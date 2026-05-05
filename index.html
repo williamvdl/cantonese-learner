@@ -1,0 +1,1901 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>廣東話 Cantonese Learner</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: system-ui, -apple-system, sans-serif; background: #f7f3ee; min-height: 100vh; padding-bottom: 70px; }
+  button { font-family: inherit; }
+  ::-webkit-scrollbar { display: none; }
+
+  /* Hamburger menu */
+  .hamburger { background: transparent; border: none; cursor: pointer; padding: 4px; display: flex; flex-direction: column; gap: 5px; }
+  .hamburger span { display: block; width: 22px; height: 2px; background: #e8c97e; border-radius: 2px; transition: all 0.2s; }
+  .nav-drawer { position: fixed; top: 0; left: 0; right: 0; bottom: 0; z-index: 50; display: none; }
+  .nav-drawer.open { display: block; }
+  .nav-backdrop { position: absolute; inset: 0; background: rgba(0,0,0,0.45); }
+  .nav-panel { position: absolute; top: 0; right: 0; width: 240px; height: 100%; background: #1a1a2e; padding: 0; display: flex; flex-direction: column; box-shadow: -4px 0 24px rgba(0,0,0,0.3); }
+  .nav-panel-header { padding: 20px 20px 16px; border-bottom: 1px solid #2e2e4e; display: flex; align-items: center; justify-content: space-between; }
+  .nav-panel-title { font-size: 13px; color: #e8c97e; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; }
+  .nav-close { background: transparent; border: none; color: #aaa; font-size: 20px; cursor: pointer; padding: 0; line-height: 1; }
+  .nav-item { display: flex; align-items: center; gap: 14px; padding: 16px 20px; cursor: pointer; border: none; background: transparent; width: 100%; text-align: left; transition: background 0.15s; border-bottom: 1px solid #2e2e4e22; }
+  .nav-item:hover { background: #252540; }
+  .nav-item.active { background: #252540; }
+  .nav-item .ni-icon { font-size: 22px; }
+  .nav-item .ni-text { display: flex; flex-direction: column; gap: 2px; }
+  .nav-item .ni-label { font-size: 15px; font-weight: 700; color: #fff; }
+  .nav-item .ni-desc { font-size: 11px; color: #666; }
+  .nav-item.active .ni-label { color: #e8c97e; }
+  .nav-item .ni-tick { margin-left: auto; color: #e8c97e; font-size: 16px; opacity: 0; }
+  .nav-item.active .ni-tick { opacity: 1; }
+
+  /* Header */
+  .header { background: #1a1a2e; padding: 16px 20px 12px; position: sticky; top: 0; z-index: 10; }
+  .header-title { display: flex; align-items: baseline; gap: 10px; }
+  .header-title .zh { font-size: 24px; color: #e8c97e; }
+  .header-title .en { font-size: 11px; color: #aaa; letter-spacing: 2px; text-transform: uppercase; }
+  .tone-key { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px; align-items: center; }
+  .tone-key span { font-size: 11px; font-weight: 700; }
+  .tone-key .label { color: #555; font-weight: 400; }
+
+  /* Voice banner */
+  .voice-banner { margin: 10px 20px 0; padding: 8px 14px; border-radius: 10px; font-size: 11px; display: flex; align-items: center; gap: 6px; }
+  .voice-ok  { background: #eafaf1; border: 1px solid #27AE60; color: #1E8449; }
+  .voice-warn{ background: #fef9e7; border: 1px solid #F0B27A; color: #935116; }
+  .voice-none{ background: #fdedec; border: 1px solid #E74C3C; color: #922B21; }
+
+  /* Topic pills */
+  .topics { display: flex; gap: 8px; overflow-x: auto; padding: 14px 20px 6px; scrollbar-width: none; }
+  .topic-btn { flex-shrink: 0; padding: 7px 13px; border-radius: 30px; cursor: pointer; font-size: 13px; font-weight: 600; border: 2px solid #ddd; background: #fff; color: #555; white-space: nowrap; transition: all 0.18s; }
+  .topic-btn.active { color: #fff; }
+
+  /* Content */
+  .content { padding: 12px 20px 40px; max-width: 680px; margin: 0 auto; }
+  .lesson-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
+  .lesson-title { font-size: 20px; font-weight: 700; margin: 0; }
+  .lesson-count { font-size: 12px; color: #999; margin-top: 2px; }
+  .mode-btn { padding: 7px 16px; border-radius: 30px; cursor: pointer; font-size: 13px; font-weight: 700; transition: all 0.15s; }
+  .hint { font-size: 11px; color: #aaa; margin-bottom: 12px; }
+
+  /* Word grid */
+  .word-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(145px, 1fr)); gap: 10px; }
+
+  /* Word card */
+  .word-card { cursor: pointer; border-radius: 14px; padding: 24px 14px 14px; min-height: 130px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 5px; position: relative; transition: background 0.2s, box-shadow 0.2s; border: 2px solid; user-select: none; }
+  .card-chinese { font-size: 34px; color: #1a1a2e; line-height: 1.2; }
+  .card-jyutping { font-size: 12px; margin-top: 2px; }
+  .card-hint { font-size: 11px; color: #bbb; margin-top: 1px; }
+  .card-english { font-size: 15px; font-weight: 700; color: #fff; text-align: center; padding: 0 8px; }
+  .speak-btn { position: absolute; top: 6px; right: 6px; width: 54px; height: 54px; border-radius: 50%; cursor: pointer; font-size: 22px; display: flex; align-items: center; justify-content: center; transition: all 0.15s; }
+  @keyframes pulse { from { opacity:1; } to { opacity:0.4; } }
+  .speaking { animation: pulse 0.6s infinite alternate; }
+
+  /* Patterns section */
+  .patterns-header { padding: 16px 20px 0; max-width: 680px; margin: 0 auto; }
+  .patterns-header h2 { font-size: 20px; font-weight: 700; color: #2C3E7A; margin-bottom: 4px; }
+  .patterns-header p { font-size: 12px; color: #999; margin-bottom: 16px; }
+  .pattern-card { background: #fff; border-radius: 16px; margin: 0 20px 14px; border: 1px solid #eee; overflow: hidden; max-width: 680px; }
+  .pattern-head { padding: 14px 16px 12px; background: #2C3E7A; }
+  .pattern-number { font-size: 10px; color: rgba(255,255,255,0.5); font-weight: 700; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 2px; }
+  .pattern-label { font-size: 17px; font-weight: 700; color: #fff; margin-bottom: 6px; }
+  .pattern-structure { display: inline-block; background: rgba(255,255,255,0.12); border-radius: 8px; padding: 4px 10px; font-size: 12px; color: rgba(255,255,255,0.85); font-family: monospace; }
+  .pattern-body { padding: 12px 16px 14px; }
+  .pattern-note { font-size: 12px; color: #888; margin-bottom: 12px; line-height: 1.5; font-style: italic; }
+  .pattern-examples { display: flex; flex-direction: column; gap: 8px; }
+  .pattern-example { display: flex; align-items: center; gap: 10px; background: #f7f3ee; border-radius: 10px; padding: 10px 12px; }
+  .pattern-ex-text { flex: 1; }
+  .pattern-ex-zh { font-size: 17px; color: #1a1a2e; margin-bottom: 3px; line-height: 1.3; }
+  .pattern-ex-jp { font-size: 12px; margin-bottom: 3px; }
+  .pattern-ex-en { font-size: 11px; color: #888; }
+  .pattern-ex-play { width: 36px; height: 36px; border-radius: 50%; border: 1.5px solid #2C3E7A; background: transparent; color: #2C3E7A; cursor: pointer; font-size: 14px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: all 0.15s; }
+  .pattern-ex-play.speaking { background: #2C3E7A; color: #fff; animation: pulse 0.6s infinite alternate; }
+
+  /* Sentences */
+  .sentences { margin-top: 28px; }
+  .sentences h3 { font-size: 14px; font-weight: 700; margin-bottom: 12px; color: #1a1a2e; }
+  .sentence-card { background: #fff; border-radius: 12px; padding: 14px 16px; margin-bottom: 10px; border: 1px solid #eee; display: flex; align-items: flex-start; gap: 12px; }
+  .sentence-body { flex: 1; }
+  .sentence-chinese { font-size: 17px; color: #1a1a2e; margin-bottom: 4px; line-height: 1.4; }
+  .sentence-jyutping { font-size: 12px; margin-bottom: 4px; }
+  .sentence-english { font-size: 12px; color: #888; }
+  .sentence-play { flex-shrink: 0; width: 44px; height: 44px; border-radius: 50%; cursor: pointer; font-size: 18px; display: flex; align-items: center; justify-content: center; transition: all 0.15s; border: 1.5px solid; background: transparent; margin-top: 2px; }
+
+  .bubble-row.right .bubble .bubble-jyutping span { color: rgba(255,255,255,0.88) !important; }
+
+  /* Sub-tabs (Words | Conversation) */
+  .subtabs { display: flex; gap: 6px; margin-bottom: 16px; }
+  .subtab-btn { flex: 1; padding: 8px 10px; border-radius: 10px; border: 2px solid #ddd; background: #fff; color: #888; font-size: 13px; font-weight: 600; cursor: pointer; transition: all 0.15s; text-align: center; }
+  .subtab-btn.active { color: #fff; border-color: transparent; }
+
+  /* Conversation */
+  .convo-scenario { font-size: 12px; color: #888; margin-bottom: 14px; font-style: italic; }
+  .convo-controls { display: flex; gap: 8px; margin-bottom: 18px; flex-wrap: wrap; }
+  .convo-ctrl-btn { padding: 7px 14px; border-radius: 20px; border: 2px solid #ddd; background: #fff; color: #555; font-size: 12px; font-weight: 600; cursor: pointer; transition: all 0.15s; }
+  .convo-ctrl-btn.on { color: #fff; border-color: transparent; }
+  .bubble-row { display: flex; margin-bottom: 14px; }
+  .bubble-row.left  { justify-content: flex-start; }
+  .bubble-row.right { justify-content: flex-end; }
+  .bubble-wrap { max-width: 80%; }
+  .bubble-name { font-size: 10px; color: #aaa; margin-bottom: 3px; padding: 0 4px; }
+  .bubble-row.right .bubble-name { text-align: right; }
+  .bubble { border-radius: 16px; padding: 12px 14px; position: relative; }
+  .bubble-row.left  .bubble { background: #fff; border: 1px solid #eee; border-bottom-left-radius: 4px; }
+  .bubble-row.right .bubble { border-bottom-right-radius: 4px; color: #fff; }
+  .bubble-chinese  { font-size: 17px; line-height: 1.4; margin-bottom: 4px; }
+  .bubble-jyutping { font-size: 11px; margin-bottom: 3px; }
+  .bubble-english  { font-size: 11px; opacity: 0.75; }
+  .bubble-play-row { display: flex; justify-content: flex-end; margin-top: 8px; }
+  .bubble-row.left .bubble-play-row { justify-content: flex-start; }
+  .bubble-play { width: 32px; height: 32px; border-radius: 50%; border: 1.5px solid; background: transparent; cursor: pointer; font-size: 13px; display: flex; align-items: center; justify-content: center; transition: all 0.15s; }
+  .gap-prompt { font-size: 12px; color: #888; margin-bottom: 8px; font-style: italic; }
+  .gap-options { display: flex; flex-direction: column; gap: 7px; }
+  .gap-btn { padding: 10px 14px; border-radius: 10px; border: 2px solid #ddd; background: #fff; color: #1a1a2e; font-size: 13px; font-weight: 600; cursor: pointer; text-align: left; transition: all 0.15s; }
+  .gap-btn.correct { background: #d4edda; border-color: #27AE60; color: #1a5e2a; }
+  .gap-btn.wrong   { background: #fde8ea; border-color: #E74C3C; color: #7b1c1c; }
+  .gap-btn:disabled { cursor: default; }
+
+  /* Speak mode */
+  .speak-card { background: #fff; border-radius: 16px; padding: 24px 20px; border: 3px solid; margin-bottom: 16px; text-align: center; }
+  .speak-prompt { font-size: 11px; color: #aaa; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 8px; }
+  .speak-target-zh { font-size: 28px; line-height: 1.3; margin-bottom: 8px; color: #1a1a2e; }
+  .speak-target-jp { font-size: 14px; margin-bottom: 6px; }
+  .speak-target-en { font-size: 12px; color: #888; margin-bottom: 18px; }
+  .mic-btn { width: 80px; height: 80px; border-radius: 50%; border: none; font-size: 32px; cursor: pointer; display: flex; align-items: center; justify-content: center; margin: 0 auto 14px; transition: all 0.2s; box-shadow: 0 4px 16px rgba(0,0,0,0.15); }
+  .mic-btn.idle { background: #fff; }
+  .mic-btn.listening { animation: micPulse 1s infinite; box-shadow: 0 0 0 0 currentColor; }
+  @keyframes micPulse { 0% { box-shadow: 0 0 0 0 rgba(231,76,60,0.6); } 100% { box-shadow: 0 0 0 18px rgba(231,76,60,0); } }
+  .speak-status { font-size: 13px; color: #888; min-height: 20px; margin-bottom: 14px; }
+  .speak-heard { background: #f7f3ee; border-radius: 10px; padding: 10px 14px; margin-bottom: 14px; font-size: 18px; color: #1a1a2e; }
+  .speak-result-good { background: #d4edda; border: 2px solid #27AE60; color: #1a5e2a; padding: 12px 16px; border-radius: 10px; font-weight: 700; margin-bottom: 14px; }
+  .speak-result-bad  { background: #fde8ea; border: 2px solid #E74C3C; color: #7b1c1c; padding: 12px 16px; border-radius: 10px; margin-bottom: 14px; font-size: 13px; }
+  .speak-actions { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+  .speak-action-btn { padding: 9px 20px; border-radius: 20px; border: none; font-size: 13px; font-weight: 700; cursor: pointer; }
+  .speak-unsupported { padding: 30px 20px; text-align: center; background: #fef9e7; border: 1px solid #F0B27A; border-radius: 12px; color: #935116; font-size: 13px; line-height: 1.6; }
+
+  /* Shadow mode */
+  .shadow-card { background: #fff; border-radius: 16px; padding: 24px 20px; border: 3px solid; margin-bottom: 16px; text-align: center; }
+  .shadow-speaker { font-size: 11px; color: #aaa; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
+  .shadow-chinese { font-size: 30px; line-height: 1.3; margin-bottom: 10px; color: #1a1a2e; }
+  .shadow-jyutping { font-size: 14px; margin-bottom: 6px; }
+  .shadow-english { font-size: 13px; color: #888; margin-bottom: 16px; }
+  .shadow-actions { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+  .shadow-btn { padding: 9px 20px; border-radius: 20px; border: none; font-size: 13px; font-weight: 700; cursor: pointer; }
+  .shadow-nav { display: flex; justify-content: space-between; align-items: center; font-size: 12px; color: #aaa; margin-bottom: 12px; }
+
+  /* Breakdown panel */
+  .breakdown-panel { margin-top: 8px; background: #f7f3ee; border-radius: 10px; padding: 10px 12px; border: 1px solid #e8e4df; }
+  .breakdown-row { display: flex; align-items: baseline; gap: 8px; padding: 5px 0; border-bottom: 1px solid #eee; }
+  .breakdown-row:last-child { border-bottom: none; }
+  .breakdown-zh { font-size: 16px; color: #1a1a2e; min-width: 36px; }
+  .breakdown-jp { font-size: 12px; flex: 1; }
+  .breakdown-en { font-size: 11px; color: #888; text-align: right; }
+  .breakdown-btn { display: flex; align-items: center; gap: 4px; margin-top: 6px; background: transparent; border: none; cursor: pointer; font-size: 11px; font-weight: 700; padding: 0; }
+
+  /* Bottom nav */
+  .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; background: #1a1a2e; display: flex; border-top: 1px solid #2e2e4e; z-index: 20; }
+  .nav-btn { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 10px 0 12px; cursor: pointer; border: none; background: transparent; gap: 4px; transition: all 0.15s; }
+  .nav-btn .nav-icon { font-size: 22px; line-height: 1; }
+  .nav-btn .nav-label { font-size: 10px; font-weight: 600; letter-spacing: 0.5px; text-transform: uppercase; color: #555; transition: color 0.15s; }
+  .nav-btn.active .nav-label { color: #e8c97e; }
+  .nav-btn.active .nav-icon { filter: drop-shadow(0 0 4px #e8c97e88); }
+
+  /* Placeholder screens */
+  .placeholder-screen { padding: 60px 24px; text-align: center; }
+  .placeholder-screen .ph-icon { font-size: 52px; margin-bottom: 16px; }
+  .placeholder-screen h2 { font-size: 22px; font-weight: 700; color: #1a1a2e; margin-bottom: 8px; }
+  .placeholder-screen p { font-size: 14px; color: #aaa; line-height: 1.6; max-width: 280px; margin: 0 auto; }
+  .placeholder-screen .ph-tag { display: inline-block; margin-top: 20px; padding: 6px 16px; border-radius: 20px; background: #1a1a2e; color: #e8c97e; font-size: 12px; font-weight: 700; }
+
+  /* Tone guide */
+  .tone-guide { margin-top: 28px; background: #fff; border-radius: 14px; padding: 16px 18px; border: 1px solid #eee; }
+  .tone-guide h3 { font-size: 14px; font-weight: 700; margin-bottom: 10px; }
+  .tone-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .tone-row { display: flex; align-items: center; gap: 7px; font-size: 12px; }
+  .tone-dot { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; }
+  .tone-desc { color: #666; }
+  .tone-ex { font-weight: 700; margin-left: auto; }
+  .tone-note { font-size: 11px; color: #bbb; margin-top: 10px; line-height: 1.5; }
+
+  /* Quiz */
+  .quiz-meta { display: flex; justify-content: space-between; margin-bottom: 10px; }
+  .quiz-meta span { font-size: 13px; }
+  .progress-bar { height: 4px; background: #eee; border-radius: 4px; margin-bottom: 20px; }
+  .progress-fill { height: 4px; border-radius: 4px; transition: width 0.35s; }
+  .quiz-card { text-align: center; background: #fafafa; border-radius: 16px; padding: 24px 16px; margin-bottom: 20px; }
+  .quiz-label { font-size: 11px; color: #aaa; letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 6px; }
+  .quiz-chinese { font-size: 44px; color: #1a1a2e; line-height: 1.2; }
+  .quiz-jyutping { font-size: 13px; margin-top: 6px; }
+  .quiz-listen { margin-top: 10px; background: transparent; border-radius: 20px; padding: 4px 14px; cursor: pointer; font-size: 12px; }
+  .choices { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .choice-btn { padding: 13px 10px; border-radius: 12px; cursor: pointer; font-size: 14px; font-weight: 600; color: #1a1a2e; transition: all 0.15s; border: 2px solid #ddd; background: #fff; }
+  .choice-btn.correct { background: #d4edda; border-color: #27AE60; }
+  .choice-btn.wrong   { background: #f8d7da; border-color: #E74C3C; }
+  .choice-btn:disabled { cursor: default; }
+
+  /* Quiz result */
+  .result { text-align: center; padding: 40px 16px; }
+  .result-emoji { font-size: 56px; }
+  .result-score { font-size: 26px; font-weight: 700; margin-top: 8px; }
+  .result-msg { font-size: 14px; color: #666; margin-top: 6px; }
+  .back-btn { margin-top: 24px; padding: 10px 28px; color: #fff; border: none; border-radius: 30px; font-size: 14px; cursor: pointer; font-weight: 700; }
+</style>
+</head>
+<body>
+
+<div id="app"></div>
+
+<script>
+// ── Data ──────────────────────────────────────────────────────────────────────
+const LESSONS = {
+  greetings: { label:"Greetings", icon:"👋", color:"#C0392B", words:[
+    {c:"你好",   j:"nei5 hou2",        e:"Hello"},
+    {c:"早晨",   j:"zou2 san4",         e:"Good morning"},
+    {c:"晚上好", j:"maan5 soeng6 hou2", e:"Good evening"},
+    {c:"再見",   j:"zoi3 gin3",         e:"Goodbye"},
+    {c:"唔該",   j:"m4 goi1",           e:"Thank you / Excuse me"},
+    {c:"多謝",   j:"do1 ze6",           e:"Thank you (for a gift)"},
+    {c:"唔緊要", j:"m4 gan2 jiu3",      e:"You're welcome"},
+    {c:"對唔住", j:"deoi3 m4 zyu6",     e:"Sorry"},
+    {c:"係",     j:"hai6",              e:"Yes"},
+    {c:"唔係",   j:"m4 hai6",           e:"No"},
+  ]},
+  numbers: { label:"Numbers", icon:"🔢", color:"#1A5276", words:[
+    {c:"零",j:"ling4",e:"Zero"},{c:"一",j:"jat1",e:"One"},{c:"二",j:"ji6",e:"Two"},
+    {c:"三",j:"saam1",e:"Three"},{c:"四",j:"sei3",e:"Four"},{c:"五",j:"ng5",e:"Five"},
+    {c:"六",j:"luk6",e:"Six"},{c:"七",j:"cat1",e:"Seven"},{c:"八",j:"baat3",e:"Eight"},
+    {c:"九",j:"gau2",e:"Nine"},{c:"十",j:"sap6",e:"Ten"},
+  ]},
+  food: { label:"Food & Drink", icon:"🍜", color:"#7D6608", words:[
+    {c:"飯",  j:"faan6",      e:"Rice / Meal"},{c:"麵",  j:"min6",        e:"Noodles"},
+    {c:"水",  j:"seoi2",      e:"Water"},     {c:"茶",  j:"caa4",        e:"Tea"},
+    {c:"咖啡",j:"gaa3 fe1",   e:"Coffee"},    {c:"雞",  j:"gai1",        e:"Chicken"},
+    {c:"魚",  j:"jyu2",       e:"Fish"},      {c:"豬肉",j:"zyu1 juk6",   e:"Pork"},
+    {c:"蔬菜",j:"so1 coi3",   e:"Vegetables"},{c:"生果",j:"saang1 gwo2", e:"Fruit"},
+    {c:"好味",j:"hou2 mei6",  e:"Delicious"}, {c:"餓",  j:"ngo6",        e:"Hungry"},
+  ]},
+  family: { label:"Family", icon:"👨‍👩‍👧", color:"#1E8449", words:[
+    {c:"爸爸",j:"baa4 baa1",  e:"Father"},   {c:"媽媽",j:"maa4 maa1",  e:"Mother"},
+    {c:"哥哥",j:"go4 go1",    e:"Older brother"},{c:"姐姐",j:"ze4 ze1",e:"Older sister"},
+    {c:"弟弟",j:"dai6 dai2",  e:"Younger brother"},{c:"妹妹",j:"mui4 mui2",e:"Younger sister"},
+    {c:"爺爺",j:"je4 je2",    e:"Paternal grandfather"},{c:"嫲嫲",j:"maa4 maa2",e:"Paternal grandmother"},
+    {c:"外公",j:"ngoi6 gung1",e:"Maternal grandfather"},{c:"外婆",j:"ngoi6 po4",e:"Maternal grandmother"},
+    {c:"兒子",j:"ji4 zi2",    e:"Son"},{c:"女兒",j:"neoi5 ji4",e:"Daughter"},
+  ]},
+  time: { label:"Days & Time", icon:"🕐", color:"#6C3483", words:[
+    {c:"今日",   j:"gam1 jat6",       e:"Today"},      {c:"聽日",  j:"ting1 jat6",       e:"Tomorrow"},
+    {c:"琴日",   j:"kam4 jat6",       e:"Yesterday"},  {c:"星期一",j:"sing1 kei4 jat1",  e:"Monday"},
+    {c:"星期二", j:"sing1 kei4 ji6",  e:"Tuesday"},    {c:"星期三",j:"sing1 kei4 saam1", e:"Wednesday"},
+    {c:"星期四", j:"sing1 kei4 sei3", e:"Thursday"},   {c:"星期五",j:"sing1 kei4 ng5",   e:"Friday"},
+    {c:"星期六", j:"sing1 kei4 luk6", e:"Saturday"},   {c:"星期日",j:"sing1 kei4 jat6",  e:"Sunday"},
+    {c:"朝早",   j:"ziu1 zou2",       e:"Morning"},    {c:"夜晚",  j:"je6 maan5",        e:"Night"},
+  ]},
+  phrases: { label:"Useful Phrases", icon:"💬", color:"#884EA0", words:[
+    {c:"你叫乜名？",  j:"nei5 giu3 mat1 meng2",      e:"What is your name?"},
+    {c:"我叫…",      j:"ngo5 giu3",                 e:"My name is…"},
+    {c:"你好嗎？",    j:"nei5 hou2 maa3",            e:"How are you?"},
+    {c:"我好好",      j:"ngo5 hou2 hou2",            e:"I am very well"},
+    {c:"幾錢？",      j:"gei2 cin2",                 e:"How much?"},
+    {c:"喺邊度？",    j:"hai2 bin1 dou6",            e:"Where is it?"},
+    {c:"我唔明",      j:"ngo5 m4 ming4",             e:"I don't understand"},
+    {c:"請講慢啲",    j:"cing2 gong2 maan6 di1",     e:"Please speak slowly"},
+    {c:"洗手間喺邊？",j:"sai2 sau2 gaan1 hai2 bin1", e:"Where is the bathroom?"},
+    {c:"我要呢個",    j:"ngo5 jiu3 ni1 go3",         e:"I want this one"},
+  ]},
+  colors: { label:"Colors", icon:"🎨", color:"#D35400", words:[
+    {c:"紅色",  j:"hung4 sik1",      e:"Red"},   {c:"橙色",  j:"caang2 sik1",    e:"Orange"},
+    {c:"黃色",  j:"wong4 sik1",      e:"Yellow"},{c:"綠色",  j:"luk6 sik1",      e:"Green"},
+    {c:"藍色",  j:"laam4 sik1",      e:"Blue"},  {c:"紫色",  j:"zi2 sik1",       e:"Purple"},
+    {c:"白色",  j:"baak6 sik1",      e:"White"}, {c:"黑色",  j:"hak1 sik1",      e:"Black"},
+    {c:"粉紅色",j:"fan2 hung4 sik1", e:"Pink"},  {c:"棕色",  j:"zung1 sik1",     e:"Brown"},
+  ]},
+  body: { label:"Body Parts", icon:"🧍", color:"#B03A2E", words:[
+    {c:"頭",j:"tau4",   e:"Head"},  {c:"眼",j:"ngaan5",e:"Eyes"},
+    {c:"耳",j:"ji5",    e:"Ears"},  {c:"鼻",j:"bei6",  e:"Nose"},
+    {c:"嘴",j:"zeoi2",  e:"Mouth"}, {c:"手",j:"sau2",  e:"Hand"},
+    {c:"腳",j:"goek3",  e:"Foot"},  {c:"心",j:"sam1",  e:"Heart"},
+    {c:"肚",j:"tou5",   e:"Stomach"},{c:"背",j:"bui3",  e:"Back"},
+  ]},
+  transport: { label:"Transport", icon:"🚇", color:"#1A7FA8", words:[
+    {c:"地鐵",   j:"dei6 tit3",      e:"MTR / Subway"},{c:"巴士",   j:"baa1 si2",       e:"Bus"},
+    {c:"的士",   j:"dik1 si2",       e:"Taxi"},        {c:"飛機",   j:"fei1 gei1",      e:"Airplane"},
+    {c:"船",     j:"syun4",          e:"Boat / Ferry"},{c:"火車",   j:"fo2 ce1",        e:"Train"},
+    {c:"單車",   j:"daan1 ce1",      e:"Bicycle"},     {c:"去邊度？",j:"heoi3 bin1 dou6",e:"Where to?"},
+    {c:"幾遠？", j:"gei2 jyun5",     e:"How far?"},    {c:"停",     j:"ting4",          e:"Stop"},
+  ]},
+  weather: { label:"Weather", icon:"⛅", color:"#2E86C1", words:[
+    {c:"天氣",j:"tin1 hei3",    e:"Weather"},{c:"熱",  j:"jit6",         e:"Hot"},
+    {c:"凍",  j:"dung3",        e:"Cold"},   {c:"落雨",j:"lok6 jyu5",    e:"Raining"},
+    {c:"太陽",j:"taai3 joeng4", e:"Sun"},    {c:"颱風",j:"toi4 fung1",   e:"Typhoon"},
+    {c:"雲",  j:"wan4",         e:"Cloud"},  {c:"風",  j:"fung1",        e:"Wind"},
+    {c:"雪",  j:"syut3",        e:"Snow"},   {c:"潮濕",j:"ciu4 sap1",    e:"Humid"},
+  ]},
+  shopping: { label:"Shopping", icon:"🛍️", color:"#A93226", words:[
+    {c:"超市",   j:"ciu1 si5",       e:"Supermarket"},  {c:"商場",   j:"soeng1 coeng4",  e:"Shopping mall"},
+    {c:"貴",     j:"gwai3",          e:"Expensive"},    {c:"平",     j:"peng4",          e:"Cheap"},
+    {c:"買",     j:"maai5",          e:"Buy"},          {c:"賣",     j:"maai6",          e:"Sell"},
+    {c:"找換",   j:"zaau2 wun6",     e:"Change money"}, {c:"收據",   j:"sau1 geoi3",     e:"Receipt"},
+    {c:"有冇折？",j:"jau5 mou5 zit3",e:"Any discount?"},{c:"唔要",  j:"m4 jiu3",        e:"Don't want it"},
+  ]},
+};
+
+const TONES = {
+  "1":{"color":"#E74C3C","desc":"High level",  "ex":"詩 si1"},
+  "2":{"color":"#E67E22","desc":"High rising", "ex":"史 si2"},
+  "3":{"color":"#c8a200","desc":"Mid level",   "ex":"試 si3"},
+  "4":{"color":"#27AE60","desc":"Low falling", "ex":"時 si4"},
+  "5":{"color":"#2980B9","desc":"Low rising",  "ex":"市 si5"},
+  "6":{"color":"#8E44AD","desc":"Low level",   "ex":"事 si6"},
+};
+
+// ── Patterns ──────────────────────────────────────────────────────────────────
+const PATTERNS = [
+  { label:"I want to…",              structure:"ngo5 soeng2 + [verb]",
+    note:"The most useful starter — attach any verb to express what you want to do.",
+    examples:[{c:"我想食",j:"ngo5 soeng2 sik6",e:"I want to eat"},{c:"我想飲茶",j:"ngo5 soeng2 jam2 caa4",e:"I want to drink tea"},{c:"我想去",j:"ngo5 soeng2 heoi3",e:"I want to go"}]},
+  { label:"I'll have / I need…",     structure:"ngo5 jiu3 + [noun]",
+    note:"Use for ordering food, asking for things, or stating what you need.",
+    examples:[{c:"我要水",j:"ngo5 jiu3 seoi2",e:"I need water"},{c:"我要三個",j:"ngo5 jiu3 saam1 go3",e:"I'll take three"},{c:"我要呢個",j:"ngo5 jiu3 ni1 go3",e:"I want this one"}]},
+  { label:"Do you have…?",           structure:"jau5 mou5 + [noun]?",
+    note:"A very natural way to ask about availability — literally 'have or not have?'",
+    examples:[{c:"有冇茶？",j:"jau5 mou5 caa4?",e:"Do you have tea?"},{c:"有冇折？",j:"jau5 mou5 zit3?",e:"Is there a discount?"},{c:"有冇平啲？",j:"jau5 mou5 peng4 di1?",e:"Is there a cheaper one?"}]},
+  { label:"Where is…?",              structure:"[noun] + hai2 bin1 dou6?",
+    note:"Put the thing you're looking for at the start, then ask where it is.",
+    examples:[{c:"洗手間喺邊度？",j:"sai2 sau2 gaan1 hai2 bin1 dou6?",e:"Where is the bathroom?"},{c:"地鐵站喺邊度？",j:"dei6 tit3 zaam6 hai2 bin1 dou6?",e:"Where is the MTR station?"},{c:"呢個喺邊度？",j:"ni1 go3 hai2 bin1 dou6?",e:"Where is this?"}]},
+  { label:"How much?",               structure:"gei2 cin2?",
+    note:"Works alone or after pointing at something. Add ni1 go3 (this one) for clarity.",
+    examples:[{c:"幾錢？",j:"gei2 cin2?",e:"How much?"},{c:"呢個幾錢？",j:"ni1 go3 gei2 cin2?",e:"How much is this one?"},{c:"大概幾錢？",j:"daai6 koi3 gei2 cin2?",e:"Approximately how much?"}]},
+  { label:"Please give me…",         structure:"m4 goi1 bei2 + [noun] + ngo5",
+    note:"Very common in restaurants and shops. Note how 'me' comes at the end.",
+    examples:[{c:"唔該俾杯茶我",j:"m4 goi1 bei2 bui1 caa4 ngo5",e:"Please give me a cup of tea"},{c:"唔該俾個袋我",j:"m4 goi1 bei2 go3 doi2 ngo5",e:"Please give me a bag"},{c:"唔該俾筷子我",j:"m4 goi1 bei2 faai3 zi2 ngo5",e:"Please give me chopsticks"}]},
+  { label:"Very…",                   structure:"hou2 + [adjective]",
+    note:"hou2 intensifies any adjective. Stack it for extra emphasis — hou2 hou2 means 'very very good'.",
+    examples:[{c:"好熱",j:"hou2 jit6",e:"Very hot"},{c:"好味",j:"hou2 mei6",e:"Very delicious"},{c:"好貴",j:"hou2 gwai3",e:"Very expensive"},{c:"好好",j:"hou2 hou2",e:"Very good"}]},
+  { label:"Not / Don't…",            structure:"m4 + [verb or adjective]",
+    note:"m4 is the general negation particle. Place it directly before the verb or adjective.",
+    examples:[{c:"我唔明",j:"ngo5 m4 ming4",e:"I don't understand"},{c:"唔貴",j:"m4 gwai3",e:"Not expensive"},{c:"我唔要",j:"ngo5 m4 jiu3",e:"I don't want it"},{c:"唔係",j:"m4 hai6",e:"That's not right"}]},
+  { label:"Yes/no question",         structure:"[statement] + maa3?",
+    note:"Add maa3 to the end of any statement to turn it into a yes/no question.",
+    examples:[{c:"你好嗎？",j:"nei5 hou2 maa3?",e:"Are you well?"},{c:"貴嗎？",j:"gwai3 maa3?",e:"Is it expensive?"},{c:"你識講廣東話嗎？",j:"nei5 sik1 gong2 gwong2 dung1 waa6 maa3?",e:"Do you speak Cantonese?"}]},
+  { label:"What would you like to…?",structure:"soeng2 + [verb] + di1 me1?",
+    note:"A polite way to ask what someone wants — common in service situations.",
+    examples:[{c:"想食啲咩？",j:"soeng2 sik6 di1 me1?",e:"What would you like to eat?"},{c:"想飲啲咩？",j:"soeng2 jam2 di1 me1?",e:"What would you like to drink?"},{c:"想買啲咩？",j:"soeng2 maai5 di1 me1?",e:"What would you like to buy?"}]},
+  { label:"I feel…",                 structure:"ngo5 gok3 dak1 + [adjective]",
+    note:"Use this to describe how you're feeling physically or emotionally.",
+    examples:[{c:"我覺得好攰",j:"ngo5 gok3 dak1 hou2 gui6",e:"I feel very tired"},{c:"我覺得好凍",j:"ngo5 gok3 dak1 hou2 dung3",e:"I feel very cold"},{c:"我覺得唔舒服",j:"ngo5 gok3 dak1 m4 syu1 fuk6",e:"I feel unwell"}]},
+  { label:"Going to…",               structure:"heoi3 + [place]",
+    note:"Simple and direct. Works for saying where you're going or asking where to go.",
+    examples:[{c:"去中環",j:"heoi3 zung1 waan4",e:"Going to Central"},{c:"去邊度？",j:"heoi3 bin1 dou6?",e:"Where are you going?"},{c:"我去超市",j:"ngo5 heoi3 ciu1 si5",e:"I'm going to the supermarket"}]},
+  { label:"See you at / on…",        structure:"[time] + gin3",
+    note:"Put any time word before gin3 to arrange when to meet.",
+    examples:[{c:"聽日見",j:"ting1 jat6 gin3",e:"See you tomorrow"},{c:"朝早見",j:"ziu1 zou2 gin3",e:"See you in the morning"},{c:"星期六見",j:"sing1 kei4 luk6 gin3",e:"See you Saturday"}]},
+  { label:"Is that ok / Can I?",     structure:"dak1 m4 dak1?",
+    note:"Literally 'ok or not ok?' — use to seek permission or check if something works.",
+    examples:[{c:"咁得唔得？",j:"gam2 dak1 m4 dak1?",e:"Is this ok?"},{c:"我坐喺呢度得唔得？",j:"ngo5 co5 hai2 ni1 dou6 dak1 m4 dak1?",e:"Can I sit here?"},{c:"而家去得唔得？",j:"ji4 gaa1 heoi3 dak1 m4 dak1?",e:"Can we go now?"}]},
+  { label:"Too…!",                   structure:"taai3 + [adjective] + laa3",
+    note:"Express that something is excessive. laa3 adds a sense of finality or mild complaint.",
+    examples:[{c:"太貴喇",j:"taai3 gwai3 laa3",e:"Too expensive!"},{c:"太熱喇",j:"taai3 jit6 laa3",e:"Too hot!"},{c:"太多喇",j:"taai3 do1 laa3",e:"Too much!"}]},
+  { label:"Can I / May I…?",         structure:"ho2 m4 ho2 ji5 + [verb]?",
+    note:"A polite way to ask permission — more formal than dak1 m4 dak1.",
+    examples:[{c:"可唔可以講慢啲？",j:"ho2 m4 ho2 ji5 gong2 maan6 di1?",e:"Can you speak more slowly?"},{c:"可唔可以睇吓？",j:"ho2 m4 ho2 ji5 tai2 haa5?",e:"Can I take a look?"},{c:"可唔可以等我？",j:"ho2 m4 ho2 ji5 dang2 ngo5?",e:"Can you wait for me?"}]},
+  { label:"What is…?",               structure:"[noun] + hai6 mat1 je5?",
+    note:"Use when you want to know what something is called or what something means.",
+    examples:[{c:"呢個係咩嘢？",j:"ni1 go3 hai6 mat1 je5?",e:"What is this?"},{c:"呢個字係咩嘢？",j:"ni1 go3 zi6 hai6 mat1 je5?",e:"What does this word mean?"},{c:"果個係咩嘢？",j:"go2 go3 hai6 mat1 je5?",e:"What is that?"}]},
+  { label:"Why…?",                   structure:"dim2 gaai3 + [statement]?",
+    note:"Place dim2 gaai3 at the start of any statement to turn it into a 'why' question.",
+    examples:[{c:"點解咁貴？",j:"dim2 gaai3 gam3 gwai3?",e:"Why is it so expensive?"},{c:"點解唔去？",j:"dim2 gaai3 m4 heoi3?",e:"Why aren't you going?"},{c:"點解咁熱？",j:"dim2 gaai3 gam3 jit6?",e:"Why is it so hot?"}]},
+  { label:"There's also… / And also…",structure:"zung6 jau5 + [noun/verb]",
+    note:"Use to add something on top of what's already been said — great for ordering.",
+    examples:[{c:"仲有茶",j:"zung6 jau5 caa4",e:"And also tea"},{c:"仲有一個",j:"zung6 jau5 jat1 go3",e:"One more"},{c:"仲有咩嘢？",j:"zung6 jau5 mat1 je5?",e:"What else is there?"}]},
+  { label:"A bit more / less…",      structure:"[adjective] + di1",
+    note:"Adding di1 after an adjective softens it — useful for polite requests.",
+    examples:[{c:"慢啲",j:"maan6 di1",e:"A bit slower"},{c:"平啲",j:"peng4 di1",e:"A bit cheaper"},{c:"多啲",j:"do1 di1",e:"A bit more"},{c:"少啲",j:"siu2 di1",e:"A bit less"}]},
+  { label:"I like…",                 structure:"ngo5 zung1 ji3 + [noun/verb]",
+    note:"Express preferences for things, food, activities or people.",
+    examples:[{c:"我鍾意食",j:"ngo5 zung1 ji3 sik6",e:"I like eating"},{c:"我鍾意茶",j:"ngo5 zung1 ji3 caa4",e:"I like tea"},{c:"我鍾意呢個",j:"ngo5 zung1 ji3 ni1 go3",e:"I like this one"}]},
+  { label:"Give [someone] [something]",structure:"bei2 + [thing] + [person]",
+    note:"bei2 means 'give' or 'let'. The person receiving comes at the end — opposite to English.",
+    examples:[{c:"俾我",j:"bei2 ngo5",e:"Give me / let me"},{c:"俾佢睇",j:"bei2 keoi5 tai2",e:"Let him see it"},{c:"我俾你",j:"ngo5 bei2 nei5",e:"I'll give you"}]},
+  { label:"I will…",                 structure:"ngo5 wui5 + [verb]",
+    note:"Use wui5 to talk about future intentions or promises.",
+    examples:[{c:"我會去",j:"ngo5 wui5 heoi3",e:"I will go"},{c:"我會記得",j:"ngo5 wui5 gei3 dak1",e:"I will remember"},{c:"我會打俾你",j:"ngo5 wui5 daa2 bei2 nei5",e:"I will call you"}]},
+  { label:"Have never / Not yet done",structure:"mei6 + [verb] + gwo",
+    note:"mei6...gwo expresses something you haven't experienced yet. Very useful for travel.",
+    examples:[{c:"我未食過",j:"ngo5 mei6 sik6 gwo",e:"I've never eaten it"},{c:"我未去過",j:"ngo5 mei6 heoi3 gwo",e:"I've never been there"},{c:"我未見過",j:"ngo5 mei6 gin3 gwo",e:"I've never seen it"}]},
+  { label:"Already done…",           structure:"[verb] + zo2 laa3",
+    note:"zo2 marks completion — something has already happened. laa3 adds a sense of 'just now'.",
+    examples:[{c:"食咗喇",j:"sik6 zo2 laa3",e:"Already eaten"},{c:"去咗喇",j:"heoi3 zo2 laa3",e:"Already gone"},{c:"買咗喇",j:"maai5 zo2 laa3",e:"Already bought it"}]},
+  { label:"How long?",               structure:"gei2 noi6?",
+    note:"Use to ask about duration — how long something takes or lasts.",
+    examples:[{c:"幾耐？",j:"gei2 noi6?",e:"How long?"},{c:"要等幾耐？",j:"jiu3 dang2 gei2 noi6?",e:"How long do I have to wait?"},{c:"去幾耐？",j:"heoi3 gei2 noi6?",e:"How long does it take to get there?"}]},
+  { label:"Together / Let's…",       structure:"jat1 cai4 + [verb]",
+    note:"jat1 cai4 means 'together' — add it before any verb to suggest doing something jointly.",
+    examples:[{c:"一齊去",j:"jat1 cai4 heoi3",e:"Let's go together"},{c:"一齊食",j:"jat1 cai4 sik6",e:"Let's eat together"},{c:"一齊啦",j:"jat1 cai4 laa1",e:"Come on, let's do it together"}]},
+  { label:"First… then…",            structure:"sin1 + [verb]… zoi3 + [verb]",
+    note:"sin1 means 'first' and zoi3 means 'then/again' — use them to sequence actions.",
+    examples:[{c:"先食，再去",j:"sin1 sik6, zoi3 heoi3",e:"First eat, then go"},{c:"先講，再做",j:"sin1 gong2, zoi3 zou6",e:"First talk, then act"},{c:"先等我",j:"sin1 dang2 ngo5",e:"Wait for me first"}]},
+  { label:"I think…",                structure:"ngo5 lam2 + [statement]",
+    note:"ngo5 lam2 softly expresses an opinion or guess — less certain than stating a fact.",
+    examples:[{c:"我諗係",j:"ngo5 lam2 hai6",e:"I think so"},{c:"我諗唔係",j:"ngo5 lam2 m4 hai6",e:"I don't think so"},{c:"我諗佢唔嚟",j:"ngo5 lam2 keoi5 m4 lai4",e:"I think he's not coming"}]},
+  { label:"Wait a moment / Wait for…",structure:"dang2 + [person/time]",
+    note:"dang2 means 'wait'. Use alone for 'wait a moment' or add who/how long to wait.",
+    examples:[{c:"等我",j:"dang2 ngo5",e:"Wait for me"},{c:"等吓",j:"dang2 haa5",e:"Wait a moment"},{c:"等一陣",j:"dang2 jat1 zan6",e:"Wait a little while"}]},
+];
+
+// ── Sentences ─────────────────────────────────────────────────────────────────
+const SENTENCES = {
+  greetings: [
+    {c:"你好！我叫William。", j:"nei5 hou2! ngo5 giu3 William.", e:"Hello! My name is William.",
+      bd:[{c:"你好",j:"nei5 hou2",e:"hello"},{c:"我",j:"ngo5",e:"I / me"},{c:"叫",j:"giu3",e:"am called"},{c:"William",j:"William",e:"William"}]},
+    {c:"早晨！你好嗎？", j:"zou2 san4! nei5 hou2 maa3?", e:"Good morning! How are you?",
+      bd:[{c:"早晨",j:"zou2 san4",e:"good morning"},{c:"你",j:"nei5",e:"you"},{c:"好嗎",j:"hou2 maa3",e:"are you well?"}]},
+    {c:"多謝，再見！", j:"do1 ze6, zoi3 gin3!", e:"Thank you, goodbye!",
+      bd:[{c:"多謝",j:"do1 ze6",e:"thank you (for a gift)"},{c:"再見",j:"zoi3 gin3",e:"goodbye"}]},
+    {c:"對唔住，我遲到。", j:"deoi3 m4 zyu6, ngo5 ci4 dou3.", e:"Sorry, I'm late.",
+      bd:[{c:"對唔住",j:"deoi3 m4 zyu6",e:"sorry"},{c:"我",j:"ngo5",e:"I"},{c:"遲到",j:"ci4 dou3",e:"late / arrive late"}]},
+    {c:"好高興認識你！", j:"hou2 gou1 hing3 jing6 sik1 nei5!", e:"Nice to meet you!",
+      bd:[{c:"好",j:"hou2",e:"very"},{c:"高興",j:"gou1 hing3",e:"happy / pleased"},{c:"認識",j:"jing6 sik1",e:"to meet / know"},{c:"你",j:"nei5",e:"you"}]},
+  ],
+  numbers: [
+    {c:"我有三個蘋果。", j:"ngo5 jau5 saam1 go3 ping4 gwo2.", e:"I have three apples.",
+      bd:[{c:"我",j:"ngo5",e:"I"},{c:"有",j:"jau5",e:"have"},{c:"三個",j:"saam1 go3",e:"three (items)"},{c:"蘋果",j:"ping4 gwo2",e:"apple"}]},
+    {c:"呢度有十個人。", j:"ni1 dou6 jau5 sap6 go3 jan4.", e:"There are ten people here.",
+      bd:[{c:"呢度",j:"ni1 dou6",e:"here"},{c:"有",j:"jau5",e:"there are"},{c:"十個",j:"sap6 go3",e:"ten (items)"},{c:"人",j:"jan4",e:"people"}]},
+    {c:"一加二係三。", j:"jat1 gaa1 ji6 hai6 saam1.", e:"One plus two is three.",
+      bd:[{c:"一",j:"jat1",e:"one"},{c:"加",j:"gaa1",e:"plus"},{c:"二",j:"ji6",e:"two"},{c:"係",j:"hai6",e:"is / equals"},{c:"三",j:"saam1",e:"three"}]},
+    {c:"我兩歲。", j:"ngo5 loeng5 seoi3.", e:"I'm two years old.",
+      bd:[{c:"我",j:"ngo5",e:"I"},{c:"兩",j:"loeng5",e:"two (with measure)"},{c:"歲",j:"seoi3",e:"years old"}]},
+    {c:"佢有五個朋友。", j:"keoi5 jau5 ng5 go3 pang4 jau5.", e:"He has five friends.",
+      bd:[{c:"佢",j:"keoi5",e:"he / she"},{c:"有",j:"jau5",e:"has"},{c:"五個",j:"ng5 go3",e:"five (items)"},{c:"朋友",j:"pang4 jau5",e:"friends"}]},
+  ],
+  food: [
+    {c:"我想飲茶。", j:"ngo5 soeng2 jam2 caa4.", e:"I want to drink tea.",
+      bd:[{c:"我",j:"ngo5",e:"I"},{c:"想",j:"soeng2",e:"want to"},{c:"飲",j:"jam2",e:"drink"},{c:"茶",j:"caa4",e:"tea"}]},
+    {c:"呢個飯好味！", j:"ni1 go3 faan6 hou2 mei6!", e:"This rice is delicious!",
+      bd:[{c:"呢個",j:"ni1 go3",e:"this"},{c:"飯",j:"faan6",e:"rice / meal"},{c:"好味",j:"hou2 mei6",e:"delicious"}]},
+    {c:"我好餓，想食麵。", j:"ngo5 hou2 ngo6, soeng2 sik6 min6.", e:"I'm hungry, I want noodles.",
+      bd:[{c:"我",j:"ngo5",e:"I"},{c:"好餓",j:"hou2 ngo6",e:"very hungry"},{c:"想食",j:"soeng2 sik6",e:"want to eat"},{c:"麵",j:"min6",e:"noodles"}]},
+    {c:"佢鍾意食魚。", j:"keoi5 zung1 ji3 sik6 jyu2.", e:"He likes eating fish.",
+      bd:[{c:"佢",j:"keoi5",e:"he / she"},{c:"鍾意",j:"zung1 ji3",e:"likes"},{c:"食",j:"sik6",e:"eat"},{c:"魚",j:"jyu2",e:"fish"}]},
+    {c:"咖啡同水，唔該。", j:"gaa3 fe1 tung4 seoi2, m4 goi1.", e:"Coffee and water, please.",
+      bd:[{c:"咖啡",j:"gaa3 fe1",e:"coffee"},{c:"同",j:"tung4",e:"and"},{c:"水",j:"seoi2",e:"water"},{c:"唔該",j:"m4 goi1",e:"please"}]},
+  ],
+  family: [
+    {c:"我爸爸好高。", j:"ngo5 baa4 baa1 hou2 gou1.", e:"My father is very tall.",
+      bd:[{c:"我",j:"ngo5",e:"my"},{c:"爸爸",j:"baa4 baa1",e:"father"},{c:"好高",j:"hou2 gou1",e:"very tall"}]},
+    {c:"我媽媽係老師。", j:"ngo5 maa4 maa1 hai6 lou5 si1.", e:"My mother is a teacher.",
+      bd:[{c:"我",j:"ngo5",e:"my"},{c:"媽媽",j:"maa4 maa1",e:"mother"},{c:"係",j:"hai6",e:"is"},{c:"老師",j:"lou5 si1",e:"teacher"}]},
+    {c:"我有一個哥哥。", j:"ngo5 jau5 jat1 go3 go4 go1.", e:"I have one older brother.",
+      bd:[{c:"我",j:"ngo5",e:"I"},{c:"有",j:"jau5",e:"have"},{c:"一個",j:"jat1 go3",e:"one (person)"},{c:"哥哥",j:"go4 go1",e:"older brother"}]},
+    {c:"妹妹好細個。", j:"mui4 mui2 hou2 sai3 go3.", e:"Younger sister is very young.",
+      bd:[{c:"妹妹",j:"mui4 mui2",e:"younger sister"},{c:"好",j:"hou2",e:"very"},{c:"細個",j:"sai3 go3",e:"young / small"}]},
+    {c:"爺爺住喺香港。", j:"je4 je2 zyu6 hai2 hoeng1 gong2.", e:"Grandfather lives in Hong Kong.",
+      bd:[{c:"爺爺",j:"je4 je2",e:"paternal grandfather"},{c:"住",j:"zyu6",e:"lives"},{c:"喺",j:"hai2",e:"in / at"},{c:"香港",j:"hoeng1 gong2",e:"Hong Kong"}]},
+  ],
+  time: [
+    {c:"今日係星期一。", j:"gam1 jat6 hai6 sing1 kei4 jat1.", e:"Today is Monday.",
+      bd:[{c:"今日",j:"gam1 jat6",e:"today"},{c:"係",j:"hai6",e:"is"},{c:"星期一",j:"sing1 kei4 jat1",e:"Monday"}]},
+    {c:"琴日係星期六。", j:"kam4 jat6 hai6 sing1 kei4 luk6.", e:"Yesterday was Saturday.",
+      bd:[{c:"琴日",j:"kam4 jat6",e:"yesterday"},{c:"係",j:"hai6",e:"was"},{c:"星期六",j:"sing1 kei4 luk6",e:"Saturday"}]},
+    {c:"聽日朝早見。", j:"ting1 jat6 ziu1 zou2 gin3.", e:"See you tomorrow morning.",
+      bd:[{c:"聽日",j:"ting1 jat6",e:"tomorrow"},{c:"朝早",j:"ziu1 zou2",e:"morning"},{c:"見",j:"gin3",e:"see / meet"}]},
+    {c:"夜晚十點瞓覺。", j:"je6 maan5 sap6 dim2 fan3 gaau3.", e:"Sleep at 10pm.",
+      bd:[{c:"夜晚",j:"je6 maan5",e:"night"},{c:"十點",j:"sap6 dim2",e:"10 o'clock"},{c:"瞓覺",j:"fan3 gaau3",e:"to sleep"}]},
+    {c:"星期日休息。", j:"sing1 kei4 jat6 jau1 sik1.", e:"Sunday is for resting.",
+      bd:[{c:"星期日",j:"sing1 kei4 jat6",e:"Sunday"},{c:"休息",j:"jau1 sik1",e:"to rest"}]},
+  ],
+  phrases: [
+    {c:"唔該，洗手間喺邊度？", j:"m4 goi1, sai2 sau2 gaan1 hai2 bin1 dou6?", e:"Excuse me, where is the bathroom?",
+      bd:[{c:"唔該",j:"m4 goi1",e:"excuse me / please"},{c:"洗手間",j:"sai2 sau2 gaan1",e:"bathroom"},{c:"喺邊度",j:"hai2 bin1 dou6",e:"is where"}]},
+    {c:"我唔明，請講慢啲。", j:"ngo5 m4 ming4, cing2 gong2 maan6 di1.", e:"I don't understand, please speak slowly.",
+      bd:[{c:"我",j:"ngo5",e:"I"},{c:"唔明",j:"m4 ming4",e:"don't understand"},{c:"請",j:"cing2",e:"please"},{c:"講",j:"gong2",e:"speak"},{c:"慢啲",j:"maan6 di1",e:"a bit slower"}]},
+    {c:"呢個幾錢？", j:"ni1 go3 gei2 cin2?", e:"How much is this?",
+      bd:[{c:"呢個",j:"ni1 go3",e:"this one"},{c:"幾錢",j:"gei2 cin2",e:"how much money"}]},
+    {c:"我叫William，你呢？", j:"ngo5 giu3 William, nei5 ne1?", e:"I'm William, and you?",
+      bd:[{c:"我",j:"ngo5",e:"I"},{c:"叫",j:"giu3",e:"am called"},{c:"William",j:"William",e:"William"},{c:"你呢",j:"nei5 ne1",e:"and you?"}]},
+    {c:"我要呢個，多謝。", j:"ngo5 jiu3 ni1 go3, do1 ze6.", e:"I want this one, thanks.",
+      bd:[{c:"我要",j:"ngo5 jiu3",e:"I want"},{c:"呢個",j:"ni1 go3",e:"this one"},{c:"多謝",j:"do1 ze6",e:"thank you"}]},
+  ],
+  colors: [
+    {c:"我鍾意紅色。", j:"ngo5 zung1 ji3 hung4 sik1.", e:"I like red.",
+      bd:[{c:"我",j:"ngo5",e:"I"},{c:"鍾意",j:"zung1 ji3",e:"like"},{c:"紅色",j:"hung4 sik1",e:"red"}]},
+    {c:"天空係藍色。", j:"tin1 hung1 hai6 laam4 sik1.", e:"The sky is blue.",
+      bd:[{c:"天空",j:"tin1 hung1",e:"sky"},{c:"係",j:"hai6",e:"is"},{c:"藍色",j:"laam4 sik1",e:"blue"}]},
+    {c:"呢件衫係白色。", j:"ni1 gin6 saam1 hai6 baak6 sik1.", e:"This shirt is white.",
+      bd:[{c:"呢件",j:"ni1 gin6",e:"this (clothing)"},{c:"衫",j:"saam1",e:"shirt / clothing"},{c:"係",j:"hai6",e:"is"},{c:"白色",j:"baak6 sik1",e:"white"}]},
+    {c:"佢著綠色嘅褲。", j:"keoi5 zoek3 luk6 sik1 ge3 fu3.", e:"He's wearing green pants.",
+      bd:[{c:"佢",j:"keoi5",e:"he / she"},{c:"著",j:"zoek3",e:"wearing"},{c:"綠色",j:"luk6 sik1",e:"green"},{c:"嘅",j:"ge3",e:"(possessive particle)"},{c:"褲",j:"fu3",e:"pants"}]},
+    {c:"我唔鍾意黃色。", j:"ngo5 m4 zung1 ji3 wong4 sik1.", e:"I don't like yellow.",
+      bd:[{c:"我",j:"ngo5",e:"I"},{c:"唔",j:"m4",e:"don't / not"},{c:"鍾意",j:"zung1 ji3",e:"like"},{c:"黃色",j:"wong4 sik1",e:"yellow"}]},
+  ],
+  body: [
+    {c:"我頭好痛。", j:"ngo5 tau4 hou2 tung3.", e:"My head really hurts.",
+      bd:[{c:"我",j:"ngo5",e:"my"},{c:"頭",j:"tau4",e:"head"},{c:"好痛",j:"hou2 tung3",e:"really hurts"}]},
+    {c:"我眼好攰。", j:"ngo5 ngaan5 hou2 gui6.", e:"My eyes are very tired.",
+      bd:[{c:"我",j:"ngo5",e:"my"},{c:"眼",j:"ngaan5",e:"eyes"},{c:"好攰",j:"hou2 gui6",e:"very tired"}]},
+    {c:"洗手要用水。", j:"sai2 sau2 jiu3 jung6 seoi2.", e:"Washing hands requires water.",
+      bd:[{c:"洗手",j:"sai2 sau2",e:"wash hands"},{c:"要",j:"jiu3",e:"need / require"},{c:"用",j:"jung6",e:"use"},{c:"水",j:"seoi2",e:"water"}]},
+    {c:"我心好痛。", j:"ngo5 sam1 hou2 tung3.", e:"My heart hurts (sad).",
+      bd:[{c:"我",j:"ngo5",e:"my"},{c:"心",j:"sam1",e:"heart"},{c:"好痛",j:"hou2 tung3",e:"really hurts"}]},
+    {c:"佢腳受傷。", j:"keoi5 goek3 sau6 soeng1.", e:"His leg is injured.",
+      bd:[{c:"佢",j:"keoi5",e:"he / she"},{c:"腳",j:"goek3",e:"leg / foot"},{c:"受傷",j:"sau6 soeng1",e:"injured"}]},
+  ],
+  transport: [
+    {c:"我坐地鐵去。", j:"ngo5 co5 dei6 tit3 heoi3.", e:"I'm taking the MTR.",
+      bd:[{c:"我",j:"ngo5",e:"I"},{c:"坐",j:"co5",e:"take / sit"},{c:"地鐵",j:"dei6 tit3",e:"MTR / subway"},{c:"去",j:"heoi3",e:"go"}]},
+    {c:"的士幾錢？", j:"dik1 si2 gei2 cin2?", e:"How much is the taxi?",
+      bd:[{c:"的士",j:"dik1 si2",e:"taxi"},{c:"幾錢",j:"gei2 cin2",e:"how much"}]},
+    {c:"巴士喺邊度停？", j:"baa1 si2 hai2 bin1 dou6 ting4?", e:"Where does the bus stop?",
+      bd:[{c:"巴士",j:"baa1 si2",e:"bus"},{c:"喺邊度",j:"hai2 bin1 dou6",e:"at where"},{c:"停",j:"ting4",e:"stop"}]},
+    {c:"飛機聽日去。", j:"fei1 gei1 ting1 jat6 heoi3.", e:"The plane goes tomorrow.",
+      bd:[{c:"飛機",j:"fei1 gei1",e:"airplane"},{c:"聽日",j:"ting1 jat6",e:"tomorrow"},{c:"去",j:"heoi3",e:"goes"}]},
+    {c:"我踩單車返工。", j:"ngo5 caai2 daan1 ce1 faan1 gung1.", e:"I cycle to work.",
+      bd:[{c:"我",j:"ngo5",e:"I"},{c:"踩",j:"caai2",e:"ride / pedal"},{c:"單車",j:"daan1 ce1",e:"bicycle"},{c:"返工",j:"faan1 gung1",e:"to work"}]},
+  ],
+  weather: [
+    {c:"今日天氣好熱。", j:"gam1 jat6 tin1 hei3 hou2 jit6.", e:"The weather today is very hot.",
+      bd:[{c:"今日",j:"gam1 jat6",e:"today"},{c:"天氣",j:"tin1 hei3",e:"weather"},{c:"好熱",j:"hou2 jit6",e:"very hot"}]},
+    {c:"落雨喇，帶遮啦。", j:"lok6 jyu5 laa3, daai3 ze1 laa1.", e:"It's raining, bring an umbrella.",
+      bd:[{c:"落雨",j:"lok6 jyu5",e:"raining"},{c:"喇",j:"laa3",e:"(particle - now)"},{c:"帶",j:"daai3",e:"bring"},{c:"遮",j:"ze1",e:"umbrella"},{c:"啦",j:"laa1",e:"(softening particle)"}]},
+    {c:"颱風嚟喇！", j:"toi4 fung1 lai4 laa3!", e:"The typhoon is coming!",
+      bd:[{c:"颱風",j:"toi4 fung1",e:"typhoon"},{c:"嚟",j:"lai4",e:"is coming"},{c:"喇",j:"laa3",e:"(particle - now)"}]},
+    {c:"今日好凍，著多件。", j:"gam1 jat6 hou2 dung3, zoek3 do1 gin6.", e:"It's cold today, wear extra layers.",
+      bd:[{c:"今日",j:"gam1 jat6",e:"today"},{c:"好凍",j:"hou2 dung3",e:"very cold"},{c:"著",j:"zoek3",e:"wear"},{c:"多件",j:"do1 gin6",e:"more (items)"}]},
+    {c:"太陽好猛！", j:"taai3 joeng4 hou2 maang5!", e:"The sun is so strong!",
+      bd:[{c:"太陽",j:"taai3 joeng4",e:"sun"},{c:"好猛",j:"hou2 maang5",e:"very strong / intense"}]},
+  ],
+  shopping: [
+    {c:"呢個好貴喎。", j:"ni1 go3 hou2 gwai3 wo3.", e:"This is really expensive.",
+      bd:[{c:"呢個",j:"ni1 go3",e:"this one"},{c:"好貴",j:"hou2 gwai3",e:"very expensive"},{c:"喎",j:"wo3",e:"(particle - really)"}]},
+    {c:"有冇平啲嘅？", j:"jau5 mou5 peng4 di1 ge3?", e:"Is there a cheaper one?",
+      bd:[{c:"有冇",j:"jau5 mou5",e:"do you have?"},{c:"平啲",j:"peng4 di1",e:"a bit cheaper"},{c:"嘅",j:"ge3",e:"one (particle)"}]},
+    {c:"我想買呢件。", j:"ngo5 soeng2 maai5 ni1 gin6.", e:"I want to buy this one.",
+      bd:[{c:"我想",j:"ngo5 soeng2",e:"I want to"},{c:"買",j:"maai5",e:"buy"},{c:"呢件",j:"ni1 gin6",e:"this one (item)"}]},
+    {c:"商場好多人。", j:"soeng1 coeng4 hou2 do1 jan4.", e:"The mall is very crowded.",
+      bd:[{c:"商場",j:"soeng1 coeng4",e:"shopping mall"},{c:"好多",j:"hou2 do1",e:"a lot of"},{c:"人",j:"jan4",e:"people"}]},
+    {c:"唔該俾收據我。", j:"m4 goi1 bei2 sau1 geoi3 ngo5.", e:"Please give me the receipt.",
+      bd:[{c:"唔該",j:"m4 goi1",e:"please"},{c:"俾",j:"bei2",e:"give"},{c:"收據",j:"sau1 geoi3",e:"receipt"},{c:"我",j:"ngo5",e:"me"}]},
+  ],
+};
+
+// ── Conversations ─────────────────────────────────────────────────────────────
+const CONVOS = {
+  greetings: { title:"Meeting someone new", speakers:["Mei (Friend)","You"],
+    lines:[
+      {u:false, c:"你好！我叫阿梅。你叫咩名？", j:"nei5 hou2! ngo5 giu3 aa3 Mui4. nei5 giu3 me1 meng2?", e:"Hi! I'm Mei. What's your name?",
+        bd:[{c:"你好",j:"nei5 hou2",e:"hello"},{c:"我",j:"ngo5",e:"I / me"},{c:"叫",j:"giu3",e:"am called"},{c:"阿梅",j:"aa3 Mui4",e:"Mei (name)"},{c:"你",j:"nei5",e:"you"},{c:"叫",j:"giu3",e:"are called"},{c:"咩名",j:"me1 meng2",e:"what name"}]},
+      {u:true,  c:"你好！我叫William。", j:"nei5 hou2! ngo5 giu3 William.", e:"Hi! I'm William.",
+        opts:["你好！我叫William。","對唔住，我唔知。","再見！"], optsJ:["nei5 hou2! ngo5 giu3 William.","deoi3 m4 zyu6, ngo5 m4 zi1.","zoi3 gin3!"],
+        bd:[{c:"你好",j:"nei5 hou2",e:"hello"},{c:"我",j:"ngo5",e:"I / me"},{c:"叫",j:"giu3",e:"am called"},{c:"William",j:"William",e:"William (name)"}]},
+      {u:false, c:"好高興認識你！你好嗎？", j:"hou2 gou1 hing3 jing6 sik1 nei5! nei5 hou2 maa3?", e:"Nice to meet you! How are you?",
+        bd:[{c:"好高興",j:"hou2 gou1 hing3",e:"very happy / pleased"},{c:"認識",j:"jing6 sik1",e:"to meet / know"},{c:"你",j:"nei5",e:"you"},{c:"你好嗎",j:"nei5 hou2 maa3",e:"how are you?"}]},
+      {u:true,  c:"我好好，多謝！你呢？", j:"ngo5 hou2 hou2, do1 ze6! nei5 ne1?", e:"I'm great, thanks! And you?",
+        opts:["我好好，多謝！你呢？","唔係，我唔好。","我唔識。"], optsJ:["ngo5 hou2 hou2, do1 ze6! nei5 ne1?","m4 hai6, ngo5 m4 hou2.","ngo5 m4 sik1."],
+        bd:[{c:"我",j:"ngo5",e:"I"},{c:"好好",j:"hou2 hou2",e:"very good"},{c:"多謝",j:"do1 ze6",e:"thank you"},{c:"你呢",j:"nei5 ne1",e:"and you?"}]},
+      {u:false, c:"我都好好！再見！", j:"ngo5 dou1 hou2 hou2! zoi3 gin3!", e:"I'm great too! Goodbye!",
+        bd:[{c:"我",j:"ngo5",e:"I"},{c:"都",j:"dou1",e:"also / too"},{c:"好好",j:"hou2 hou2",e:"very good"},{c:"再見",j:"zoi3 gin3",e:"goodbye"}]},
+      {u:true,  c:"再見！多謝！", j:"zoi3 gin3! do1 ze6!", e:"Goodbye! Thank you!",
+        opts:["再見！多謝！","唔該，對唔住。","你好嗎？"], optsJ:["zoi3 gin3! do1 ze6!","m4 goi1, deoi3 m4 zyu6.","nei5 hou2 maa3?"],
+        bd:[{c:"再見",j:"zoi3 gin3",e:"goodbye"},{c:"多謝",j:"do1 ze6",e:"thank you"}]},
+    ]},
+  numbers: { title:"Buying fruit at the market", speakers:["Vendor","You"],
+    lines:[
+      {u:false, c:"你好！想買啲咩？", j:"nei5 hou2! soeng2 maai5 di1 me1?", e:"Hello! What would you like?",
+        bd:[{c:"你好",j:"nei5 hou2",e:"hello"},{c:"想",j:"soeng2",e:"want to"},{c:"買",j:"maai5",e:"buy"},{c:"啲咩",j:"di1 me1",e:"what things"}]},
+      {u:true,  c:"我想買蘋果。有幾多個？", j:"ngo5 soeng2 maai5 ping4 gwo2. jau5 gei2 do1 go3?", e:"I'd like apples. How many are there?",
+        opts:["我想買蘋果。有幾多個？","我想食飯。","唔該，再見。"], optsJ:["ngo5 soeng2 maai5 ping4 gwo2. jau5 gei2 do1 go3?","ngo5 soeng2 sik6 faan6.","m4 goi1, zoi3 gin3."],
+        bd:[{c:"我",j:"ngo5",e:"I"},{c:"想買",j:"soeng2 maai5",e:"want to buy"},{c:"蘋果",j:"ping4 gwo2",e:"apple"},{c:"有",j:"jau5",e:"have / there are"},{c:"幾多個",j:"gei2 do1 go3",e:"how many (items)"}]},
+      {u:false, c:"有十個，每個五蚊。", j:"jau5 sap6 go3, mui5 go3 ng5 man1.", e:"Ten available, five dollars each.",
+        bd:[{c:"有",j:"jau5",e:"there are"},{c:"十個",j:"sap6 go3",e:"ten (items)"},{c:"每個",j:"mui5 go3",e:"each one"},{c:"五蚊",j:"ng5 man1",e:"five dollars"}]},
+      {u:true,  c:"我要三個，多謝。", j:"ngo5 jiu3 saam1 go3, do1 ze6.", e:"I'll take three, thank you.",
+        opts:["我要三個，多謝。","我要一百個。","唔要，太貴。"], optsJ:["ngo5 jiu3 saam1 go3, do1 ze6.","ngo5 jiu3 jat1 baak3 go3.","m4 jiu3, taai3 gwai3."],
+        bd:[{c:"我要",j:"ngo5 jiu3",e:"I want / I'll take"},{c:"三個",j:"saam1 go3",e:"three (items)"},{c:"多謝",j:"do1 ze6",e:"thank you"}]},
+      {u:false, c:"好，三個係十五蚊。", j:"hou2, saam1 go3 hai6 sap6 ng5 man1.", e:"Sure, three is fifteen dollars.",
+        bd:[{c:"好",j:"hou2",e:"good / ok"},{c:"三個",j:"saam1 go3",e:"three (items)"},{c:"係",j:"hai6",e:"is / equals"},{c:"十五蚊",j:"sap6 ng5 man1",e:"fifteen dollars"}]},
+      {u:true,  c:"好的，多謝！", j:"hou2 dik1, do1 ze6!", e:"Great, thank you!",
+        opts:["好的，多謝！","我唔明。","再買多一個。"], optsJ:["hou2 dik1, do1 ze6!","ngo5 m4 ming4.","zoi3 maai5 do1 jat1 go3."],
+        bd:[{c:"好的",j:"hou2 dik1",e:"alright / great"},{c:"多謝",j:"do1 ze6",e:"thank you"}]},
+    ]},
+  food: { title:"Ordering at a dim sum restaurant", speakers:["Waiter","You"],
+    lines:[
+      {u:false, c:"你好，想食啲咩？", j:"nei5 hou2, soeng2 sik6 di1 me1?", e:"Hello, what would you like to eat?",
+        bd:[{c:"你好",j:"nei5 hou2",e:"hello"},{c:"想",j:"soeng2",e:"want to"},{c:"食",j:"sik6",e:"eat"},{c:"啲咩",j:"di1 me1",e:"what things"}]},
+      {u:true,  c:"我想食魚同飯，唔該。", j:"ngo5 soeng2 sik6 jyu2 tung4 faan6, m4 goi1.", e:"I'd like fish and rice, please.",
+        opts:["我想食魚同飯，唔該。","我唔餓。","我想飲咖啡。"], optsJ:["ngo5 soeng2 sik6 jyu2 tung4 faan6, m4 goi1.","ngo5 m4 ngo6.","ngo5 soeng2 jam2 gaa3 fe1."],
+        bd:[{c:"我",j:"ngo5",e:"I"},{c:"想食",j:"soeng2 sik6",e:"want to eat"},{c:"魚",j:"jyu2",e:"fish"},{c:"同",j:"tung4",e:"and"},{c:"飯",j:"faan6",e:"rice"},{c:"唔該",j:"m4 goi1",e:"please / excuse me"}]},
+      {u:false, c:"好，飲啲咩？", j:"hou2, jam2 di1 me1?", e:"Sure, what would you like to drink?",
+        bd:[{c:"好",j:"hou2",e:"good / ok"},{c:"飲",j:"jam2",e:"drink"},{c:"啲咩",j:"di1 me1",e:"what things"}]},
+      {u:true,  c:"唔該俾杯茶我。", j:"m4 goi1 bei2 bui1 caa4 ngo5.", e:"Please give me a cup of tea.",
+        opts:["唔該俾杯茶我。","我想食麵。","唔要，多謝。"], optsJ:["m4 goi1 bei2 bui1 caa4 ngo5.","ngo5 soeng2 sik6 min6.","m4 jiu3, do1 ze6."],
+        bd:[{c:"唔該",j:"m4 goi1",e:"please"},{c:"俾",j:"bei2",e:"give"},{c:"杯",j:"bui1",e:"cup (measure word)"},{c:"茶",j:"caa4",e:"tea"},{c:"我",j:"ngo5",e:"me"}]},
+      {u:false, c:"好！仲要啲咩嗎？", j:"hou2! zung6 jiu3 di1 me1 maa3?", e:"Great! Would you like anything else?",
+        bd:[{c:"好",j:"hou2",e:"good"},{c:"仲",j:"zung6",e:"still / also"},{c:"要",j:"jiu3",e:"want"},{c:"啲咩",j:"di1 me1",e:"what else"},{c:"嗎",j:"maa3",e:"(question particle)"}]},
+      {u:true,  c:"唔要喇，多謝！好味！", j:"m4 jiu3 laa3, do1 ze6! hou2 mei6!", e:"No thanks! It's delicious!",
+        opts:["唔要喇，多謝！好味！","我仲好餓。","再嚟多碗飯。"], optsJ:["m4 jiu3 laa3, do1 ze6! hou2 mei6!","ngo5 zung6 hou2 ngo6.","zoi3 lai4 do1 wun2 faan6."],
+        bd:[{c:"唔要",j:"m4 jiu3",e:"don't want"},{c:"喇",j:"laa3",e:"(sentence final particle)"},{c:"多謝",j:"do1 ze6",e:"thank you"},{c:"好味",j:"hou2 mei6",e:"delicious"}]},
+    ]},
+  family: { title:"Introducing your family", speakers:["Friend","You"],
+    lines:[
+      {u:false, c:"你有冇兄弟姐妹？", j:"nei5 jau5 mou5 hing1 dai6 ze2 mui6?", e:"Do you have brothers or sisters?",
+        bd:[{c:"你",j:"nei5",e:"you"},{c:"有冇",j:"jau5 mou5",e:"have or not?"},{c:"兄弟",j:"hing1 dai6",e:"brothers"},{c:"姐妹",j:"ze2 mui6",e:"sisters"}]},
+      {u:true,  c:"有，我有一個哥哥同一個妹妹。", j:"jau5, ngo5 jau5 jat1 go3 go4 go1 tung4 jat1 go3 mui4 mui2.", e:"Yes, one older brother and one younger sister.",
+        opts:["有，我有一個哥哥同一個妹妹。","冇，我係獨生子。","我唔知。"], optsJ:["jau5, ngo5 jau5 jat1 go3 go4 go1 tung4 jat1 go3 mui4 mui2.","mou5, ngo5 hai6 duk6 sang1 zi2.","ngo5 m4 zi1."],
+        bd:[{c:"有",j:"jau5",e:"yes / have"},{c:"我有",j:"ngo5 jau5",e:"I have"},{c:"一個",j:"jat1 go3",e:"one (person)"},{c:"哥哥",j:"go4 go1",e:"older brother"},{c:"同",j:"tung4",e:"and"},{c:"一個",j:"jat1 go3",e:"one (person)"},{c:"妹妹",j:"mui4 mui2",e:"younger sister"}]},
+      {u:false, c:"你爸爸媽媽做咩工作？", j:"nei5 baa4 baa1 maa4 maa1 zou6 me1 gung1 zok3?", e:"What do your parents do for work?",
+        bd:[{c:"你",j:"nei5",e:"your"},{c:"爸爸",j:"baa4 baa1",e:"father"},{c:"媽媽",j:"maa4 maa1",e:"mother"},{c:"做",j:"zou6",e:"do"},{c:"咩",j:"me1",e:"what"},{c:"工作",j:"gung1 zok3",e:"work / job"}]},
+      {u:true,  c:"我爸爸係醫生，媽媽係老師。", j:"ngo5 baa4 baa1 hai6 ji1 sang1, maa4 maa1 hai6 lou5 si1.", e:"My dad is a doctor, my mum is a teacher.",
+        opts:["我爸爸係醫生，媽媽係老師。","我唔知佢哋做咩。","佢哋唔工作。"], optsJ:["ngo5 baa4 baa1 hai6 ji1 sang1, maa4 maa1 hai6 lou5 si1.","ngo5 m4 zi1 keoi5 dei6 zou6 me1.","keoi5 dei6 m4 gung1 zok3."],
+        bd:[{c:"我爸爸",j:"ngo5 baa4 baa1",e:"my father"},{c:"係",j:"hai6",e:"is"},{c:"醫生",j:"ji1 sang1",e:"doctor"},{c:"媽媽",j:"maa4 maa1",e:"mother"},{c:"係",j:"hai6",e:"is"},{c:"老師",j:"lou5 si1",e:"teacher"}]},
+      {u:false, c:"你哋住喺邊度？", j:"nei5 dei6 zyu6 hai2 bin1 dou6?", e:"Where do you all live?",
+        bd:[{c:"你哋",j:"nei5 dei6",e:"you all"},{c:"住",j:"zyu6",e:"live"},{c:"喺",j:"hai2",e:"at / in"},{c:"邊度",j:"bin1 dou6",e:"where"}]},
+      {u:true,  c:"我哋住喺悉尼。", j:"ngo5 dei6 zyu6 hai2 Sat1 nei4.", e:"We live in Sydney.",
+        opts:["我哋住喺悉尼。","我唔知。","我哋住喺飛機。"], optsJ:["ngo5 dei6 zyu6 hai2 Sat1 nei4.","ngo5 m4 zi1.","ngo5 dei6 zyu6 hai2 fei1 gei1."],
+        bd:[{c:"我哋",j:"ngo5 dei6",e:"we / us"},{c:"住",j:"zyu6",e:"live"},{c:"喺",j:"hai2",e:"in / at"},{c:"悉尼",j:"Sat1 nei4",e:"Sydney"}]},
+    ]},
+  time: { title:"Making weekend plans", speakers:["Friend","You"],
+    lines:[
+      {u:false, c:"今個週末你有冇空？", j:"gam1 go3 zau1 mut6 nei5 jau5 mou5 hung1?", e:"Are you free this weekend?",
+        bd:[{c:"今個",j:"gam1 go3",e:"this (one)"},{c:"週末",j:"zau1 mut6",e:"weekend"},{c:"你",j:"nei5",e:"you"},{c:"有冇空",j:"jau5 mou5 hung1",e:"free or not? (have time?)"}]},
+      {u:true,  c:"星期六得，星期日唔得。", j:"sing1 kei4 luk6 dak1, sing1 kei4 jat6 m4 dak1.", e:"Saturday is fine, Sunday I can't.",
+        opts:["星期六得，星期日唔得。","今日唔得。","我唔知幾時。"], optsJ:["sing1 kei4 luk6 dak1, sing1 kei4 jat6 m4 dak1.","gam1 jat6 m4 dak1.","ngo5 m4 zi1 gei2 si4."],
+        bd:[{c:"星期六",j:"sing1 kei4 luk6",e:"Saturday"},{c:"得",j:"dak1",e:"ok / can do"},{c:"星期日",j:"sing1 kei4 jat6",e:"Sunday"},{c:"唔得",j:"m4 dak1",e:"not ok / can't"}]},
+      {u:false, c:"星期六朝早幾點見？", j:"sing1 kei4 luk6 ziu1 zou2 gei2 dim2 gin3?", e:"What time shall we meet Saturday morning?",
+        bd:[{c:"星期六",j:"sing1 kei4 luk6",e:"Saturday"},{c:"朝早",j:"ziu1 zou2",e:"morning"},{c:"幾點",j:"gei2 dim2",e:"what time"},{c:"見",j:"gin3",e:"meet / see"}]},
+      {u:true,  c:"朝早十點見，好嗎？", j:"ziu1 zou2 sap6 dim2 gin3, hou2 maa3?", e:"Meet at 10am, is that ok?",
+        opts:["朝早十點見，好嗎？","夜晚三點。","琴日見。"], optsJ:["ziu1 zou2 sap6 dim2 gin3, hou2 maa3?","je6 maan5 saam1 dim2.","kam4 jat6 gin3."],
+        bd:[{c:"朝早",j:"ziu1 zou2",e:"morning"},{c:"十點",j:"sap6 dim2",e:"10 o'clock"},{c:"見",j:"gin3",e:"meet"},{c:"好嗎",j:"hou2 maa3",e:"is that ok?"}]},
+      {u:false, c:"好呀！聽日見！", j:"hou2 aa3! ting1 jat6 gin3!", e:"Great! See you tomorrow!",
+        bd:[{c:"好呀",j:"hou2 aa3",e:"great / sounds good"},{c:"聽日",j:"ting1 jat6",e:"tomorrow"},{c:"見",j:"gin3",e:"see / meet"}]},
+      {u:true,  c:"好的！聽日朝早見！", j:"hou2 dik1! ting1 jat6 ziu1 zou2 gin3!", e:"Sure! See you tomorrow morning!",
+        opts:["好的！聽日朝早見！","唔好，我唔得閒。","琴日見。"], optsJ:["hou2 dik1! ting1 jat6 ziu1 zou2 gin3!","m4 hou2, ngo5 m4 dak1 haan4.","kam4 jat6 gin3."],
+        bd:[{c:"好的",j:"hou2 dik1",e:"alright"},{c:"聽日",j:"ting1 jat6",e:"tomorrow"},{c:"朝早",j:"ziu1 zou2",e:"morning"},{c:"見",j:"gin3",e:"see / meet"}]},
+    ]},
+  phrases: { title:"Asking for directions", speakers:["Stranger","You"],
+    lines:[
+      {u:true,  c:"唔該，地鐵站喺邊度？", j:"m4 goi1, dei6 tit3 zaam6 hai2 bin1 dou6?", e:"Excuse me, where is the MTR?",
+        opts:["唔該，地鐵站喺邊度？","你好嗎？","幾錢？"], optsJ:["m4 goi1, dei6 tit3 zaam6 hai2 bin1 dou6?","nei5 hou2 maa3?","gei2 cin2?"],
+        bd:[{c:"唔該",j:"m4 goi1",e:"excuse me / please"},{c:"地鐵站",j:"dei6 tit3 zaam6",e:"MTR station"},{c:"喺",j:"hai2",e:"is at"},{c:"邊度",j:"bin1 dou6",e:"where"}]},
+      {u:false, c:"喺前面，行五分鐘。", j:"hai2 cin4 min6, haang4 ng5 fan1 zung1.", e:"It's ahead, five minutes walk.",
+        bd:[{c:"喺",j:"hai2",e:"is at"},{c:"前面",j:"cin4 min6",e:"ahead / in front"},{c:"行",j:"haang4",e:"walk"},{c:"五分鐘",j:"ng5 fan1 zung1",e:"five minutes"}]},
+      {u:true,  c:"唔係好明，可唔可以講慢啲？", j:"m4 hai6 hou2 ming4, ho2 m4 ho2 ji5 gong2 maan6 di1?", e:"I didn't quite understand, can you speak more slowly?",
+        opts:["唔係好明，可唔可以講慢啲？","唔該，再見。","我唔知。"], optsJ:["m4 hai6 hou2 ming4, ho2 m4 ho2 ji5 gong2 maan6 di1?","m4 goi1, zoi3 gin3.","ngo5 m4 zi1."],
+        bd:[{c:"唔係好明",j:"m4 hai6 hou2 ming4",e:"not quite understand"},{c:"可唔可以",j:"ho2 m4 ho2 ji5",e:"can or not? (may I?)"},{c:"講",j:"gong2",e:"speak"},{c:"慢啲",j:"maan6 di1",e:"a bit slower"}]},
+      {u:false, c:"當然！喺前面，行五分鐘。", j:"dong1 jin4! hai2 cin4 min6, haang4 ng5 fan1 zung1.", e:"Of course! Ahead, five minutes walk.",
+        bd:[{c:"當然",j:"dong1 jin4",e:"of course"},{c:"喺前面",j:"hai2 cin4 min6",e:"ahead / in front"},{c:"行",j:"haang4",e:"walk"},{c:"五分鐘",j:"ng5 fan1 zung1",e:"five minutes"}]},
+      {u:true,  c:"明白喇，多謝你！", j:"ming4 baak6 laa3, do1 ze6 nei5!", e:"I understand, thank you!",
+        opts:["明白喇，多謝你！","我唔明。","對唔住。"], optsJ:["ming4 baak6 laa3, do1 ze6 nei5!","ngo5 m4 ming4.","deoi3 m4 zyu6."],
+        bd:[{c:"明白",j:"ming4 baak6",e:"understand"},{c:"喇",j:"laa3",e:"(completion particle)"},{c:"多謝",j:"do1 ze6",e:"thank you"},{c:"你",j:"nei5",e:"you"}]},
+      {u:false, c:"唔緊要，祝你好運！", j:"m4 gan2 jiu3, zuk1 nei5 hou2 wan6!", e:"No problem, good luck!",
+        bd:[{c:"唔緊要",j:"m4 gan2 jiu3",e:"no problem / never mind"},{c:"祝",j:"zuk1",e:"wish"},{c:"你",j:"nei5",e:"you"},{c:"好運",j:"hou2 wan6",e:"good luck"}]},
+    ]},
+  colors: { title:"Shopping for clothes", speakers:["Shop assistant","You"],
+    lines:[
+      {u:false, c:"你好，你想搵咩顏色？", j:"nei5 hou2, nei5 soeng2 wan2 me1 ngaan4 sik1?", e:"Hello, what colour are you looking for?",
+        bd:[{c:"你好",j:"nei5 hou2",e:"hello"},{c:"你",j:"nei5",e:"you"},{c:"想",j:"soeng2",e:"want to"},{c:"搵",j:"wan2",e:"look for / find"},{c:"咩顏色",j:"me1 ngaan4 sik1",e:"what colour"}]},
+      {u:true,  c:"我想要藍色或者黑色。", j:"ngo5 soeng2 jiu3 laam4 sik1 waak6 ze2 hak1 sik1.", e:"I'd like blue or black.",
+        opts:["我想要藍色或者黑色。","我鍾意紅色同綠色。","我唔知。"], optsJ:["ngo5 soeng2 jiu3 laam4 sik1 waak6 ze2 hak1 sik1.","ngo5 zung1 ji3 hung4 sik1 tung4 luk6 sik1.","ngo5 m4 zi1."],
+        bd:[{c:"我想要",j:"ngo5 soeng2 jiu3",e:"I would like"},{c:"藍色",j:"laam4 sik1",e:"blue"},{c:"或者",j:"waak6 ze2",e:"or"},{c:"黑色",j:"hak1 sik1",e:"black"}]},
+      {u:false, c:"呢件係藍色，你覺得點？", j:"ni1 gin6 hai6 laam4 sik1, nei5 gok3 dak1 dim2?", e:"This one is blue, what do you think?",
+        bd:[{c:"呢件",j:"ni1 gin6",e:"this one (clothing)"},{c:"係",j:"hai6",e:"is"},{c:"藍色",j:"laam4 sik1",e:"blue"},{c:"你",j:"nei5",e:"you"},{c:"覺得點",j:"gok3 dak1 dim2",e:"what do you think?"}]},
+      {u:true,  c:"好靚！有冇白色？", j:"hou2 leng3! jau5 mou5 baak6 sik1?", e:"Very nice! Do you have white?",
+        opts:["好靚！有冇白色？","太貴喇。","唔啱我。"], optsJ:["hou2 leng3! jau5 mou5 baak6 sik1?","taai3 gwai3 laa3.","m4 ngaam1 ngo5."],
+        bd:[{c:"好靚",j:"hou2 leng3",e:"very nice / beautiful"},{c:"有冇",j:"jau5 mou5",e:"do you have?"},{c:"白色",j:"baak6 sik1",e:"white"}]},
+      {u:false, c:"有，呢件白色都好好睇。", j:"jau5, ni1 gin6 baak6 sik1 dou1 hou2 hou2 tai2.", e:"Yes, this white one is also very nice.",
+        bd:[{c:"有",j:"jau5",e:"yes / have"},{c:"呢件",j:"ni1 gin6",e:"this one"},{c:"白色",j:"baak6 sik1",e:"white"},{c:"都",j:"dou1",e:"also"},{c:"好好睇",j:"hou2 hou2 tai2",e:"very nice looking"}]},
+      {u:true,  c:"我買白色嗰件，多謝！", j:"ngo5 maai5 baak6 sik1 go2 gin6, do1 ze6!", e:"I'll take the white one, thanks!",
+        opts:["我買白色嗰件，多謝！","兩件都唔要。","有冇平啲？"], optsJ:["ngo5 maai5 baak6 sik1 go2 gin6, do1 ze6!","loeng5 gin6 dou1 m4 jiu3.","jau5 mou5 peng4 di1?"],
+        bd:[{c:"我買",j:"ngo5 maai5",e:"I'll buy"},{c:"白色",j:"baak6 sik1",e:"white"},{c:"嗰件",j:"go2 gin6",e:"that one (clothing)"},{c:"多謝",j:"do1 ze6",e:"thank you"}]},
+    ]},
+  body: { title:"At the doctor", speakers:["Doctor","You"],
+    lines:[
+      {u:false, c:"你好，你有咩唔舒服？", j:"nei5 hou2, nei5 jau5 me1 m4 syu1 fuk6?", e:"Hello, what seems to be the problem?",
+        bd:[{c:"你好",j:"nei5 hou2",e:"hello"},{c:"你",j:"nei5",e:"you"},{c:"有",j:"jau5",e:"have"},{c:"咩",j:"me1",e:"what"},{c:"唔舒服",j:"m4 syu1 fuk6",e:"unwell / discomfort"}]},
+      {u:true,  c:"我頭好痛，同埋肚都唔舒服。", j:"ngo5 tau4 hou2 tung3, tung4 maai4 tou5 dou1 m4 syu1 fuk6.", e:"I have a bad headache and stomach ache.",
+        opts:["我頭好痛，同埋肚都唔舒服。","我眼好攰。","我腳痛。"], optsJ:["ngo5 tau4 hou2 tung3, tung4 maai4 tou5 dou1 m4 syu1 fuk6.","ngo5 ngaan5 hou2 gui6.","ngo5 goek3 tung3."],
+        bd:[{c:"我頭",j:"ngo5 tau4",e:"my head"},{c:"好痛",j:"hou2 tung3",e:"really hurts"},{c:"同埋",j:"tung4 maai4",e:"and also"},{c:"肚",j:"tou5",e:"stomach"},{c:"都",j:"dou1",e:"also"},{c:"唔舒服",j:"m4 syu1 fuk6",e:"unwell"}]},
+      {u:false, c:"你係咪有發燒？", j:"nei5 hai6 mai6 jau5 faat3 siu1?", e:"Do you have a fever?",
+        bd:[{c:"你",j:"nei5",e:"you"},{c:"係咪",j:"hai6 mai6",e:"are you? / is it?"},{c:"有",j:"jau5",e:"have"},{c:"發燒",j:"faat3 siu1",e:"fever"}]},
+      {u:true,  c:"唔知，但係我覺得好凍。", j:"m4 zi1, daan6 hai6 ngo5 gok3 dak1 hou2 dung3.", e:"I'm not sure, but I feel very cold.",
+        opts:["唔知，但係我覺得好凍。","唔係，我好熱。","我唔知。"], optsJ:["m4 zi1, daan6 hai6 ngo5 gok3 dak1 hou2 dung3.","m4 hai6, ngo5 hou2 jit6.","ngo5 m4 zi1."],
+        bd:[{c:"唔知",j:"m4 zi1",e:"don't know / not sure"},{c:"但係",j:"daan6 hai6",e:"but"},{c:"我",j:"ngo5",e:"I"},{c:"覺得",j:"gok3 dak1",e:"feel"},{c:"好凍",j:"hou2 dung3",e:"very cold"}]},
+      {u:false, c:"我幫你量體溫。請坐。", j:"ngo5 bong1 nei5 loeng4 tai2 wan1. cing2 co5.", e:"Let me take your temperature. Please sit.",
+        bd:[{c:"我幫你",j:"ngo5 bong1 nei5",e:"let me help you"},{c:"量",j:"loeng4",e:"measure"},{c:"體溫",j:"tai2 wan1",e:"body temperature"},{c:"請坐",j:"cing2 co5",e:"please sit"}]},
+      {u:true,  c:"好，多謝醫生。", j:"hou2, do1 ze6 ji1 sang1.", e:"Ok, thank you doctor.",
+        opts:["好，多謝醫生。","唔使喇。","我想走。"], optsJ:["hou2, do1 ze6 ji1 sang1.","m4 sai2 laa3.","ngo5 soeng2 zau2."],
+        bd:[{c:"好",j:"hou2",e:"ok"},{c:"多謝",j:"do1 ze6",e:"thank you"},{c:"醫生",j:"ji1 sang1",e:"doctor"}]},
+    ]},
+  transport: { title:"Getting a taxi", speakers:["Driver","You"],
+    lines:[
+      {u:false, c:"你好！去邊度？", j:"nei5 hou2! heoi3 bin1 dou6?", e:"Hello! Where are you going?",
+        bd:[{c:"你好",j:"nei5 hou2",e:"hello"},{c:"去",j:"heoi3",e:"go to"},{c:"邊度",j:"bin1 dou6",e:"where"}]},
+      {u:true,  c:"去中環，唔該。", j:"heoi3 zung1 waan4, m4 goi1.", e:"To Central, please.",
+        opts:["去中環，唔該。","我想坐地鐵。","去機場。"], optsJ:["heoi3 zung1 waan4, m4 goi1.","ngo5 soeng2 co5 dei6 tit3.","heoi3 gei1 coeng4."],
+        bd:[{c:"去",j:"heoi3",e:"go to"},{c:"中環",j:"zung1 waan4",e:"Central (HK district)"},{c:"唔該",j:"m4 goi1",e:"please / thank you"}]},
+      {u:false, c:"好，大概三十分鐘。", j:"hou2, daai6 koi3 saam1 sap6 fan1 zung1.", e:"Sure, about thirty minutes.",
+        bd:[{c:"好",j:"hou2",e:"ok"},{c:"大概",j:"daai6 koi3",e:"approximately"},{c:"三十",j:"saam1 sap6",e:"thirty"},{c:"分鐘",j:"fan1 zung1",e:"minutes"}]},
+      {u:true,  c:"大概幾錢？", j:"daai6 koi3 gei2 cin2?", e:"About how much will it cost?",
+        opts:["大概幾錢？","幾遠？","幾時到？"], optsJ:["daai6 koi3 gei2 cin2?","gei2 jyun5?","gei2 si4 dou3?"],
+        bd:[{c:"大概",j:"daai6 koi3",e:"approximately"},{c:"幾錢",j:"gei2 cin2",e:"how much money"}]},
+      {u:false, c:"大概一百蚊左右。", j:"daai6 koi3 jat1 baak3 man1 zo2 jau6.", e:"Around a hundred dollars.",
+        bd:[{c:"大概",j:"daai6 koi3",e:"approximately"},{c:"一百",j:"jat1 baak3",e:"one hundred"},{c:"蚊",j:"man1",e:"dollars"},{c:"左右",j:"zo2 jau6",e:"around / about"}]},
+      {u:true,  c:"好，多謝！到咗叫我。", j:"hou2, do1 ze6! dou3 zo2 giu3 ngo5.", e:"OK thanks! Let me know when we arrive.",
+        opts:["好，多謝！到咗叫我。","太貴喇，唔坐。","可唔可以快啲？"], optsJ:["hou2, do1 ze6! dou3 zo2 giu3 ngo5.","taai3 gwai3 laa3, m4 co5.","ho2 m4 ho2 ji5 faai3 di1?"],
+        bd:[{c:"好",j:"hou2",e:"ok"},{c:"多謝",j:"do1 ze6",e:"thank you"},{c:"到咗",j:"dou3 zo2",e:"arrived / when we arrive"},{c:"叫我",j:"giu3 ngo5",e:"tell me / call me"}]},
+    ]},
+  weather: { title:"Chatting about the weather", speakers:["Neighbour","You"],
+    lines:[
+      {u:false, c:"今日天氣好熱呀！", j:"gam1 jat6 tin1 hei3 hou2 jit6 aa3!", e:"The weather is so hot today!",
+        bd:[{c:"今日",j:"gam1 jat6",e:"today"},{c:"天氣",j:"tin1 hei3",e:"weather"},{c:"好熱",j:"hou2 jit6",e:"very hot"},{c:"呀",j:"aa3",e:"(exclamation particle)"}]},
+      {u:true,  c:"係呀！我好唔鍾意熱天。", j:"hai6 aa3! ngo5 hou2 m4 zung1 ji3 jit6 tin1.", e:"Yeah! I really don't like hot weather.",
+        opts:["係呀！我好唔鍾意熱天。","我鍾意熱天。","今日落雨。"], optsJ:["hai6 aa3! ngo5 hou2 m4 zung1 ji3 jit6 tin1.","ngo5 zung1 ji3 jit6 tin1.","gam1 jat6 lok6 jyu5."],
+        bd:[{c:"係呀",j:"hai6 aa3",e:"yes / that's right"},{c:"我",j:"ngo5",e:"I"},{c:"好唔鍾意",j:"hou2 m4 zung1 ji3",e:"really don't like"},{c:"熱天",j:"jit6 tin1",e:"hot weather"}]},
+      {u:false, c:"聽日好似會落雨。", j:"ting1 jat6 hou2 ci5 wui5 lok6 jyu5.", e:"It looks like it will rain tomorrow.",
+        bd:[{c:"聽日",j:"ting1 jat6",e:"tomorrow"},{c:"好似",j:"hou2 ci5",e:"seems like / looks like"},{c:"會",j:"wui5",e:"will"},{c:"落雨",j:"lok6 jyu5",e:"rain (fall rain)"}]},
+      {u:true,  c:"真係？我要帶遮喇。", j:"zan1 hai6? ngo5 jiu3 daai3 ze1 laa3.", e:"Really? I'll need to bring an umbrella.",
+        opts:["真係？我要帶遮喇。","我鍾意落雨。","唔緊要。"], optsJ:["zan1 hai6? ngo5 jiu3 daai3 ze1 laa3.","ngo5 zung1 ji3 lok6 jyu5.","m4 gan2 jiu3."],
+        bd:[{c:"真係",j:"zan1 hai6",e:"really?"},{c:"我要",j:"ngo5 jiu3",e:"I need to"},{c:"帶",j:"daai3",e:"bring / carry"},{c:"遮",j:"ze1",e:"umbrella"},{c:"喇",j:"laa3",e:"(particle — now/already)"}]},
+      {u:false, c:"係呀，颱風季節都嚟喇。", j:"hai6 aa3, toi4 fung1 gwai3 zit3 dou1 lai4 laa3.", e:"Yes, and the typhoon season is coming.",
+        bd:[{c:"係呀",j:"hai6 aa3",e:"yes"},{c:"颱風",j:"toi4 fung1",e:"typhoon"},{c:"季節",j:"gwai3 zit3",e:"season"},{c:"都",j:"dou1",e:"also"},{c:"嚟喇",j:"lai4 laa3",e:"is coming"}]},
+      {u:true,  c:"係囉！希望天氣快啲好番。", j:"hai6 lo3! hei1 mong6 tin1 hei3 faai3 di1 hou2 faan1.", e:"Right! I hope the weather improves soon.",
+        opts:["係囉！希望天氣快啲好番。","我鍾意颱風。","唔緊要。"], optsJ:["hai6 lo3! hei1 mong6 tin1 hei3 faai3 di1 hou2 faan1.","ngo5 zung1 ji3 toi4 fung1.","m4 gan2 jiu3."],
+        bd:[{c:"係囉",j:"hai6 lo3",e:"right / exactly"},{c:"希望",j:"hei1 mong6",e:"hope"},{c:"天氣",j:"tin1 hei3",e:"weather"},{c:"快啲",j:"faai3 di1",e:"sooner / faster"},{c:"好番",j:"hou2 faan1",e:"get better"}]},
+    ]},
+  shopping: { title:"Bargaining at a market stall", speakers:["Vendor","You"],
+    lines:[
+      {u:false, c:"你好！想買咩？", j:"nei5 hou2! soeng2 maai5 me1?", e:"Hello! What would you like to buy?",
+        bd:[{c:"你好",j:"nei5 hou2",e:"hello"},{c:"想買",j:"soeng2 maai5",e:"want to buy"},{c:"咩",j:"me1",e:"what"}]},
+      {u:true,  c:"呢個幾錢？", j:"ni1 go3 gei2 cin2?", e:"How much is this?",
+        opts:["呢個幾錢？","有冇折？","我唔要。"], optsJ:["ni1 go3 gei2 cin2?","jau5 mou5 zit3?","ngo5 m4 jiu3."],
+        bd:[{c:"呢個",j:"ni1 go3",e:"this one"},{c:"幾錢",j:"gei2 cin2",e:"how much money"}]},
+      {u:false, c:"呢個二百蚊。", j:"ni1 go3 ji6 baak3 man1.", e:"This one is two hundred dollars.",
+        bd:[{c:"呢個",j:"ni1 go3",e:"this one"},{c:"二百",j:"ji6 baak3",e:"two hundred"},{c:"蚊",j:"man1",e:"dollars"}]},
+      {u:true,  c:"咁貴！有冇折㗎？", j:"gam3 gwai3! jau5 mou5 zit3 gaa3?", e:"So expensive! Any discount?",
+        opts:["咁貴！有冇折㗎？","好，我買。","有冇平啲嘅？"], optsJ:["gam3 gwai3! jau5 mou5 zit3 gaa3?","hou2, ngo5 maai5.","jau5 mou5 peng4 di1 ge3?"],
+        bd:[{c:"咁貴",j:"gam3 gwai3",e:"so expensive"},{c:"有冇",j:"jau5 mou5",e:"do you have?"},{c:"折",j:"zit3",e:"discount"},{c:"㗎",j:"gaa3",e:"(emphasis particle)"}]},
+      {u:false, c:"好，俾一百八十蚊你啦。", j:"hou2, bei2 jat1 baak3 baat3 sap6 man1 nei5 laa1.", e:"Ok, one hundred and eighty dollars for you.",
+        bd:[{c:"好",j:"hou2",e:"ok"},{c:"俾",j:"bei2",e:"give"},{c:"一百八十",j:"jat1 baak3 baat3 sap6",e:"one hundred eighty"},{c:"蚊",j:"man1",e:"dollars"},{c:"你",j:"nei5",e:"you"},{c:"啦",j:"laa1",e:"(softening particle)"}]},
+      {u:true,  c:"好，成交！多謝！", j:"hou2, sing4 gaau1! do1 ze6!", e:"Deal! Thank you!",
+        opts:["好，成交！多謝！","唔要喇，太貴。","平啲先得。"], optsJ:["hou2, sing4 gaau1! do1 ze6!","m4 jiu3 laa3, taai3 gwai3.","peng4 di1 sin1 dak1."],
+        bd:[{c:"好",j:"hou2",e:"ok"},{c:"成交",j:"sing4 gaau1",e:"deal / agreed"},{c:"多謝",j:"do1 ze6",e:"thank you"}]},
+    ]},
+};
+
+// ── Audio ─────────────────────────────────────────────────────────────────────
+let _voices = null;
+
+function loadVoices() {
+  return new Promise(resolve => {
+    const v = window.speechSynthesis.getVoices();
+    if (v.length > 0) { _voices = v; resolve(v); return; }
+    const handler = () => {
+      _voices = window.speechSynthesis.getVoices();
+      resolve(_voices);
+      window.speechSynthesis.removeEventListener('voiceschanged', handler);
+    };
+    window.speechSynthesis.addEventListener('voiceschanged', handler);
+    setTimeout(() => { _voices = window.speechSynthesis.getVoices(); resolve(_voices); }, 2500);
+  });
+}
+
+function pickVoicePair(voices) {
+  const zh = voices.filter(v => v.lang === 'zh-HK' || v.lang === 'zh-TW' || v.lang.startsWith('zh'));
+  if (zh.length === 0) return { a: null, b: null };
+  const a = zh[0];
+  // Prefer the 5th voice (index 4) as speaker B — user confirmed it's male on their device
+  const b = zh[4] || zh.find(v => v !== a) || null;
+  return { a, b };
+}
+
+async function speak(text, onEnd, voiceOverride, pitchOverride, langOverride) {
+  if (!window.speechSynthesis) return;
+  window.speechSynthesis.cancel();
+  const voices = _voices || await loadVoices();
+  const utt = new SpeechSynthesisUtterance(text);
+  utt.lang = langOverride || 'zh-HK';
+  const rates = { slow: 0.6, normal: 0.8, fast: 1.1 };
+  utt.rate  = rates[state.speed] || 0.8;
+  utt.pitch = pitchOverride !== undefined ? pitchOverride : 1.0;
+  const { a } = pickVoicePair(voices);
+  if (voiceOverride) utt.voice = voiceOverride;
+  else if (a) utt.voice = a;
+  if (onEnd) utt.onend = onEnd;
+  window.speechSynthesis.speak(utt);
+}
+
+// Speak as a specific conversation speaker — uses subtle pitch variation
+async function speakAs(text, isUser, onEnd) {
+  const voices = _voices || await loadVoices();
+  const { a } = pickVoicePair(voices);
+  const pitch = isUser ? 0.85 : 1.1;
+  speak(text, onEnd, a, pitch, 'zh-HK');
+}
+
+// ── Helpers ───────────────────────────────────────────────────────────────────
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length-1; i>0; i--) {
+    const j = Math.floor(Math.random()*(i+1));
+    [a[i],a[j]]=[a[j],a[i]];
+  }
+  return a;
+}
+
+function colorJyutping(text) {
+  return text.split(' ').map(syl => {
+    const tone = syl.match(/[1-6]/);
+    const color = tone ? TONES[tone[0]].color : '#777';
+    return `<span style="color:${color};font-weight:700;margin-right:3px">${syl}</span>`;
+  }).join('');
+}
+
+// ── State ─────────────────────────────────────────────────────────────────────
+let state = {
+  speed: 'normal',
+  nav: 'topics',
+  drawerOpen: false,
+  topic: 'greetings',
+  mode:  'study',
+  tab:   'words',          // 'words' | 'convo'
+  flipped: {},
+  speaking: null,
+  sentenceBreakdownOpen: {},
+  voiceInfo: null,
+  quiz: null,
+  convo: {
+    convMode: 'read',
+    playingLine: null,
+    shadowStep: 0,
+    shadowWaiting: false,
+    gapAnswers: {},
+    bubbleRevealed: {},
+    breakdownOpen: {},
+    speakStep: 0,
+    speakStatus: 'idle',     // 'idle' | 'listening' | 'matched' | 'mismatch'
+    speakHeard: '',
+    speakAutoPlayed: false,
+  },
+};
+
+function getQuizInitState(words) {
+  const queue = shuffle(words).slice(0, Math.min(words.length, 8));
+  return {
+    queue,
+    idx: 0,
+    score: 0,
+    selected: null,
+    done: false,
+    choices: buildChoices(queue[0], words),
+  };
+}
+
+function buildChoices(answer, all) {
+  const others = shuffle(all.filter(w => w.c !== answer.c)).slice(0, 3);
+  return shuffle([...others, answer]);
+}
+
+function playAllConvo(lines, idx) {
+  if (idx >= lines.length) { state.convo.playingLine = null; render(); return; }
+  state.convo.playingLine = idx;
+  render();
+  const line = lines[idx];
+  speakAs(line.c, line.u, () => setTimeout(() => playAllConvo(lines, idx + 1), 500));
+}
+
+// ── Speech recognition ───────────────────────────────────────────────────────
+let _recognition = null;
+
+function normalizeChinese(text) {
+  // Strip whitespace and Chinese punctuation for comparison
+  return (text || '').replace(/[\s，。！？、,!?.\-]/g, '');
+}
+
+function fuzzyMatch(heard, target) {
+  const h = normalizeChinese(heard);
+  const t = normalizeChinese(target);
+  if (!h || !t) return false;
+  // Exact match
+  if (h === t) return true;
+  // Substantial overlap — count matching characters
+  const longer = h.length > t.length ? h : t;
+  const shorter = h.length > t.length ? t : h;
+  let matches = 0;
+  for (const ch of shorter) {
+    if (longer.includes(ch)) matches++;
+  }
+  // Require at least 70% character match
+  return (matches / shorter.length) >= 0.7;
+}
+
+function startListening() {
+  const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SpeechRec) return;
+  if (_recognition) { try { _recognition.abort(); } catch(e){} }
+
+  const rec = new SpeechRec();
+  rec.lang = 'yue-Hant-HK';
+  rec.continuous = true;        // keep listening until user stops
+  rec.interimResults = true;    // capture words as they're heard
+  rec.maxAlternatives = 3;
+
+  let finalTranscript = '';
+  let interimTranscript = '';
+
+  rec.onresult = (e) => {
+    interimTranscript = '';
+    for (let i = e.resultIndex; i < e.results.length; i++) {
+      const transcript = e.results[i][0].transcript;
+      if (e.results[i].isFinal) {
+        finalTranscript += transcript;
+      } else {
+        interimTranscript += transcript;
+      }
+    }
+    state.convo.speakHeard = (finalTranscript + interimTranscript).trim() || '…';
+    render();
+  };
+  rec.onerror = (e) => {
+    if (e.error === 'no-speech' || e.error === 'aborted') return;  // user-initiated stop
+    state.convo.speakStatus = 'mismatch';
+    state.convo.speakHeard = '(error: ' + e.error + ')';
+    render();
+  };
+  rec.onend = () => {
+    // Recognition session ended — if user is still in 'listening' mode, evaluate result
+    if (state.convo.speakStatus === 'listening') {
+      const heard = finalTranscript.trim();
+      if (!heard) {
+        state.convo.speakStatus = 'idle';
+        state.convo.speakHeard  = '';
+      } else {
+        const target = CONVOS[state.topic].lines[state.convo.speakStep].c;
+        const matched = fuzzyMatch(heard, target);
+        state.convo.speakHeard  = heard;
+        state.convo.speakStatus = matched ? 'matched' : 'mismatch';
+        if (matched) speak(target);
+      }
+      render();
+    }
+  };
+
+  state.convo.speakStatus = 'listening';
+  state.convo.speakHeard = '';
+  render();
+  try { rec.start(); } catch(e) {
+    state.convo.speakStatus = 'idle';
+    render();
+  }
+  _recognition = rec;
+}
+
+function stopListening() {
+  if (_recognition) { try { _recognition.abort(); } catch(e){} _recognition = null; }
+}
+
+// User pressed stop — gracefully end so onend fires and processes result
+function finishListening() {
+  if (_recognition) { try { _recognition.stop(); } catch(e){} }
+}
+
+// ── Render ────────────────────────────────────────────────────────────────────
+function renderDrawer() {
+  const items = [
+    { key:'topics',   icon:'📖', label:'Topics',   desc:'Vocabulary, sentences & conversations' },
+    { key:'patterns', icon:'🔨', label:'Patterns',  desc:'Sentence building blocks'             },
+    { key:'progress', icon:'⭐', label:'Progress',  desc:'Track your learning journey'          },
+  ];
+  const open = state.drawerOpen ? 'open' : '';
+  return `
+    <div class="nav-drawer ${open}" id="nav-drawer">
+      <div class="nav-backdrop" id="nav-backdrop"></div>
+      <div class="nav-panel">
+        <div class="nav-panel-header">
+          <span class="nav-panel-title">Menu</span>
+          <button class="nav-close" id="nav-close">✕</button>
+        </div>
+        ${items.map(item => `
+          <button class="nav-item${state.nav===item.key?' active':''}" data-nav="${item.key}">
+            <span class="ni-icon">${item.icon}</span>
+            <span class="ni-text">
+              <span class="ni-label">${item.label}</span>
+              <span class="ni-desc">${item.desc}</span>
+            </span>
+            <span class="ni-tick">✓</span>
+          </button>`).join('')}
+      </div>
+    </div>`;
+}
+
+function renderPatterns() {
+  const cards = PATTERNS.map((p, pi) => {
+    const examples = p.examples.map((ex, ei) => {
+      const key = `p${pi}-e${ei}`;
+      const speaking = state.speaking === key;
+      return `
+        <div class="pattern-example">
+          <div class="pattern-ex-text">
+            <div class="pattern-ex-zh">${ex.c}</div>
+            <div class="pattern-ex-jp">${colorJyutping(ex.j)}</div>
+            <div class="pattern-ex-en">${ex.e}</div>
+          </div>
+          <button class="pattern-ex-play${speaking?' speaking':''}" data-pex="${key}" data-pex-chinese="${ex.c}">
+            ${speaking?'🔊':'▶'}
+          </button>
+        </div>`;
+    }).join('');
+    return `
+      <div class="pattern-card">
+        <div class="pattern-head">
+          <div class="pattern-number">Pattern ${pi+1} of ${PATTERNS.length}</div>
+          <div class="pattern-label">${p.label}</div>
+          <span class="pattern-structure">${colorJyutping(p.structure)}</span>
+        </div>
+        <div class="pattern-body">
+          <div class="pattern-note">${p.note}</div>
+          <div class="pattern-examples">${examples}</div>
+        </div>
+      </div>`;
+  }).join('');
+
+  return `
+    <div class="patterns-header">
+      <h2>🔨 Sentence Patterns</h2>
+      <p>${PATTERNS.length} building blocks — tap ▶ to hear any example</p>
+    </div>
+    ${cards}`;
+}
+
+function renderPlaceholder(icon, title, subtitle) {
+  return `
+    <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;padding:60px 30px;text-align:center;min-height:300px;">
+      <div style="font-size:52px;margin-bottom:16px;">${icon}</div>
+      <div style="font-size:20px;font-weight:700;color:#1a1a2e;margin-bottom:8px;">${title}</div>
+      <div style="font-size:13px;color:#aaa;line-height:1.6;max-width:260px;">${subtitle}</div>
+    </div>`;
+}
+
+function render() {
+  const app = document.getElementById('app');
+  const lesson = LESSONS[state.topic];
+  const color  = lesson.color;
+
+  let mainContent = '';
+  if (state.nav === 'topics') {
+    mainContent = `
+      ${renderVoiceBanner()}
+      ${renderTopics()}
+      <div class="content">
+        ${renderLessonHeader(lesson, color)}
+        ${state.mode === 'quiz' ? renderQuiz(lesson, color) : state.tab === 'convo' ? renderConversation(color) : renderStudy(lesson, color)}
+      </div>`;
+  } else if (state.nav === 'patterns') {
+    mainContent = renderPatterns();
+  } else if (state.nav === 'progress') {
+    mainContent = renderPlaceholder('⭐', 'Progress', 'Coming soon — track completed topics, review scores, and run cross-topic reviews.');
+  }
+
+  app.innerHTML = `
+    ${renderHeader(color)}
+    ${mainContent}
+    ${renderDrawer()}
+  `;
+
+  attachEvents(lesson, color);
+}
+
+function renderHeader(color) {
+  const toneKeys = Object.entries(TONES).map(([t,d]) =>
+    `<span style="color:${d.color}">● T${t}</span>`
+  ).join('');
+  const speeds = [
+    { key:'slow',   label:'🐢 Slow'   },
+    { key:'normal', label:'🚶 Normal' },
+    { key:'fast',   label:'🏃 Fast'   },
+  ];
+  const speedBtns = speeds.map(s => {
+    const active = state.speed === s.key;
+    return `<button id="speed-${s.key}" style="padding:4px 10px;border-radius:20px;border:1.5px solid ${active?'#e8c97e':'#555'};background:${active?'#e8c97e':'transparent'};color:${active?'#1a1a2e':'#aaa'};font-size:11px;font-weight:700;cursor:pointer;">${s.label}</button>`;
+  }).join('');
+  return `
+    <div class="header">
+      <div style="display:flex;align-items:center;justify-content:space-between;">
+        <div class="header-title">
+          <span class="zh">廣東話</span>
+          <span class="en">Cantonese Learner</span>
+        </div>
+        <button class="hamburger" id="hamburger-btn" aria-label="Menu">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+      <div class="tone-key">
+        ${toneKeys}
+        <span class="label">← jyutping tones</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:6px;margin-top:8px;">
+        <span style="font-size:11px;color:#555;">Speed:</span>
+        ${speedBtns}
+      </div>
+    </div>`;
+}
+
+function renderVoiceBanner() {
+  if (!state.voiceInfo) return '';
+  const v = state.voiceInfo;
+  const cls = v.status === 'hk' ? 'voice-ok' : v.status === 'other' ? 'voice-warn' : 'voice-none';
+  const icon = v.status !== 'none' ? '🔊' : '⚠️';
+  const extra = v.status === 'none'
+    ? ' · Try Chrome, or go to Android Settings → General Management → Language → TTS → install Chinese (Hong Kong)'
+    : '';
+  return `<div class="voice-banner ${cls}">${icon} ${v.label}${v.name ? ' — ' + v.name : ''}${extra}</div>`;
+}
+
+function renderTopics() {
+  const btns = Object.entries(LESSONS).map(([key, l]) => {
+    const active = state.topic === key;
+    const style = active
+      ? `background:${l.color};color:#fff;border-color:${l.color}`
+      : `background:#fff;color:#555;border-color:#ddd`;
+    return `<button class="topic-btn${active?' active':''}" style="${style}" data-topic="${key}">${l.icon} ${l.label}</button>`;
+  }).join('');
+  return `<div class="topics">${btns}</div>`;
+}
+
+function renderLessonHeader(lesson, color) {
+  const isQuiz = state.mode === 'quiz';
+  const btnStyle = isQuiz
+    ? `background:${color};color:#fff;border:2px solid ${color}`
+    : `background:transparent;color:${color};border:2px solid ${color}`;
+  const subtabs = !isQuiz ? `
+    <div class="subtabs">
+      <button class="subtab-btn${state.tab==='words'?' active':''}" id="tab-words"
+        style="${state.tab==='words'?'background:'+color:''}">📖 Words</button>
+      <button class="subtab-btn${state.tab==='convo'?' active':''}" id="tab-convo"
+        style="${state.tab==='convo'?'background:'+color:''}">💬 Conversation</button>
+    </div>` : '';
+  return `
+    <div class="lesson-header">
+      <div>
+        <h2 class="lesson-title" style="color:${color}">${lesson.icon} ${lesson.label}</h2>
+        <div class="lesson-count">${lesson.words.length} words</div>
+      </div>
+      <button class="mode-btn" id="mode-toggle" style="${btnStyle}">
+        ${isQuiz ? '📖 Study' : '🧠 Quiz me'}
+      </button>
+    </div>
+    ${subtabs}`;
+}
+
+function renderConversation(color) {
+  const convo = CONVOS[state.topic];
+  if (!convo) return '<p style="color:#aaa;padding:20px 0">No conversation for this topic yet.</p>';
+  const cv = state.convo;
+  const lines = convo.lines;
+
+  // ── Control bar ──
+  const playAllStyle = cv.playingLine !== null
+    ? `background:${color};color:#fff;border-color:${color}`
+    : '';
+  const gapOn    = cv.convMode === 'gap';
+  const shadowOn = cv.convMode === 'shadow';
+  const speakOn  = cv.convMode === 'speak';
+  const controls = `
+    <div class="convo-controls">
+      <button class="convo-ctrl-btn${cv.playingLine!==null?' on':''}" id="play-all-btn"
+        style="${cv.playingLine!==null?'background:'+color+';color:#fff;border-color:'+color:'border-color:'+color+';color:'+color}">
+        ${cv.playingLine!==null?'⏹ Stop':'▶ Play All'}
+      </button>
+      <button class="convo-ctrl-btn${gapOn?' on':''}" id="gap-mode-btn"
+        style="${gapOn?'background:'+color+';color:#fff;border-color:'+color:''}">
+        🧩 Fill-the-Gap
+      </button>
+      <button class="convo-ctrl-btn${shadowOn?' on':''}" id="shadow-mode-btn"
+        style="${shadowOn?'background:'+color+';color:#fff;border-color:'+color:''}">
+        🎤 Shadow
+      </button>
+      <button class="convo-ctrl-btn${speakOn?' on':''}" id="speak-mode-btn"
+        style="${speakOn?'background:'+color+';color:#fff;border-color:'+color:''}">
+        🎙 Speak
+      </button>
+    </div>`;
+
+  // ── Speak mode ──
+  if (speakOn) {
+    const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (!SpeechRec) {
+      return `
+        <div class="convo-scenario">📍 ${convo.title}</div>
+        ${controls}
+        <div class="speak-unsupported">
+          <div style="font-size:24px;margin-bottom:8px">🎙</div>
+          <strong>Speech recognition not supported</strong><br>
+          Your browser doesn't support voice input. Try Chrome on Android or desktop.
+        </div>`;
+    }
+    const step = Math.min(cv.speakStep, lines.length - 1);
+    const line = lines[step];
+    const isUser = line.u;
+    const spkName = isUser ? convo.speakers[1] : convo.speakers[0];
+    const playing = cv.playingLine === step;
+    const status  = cv.speakStatus;
+    const isLast  = step >= lines.length - 1;
+
+    const statusText = {
+      idle:      isUser ? '👇 Press the mic and say the line above' : '👂 Listen, then continue',
+      listening: '🎙 Listening… speak the line, then press Stop',
+      matched:   '',
+      mismatch:  '',
+    }[status] || '';
+
+    const result = status === 'matched'
+      ? `<div class="speak-result-good">✓ Great! You said it correctly.</div>`
+      : status === 'mismatch'
+      ? `<div class="speak-result-bad">
+          <div style="font-weight:700;margin-bottom:4px">Hmm, that didn't quite match.</div>
+          <div>Expected: <strong>${line.c}</strong></div>
+        </div>`
+      : '';
+
+    const heard = cv.speakHeard
+      ? `<div class="speak-heard">You said: <strong>${cv.speakHeard}</strong></div>`
+      : '';
+
+    return `
+      <div class="convo-scenario">📍 ${convo.title}</div>
+      ${controls}
+      <div class="shadow-nav">
+        <span>Line ${step+1} of ${lines.length}</span>
+        <span style="color:${color};font-weight:700">${isUser?'🗣 Your turn':'👂 Listen'}</span>
+      </div>
+      <div class="speak-card" style="border-color:${color}">
+        <div class="speak-prompt">${spkName}</div>
+        <div class="speak-target-zh">${line.c}</div>
+        <div class="speak-target-jp">${colorJyutping(line.j)}</div>
+        <div class="speak-target-en">${line.e}</div>
+        ${isUser ? `
+          <button class="mic-btn ${status==='listening'?'listening':'idle'}" id="mic-btn"
+            style="color:${status==='listening'?'#E74C3C':color};border:3px solid ${status==='listening'?'#E74C3C':color}">
+            ${status==='listening'?'🔴':'🎙'}
+          </button>
+          <div class="speak-status">${statusText}</div>
+          ${status==='listening' ? `
+            <button class="speak-action-btn" id="speak-stop-btn" style="background:#E74C3C;color:#fff;margin-bottom:14px">
+              ⏹ Stop & Check
+            </button>
+          ` : ''}
+          ${heard}
+          ${result}
+        ` : `
+          <button class="speak-action-btn" id="speak-listen-btn"
+            style="background:${playing?color+'cc':color};color:#fff">
+            ${playing?'🔊 Playing…':'▶ Listen'}
+          </button>
+        `}
+        <div class="speak-actions">
+          ${isUser && status === 'mismatch' ? `
+            <button class="speak-action-btn" id="speak-retry" style="background:#eee;color:#555">↻ Try Again</button>
+            <button class="speak-action-btn" id="speak-skip"  style="background:${color};color:#fff">Skip →</button>
+          ` : ''}
+          ${(isUser && status === 'matched') || !isUser ? `
+            <button class="speak-action-btn" id="speak-next" style="background:${color};color:#fff">
+              ${isLast ? '🔁 Restart' : 'Next →'}
+            </button>
+          ` : ''}
+        </div>
+      </div>
+      ${isUser && status === 'idle' ? `<p style="font-size:11px;color:#aaa;text-align:center;margin-top:6px">📱 Allow microphone access if prompted</p>` : ''}`;
+  }
+
+  // ── Shadow mode ──
+  if (shadowOn) {
+    const step = Math.min(cv.shadowStep, lines.length - 1);
+    const line = lines[step];
+    const isUser = line.u;
+    const spkName = isUser ? convo.speakers[1] : convo.speakers[0];
+    const playing = cv.playingLine === step;
+    return `
+      <div class="convo-scenario">📍 ${convo.title}</div>
+      ${controls}
+      <div class="shadow-nav">
+        <span>Line ${step+1} of ${lines.length}</span>
+        <span style="color:${color};font-weight:700">${isUser?'🗣 Your line':'👂 Listen'}</span>
+      </div>
+      <div class="shadow-card" style="border-color:${color}">
+        <div class="shadow-speaker">${spkName}</div>
+        <div class="shadow-chinese">${line.c}</div>
+        <div class="shadow-jyutping">${colorJyutping(line.j)}</div>
+        <div class="shadow-english">${line.e}</div>
+        <div class="shadow-actions">
+          <button class="shadow-btn" id="shadow-play"
+            style="background:${playing?color+'cc':color};color:#fff">
+            ${playing?'🔊 Playing…':'▶ Listen'}
+          </button>
+          ${cv.shadowWaiting || !isUser ? `
+          <button class="shadow-btn" id="shadow-next"
+            style="background:#eee;color:#555">
+            ${step >= lines.length-1 ? '🔁 Restart' : 'Next →'}
+          </button>` : ''}
+        </div>
+      </div>
+      ${isUser ? '<p style="font-size:12px;color:#aaa;text-align:center">🎤 Repeat the line above, then press Next</p>' : ''}`;
+  }
+
+  // ── Read / Gap mode ──
+  const bubbles = lines.map((line, i) => {
+    const isUser   = line.u;
+    const side     = isUser ? 'right' : 'left';
+    const spkName  = isUser ? convo.speakers[1] : convo.speakers[0];
+    const bubbleBg = isUser ? color : '#fff';
+    const playing  = cv.playingLine === i;
+    const playColor = isUser ? 'rgba(255,255,255,0.8)' : color;
+
+    // Gap mode: hide user lines until answered
+    if (gapOn && isUser) {
+      const answered = cv.gapAnswers[i];
+      if (!answered) {
+        // Show choices
+        const paired = shuffle(line.opts.map((c, k) => ({ c, j: line.optsJ[k] })));
+        const opts = paired.map(opt =>
+            `<button class="gap-btn" data-gap-line="${i}" data-gap-ans="${opt.c}">${colorJyutping(opt.j)}</button>`
+          ).join('');
+        return `
+          <div class="bubble-row ${side}">
+            <div class="bubble-wrap">
+              <div class="bubble-name">${spkName}</div>
+              <div class="bubble" style="background:${bubbleBg}22;border:2px dashed ${color}88">
+                <div class="gap-prompt">👆 What would you say?</div>
+                <div class="gap-options">${opts}</div>
+              </div>
+            </div>
+          </div>`;
+      } else {
+        // Show answered line with result highlight
+        const correct = answered === line.c;
+        const hlColor = correct ? '#d4edda' : '#f8d7da';
+        const hlBorder = correct ? '#27AE60' : '#E74C3C';
+        return `
+          <div class="bubble-row ${side}">
+            <div class="bubble-wrap">
+              <div class="bubble-name">${spkName} ${correct?'✓':'✗'}</div>
+              <div class="bubble" style="background:${hlColor};border:2px solid ${hlBorder}">
+                <div class="bubble-chinese" style="color:#1a1a2e">${line.c}</div>
+                <div class="bubble-jyutping">${colorJyutping(line.j)}</div>
+                <div class="bubble-english" style="color:#555">${line.e}</div>
+              </div>
+            </div>
+          </div>`;
+      }
+    }
+
+    // Normal bubble
+    const revealed = cv.bubbleRevealed[i];
+    const bdOpen   = cv.breakdownOpen[i];
+    const engHtml  = revealed
+      ? `<div class="bubble-english" style="margin-top:4px">${line.e}</div>`
+      : `<div class="bubble-eng-hint" style="font-size:11px;opacity:0.5;margin-top:4px;font-style:italic">tap to see English</div>`;
+    const bdPanel  = (bdOpen && line.bd) ? `
+      <div class="breakdown-panel">
+        ${line.bd.map(w => `
+          <div class="breakdown-row">
+            <span class="breakdown-zh">${w.c}</span>
+            <span class="breakdown-jp">${colorJyutping(w.j)}</span>
+            <span class="breakdown-en">${w.e}</span>
+          </div>`).join('')}
+      </div>` : '';
+    const bdBtnColor = isUser ? 'rgba(255,255,255,0.7)' : color;
+    const bdBtn = line.bd ? `
+      <button class="breakdown-btn" data-breakdown="${i}" style="color:${bdBtnColor}">
+        ${bdOpen ? '▲ hide breakdown' : '🔍 word breakdown'}
+      </button>` : '';
+    return `
+      <div class="bubble-row ${side}">
+        <div class="bubble-wrap">
+          <div class="bubble-name">${spkName}</div>
+          <div class="bubble" data-reveal="${i}" style="cursor:pointer;background:${bubbleBg};${playing?'box-shadow:0 0 0 3px '+color+'66':''}">
+            <div class="bubble-chinese" style="${isUser?'color:#fff':''}">${line.c}</div>
+            <div class="bubble-jyutping">${colorJyutping(line.j)}</div>
+            ${engHtml}
+            <div class="bubble-play-row">
+              ${bdBtn}
+              <button class="bubble-play" data-bubble="${i}"
+                style="border-color:${playColor};color:${playing?(isUser?bubbleBg:color)+'':playColor};background:${playing?playColor:'transparent'}">
+                ${playing?'🔊':'▶'}
+              </button>
+            </div>
+          </div>
+          ${bdPanel}
+        </div>
+      </div>`;
+  }).join('');
+
+  return `
+    <div class="convo-scenario">📍 ${convo.title}</div>
+    ${controls}
+    ${bubbles}`;
+}
+
+function renderSentences(topic, color) {
+  const sentences = SENTENCES[topic] || [];
+  if (!sentences.length) return '';
+  const items = sentences.map((s, i) => {
+    const speaking = state.speaking === 'sent-' + i;
+    const bdOpen = state.sentenceBreakdownOpen[i];
+    const bdPanel = (bdOpen && s.bd) ? `
+      <div class="breakdown-panel" style="margin:8px 0 4px">
+        ${s.bd.map(w => `
+          <div class="breakdown-row">
+            <span class="breakdown-zh">${w.c}</span>
+            <span class="breakdown-jp">${colorJyutping(w.j)}</span>
+            <span class="breakdown-en">${w.e}</span>
+          </div>`).join('')}
+      </div>` : '';
+    const bdBtn = s.bd ? `
+      <button class="breakdown-btn" data-sent-bd="${i}" style="color:${color};margin-top:6px">
+        ${bdOpen ? '▲ hide breakdown' : '🔍 word breakdown'}
+      </button>` : '';
+    return `
+      <div class="sentence-wrap" style="margin-bottom:10px">
+        <div class="sentence-card" style="margin-bottom:0">
+          <div class="sentence-body">
+            <div class="sentence-chinese">${s.c}</div>
+            <div class="sentence-jyutping">${colorJyutping(s.j)}</div>
+            <div class="sentence-english">${s.e}</div>
+            ${bdBtn}
+          </div>
+          <button class="sentence-play${speaking ? ' speaking' : ''}" data-sent="${i}"
+            style="border-color:${color};color:${speaking ? '#fff' : color};background:${speaking ? color : 'transparent'}"
+            title="Listen to sentence">
+            ${speaking ? '🔊' : '▶'}
+          </button>
+        </div>
+        ${bdPanel}
+      </div>`;
+  }).join('');
+  return `
+    <div class="sentences">
+      <h3>💬 Simple Sentences</h3>
+      ${items}
+    </div>`;
+}
+
+function renderStudy(lesson, color) {
+  const cards = lesson.words.map((w, i) => {
+    const flipped = state.flipped[i];
+    const speaking = state.speaking === i;
+    const cardBg  = flipped ? color : '#fff';
+    const cardShadow = flipped ? `0 4px 20px ${color}44` : '0 2px 6px rgba(0,0,0,0.06)';
+    const btnBorder = flipped ? 'rgba(255,255,255,0.6)' : color;
+    const btnColor  = flipped ? '#fff' : color;
+    const btnBg     = speaking ? color : 'transparent';
+    const inner = flipped
+      ? `<div class="card-english">${w.e}</div>`
+      : `<div class="card-chinese">${w.c}</div>
+         <div class="card-jyutping">${colorJyutping(w.j)}</div>
+         <div class="card-hint">tap to reveal</div>`;
+    return `
+      <div class="word-card" data-card="${i}"
+        style="background:${cardBg};border-color:${color};box-shadow:${cardShadow}">
+        ${inner}
+        <button class="speak-btn${speaking?' speaking':''}" data-speak="${i}"
+          style="background:${btnBg};border:1.5px solid ${btnBorder};color:${btnColor}" title="Listen">
+          ${speaking ? '🔊' : '▶'}
+        </button>
+      </div>`;
+  }).join('');
+
+  const toneRows = Object.entries(TONES).map(([t,d]) =>
+    `<div class="tone-row">
+      <span class="tone-dot" style="background:${d.color}"></span>
+      <span class="tone-desc">${t} — ${d.desc}</span>
+      <span class="tone-ex" style="color:${d.color}">${d.ex}</span>
+    </div>`
+  ).join('');
+
+  return `
+    <div class="hint">Tap a card to reveal English · ▶ to hear pronunciation</div>
+    <div class="word-grid">${cards}</div>
+    ${renderSentences(state.topic, color)}
+    <div class="tone-guide">
+      <h3>📖 Jyutping Tone Guide</h3>
+      <div class="tone-grid">${toneRows}</div>
+      <p class="tone-note">The number at the end of each syllable tells you which tone to use. Colours match throughout the app.</p>
+    </div>`;
+}
+
+function renderQuiz(lesson, color) {
+  const q = state.quiz;
+  if (!q) return '';
+
+  if (q.done) {
+    const pct = q.score / q.queue.length;
+    const emoji = pct >= 0.75 ? '🏆' : pct >= 0.5 ? '⭐' : '💪';
+    const msg   = pct >= 0.75 ? "Excellent! You're a natural!" : pct >= 0.5 ? "Good effort! Keep practising." : "Keep going — practice makes perfect!";
+    return `
+      <div class="result">
+        <div class="result-emoji">${emoji}</div>
+        <div class="result-score" style="color:${color}">${q.score} / ${q.queue.length} correct</div>
+        <div class="result-msg">${msg}</div>
+        <button class="back-btn" id="quiz-back" style="background:${color}">← Back to Lesson</button>
+      </div>`;
+  }
+
+  const cw = q.queue[q.idx];
+  const pct = (q.idx / q.queue.length * 100).toFixed(0);
+  const choiceBtns = q.choices.map(c => {
+    const isCorrect = c.c === cw.c;
+    const isChosen  = q.selected === c.c;
+    let cls = 'choice-btn';
+    if (q.selected) { if (isCorrect) cls += ' correct'; else if (isChosen) cls += ' wrong'; }
+    return `<button class="${cls}" data-choice="${c.c}" ${q.selected ? 'disabled' : ''}>${c.e}</button>`;
+  }).join('');
+
+  return `
+    <div class="quiz-meta">
+      <span style="color:#888">Question ${q.idx+1} / ${q.queue.length}</span>
+      <span style="color:${color};font-weight:700">Score: ${q.score}</span>
+    </div>
+    <div class="progress-bar">
+      <div class="progress-fill" style="background:${color};width:${pct}%"></div>
+    </div>
+    <div class="quiz-card" style="border:2px solid ${color}22">
+      <div class="quiz-label">What does this mean?</div>
+      <div class="quiz-chinese">${cw.c}</div>
+      <div class="quiz-jyutping">${colorJyutping(cw.j)}</div>
+      <button class="quiz-listen" id="quiz-listen" style="border:1.5px solid ${color};color:${color}">▶ Listen</button>
+    </div>
+    <div class="choices">${choiceBtns}</div>`;
+}
+
+// ── Events ────────────────────────────────────────────────────────────────────
+function attachEvents(lesson, color) {
+  // Hamburger open
+  const hamburger = document.getElementById('hamburger-btn');
+  if (hamburger) hamburger.addEventListener('click', () => { state.drawerOpen = true; render(); });
+
+  // Drawer close (X button and backdrop)
+  const navClose    = document.getElementById('nav-close');
+  const navBackdrop = document.getElementById('nav-backdrop');
+  if (navClose)    navClose.addEventListener('click',    () => { state.drawerOpen = false; render(); });
+  if (navBackdrop) navBackdrop.addEventListener('click', () => { state.drawerOpen = false; render(); });
+
+  // Nav items
+  document.querySelectorAll('[data-nav]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      state.nav = btn.dataset.nav;
+      state.drawerOpen = false;
+      render();
+    });
+  });
+
+  // Pattern example play buttons
+  document.querySelectorAll('[data-pex]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const key     = btn.dataset.pex;
+      const chinese = btn.dataset.pexChinese;
+      state.speaking = key;
+      render();
+      speak(chinese, () => { state.speaking = null; render(); });
+      setTimeout(() => { if (state.speaking === key) { state.speaking = null; render(); } }, 5000);
+    });
+  });
+
+  // Speed toggle
+  ['slow','normal','fast'].forEach(s => {
+    const btn = document.getElementById('speed-' + s);
+    if (btn) btn.addEventListener('click', () => { state.speed = s; render(); });
+  });
+
+  // Topic buttons
+  document.querySelectorAll('[data-topic]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      state.topic   = btn.dataset.topic;
+      state.mode    = 'study';
+      state.tab     = 'words';
+      state.flipped = {};
+      state.speaking= null;
+      state.sentenceBreakdownOpen = {};
+      state.convo   = { convMode:'read', playingLine:null, shadowStep:0, shadowWaiting:false, gapAnswers:{}, bubbleRevealed:{}, breakdownOpen:{}, speakStep:0, speakStatus:'idle', speakHeard:'', speakAutoPlayed:false };
+      render();
+    });
+  });
+
+  // Sub-tabs
+  const tabWords = document.getElementById('tab-words');
+  const tabConvo = document.getElementById('tab-convo');
+  if (tabWords) tabWords.addEventListener('click', () => { state.tab = 'words'; render(); });
+  if (tabConvo) tabConvo.addEventListener('click', () => { state.tab = 'convo'; render(); });
+
+  // Conversation: Play All / Stop
+  const playAllBtn = document.getElementById('play-all-btn');
+  if (playAllBtn) playAllBtn.addEventListener('click', () => {
+    if (state.convo.playingLine !== null) {
+      window.speechSynthesis.cancel();
+      state.convo.playingLine = null;
+      render();
+    } else {
+      const lines = CONVOS[state.topic].lines;
+      playAllConvo(lines, 0);
+    }
+  });
+
+  // Conversation: Gap mode toggle
+  const gapBtn = document.getElementById('gap-mode-btn');
+  if (gapBtn) gapBtn.addEventListener('click', () => {
+    state.convo.convMode   = state.convo.convMode === 'gap' ? 'read' : 'gap';
+    state.convo.gapAnswers = {};
+    state.convo.breakdownOpen = {};
+    render();
+  });
+
+  // Conversation: Shadow mode toggle
+  const shadowBtn = document.getElementById('shadow-mode-btn');
+  if (shadowBtn) shadowBtn.addEventListener('click', () => {
+    state.convo.convMode     = state.convo.convMode === 'shadow' ? 'read' : 'shadow';
+    state.convo.shadowStep   = 0;
+    state.convo.shadowWaiting= false;
+    window.speechSynthesis.cancel();
+    state.convo.playingLine  = null;
+    render();
+  });
+
+  // Shadow: play button
+  const shadowPlay = document.getElementById('shadow-play');
+  if (shadowPlay) shadowPlay.addEventListener('click', () => {
+    const line = CONVOS[state.topic].lines[state.convo.shadowStep];
+    state.convo.playingLine = state.convo.shadowStep;
+    render();
+    speak(line.c, () => {
+      state.convo.playingLine  = null;
+      state.convo.shadowWaiting= true;
+      render();
+    });
+  });
+
+  // Shadow: next button
+  const shadowNext = document.getElementById('shadow-next');
+  if (shadowNext) shadowNext.addEventListener('click', () => {
+    const lines = CONVOS[state.topic].lines;
+    window.speechSynthesis.cancel();
+    state.convo.playingLine   = null;
+    state.convo.shadowWaiting = false;
+    if (state.convo.shadowStep >= lines.length - 1) {
+      state.convo.shadowStep = 0;
+    } else {
+      state.convo.shadowStep++;
+    }
+    render();
+  });
+
+  // Conversation: Speak mode toggle
+  const speakBtn = document.getElementById('speak-mode-btn');
+  if (speakBtn) speakBtn.addEventListener('click', () => {
+    stopListening();
+    window.speechSynthesis.cancel();
+    state.convo.convMode    = state.convo.convMode === 'speak' ? 'read' : 'speak';
+    state.convo.speakStep   = 0;
+    state.convo.speakStatus = 'idle';
+    state.convo.speakHeard  = '';
+    state.convo.playingLine = null;
+    render();
+  });
+
+  // Speak: mic button — toggles start/stop
+  const micBtn = document.getElementById('mic-btn');
+  if (micBtn) micBtn.addEventListener('click', () => {
+    if (state.convo.speakStatus === 'listening') {
+      finishListening();   // gracefully stop and process
+    } else {
+      startListening();
+    }
+  });
+
+  // Speak: dedicated stop button
+  const speakStopBtn = document.getElementById('speak-stop-btn');
+  if (speakStopBtn) speakStopBtn.addEventListener('click', () => {
+    finishListening();
+  });
+
+  // Speak: listen button (other speaker's turn)
+  const speakListenBtn = document.getElementById('speak-listen-btn');
+  if (speakListenBtn) speakListenBtn.addEventListener('click', () => {
+    const line = CONVOS[state.topic].lines[state.convo.speakStep];
+    state.convo.playingLine = state.convo.speakStep;
+    render();
+    speakAs(line.c, line.u, () => { state.convo.playingLine = null; render(); });
+  });
+
+  // Speak: next button
+  const speakNext = document.getElementById('speak-next');
+  if (speakNext) speakNext.addEventListener('click', () => {
+    const lines = CONVOS[state.topic].lines;
+    stopListening();
+    window.speechSynthesis.cancel();
+    state.convo.playingLine = null;
+    state.convo.speakStatus = 'idle';
+    state.convo.speakHeard  = '';
+    if (state.convo.speakStep >= lines.length - 1) {
+      state.convo.speakStep = 0;
+    } else {
+      state.convo.speakStep++;
+    }
+    render();
+  });
+
+  // Speak: retry button
+  const speakRetry = document.getElementById('speak-retry');
+  if (speakRetry) speakRetry.addEventListener('click', () => {
+    state.convo.speakStatus = 'idle';
+    state.convo.speakHeard  = '';
+    render();
+  });
+
+  // Speak: skip button
+  const speakSkip = document.getElementById('speak-skip');
+  if (speakSkip) speakSkip.addEventListener('click', () => {
+    const lines = CONVOS[state.topic].lines;
+    state.convo.speakStatus = 'idle';
+    state.convo.speakHeard  = '';
+    if (state.convo.speakStep >= lines.length - 1) {
+      state.convo.speakStep = 0;
+    } else {
+      state.convo.speakStep++;
+    }
+    render();
+  });
+
+  // Breakdown toggle
+  document.querySelectorAll('[data-breakdown]').forEach(btn => {
+    btn.addEventListener('click', e => {
+      e.stopPropagation();
+      const i = parseInt(btn.dataset.breakdown);
+      state.convo.breakdownOpen[i] = !state.convo.breakdownOpen[i];
+      render();
+    });
+  });
+
+  // Bubble English reveal (tap bubble)
+  document.querySelectorAll('[data-reveal]').forEach(bubble => {
+    bubble.addEventListener('click', e => {
+      if (e.target.closest('[data-bubble]')) return; // don't fire when tapping play btn
+      const i = parseInt(bubble.dataset.reveal);
+      state.convo.bubbleRevealed[i] = !state.convo.bubbleRevealed[i];
+      render();
+    });
+  });
+
+  // Bubble play buttons
+  document.querySelectorAll('[data-bubble]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const i = parseInt(btn.dataset.bubble);
+      const line = CONVOS[state.topic].lines[i];
+      state.convo.playingLine = i;
+      render();
+      speakAs(line.c, line.u, () => { state.convo.playingLine = null; render(); });
+      setTimeout(() => { if (state.convo.playingLine === i) { state.convo.playingLine = null; render(); } }, 6000);
+    });
+  });
+
+  // Gap mode answer buttons
+  document.querySelectorAll('[data-gap-line]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const lineIdx = parseInt(btn.dataset.gapLine);
+      const chosen  = btn.dataset.gapAns;
+      state.convo.gapAnswers[lineIdx] = chosen;
+      const correct = chosen === CONVOS[state.topic].lines[lineIdx].c;
+      if (correct) speak(chosen);
+      render();
+    });
+  });
+
+  // Mode toggle
+  const modeBtn = document.getElementById('mode-toggle');
+  if (modeBtn) modeBtn.addEventListener('click', () => {
+    state.mode = state.mode === 'study' ? 'quiz' : 'study';
+    if (state.mode === 'quiz') state.quiz = getQuizInitState(lesson.words);
+    render();
+  });
+
+  // Flip cards
+  document.querySelectorAll('[data-card]').forEach(card => {
+    card.addEventListener('click', e => {
+      if (e.target.closest('[data-speak]')) return;
+      const i = parseInt(card.dataset.card);
+      state.flipped[i] = !state.flipped[i];
+      render();
+    });
+  });
+
+  // Speak buttons
+  document.querySelectorAll('[data-speak]').forEach(btn => {
+    btn.addEventListener('click', e => {
+      e.stopPropagation();
+      const i = parseInt(btn.dataset.speak);
+      const word = lesson.words[i];
+      state.speaking = i;
+      render();
+      speak(word.c, () => { state.speaking = null; render(); });
+      setTimeout(() => { if (state.speaking === i) { state.speaking = null; render(); } }, 4000);
+    });
+  });
+
+  // Sentence play buttons
+  document.querySelectorAll('[data-sent]').forEach(btn => {
+    btn.addEventListener('click', e => {
+      e.stopPropagation();
+      const i = parseInt(btn.dataset.sent);
+      const sentence = SENTENCES[state.topic][i];
+      state.speaking = 'sent-' + i;
+      render();
+      speak(sentence.c, () => { state.speaking = null; render(); });
+      setTimeout(() => { if (state.speaking === 'sent-' + i) { state.speaking = null; render(); } }, 6000);
+    });
+  });
+
+  // Sentence breakdown toggle
+  document.querySelectorAll('[data-sent-bd]').forEach(btn => {
+    btn.addEventListener('click', e => {
+      e.stopPropagation();
+      const i = parseInt(btn.dataset.sentBd);
+      state.sentenceBreakdownOpen[i] = !state.sentenceBreakdownOpen[i];
+      render();
+    });
+  });
+
+  // Quiz listen
+  const ql = document.getElementById('quiz-listen');
+  if (ql && state.quiz) {
+    ql.addEventListener('click', () => speak(state.quiz.queue[state.quiz.idx].c));
+  }
+
+  // Quiz choices
+  if (state.quiz && !state.quiz.done) {
+    document.querySelectorAll('[data-choice]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        if (state.quiz.selected) return;
+        const chosen = btn.dataset.choice;
+        const cw = state.quiz.queue[state.quiz.idx];
+        const correct = chosen === cw.c;
+        speak(cw.c);
+        state.quiz.selected = chosen;
+        if (correct) state.quiz.score++;
+        render();
+        setTimeout(() => {
+          const next = state.quiz.idx + 1;
+          if (next >= state.quiz.queue.length) {
+            state.quiz.done = true;
+          } else {
+            state.quiz.idx = next;
+            state.quiz.selected = null;
+            state.quiz.choices = buildChoices(state.quiz.queue[next], lesson.words);
+          }
+          render();
+        }, 950);
+      });
+    });
+  }
+
+  // Quiz back
+  const qb = document.getElementById('quiz-back');
+  if (qb) qb.addEventListener('click', () => { state.mode = 'study'; render(); });
+}
+
+// ── Init ──────────────────────────────────────────────────────────────────────
+(async function init() {
+  render(); // first paint immediately
+
+  const voices = await loadVoices();
+  const zhVoices = voices.filter(v => v.lang === 'zh-HK' || v.lang === 'zh-TW' || v.lang.startsWith('zh'));
+  const hk = voices.find(v => v.lang === 'zh-HK');
+  const tw = voices.find(v => v.lang === 'zh-TW');
+  const zh = zhVoices[0];
+  const count = zhVoices.length;
+  const dualNote = count >= 2 ? ` · ${count} voices found — dual speaker active` : ` · 1 voice found — using pitch to differentiate speakers`;
+  if (hk)      state.voiceInfo = { status:'hk',    label:'Cantonese (zh-HK) ready ✓' + dualNote, name: hk.name };
+  else if (tw) state.voiceInfo = { status:'other', label:'Chinese (zh-TW) in use' + dualNote,     name: tw.name };
+  else if (zh) state.voiceInfo = { status:'other', label:'Chinese voice in use' + dualNote,        name: zh.name };
+  else         state.voiceInfo = { status:'none',  label:'No Chinese voice found — install one via Android Settings → General Management → Language & Input → Text-to-Speech → Google TTS → Install voice data → Chinese (Hong Kong)', name: '' };
+
+  render(); // re-render with voice info
+})();
+</script>
+</body>
+</html>
