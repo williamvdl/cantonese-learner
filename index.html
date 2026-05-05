@@ -81,8 +81,13 @@
   .translate-input { width: 100%; min-height: 60px; border: none; outline: none; font-size: 16px; font-family: inherit; resize: vertical; color: #1a1a2e; background: transparent; }
   .translate-input::placeholder { color: #bbb; }
   .translate-input-actions { display: flex; gap: 8px; align-items: center; margin-top: 10px; padding-top: 10px; border-top: 1px solid #f4f0eb; }
-  .translate-mic { display: none; }   /* hidden in Phase 1, ready for Phase 2 */
-  .translate-direction { display: none; }   /* hidden in Phase 1, ready for Phase 2 */
+  .translate-mic { width: 38px; height: 38px; border-radius: 50%; border: 1.5px solid #2C3E7A; background: transparent; color: #2C3E7A; cursor: pointer; font-size: 16px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: all 0.15s; }
+  .translate-mic.listening { background: #E74C3C; border-color: #E74C3C; color: #fff; animation: micPulse 1s infinite; }
+  .translate-direction-row { display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 12px; padding: 6px 12px; background: #fff; border-radius: 30px; border: 1px solid #eee; }
+  .translate-dir-label { font-size: 13px; font-weight: 700; color: #2C3E7A; padding: 4px 10px; border-radius: 16px; }
+  .translate-dir-label.muted { color: #aaa; font-weight: 500; }
+  .translate-dir-swap { background: transparent; border: none; cursor: pointer; font-size: 18px; color: #2C3E7A; padding: 4px 8px; }
+  .translate-listening-hint { font-size: 11px; color: #E74C3C; font-weight: 700; margin-top: 6px; text-align: center; animation: pulse 0.6s infinite alternate; }
   .translate-go { flex: 1; padding: 10px 18px; background: #2C3E7A; color: #fff; border: none; border-radius: 10px; font-size: 14px; font-weight: 700; cursor: pointer; }
   .translate-go:disabled { opacity: 0.5; cursor: default; }
   .translate-clear { padding: 10px 14px; background: transparent; color: #888; border: 1px solid #ddd; border-radius: 10px; font-size: 13px; cursor: pointer; }
@@ -868,12 +873,13 @@ let state = {
   nav: 'topics',
   drawerOpen: false,
   translate: {
-    direction:   'en-yue',     // Phase 1: only en-yue used; ready for 'yue-en' in Phase 2
+    direction:   'en-yue',     // 'en-yue' | 'yue-en'
     inputText:   '',
-    result:      null,         // {zh, jp, en, bd, pattern?}
+    result:      null,
     loading:     false,
     error:       null,
-    showApiKey:  false,        // toggles between masked/visible during entry
+    showApiKey:  false,
+    listening:   false,
   },
   topic: 'greetings',
   mode:  'study',
@@ -1161,6 +1167,69 @@ function finishListening() {
   if (_recognition) { try { _recognition.stop(); } catch(e){} }
 }
 
+// ── Translate speech input ───────────────────────────────────────────────────
+let _translateRec = null;
+
+function startTranslateListening() {
+  const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SpeechRec) {
+    state.translate.error = 'Speech recognition not supported on this browser';
+    render();
+    return;
+  }
+  if (_translateRec) { try { _translateRec.abort(); } catch(e){} }
+
+  const isToYue = state.translate.direction === 'en-yue';
+  const rec = new SpeechRec();
+  // For en-yue mode: input is English. For yue-en mode: input is Cantonese.
+  rec.lang = isToYue ? 'en-US' : 'yue-Hant-HK';
+  rec.continuous = true;
+  rec.interimResults = true;
+  rec.maxAlternatives = 1;
+
+  let finalTranscript = '';
+
+  rec.onresult = (e) => {
+    let interim = '';
+    for (let i = e.resultIndex; i < e.results.length; i++) {
+      const t = e.results[i][0].transcript;
+      if (e.results[i].isFinal) finalTranscript += t;
+      else interim += t;
+    }
+    state.translate.inputText = (finalTranscript + interim).trim();
+    // Update textarea directly without full re-render to avoid focus loss
+    const ta = document.getElementById('translate-input');
+    if (ta) ta.value = state.translate.inputText;
+  };
+  rec.onerror = (e) => {
+    if (e.error === 'no-speech' || e.error === 'aborted') return;
+    state.translate.error = 'Speech error: ' + e.error;
+    state.translate.listening = false;
+    render();
+  };
+  rec.onend = () => {
+    if (state.translate.listening) {
+      state.translate.listening = false;
+      state.translate.inputText = finalTranscript.trim() || state.translate.inputText;
+      render();
+    }
+  };
+
+  state.translate.listening = true;
+  state.translate.error = null;
+  render();
+  try { rec.start(); } catch(e) {
+    state.translate.listening = false;
+    state.translate.error = 'Could not start microphone';
+    render();
+  }
+  _translateRec = rec;
+}
+
+function stopTranslateListening() {
+  if (_translateRec) { try { _translateRec.stop(); } catch(e){} }
+}
+
 // ── Render ────────────────────────────────────────────────────────────────────
 function renderDrawer() {
   const items = [
@@ -1259,6 +1328,12 @@ function renderTranslate() {
 
   // Main translate UI
   const result = tr.result;
+  const isToYue = tr.direction === 'en-yue';
+  const fromLabel = isToYue ? '🇬🇧 English' : '🇭🇰 Cantonese';
+  const toLabel   = isToYue ? '🇭🇰 Cantonese' : '🇬🇧 English';
+  const placeholder = isToYue
+    ? "Type or speak English, e.g. 'I want to drink tea'"
+    : "Type or speak Cantonese characters, e.g. '我想飲茶'";
   const bdHtml = result?.bd ? result.bd.map(w => `
     <div class="breakdown-row">
       <span class="breakdown-zh">${w.c}</span>
@@ -1267,18 +1342,33 @@ function renderTranslate() {
     </div>`).join('') : '';
 
   const speaking = state.speaking === 'translate-result';
-  const playColor = '#2C3E7A';
+  const listening = tr.listening;
+
+  // Show result fields based on direction
+  // For en-yue: zh + jp + en (English is the original input)
+  // For yue-en: zh + jp + en (English is the translation)
+  // Same shape works either way.
 
   return `
     <div class="translate-wrap">
       <div class="translate-header">
         <h2>🌐 Translate</h2>
-        <p>English → Cantonese with breakdown · powered by Gemini</p>
+        <p>Type or speak · word-by-word breakdown · powered by Gemini</p>
+      </div>
+
+      <div class="translate-direction-row">
+        <span class="translate-dir-label">${fromLabel}</span>
+        <button class="translate-dir-swap" id="translate-swap" title="Swap direction">⇄</button>
+        <span class="translate-dir-label">${toLabel}</span>
       </div>
 
       <div class="translate-input-wrap">
-        <textarea class="translate-input" id="translate-input" placeholder="Type English here, e.g. 'I want to drink tea'" rows="3">${tr.inputText.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}</textarea>
+        <textarea class="translate-input" id="translate-input" placeholder="${placeholder}" rows="3">${tr.inputText.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}</textarea>
+        ${listening ? '<div class="translate-listening-hint">🎙 Listening… speak now, then tap mic to stop</div>' : ''}
         <div class="translate-input-actions">
+          <button class="translate-mic ${listening?'listening':''}" id="translate-mic" title="${listening?'Stop listening':'Speak instead of typing'}">
+            ${listening?'🔴':'🎙'}
+          </button>
           ${tr.inputText ? '<button class="translate-clear" id="translate-clear">Clear</button>' : ''}
           <button class="translate-go" id="translate-go" ${tr.loading ? 'disabled' : ''}>
             ${tr.loading ? '⏳ Translating…' : '✨ Translate'}
@@ -1869,6 +1959,28 @@ function attachEvents(lesson, color) {
       state.translate.error = null;
       state.translate.inputText = '';
       render();
+    }
+  });
+
+  // Direction swap (en-yue ↔ yue-en)
+  const trSwap = document.getElementById('translate-swap');
+  if (trSwap) trSwap.addEventListener('click', () => {
+    stopTranslateListening();
+    state.translate.direction = state.translate.direction === 'en-yue' ? 'yue-en' : 'en-yue';
+    state.translate.inputText = '';
+    state.translate.result    = null;
+    state.translate.error     = null;
+    state.translate.listening = false;
+    render();
+  });
+
+  // Mic button — toggles speech input
+  const trMic = document.getElementById('translate-mic');
+  if (trMic) trMic.addEventListener('click', () => {
+    if (state.translate.listening) {
+      stopTranslateListening();
+    } else {
+      startTranslateListening();
     }
   });
 
