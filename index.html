@@ -72,6 +72,39 @@
   @keyframes pulse { from { opacity:1; } to { opacity:0.4; } }
   .speaking { animation: pulse 0.6s infinite alternate; }
 
+  /* Translate */
+  .translate-wrap { padding: 16px 20px 32px; max-width: 680px; margin: 0 auto; }
+  .translate-header { margin-bottom: 16px; }
+  .translate-header h2 { font-size: 20px; font-weight: 700; color: #2C3E7A; margin-bottom: 4px; }
+  .translate-header p { font-size: 12px; color: #999; }
+  .translate-input-wrap { background: #fff; border-radius: 14px; padding: 14px; border: 1px solid #eee; margin-bottom: 12px; }
+  .translate-input { width: 100%; min-height: 60px; border: none; outline: none; font-size: 16px; font-family: inherit; resize: vertical; color: #1a1a2e; background: transparent; }
+  .translate-input::placeholder { color: #bbb; }
+  .translate-input-actions { display: flex; gap: 8px; align-items: center; margin-top: 10px; padding-top: 10px; border-top: 1px solid #f4f0eb; }
+  .translate-mic { display: none; }   /* hidden in Phase 1, ready for Phase 2 */
+  .translate-direction { display: none; }   /* hidden in Phase 1, ready for Phase 2 */
+  .translate-go { flex: 1; padding: 10px 18px; background: #2C3E7A; color: #fff; border: none; border-radius: 10px; font-size: 14px; font-weight: 700; cursor: pointer; }
+  .translate-go:disabled { opacity: 0.5; cursor: default; }
+  .translate-clear { padding: 10px 14px; background: transparent; color: #888; border: 1px solid #ddd; border-radius: 10px; font-size: 13px; cursor: pointer; }
+  .translate-loading { padding: 30px 16px; text-align: center; color: #888; font-size: 13px; }
+  .translate-error { background: #fde8ea; border: 1px solid #E74C3C; color: #7b1c1c; padding: 12px 16px; border-radius: 10px; font-size: 13px; margin-bottom: 12px; }
+  .translate-result { background: #fff; border-radius: 14px; padding: 16px 18px; border: 2px solid #2C3E7A22; }
+  .translate-zh { font-size: 22px; line-height: 1.4; color: #1a1a2e; margin-bottom: 8px; }
+  .translate-jp { font-size: 14px; margin-bottom: 8px; }
+  .translate-result-actions { display: flex; gap: 8px; margin-top: 10px; padding-top: 10px; border-top: 1px solid #f4f0eb; }
+  .translate-action-btn { flex: 1; padding: 8px 12px; border-radius: 8px; border: 1.5px solid #2C3E7A; background: transparent; color: #2C3E7A; font-size: 12px; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 4px; }
+  .translate-action-btn.primary { background: #2C3E7A; color: #fff; }
+
+  /* API key setup */
+  .apikey-setup { background: #fff; border-radius: 14px; padding: 22px 18px; border: 2px dashed #2C3E7A; margin-bottom: 16px; text-align: center; }
+  .apikey-setup h3 { font-size: 16px; color: #2C3E7A; margin-bottom: 8px; }
+  .apikey-setup p { font-size: 13px; color: #666; line-height: 1.5; margin-bottom: 12px; }
+  .apikey-setup small { color: #aaa; font-size: 11px; }
+  .apikey-input { width: 100%; padding: 10px 12px; border: 1px solid #ddd; border-radius: 8px; font-size: 13px; font-family: monospace; margin-bottom: 10px; box-sizing: border-box; }
+  .apikey-save { padding: 10px 18px; background: #2C3E7A; color: #fff; border: none; border-radius: 8px; font-size: 13px; font-weight: 700; cursor: pointer; width: 100%; }
+  .apikey-toggle-row { display: flex; justify-content: flex-end; margin-top: 6px; }
+  .apikey-toggle-btn { background: transparent; border: none; color: #999; font-size: 11px; cursor: pointer; padding: 0; text-decoration: underline; }
+
   /* Patterns section */
   .patterns-header { padding: 16px 20px 0; max-width: 680px; margin: 0 auto; }
   .patterns-header h2 { font-size: 20px; font-weight: 700; color: #2C3E7A; margin-bottom: 4px; }
@@ -834,6 +867,14 @@ let state = {
   speed: 'normal',
   nav: 'topics',
   drawerOpen: false,
+  translate: {
+    direction:   'en-yue',     // Phase 1: only en-yue used; ready for 'yue-en' in Phase 2
+    inputText:   '',
+    result:      null,         // {zh, jp, en, bd, pattern?}
+    loading:     false,
+    error:       null,
+    showApiKey:  false,        // toggles between masked/visible during entry
+  },
   topic: 'greetings',
   mode:  'study',
   tab:   'words',          // 'words' | 'convo'
@@ -880,6 +921,135 @@ function playAllConvo(lines, idx) {
   render();
   const line = lines[idx];
   speakAs(line.c, line.u, () => setTimeout(() => playAllConvo(lines, idx + 1), 500));
+}
+
+// ── Translation (provider-abstracted) ─────────────────────────────────────────
+// Configuration — change provider here to swap. Each provider implementation
+// returns the same standardised shape: { zh, jp, en, bd, pattern? }
+const TRANSLATION_PROVIDER = 'gemini';   // 'gemini' | 'claude' | 'openai'
+
+function getApiKey() {
+  return localStorage.getItem('cantonese_api_key') || '';
+}
+function setApiKey(key) {
+  localStorage.setItem('cantonese_api_key', key);
+}
+
+function buildPrompt(text, direction) {
+  const isToYue = direction === 'en-yue';
+  const sourceLabel = isToYue ? 'English' : 'Cantonese (in characters or jyutping)';
+  const targetLabel = isToYue ? 'Cantonese' : 'English';
+  return `You are a Cantonese language learning assistant. Translate the following ${sourceLabel} text to ${targetLabel}.
+
+Important rules:
+- Use COLLOQUIAL Cantonese (HK style), not Mandarin/Standard Written Chinese
+- Use Cantonese-specific characters where appropriate (e.g. 嘅, 咗, 嚟, 喺, 唔, 啲, 咁, 嗰)
+- Use jyutping romanization (with tone numbers 1-6)
+- Provide a word-by-word breakdown grouping characters into meaningful chunks
+
+Input: "${text}"
+
+Respond ONLY with valid JSON in this exact format (no markdown, no code fences, no commentary):
+{
+  "zh": "Cantonese characters here",
+  "jp": "jyutping with tone numbers here",
+  "en": "English meaning here",
+  "bd": [
+    {"c": "chunk in Chinese", "j": "chunk in jyutping", "e": "chunk meaning in English"}
+  ]
+}`;
+}
+
+function parseAiResponse(text) {
+  // Strip code fences if present, find first { ... } block
+  const cleaned = text.replace(/```json\s*|\s*```/g, '').trim();
+  const match = cleaned.match(/\{[\s\S]*\}/);
+  if (!match) throw new Error('No JSON found in response');
+  const obj = JSON.parse(match[0]);
+  if (!obj.zh || !obj.jp || !obj.en || !Array.isArray(obj.bd)) {
+    throw new Error('Response missing required fields');
+  }
+  return obj;
+}
+
+// ── Provider implementations ──
+async function callGemini(prompt, apiKey) {
+  const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${encodeURIComponent(apiKey)}`;
+  const res = await fetch(url, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      contents: [{ parts: [{ text: prompt }] }],
+      generationConfig: { temperature: 0.3, responseMimeType: 'application/json' },
+    }),
+  });
+  if (!res.ok) {
+    const errText = await res.text();
+    throw new Error(`Gemini error ${res.status}: ${errText.slice(0, 200)}`);
+  }
+  const data = await res.json();
+  const text = data?.candidates?.[0]?.content?.parts?.[0]?.text;
+  if (!text) throw new Error('Gemini returned empty response');
+  return text;
+}
+
+async function callClaude(prompt, apiKey) {
+  const res = await fetch('https://api.anthropic.com/v1/messages', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'x-api-key': apiKey,
+      'anthropic-version': '2023-06-01',
+    },
+    body: JSON.stringify({
+      model: 'claude-haiku-4-5-20251001',
+      max_tokens: 1024,
+      messages: [{ role: 'user', content: prompt }],
+    }),
+  });
+  if (!res.ok) {
+    const errText = await res.text();
+    throw new Error(`Claude error ${res.status}: ${errText.slice(0, 200)}`);
+  }
+  const data = await res.json();
+  const text = data?.content?.[0]?.text;
+  if (!text) throw new Error('Claude returned empty response');
+  return text;
+}
+
+async function callOpenAI(prompt, apiKey) {
+  const res = await fetch('https://api.openai.com/v1/chat/completions', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + apiKey },
+    body: JSON.stringify({
+      model: 'gpt-4o-mini',
+      messages: [{ role: 'user', content: prompt }],
+      response_format: { type: 'json_object' },
+    }),
+  });
+  if (!res.ok) {
+    const errText = await res.text();
+    throw new Error(`OpenAI error ${res.status}: ${errText.slice(0, 200)}`);
+  }
+  const data = await res.json();
+  const text = data?.choices?.[0]?.message?.content;
+  if (!text) throw new Error('OpenAI returned empty response');
+  return text;
+}
+
+// Single entry point — rest of app calls only this
+async function translateText(text, direction = 'en-yue') {
+  const apiKey = getApiKey();
+  if (!apiKey) throw new Error('Missing API key');
+  const prompt = buildPrompt(text, direction);
+  let raw;
+  switch (TRANSLATION_PROVIDER) {
+    case 'gemini': raw = await callGemini(prompt, apiKey); break;
+    case 'claude': raw = await callClaude(prompt, apiKey); break;
+    case 'openai': raw = await callOpenAI(prompt, apiKey); break;
+    default: throw new Error('Unknown provider: ' + TRANSLATION_PROVIDER);
+  }
+  return parseAiResponse(raw);
 }
 
 // ── Speech recognition ───────────────────────────────────────────────────────
@@ -980,9 +1150,10 @@ function finishListening() {
 // ── Render ────────────────────────────────────────────────────────────────────
 function renderDrawer() {
   const items = [
-    { key:'topics',   icon:'📖', label:'Topics',   desc:'Vocabulary, sentences & conversations' },
-    { key:'patterns', icon:'🔨', label:'Patterns',  desc:'Sentence building blocks'             },
-    { key:'progress', icon:'⭐', label:'Progress',  desc:'Track your learning journey'          },
+    { key:'topics',    icon:'📖', label:'Topics',    desc:'Vocabulary, sentences & conversations' },
+    { key:'patterns',  icon:'🔨', label:'Patterns',   desc:'Sentence building blocks'             },
+    { key:'translate', icon:'🌐', label:'Translate',  desc:'AI-powered translation & breakdown'   },
+    { key:'progress',  icon:'⭐', label:'Progress',   desc:'Track your learning journey'          },
   ];
   const open = state.drawerOpen ? 'open' : '';
   return `
@@ -1045,6 +1216,90 @@ function renderPatterns() {
     ${cards}`;
 }
 
+function renderTranslate() {
+  const tr = state.translate;
+  const hasKey = !!getApiKey();
+
+  // API key setup screen if no key
+  if (!hasKey) {
+    return `
+      <div class="translate-wrap">
+        <div class="translate-header">
+          <h2>🌐 Translate</h2>
+          <p>AI-powered translation with word-by-word breakdown</p>
+        </div>
+        <div class="apikey-setup">
+          <h3>🔑 One-time setup</h3>
+          <p>Paste your <strong>Google Gemini API key</strong> to enable translations. It's saved securely on your device only — never uploaded anywhere.</p>
+          <input type="${tr.showApiKey ? 'text' : 'password'}" id="apikey-input" class="apikey-input" placeholder="AIza..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+          <button class="apikey-save" id="apikey-save">Save Key & Continue</button>
+          <div class="apikey-toggle-row">
+            <button class="apikey-toggle-btn" id="apikey-toggle">${tr.showApiKey ? 'Hide' : 'Show'} key</button>
+          </div>
+          <p style="margin-top:14px;font-size:11px;color:#aaa;line-height:1.5">
+            Don't have one? Get a free key in 90 seconds at <strong>aistudio.google.com</strong> — no credit card needed.
+          </p>
+        </div>
+      </div>`;
+  }
+
+  // Main translate UI
+  const result = tr.result;
+  const bdHtml = result?.bd ? result.bd.map(w => `
+    <div class="breakdown-row">
+      <span class="breakdown-zh">${w.c}</span>
+      <span class="breakdown-jp">${colorJyutping(w.j)}</span>
+      <span class="breakdown-en">${w.e}</span>
+    </div>`).join('') : '';
+
+  const speaking = state.speaking === 'translate-result';
+  const playColor = '#2C3E7A';
+
+  return `
+    <div class="translate-wrap">
+      <div class="translate-header">
+        <h2>🌐 Translate</h2>
+        <p>English → Cantonese with breakdown · powered by Gemini</p>
+      </div>
+
+      <div class="translate-input-wrap">
+        <textarea class="translate-input" id="translate-input" placeholder="Type English here, e.g. 'I want to drink tea'" rows="3">${tr.inputText.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}</textarea>
+        <div class="translate-input-actions">
+          ${tr.inputText ? '<button class="translate-clear" id="translate-clear">Clear</button>' : ''}
+          <button class="translate-go" id="translate-go" ${tr.loading ? 'disabled' : ''}>
+            ${tr.loading ? '⏳ Translating…' : '✨ Translate'}
+          </button>
+        </div>
+      </div>
+
+      ${tr.error ? `<div class="translate-error">⚠ ${tr.error}</div>` : ''}
+
+      ${tr.loading ? `<div class="translate-loading">Translating with Gemini…</div>` : ''}
+
+      ${result ? `
+        <div class="translate-result">
+          <div class="translate-zh">${result.zh}</div>
+          <div class="translate-jp">${colorJyutping(result.jp)}</div>
+          <div class="bubble-english" style="font-size:12px;color:#888;margin-bottom:6px">${result.en}</div>
+          <div class="translate-result-actions">
+            <button class="translate-action-btn primary" id="translate-listen" data-tr-text="${result.zh}">
+              ${speaking ? '🔊 Playing…' : '▶ Listen'}
+            </button>
+          </div>
+          ${bdHtml ? `
+            <div style="margin-top:14px;padding-top:12px;border-top:1px solid #f4f0eb">
+              <div style="font-size:11px;color:#888;font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:8px">Word-by-word breakdown</div>
+              ${bdHtml}
+            </div>` : ''}
+        </div>
+      ` : ''}
+
+      <div style="margin-top:20px;text-align:center">
+        <button class="apikey-toggle-btn" id="translate-reset-key">Reset API key</button>
+      </div>
+    </div>`;
+}
+
 function renderPlaceholder(icon, title, subtitle) {
   return `
     <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;padding:60px 30px;text-align:center;min-height:300px;">
@@ -1070,6 +1325,8 @@ function render() {
       </div>`;
   } else if (state.nav === 'patterns') {
     mainContent = renderPatterns();
+  } else if (state.nav === 'translate') {
+    mainContent = renderTranslate();
   } else if (state.nav === 'progress') {
     mainContent = renderPlaceholder('⭐', 'Progress', 'Coming soon — track completed topics, review scores, and run cross-topic reviews.');
   }
@@ -1564,6 +1821,92 @@ function attachEvents(lesson, color) {
       state.drawerOpen = false;
       render();
     });
+  });
+
+  // ── Translate events ──────────────────────────────────────────
+  // API key save
+  const apikeySave = document.getElementById('apikey-save');
+  if (apikeySave) apikeySave.addEventListener('click', () => {
+    const input = document.getElementById('apikey-input');
+    const key = (input?.value || '').trim();
+    if (!key) {
+      state.translate.error = 'Please paste your API key first';
+      render();
+      return;
+    }
+    setApiKey(key);
+    state.translate.error = null;
+    render();
+  });
+
+  // Show/hide API key toggle
+  const apikeyToggle = document.getElementById('apikey-toggle');
+  if (apikeyToggle) apikeyToggle.addEventListener('click', () => {
+    state.translate.showApiKey = !state.translate.showApiKey;
+    render();
+  });
+
+  // Reset API key
+  const apikeyReset = document.getElementById('translate-reset-key');
+  if (apikeyReset) apikeyReset.addEventListener('click', () => {
+    if (confirm('Remove your saved API key? You\'ll need to re-enter it to translate.')) {
+      localStorage.removeItem('cantonese_api_key');
+      state.translate.result = null;
+      state.translate.error = null;
+      state.translate.inputText = '';
+      render();
+    }
+  });
+
+  // Translate input — keep state in sync
+  const translateInput = document.getElementById('translate-input');
+  if (translateInput) {
+    translateInput.addEventListener('input', () => {
+      state.translate.inputText = translateInput.value;
+      // No re-render on every keystroke — would lose focus. Just sync state.
+    });
+  }
+
+  // Clear input
+  const translateClear = document.getElementById('translate-clear');
+  if (translateClear) translateClear.addEventListener('click', () => {
+    state.translate.inputText = '';
+    state.translate.result = null;
+    state.translate.error = null;
+    render();
+  });
+
+  // Translate button
+  const translateGo = document.getElementById('translate-go');
+  if (translateGo) translateGo.addEventListener('click', async () => {
+    const input = document.getElementById('translate-input');
+    const text = (input?.value || '').trim();
+    if (!text) return;
+    state.translate.inputText = text;
+    state.translate.loading = true;
+    state.translate.error   = null;
+    state.translate.result  = null;
+    render();
+    try {
+      const result = await translateText(text, state.translate.direction);
+      state.translate.result  = result;
+      state.translate.loading = false;
+      render();
+    } catch (err) {
+      state.translate.loading = false;
+      state.translate.error   = err.message || 'Translation failed';
+      render();
+    }
+  });
+
+  // Listen button on translation result
+  const translateListen = document.getElementById('translate-listen');
+  if (translateListen) translateListen.addEventListener('click', () => {
+    const text = translateListen.dataset.trText;
+    state.speaking = 'translate-result';
+    render();
+    speak(text, () => { state.speaking = null; render(); });
+    setTimeout(() => { if (state.speaking === 'translate-result') { state.speaking = null; render(); } }, 6000);
   });
 
   // Pattern example play buttons
