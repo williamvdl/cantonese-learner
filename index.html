@@ -72,6 +72,40 @@
   @keyframes pulse { from { opacity:1; } to { opacity:0.4; } }
   .speaking { animation: pulse 0.6s infinite alternate; }
 
+  /* Home screen — categorised topic cards */
+  .home-wrap { padding: 12px 20px 32px; max-width: 760px; margin: 0 auto; }
+  .home-header { margin-bottom: 14px; }
+  .home-title { font-size: 20px; font-weight: 700; color: #1a1a2e; margin-bottom: 4px; }
+  .home-subtitle { font-size: 12px; color: #999; }
+
+  .cat-filter-row { display: flex; gap: 7px; overflow-x: auto; padding: 4px 0 10px; scrollbar-width: none; margin-bottom: 12px; }
+  .cat-filter-pill { flex-shrink: 0; padding: 7px 13px; border-radius: 30px; cursor: pointer; font-size: 13px; font-weight: 600; border: 2px solid #ddd; background: #fff; color: #555; white-space: nowrap; transition: all 0.18s; display: flex; align-items: center; gap: 5px; }
+  .cat-filter-pill.active { background: #1a1a2e; color: #fff; border-color: #1a1a2e; }
+
+  .cat-section { margin-bottom: 24px; }
+  .cat-section-header { display: flex; align-items: baseline; gap: 8px; margin-bottom: 10px; padding: 0 4px; }
+  .cat-section-title { font-size: 14px; font-weight: 700; color: #1a1a2e; }
+  .cat-section-count { font-size: 11px; color: #aaa; font-weight: 600; }
+
+  .topic-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 10px; }
+  .topic-card { cursor: pointer; border-radius: 14px; padding: 16px 14px; background: #fff; border: 2px solid; min-height: 100px; display: flex; flex-direction: column; gap: 4px; transition: all 0.15s; position: relative; user-select: none; }
+  .topic-card:active { transform: scale(0.97); }
+  .topic-card-icon { font-size: 28px; line-height: 1; margin-bottom: 4px; }
+  .topic-card-label { font-size: 14px; font-weight: 700; color: #1a1a2e; line-height: 1.2; }
+  .topic-card-meta { font-size: 11px; color: #888; margin-top: auto; }
+  .topic-card-rounds { display: flex; gap: 3px; margin-top: 4px; }
+  .topic-card-pip { width: 6px; height: 6px; border-radius: 50%; }
+
+  /* Round selector inside topic page */
+  .round-selector { display: flex; gap: 6px; margin-bottom: 12px; align-items: center; }
+  .round-label { font-size: 11px; color: #888; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; margin-right: 4px; }
+  .round-btn { padding: 5px 12px; border-radius: 16px; border: 2px solid; background: #fff; cursor: pointer; font-size: 12px; font-weight: 700; transition: all 0.15s; }
+  .round-btn.active { color: #fff; }
+
+  /* Back-to-home button */
+  .back-home-btn { display: inline-flex; align-items: center; gap: 5px; background: transparent; border: none; color: #888; font-size: 13px; cursor: pointer; padding: 4px 0; margin-bottom: 8px; font-weight: 600; }
+  .back-home-btn:hover { color: #1a1a2e; }
+
   /* Translate */
   .translate-wrap { padding: 16px 20px 32px; max-width: 680px; margin: 0 auto; }
   .translate-header { margin-bottom: 16px; }
@@ -267,6 +301,68 @@
 
 <script>
 // ── Data ──────────────────────────────────────────────────────────────────────
+// ── Categories & rounds ─────────────────────────────────────────────────────
+// Category metadata (display order set by array order)
+const CATEGORIES = [
+  { key:'everyday',  label:'Everyday Essentials', icon:'🌟' },
+  { key:'people',    label:'People & Relationships', icon:'👨‍👩‍👧' },
+  { key:'food',      label:'Food & Dining', icon:'🍜' },
+  { key:'outabout',  label:'Out & About', icon:'🛍️' },
+  { key:'daily',     label:'Daily Life', icon:'🌤️' },
+];
+
+// Map each topic to its category. To move a topic between categories, change its value here.
+const TOPIC_CATEGORIES = {
+  greetings: 'everyday',
+  numbers:   'everyday',
+  time:      'everyday',
+  phrases:   'everyday',
+  family:    'people',
+  body:      'people',
+  food:      'food',
+  shopping:  'outabout',
+  transport: 'outabout',
+  weather:   'daily',
+  colors:    'daily',
+};
+
+// Round data (wraps existing data as Round 1, ready for Round 2/3 to be added per-topic)
+// Structure: TOPIC_ROUNDS[topic] = { 1: {wordsKey, sentencesKey, convoKey}, 2: {...}, ... }
+// For Round 1, keys reference existing LESSONS/SENTENCES/CONVOS data.
+// For higher rounds, data lives in ROUND_DATA below.
+const ROUND_DATA = {
+  // Example Round 2/3 data slots in here later, e.g.:
+  // 'food-r2': { words: [...], sentences: [...], conversation: {...} }
+};
+
+// Round accessors — single point of truth for "what content is in this topic+round"
+function getAvailableRounds(topic) {
+  // Round 1 is always available (existing data). Higher rounds exist if entries in ROUND_DATA.
+  const rounds = [1];
+  if (ROUND_DATA[topic + '-r2']) rounds.push(2);
+  if (ROUND_DATA[topic + '-r3']) rounds.push(3);
+  return rounds;
+}
+
+function getRoundWords(topic, round) {
+  if (round === 1) return LESSONS[topic]?.words || [];
+  return ROUND_DATA[topic + '-r' + round]?.words || [];
+}
+
+function getRoundSentences(topic, round) {
+  if (round === 1) return SENTENCES[topic] || [];
+  return ROUND_DATA[topic + '-r' + round]?.sentences || [];
+}
+
+function getRoundConvo(topic, round) {
+  if (round === 1) return CONVOS[topic] || null;
+  return ROUND_DATA[topic + '-r' + round]?.convo || null;
+}
+
+function getTopicsByCategory(categoryKey) {
+  return Object.keys(TOPIC_CATEGORIES).filter(t => TOPIC_CATEGORIES[t] === categoryKey);
+}
+
 const LESSONS = {
   greetings: { label:"Greetings", icon:"👋", color:"#C0392B", words:[
     {c:"你好",   j:"nei5 hou2",        e:"Hello"},
@@ -873,6 +969,9 @@ let state = {
   speed: 'normal',
   nav: 'topics',
   drawerOpen: false,
+  homeView: true,                 // true = show home screen, false = inside a topic
+  selectedCategory: 'all',        // 'all' or a category key
+  currentRound: 1,
   translate: {
     direction:   'en-yue',     // 'en-yue' | 'yue-en'
     inputText:   '',
@@ -1244,6 +1343,13 @@ function renderDrawer() {
     { key:'progress',  icon:'⭐', label:'Progress',   desc:'Track your learning journey'          },
   ];
   const open = state.drawerOpen ? 'open' : '';
+  const categorySubLinks = CATEGORIES.map(cat => `
+    <button class="nav-item nav-subitem" data-cat-jump="${cat.key}" style="padding-left:50px;border-bottom:none">
+      <span class="ni-icon" style="font-size:14px">${cat.icon}</span>
+      <span class="ni-text">
+        <span class="ni-label" style="font-size:13px;color:#bbb">${cat.label}</span>
+      </span>
+    </button>`).join('');
   return `
     <div class="nav-drawer ${open}" id="nav-drawer">
       <div class="nav-backdrop" id="nav-backdrop"></div>
@@ -1252,15 +1358,22 @@ function renderDrawer() {
           <span class="nav-panel-title">Menu</span>
           <button class="nav-close" id="nav-close">✕</button>
         </div>
-        ${items.map(item => `
-          <button class="nav-item${state.nav===item.key?' active':''}" data-nav="${item.key}">
-            <span class="ni-icon">${item.icon}</span>
-            <span class="ni-text">
-              <span class="ni-label">${item.label}</span>
-              <span class="ni-desc">${item.desc}</span>
-            </span>
-            <span class="ni-tick">✓</span>
-          </button>`).join('')}
+        ${items.map(item => {
+          const main = `
+            <button class="nav-item${state.nav===item.key?' active':''}" data-nav="${item.key}">
+              <span class="ni-icon">${item.icon}</span>
+              <span class="ni-text">
+                <span class="ni-label">${item.label}</span>
+                <span class="ni-desc">${item.desc}</span>
+              </span>
+              <span class="ni-tick">✓</span>
+            </button>`;
+          // Show category quick-jump under Topics
+          if (item.key === 'topics' && state.nav === 'topics') {
+            return main + categorySubLinks;
+          }
+          return main;
+        }).join('')}
       </div>
     </div>`;
 }
@@ -1425,13 +1538,20 @@ function render() {
 
   let mainContent = '';
   if (state.nav === 'topics') {
-    mainContent = `
-      ${renderVoiceBanner()}
-      ${renderTopics()}
-      <div class="content">
-        ${renderLessonHeader(lesson, color)}
-        ${state.mode === 'quiz' ? renderQuiz(lesson, color) : state.tab === 'convo' ? renderConversation(color) : renderStudy(lesson, color)}
-      </div>`;
+    if (state.homeView) {
+      mainContent = `
+        ${renderVoiceBanner()}
+        ${renderHomeScreen()}`;
+    } else {
+      mainContent = `
+        ${renderVoiceBanner()}
+        <div class="content">
+          <button class="back-home-btn" id="back-home-btn">← Back to topics</button>
+          ${renderRoundSelector(state.topic, color)}
+          ${renderLessonHeader(lesson, color)}
+          ${state.mode === 'quiz' ? renderQuiz(lesson, color) : state.tab === 'convo' ? renderConversation(color) : renderStudy(lesson, color)}
+        </div>`;
+    }
   } else if (state.nav === 'patterns') {
     mainContent = renderPatterns();
   } else if (state.nav === 'translate') {
@@ -1493,6 +1613,77 @@ function renderVoiceBanner() {
     ? ' · Try Chrome, or go to Android Settings → General Management → Language → TTS → install Chinese (Hong Kong)'
     : '';
   return `<div class="voice-banner ${cls}">${icon} ${v.label}${v.name ? ' — ' + v.name : ''}${extra}</div>`;
+}
+
+function renderCategoryFilter() {
+  const pills = [
+    { key:'all', label:'All', icon:'📚' },
+    ...CATEGORIES,
+  ];
+  const html = pills.map(c => {
+    const active = state.selectedCategory === c.key;
+    return `<button class="cat-filter-pill${active?' active':''}" data-catfilter="${c.key}">${c.icon} ${c.label}</button>`;
+  }).join('');
+  return `<div class="cat-filter-row">${html}</div>`;
+}
+
+function renderTopicCard(topicKey) {
+  const lesson = LESSONS[topicKey];
+  if (!lesson) return '';
+  const rounds = getAvailableRounds(topicKey);
+  const pips = rounds.map(r => `<span class="topic-card-pip" style="background:${lesson.color}"></span>`).join('') +
+               (rounds.length < 3 ? `<span class="topic-card-pip" style="background:${lesson.color}33"></span>`.repeat(3 - rounds.length) : '');
+  return `
+    <div class="topic-card" data-topic-card="${topicKey}" style="border-color:${lesson.color}">
+      <div class="topic-card-icon">${lesson.icon}</div>
+      <div class="topic-card-label">${lesson.label}</div>
+      <div class="topic-card-meta">${rounds.length} round${rounds.length>1?'s':''} · ${lesson.words.length} words</div>
+      <div class="topic-card-rounds">${pips}</div>
+    </div>`;
+}
+
+function renderHomeScreen() {
+  const filter = state.selectedCategory;
+  const sections = CATEGORIES
+    .filter(cat => filter === 'all' || filter === cat.key)
+    .map(cat => {
+      const topics = getTopicsByCategory(cat.key);
+      if (topics.length === 0) return '';
+      const cards = topics.map(t => renderTopicCard(t)).join('');
+      return `
+        <div class="cat-section" id="cat-anchor-${cat.key}">
+          <div class="cat-section-header">
+            <span class="cat-section-title">${cat.icon} ${cat.label}</span>
+            <span class="cat-section-count">${topics.length} topic${topics.length>1?'s':''}</span>
+          </div>
+          <div class="topic-grid">${cards}</div>
+        </div>`;
+    }).join('');
+
+  return `
+    <div class="home-wrap">
+      <div class="home-header">
+        <div class="home-title">📖 Topics</div>
+        <div class="home-subtitle">Choose a category and topic to start learning</div>
+      </div>
+      ${renderCategoryFilter()}
+      ${sections}
+    </div>`;
+}
+
+function renderRoundSelector(topicKey, color) {
+  const rounds = getAvailableRounds(topicKey);
+  if (rounds.length <= 1) return '';   // Hide selector if only one round
+  const btns = rounds.map(r => {
+    const active = state.currentRound === r;
+    const style = active ? `background:${color};border-color:${color};color:#fff` : `border-color:${color};color:${color}`;
+    return `<button class="round-btn${active?' active':''}" data-round="${r}" style="${style}">Round ${r}</button>`;
+  }).join('');
+  return `
+    <div class="round-selector">
+      <span class="round-label">Level:</span>
+      ${btns}
+    </div>`;
 }
 
 function renderTopics() {
@@ -1926,8 +2117,23 @@ function attachEvents(lesson, color) {
   // Nav items
   document.querySelectorAll('[data-nav]').forEach(btn => {
     btn.addEventListener('click', () => {
-      state.nav = btn.dataset.nav;
+      const target = btn.dataset.nav;
+      // Tapping Topics from the drawer always returns to home view
+      if (target === 'topics') state.homeView = true;
+      state.nav = target;
       state.drawerOpen = false;
+      render();
+    });
+  });
+
+  // Category quick-jump (drawer sublinks)
+  document.querySelectorAll('[data-cat-jump]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      state.nav = 'topics';
+      state.homeView = true;
+      state.selectedCategory = btn.dataset.catJump;
+      state.drawerOpen = false;
+      window.scrollTo(0, 0);
       render();
     });
   });
@@ -2058,7 +2264,7 @@ function attachEvents(lesson, color) {
     if (btn) btn.addEventListener('click', () => { state.speed = s; render(); });
   });
 
-  // Topic buttons
+  // Topic buttons (legacy pill bar — still works if shown elsewhere)
   document.querySelectorAll('[data-topic]').forEach(btn => {
     btn.addEventListener('click', () => {
       state.topic   = btn.dataset.topic;
@@ -2068,6 +2274,58 @@ function attachEvents(lesson, color) {
       state.speaking= null;
       state.sentenceBreakdownOpen = {};
       state.convo   = { convMode:'read', playingLine:null, shadowStep:0, shadowWaiting:false, gapAnswers:{}, bubbleRevealed:{}, breakdownOpen:{}, speakStep:0, speakStatus:'idle', speakHeard:'', speakAutoPlayed:false };
+      render();
+    });
+  });
+
+  // Topic cards (home screen) — enter the topic
+  document.querySelectorAll('[data-topic-card]').forEach(card => {
+    card.addEventListener('click', () => {
+      state.topic        = card.dataset.topicCard;
+      state.homeView     = false;
+      state.currentRound = 1;
+      state.mode         = 'study';
+      state.tab          = 'words';
+      state.flipped      = {};
+      state.speaking     = null;
+      state.sentenceBreakdownOpen = {};
+      state.convo        = { convMode:'read', playingLine:null, shadowStep:0, shadowWaiting:false, gapAnswers:{}, bubbleRevealed:{}, breakdownOpen:{}, speakStep:0, speakStatus:'idle', speakHeard:'', speakAutoPlayed:false };
+      window.scrollTo(0, 0);
+      render();
+    });
+  });
+
+  // Back to home button
+  const backHomeBtn = document.getElementById('back-home-btn');
+  if (backHomeBtn) backHomeBtn.addEventListener('click', () => {
+    state.homeView = true;
+    state.mode     = 'study';
+    state.tab      = 'words';
+    window.speechSynthesis.cancel();
+    window.scrollTo(0, 0);
+    render();
+  });
+
+  // Category filter pills
+  document.querySelectorAll('[data-catfilter]').forEach(pill => {
+    pill.addEventListener('click', () => {
+      state.selectedCategory = pill.dataset.catfilter;
+      render();
+    });
+  });
+
+  // Round selector inside topic
+  document.querySelectorAll('[data-round]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const r = parseInt(btn.dataset.round);
+      if (r === state.currentRound) return;
+      state.currentRound = r;
+      // Reset transient state for new round
+      state.flipped  = {};
+      state.speaking = null;
+      state.sentenceBreakdownOpen = {};
+      state.convo = { convMode:'read', playingLine:null, shadowStep:0, shadowWaiting:false, gapAnswers:{}, bubbleRevealed:{}, breakdownOpen:{}, speakStep:0, speakStatus:'idle', speakHeard:'', speakAutoPlayed:false };
+      window.scrollTo(0, 0);
       render();
     });
   });
