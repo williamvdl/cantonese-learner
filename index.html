@@ -78,9 +78,9 @@
   .home-title { font-size: 20px; font-weight: 700; color: #1a1a2e; margin-bottom: 4px; }
   .home-subtitle { font-size: 12px; color: #999; }
 
-  .cat-filter-row { display: flex; gap: 7px; overflow-x: auto; padding: 4px 0 10px; scrollbar-width: none; margin-bottom: 12px; }
-  .cat-filter-pill { flex-shrink: 0; padding: 7px 13px; border-radius: 30px; cursor: pointer; font-size: 13px; font-weight: 600; border: 2px solid #ddd; background: #fff; color: #555; white-space: nowrap; transition: all 0.18s; display: flex; align-items: center; gap: 5px; }
-  .cat-filter-pill.active { background: #1a1a2e; color: #fff; border-color: #1a1a2e; }
+  .cat-filter-wrap { margin-bottom: 14px; }
+  .cat-filter-select { width: 100%; padding: 12px 36px 12px 14px; font-size: 14px; font-weight: 600; color: #1a1a2e; background: #fff; border: 2px solid #ddd; border-radius: 12px; cursor: pointer; appearance: none; -webkit-appearance: none; -moz-appearance: none; background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%231a1a2e'><path d='M7 10l5 5 5-5z'/></svg>"); background-repeat: no-repeat; background-position: right 10px center; background-size: 22px; font-family: inherit; }
+  .cat-filter-select:focus { outline: none; border-color: #1a1a2e; }
 
   .cat-section { margin-bottom: 24px; }
   .cat-section-header { display: flex; align-items: baseline; gap: 8px; margin-bottom: 10px; padding: 0 4px; }
@@ -1343,13 +1343,26 @@ function renderDrawer() {
     { key:'progress',  icon:'⭐', label:'Progress',   desc:'Track your learning journey'          },
   ];
   const open = state.drawerOpen ? 'open' : '';
-  const categorySubLinks = CATEGORIES.map(cat => `
-    <button class="nav-item nav-subitem" data-cat-jump="${cat.key}" style="padding-left:50px;border-bottom:none">
+  const allActive = state.selectedCategory === 'all';
+  const allLink = `
+    <button class="nav-item nav-subitem${allActive?' subitem-active':''}" data-cat-jump="all" style="padding-left:50px;border-bottom:none">
+      <span class="ni-icon" style="font-size:14px">📚</span>
+      <span class="ni-text">
+        <span class="ni-label" style="font-size:13px;color:${allActive?'#e8c97e':'#bbb'};font-weight:${allActive?'700':'500'}">All Categories</span>
+      </span>
+      ${allActive ? '<span style="margin-left:auto;color:#e8c97e;font-size:12px;padding-right:14px">●</span>' : ''}
+    </button>`;
+  const categorySubLinks = allLink + CATEGORIES.map(cat => {
+    const active = state.selectedCategory === cat.key;
+    return `
+    <button class="nav-item nav-subitem${active?' subitem-active':''}" data-cat-jump="${cat.key}" style="padding-left:50px;border-bottom:none">
       <span class="ni-icon" style="font-size:14px">${cat.icon}</span>
       <span class="ni-text">
-        <span class="ni-label" style="font-size:13px;color:#bbb">${cat.label}</span>
+        <span class="ni-label" style="font-size:13px;color:${active?'#e8c97e':'#bbb'};font-weight:${active?'700':'500'}">${cat.label}</span>
       </span>
-    </button>`).join('');
+      ${active ? '<span style="margin-left:auto;color:#e8c97e;font-size:12px;padding-right:14px">●</span>' : ''}
+    </button>`;
+  }).join('');
   return `
     <div class="nav-drawer ${open}" id="nav-drawer">
       <div class="nav-backdrop" id="nav-backdrop"></div>
@@ -1616,15 +1629,21 @@ function renderVoiceBanner() {
 }
 
 function renderCategoryFilter() {
-  const pills = [
-    { key:'all', label:'All', icon:'📚' },
-    ...CATEGORIES,
+  const allCount = Object.keys(TOPIC_CATEGORIES).length;
+  const options = [
+    { key:'all', label:`📚 All Categories (${allCount})` },
+    ...CATEGORIES.map(c => ({
+      key:   c.key,
+      label: `${c.icon} ${c.label} (${getTopicsByCategory(c.key).length})`,
+    })),
   ];
-  const html = pills.map(c => {
-    const active = state.selectedCategory === c.key;
-    return `<button class="cat-filter-pill${active?' active':''}" data-catfilter="${c.key}">${c.icon} ${c.label}</button>`;
-  }).join('');
-  return `<div class="cat-filter-row">${html}</div>`;
+  const opts = options.map(o =>
+    `<option value="${o.key}"${state.selectedCategory === o.key ? ' selected' : ''}>${o.label}</option>`
+  ).join('');
+  return `
+    <div class="cat-filter-wrap">
+      <select class="cat-filter-select" id="cat-filter-select">${opts}</select>
+    </div>`;
 }
 
 function renderTopicCard(topicKey) {
@@ -2306,12 +2325,12 @@ function attachEvents(lesson, color) {
     render();
   });
 
-  // Category filter pills
-  document.querySelectorAll('[data-catfilter]').forEach(pill => {
-    pill.addEventListener('click', () => {
-      state.selectedCategory = pill.dataset.catfilter;
-      render();
-    });
+  // Category filter dropdown
+  const catSelect = document.getElementById('cat-filter-select');
+  if (catSelect) catSelect.addEventListener('change', () => {
+    state.selectedCategory = catSelect.value;
+    window.scrollTo(0, 0);
+    render();
   });
 
   // Round selector inside topic
