@@ -2104,7 +2104,7 @@ function renderLessonHeader(lesson, color) {
     <div class="lesson-header">
       <div>
         <h2 class="lesson-title" style="color:${color}">${lesson.icon} ${lesson.label}</h2>
-        <div class="lesson-count">${lesson.words.length} words</div>
+        <div class="lesson-count">${getRoundWords(state.topic, state.currentRound).length} words</div>
       </div>
       <button class="mode-btn" id="mode-toggle" style="${btnStyle}">
         ${isQuiz ? '📖 Study' : '🧠 Quiz me'}
@@ -2914,7 +2914,7 @@ function attachEvents(lesson, color) {
   const modeBtn = document.getElementById('mode-toggle');
   if (modeBtn) modeBtn.addEventListener('click', () => {
     state.mode = state.mode === 'study' ? 'quiz' : 'study';
-    if (state.mode === 'quiz') state.quiz = getQuizInitState(lesson.words);
+    if (state.mode === 'quiz') state.quiz = getQuizInitState(getRoundWords(state.topic, state.currentRound));
     render();
   });
 
@@ -2933,7 +2933,8 @@ function attachEvents(lesson, color) {
     btn.addEventListener('click', e => {
       e.stopPropagation();
       const i = parseInt(btn.dataset.speak);
-      const word = lesson.words[i];
+      const word = getRoundWords(state.topic, state.currentRound)[i];
+      if (!word) return;
       state.speaking = i;
       render();
       speak(word.c, () => { state.speaking = null; render(); });
@@ -2989,7 +2990,7 @@ function attachEvents(lesson, color) {
           } else {
             state.quiz.idx = next;
             state.quiz.selected = null;
-            state.quiz.choices = buildChoices(state.quiz.queue[next], lesson.words);
+            state.quiz.choices = buildChoices(state.quiz.queue[next], getRoundWords(state.topic, state.currentRound));
           }
           render();
         }, 950);
