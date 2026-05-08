@@ -1359,6 +1359,8 @@ let state = {
   flipped: {},
   speaking: null,
   sentenceBreakdownOpen: {},
+  sentenceRevealed: {},
+  patternRevealed: {},
   voiceInfo: null,
   quiz: null,
   convo: {
@@ -1768,12 +1770,16 @@ function renderPatterns() {
     const examples = p.examples.map((ex, ei) => {
       const key = `p${pi}-e${ei}`;
       const speaking = state.speaking === key;
+      const revealed = state.patternRevealed[key];
+      const englishEl = revealed
+        ? `<div class="pattern-ex-en">${ex.e}</div>`
+        : `<div class="pattern-ex-en pattern-ex-eng-hint" data-pat-reveal="${key}" style="font-style:italic;color:#bbb;cursor:pointer">tap to see English</div>`;
       return `
         <div class="pattern-example">
           <div class="pattern-ex-text">
             <div class="pattern-ex-zh">${ex.c}</div>
             <div class="pattern-ex-jp">${colorJyutping(ex.j)}</div>
-            <div class="pattern-ex-en">${ex.e}</div>
+            ${englishEl}
           </div>
           <button class="pattern-ex-play${speaking?' speaking':''}" data-pex="${key}" data-pex-chinese="${ex.c}">
             ${speaking?'🔊':'▶'}
@@ -2367,6 +2373,7 @@ function renderSentences(topic, color) {
   const items = sentences.map((s, i) => {
     const speaking = state.speaking === 'sent-' + i;
     const bdOpen = state.sentenceBreakdownOpen[i];
+    const revealed = state.sentenceRevealed[i];
     const bdPanel = (bdOpen && s.bd) ? `
       <div class="breakdown-panel" style="margin:8px 0 4px">
         ${s.bd.map(w => `
@@ -2380,13 +2387,16 @@ function renderSentences(topic, color) {
       <button class="breakdown-btn" data-sent-bd="${i}" style="color:${color};margin-top:6px">
         ${bdOpen ? '▲ hide breakdown' : '🔍 word breakdown'}
       </button>` : '';
+    const englishEl = revealed
+      ? `<div class="sentence-english">${s.e}</div>`
+      : `<div class="sentence-eng-hint" data-sent-reveal="${i}" style="font-size:11px;color:#aaa;font-style:italic;cursor:pointer;margin-top:2px">tap to see English</div>`;
     return `
       <div class="sentence-wrap" style="margin-bottom:10px">
         <div class="sentence-card" style="margin-bottom:0">
           <div class="sentence-body">
             <div class="sentence-chinese">${s.c}</div>
             <div class="sentence-jyutping">${colorJyutping(s.j)}</div>
-            <div class="sentence-english">${s.e}</div>
+            ${englishEl}
             ${bdBtn}
           </div>
           <button class="sentence-play${speaking ? ' speaking' : ''}" data-sent="${i}"
@@ -2665,6 +2675,8 @@ function attachEvents(lesson, color) {
       state.flipped = {};
       state.speaking= null;
       state.sentenceBreakdownOpen = {};
+      state.sentenceRevealed = {};
+      state.patternRevealed = {};
       state.convo   = { convMode:'read', playingLine:null, shadowStep:0, shadowWaiting:false, gapAnswers:{}, bubbleRevealed:{}, breakdownOpen:{}, speakStep:0, speakStatus:'idle', speakHeard:'', speakAutoPlayed:false };
       render();
     });
@@ -2681,6 +2693,8 @@ function attachEvents(lesson, color) {
       state.flipped      = {};
       state.speaking     = null;
       state.sentenceBreakdownOpen = {};
+      state.sentenceRevealed = {};
+      state.patternRevealed = {};
       state.convo        = { convMode:'read', playingLine:null, shadowStep:0, shadowWaiting:false, gapAnswers:{}, bubbleRevealed:{}, breakdownOpen:{}, speakStep:0, speakStatus:'idle', speakHeard:'', speakAutoPlayed:false };
       window.scrollTo(0, 0);
       render();
@@ -2716,6 +2730,8 @@ function attachEvents(lesson, color) {
       state.flipped  = {};
       state.speaking = null;
       state.sentenceBreakdownOpen = {};
+      state.sentenceRevealed = {};
+      state.patternRevealed = {};
       state.convo = { convMode:'read', playingLine:null, shadowStep:0, shadowWaiting:false, gapAnswers:{}, bubbleRevealed:{}, breakdownOpen:{}, speakStep:0, speakStatus:'idle', speakHeard:'', speakAutoPlayed:false };
       window.scrollTo(0, 0);
       render();
@@ -2961,6 +2977,26 @@ function attachEvents(lesson, color) {
       e.stopPropagation();
       const i = parseInt(btn.dataset.sentBd);
       state.sentenceBreakdownOpen[i] = !state.sentenceBreakdownOpen[i];
+      render();
+    });
+  });
+
+  // Sentence English reveal
+  document.querySelectorAll('[data-sent-reveal]').forEach(el => {
+    el.addEventListener('click', e => {
+      e.stopPropagation();
+      const i = parseInt(el.dataset.sentReveal);
+      state.sentenceRevealed[i] = true;
+      render();
+    });
+  });
+
+  // Pattern example English reveal
+  document.querySelectorAll('[data-pat-reveal]').forEach(el => {
+    el.addEventListener('click', e => {
+      e.stopPropagation();
+      const key = el.dataset.patReveal;
+      state.patternRevealed[key] = true;
       render();
     });
   });
