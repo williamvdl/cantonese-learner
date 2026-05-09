@@ -285,6 +285,68 @@
   .result-score { font-size: 26px; font-weight: 700; margin-top: 8px; }
   .result-msg { font-size: 14px; color: #666; margin-top: 6px; }
   .back-btn { margin-top: 24px; padding: 10px 28px; color: #fff; border: none; border-radius: 30px; font-size: 14px; cursor: pointer; font-weight: 700; }
+
+  /* Lesson note panel (intro context above words) */
+  .lesson-note { border-radius: 12px; padding: 12px 14px; margin-bottom: 14px; border-left: 4px solid; background: #fff; box-shadow: 0 1px 4px rgba(0,0,0,0.04); }
+  .lesson-note-title { font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 6px; }
+  .lesson-note-body { font-size: 13px; line-height: 1.5; color: #333; }
+  .lesson-note-body strong { color: #1a1a2e; }
+
+  /* Learning Path */
+  .path-list { padding: 12px 20px 40px; max-width: 680px; margin: 0 auto; }
+  .path-level-header { font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: #888; margin: 18px 4px 10px; }
+  .path-level-header:first-child { margin-top: 4px; }
+  .path-card { background: #fff; border-radius: 14px; padding: 16px 18px; border: 2px solid #e8c97e; cursor: pointer; transition: all 0.15s; user-select: none; margin-bottom: 12px; }
+  .path-card:active { transform: scale(0.98); }
+  .path-card.locked { border-color: #ddd; cursor: default; opacity: 0.7; }
+  .path-card.locked:active { transform: none; }
+  .path-card-top { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; }
+  .path-card-icon { font-size: 28px; line-height: 1; }
+  .path-card-title { flex: 1; font-size: 16px; font-weight: 700; color: #1a1a2e; }
+  .path-card-badge { font-size: 10px; font-weight: 700; padding: 3px 8px; border-radius: 10px; letter-spacing: 0.5px; text-transform: uppercase; }
+  .path-card-badge.coming { background: #eee; color: #888; }
+  .path-card-desc { font-size: 12px; color: #777; margin-bottom: 10px; line-height: 1.4; }
+  .path-card-progress { display: flex; align-items: center; gap: 10px; }
+  .path-progress-bar { flex: 1; height: 6px; background: #f0e6d2; border-radius: 3px; overflow: hidden; }
+  .path-progress-fill { height: 100%; background: #e8c97e; transition: width 0.3s; }
+  .path-progress-count { font-size: 11px; color: #777; font-weight: 700; white-space: nowrap; }
+
+  /* Path timeline */
+  .path-timeline-wrap { padding: 12px 20px 40px; max-width: 680px; margin: 0 auto; }
+  .path-timeline-back { display: inline-flex; align-items: center; gap: 5px; background: transparent; border: none; color: #888; font-size: 13px; cursor: pointer; padding: 4px 0; margin-bottom: 8px; font-weight: 600; }
+  .path-timeline-back:hover { color: #1a1a2e; }
+  .path-timeline-header { margin-bottom: 18px; }
+  .path-timeline-title { font-size: 22px; font-weight: 700; color: #1a1a2e; margin-bottom: 4px; }
+  .path-timeline-sub { font-size: 12px; color: #888; margin-bottom: 10px; }
+  .path-timeline-progress { display: flex; align-items: center; gap: 10px; margin-top: 10px; }
+
+  .path-timeline { position: relative; padding-left: 8px; }
+  .path-step { position: relative; display: flex; gap: 14px; padding: 0 0 4px 0; min-height: 64px; }
+  .path-step-rail { position: relative; width: 32px; flex-shrink: 0; display: flex; flex-direction: column; align-items: center; }
+  .path-step-node { width: 32px; height: 32px; border-radius: 50%; background: #fff; border: 2.5px solid #ccc; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; color: #888; z-index: 1; flex-shrink: 0; }
+  .path-step-line { position: absolute; top: 32px; bottom: -4px; left: 50%; width: 2px; background: #e0e0e0; transform: translateX(-50%); }
+  .path-step:last-child .path-step-line { display: none; }
+  .path-step.done .path-step-node { background: #4CAF50; border-color: #4CAF50; color: #fff; }
+  .path-step.done .path-step-line { background: #4CAF50; }
+  .path-step.next .path-step-node { border-color: #e8c97e; box-shadow: 0 0 0 4px #e8c97e33; color: #1a1a2e; }
+
+  .path-step-body { flex: 1; padding-bottom: 14px; }
+  .path-step-card { background: #fff; border-radius: 12px; padding: 12px 14px; border: 1.5px solid #eee; cursor: pointer; transition: all 0.15s; user-select: none; }
+  .path-step-card:active { transform: scale(0.98); }
+  .path-step.next .path-step-card { border-color: #e8c97e; box-shadow: 0 2px 12px #e8c97e22; }
+  .path-step.done .path-step-card { background: #f7faf5; border-color: #d4e7c5; }
+  .path-step-row { display: flex; align-items: center; gap: 10px; }
+  .path-step-icon { font-size: 22px; line-height: 1; }
+  .path-step-text { flex: 1; min-width: 0; }
+  .path-step-title { font-size: 14px; font-weight: 700; color: #1a1a2e; line-height: 1.2; }
+  .path-step-meta { font-size: 11px; color: #888; margin-top: 2px; }
+  .path-next-badge { display: inline-block; font-size: 9px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: #1a1a2e; background: #e8c97e; padding: 2px 7px; border-radius: 8px; margin-bottom: 5px; }
+
+  .path-complete-btn { background: transparent; border: 2px solid #ccc; border-radius: 50%; width: 28px; height: 28px; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 14px; color: transparent; flex-shrink: 0; transition: all 0.15s; padding: 0; }
+  .path-complete-btn:active { transform: scale(0.9); }
+  .path-step.done .path-complete-btn { background: #4CAF50; border-color: #4CAF50; color: #fff; }
+
+  .path-empty-msg { text-align: center; padding: 40px 16px; color: #888; font-size: 13px; }
 </style>
 </head>
 <body>
@@ -322,6 +384,32 @@ const TOPIC_CATEGORIES = {
   weather:      'daily',
   colors:       'daily',
 };
+
+// Learning Paths — curated curriculum that reuses existing topic content.
+// Each path lesson references an existing topic key + round. Add notes/sub-content later via ROUND_DATA.
+const LEARNING_PATHS = [
+  { key:'beginner', label:'Beginner', icon:'🌱', level:'Beginner', desc:'Foundations: greet people, count, talk about family, food, time, and getting around.',
+    lessons: [
+      { topic:'greetings',  round:1 },
+      { topic:'yesno',      round:1 },
+      { topic:'numbers',    round:1 },
+      { topic:'family',     round:1 },
+      { topic:'phrases',    round:1 },
+      { topic:'time',       round:1 },
+      { topic:'tense',      round:1 },
+      { topic:'food',       round:1 },
+      { topic:'particles',  round:1 },
+      { topic:'feelings',   round:1 },
+      { topic:'colors',     round:1 },
+      { topic:'body',       round:1 },
+      { topic:'shopping',   round:1 },
+      { topic:'directions', round:1 },
+      { topic:'transport',  round:1 },
+    ],
+  },
+  { key:'intermediate', label:'Intermediate', icon:'🌿', level:'Intermediate', desc:'Coming soon — Round 2 vocabulary, longer conversations, and richer particles.', comingSoon:true, lessons: [] },
+  { key:'advanced',     label:'Advanced',     icon:'🌳', level:'Advanced',     desc:'Coming soon — natural register, idioms, and family-context conversation.', comingSoon:true, lessons: [] },
+];
 
 // Round data (wraps existing data as Round 1, ready for Round 2/3 to be added per-topic)
 // Structure: TOPIC_ROUNDS[topic] = { 1: {wordsKey, sentencesKey, convoKey}, 2: {...}, ... }
@@ -378,6 +466,7 @@ const ROUND_DATA = {
 
   // ── Numbers Round 2 — tens, hundreds, money ──
   'numbers-r2': {
+    note:"Bigger numbers in Cantonese are built like Lego: <em>ji6 sap6</em> (二十) is literally \"two-ten\" = 20, <em>saam1 sap6 ng5</em> (三十五) is \"three-ten-five\" = 35. Hundreds use <strong>baak3</strong> (百) and thousands use <strong>cin1</strong> (千). For Hong Kong money, <strong>man1</strong> (蚊) is the colloquial word for dollar (HKD) — you'll hear it everywhere from markets to taxis. <em>gei2 do1</em> (幾多) means \"how many\" or \"how much\" — pair it with <em>cin2</em> (錢, money) to ask prices.",
     words: [
       {c:"二十",   j:"ji6 sap6",        e:"Twenty"},
       {c:"三十",   j:"saam1 sap6",      e:"Thirty"},
@@ -495,6 +584,11 @@ function getRoundConvo(topic, round) {
   return ROUND_DATA[topic + '-r' + round]?.convo || null;
 }
 
+function getRoundNote(topic, round) {
+  if (round === 1) return LESSONS[topic]?.note || null;
+  return ROUND_DATA[topic + '-r' + round]?.note || null;
+}
+
 function getTopicsByCategory(categoryKey) {
   return Object.keys(TOPIC_CATEGORIES).filter(t => TOPIC_CATEGORIES[t] === categoryKey);
 }
@@ -603,7 +697,9 @@ const LESSONS = {
     {c:"歡迎",   j:"fun1 jing4",     e:"Welcome"},
   ]},
 
-  tense: { label:"Verb Tense", icon:"⏳", color:"#5D6D7E", words:[
+  tense: { label:"Verb Tense", icon:"⏳", color:"#5D6D7E",
+    note:"Cantonese verbs don't change form for past, present, or future — instead, small particles and time words do the work. <strong>zo2</strong>, <strong>gan2</strong>, <strong>gwo3</strong>, and <strong>zyu6</strong> attach <strong>after</strong> the verb (e.g. <em>sik6 zo2</em> = ate, <em>sik6 gan2</em> = eating). Modals like <strong>wui5</strong> (will) and <strong>jiu3</strong> (need to) come <strong>before</strong> the verb. Time words like <em>ji5 ging1</em> (already) and <em>mei6</em> (not yet) sit at the start or before the verb to anchor when something happens.",
+    words:[
     {c:"咗",     j:"zo2",            e:"(completed action)"},
     {c:"緊",     j:"gan2",           e:"(currently happening)"},
     {c:"過",     j:"gwo3",           e:"(experienced before)"},
@@ -616,7 +712,9 @@ const LESSONS = {
     {c:"快啲",   j:"faai3 di1",      e:"soon / quickly"},
   ]},
 
-  particles: { label:"Sentence Particles", icon:"💭", color:"#76448A", words:[
+  particles: { label:"Sentence Particles", icon:"💭", color:"#76448A",
+    note:"Sentence-final particles sit at the very end of a sentence and add emotional or grammatical flavour without changing the literal meaning. They're what makes Cantonese sound natural — speech without them feels flat and robotic. <strong>Tone matters a lot</strong>: <em>laa1</em> (softening) and <em>laa3</em> (now / completion) are different particles, not variants. Don't try to translate each one literally — instead, learn the feeling each adds: certainty, surprise, gentleness, limitation, or inviting agreement.",
+    words:[
     {c:"喇",     j:"laa3",           e:"(now / completion)"},
     {c:"啦",     j:"laa1",           e:"(softening / suggestion)"},
     {c:"呀",     j:"aa3",            e:"(soft confirmation)"},
@@ -1336,6 +1434,10 @@ let state = {
   homeView: true,                 // true = show home screen, false = inside a topic
   selectedCategory: 'all',        // 'all' or a category key
   currentRound: 1,
+  pathView: 'list',               // 'list' = paths list, 'timeline' = inside a path
+  activePath: 'beginner',         // which path is being viewed
+  pathProgress: {},               // { beginner: { greetings:true, ... }, ... } — loaded from localStorage
+  fromPath: false,                // true when user entered a topic via the Learning Path
   translate: {
     direction:   'en-yue',     // 'en-yue' | 'yue-en'
     inputText:   '',
@@ -1404,6 +1506,50 @@ function getApiKey() {
 }
 function setApiKey(key) {
   localStorage.setItem('cantonese_api_key', key);
+}
+
+// Path progress persistence
+const PATH_PROGRESS_KEY = 'cantonese_path_progress';
+function loadPathProgress() {
+  try {
+    const raw = localStorage.getItem(PATH_PROGRESS_KEY);
+    return raw ? JSON.parse(raw) : {};
+  } catch (e) {
+    return {};
+  }
+}
+function savePathProgress() {
+  try {
+    localStorage.setItem(PATH_PROGRESS_KEY, JSON.stringify(state.pathProgress));
+  } catch (e) {
+    // localStorage full or unavailable — fail silently, in-memory state still works
+  }
+}
+function isLessonComplete(pathKey, topicKey) {
+  return !!(state.pathProgress[pathKey] && state.pathProgress[pathKey][topicKey]);
+}
+function toggleLessonComplete(pathKey, topicKey) {
+  if (!state.pathProgress[pathKey]) state.pathProgress[pathKey] = {};
+  if (state.pathProgress[pathKey][topicKey]) {
+    delete state.pathProgress[pathKey][topicKey];
+  } else {
+    state.pathProgress[pathKey][topicKey] = true;
+  }
+  savePathProgress();
+}
+function pathCompleteCount(pathKey) {
+  const p = state.pathProgress[pathKey];
+  if (!p) return 0;
+  const path = LEARNING_PATHS.find(x => x.key === pathKey);
+  if (!path) return 0;
+  return path.lessons.filter(l => p[l.topic]).length;
+}
+function nextIncompleteTopic(pathKey) {
+  const path = LEARNING_PATHS.find(x => x.key === pathKey);
+  if (!path) return null;
+  const p = state.pathProgress[pathKey] || {};
+  const next = path.lessons.find(l => !p[l.topic]);
+  return next ? next.topic : null;
 }
 
 function buildPrompt(text, direction) {
@@ -1702,10 +1848,11 @@ function stopTranslateListening() {
 // ── Render ────────────────────────────────────────────────────────────────────
 function renderDrawer() {
   const items = [
-    { key:'topics',    icon:'📖', label:'Topics',    desc:'Vocabulary, sentences & conversations' },
-    { key:'patterns',  icon:'🔨', label:'Patterns',   desc:'Sentence building blocks'             },
-    { key:'translate', icon:'🌐', label:'Translate',  desc:'AI-powered translation & breakdown'   },
-    { key:'progress',  icon:'⭐', label:'Progress',   desc:'Track your learning journey'          },
+    { key:'topics',    icon:'📖', label:'Topics',         desc:'Vocabulary, sentences & conversations' },
+    { key:'path',      icon:'🛤️', label:'Learning Path',  desc:'Curated curriculum, ordered & tracked'  },
+    { key:'patterns',  icon:'🔨', label:'Patterns',        desc:'Sentence building blocks'              },
+    { key:'translate', icon:'🌐', label:'Translate',       desc:'AI-powered translation & breakdown'    },
+    { key:'progress',  icon:'⭐', label:'Progress',        desc:'Track your learning journey'           },
   ];
   const open = state.drawerOpen ? 'open' : '';
   const allActive = state.selectedCategory === 'all';
@@ -1904,6 +2051,121 @@ function renderTranslate() {
     </div>`;
 }
 
+function renderLearningPath() {
+  if (state.pathView === 'timeline') {
+    return renderPathTimeline(state.activePath);
+  }
+  return renderPathList();
+}
+
+function renderPathList() {
+  // Group paths by level
+  const byLevel = {};
+  LEARNING_PATHS.forEach(p => {
+    if (!byLevel[p.level]) byLevel[p.level] = [];
+    byLevel[p.level].push(p);
+  });
+  const levelOrder = ['Beginner', 'Intermediate', 'Advanced'];
+  const sections = levelOrder.filter(l => byLevel[l]).map(level => {
+    const cards = byLevel[level].map(p => {
+      const total = p.lessons.length;
+      const done = pathCompleteCount(p.key);
+      const pct = total > 0 ? Math.round((done / total) * 100) : 0;
+      const locked = !!p.comingSoon;
+      const cardCls = 'path-card' + (locked ? ' locked' : '');
+      const dataAttr = locked ? '' : `data-path-open="${p.key}"`;
+      const badge = locked
+        ? `<span class="path-card-badge coming">Coming Soon</span>`
+        : (total > 0 && done === total ? `<span class="path-card-badge" style="background:#4CAF50;color:#fff">Complete</span>` : '');
+      const progress = locked ? '' : `
+        <div class="path-card-progress">
+          <div class="path-progress-bar"><div class="path-progress-fill" style="width:${pct}%"></div></div>
+          <span class="path-progress-count">${done} / ${total}</span>
+        </div>`;
+      return `
+        <div class="${cardCls}" ${dataAttr}>
+          <div class="path-card-top">
+            <span class="path-card-icon">${p.icon}</span>
+            <span class="path-card-title">${p.label}</span>
+            ${badge}
+          </div>
+          <div class="path-card-desc">${p.desc}</div>
+          ${progress}
+        </div>`;
+    }).join('');
+    return `
+      <div class="path-level-header">${level}</div>
+      ${cards}`;
+  }).join('');
+
+  return `
+    <div class="path-list">
+      <h2 style="font-size:22px;font-weight:700;color:#1a1a2e;margin-bottom:4px;">🛤️ Learning Path</h2>
+      <div style="font-size:12px;color:#888;margin-bottom:14px;">Curated lessons in order. Tap any to jump in — nothing is locked.</div>
+      ${sections}
+    </div>`;
+}
+
+function renderPathTimeline(pathKey) {
+  const path = LEARNING_PATHS.find(p => p.key === pathKey);
+  if (!path) return `<div class="path-empty-msg">Path not found.</div>`;
+  if (!path.lessons.length) {
+    return `
+      <div class="path-timeline-wrap">
+        <button class="path-timeline-back" data-path-back>← Back to Learning Paths</button>
+        <div class="path-empty-msg">${path.icon} ${path.label} — coming soon.</div>
+      </div>`;
+  }
+  const total = path.lessons.length;
+  const done = pathCompleteCount(pathKey);
+  const pct = Math.round((done / total) * 100);
+  const nextTopic = nextIncompleteTopic(pathKey);
+
+  const steps = path.lessons.map((l, i) => {
+    const lesson = LESSONS[l.topic];
+    if (!lesson) return ''; // Defensive — skip if topic doesn't exist
+    const complete = isLessonComplete(pathKey, l.topic);
+    const isNext = !complete && l.topic === nextTopic;
+    const stepCls = 'path-step' + (complete ? ' done' : '') + (isNext ? ' next' : '');
+    const nextBadge = isNext ? `<span class="path-next-badge">Next up</span>` : '';
+    const wordCount = (lesson.words || []).length;
+    return `
+      <div class="${stepCls}">
+        <div class="path-step-rail">
+          <div class="path-step-node">${complete ? '✓' : (i + 1)}</div>
+          <div class="path-step-line"></div>
+        </div>
+        <div class="path-step-body">
+          <div class="path-step-card" data-path-lesson="${l.topic}">
+            ${nextBadge}
+            <div class="path-step-row">
+              <span class="path-step-icon">${lesson.icon}</span>
+              <div class="path-step-text">
+                <div class="path-step-title">${lesson.label}</div>
+                <div class="path-step-meta">${wordCount} word${wordCount !== 1 ? 's' : ''}</div>
+              </div>
+              <button class="path-complete-btn" data-path-toggle="${l.topic}" aria-label="${complete ? 'Mark incomplete' : 'Mark complete'}">${complete ? '✓' : '✓'}</button>
+            </div>
+          </div>
+        </div>
+      </div>`;
+  }).join('');
+
+  return `
+    <div class="path-timeline-wrap">
+      <button class="path-timeline-back" data-path-back>← Back to Learning Paths</button>
+      <div class="path-timeline-header">
+        <div class="path-timeline-title">${path.icon} ${path.label}</div>
+        <div class="path-timeline-sub">${path.desc}</div>
+        <div class="path-timeline-progress">
+          <div class="path-progress-bar"><div class="path-progress-fill" style="width:${pct}%"></div></div>
+          <span class="path-progress-count">${done} / ${total} complete</span>
+        </div>
+      </div>
+      <div class="path-timeline">${steps}</div>
+    </div>`;
+}
+
 function renderPlaceholder(icon, title, subtitle) {
   return `
     <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;padding:60px 30px;text-align:center;min-height:300px;">
@@ -1928,7 +2190,7 @@ function render() {
       mainContent = `
         ${renderVoiceBanner()}
         <div class="content">
-          <button class="back-home-btn" id="back-home-btn">← Back to topics</button>
+          <button class="back-home-btn" id="back-home-btn">${state.fromPath ? '← Back to Learning Path' : '← Back to topics'}</button>
           ${renderRoundSelector(state.topic, color)}
           ${renderLessonHeader(lesson, color)}
           ${state.mode === 'quiz' ? renderQuiz(lesson, color) : state.tab === 'convo' ? renderConversation(color) : renderStudy(lesson, color)}
@@ -1938,6 +2200,8 @@ function render() {
     mainContent = renderPatterns();
   } else if (state.nav === 'translate') {
     mainContent = renderTranslate();
+  } else if (state.nav === 'path') {
+    mainContent = `${renderVoiceBanner()}${renderLearningPath()}`;
   } else if (state.nav === 'progress') {
     mainContent = renderPlaceholder('⭐', 'Progress', 'Coming soon — track completed topics, review scores, and run cross-topic reviews.');
   }
@@ -2407,6 +2671,15 @@ function renderStudy(lesson, color) {
 
   return `
     <div class="hint">Tap a card to reveal English · ▶ to hear pronunciation</div>
+    ${(() => {
+      const note = getRoundNote(state.topic, state.currentRound);
+      return note
+        ? `<div class="lesson-note" style="border-left-color:${color}">
+             <div class="lesson-note-title" style="color:${color}">📌 About this lesson</div>
+             <div class="lesson-note-body">${note}</div>
+           </div>`
+        : '';
+    })()}
     <div class="word-grid">${cards}</div>
     ${renderSentences(state.topic, color)}
     <div class="tone-guide">
@@ -2478,7 +2751,10 @@ function attachEvents(lesson, color) {
       const target = btn.dataset.nav;
       // Tapping Topics from the drawer always returns to home view
       if (target === 'topics') state.homeView = true;
+      // Tapping Learning Path from the drawer always returns to the path list
+      if (target === 'path') state.pathView = 'list';
       state.nav = target;
+      state.fromPath = false;          // any drawer navigation clears the path-return flag
       state.drawerOpen = false;
       render();
     });
@@ -2490,6 +2766,7 @@ function attachEvents(lesson, color) {
       state.nav = 'topics';
       state.homeView = true;
       state.selectedCategory = btn.dataset.catJump;
+      state.fromPath = false;
       state.drawerOpen = false;
       window.scrollTo(0, 0);
       render();
@@ -2660,10 +2937,21 @@ function attachEvents(lesson, color) {
   // Back to home button
   const backHomeBtn = document.getElementById('back-home-btn');
   if (backHomeBtn) backHomeBtn.addEventListener('click', () => {
+    window.speechSynthesis.cancel();
+    if (state.fromPath) {
+      // Return to the timeline of the path that brought us here
+      state.nav         = 'path';
+      state.pathView    = 'timeline';
+      state.fromPath    = false;
+      state.mode        = 'study';
+      state.tab         = 'words';
+      window.scrollTo(0, 0);
+      render();
+      return;
+    }
     state.homeView = true;
     state.mode     = 'study';
     state.tab      = 'words';
-    window.speechSynthesis.cancel();
     window.scrollTo(0, 0);
     render();
   });
@@ -2964,10 +3252,68 @@ function attachEvents(lesson, color) {
   // Quiz back
   const qb = document.getElementById('quiz-back');
   if (qb) qb.addEventListener('click', () => { state.mode = 'study'; render(); });
+
+  // ── Learning Path events ──────────────────────────────────────────
+  // Open a path from the list view → switch to that path's timeline
+  document.querySelectorAll('[data-path-open]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      state.activePath = btn.dataset.pathOpen;
+      state.pathView   = 'timeline';
+      window.scrollTo(0, 0);
+      render();
+    });
+  });
+
+  // Back from timeline → path list
+  document.querySelectorAll('[data-path-back]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      state.pathView = 'list';
+      window.scrollTo(0, 0);
+      render();
+    });
+  });
+
+  // Tap a lesson in the timeline → open the topic with fromPath flag
+  document.querySelectorAll('[data-path-lesson]').forEach(card => {
+    card.addEventListener('click', (e) => {
+      // Ignore taps on the mark-complete button (handled separately)
+      if (e.target.closest('[data-path-toggle]')) return;
+      const topicKey = card.dataset.pathLesson;
+      const path     = LEARNING_PATHS.find(p => p.key === state.activePath);
+      const lesson   = path && path.lessons.find(l => l.topic === topicKey);
+      const round    = lesson ? lesson.round : 1;
+      state.topic        = topicKey;
+      state.currentRound = round;
+      state.nav          = 'topics';
+      state.homeView     = false;
+      state.fromPath     = true;
+      state.mode         = 'study';
+      state.tab          = 'words';
+      state.flipped      = {};
+      state.speaking     = null;
+      state.sentenceBreakdownOpen = {};
+      state.sentenceRevealed = {};
+      state.patternRevealed = {};
+      state.convo        = { convMode:'read', playingLine:null, gapAnswers:{}, bubbleRevealed:{}, breakdownOpen:{}, speakStep:0, speakStatus:'idle', speakHeard:'', speakAutoPlayed:false, speakRevealed:{} };
+      window.scrollTo(0, 0);
+      render();
+    });
+  });
+
+  // Toggle complete on a timeline lesson (without navigating)
+  document.querySelectorAll('[data-path-toggle]').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      toggleLessonComplete(state.activePath, btn.dataset.pathToggle);
+      render();
+    });
+  });
 }
 
 // ── Init ──────────────────────────────────────────────────────────────────────
 (async function init() {
+  state.pathProgress = loadPathProgress();   // restore saved completion state
+
   render(); // first paint immediately
 
   const voices = await loadVoices();
