@@ -3,6 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#1a1a2e">
+<link rel="manifest" href="./manifest.json">
 <title>廣東話 Cantonese Learner</title>
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -4208,6 +4210,20 @@ function attachEvents(lesson, color) {
 
   render(); // re-render with voice info
 })();
+</script>
+
+<script>
+// ── Service Worker Registration ───────────────────────────────────────────────
+// Registers sw.js so the app works offline and can be installed to home screen.
+// The 'serviceWorker' in navigator check means this silently does nothing
+// in browsers that don't support it (old browsers, file:// local testing).
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('./sw.js')
+      .then(() => console.log('[SW] Registered'))
+      .catch(err => console.warn('[SW] Registration failed:', err));
+  });
+}
 </script>
 </body>
 </html>
