@@ -1039,17 +1039,17 @@ function startTranslateListening() {
   let finalTranscript = '';
 
   rec.onresult = (e) => {
-    // Rebuild the entire transcript from all results each event — avoids
-    // double-counting on mobile Chrome where resultIndex doesn't reliably advance.
-    let finalText = '';
+    // Same pattern as the Convo speech handler: only process results from
+    // event.resultIndex onwards, with finalTranscript persisting across events.
+    // Looping from 0 stutters on devices where e.results accumulates cumulative
+    // entries instead of deltas (Chrome Android with continuous:true).
     let interimText = '';
-    for (let i = 0; i < e.results.length; i++) {
+    for (let i = e.resultIndex; i < e.results.length; i++) {
       const seg = e.results[i][0].transcript;
-      if (e.results[i].isFinal) finalText += seg;
-      else interimText += seg;
+      if (e.results[i].isFinal) finalTranscript += seg;
+      else                      interimText     += seg;
     }
-    finalTranscript = finalText;
-    state.translate.inputText = (finalText + interimText).trim();
+    state.translate.inputText = (finalTranscript + interimText).trim();
     // Update textarea directly without full re-render to avoid focus loss
     const ta = document.getElementById('translate-input');
     if (ta) ta.value = state.translate.inputText;
