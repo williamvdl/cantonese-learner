@@ -1,0 +1,383 @@
+{
+  "meta": {
+    "label": "Days & Time",
+    "icon": "🕐",
+    "color": "#6C3483"
+  },
+  "rounds": {
+    "1": {
+      "note": null,
+      "words": [
+        {
+          "c": "今日",
+          "j": "gam1 jat6",
+          "e": "Today"
+        },
+        {
+          "c": "聽日",
+          "j": "ting1 jat6",
+          "e": "Tomorrow"
+        },
+        {
+          "c": "琴日",
+          "j": "kam4 jat6",
+          "e": "Yesterday"
+        },
+        {
+          "c": "星期一",
+          "j": "sing1 kei4 jat1",
+          "e": "Monday"
+        },
+        {
+          "c": "星期二",
+          "j": "sing1 kei4 ji6",
+          "e": "Tuesday"
+        },
+        {
+          "c": "星期三",
+          "j": "sing1 kei4 saam1",
+          "e": "Wednesday"
+        },
+        {
+          "c": "星期四",
+          "j": "sing1 kei4 sei3",
+          "e": "Thursday"
+        },
+        {
+          "c": "星期五",
+          "j": "sing1 kei4 ng5",
+          "e": "Friday"
+        },
+        {
+          "c": "星期六",
+          "j": "sing1 kei4 luk6",
+          "e": "Saturday"
+        },
+        {
+          "c": "星期日",
+          "j": "sing1 kei4 jat6",
+          "e": "Sunday"
+        },
+        {
+          "c": "朝早",
+          "j": "ziu1 zou2",
+          "e": "Morning"
+        },
+        {
+          "c": "夜晚",
+          "j": "je6 maan5",
+          "e": "Night"
+        }
+      ],
+      "sentences": [
+        {
+          "c": "今日係星期一。",
+          "j": "gam1 jat6 hai6 sing1 kei4 jat1.",
+          "e": "Today is Monday.",
+          "bd": [
+            {
+              "c": "今日",
+              "j": "gam1 jat6",
+              "e": "today"
+            },
+            {
+              "c": "係",
+              "j": "hai6",
+              "e": "is"
+            },
+            {
+              "c": "星期一",
+              "j": "sing1 kei4 jat1",
+              "e": "Monday"
+            }
+          ]
+        },
+        {
+          "c": "琴日係星期六。",
+          "j": "kam4 jat6 hai6 sing1 kei4 luk6.",
+          "e": "Yesterday was Saturday.",
+          "bd": [
+            {
+              "c": "琴日",
+              "j": "kam4 jat6",
+              "e": "yesterday"
+            },
+            {
+              "c": "係",
+              "j": "hai6",
+              "e": "was"
+            },
+            {
+              "c": "星期六",
+              "j": "sing1 kei4 luk6",
+              "e": "Saturday"
+            }
+          ]
+        },
+        {
+          "c": "聽日朝早見。",
+          "j": "ting1 jat6 ziu1 zou2 gin3.",
+          "e": "See you tomorrow morning.",
+          "bd": [
+            {
+              "c": "聽日",
+              "j": "ting1 jat6",
+              "e": "tomorrow"
+            },
+            {
+              "c": "朝早",
+              "j": "ziu1 zou2",
+              "e": "morning"
+            },
+            {
+              "c": "見",
+              "j": "gin3",
+              "e": "see / meet"
+            }
+          ]
+        },
+        {
+          "c": "夜晚十點瞓覺。",
+          "j": "je6 maan5 sap6 dim2 fan3 gaau3.",
+          "e": "Sleep at 10pm.",
+          "bd": [
+            {
+              "c": "夜晚",
+              "j": "je6 maan5",
+              "e": "night"
+            },
+            {
+              "c": "十點",
+              "j": "sap6 dim2",
+              "e": "10 o'clock"
+            },
+            {
+              "c": "瞓覺",
+              "j": "fan3 gaau3",
+              "e": "to sleep"
+            }
+          ]
+        },
+        {
+          "c": "星期日休息。",
+          "j": "sing1 kei4 jat6 jau1 sik1.",
+          "e": "Sunday is for resting.",
+          "bd": [
+            {
+              "c": "星期日",
+              "j": "sing1 kei4 jat6",
+              "e": "Sunday"
+            },
+            {
+              "c": "休息",
+              "j": "jau1 sik1",
+              "e": "to rest"
+            }
+          ]
+        }
+      ],
+      "convo": {
+        "title": "Making weekend plans",
+        "speakers": [
+          "Friend",
+          "You"
+        ],
+        "lines": [
+          {
+            "u": false,
+            "c": "今個週末你有冇空？",
+            "j": "gam1 go3 zau1 mut6 nei5 jau5 mou5 hung1?",
+            "e": "Are you free this weekend?",
+            "bd": [
+              {
+                "c": "今個",
+                "j": "gam1 go3",
+                "e": "this (one)"
+              },
+              {
+                "c": "週末",
+                "j": "zau1 mut6",
+                "e": "weekend"
+              },
+              {
+                "c": "你",
+                "j": "nei5",
+                "e": "you"
+              },
+              {
+                "c": "有冇空",
+                "j": "jau5 mou5 hung1",
+                "e": "free or not? (have time?)"
+              }
+            ]
+          },
+          {
+            "u": true,
+            "c": "星期六得，星期日唔得。",
+            "j": "sing1 kei4 luk6 dak1, sing1 kei4 jat6 m4 dak1.",
+            "e": "Saturday is fine, Sunday I can't.",
+            "opts": [
+              "星期六得，星期日唔得。",
+              "今日唔得。",
+              "我唔知幾時。"
+            ],
+            "optsJ": [
+              "sing1 kei4 luk6 dak1, sing1 kei4 jat6 m4 dak1.",
+              "gam1 jat6 m4 dak1.",
+              "ngo5 m4 zi1 gei2 si4."
+            ],
+            "bd": [
+              {
+                "c": "星期六",
+                "j": "sing1 kei4 luk6",
+                "e": "Saturday"
+              },
+              {
+                "c": "得",
+                "j": "dak1",
+                "e": "ok / can do"
+              },
+              {
+                "c": "星期日",
+                "j": "sing1 kei4 jat6",
+                "e": "Sunday"
+              },
+              {
+                "c": "唔得",
+                "j": "m4 dak1",
+                "e": "not ok / can't"
+              }
+            ]
+          },
+          {
+            "u": false,
+            "c": "星期六朝早幾點見？",
+            "j": "sing1 kei4 luk6 ziu1 zou2 gei2 dim2 gin3?",
+            "e": "What time shall we meet Saturday morning?",
+            "bd": [
+              {
+                "c": "星期六",
+                "j": "sing1 kei4 luk6",
+                "e": "Saturday"
+              },
+              {
+                "c": "朝早",
+                "j": "ziu1 zou2",
+                "e": "morning"
+              },
+              {
+                "c": "幾點",
+                "j": "gei2 dim2",
+                "e": "what time"
+              },
+              {
+                "c": "見",
+                "j": "gin3",
+                "e": "meet / see"
+              }
+            ]
+          },
+          {
+            "u": true,
+            "c": "朝早十點見，好嗎？",
+            "j": "ziu1 zou2 sap6 dim2 gin3, hou2 maa3?",
+            "e": "Meet at 10am, is that ok?",
+            "opts": [
+              "朝早十點見，好嗎？",
+              "夜晚三點。",
+              "琴日見。"
+            ],
+            "optsJ": [
+              "ziu1 zou2 sap6 dim2 gin3, hou2 maa3?",
+              "je6 maan5 saam1 dim2.",
+              "kam4 jat6 gin3."
+            ],
+            "bd": [
+              {
+                "c": "朝早",
+                "j": "ziu1 zou2",
+                "e": "morning"
+              },
+              {
+                "c": "十點",
+                "j": "sap6 dim2",
+                "e": "10 o'clock"
+              },
+              {
+                "c": "見",
+                "j": "gin3",
+                "e": "meet"
+              },
+              {
+                "c": "好嗎",
+                "j": "hou2 maa3",
+                "e": "is that ok?"
+              }
+            ]
+          },
+          {
+            "u": false,
+            "c": "好呀！聽日見！",
+            "j": "hou2 aa3! ting1 jat6 gin3!",
+            "e": "Great! See you tomorrow!",
+            "bd": [
+              {
+                "c": "好呀",
+                "j": "hou2 aa3",
+                "e": "great / sounds good"
+              },
+              {
+                "c": "聽日",
+                "j": "ting1 jat6",
+                "e": "tomorrow"
+              },
+              {
+                "c": "見",
+                "j": "gin3",
+                "e": "see / meet"
+              }
+            ]
+          },
+          {
+            "u": true,
+            "c": "好的！聽日朝早見！",
+            "j": "hou2 dik1! ting1 jat6 ziu1 zou2 gin3!",
+            "e": "Sure! See you tomorrow morning!",
+            "opts": [
+              "好的！聽日朝早見！",
+              "唔好，我唔得閒。",
+              "琴日見。"
+            ],
+            "optsJ": [
+              "hou2 dik1! ting1 jat6 ziu1 zou2 gin3!",
+              "m4 hou2, ngo5 m4 dak1 haan4.",
+              "kam4 jat6 gin3."
+            ],
+            "bd": [
+              {
+                "c": "好的",
+                "j": "hou2 dik1",
+                "e": "alright"
+              },
+              {
+                "c": "聽日",
+                "j": "ting1 jat6",
+                "e": "tomorrow"
+              },
+              {
+                "c": "朝早",
+                "j": "ziu1 zou2",
+                "e": "morning"
+              },
+              {
+                "c": "見",
+                "j": "gin3",
+                "e": "see / meet"
+              }
+            ]
+          }
+        ]
+      }
+    }
+  }
+}

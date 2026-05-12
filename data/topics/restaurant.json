@@ -1,0 +1,373 @@
+{
+  "meta": {
+    "label": "Restaurant & Ordering",
+    "icon": "🍴",
+    "color": "#A04000"
+  },
+  "rounds": {
+    "1": {
+      "note": "Eating out in Hong Kong has its own ritual. You'll hear <em>dim2 sam1</em> (點心 — dim sum, literally 'touch the heart') at yum cha, and the waiter asking <em>jiu3 dim2 je5?</em> ('what would you like?'). Note <strong>lok6 daan1</strong> (落單) for placing an order, and <strong>maai4 daan1</strong> (埋單) for asking for the bill — both are fixed compound verbs worth learning as units. Most everyday eating happens at a <em>caa4 caan1 teng1</em> (茶餐廳 — HK-style cafe).",
+      "words": [
+        {
+          "c": "餐牌",
+          "j": "caan1 paai4",
+          "e": "Menu"
+        },
+        {
+          "c": "侍應",
+          "j": "si6 jing3",
+          "e": "Waiter / Waitress"
+        },
+        {
+          "c": "點心",
+          "j": "dim2 sam1",
+          "e": "Dim sum"
+        },
+        {
+          "c": "落單",
+          "j": "lok6 daan1",
+          "e": "To order (place an order)"
+        },
+        {
+          "c": "埋單",
+          "j": "maai4 daan1",
+          "e": "Ask for the bill"
+        },
+        {
+          "c": "凍",
+          "j": "dung3",
+          "e": "Cold (drink)"
+        },
+        {
+          "c": "熱",
+          "j": "jit6",
+          "e": "Hot"
+        },
+        {
+          "c": "少冰",
+          "j": "siu2 bing1",
+          "e": "Less ice"
+        },
+        {
+          "c": "飽",
+          "j": "baau2",
+          "e": "Full (after eating)"
+        },
+        {
+          "c": "好食",
+          "j": "hou2 sik6",
+          "e": "Delicious / tasty"
+        }
+      ],
+      "sentences": [
+        {
+          "c": "唔該，俾我個餐牌。",
+          "j": "m4 goi1, bei2 ngo5 go3 caan1 paai4.",
+          "e": "Excuse me, please give me the menu.",
+          "bd": [
+            {
+              "c": "唔該",
+              "j": "m4 goi1",
+              "e": "excuse me / please"
+            },
+            {
+              "c": "俾",
+              "j": "bei2",
+              "e": "give"
+            },
+            {
+              "c": "我",
+              "j": "ngo5",
+              "e": "me"
+            },
+            {
+              "c": "個",
+              "j": "go3",
+              "e": "(measure word)"
+            },
+            {
+              "c": "餐牌",
+              "j": "caan1 paai4",
+              "e": "menu"
+            }
+          ]
+        },
+        {
+          "c": "我想叫凍檸茶。",
+          "j": "ngo5 soeng2 giu3 dung3 ning4 caa4.",
+          "e": "I'd like to order iced lemon tea.",
+          "bd": [
+            {
+              "c": "我",
+              "j": "ngo5",
+              "e": "I"
+            },
+            {
+              "c": "想",
+              "j": "soeng2",
+              "e": "would like"
+            },
+            {
+              "c": "叫",
+              "j": "giu3",
+              "e": "order"
+            },
+            {
+              "c": "凍",
+              "j": "dung3",
+              "e": "cold / iced"
+            },
+            {
+              "c": "檸茶",
+              "j": "ning4 caa4",
+              "e": "lemon tea"
+            }
+          ]
+        },
+        {
+          "c": "我好餓呀！",
+          "j": "ngo5 hou2 ngo6 aa3!",
+          "e": "I'm so hungry!",
+          "bd": [
+            {
+              "c": "我",
+              "j": "ngo5",
+              "e": "I"
+            },
+            {
+              "c": "好",
+              "j": "hou2",
+              "e": "very"
+            },
+            {
+              "c": "餓",
+              "j": "ngo6",
+              "e": "hungry"
+            },
+            {
+              "c": "呀",
+              "j": "aa3",
+              "e": "(emphasis)"
+            }
+          ]
+        },
+        {
+          "c": "唔該，埋單。",
+          "j": "m4 goi1, maai4 daan1.",
+          "e": "Excuse me, the bill please.",
+          "bd": [
+            {
+              "c": "唔該",
+              "j": "m4 goi1",
+              "e": "excuse me"
+            },
+            {
+              "c": "埋單",
+              "j": "maai4 daan1",
+              "e": "the bill"
+            }
+          ]
+        },
+        {
+          "c": "呢個好食！",
+          "j": "ni1 go3 hou2 sik6!",
+          "e": "This is delicious!",
+          "bd": [
+            {
+              "c": "呢個",
+              "j": "ni1 go3",
+              "e": "this one"
+            },
+            {
+              "c": "好食",
+              "j": "hou2 sik6",
+              "e": "delicious"
+            }
+          ]
+        }
+      ],
+      "convo": {
+        "title": "Lunch at a cha chaan teng",
+        "speakers": [
+          "Waiter",
+          "You"
+        ],
+        "lines": [
+          {
+            "u": false,
+            "c": "你好！要點嘢呀？",
+            "j": "nei5 hou2! jiu3 dim2 je5 aa3?",
+            "e": "Hello! What would you like?",
+            "bd": [
+              {
+                "c": "你好",
+                "j": "nei5 hou2",
+                "e": "hello"
+              },
+              {
+                "c": "要",
+                "j": "jiu3",
+                "e": "want"
+              },
+              {
+                "c": "點嘢",
+                "j": "dim2 je5",
+                "e": "what"
+              },
+              {
+                "c": "呀",
+                "j": "aa3",
+                "e": "(soft particle)"
+              }
+            ]
+          },
+          {
+            "u": true,
+            "c": "我要叉燒飯，唔該。",
+            "j": "ngo5 jiu3 caa1 siu1 faan6, m4 goi1.",
+            "e": "I'd like char siu rice, please.",
+            "opts": [
+              "我要叉燒飯，唔該。",
+              "我唔餓。",
+              "你係邊個？"
+            ],
+            "optsJ": [
+              "ngo5 jiu3 caa1 siu1 faan6, m4 goi1.",
+              "ngo5 m4 ngo6.",
+              "nei5 hai6 bin1 go3?"
+            ],
+            "bd": [
+              {
+                "c": "我",
+                "j": "ngo5",
+                "e": "I"
+              },
+              {
+                "c": "要",
+                "j": "jiu3",
+                "e": "want"
+              },
+              {
+                "c": "叉燒飯",
+                "j": "caa1 siu1 faan6",
+                "e": "char siu rice"
+              },
+              {
+                "c": "唔該",
+                "j": "m4 goi1",
+                "e": "please"
+              }
+            ]
+          },
+          {
+            "u": false,
+            "c": "飲乜嘢？",
+            "j": "jam2 mat1 je5?",
+            "e": "What would you like to drink?",
+            "bd": [
+              {
+                "c": "飲",
+                "j": "jam2",
+                "e": "drink"
+              },
+              {
+                "c": "乜嘢",
+                "j": "mat1 je5",
+                "e": "what"
+              }
+            ]
+          },
+          {
+            "u": true,
+            "c": "凍檸茶，少冰。",
+            "j": "dung3 ning4 caa4, siu2 bing1.",
+            "e": "Iced lemon tea, less ice.",
+            "opts": [
+              "凍檸茶，少冰。",
+              "我好飽。",
+              "唔該埋單。"
+            ],
+            "optsJ": [
+              "dung3 ning4 caa4, siu2 bing1.",
+              "ngo5 hou2 baau2.",
+              "m4 goi1 maai4 daan1."
+            ],
+            "bd": [
+              {
+                "c": "凍",
+                "j": "dung3",
+                "e": "cold / iced"
+              },
+              {
+                "c": "檸茶",
+                "j": "ning4 caa4",
+                "e": "lemon tea"
+              },
+              {
+                "c": "少冰",
+                "j": "siu2 bing1",
+                "e": "less ice"
+              }
+            ]
+          },
+          {
+            "u": false,
+            "c": "好，等陣就嚟。",
+            "j": "hou2, dang2 zan6 zau6 lai4.",
+            "e": "OK, coming right up.",
+            "bd": [
+              {
+                "c": "好",
+                "j": "hou2",
+                "e": "OK"
+              },
+              {
+                "c": "等陣",
+                "j": "dang2 zan6",
+                "e": "in a moment"
+              },
+              {
+                "c": "就",
+                "j": "zau6",
+                "e": "will"
+              },
+              {
+                "c": "嚟",
+                "j": "lai4",
+                "e": "come"
+              }
+            ]
+          },
+          {
+            "u": true,
+            "c": "唔該晒。",
+            "j": "m4 goi1 saai3.",
+            "e": "Thanks a lot.",
+            "opts": [
+              "唔該晒。",
+              "唔好。",
+              "好食呀！"
+            ],
+            "optsJ": [
+              "m4 goi1 saai3.",
+              "m4 hou2.",
+              "hou2 sik6 aa3!"
+            ],
+            "bd": [
+              {
+                "c": "唔該",
+                "j": "m4 goi1",
+                "e": "thanks"
+              },
+              {
+                "c": "晒",
+                "j": "saai3",
+                "e": "(emphasizer - a lot)"
+              }
+            ]
+          }
+        ]
+      }
+    }
+  }
+}

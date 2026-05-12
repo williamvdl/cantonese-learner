@@ -1,0 +1,428 @@
+{
+  "meta": {
+    "label": "Verb Tense",
+    "icon": "⏳",
+    "color": "#5D6D7E"
+  },
+  "rounds": {
+    "1": {
+      "note": "Cantonese verbs don't change form for past, present, or future — instead, small particles and time words do the work. <strong>zo2</strong>, <strong>gan2</strong>, <strong>gwo3</strong>, and <strong>zyu6</strong> attach <strong>after</strong> the verb (e.g. <em>sik6 zo2</em> = ate, <em>sik6 gan2</em> = eating). Modals like <strong>wui5</strong> (will) and <strong>jiu3</strong> (need to) come <strong>before</strong> the verb. Time words like <em>ji5 ging1</em> (already) and <em>mei6</em> (not yet) sit at the start or before the verb to anchor when something happens.",
+      "words": [
+        {
+          "c": "咗",
+          "j": "zo2",
+          "e": "(completed action)"
+        },
+        {
+          "c": "緊",
+          "j": "gan2",
+          "e": "(currently happening)"
+        },
+        {
+          "c": "過",
+          "j": "gwo3",
+          "e": "(experienced before)"
+        },
+        {
+          "c": "住",
+          "j": "zyu6",
+          "e": "(ongoing state)"
+        },
+        {
+          "c": "會",
+          "j": "wui5",
+          "e": "will / would"
+        },
+        {
+          "c": "要",
+          "j": "jiu3",
+          "e": "need to / will"
+        },
+        {
+          "c": "未",
+          "j": "mei6",
+          "e": "not yet"
+        },
+        {
+          "c": "已經",
+          "j": "ji5 ging1",
+          "e": "already"
+        },
+        {
+          "c": "剛剛",
+          "j": "gong1 gong1",
+          "e": "just now"
+        },
+        {
+          "c": "快啲",
+          "j": "faai3 di1",
+          "e": "soon / quickly"
+        }
+      ],
+      "sentences": [
+        {
+          "c": "我食咗飯。",
+          "j": "ngo5 sik6 zo2 faan6.",
+          "e": "I have eaten.",
+          "bd": [
+            {
+              "c": "我",
+              "j": "ngo5",
+              "e": "I"
+            },
+            {
+              "c": "食",
+              "j": "sik6",
+              "e": "eat"
+            },
+            {
+              "c": "咗",
+              "j": "zo2",
+              "e": "(completed)"
+            },
+            {
+              "c": "飯",
+              "j": "faan6",
+              "e": "rice / meal"
+            }
+          ]
+        },
+        {
+          "c": "佢食緊飯。",
+          "j": "keoi5 sik6 gan2 faan6.",
+          "e": "He's eating now.",
+          "bd": [
+            {
+              "c": "佢",
+              "j": "keoi5",
+              "e": "he / she"
+            },
+            {
+              "c": "食",
+              "j": "sik6",
+              "e": "eat"
+            },
+            {
+              "c": "緊",
+              "j": "gan2",
+              "e": "(currently)"
+            },
+            {
+              "c": "飯",
+              "j": "faan6",
+              "e": "rice"
+            }
+          ]
+        },
+        {
+          "c": "我去過香港。",
+          "j": "ngo5 heoi3 gwo3 hoeng1 gong2.",
+          "e": "I have been to Hong Kong.",
+          "bd": [
+            {
+              "c": "我",
+              "j": "ngo5",
+              "e": "I"
+            },
+            {
+              "c": "去",
+              "j": "heoi3",
+              "e": "go"
+            },
+            {
+              "c": "過",
+              "j": "gwo3",
+              "e": "(experienced)"
+            },
+            {
+              "c": "香港",
+              "j": "hoeng1 gong2",
+              "e": "Hong Kong"
+            }
+          ]
+        },
+        {
+          "c": "我未食。",
+          "j": "ngo5 mei6 sik6.",
+          "e": "I haven't eaten yet.",
+          "bd": [
+            {
+              "c": "我",
+              "j": "ngo5",
+              "e": "I"
+            },
+            {
+              "c": "未",
+              "j": "mei6",
+              "e": "not yet"
+            },
+            {
+              "c": "食",
+              "j": "sik6",
+              "e": "eat"
+            }
+          ]
+        },
+        {
+          "c": "我會去。",
+          "j": "ngo5 wui5 heoi3.",
+          "e": "I will go.",
+          "bd": [
+            {
+              "c": "我",
+              "j": "ngo5",
+              "e": "I"
+            },
+            {
+              "c": "會",
+              "j": "wui5",
+              "e": "will"
+            },
+            {
+              "c": "去",
+              "j": "heoi3",
+              "e": "go"
+            }
+          ]
+        }
+      ],
+      "convo": {
+        "title": "Catching up with a friend",
+        "speakers": [
+          "Friend",
+          "You"
+        ],
+        "lines": [
+          {
+            "u": false,
+            "c": "你食咗飯未？",
+            "j": "nei5 sik6 zo2 faan6 mei6?",
+            "e": "Have you eaten yet?",
+            "bd": [
+              {
+                "c": "你",
+                "j": "nei5",
+                "e": "you"
+              },
+              {
+                "c": "食",
+                "j": "sik6",
+                "e": "eat"
+              },
+              {
+                "c": "咗",
+                "j": "zo2",
+                "e": "(completed)"
+              },
+              {
+                "c": "飯",
+                "j": "faan6",
+                "e": "meal"
+              },
+              {
+                "c": "未",
+                "j": "mei6",
+                "e": "yet?"
+              }
+            ]
+          },
+          {
+            "u": true,
+            "c": "未呀，仲未食。",
+            "j": "mei6 aa3, zung6 mei6 sik6.",
+            "e": "Not yet, haven't eaten.",
+            "opts": [
+              "未呀，仲未食。",
+              "食咗喇。",
+              "我唔餓。"
+            ],
+            "optsJ": [
+              "mei6 aa3, zung6 mei6 sik6.",
+              "sik6 zo2 laa3.",
+              "ngo5 m4 ngo6."
+            ],
+            "bd": [
+              {
+                "c": "未",
+                "j": "mei6",
+                "e": "not yet"
+              },
+              {
+                "c": "呀",
+                "j": "aa3",
+                "e": "(particle)"
+              },
+              {
+                "c": "仲",
+                "j": "zung6",
+                "e": "still"
+              },
+              {
+                "c": "未食",
+                "j": "mei6 sik6",
+                "e": "haven't eaten"
+              }
+            ]
+          },
+          {
+            "u": false,
+            "c": "我都未食。一齊去食啦！",
+            "j": "ngo5 dou1 mei6 sik6. jat1 cai4 heoi3 sik6 laa1!",
+            "e": "I haven't either. Let's go eat together!",
+            "bd": [
+              {
+                "c": "我",
+                "j": "ngo5",
+                "e": "I"
+              },
+              {
+                "c": "都",
+                "j": "dou1",
+                "e": "also"
+              },
+              {
+                "c": "未食",
+                "j": "mei6 sik6",
+                "e": "haven't eaten"
+              },
+              {
+                "c": "一齊",
+                "j": "jat1 cai4",
+                "e": "together"
+              },
+              {
+                "c": "去食",
+                "j": "heoi3 sik6",
+                "e": "go eat"
+              },
+              {
+                "c": "啦",
+                "j": "laa1",
+                "e": "(suggestion)"
+              }
+            ]
+          },
+          {
+            "u": true,
+            "c": "好呀！你食過呢間嗎？",
+            "j": "hou2 aa3! nei5 sik6 gwo3 ni1 gaan1 maa3?",
+            "e": "Sure! Have you tried this place?",
+            "opts": [
+              "好呀！你食過呢間嗎？",
+              "唔得，我冇空。",
+              "我唔知。"
+            ],
+            "optsJ": [
+              "hou2 aa3! nei5 sik6 gwo3 ni1 gaan1 maa3?",
+              "m4 dak1, ngo5 mou5 hung1.",
+              "ngo5 m4 zi1."
+            ],
+            "bd": [
+              {
+                "c": "好呀",
+                "j": "hou2 aa3",
+                "e": "sure / great"
+              },
+              {
+                "c": "你",
+                "j": "nei5",
+                "e": "you"
+              },
+              {
+                "c": "食過",
+                "j": "sik6 gwo3",
+                "e": "have eaten / tried"
+              },
+              {
+                "c": "呢間",
+                "j": "ni1 gaan1",
+                "e": "this place"
+              },
+              {
+                "c": "嗎",
+                "j": "maa3",
+                "e": "(question)"
+              }
+            ]
+          },
+          {
+            "u": false,
+            "c": "未食過，但係聽講好正。",
+            "j": "mei6 sik6 gwo3, daan6 hai6 teng1 gong2 hou2 zeng3.",
+            "e": "Haven't tried it, but heard it's great.",
+            "bd": [
+              {
+                "c": "未食過",
+                "j": "mei6 sik6 gwo3",
+                "e": "never tried"
+              },
+              {
+                "c": "但係",
+                "j": "daan6 hai6",
+                "e": "but"
+              },
+              {
+                "c": "聽講",
+                "j": "teng1 gong2",
+                "e": "heard"
+              },
+              {
+                "c": "好正",
+                "j": "hou2 zeng3",
+                "e": "really good"
+              }
+            ]
+          },
+          {
+            "u": true,
+            "c": "咁我哋而家就去啦。",
+            "j": "gam2 ngo5 dei6 ji4 gaa1 zau6 heoi3 laa1.",
+            "e": "Then let's go now.",
+            "opts": [
+              "咁我哋而家就去啦。",
+              "聽日先去。",
+              "我唔想去。"
+            ],
+            "optsJ": [
+              "gam2 ngo5 dei6 ji4 gaa1 zau6 heoi3 laa1.",
+              "ting1 jat6 sin1 heoi3.",
+              "ngo5 m4 soeng2 heoi3."
+            ],
+            "bd": [
+              {
+                "c": "咁",
+                "j": "gam2",
+                "e": "then / so"
+              },
+              {
+                "c": "我哋",
+                "j": "ngo5 dei6",
+                "e": "we / us"
+              },
+              {
+                "c": "而家",
+                "j": "ji4 gaa1",
+                "e": "now"
+              },
+              {
+                "c": "就",
+                "j": "zau6",
+                "e": "then / will"
+              },
+              {
+                "c": "去",
+                "j": "heoi3",
+                "e": "go"
+              },
+              {
+                "c": "啦",
+                "j": "laa1",
+                "e": "(suggestion)"
+              }
+            ]
+          }
+        ]
+      }
+    }
+  }
+}

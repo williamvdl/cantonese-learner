@@ -1,0 +1,373 @@
+{
+  "meta": {
+    "label": "Friends & Social",
+    "icon": "👫",
+    "color": "#AD1457"
+  },
+  "rounds": {
+    "1": {
+      "note": "Making plans uses <strong>joek3</strong> (約) as its core verb — it covers everything from arranging a meet-up to making a date. To accept, <em>hou2</em> (好). To decline politely, the cultural move is <em>goi2 jat6 laa1</em> ('another day') rather than a flat no. The compound <em>dak1 haan4</em> (得閒, free/available) is paired with most invitation questions: <em>nei5 gei2 si4 dak1 haan4?</em> = 'when are you free?'",
+      "words": [
+        {
+          "c": "朋友",
+          "j": "pang4 jau5",
+          "e": "Friend"
+        },
+        {
+          "c": "約",
+          "j": "joek3",
+          "e": "Make plans / appointment"
+        },
+        {
+          "c": "一齊",
+          "j": "jat1 cai4",
+          "e": "Together"
+        },
+        {
+          "c": "得閒",
+          "j": "dak1 haan4",
+          "e": "Free / have time"
+        },
+        {
+          "c": "派對",
+          "j": "paai3 deoi3",
+          "e": "Party"
+        },
+        {
+          "c": "出街",
+          "j": "ceot1 gaai1",
+          "e": "Go out"
+        },
+        {
+          "c": "改日",
+          "j": "goi2 jat6",
+          "e": "Another day (rain check)"
+        },
+        {
+          "c": "邀請",
+          "j": "jiu1 cing2",
+          "e": "Invite"
+        },
+        {
+          "c": "玩",
+          "j": "waan2",
+          "e": "Hang out / play"
+        },
+        {
+          "c": "慶祝",
+          "j": "hing3 zuk1",
+          "e": "Celebrate"
+        }
+      ],
+      "sentences": [
+        {
+          "c": "我哋約星期六食飯。",
+          "j": "ngo5 dei6 joek3 sing1 kei4 luk6 sik6 faan6.",
+          "e": "We're meeting for lunch on Saturday.",
+          "bd": [
+            {
+              "c": "我哋",
+              "j": "ngo5 dei6",
+              "e": "we"
+            },
+            {
+              "c": "約",
+              "j": "joek3",
+              "e": "made plans"
+            },
+            {
+              "c": "星期六",
+              "j": "sing1 kei4 luk6",
+              "e": "Saturday"
+            },
+            {
+              "c": "食飯",
+              "j": "sik6 faan6",
+              "e": "eat / have a meal"
+            }
+          ]
+        },
+        {
+          "c": "你今晚得閒嗎？",
+          "j": "nei5 gam1 maan5 dak1 haan4 maa3?",
+          "e": "Are you free tonight?",
+          "bd": [
+            {
+              "c": "你",
+              "j": "nei5",
+              "e": "you"
+            },
+            {
+              "c": "今晚",
+              "j": "gam1 maan5",
+              "e": "tonight"
+            },
+            {
+              "c": "得閒",
+              "j": "dak1 haan4",
+              "e": "free"
+            },
+            {
+              "c": "嗎",
+              "j": "maa3",
+              "e": "(yes/no)"
+            }
+          ]
+        },
+        {
+          "c": "我哋一齊出街啦！",
+          "j": "ngo5 dei6 jat1 cai4 ceot1 gaai1 laa1!",
+          "e": "Let's go out together!",
+          "bd": [
+            {
+              "c": "我哋",
+              "j": "ngo5 dei6",
+              "e": "we / us"
+            },
+            {
+              "c": "一齊",
+              "j": "jat1 cai4",
+              "e": "together"
+            },
+            {
+              "c": "出街",
+              "j": "ceot1 gaai1",
+              "e": "go out"
+            },
+            {
+              "c": "啦",
+              "j": "laa1",
+              "e": "(suggestion)"
+            }
+          ]
+        },
+        {
+          "c": "對唔住，改日啦。",
+          "j": "deoi3 m4 zyu6, goi2 jat6 laa1.",
+          "e": "Sorry, another day.",
+          "bd": [
+            {
+              "c": "對唔住",
+              "j": "deoi3 m4 zyu6",
+              "e": "sorry"
+            },
+            {
+              "c": "改日",
+              "j": "goi2 jat6",
+              "e": "another day"
+            },
+            {
+              "c": "啦",
+              "j": "laa1",
+              "e": "(softening)"
+            }
+          ]
+        },
+        {
+          "c": "多謝你嘅邀請。",
+          "j": "do1 ze6 nei5 ge3 jiu1 cing2.",
+          "e": "Thank you for the invitation.",
+          "bd": [
+            {
+              "c": "多謝",
+              "j": "do1 ze6",
+              "e": "thank you"
+            },
+            {
+              "c": "你",
+              "j": "nei5",
+              "e": "your"
+            },
+            {
+              "c": "嘅",
+              "j": "ge3",
+              "e": "(possessive)"
+            },
+            {
+              "c": "邀請",
+              "j": "jiu1 cing2",
+              "e": "invitation"
+            }
+          ]
+        }
+      ],
+      "convo": {
+        "title": "Making weekend plans",
+        "speakers": [
+          "Friend",
+          "You"
+        ],
+        "lines": [
+          {
+            "u": false,
+            "c": "你聽日得唔得閒呀？",
+            "j": "nei5 ting1 jat6 dak1 m4 dak1 haan4 aa3?",
+            "e": "Are you free tomorrow?",
+            "bd": [
+              {
+                "c": "你",
+                "j": "nei5",
+                "e": "you"
+              },
+              {
+                "c": "聽日",
+                "j": "ting1 jat6",
+                "e": "tomorrow"
+              },
+              {
+                "c": "得唔得閒",
+                "j": "dak1 m4 dak1 haan4",
+                "e": "free or not"
+              },
+              {
+                "c": "呀",
+                "j": "aa3",
+                "e": "(soft particle)"
+              }
+            ]
+          },
+          {
+            "u": true,
+            "c": "得呀，做咩？",
+            "j": "dak1 aa3, zou6 me1?",
+            "e": "Yes, what's up?",
+            "opts": [
+              "得呀，做咩？",
+              "唔得閒。",
+              "我唔知。"
+            ],
+            "optsJ": [
+              "dak1 aa3, zou6 me1?",
+              "m4 dak1 haan4.",
+              "ngo5 m4 zi1."
+            ],
+            "bd": [
+              {
+                "c": "得呀",
+                "j": "dak1 aa3",
+                "e": "OK / yes"
+              },
+              {
+                "c": "做咩",
+                "j": "zou6 me1",
+                "e": "do what"
+              }
+            ]
+          },
+          {
+            "u": false,
+            "c": "我哋去飲茶啦。",
+            "j": "ngo5 dei6 heoi3 jam2 caa4 laa1.",
+            "e": "Let's go for yum cha.",
+            "bd": [
+              {
+                "c": "我哋",
+                "j": "ngo5 dei6",
+                "e": "we"
+              },
+              {
+                "c": "去",
+                "j": "heoi3",
+                "e": "go"
+              },
+              {
+                "c": "飲茶",
+                "j": "jam2 caa4",
+                "e": "yum cha"
+              },
+              {
+                "c": "啦",
+                "j": "laa1",
+                "e": "(let's)"
+              }
+            ]
+          },
+          {
+            "u": true,
+            "c": "好呀！幾點？",
+            "j": "hou2 aa3! gei2 dim2?",
+            "e": "Sure! What time?",
+            "opts": [
+              "好呀！幾點？",
+              "唔好。",
+              "改日啦。"
+            ],
+            "optsJ": [
+              "hou2 aa3! gei2 dim2?",
+              "m4 hou2.",
+              "goi2 jat6 laa1."
+            ],
+            "bd": [
+              {
+                "c": "好呀",
+                "j": "hou2 aa3",
+                "e": "sure / OK"
+              },
+              {
+                "c": "幾點",
+                "j": "gei2 dim2",
+                "e": "what time"
+              }
+            ]
+          },
+          {
+            "u": false,
+            "c": "朝早十一點，喺尖沙咀。",
+            "j": "ziu1 zou2 sap6 jat1 dim2, hai2 zim1 saa1 zeoi2.",
+            "e": "11am, in Tsim Sha Tsui.",
+            "bd": [
+              {
+                "c": "朝早",
+                "j": "ziu1 zou2",
+                "e": "morning"
+              },
+              {
+                "c": "十一點",
+                "j": "sap6 jat1 dim2",
+                "e": "11 o'clock"
+              },
+              {
+                "c": "喺",
+                "j": "hai2",
+                "e": "at"
+              },
+              {
+                "c": "尖沙咀",
+                "j": "zim1 saa1 zeoi2",
+                "e": "Tsim Sha Tsui"
+              }
+            ]
+          },
+          {
+            "u": true,
+            "c": "OK！見！",
+            "j": "OK! gin3!",
+            "e": "OK! See you!",
+            "opts": [
+              "OK！見！",
+              "我去唔到。",
+              "點解？"
+            ],
+            "optsJ": [
+              "OK! gin3!",
+              "ngo5 heoi3 m4 dou3.",
+              "dim2 gaai2?"
+            ],
+            "bd": [
+              {
+                "c": "OK",
+                "j": "OK",
+                "e": "OK"
+              },
+              {
+                "c": "見",
+                "j": "gin3",
+                "e": "see you"
+              }
+            ]
+          }
+        ]
+      }
+    }
+  }
+}

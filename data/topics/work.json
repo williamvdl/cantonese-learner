@@ -1,0 +1,343 @@
+{
+  "meta": {
+    "label": "Office & Work",
+    "icon": "💼",
+    "color": "#1B4F72"
+  },
+  "rounds": {
+    "1": {
+      "note": "Cantonese work vocabulary is built around <em>gung1</em> (工, work). <strong>faan1 gung1</strong> (返工) literally 'return work' = go to work. <strong>fong3 gung1</strong> (放工) literally 'release work' = finish work. <strong>gaa1 baan1</strong> (加班) = overtime. The HK workplace runs on these compounds — you'll hear them daily. <em>tung4 si6</em> (同事, colleague) shares the root <em>tung4</em> (same) you've seen in 'with/and'.",
+      "words": [
+        {
+          "c": "公司",
+          "j": "gung1 si1",
+          "e": "Company"
+        },
+        {
+          "c": "老闆",
+          "j": "lou5 baan2",
+          "e": "Boss"
+        },
+        {
+          "c": "同事",
+          "j": "tung4 si6",
+          "e": "Colleague"
+        },
+        {
+          "c": "工作",
+          "j": "gung1 zok3",
+          "e": "Work / job"
+        },
+        {
+          "c": "開會",
+          "j": "hoi1 wui2",
+          "e": "Meeting"
+        },
+        {
+          "c": "返工",
+          "j": "faan1 gung1",
+          "e": "Go to work"
+        },
+        {
+          "c": "放工",
+          "j": "fong3 gung1",
+          "e": "Finish work"
+        },
+        {
+          "c": "加班",
+          "j": "gaa1 baan1",
+          "e": "Overtime"
+        },
+        {
+          "c": "出糧",
+          "j": "ceot1 loeng4",
+          "e": "Get paid"
+        },
+        {
+          "c": "截止日期",
+          "j": "zit6 zi2 jat6 kei4",
+          "e": "Deadline"
+        }
+      ],
+      "sentences": [
+        {
+          "c": "我返工。",
+          "j": "ngo5 faan1 gung1.",
+          "e": "I'm going to work.",
+          "bd": [
+            {
+              "c": "我",
+              "j": "ngo5",
+              "e": "I"
+            },
+            {
+              "c": "返工",
+              "j": "faan1 gung1",
+              "e": "go to work"
+            }
+          ]
+        },
+        {
+          "c": "我哋公司好大。",
+          "j": "ngo5 dei6 gung1 si1 hou2 daai6.",
+          "e": "Our company is big.",
+          "bd": [
+            {
+              "c": "我哋",
+              "j": "ngo5 dei6",
+              "e": "our"
+            },
+            {
+              "c": "公司",
+              "j": "gung1 si1",
+              "e": "company"
+            },
+            {
+              "c": "好大",
+              "j": "hou2 daai6",
+              "e": "very big"
+            }
+          ]
+        },
+        {
+          "c": "老闆叫我加班。",
+          "j": "lou5 baan2 giu3 ngo5 gaa1 baan1.",
+          "e": "The boss told me to do overtime.",
+          "bd": [
+            {
+              "c": "老闆",
+              "j": "lou5 baan2",
+              "e": "boss"
+            },
+            {
+              "c": "叫",
+              "j": "giu3",
+              "e": "told"
+            },
+            {
+              "c": "我",
+              "j": "ngo5",
+              "e": "me"
+            },
+            {
+              "c": "加班",
+              "j": "gaa1 baan1",
+              "e": "do overtime"
+            }
+          ]
+        },
+        {
+          "c": "幾時放工呀？",
+          "j": "gei2 si4 fong3 gung1 aa3?",
+          "e": "When do you finish work?",
+          "bd": [
+            {
+              "c": "幾時",
+              "j": "gei2 si4",
+              "e": "when"
+            },
+            {
+              "c": "放工",
+              "j": "fong3 gung1",
+              "e": "finish work"
+            },
+            {
+              "c": "呀",
+              "j": "aa3",
+              "e": "(soft particle)"
+            }
+          ]
+        },
+        {
+          "c": "開會喺三點。",
+          "j": "hoi1 wui2 hai2 saam1 dim2.",
+          "e": "The meeting is at 3.",
+          "bd": [
+            {
+              "c": "開會",
+              "j": "hoi1 wui2",
+              "e": "meeting"
+            },
+            {
+              "c": "喺",
+              "j": "hai2",
+              "e": "at"
+            },
+            {
+              "c": "三點",
+              "j": "saam1 dim2",
+              "e": "3 o'clock"
+            }
+          ]
+        }
+      ],
+      "convo": {
+        "title": "Catching up with a colleague",
+        "speakers": [
+          "Colleague",
+          "You"
+        ],
+        "lines": [
+          {
+            "u": false,
+            "c": "今日點呀，忙唔忙？",
+            "j": "gam1 jat6 dim2 aa3, mong4 m4 mong4?",
+            "e": "How's today, are you busy?",
+            "bd": [
+              {
+                "c": "今日",
+                "j": "gam1 jat6",
+                "e": "today"
+              },
+              {
+                "c": "點呀",
+                "j": "dim2 aa3",
+                "e": "how"
+              },
+              {
+                "c": "忙唔忙",
+                "j": "mong4 m4 mong4",
+                "e": "busy or not"
+              }
+            ]
+          },
+          {
+            "u": true,
+            "c": "好忙，老闆叫我加班。",
+            "j": "hou2 mong4, lou5 baan2 giu3 ngo5 gaa1 baan1.",
+            "e": "Very busy, the boss told me to do overtime.",
+            "opts": [
+              "好忙，老闆叫我加班。",
+              "好得閒。",
+              "唔知。"
+            ],
+            "optsJ": [
+              "hou2 mong4, lou5 baan2 giu3 ngo5 gaa1 baan1.",
+              "hou2 dak1 haan4.",
+              "m4 zi1."
+            ],
+            "bd": [
+              {
+                "c": "好忙",
+                "j": "hou2 mong4",
+                "e": "very busy"
+              },
+              {
+                "c": "老闆",
+                "j": "lou5 baan2",
+                "e": "boss"
+              },
+              {
+                "c": "叫我",
+                "j": "giu3 ngo5",
+                "e": "told me"
+              },
+              {
+                "c": "加班",
+                "j": "gaa1 baan1",
+                "e": "overtime"
+              }
+            ]
+          },
+          {
+            "u": false,
+            "c": "截止日期係幾時？",
+            "j": "zit6 zi2 jat6 kei4 hai6 gei2 si4?",
+            "e": "When's the deadline?",
+            "bd": [
+              {
+                "c": "截止日期",
+                "j": "zit6 zi2 jat6 kei4",
+                "e": "deadline"
+              },
+              {
+                "c": "係",
+                "j": "hai6",
+                "e": "is"
+              },
+              {
+                "c": "幾時",
+                "j": "gei2 si4",
+                "e": "when"
+              }
+            ]
+          },
+          {
+            "u": true,
+            "c": "聽日朝早。",
+            "j": "ting1 jat6 ziu1 zou2.",
+            "e": "Tomorrow morning.",
+            "opts": [
+              "聽日朝早。",
+              "下星期。",
+              "我唔知。"
+            ],
+            "optsJ": [
+              "ting1 jat6 ziu1 zou2.",
+              "haa6 sing1 kei4.",
+              "ngo5 m4 zi1."
+            ],
+            "bd": [
+              {
+                "c": "聽日",
+                "j": "ting1 jat6",
+                "e": "tomorrow"
+              },
+              {
+                "c": "朝早",
+                "j": "ziu1 zou2",
+                "e": "morning"
+              }
+            ]
+          },
+          {
+            "u": false,
+            "c": "加油呀！",
+            "j": "gaa1 jau4 aa3!",
+            "e": "Hang in there!",
+            "bd": [
+              {
+                "c": "加油",
+                "j": "gaa1 jau4",
+                "e": "hang in there / go for it"
+              },
+              {
+                "c": "呀",
+                "j": "aa3",
+                "e": "(soft)"
+              }
+            ]
+          },
+          {
+            "u": true,
+            "c": "多謝你！",
+            "j": "do1 ze6 nei5!",
+            "e": "Thanks!",
+            "opts": [
+              "多謝你！",
+              "唔係。",
+              "你呢？"
+            ],
+            "optsJ": [
+              "do1 ze6 nei5!",
+              "m4 hai6.",
+              "nei5 ne1?"
+            ],
+            "bd": [
+              {
+                "c": "多謝",
+                "j": "do1 ze6",
+                "e": "thanks"
+              },
+              {
+                "c": "你",
+                "j": "nei5",
+                "e": "you"
+              }
+            ]
+          }
+        ]
+      }
+    }
+  }
+}

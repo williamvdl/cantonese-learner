@@ -1,0 +1,388 @@
+{
+  "topics": [
+    {
+      "key": "greetings",
+      "label": "Greetings",
+      "icon": "👋",
+      "color": "#C0392B",
+      "rounds": [
+        1,
+        2
+      ],
+      "wordCounts": {
+        "1": 10,
+        "2": 10
+      }
+    },
+    {
+      "key": "numbers",
+      "label": "Numbers",
+      "icon": "🔢",
+      "color": "#1A5276",
+      "rounds": [
+        1,
+        2
+      ],
+      "wordCounts": {
+        "1": 11,
+        "2": 10
+      }
+    },
+    {
+      "key": "food",
+      "label": "Food & Drink",
+      "icon": "🍜",
+      "color": "#7D6608",
+      "rounds": [
+        1,
+        2
+      ],
+      "wordCounts": {
+        "1": 12,
+        "2": 10
+      }
+    },
+    {
+      "key": "restaurant",
+      "label": "Restaurant & Ordering",
+      "icon": "🍴",
+      "color": "#A04000",
+      "rounds": [
+        1
+      ],
+      "wordCounts": {
+        "1": 10
+      }
+    },
+    {
+      "key": "family",
+      "label": "Family",
+      "icon": "👨‍👩‍👧",
+      "color": "#1E8449",
+      "rounds": [
+        1
+      ],
+      "wordCounts": {
+        "1": 12
+      }
+    },
+    {
+      "key": "time",
+      "label": "Days & Time",
+      "icon": "🕐",
+      "color": "#6C3483",
+      "rounds": [
+        1
+      ],
+      "wordCounts": {
+        "1": 12
+      }
+    },
+    {
+      "key": "phrases",
+      "label": "Useful Phrases",
+      "icon": "💬",
+      "color": "#884EA0",
+      "rounds": [
+        1
+      ],
+      "wordCounts": {
+        "1": 10
+      }
+    },
+    {
+      "key": "questions",
+      "label": "Asking Questions",
+      "icon": "❓",
+      "color": "#34495E",
+      "rounds": [
+        1
+      ],
+      "wordCounts": {
+        "1": 10
+      }
+    },
+    {
+      "key": "colors",
+      "label": "Colors",
+      "icon": "🎨",
+      "color": "#D35400",
+      "rounds": [
+        1
+      ],
+      "wordCounts": {
+        "1": 10
+      }
+    },
+    {
+      "key": "body",
+      "label": "Body Parts",
+      "icon": "🧍",
+      "color": "#B03A2E",
+      "rounds": [
+        1,
+        2
+      ],
+      "wordCounts": {
+        "1": 10,
+        "2": 10
+      }
+    },
+    {
+      "key": "transport",
+      "label": "Transport",
+      "icon": "🚇",
+      "color": "#1A7FA8",
+      "rounds": [
+        1
+      ],
+      "wordCounts": {
+        "1": 10
+      }
+    },
+    {
+      "key": "weather",
+      "label": "Weather",
+      "icon": "⛅",
+      "color": "#2E86C1",
+      "rounds": [
+        1
+      ],
+      "wordCounts": {
+        "1": 10
+      }
+    },
+    {
+      "key": "shopping",
+      "label": "Shopping",
+      "icon": "🛍️",
+      "color": "#A93226",
+      "rounds": [
+        1,
+        2
+      ],
+      "wordCounts": {
+        "1": 10,
+        "2": 10
+      }
+    },
+    {
+      "key": "yesno",
+      "label": "Yes/No & Politeness",
+      "icon": "🙏",
+      "color": "#16A085",
+      "rounds": [
+        1
+      ],
+      "wordCounts": {
+        "1": 10
+      }
+    },
+    {
+      "key": "tense",
+      "label": "Verb Tense",
+      "icon": "⏳",
+      "color": "#5D6D7E",
+      "rounds": [
+        1
+      ],
+      "wordCounts": {
+        "1": 10
+      }
+    },
+    {
+      "key": "particles",
+      "label": "Sentence Particles",
+      "icon": "💭",
+      "color": "#76448A",
+      "rounds": [
+        1
+      ],
+      "wordCounts": {
+        "1": 10
+      }
+    },
+    {
+      "key": "feelings",
+      "label": "Feelings & Emotions",
+      "icon": "😊",
+      "color": "#E91E63",
+      "rounds": [
+        1,
+        2
+      ],
+      "wordCounts": {
+        "1": 10,
+        "2": 10
+      }
+    },
+    {
+      "key": "directions",
+      "label": "Asking Directions",
+      "icon": "🧭",
+      "color": "#117864",
+      "rounds": [
+        1
+      ],
+      "wordCounts": {
+        "1": 10
+      }
+    },
+    {
+      "key": "friends",
+      "label": "Friends & Social",
+      "icon": "👫",
+      "color": "#AD1457",
+      "rounds": [
+        1
+      ],
+      "wordCounts": {
+        "1": 10
+      }
+    },
+    {
+      "key": "hotels",
+      "label": "Hotels & Accommodation",
+      "icon": "🏨",
+      "color": "#5B2C6F",
+      "rounds": [
+        1
+      ],
+      "wordCounts": {
+        "1": 10
+      }
+    },
+    {
+      "key": "attractions",
+      "label": "Tourist Attractions",
+      "icon": "🎡",
+      "color": "#5499C7",
+      "rounds": [
+        1
+      ],
+      "wordCounts": {
+        "1": 10
+      }
+    },
+    {
+      "key": "home",
+      "label": "Home & Rooms",
+      "icon": "🏠",
+      "color": "#1F618D",
+      "rounds": [
+        1
+      ],
+      "wordCounts": {
+        "1": 10
+      }
+    },
+    {
+      "key": "animals",
+      "label": "Animals & Pets",
+      "icon": "🐶",
+      "color": "#138D75",
+      "rounds": [
+        1
+      ],
+      "wordCounts": {
+        "1": 10
+      }
+    },
+    {
+      "key": "cooking",
+      "label": "Cooking & Kitchen",
+      "icon": "🍳",
+      "color": "#784212",
+      "rounds": [
+        1
+      ],
+      "wordCounts": {
+        "1": 10
+      }
+    },
+    {
+      "key": "work",
+      "label": "Office & Work",
+      "icon": "💼",
+      "color": "#1B4F72",
+      "rounds": [
+        1
+      ],
+      "wordCounts": {
+        "1": 10
+      }
+    },
+    {
+      "key": "school",
+      "label": "School & Studying",
+      "icon": "📚",
+      "color": "#7D3C98",
+      "rounds": [
+        1
+      ],
+      "wordCounts": {
+        "1": 10
+      }
+    },
+    {
+      "key": "tech",
+      "label": "Technology",
+      "icon": "💻",
+      "color": "#21618C",
+      "rounds": [
+        1
+      ],
+      "wordCounts": {
+        "1": 10
+      }
+    },
+    {
+      "key": "money",
+      "label": "Money & Banking",
+      "icon": "💰",
+      "color": "#6E2C00",
+      "rounds": [
+        1
+      ],
+      "wordCounts": {
+        "1": 10
+      }
+    },
+    {
+      "key": "hobbies",
+      "label": "Hobbies & Free Time",
+      "icon": "🎨",
+      "color": "#196F3D",
+      "rounds": [
+        1
+      ],
+      "wordCounts": {
+        "1": 10
+      }
+    },
+    {
+      "key": "sports",
+      "label": "Sports & Exercise",
+      "icon": "⚽",
+      "color": "#0B5345",
+      "rounds": [
+        1
+      ],
+      "wordCounts": {
+        "1": 10
+      }
+    },
+    {
+      "key": "emergencies",
+      "label": "Emergencies",
+      "icon": "🚨",
+      "color": "#922B21",
+      "rounds": [
+        1
+      ],
+      "wordCounts": {
+        "1": 10
+      }
+    }
+  ]
+}

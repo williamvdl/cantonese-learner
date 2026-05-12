@@ -1,0 +1,383 @@
+{
+  "meta": {
+    "label": "Home & Rooms",
+    "icon": "🏠",
+    "color": "#1F618D"
+  },
+  "rounds": {
+    "1": {
+      "note": "<em>uk1 kei2</em> (屋企) is the natural Cantonese for 'home' — much more colloquial than the formal 家. To talk about going home, <strong>faan1 uk1 kei2</strong> (返屋企, literally 'return home'). Room names are distinct compounds rather than English-style: <em>cyu4 fong2</em> (廚房, kitchen), <em>ci3 so2</em> (廁所, toilet), <em>haak3 teng1</em> (客廳, living room). For 'bedroom', most people just say <em>fong2</em> (房) — the formal <em>fong4 gaan1</em> (房間) sits in writing or service contexts.",
+      "words": [
+        {
+          "c": "屋企",
+          "j": "uk1 kei2",
+          "e": "Home"
+        },
+        {
+          "c": "廚房",
+          "j": "cyu4 fong2",
+          "e": "Kitchen"
+        },
+        {
+          "c": "廁所",
+          "j": "ci3 so2",
+          "e": "Toilet"
+        },
+        {
+          "c": "客廳",
+          "j": "haak3 teng1",
+          "e": "Living room"
+        },
+        {
+          "c": "房",
+          "j": "fong2",
+          "e": "Room / bedroom"
+        },
+        {
+          "c": "床",
+          "j": "cong4",
+          "e": "Bed"
+        },
+        {
+          "c": "枱",
+          "j": "toi2",
+          "e": "Table"
+        },
+        {
+          "c": "椅",
+          "j": "ji2",
+          "e": "Chair"
+        },
+        {
+          "c": "窗",
+          "j": "coeng1",
+          "e": "Window"
+        },
+        {
+          "c": "門",
+          "j": "mun4",
+          "e": "Door"
+        }
+      ],
+      "sentences": [
+        {
+          "c": "我返屋企。",
+          "j": "ngo5 faan1 uk1 kei2.",
+          "e": "I'm going home.",
+          "bd": [
+            {
+              "c": "我",
+              "j": "ngo5",
+              "e": "I"
+            },
+            {
+              "c": "返",
+              "j": "faan1",
+              "e": "return"
+            },
+            {
+              "c": "屋企",
+              "j": "uk1 kei2",
+              "e": "home"
+            }
+          ]
+        },
+        {
+          "c": "廁所喺邊度？",
+          "j": "ci3 so2 hai2 bin1 dou6?",
+          "e": "Where is the toilet?",
+          "bd": [
+            {
+              "c": "廁所",
+              "j": "ci3 so2",
+              "e": "toilet"
+            },
+            {
+              "c": "喺",
+              "j": "hai2",
+              "e": "is at"
+            },
+            {
+              "c": "邊度",
+              "j": "bin1 dou6",
+              "e": "where"
+            }
+          ]
+        },
+        {
+          "c": "我喺廚房煮飯。",
+          "j": "ngo5 hai2 cyu4 fong2 zyu2 faan6.",
+          "e": "I'm cooking in the kitchen.",
+          "bd": [
+            {
+              "c": "我",
+              "j": "ngo5",
+              "e": "I"
+            },
+            {
+              "c": "喺",
+              "j": "hai2",
+              "e": "at"
+            },
+            {
+              "c": "廚房",
+              "j": "cyu4 fong2",
+              "e": "kitchen"
+            },
+            {
+              "c": "煮飯",
+              "j": "zyu2 faan6",
+              "e": "cook"
+            }
+          ]
+        },
+        {
+          "c": "我嘅房好細。",
+          "j": "ngo5 ge3 fong2 hou2 sai3.",
+          "e": "My room is very small.",
+          "bd": [
+            {
+              "c": "我嘅",
+              "j": "ngo5 ge3",
+              "e": "my"
+            },
+            {
+              "c": "房",
+              "j": "fong2",
+              "e": "room"
+            },
+            {
+              "c": "好細",
+              "j": "hou2 sai3",
+              "e": "very small"
+            }
+          ]
+        },
+        {
+          "c": "開窗，唔該。",
+          "j": "hoi1 coeng1, m4 goi1.",
+          "e": "Open the window, please.",
+          "bd": [
+            {
+              "c": "開",
+              "j": "hoi1",
+              "e": "open"
+            },
+            {
+              "c": "窗",
+              "j": "coeng1",
+              "e": "window"
+            },
+            {
+              "c": "唔該",
+              "j": "m4 goi1",
+              "e": "please"
+            }
+          ]
+        }
+      ],
+      "convo": {
+        "title": "Showing someone your new place",
+        "speakers": [
+          "Friend",
+          "You"
+        ],
+        "lines": [
+          {
+            "u": false,
+            "c": "嘩，你個屋企好大呀！",
+            "j": "waa3, nei5 go3 uk1 kei2 hou2 daai6 aa3!",
+            "e": "Wow, your place is huge!",
+            "bd": [
+              {
+                "c": "嘩",
+                "j": "waa3",
+                "e": "wow"
+              },
+              {
+                "c": "你",
+                "j": "nei5",
+                "e": "your"
+              },
+              {
+                "c": "個",
+                "j": "go3",
+                "e": "(measure word)"
+              },
+              {
+                "c": "屋企",
+                "j": "uk1 kei2",
+                "e": "home"
+              },
+              {
+                "c": "好大",
+                "j": "hou2 daai6",
+                "e": "very big"
+              }
+            ]
+          },
+          {
+            "u": true,
+            "c": "多謝，呢個係客廳。",
+            "j": "do1 ze6, ni1 go3 hai6 haak3 teng1.",
+            "e": "Thanks, this is the living room.",
+            "opts": [
+              "多謝，呢個係客廳。",
+              "唔好意思。",
+              "邊度都好。"
+            ],
+            "optsJ": [
+              "do1 ze6, ni1 go3 hai6 haak3 teng1.",
+              "m4 hou2 ji3 si3.",
+              "bin1 dou6 dou1 hou2."
+            ],
+            "bd": [
+              {
+                "c": "多謝",
+                "j": "do1 ze6",
+                "e": "thanks"
+              },
+              {
+                "c": "呢個",
+                "j": "ni1 go3",
+                "e": "this"
+              },
+              {
+                "c": "係",
+                "j": "hai6",
+                "e": "is"
+              },
+              {
+                "c": "客廳",
+                "j": "haak3 teng1",
+                "e": "living room"
+              }
+            ]
+          },
+          {
+            "u": false,
+            "c": "廚房喺邊度？",
+            "j": "cyu4 fong2 hai2 bin1 dou6?",
+            "e": "Where's the kitchen?",
+            "bd": [
+              {
+                "c": "廚房",
+                "j": "cyu4 fong2",
+                "e": "kitchen"
+              },
+              {
+                "c": "喺",
+                "j": "hai2",
+                "e": "is at"
+              },
+              {
+                "c": "邊度",
+                "j": "bin1 dou6",
+                "e": "where"
+              }
+            ]
+          },
+          {
+            "u": true,
+            "c": "喺嗰邊，行入去就見到。",
+            "j": "hai2 go2 bin1, haang4 jap6 heoi3 zau6 gin3 dou2.",
+            "e": "Over there, walk in and you'll see.",
+            "opts": [
+              "喺嗰邊，行入去就見到。",
+              "我唔知。",
+              "冇廚房。"
+            ],
+            "optsJ": [
+              "hai2 go2 bin1, haang4 jap6 heoi3 zau6 gin3 dou2.",
+              "ngo5 m4 zi1.",
+              "mou5 cyu4 fong2."
+            ],
+            "bd": [
+              {
+                "c": "喺",
+                "j": "hai2",
+                "e": "is at"
+              },
+              {
+                "c": "嗰邊",
+                "j": "go2 bin1",
+                "e": "over there"
+              },
+              {
+                "c": "行入去",
+                "j": "haang4 jap6 heoi3",
+                "e": "walk in"
+              },
+              {
+                "c": "就見到",
+                "j": "zau6 gin3 dou2",
+                "e": "and you'll see"
+              }
+            ]
+          },
+          {
+            "u": false,
+            "c": "你個房幾大呀？",
+            "j": "nei5 go3 fong2 gei2 daai6 aa3?",
+            "e": "How big is your bedroom?",
+            "bd": [
+              {
+                "c": "你",
+                "j": "nei5",
+                "e": "your"
+              },
+              {
+                "c": "房",
+                "j": "fong2",
+                "e": "room"
+              },
+              {
+                "c": "幾大",
+                "j": "gei2 daai6",
+                "e": "how big"
+              },
+              {
+                "c": "呀",
+                "j": "aa3",
+                "e": "(soft particle)"
+              }
+            ]
+          },
+          {
+            "u": true,
+            "c": "細細個，但係夠瞓。",
+            "j": "sai3 sai3 go3, daan6 hai6 gau3 fan3.",
+            "e": "A bit small, but enough to sleep.",
+            "opts": [
+              "細細個，但係夠瞓。",
+              "好大！",
+              "我冇床。"
+            ],
+            "optsJ": [
+              "sai3 sai3 go3, daan6 hai6 gau3 fan3.",
+              "hou2 daai6!",
+              "ngo5 mou5 cong4."
+            ],
+            "bd": [
+              {
+                "c": "細細個",
+                "j": "sai3 sai3 go3",
+                "e": "smallish"
+              },
+              {
+                "c": "但係",
+                "j": "daan6 hai6",
+                "e": "but"
+              },
+              {
+                "c": "夠瞓",
+                "j": "gau3 fan3",
+                "e": "enough to sleep"
+              }
+            ]
+          }
+        ]
+      }
+    }
+  }
+}

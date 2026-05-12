@@ -1,0 +1,413 @@
+{
+  "meta": {
+    "label": "Asking Questions",
+    "icon": "❓",
+    "color": "#34495E"
+  },
+  "rounds": {
+    "1": {
+      "note": "Question words in Cantonese usually sit where the answer would go: 'who is going?' becomes <em>bin1 go3 heoi3?</em> — literally 'who go?'. To form a yes/no question, add <strong>maa3</strong> to the end of any statement. To ask 'why', put <strong>dim2 gaai2</strong> at the start. The particle <strong>ne1</strong> attaches to a noun or pronoun to mean 'and you?' / 'what about X?' — a tiny but very useful word for keeping conversation flowing.",
+      "words": [
+        {
+          "c": "邊個",
+          "j": "bin1 go3",
+          "e": "Who"
+        },
+        {
+          "c": "乜嘢",
+          "j": "mat1 je5",
+          "e": "What"
+        },
+        {
+          "c": "邊度",
+          "j": "bin1 dou6",
+          "e": "Where"
+        },
+        {
+          "c": "幾時",
+          "j": "gei2 si4",
+          "e": "When"
+        },
+        {
+          "c": "點解",
+          "j": "dim2 gaai2",
+          "e": "Why"
+        },
+        {
+          "c": "點樣",
+          "j": "dim2 joeng2",
+          "e": "How"
+        },
+        {
+          "c": "幾多",
+          "j": "gei2 do1",
+          "e": "How many / much"
+        },
+        {
+          "c": "邊",
+          "j": "bin1",
+          "e": "Which"
+        },
+        {
+          "c": "嗎",
+          "j": "maa3",
+          "e": "(yes/no question)"
+        },
+        {
+          "c": "呢",
+          "j": "ne1",
+          "e": "(and you? / what about?)"
+        }
+      ],
+      "sentences": [
+        {
+          "c": "你係邊個？",
+          "j": "nei5 hai6 bin1 go3?",
+          "e": "Who are you?",
+          "bd": [
+            {
+              "c": "你",
+              "j": "nei5",
+              "e": "you"
+            },
+            {
+              "c": "係",
+              "j": "hai6",
+              "e": "are"
+            },
+            {
+              "c": "邊個",
+              "j": "bin1 go3",
+              "e": "who"
+            }
+          ]
+        },
+        {
+          "c": "幾時走？",
+          "j": "gei2 si4 zau2?",
+          "e": "When are we leaving?",
+          "bd": [
+            {
+              "c": "幾時",
+              "j": "gei2 si4",
+              "e": "when"
+            },
+            {
+              "c": "走",
+              "j": "zau2",
+              "e": "leave / go"
+            }
+          ]
+        },
+        {
+          "c": "點解唔嚟？",
+          "j": "dim2 gaai2 m4 lai4?",
+          "e": "Why aren't you coming?",
+          "bd": [
+            {
+              "c": "點解",
+              "j": "dim2 gaai2",
+              "e": "why"
+            },
+            {
+              "c": "唔",
+              "j": "m4",
+              "e": "not"
+            },
+            {
+              "c": "嚟",
+              "j": "lai4",
+              "e": "come"
+            }
+          ]
+        },
+        {
+          "c": "你住喺邊度？",
+          "j": "nei5 zyu6 hai2 bin1 dou6?",
+          "e": "Where do you live?",
+          "bd": [
+            {
+              "c": "你",
+              "j": "nei5",
+              "e": "you"
+            },
+            {
+              "c": "住",
+              "j": "zyu6",
+              "e": "live"
+            },
+            {
+              "c": "喺",
+              "j": "hai2",
+              "e": "at"
+            },
+            {
+              "c": "邊度",
+              "j": "bin1 dou6",
+              "e": "where"
+            }
+          ]
+        },
+        {
+          "c": "你叫乜嘢名？",
+          "j": "nei5 giu3 mat1 je5 meng2?",
+          "e": "What's your name?",
+          "bd": [
+            {
+              "c": "你",
+              "j": "nei5",
+              "e": "you"
+            },
+            {
+              "c": "叫",
+              "j": "giu3",
+              "e": "are called"
+            },
+            {
+              "c": "乜嘢",
+              "j": "mat1 je5",
+              "e": "what"
+            },
+            {
+              "c": "名",
+              "j": "meng2",
+              "e": "name"
+            }
+          ]
+        }
+      ],
+      "convo": {
+        "title": "Meeting someone new",
+        "speakers": [
+          "Stranger",
+          "You"
+        ],
+        "lines": [
+          {
+            "u": false,
+            "c": "你好！你叫乜嘢名？",
+            "j": "nei5 hou2! nei5 giu3 mat1 je5 meng2?",
+            "e": "Hello! What's your name?",
+            "bd": [
+              {
+                "c": "你好",
+                "j": "nei5 hou2",
+                "e": "hello"
+              },
+              {
+                "c": "你",
+                "j": "nei5",
+                "e": "you"
+              },
+              {
+                "c": "叫",
+                "j": "giu3",
+                "e": "are called"
+              },
+              {
+                "c": "乜嘢",
+                "j": "mat1 je5",
+                "e": "what"
+              },
+              {
+                "c": "名",
+                "j": "meng2",
+                "e": "name"
+              }
+            ]
+          },
+          {
+            "u": true,
+            "c": "我叫David。你呢？",
+            "j": "ngo5 giu3 David. nei5 ne1?",
+            "e": "I'm David. And you?",
+            "opts": [
+              "我叫David。你呢？",
+              "我食緊飯。",
+              "我唔知。"
+            ],
+            "optsJ": [
+              "ngo5 giu3 David. nei5 ne1?",
+              "ngo5 sik6 gan2 faan6.",
+              "ngo5 m4 zi1."
+            ],
+            "bd": [
+              {
+                "c": "我",
+                "j": "ngo5",
+                "e": "I"
+              },
+              {
+                "c": "叫",
+                "j": "giu3",
+                "e": "am called"
+              },
+              {
+                "c": "David",
+                "j": "David",
+                "e": "David"
+              },
+              {
+                "c": "你呢",
+                "j": "nei5 ne1",
+                "e": "and you?"
+              }
+            ]
+          },
+          {
+            "u": false,
+            "c": "我叫Sarah。你住喺邊度？",
+            "j": "ngo5 giu3 Sarah. nei5 zyu6 hai2 bin1 dou6?",
+            "e": "I'm Sarah. Where do you live?",
+            "bd": [
+              {
+                "c": "我",
+                "j": "ngo5",
+                "e": "I"
+              },
+              {
+                "c": "叫",
+                "j": "giu3",
+                "e": "am called"
+              },
+              {
+                "c": "Sarah",
+                "j": "Sarah",
+                "e": "Sarah"
+              },
+              {
+                "c": "你",
+                "j": "nei5",
+                "e": "you"
+              },
+              {
+                "c": "住",
+                "j": "zyu6",
+                "e": "live"
+              },
+              {
+                "c": "喺",
+                "j": "hai2",
+                "e": "at"
+              },
+              {
+                "c": "邊度",
+                "j": "bin1 dou6",
+                "e": "where"
+              }
+            ]
+          },
+          {
+            "u": true,
+            "c": "我住喺香港。你呢？",
+            "j": "ngo5 zyu6 hai2 hoeng1 gong2. nei5 ne1?",
+            "e": "I live in Hong Kong. And you?",
+            "opts": [
+              "我住喺香港。你呢？",
+              "我食緊飯。",
+              "我去街。"
+            ],
+            "optsJ": [
+              "ngo5 zyu6 hai2 hoeng1 gong2. nei5 ne1?",
+              "ngo5 sik6 gan2 faan6.",
+              "ngo5 heoi3 gaai1."
+            ],
+            "bd": [
+              {
+                "c": "我",
+                "j": "ngo5",
+                "e": "I"
+              },
+              {
+                "c": "住",
+                "j": "zyu6",
+                "e": "live"
+              },
+              {
+                "c": "喺",
+                "j": "hai2",
+                "e": "at"
+              },
+              {
+                "c": "香港",
+                "j": "hoeng1 gong2",
+                "e": "Hong Kong"
+              },
+              {
+                "c": "你呢",
+                "j": "nei5 ne1",
+                "e": "and you?"
+              }
+            ]
+          },
+          {
+            "u": false,
+            "c": "我都係。點解嚟香港？",
+            "j": "ngo5 dou1 hai6. dim2 gaai2 lai4 hoeng1 gong2?",
+            "e": "Me too. Why did you come to Hong Kong?",
+            "bd": [
+              {
+                "c": "我",
+                "j": "ngo5",
+                "e": "I"
+              },
+              {
+                "c": "都係",
+                "j": "dou1 hai6",
+                "e": "also am"
+              },
+              {
+                "c": "點解",
+                "j": "dim2 gaai2",
+                "e": "why"
+              },
+              {
+                "c": "嚟",
+                "j": "lai4",
+                "e": "come"
+              },
+              {
+                "c": "香港",
+                "j": "hoeng1 gong2",
+                "e": "Hong Kong"
+              }
+            ]
+          },
+          {
+            "u": true,
+            "c": "我嚟做嘢。",
+            "j": "ngo5 lai4 zou6 je5.",
+            "e": "I came for work.",
+            "opts": [
+              "我嚟做嘢。",
+              "我唔知。",
+              "你係邊個？"
+            ],
+            "optsJ": [
+              "ngo5 lai4 zou6 je5.",
+              "ngo5 m4 zi1.",
+              "nei5 hai6 bin1 go3?"
+            ],
+            "bd": [
+              {
+                "c": "我",
+                "j": "ngo5",
+                "e": "I"
+              },
+              {
+                "c": "嚟",
+                "j": "lai4",
+                "e": "come"
+              },
+              {
+                "c": "做嘢",
+                "j": "zou6 je5",
+                "e": "to work"
+              }
+            ]
+          }
+        ]
+      }
+    }
+  }
+}

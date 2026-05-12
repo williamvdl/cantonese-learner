@@ -1,0 +1,757 @@
+{
+  "meta": {
+    "label": "Body Parts",
+    "icon": "🧍",
+    "color": "#B03A2E"
+  },
+  "rounds": {
+    "1": {
+      "note": null,
+      "words": [
+        {
+          "c": "頭",
+          "j": "tau4",
+          "e": "Head"
+        },
+        {
+          "c": "眼",
+          "j": "ngaan5",
+          "e": "Eyes"
+        },
+        {
+          "c": "耳",
+          "j": "ji5",
+          "e": "Ears"
+        },
+        {
+          "c": "鼻",
+          "j": "bei6",
+          "e": "Nose"
+        },
+        {
+          "c": "嘴",
+          "j": "zeoi2",
+          "e": "Mouth"
+        },
+        {
+          "c": "手",
+          "j": "sau2",
+          "e": "Hand"
+        },
+        {
+          "c": "腳",
+          "j": "goek3",
+          "e": "Foot"
+        },
+        {
+          "c": "心",
+          "j": "sam1",
+          "e": "Heart"
+        },
+        {
+          "c": "肚",
+          "j": "tou5",
+          "e": "Stomach"
+        },
+        {
+          "c": "背",
+          "j": "bui3",
+          "e": "Back"
+        }
+      ],
+      "sentences": [
+        {
+          "c": "我頭好痛。",
+          "j": "ngo5 tau4 hou2 tung3.",
+          "e": "My head really hurts.",
+          "bd": [
+            {
+              "c": "我",
+              "j": "ngo5",
+              "e": "my"
+            },
+            {
+              "c": "頭",
+              "j": "tau4",
+              "e": "head"
+            },
+            {
+              "c": "好痛",
+              "j": "hou2 tung3",
+              "e": "really hurts"
+            }
+          ]
+        },
+        {
+          "c": "我眼好攰。",
+          "j": "ngo5 ngaan5 hou2 gui6.",
+          "e": "My eyes are very tired.",
+          "bd": [
+            {
+              "c": "我",
+              "j": "ngo5",
+              "e": "my"
+            },
+            {
+              "c": "眼",
+              "j": "ngaan5",
+              "e": "eyes"
+            },
+            {
+              "c": "好攰",
+              "j": "hou2 gui6",
+              "e": "very tired"
+            }
+          ]
+        },
+        {
+          "c": "洗手要用水。",
+          "j": "sai2 sau2 jiu3 jung6 seoi2.",
+          "e": "Washing hands requires water.",
+          "bd": [
+            {
+              "c": "洗手",
+              "j": "sai2 sau2",
+              "e": "wash hands"
+            },
+            {
+              "c": "要",
+              "j": "jiu3",
+              "e": "need / require"
+            },
+            {
+              "c": "用",
+              "j": "jung6",
+              "e": "use"
+            },
+            {
+              "c": "水",
+              "j": "seoi2",
+              "e": "water"
+            }
+          ]
+        },
+        {
+          "c": "我心好痛。",
+          "j": "ngo5 sam1 hou2 tung3.",
+          "e": "My heart hurts (sad).",
+          "bd": [
+            {
+              "c": "我",
+              "j": "ngo5",
+              "e": "my"
+            },
+            {
+              "c": "心",
+              "j": "sam1",
+              "e": "heart"
+            },
+            {
+              "c": "好痛",
+              "j": "hou2 tung3",
+              "e": "really hurts"
+            }
+          ]
+        },
+        {
+          "c": "佢腳受傷。",
+          "j": "keoi5 goek3 sau6 soeng1.",
+          "e": "His leg is injured.",
+          "bd": [
+            {
+              "c": "佢",
+              "j": "keoi5",
+              "e": "he / she"
+            },
+            {
+              "c": "腳",
+              "j": "goek3",
+              "e": "leg / foot"
+            },
+            {
+              "c": "受傷",
+              "j": "sau6 soeng1",
+              "e": "injured"
+            }
+          ]
+        }
+      ],
+      "convo": {
+        "title": "At the doctor",
+        "speakers": [
+          "Doctor",
+          "You"
+        ],
+        "lines": [
+          {
+            "u": false,
+            "c": "你好，你有咩唔舒服？",
+            "j": "nei5 hou2, nei5 jau5 me1 m4 syu1 fuk6?",
+            "e": "Hello, what seems to be the problem?",
+            "bd": [
+              {
+                "c": "你好",
+                "j": "nei5 hou2",
+                "e": "hello"
+              },
+              {
+                "c": "你",
+                "j": "nei5",
+                "e": "you"
+              },
+              {
+                "c": "有",
+                "j": "jau5",
+                "e": "have"
+              },
+              {
+                "c": "咩",
+                "j": "me1",
+                "e": "what"
+              },
+              {
+                "c": "唔舒服",
+                "j": "m4 syu1 fuk6",
+                "e": "unwell / discomfort"
+              }
+            ]
+          },
+          {
+            "u": true,
+            "c": "我頭好痛，同埋肚都唔舒服。",
+            "j": "ngo5 tau4 hou2 tung3, tung4 maai4 tou5 dou1 m4 syu1 fuk6.",
+            "e": "I have a bad headache and stomach ache.",
+            "opts": [
+              "我頭好痛，同埋肚都唔舒服。",
+              "我眼好攰。",
+              "我腳痛。"
+            ],
+            "optsJ": [
+              "ngo5 tau4 hou2 tung3, tung4 maai4 tou5 dou1 m4 syu1 fuk6.",
+              "ngo5 ngaan5 hou2 gui6.",
+              "ngo5 goek3 tung3."
+            ],
+            "bd": [
+              {
+                "c": "我頭",
+                "j": "ngo5 tau4",
+                "e": "my head"
+              },
+              {
+                "c": "好痛",
+                "j": "hou2 tung3",
+                "e": "really hurts"
+              },
+              {
+                "c": "同埋",
+                "j": "tung4 maai4",
+                "e": "and also"
+              },
+              {
+                "c": "肚",
+                "j": "tou5",
+                "e": "stomach"
+              },
+              {
+                "c": "都",
+                "j": "dou1",
+                "e": "also"
+              },
+              {
+                "c": "唔舒服",
+                "j": "m4 syu1 fuk6",
+                "e": "unwell"
+              }
+            ]
+          },
+          {
+            "u": false,
+            "c": "你係咪有發燒？",
+            "j": "nei5 hai6 mai6 jau5 faat3 siu1?",
+            "e": "Do you have a fever?",
+            "bd": [
+              {
+                "c": "你",
+                "j": "nei5",
+                "e": "you"
+              },
+              {
+                "c": "係咪",
+                "j": "hai6 mai6",
+                "e": "are you? / is it?"
+              },
+              {
+                "c": "有",
+                "j": "jau5",
+                "e": "have"
+              },
+              {
+                "c": "發燒",
+                "j": "faat3 siu1",
+                "e": "fever"
+              }
+            ]
+          },
+          {
+            "u": true,
+            "c": "唔知，但係我覺得好凍。",
+            "j": "m4 zi1, daan6 hai6 ngo5 gok3 dak1 hou2 dung3.",
+            "e": "I'm not sure, but I feel very cold.",
+            "opts": [
+              "唔知，但係我覺得好凍。",
+              "唔係，我好熱。",
+              "我唔知。"
+            ],
+            "optsJ": [
+              "m4 zi1, daan6 hai6 ngo5 gok3 dak1 hou2 dung3.",
+              "m4 hai6, ngo5 hou2 jit6.",
+              "ngo5 m4 zi1."
+            ],
+            "bd": [
+              {
+                "c": "唔知",
+                "j": "m4 zi1",
+                "e": "don't know / not sure"
+              },
+              {
+                "c": "但係",
+                "j": "daan6 hai6",
+                "e": "but"
+              },
+              {
+                "c": "我",
+                "j": "ngo5",
+                "e": "I"
+              },
+              {
+                "c": "覺得",
+                "j": "gok3 dak1",
+                "e": "feel"
+              },
+              {
+                "c": "好凍",
+                "j": "hou2 dung3",
+                "e": "very cold"
+              }
+            ]
+          },
+          {
+            "u": false,
+            "c": "我幫你量體溫。請坐。",
+            "j": "ngo5 bong1 nei5 loeng4 tai2 wan1. cing2 co5.",
+            "e": "Let me take your temperature. Please sit.",
+            "bd": [
+              {
+                "c": "我幫你",
+                "j": "ngo5 bong1 nei5",
+                "e": "let me help you"
+              },
+              {
+                "c": "量",
+                "j": "loeng4",
+                "e": "measure"
+              },
+              {
+                "c": "體溫",
+                "j": "tai2 wan1",
+                "e": "body temperature"
+              },
+              {
+                "c": "請坐",
+                "j": "cing2 co5",
+                "e": "please sit"
+              }
+            ]
+          },
+          {
+            "u": true,
+            "c": "好，多謝醫生。",
+            "j": "hou2, do1 ze6 ji1 sang1.",
+            "e": "Ok, thank you doctor.",
+            "opts": [
+              "好，多謝醫生。",
+              "唔使喇。",
+              "我想走。"
+            ],
+            "optsJ": [
+              "hou2, do1 ze6 ji1 sang1.",
+              "m4 sai2 laa3.",
+              "ngo5 soeng2 zau2."
+            ],
+            "bd": [
+              {
+                "c": "好",
+                "j": "hou2",
+                "e": "ok"
+              },
+              {
+                "c": "多謝",
+                "j": "do1 ze6",
+                "e": "thank you"
+              },
+              {
+                "c": "醫生",
+                "j": "ji1 sang1",
+                "e": "doctor"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "2": {
+      "note": "Tier 1 covered anatomy; Tier 2 puts it to use when you're unwell. The structure is simple: <strong>body part + tung3</strong> (痛, pain) describes any ache — <em>tau4 tung3</em> (頭痛, headache), <em>tou5 tung3</em> (肚痛, stomachache). The verb <strong>beng6</strong> (病) covers being ill generally. At the pharmacy (<em>joek6 fong2</em>, 藥房) you'll buy <em>joek6</em> (藥, medicine) — same character, different role.",
+      "words": [
+        {
+          "c": "痛",
+          "j": "tung3",
+          "e": "Pain / sore / ache"
+        },
+        {
+          "c": "病",
+          "j": "beng6",
+          "e": "Sick / illness"
+        },
+        {
+          "c": "發燒",
+          "j": "faat3 siu1",
+          "e": "Fever"
+        },
+        {
+          "c": "咳",
+          "j": "kat1",
+          "e": "Cough"
+        },
+        {
+          "c": "頭痛",
+          "j": "tau4 tung3",
+          "e": "Headache"
+        },
+        {
+          "c": "肚痛",
+          "j": "tou5 tung3",
+          "e": "Stomachache"
+        },
+        {
+          "c": "醫生",
+          "j": "ji1 sang1",
+          "e": "Doctor"
+        },
+        {
+          "c": "醫院",
+          "j": "ji1 jyun2",
+          "e": "Hospital"
+        },
+        {
+          "c": "藥",
+          "j": "joek6",
+          "e": "Medicine"
+        },
+        {
+          "c": "藥房",
+          "j": "joek6 fong2",
+          "e": "Pharmacy"
+        }
+      ],
+      "sentences": [
+        {
+          "c": "我頭痛。",
+          "j": "ngo5 tau4 tung3.",
+          "e": "I have a headache.",
+          "bd": [
+            {
+              "c": "我",
+              "j": "ngo5",
+              "e": "I"
+            },
+            {
+              "c": "頭痛",
+              "j": "tau4 tung3",
+              "e": "headache"
+            }
+          ]
+        },
+        {
+          "c": "我發燒。",
+          "j": "ngo5 faat3 siu1.",
+          "e": "I have a fever.",
+          "bd": [
+            {
+              "c": "我",
+              "j": "ngo5",
+              "e": "I"
+            },
+            {
+              "c": "發燒",
+              "j": "faat3 siu1",
+              "e": "have a fever"
+            }
+          ]
+        },
+        {
+          "c": "我要去睇醫生。",
+          "j": "ngo5 jiu3 heoi3 tai2 ji1 sang1.",
+          "e": "I need to see a doctor.",
+          "bd": [
+            {
+              "c": "我",
+              "j": "ngo5",
+              "e": "I"
+            },
+            {
+              "c": "要",
+              "j": "jiu3",
+              "e": "need to"
+            },
+            {
+              "c": "去",
+              "j": "heoi3",
+              "e": "go"
+            },
+            {
+              "c": "睇",
+              "j": "tai2",
+              "e": "see"
+            },
+            {
+              "c": "醫生",
+              "j": "ji1 sang1",
+              "e": "doctor"
+            }
+          ]
+        },
+        {
+          "c": "藥房喺邊度？",
+          "j": "joek6 fong2 hai2 bin1 dou6?",
+          "e": "Where is the pharmacy?",
+          "bd": [
+            {
+              "c": "藥房",
+              "j": "joek6 fong2",
+              "e": "pharmacy"
+            },
+            {
+              "c": "喺",
+              "j": "hai2",
+              "e": "is at"
+            },
+            {
+              "c": "邊度",
+              "j": "bin1 dou6",
+              "e": "where"
+            }
+          ]
+        },
+        {
+          "c": "食咗藥未呀？",
+          "j": "sik6 zo2 joek6 mei6 aa3?",
+          "e": "Have you taken your medicine?",
+          "bd": [
+            {
+              "c": "食咗",
+              "j": "sik6 zo2",
+              "e": "taken / eaten"
+            },
+            {
+              "c": "藥",
+              "j": "joek6",
+              "e": "medicine"
+            },
+            {
+              "c": "未",
+              "j": "mei6",
+              "e": "yet"
+            },
+            {
+              "c": "呀",
+              "j": "aa3",
+              "e": "(soft particle)"
+            }
+          ]
+        }
+      ],
+      "convo": {
+        "title": "At the pharmacy",
+        "speakers": [
+          "Pharmacist",
+          "You"
+        ],
+        "lines": [
+          {
+            "u": false,
+            "c": "係咩問題？",
+            "j": "hai6 me1 man6 tai4?",
+            "e": "What's the problem?",
+            "bd": [
+              {
+                "c": "係",
+                "j": "hai6",
+                "e": "is"
+              },
+              {
+                "c": "咩",
+                "j": "me1",
+                "e": "what"
+              },
+              {
+                "c": "問題",
+                "j": "man6 tai4",
+                "e": "problem"
+              }
+            ]
+          },
+          {
+            "u": true,
+            "c": "我頭痛同發燒。",
+            "j": "ngo5 tau4 tung3 tung4 faat3 siu1.",
+            "e": "I have a headache and a fever.",
+            "opts": [
+              "我頭痛同發燒。",
+              "我好開心。",
+              "幾錢？"
+            ],
+            "optsJ": [
+              "ngo5 tau4 tung3 tung4 faat3 siu1.",
+              "ngo5 hou2 hoi1 sam1.",
+              "gei2 cin2?"
+            ],
+            "bd": [
+              {
+                "c": "我",
+                "j": "ngo5",
+                "e": "I"
+              },
+              {
+                "c": "頭痛",
+                "j": "tau4 tung3",
+                "e": "headache"
+              },
+              {
+                "c": "同",
+                "j": "tung4",
+                "e": "and"
+              },
+              {
+                "c": "發燒",
+                "j": "faat3 siu1",
+                "e": "fever"
+              }
+            ]
+          },
+          {
+            "u": false,
+            "c": "幾耐喇？",
+            "j": "gei2 noi6 laa3?",
+            "e": "How long has it been?",
+            "bd": [
+              {
+                "c": "幾耐",
+                "j": "gei2 noi6",
+                "e": "how long"
+              },
+              {
+                "c": "喇",
+                "j": "laa3",
+                "e": "(particle - now)"
+              }
+            ]
+          },
+          {
+            "u": true,
+            "c": "兩日喇。",
+            "j": "loeng5 jat6 laa3.",
+            "e": "Two days now.",
+            "opts": [
+              "兩日喇。",
+              "我好飽。",
+              "唔該晒。"
+            ],
+            "optsJ": [
+              "loeng5 jat6 laa3.",
+              "ngo5 hou2 baau2.",
+              "m4 goi1 saai3."
+            ],
+            "bd": [
+              {
+                "c": "兩日",
+                "j": "loeng5 jat6",
+                "e": "two days"
+              },
+              {
+                "c": "喇",
+                "j": "laa3",
+                "e": "(particle - now)"
+              }
+            ]
+          },
+          {
+            "u": false,
+            "c": "食呢隻藥啦，一日三次。",
+            "j": "sik6 ni1 zek3 joek6 laa1, jat1 jat6 saam1 ci3.",
+            "e": "Take this medicine, three times a day.",
+            "bd": [
+              {
+                "c": "食",
+                "j": "sik6",
+                "e": "take"
+              },
+              {
+                "c": "呢隻",
+                "j": "ni1 zek3",
+                "e": "this (type)"
+              },
+              {
+                "c": "藥",
+                "j": "joek6",
+                "e": "medicine"
+              },
+              {
+                "c": "啦",
+                "j": "laa1",
+                "e": "(suggestion)"
+              },
+              {
+                "c": "一日",
+                "j": "jat1 jat6",
+                "e": "one day"
+              },
+              {
+                "c": "三次",
+                "j": "saam1 ci3",
+                "e": "three times"
+              }
+            ]
+          },
+          {
+            "u": true,
+            "c": "好，唔該。",
+            "j": "hou2, m4 goi1.",
+            "e": "OK, thanks.",
+            "opts": [
+              "好，唔該。",
+              "唔好。",
+              "你係邊個？"
+            ],
+            "optsJ": [
+              "hou2, m4 goi1.",
+              "m4 hou2.",
+              "nei5 hai6 bin1 go3?"
+            ],
+            "bd": [
+              {
+                "c": "好",
+                "j": "hou2",
+                "e": "OK"
+              },
+              {
+                "c": "唔該",
+                "j": "m4 goi1",
+                "e": "thanks"
+              }
+            ]
+          }
+        ]
+      }
+    }
+  }
+}

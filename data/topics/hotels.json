@@ -1,0 +1,383 @@
+{
+  "meta": {
+    "label": "Hotels & Accommodation",
+    "icon": "🏨",
+    "color": "#5B2C6F"
+  },
+  "rounds": {
+    "1": {
+      "note": "Hotel vocabulary leans toward the formal end of Cantonese — it lives in service contexts. <em>zau2 dim3</em> (酒店) is the standard word for hotel. Expect the receptionist to ask <em>nei5 deng6 zo2 fong2 mei6 aa3?</em> ('have you booked?'). The verbs <strong>jap6 zyu6</strong> (入住, check in, literally 'enter and stay') and <strong>teoi3 fong2</strong> (退房, check out, 'return room') are compound expressions worth learning whole.",
+      "words": [
+        {
+          "c": "酒店",
+          "j": "zau2 dim3",
+          "e": "Hotel"
+        },
+        {
+          "c": "房間",
+          "j": "fong4 gaan1",
+          "e": "Room"
+        },
+        {
+          "c": "鎖匙",
+          "j": "so2 si4",
+          "e": "Key"
+        },
+        {
+          "c": "早餐",
+          "j": "zou2 caan1",
+          "e": "Breakfast"
+        },
+        {
+          "c": "行李",
+          "j": "hang4 lei5",
+          "e": "Luggage"
+        },
+        {
+          "c": "訂房",
+          "j": "deng6 fong2",
+          "e": "Book a room"
+        },
+        {
+          "c": "入住",
+          "j": "jap6 zyu6",
+          "e": "Check in"
+        },
+        {
+          "c": "退房",
+          "j": "teoi3 fong2",
+          "e": "Check out"
+        },
+        {
+          "c": "服務員",
+          "j": "fuk6 mou6 jyun4",
+          "e": "Service staff"
+        },
+        {
+          "c": "幾樓",
+          "j": "gei2 lau2",
+          "e": "What floor"
+        }
+      ],
+      "sentences": [
+        {
+          "c": "我訂咗一間房。",
+          "j": "ngo5 deng6 zo2 jat1 gaan1 fong2.",
+          "e": "I booked a room.",
+          "bd": [
+            {
+              "c": "我",
+              "j": "ngo5",
+              "e": "I"
+            },
+            {
+              "c": "訂咗",
+              "j": "deng6 zo2",
+              "e": "booked"
+            },
+            {
+              "c": "一間",
+              "j": "jat1 gaan1",
+              "e": "one (room)"
+            },
+            {
+              "c": "房",
+              "j": "fong2",
+              "e": "room"
+            }
+          ]
+        },
+        {
+          "c": "我想入住。",
+          "j": "ngo5 soeng2 jap6 zyu6.",
+          "e": "I'd like to check in.",
+          "bd": [
+            {
+              "c": "我",
+              "j": "ngo5",
+              "e": "I"
+            },
+            {
+              "c": "想",
+              "j": "soeng2",
+              "e": "would like"
+            },
+            {
+              "c": "入住",
+              "j": "jap6 zyu6",
+              "e": "check in"
+            }
+          ]
+        },
+        {
+          "c": "鎖匙俾我，唔該。",
+          "j": "so2 si4 bei2 ngo5, m4 goi1.",
+          "e": "The key please.",
+          "bd": [
+            {
+              "c": "鎖匙",
+              "j": "so2 si4",
+              "e": "key"
+            },
+            {
+              "c": "俾",
+              "j": "bei2",
+              "e": "give"
+            },
+            {
+              "c": "我",
+              "j": "ngo5",
+              "e": "me"
+            },
+            {
+              "c": "唔該",
+              "j": "m4 goi1",
+              "e": "please"
+            }
+          ]
+        },
+        {
+          "c": "早餐喺幾樓？",
+          "j": "zou2 caan1 hai2 gei2 lau2?",
+          "e": "What floor is breakfast on?",
+          "bd": [
+            {
+              "c": "早餐",
+              "j": "zou2 caan1",
+              "e": "breakfast"
+            },
+            {
+              "c": "喺",
+              "j": "hai2",
+              "e": "is at"
+            },
+            {
+              "c": "幾樓",
+              "j": "gei2 lau2",
+              "e": "what floor"
+            }
+          ]
+        },
+        {
+          "c": "我聽朝退房。",
+          "j": "ngo5 ting1 ziu1 teoi3 fong2.",
+          "e": "I'm checking out tomorrow morning.",
+          "bd": [
+            {
+              "c": "我",
+              "j": "ngo5",
+              "e": "I"
+            },
+            {
+              "c": "聽朝",
+              "j": "ting1 ziu1",
+              "e": "tomorrow morning"
+            },
+            {
+              "c": "退房",
+              "j": "teoi3 fong2",
+              "e": "check out"
+            }
+          ]
+        }
+      ],
+      "convo": {
+        "title": "Checking in at a hotel",
+        "speakers": [
+          "Receptionist",
+          "You"
+        ],
+        "lines": [
+          {
+            "u": false,
+            "c": "你好，請問訂咗房未？",
+            "j": "nei5 hou2, cing2 man6 deng6 zo2 fong2 mei6?",
+            "e": "Hello, have you booked a room?",
+            "bd": [
+              {
+                "c": "你好",
+                "j": "nei5 hou2",
+                "e": "hello"
+              },
+              {
+                "c": "請問",
+                "j": "cing2 man6",
+                "e": "may I ask"
+              },
+              {
+                "c": "訂咗",
+                "j": "deng6 zo2",
+                "e": "booked"
+              },
+              {
+                "c": "房",
+                "j": "fong2",
+                "e": "room"
+              },
+              {
+                "c": "未",
+                "j": "mei6",
+                "e": "yet (in question form)"
+              }
+            ]
+          },
+          {
+            "u": true,
+            "c": "訂咗，姓Chan。",
+            "j": "deng6 zo2, sing3 Chan.",
+            "e": "Yes, the name is Chan.",
+            "opts": [
+              "訂咗，姓Chan。",
+              "未訂。",
+              "我唔知。"
+            ],
+            "optsJ": [
+              "deng6 zo2, sing3 Chan.",
+              "mei6 deng6.",
+              "ngo5 m4 zi1."
+            ],
+            "bd": [
+              {
+                "c": "訂咗",
+                "j": "deng6 zo2",
+                "e": "booked"
+              },
+              {
+                "c": "姓",
+                "j": "sing3",
+                "e": "surname"
+              },
+              {
+                "c": "Chan",
+                "j": "Chan",
+                "e": "Chan"
+              }
+            ]
+          },
+          {
+            "u": false,
+            "c": "一間雙人房，三晚。",
+            "j": "jat1 gaan1 soeng1 jan4 fong2, saam1 maan5.",
+            "e": "One double room, three nights.",
+            "bd": [
+              {
+                "c": "一間",
+                "j": "jat1 gaan1",
+                "e": "one (room)"
+              },
+              {
+                "c": "雙人房",
+                "j": "soeng1 jan4 fong2",
+                "e": "double room"
+              },
+              {
+                "c": "三晚",
+                "j": "saam1 maan5",
+                "e": "three nights"
+              }
+            ]
+          },
+          {
+            "u": true,
+            "c": "啱，請問幾點退房？",
+            "j": "ngaam1, cing2 man6 gei2 dim2 teoi3 fong2?",
+            "e": "Right, what's the checkout time?",
+            "opts": [
+              "啱，請問幾點退房？",
+              "唔啱。",
+              "唔該。"
+            ],
+            "optsJ": [
+              "ngaam1, cing2 man6 gei2 dim2 teoi3 fong2?",
+              "m4 ngaam1.",
+              "m4 goi1."
+            ],
+            "bd": [
+              {
+                "c": "啱",
+                "j": "ngaam1",
+                "e": "correct"
+              },
+              {
+                "c": "請問",
+                "j": "cing2 man6",
+                "e": "may I ask"
+              },
+              {
+                "c": "幾點",
+                "j": "gei2 dim2",
+                "e": "what time"
+              },
+              {
+                "c": "退房",
+                "j": "teoi3 fong2",
+                "e": "check out"
+              }
+            ]
+          },
+          {
+            "u": false,
+            "c": "中午十二點，房間喺八樓。",
+            "j": "zung1 ng5 sap6 ji6 dim2, fong4 gaan1 hai2 baat3 lau2.",
+            "e": "Noon, room is on the 8th floor.",
+            "bd": [
+              {
+                "c": "中午",
+                "j": "zung1 ng5",
+                "e": "noon"
+              },
+              {
+                "c": "十二點",
+                "j": "sap6 ji6 dim2",
+                "e": "12 o'clock"
+              },
+              {
+                "c": "房間",
+                "j": "fong4 gaan1",
+                "e": "room"
+              },
+              {
+                "c": "喺",
+                "j": "hai2",
+                "e": "is at"
+              },
+              {
+                "c": "八樓",
+                "j": "baat3 lau2",
+                "e": "8th floor"
+              }
+            ]
+          },
+          {
+            "u": true,
+            "c": "多謝你！",
+            "j": "do1 ze6 nei5!",
+            "e": "Thank you!",
+            "opts": [
+              "多謝你！",
+              "我唔住。",
+              "好貴。"
+            ],
+            "optsJ": [
+              "do1 ze6 nei5!",
+              "ngo5 m4 zyu6.",
+              "hou2 gwai3."
+            ],
+            "bd": [
+              {
+                "c": "多謝",
+                "j": "do1 ze6",
+                "e": "thank you"
+              },
+              {
+                "c": "你",
+                "j": "nei5",
+                "e": "you"
+              }
+            ]
+          }
+        ]
+      }
+    }
+  }
+}

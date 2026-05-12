@@ -1,0 +1,368 @@
+{
+  "meta": {
+    "label": "School & Studying",
+    "icon": "📚",
+    "color": "#7D3C98"
+  },
+  "rounds": {
+    "1": {
+      "note": "Cantonese school life uses verb-object compounds. <strong>duk6 syu1</strong> (讀書) literally 'read book' = study generally. <strong>soeng5 tong4</strong> (上堂) literally 'ascend class' = attend a lesson. <strong>haau2 si3</strong> (考試) = take an exam. Two words for 'knowing': <em>sik1</em> (識) = know how to / be able to (skills), versus <em>zi1</em> (知, knowing a fact). 'I can speak Cantonese' uses <em>sik1</em>; 'I know that' uses <em>zi1</em>.",
+      "words": [
+        {
+          "c": "學校",
+          "j": "hok6 haau6",
+          "e": "School"
+        },
+        {
+          "c": "老師",
+          "j": "lou5 si1",
+          "e": "Teacher"
+        },
+        {
+          "c": "學生",
+          "j": "hok6 saang1",
+          "e": "Student"
+        },
+        {
+          "c": "功課",
+          "j": "gung1 fo3",
+          "e": "Homework"
+        },
+        {
+          "c": "考試",
+          "j": "haau2 si3",
+          "e": "Exam"
+        },
+        {
+          "c": "讀書",
+          "j": "duk6 syu1",
+          "e": "Study / read"
+        },
+        {
+          "c": "上堂",
+          "j": "soeng5 tong4",
+          "e": "Go to class"
+        },
+        {
+          "c": "同學",
+          "j": "tung4 hok6",
+          "e": "Classmate"
+        },
+        {
+          "c": "識",
+          "j": "sik1",
+          "e": "Know how to"
+        },
+        {
+          "c": "答",
+          "j": "daap3",
+          "e": "Answer"
+        }
+      ],
+      "sentences": [
+        {
+          "c": "我去學校。",
+          "j": "ngo5 heoi3 hok6 haau6.",
+          "e": "I go to school.",
+          "bd": [
+            {
+              "c": "我",
+              "j": "ngo5",
+              "e": "I"
+            },
+            {
+              "c": "去",
+              "j": "heoi3",
+              "e": "go to"
+            },
+            {
+              "c": "學校",
+              "j": "hok6 haau6",
+              "e": "school"
+            }
+          ]
+        },
+        {
+          "c": "我做緊功課。",
+          "j": "ngo5 zou6 gan2 gung1 fo3.",
+          "e": "I'm doing homework.",
+          "bd": [
+            {
+              "c": "我",
+              "j": "ngo5",
+              "e": "I"
+            },
+            {
+              "c": "做緊",
+              "j": "zou6 gan2",
+              "e": "doing"
+            },
+            {
+              "c": "功課",
+              "j": "gung1 fo3",
+              "e": "homework"
+            }
+          ]
+        },
+        {
+          "c": "聽日有考試。",
+          "j": "ting1 jat6 jau5 haau2 si3.",
+          "e": "There's an exam tomorrow.",
+          "bd": [
+            {
+              "c": "聽日",
+              "j": "ting1 jat6",
+              "e": "tomorrow"
+            },
+            {
+              "c": "有",
+              "j": "jau5",
+              "e": "have / there is"
+            },
+            {
+              "c": "考試",
+              "j": "haau2 si3",
+              "e": "exam"
+            }
+          ]
+        },
+        {
+          "c": "我同學好聰明。",
+          "j": "ngo5 tung4 hok6 hou2 cung1 ming4.",
+          "e": "My classmate is very smart.",
+          "bd": [
+            {
+              "c": "我",
+              "j": "ngo5",
+              "e": "my"
+            },
+            {
+              "c": "同學",
+              "j": "tung4 hok6",
+              "e": "classmate"
+            },
+            {
+              "c": "好",
+              "j": "hou2",
+              "e": "very"
+            },
+            {
+              "c": "聰明",
+              "j": "cung1 ming4",
+              "e": "smart"
+            }
+          ]
+        },
+        {
+          "c": "我唔識答呢題。",
+          "j": "ngo5 m4 sik1 daap3 ni1 tai4.",
+          "e": "I don't know the answer to this question.",
+          "bd": [
+            {
+              "c": "我",
+              "j": "ngo5",
+              "e": "I"
+            },
+            {
+              "c": "唔識",
+              "j": "m4 sik1",
+              "e": "don't know how"
+            },
+            {
+              "c": "答",
+              "j": "daap3",
+              "e": "answer"
+            },
+            {
+              "c": "呢題",
+              "j": "ni1 tai4",
+              "e": "this question"
+            }
+          ]
+        }
+      ],
+      "convo": {
+        "title": "Asking about exams",
+        "speakers": [
+          "Classmate",
+          "You"
+        ],
+        "lines": [
+          {
+            "u": false,
+            "c": "你準備好考試未？",
+            "j": "nei5 zeon2 bei6 hou2 haau2 si3 mei6?",
+            "e": "Have you prepared for the exam?",
+            "bd": [
+              {
+                "c": "你",
+                "j": "nei5",
+                "e": "you"
+              },
+              {
+                "c": "準備好",
+                "j": "zeon2 bei6 hou2",
+                "e": "prepared"
+              },
+              {
+                "c": "考試",
+                "j": "haau2 si3",
+                "e": "exam"
+              },
+              {
+                "c": "未",
+                "j": "mei6",
+                "e": "yet"
+              }
+            ]
+          },
+          {
+            "u": true,
+            "c": "未呀，仲有好多功課。",
+            "j": "mei6 aa3, zung6 jau5 hou2 do1 gung1 fo3.",
+            "e": "Not yet, still lots of homework.",
+            "opts": [
+              "未呀，仲有好多功課。",
+              "已經準備好。",
+              "我唔知。"
+            ],
+            "optsJ": [
+              "mei6 aa3, zung6 jau5 hou2 do1 gung1 fo3.",
+              "ji5 ging1 zeon2 bei6 hou2.",
+              "ngo5 m4 zi1."
+            ],
+            "bd": [
+              {
+                "c": "未呀",
+                "j": "mei6 aa3",
+                "e": "not yet"
+              },
+              {
+                "c": "仲",
+                "j": "zung6",
+                "e": "still"
+              },
+              {
+                "c": "有好多",
+                "j": "jau5 hou2 do1",
+                "e": "lots of"
+              },
+              {
+                "c": "功課",
+                "j": "gung1 fo3",
+                "e": "homework"
+              }
+            ]
+          },
+          {
+            "u": false,
+            "c": "一齊讀書，得唔得？",
+            "j": "jat1 cai4 duk6 syu1, dak1 m4 dak1?",
+            "e": "Study together, OK?",
+            "bd": [
+              {
+                "c": "一齊",
+                "j": "jat1 cai4",
+                "e": "together"
+              },
+              {
+                "c": "讀書",
+                "j": "duk6 syu1",
+                "e": "study"
+              },
+              {
+                "c": "得唔得",
+                "j": "dak1 m4 dak1",
+                "e": "OK or not"
+              }
+            ]
+          },
+          {
+            "u": true,
+            "c": "好呀，幾時？",
+            "j": "hou2 aa3, gei2 si4?",
+            "e": "Sure, when?",
+            "opts": [
+              "好呀，幾時？",
+              "唔得閒。",
+              "改日啦。"
+            ],
+            "optsJ": [
+              "hou2 aa3, gei2 si4?",
+              "m4 dak1 haan4.",
+              "goi2 jat6 laa1."
+            ],
+            "bd": [
+              {
+                "c": "好呀",
+                "j": "hou2 aa3",
+                "e": "sure"
+              },
+              {
+                "c": "幾時",
+                "j": "gei2 si4",
+                "e": "when"
+              }
+            ]
+          },
+          {
+            "u": false,
+            "c": "今晚七點，去圖書館。",
+            "j": "gam1 maan5 cat1 dim2, heoi3 tou4 syu1 gun2.",
+            "e": "Tonight at 7, at the library.",
+            "bd": [
+              {
+                "c": "今晚",
+                "j": "gam1 maan5",
+                "e": "tonight"
+              },
+              {
+                "c": "七點",
+                "j": "cat1 dim2",
+                "e": "7 o'clock"
+              },
+              {
+                "c": "去",
+                "j": "heoi3",
+                "e": "go"
+              },
+              {
+                "c": "圖書館",
+                "j": "tou4 syu1 gun2",
+                "e": "library"
+              }
+            ]
+          },
+          {
+            "u": true,
+            "c": "好！見！",
+            "j": "hou2! gin3!",
+            "e": "OK! See you!",
+            "opts": [
+              "好！見！",
+              "唔好。",
+              "點解？"
+            ],
+            "optsJ": [
+              "hou2! gin3!",
+              "m4 hou2.",
+              "dim2 gaai2?"
+            ],
+            "bd": [
+              {
+                "c": "好",
+                "j": "hou2",
+                "e": "OK"
+              },
+              {
+                "c": "見",
+                "j": "gin3",
+                "e": "see you"
+              }
+            ]
+          }
+        ]
+      }
+    }
+  }
+}

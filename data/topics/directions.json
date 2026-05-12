@@ -1,0 +1,386 @@
+{
+  "meta": {
+    "label": "Asking Directions",
+    "icon": "🧭",
+    "color": "#117864"
+  },
+  "rounds": {
+    "1": {
+      "note": null,
+      "words": [
+        {
+          "c": "左邊",
+          "j": "zo2 bin1",
+          "e": "Left side"
+        },
+        {
+          "c": "右邊",
+          "j": "jau6 bin1",
+          "e": "Right side"
+        },
+        {
+          "c": "前面",
+          "j": "cin4 min6",
+          "e": "In front / ahead"
+        },
+        {
+          "c": "後面",
+          "j": "hau6 min6",
+          "e": "Behind"
+        },
+        {
+          "c": "直行",
+          "j": "zik6 haang4",
+          "e": "Straight ahead"
+        },
+        {
+          "c": "轉",
+          "j": "zyun3",
+          "e": "Turn"
+        },
+        {
+          "c": "對面",
+          "j": "deoi3 min6",
+          "e": "Opposite"
+        },
+        {
+          "c": "附近",
+          "j": "fu6 gan6",
+          "e": "Nearby"
+        },
+        {
+          "c": "遠",
+          "j": "jyun5",
+          "e": "Far"
+        },
+        {
+          "c": "近",
+          "j": "kan5",
+          "e": "Close / near"
+        }
+      ],
+      "sentences": [
+        {
+          "c": "轉左。",
+          "j": "zyun3 zo2.",
+          "e": "Turn left.",
+          "bd": [
+            {
+              "c": "轉",
+              "j": "zyun3",
+              "e": "turn"
+            },
+            {
+              "c": "左",
+              "j": "zo2",
+              "e": "left"
+            }
+          ]
+        },
+        {
+          "c": "直行就到。",
+          "j": "zik6 haang4 zau6 dou3.",
+          "e": "Go straight, you'll arrive.",
+          "bd": [
+            {
+              "c": "直行",
+              "j": "zik6 haang4",
+              "e": "go straight"
+            },
+            {
+              "c": "就",
+              "j": "zau6",
+              "e": "then"
+            },
+            {
+              "c": "到",
+              "j": "dou3",
+              "e": "arrive"
+            }
+          ]
+        },
+        {
+          "c": "喺前面。",
+          "j": "hai2 cin4 min6.",
+          "e": "It's ahead.",
+          "bd": [
+            {
+              "c": "喺",
+              "j": "hai2",
+              "e": "is at"
+            },
+            {
+              "c": "前面",
+              "j": "cin4 min6",
+              "e": "ahead / in front"
+            }
+          ]
+        },
+        {
+          "c": "好近，行幾分鐘。",
+          "j": "hou2 kan5, haang4 gei2 fan1 zung1.",
+          "e": "Very close, just a few minutes walk.",
+          "bd": [
+            {
+              "c": "好近",
+              "j": "hou2 kan5",
+              "e": "very close"
+            },
+            {
+              "c": "行",
+              "j": "haang4",
+              "e": "walk"
+            },
+            {
+              "c": "幾分鐘",
+              "j": "gei2 fan1 zung1",
+              "e": "a few minutes"
+            }
+          ]
+        },
+        {
+          "c": "喺對面。",
+          "j": "hai2 deoi3 min6.",
+          "e": "It's opposite.",
+          "bd": [
+            {
+              "c": "喺",
+              "j": "hai2",
+              "e": "is at"
+            },
+            {
+              "c": "對面",
+              "j": "deoi3 min6",
+              "e": "opposite"
+            }
+          ]
+        }
+      ],
+      "convo": {
+        "title": "Asking the way to the museum",
+        "speakers": [
+          "Local",
+          "You"
+        ],
+        "lines": [
+          {
+            "u": true,
+            "c": "唔該，博物館喺邊度？",
+            "j": "m4 goi1, bok3 mat6 gun2 hai2 bin1 dou6?",
+            "e": "Excuse me, where is the museum?",
+            "opts": [
+              "唔該，博物館喺邊度？",
+              "你好嗎？",
+              "我唔知。"
+            ],
+            "optsJ": [
+              "m4 goi1, bok3 mat6 gun2 hai2 bin1 dou6?",
+              "nei5 hou2 maa3?",
+              "ngo5 m4 zi1."
+            ],
+            "bd": [
+              {
+                "c": "唔該",
+                "j": "m4 goi1",
+                "e": "excuse me"
+              },
+              {
+                "c": "博物館",
+                "j": "bok3 mat6 gun2",
+                "e": "museum"
+              },
+              {
+                "c": "喺邊度",
+                "j": "hai2 bin1 dou6",
+                "e": "is where"
+              }
+            ]
+          },
+          {
+            "u": false,
+            "c": "直行，然後轉左。",
+            "j": "zik6 haang4, jin4 hau6 zyun3 zo2.",
+            "e": "Go straight, then turn left.",
+            "bd": [
+              {
+                "c": "直行",
+                "j": "zik6 haang4",
+                "e": "go straight"
+              },
+              {
+                "c": "然後",
+                "j": "jin4 hau6",
+                "e": "then"
+              },
+              {
+                "c": "轉",
+                "j": "zyun3",
+                "e": "turn"
+              },
+              {
+                "c": "左",
+                "j": "zo2",
+                "e": "left"
+              }
+            ]
+          },
+          {
+            "u": true,
+            "c": "行幾耐？",
+            "j": "haang4 gei2 noi6?",
+            "e": "How long does it take?",
+            "opts": [
+              "行幾耐？",
+              "好遠嗎？",
+              "唔該。"
+            ],
+            "optsJ": [
+              "haang4 gei2 noi6?",
+              "hou2 jyun5 maa3?",
+              "m4 goi1."
+            ],
+            "bd": [
+              {
+                "c": "行",
+                "j": "haang4",
+                "e": "walk"
+              },
+              {
+                "c": "幾耐",
+                "j": "gei2 noi6",
+                "e": "how long"
+              }
+            ]
+          },
+          {
+            "u": false,
+            "c": "大概十分鐘，唔係好遠。",
+            "j": "daai6 koi3 sap6 fan1 zung1, m4 hai6 hou2 jyun5.",
+            "e": "About ten minutes, not very far.",
+            "bd": [
+              {
+                "c": "大概",
+                "j": "daai6 koi3",
+                "e": "about"
+              },
+              {
+                "c": "十分鐘",
+                "j": "sap6 fan1 zung1",
+                "e": "ten minutes"
+              },
+              {
+                "c": "唔係",
+                "j": "m4 hai6",
+                "e": "not"
+              },
+              {
+                "c": "好遠",
+                "j": "hou2 jyun5",
+                "e": "very far"
+              }
+            ]
+          },
+          {
+            "u": true,
+            "c": "博物館對面有冇餐廳？",
+            "j": "bok3 mat6 gun2 deoi3 min6 jau5 mou5 caan1 teng1?",
+            "e": "Is there a restaurant opposite the museum?",
+            "opts": [
+              "博物館對面有冇餐廳？",
+              "幾錢？",
+              "唔該。"
+            ],
+            "optsJ": [
+              "bok3 mat6 gun2 deoi3 min6 jau5 mou5 caan1 teng1?",
+              "gei2 cin2?",
+              "m4 goi1."
+            ],
+            "bd": [
+              {
+                "c": "博物館",
+                "j": "bok3 mat6 gun2",
+                "e": "museum"
+              },
+              {
+                "c": "對面",
+                "j": "deoi3 min6",
+                "e": "opposite"
+              },
+              {
+                "c": "有冇",
+                "j": "jau5 mou5",
+                "e": "is there?"
+              },
+              {
+                "c": "餐廳",
+                "j": "caan1 teng1",
+                "e": "restaurant"
+              }
+            ]
+          },
+          {
+            "u": false,
+            "c": "有，附近有幾間餐廳。",
+            "j": "jau5, fu6 gan6 jau5 gei2 gaan1 caan1 teng1.",
+            "e": "Yes, there are a few restaurants nearby.",
+            "bd": [
+              {
+                "c": "有",
+                "j": "jau5",
+                "e": "yes / there is"
+              },
+              {
+                "c": "附近",
+                "j": "fu6 gan6",
+                "e": "nearby"
+              },
+              {
+                "c": "幾間",
+                "j": "gei2 gaan1",
+                "e": "a few"
+              },
+              {
+                "c": "餐廳",
+                "j": "caan1 teng1",
+                "e": "restaurants"
+              }
+            ]
+          },
+          {
+            "u": true,
+            "c": "明白，多謝你！",
+            "j": "ming4 baak6, do1 ze6 nei5!",
+            "e": "Got it, thank you!",
+            "opts": [
+              "明白，多謝你！",
+              "我唔明。",
+              "再見。"
+            ],
+            "optsJ": [
+              "ming4 baak6, do1 ze6 nei5!",
+              "ngo5 m4 ming4.",
+              "zoi3 gin3."
+            ],
+            "bd": [
+              {
+                "c": "明白",
+                "j": "ming4 baak6",
+                "e": "understand"
+              },
+              {
+                "c": "多謝",
+                "j": "do1 ze6",
+                "e": "thank you"
+              },
+              {
+                "c": "你",
+                "j": "nei5",
+                "e": "you"
+              }
+            ]
+          }
+        ]
+      }
+    }
+  }
+}

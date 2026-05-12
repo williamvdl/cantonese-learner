@@ -1,0 +1,393 @@
+{
+  "meta": {
+    "label": "Sentence Particles",
+    "icon": "💭",
+    "color": "#76448A"
+  },
+  "rounds": {
+    "1": {
+      "note": "Sentence-final particles sit at the very end of a sentence and add emotional or grammatical flavour without changing the literal meaning. They're what makes Cantonese sound natural — speech without them feels flat and robotic. <strong>Tone matters a lot</strong>: <em>laa1</em> (softening) and <em>laa3</em> (now / completion) are different particles, not variants. Don't try to translate each one literally — instead, learn the feeling each adds: certainty, surprise, gentleness, limitation, or inviting agreement.",
+      "words": [
+        {
+          "c": "喇",
+          "j": "laa3",
+          "e": "(now / completion)"
+        },
+        {
+          "c": "啦",
+          "j": "laa1",
+          "e": "(softening / suggestion)"
+        },
+        {
+          "c": "呀",
+          "j": "aa3",
+          "e": "(soft confirmation)"
+        },
+        {
+          "c": "嗎",
+          "j": "maa3",
+          "e": "(yes/no question)"
+        },
+        {
+          "c": "喎",
+          "j": "wo3",
+          "e": "(emphasis / surprise)"
+        },
+        {
+          "c": "囉",
+          "j": "lo3",
+          "e": "(obviously / exasperation)"
+        },
+        {
+          "c": "㗎",
+          "j": "gaa3",
+          "e": "(matter-of-fact)"
+        },
+        {
+          "c": "咋",
+          "j": "zaa3",
+          "e": "(only / limitation)"
+        },
+        {
+          "c": "咩",
+          "j": "me1",
+          "e": "(surprised question)"
+        },
+        {
+          "c": "吖",
+          "j": "aa1",
+          "e": "(gentle prompt)"
+        }
+      ],
+      "sentences": [
+        {
+          "c": "食飯喇！",
+          "j": "sik6 faan6 laa3!",
+          "e": "Time to eat!",
+          "bd": [
+            {
+              "c": "食",
+              "j": "sik6",
+              "e": "eat"
+            },
+            {
+              "c": "飯",
+              "j": "faan6",
+              "e": "meal"
+            },
+            {
+              "c": "喇",
+              "j": "laa3",
+              "e": "(now / let's)"
+            }
+          ]
+        },
+        {
+          "c": "一齊去啦。",
+          "j": "jat1 cai4 heoi3 laa1.",
+          "e": "Let's go together.",
+          "bd": [
+            {
+              "c": "一齊",
+              "j": "jat1 cai4",
+              "e": "together"
+            },
+            {
+              "c": "去",
+              "j": "heoi3",
+              "e": "go"
+            },
+            {
+              "c": "啦",
+              "j": "laa1",
+              "e": "(softening)"
+            }
+          ]
+        },
+        {
+          "c": "係呀！",
+          "j": "hai6 aa3!",
+          "e": "That's right!",
+          "bd": [
+            {
+              "c": "係",
+              "j": "hai6",
+              "e": "yes / is"
+            },
+            {
+              "c": "呀",
+              "j": "aa3",
+              "e": "(soft confirmation)"
+            }
+          ]
+        },
+        {
+          "c": "咁貴喎！",
+          "j": "gam3 gwai3 wo3!",
+          "e": "That's so expensive!",
+          "bd": [
+            {
+              "c": "咁",
+              "j": "gam3",
+              "e": "so"
+            },
+            {
+              "c": "貴",
+              "j": "gwai3",
+              "e": "expensive"
+            },
+            {
+              "c": "喎",
+              "j": "wo3",
+              "e": "(emphasis)"
+            }
+          ]
+        },
+        {
+          "c": "你係咩？",
+          "j": "nei5 hai6 me1?",
+          "e": "Are you really?",
+          "bd": [
+            {
+              "c": "你",
+              "j": "nei5",
+              "e": "you"
+            },
+            {
+              "c": "係",
+              "j": "hai6",
+              "e": "are"
+            },
+            {
+              "c": "咩",
+              "j": "me1",
+              "e": "(surprised question)"
+            }
+          ]
+        }
+      ],
+      "convo": {
+        "title": "A casual chat with a flatmate",
+        "speakers": [
+          "Flatmate",
+          "You"
+        ],
+        "lines": [
+          {
+            "u": false,
+            "c": "今日好攰呀！",
+            "j": "gam1 jat6 hou2 gui6 aa3!",
+            "e": "Today was so tiring!",
+            "bd": [
+              {
+                "c": "今日",
+                "j": "gam1 jat6",
+                "e": "today"
+              },
+              {
+                "c": "好",
+                "j": "hou2",
+                "e": "very"
+              },
+              {
+                "c": "攰",
+                "j": "gui6",
+                "e": "tired"
+              },
+              {
+                "c": "呀",
+                "j": "aa3",
+                "e": "(soft confirmation)"
+              }
+            ]
+          },
+          {
+            "u": true,
+            "c": "係囉，我都係。",
+            "j": "hai6 lo3, ngo5 dou1 hai6.",
+            "e": "Yeah, me too.",
+            "opts": [
+              "係囉，我都係。",
+              "唔係，我好精神。",
+              "我唔知。"
+            ],
+            "optsJ": [
+              "hai6 lo3, ngo5 dou1 hai6.",
+              "m4 hai6, ngo5 hou2 zing1 san4.",
+              "ngo5 m4 zi1."
+            ],
+            "bd": [
+              {
+                "c": "係",
+                "j": "hai6",
+                "e": "yes / right"
+              },
+              {
+                "c": "囉",
+                "j": "lo3",
+                "e": "(obviously)"
+              },
+              {
+                "c": "我",
+                "j": "ngo5",
+                "e": "I"
+              },
+              {
+                "c": "都",
+                "j": "dou1",
+                "e": "also"
+              },
+              {
+                "c": "係",
+                "j": "hai6",
+                "e": "am"
+              }
+            ]
+          },
+          {
+            "u": false,
+            "c": "睇套戲先啦？",
+            "j": "tai2 tou3 hei3 sin1 laa1?",
+            "e": "Want to watch a movie first?",
+            "bd": [
+              {
+                "c": "睇",
+                "j": "tai2",
+                "e": "watch"
+              },
+              {
+                "c": "套戲",
+                "j": "tou3 hei3",
+                "e": "a movie"
+              },
+              {
+                "c": "先",
+                "j": "sin1",
+                "e": "first"
+              },
+              {
+                "c": "啦",
+                "j": "laa1",
+                "e": "(suggestion)"
+              }
+            ]
+          },
+          {
+            "u": true,
+            "c": "好呀！睇咩戲？",
+            "j": "hou2 aa3! tai2 me1 hei3?",
+            "e": "Sure! What movie?",
+            "opts": [
+              "好呀！睇咩戲？",
+              "唔得，我要瞓。",
+              "下次先。"
+            ],
+            "optsJ": [
+              "hou2 aa3! tai2 me1 hei3?",
+              "m4 dak1, ngo5 jiu3 fan3.",
+              "haa6 ci3 sin1."
+            ],
+            "bd": [
+              {
+                "c": "好",
+                "j": "hou2",
+                "e": "OK"
+              },
+              {
+                "c": "呀",
+                "j": "aa3",
+                "e": "(soft particle)"
+              },
+              {
+                "c": "睇",
+                "j": "tai2",
+                "e": "watch"
+              },
+              {
+                "c": "咩",
+                "j": "me1",
+                "e": "what"
+              },
+              {
+                "c": "戲",
+                "j": "hei3",
+                "e": "movie"
+              }
+            ]
+          },
+          {
+            "u": false,
+            "c": "鍾意咩都得啦。",
+            "j": "zung1 ji3 me1 dou1 dak1 laa1.",
+            "e": "Whatever you like is fine.",
+            "bd": [
+              {
+                "c": "鍾意",
+                "j": "zung1 ji3",
+                "e": "like"
+              },
+              {
+                "c": "咩",
+                "j": "me1",
+                "e": "whatever"
+              },
+              {
+                "c": "都",
+                "j": "dou1",
+                "e": "also"
+              },
+              {
+                "c": "得",
+                "j": "dak1",
+                "e": "OK"
+              },
+              {
+                "c": "啦",
+                "j": "laa1",
+                "e": "(softening)"
+              }
+            ]
+          },
+          {
+            "u": true,
+            "c": "咁睇喜劇喎！",
+            "j": "gam2 tai2 hei2 kek6 wo3!",
+            "e": "Then let's watch a comedy!",
+            "opts": [
+              "咁睇喜劇喎！",
+              "睇驚悚片。",
+              "我唔知。"
+            ],
+            "optsJ": [
+              "gam2 tai2 hei2 kek6 wo3!",
+              "tai2 ging1 sung2 pin2.",
+              "ngo5 m4 zi1."
+            ],
+            "bd": [
+              {
+                "c": "咁",
+                "j": "gam2",
+                "e": "then"
+              },
+              {
+                "c": "睇",
+                "j": "tai2",
+                "e": "watch"
+              },
+              {
+                "c": "喜劇",
+                "j": "hei2 kek6",
+                "e": "comedy"
+              },
+              {
+                "c": "喎",
+                "j": "wo3",
+                "e": "(emphasis)"
+              }
+            ]
+          }
+        ]
+      }
+    }
+  }
+}

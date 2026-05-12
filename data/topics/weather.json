@@ -1,0 +1,408 @@
+{
+  "meta": {
+    "label": "Weather",
+    "icon": "⛅",
+    "color": "#2E86C1"
+  },
+  "rounds": {
+    "1": {
+      "note": null,
+      "words": [
+        {
+          "c": "天氣",
+          "j": "tin1 hei3",
+          "e": "Weather"
+        },
+        {
+          "c": "熱",
+          "j": "jit6",
+          "e": "Hot"
+        },
+        {
+          "c": "凍",
+          "j": "dung3",
+          "e": "Cold"
+        },
+        {
+          "c": "落雨",
+          "j": "lok6 jyu5",
+          "e": "Raining"
+        },
+        {
+          "c": "太陽",
+          "j": "taai3 joeng4",
+          "e": "Sun"
+        },
+        {
+          "c": "颱風",
+          "j": "toi4 fung1",
+          "e": "Typhoon"
+        },
+        {
+          "c": "雲",
+          "j": "wan4",
+          "e": "Cloud"
+        },
+        {
+          "c": "風",
+          "j": "fung1",
+          "e": "Wind"
+        },
+        {
+          "c": "雪",
+          "j": "syut3",
+          "e": "Snow"
+        },
+        {
+          "c": "潮濕",
+          "j": "ciu4 sap1",
+          "e": "Humid"
+        }
+      ],
+      "sentences": [
+        {
+          "c": "今日天氣好熱。",
+          "j": "gam1 jat6 tin1 hei3 hou2 jit6.",
+          "e": "The weather today is very hot.",
+          "bd": [
+            {
+              "c": "今日",
+              "j": "gam1 jat6",
+              "e": "today"
+            },
+            {
+              "c": "天氣",
+              "j": "tin1 hei3",
+              "e": "weather"
+            },
+            {
+              "c": "好熱",
+              "j": "hou2 jit6",
+              "e": "very hot"
+            }
+          ]
+        },
+        {
+          "c": "落雨喇，帶遮啦。",
+          "j": "lok6 jyu5 laa3, daai3 ze1 laa1.",
+          "e": "It's raining, bring an umbrella.",
+          "bd": [
+            {
+              "c": "落雨",
+              "j": "lok6 jyu5",
+              "e": "raining"
+            },
+            {
+              "c": "喇",
+              "j": "laa3",
+              "e": "(particle - now)"
+            },
+            {
+              "c": "帶",
+              "j": "daai3",
+              "e": "bring"
+            },
+            {
+              "c": "遮",
+              "j": "ze1",
+              "e": "umbrella"
+            },
+            {
+              "c": "啦",
+              "j": "laa1",
+              "e": "(softening particle)"
+            }
+          ]
+        },
+        {
+          "c": "颱風嚟喇！",
+          "j": "toi4 fung1 lai4 laa3!",
+          "e": "The typhoon is coming!",
+          "bd": [
+            {
+              "c": "颱風",
+              "j": "toi4 fung1",
+              "e": "typhoon"
+            },
+            {
+              "c": "嚟",
+              "j": "lai4",
+              "e": "is coming"
+            },
+            {
+              "c": "喇",
+              "j": "laa3",
+              "e": "(particle - now)"
+            }
+          ]
+        },
+        {
+          "c": "今日好凍，著多件。",
+          "j": "gam1 jat6 hou2 dung3, zoek3 do1 gin6.",
+          "e": "It's cold today, wear extra layers.",
+          "bd": [
+            {
+              "c": "今日",
+              "j": "gam1 jat6",
+              "e": "today"
+            },
+            {
+              "c": "好凍",
+              "j": "hou2 dung3",
+              "e": "very cold"
+            },
+            {
+              "c": "著",
+              "j": "zoek3",
+              "e": "wear"
+            },
+            {
+              "c": "多件",
+              "j": "do1 gin6",
+              "e": "more (items)"
+            }
+          ]
+        },
+        {
+          "c": "太陽好猛！",
+          "j": "taai3 joeng4 hou2 maang5!",
+          "e": "The sun is so strong!",
+          "bd": [
+            {
+              "c": "太陽",
+              "j": "taai3 joeng4",
+              "e": "sun"
+            },
+            {
+              "c": "好猛",
+              "j": "hou2 maang5",
+              "e": "very strong / intense"
+            }
+          ]
+        }
+      ],
+      "convo": {
+        "title": "Chatting about the weather",
+        "speakers": [
+          "Neighbour",
+          "You"
+        ],
+        "lines": [
+          {
+            "u": false,
+            "c": "今日天氣好熱呀！",
+            "j": "gam1 jat6 tin1 hei3 hou2 jit6 aa3!",
+            "e": "The weather is so hot today!",
+            "bd": [
+              {
+                "c": "今日",
+                "j": "gam1 jat6",
+                "e": "today"
+              },
+              {
+                "c": "天氣",
+                "j": "tin1 hei3",
+                "e": "weather"
+              },
+              {
+                "c": "好熱",
+                "j": "hou2 jit6",
+                "e": "very hot"
+              },
+              {
+                "c": "呀",
+                "j": "aa3",
+                "e": "(exclamation particle)"
+              }
+            ]
+          },
+          {
+            "u": true,
+            "c": "係呀！我好唔鍾意熱天。",
+            "j": "hai6 aa3! ngo5 hou2 m4 zung1 ji3 jit6 tin1.",
+            "e": "Yeah! I really don't like hot weather.",
+            "opts": [
+              "係呀！我好唔鍾意熱天。",
+              "我鍾意熱天。",
+              "今日落雨。"
+            ],
+            "optsJ": [
+              "hai6 aa3! ngo5 hou2 m4 zung1 ji3 jit6 tin1.",
+              "ngo5 zung1 ji3 jit6 tin1.",
+              "gam1 jat6 lok6 jyu5."
+            ],
+            "bd": [
+              {
+                "c": "係呀",
+                "j": "hai6 aa3",
+                "e": "yes / that's right"
+              },
+              {
+                "c": "我",
+                "j": "ngo5",
+                "e": "I"
+              },
+              {
+                "c": "好唔鍾意",
+                "j": "hou2 m4 zung1 ji3",
+                "e": "really don't like"
+              },
+              {
+                "c": "熱天",
+                "j": "jit6 tin1",
+                "e": "hot weather"
+              }
+            ]
+          },
+          {
+            "u": false,
+            "c": "聽日好似會落雨。",
+            "j": "ting1 jat6 hou2 ci5 wui5 lok6 jyu5.",
+            "e": "It looks like it will rain tomorrow.",
+            "bd": [
+              {
+                "c": "聽日",
+                "j": "ting1 jat6",
+                "e": "tomorrow"
+              },
+              {
+                "c": "好似",
+                "j": "hou2 ci5",
+                "e": "seems like / looks like"
+              },
+              {
+                "c": "會",
+                "j": "wui5",
+                "e": "will"
+              },
+              {
+                "c": "落雨",
+                "j": "lok6 jyu5",
+                "e": "rain (fall rain)"
+              }
+            ]
+          },
+          {
+            "u": true,
+            "c": "真係？我要帶遮喇。",
+            "j": "zan1 hai6? ngo5 jiu3 daai3 ze1 laa3.",
+            "e": "Really? I'll need to bring an umbrella.",
+            "opts": [
+              "真係？我要帶遮喇。",
+              "我鍾意落雨。",
+              "唔緊要。"
+            ],
+            "optsJ": [
+              "zan1 hai6? ngo5 jiu3 daai3 ze1 laa3.",
+              "ngo5 zung1 ji3 lok6 jyu5.",
+              "m4 gan2 jiu3."
+            ],
+            "bd": [
+              {
+                "c": "真係",
+                "j": "zan1 hai6",
+                "e": "really?"
+              },
+              {
+                "c": "我要",
+                "j": "ngo5 jiu3",
+                "e": "I need to"
+              },
+              {
+                "c": "帶",
+                "j": "daai3",
+                "e": "bring / carry"
+              },
+              {
+                "c": "遮",
+                "j": "ze1",
+                "e": "umbrella"
+              },
+              {
+                "c": "喇",
+                "j": "laa3",
+                "e": "(particle — now/already)"
+              }
+            ]
+          },
+          {
+            "u": false,
+            "c": "係呀，颱風季節都嚟喇。",
+            "j": "hai6 aa3, toi4 fung1 gwai3 zit3 dou1 lai4 laa3.",
+            "e": "Yes, and the typhoon season is coming.",
+            "bd": [
+              {
+                "c": "係呀",
+                "j": "hai6 aa3",
+                "e": "yes"
+              },
+              {
+                "c": "颱風",
+                "j": "toi4 fung1",
+                "e": "typhoon"
+              },
+              {
+                "c": "季節",
+                "j": "gwai3 zit3",
+                "e": "season"
+              },
+              {
+                "c": "都",
+                "j": "dou1",
+                "e": "also"
+              },
+              {
+                "c": "嚟喇",
+                "j": "lai4 laa3",
+                "e": "is coming"
+              }
+            ]
+          },
+          {
+            "u": true,
+            "c": "係囉！希望天氣快啲好番。",
+            "j": "hai6 lo3! hei1 mong6 tin1 hei3 faai3 di1 hou2 faan1.",
+            "e": "Right! I hope the weather improves soon.",
+            "opts": [
+              "係囉！希望天氣快啲好番。",
+              "我鍾意颱風。",
+              "唔緊要。"
+            ],
+            "optsJ": [
+              "hai6 lo3! hei1 mong6 tin1 hei3 faai3 di1 hou2 faan1.",
+              "ngo5 zung1 ji3 toi4 fung1.",
+              "m4 gan2 jiu3."
+            ],
+            "bd": [
+              {
+                "c": "係囉",
+                "j": "hai6 lo3",
+                "e": "right / exactly"
+              },
+              {
+                "c": "希望",
+                "j": "hei1 mong6",
+                "e": "hope"
+              },
+              {
+                "c": "天氣",
+                "j": "tin1 hei3",
+                "e": "weather"
+              },
+              {
+                "c": "快啲",
+                "j": "faai3 di1",
+                "e": "sooner / faster"
+              },
+              {
+                "c": "好番",
+                "j": "hou2 faan1",
+                "e": "get better"
+              }
+            ]
+          }
+        ]
+      }
+    }
+  }
+}

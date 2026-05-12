@@ -1,0 +1,373 @@
+{
+  "meta": {
+    "label": "Yes/No & Politeness",
+    "icon": "🙏",
+    "color": "#16A085"
+  },
+  "rounds": {
+    "1": {
+      "note": null,
+      "words": [
+        {
+          "c": "係",
+          "j": "hai6",
+          "e": "Yes / It is"
+        },
+        {
+          "c": "唔係",
+          "j": "m4 hai6",
+          "e": "No / It isn't"
+        },
+        {
+          "c": "好",
+          "j": "hou2",
+          "e": "OK / Good"
+        },
+        {
+          "c": "唔好",
+          "j": "m4 hou2",
+          "e": "No / Not good"
+        },
+        {
+          "c": "得",
+          "j": "dak1",
+          "e": "OK / Can do"
+        },
+        {
+          "c": "唔得",
+          "j": "m4 dak1",
+          "e": "Not OK / Can't"
+        },
+        {
+          "c": "唔該",
+          "j": "m4 goi1",
+          "e": "Please / Excuse me"
+        },
+        {
+          "c": "多謝",
+          "j": "do1 ze6",
+          "e": "Thank you (gift)"
+        },
+        {
+          "c": "請",
+          "j": "cing2",
+          "e": "Please (formal)"
+        },
+        {
+          "c": "歡迎",
+          "j": "fun1 jing4",
+          "e": "Welcome"
+        }
+      ],
+      "sentences": [
+        {
+          "c": "係，我係。",
+          "j": "hai6, ngo5 hai6.",
+          "e": "Yes, I am.",
+          "bd": [
+            {
+              "c": "係",
+              "j": "hai6",
+              "e": "yes"
+            },
+            {
+              "c": "我",
+              "j": "ngo5",
+              "e": "I"
+            },
+            {
+              "c": "係",
+              "j": "hai6",
+              "e": "am"
+            }
+          ]
+        },
+        {
+          "c": "唔係，唔該。",
+          "j": "m4 hai6, m4 goi1.",
+          "e": "No, thank you.",
+          "bd": [
+            {
+              "c": "唔係",
+              "j": "m4 hai6",
+              "e": "no"
+            },
+            {
+              "c": "唔該",
+              "j": "m4 goi1",
+              "e": "thank you / please"
+            }
+          ]
+        },
+        {
+          "c": "得，冇問題。",
+          "j": "dak1, mou5 man6 tai4.",
+          "e": "OK, no problem.",
+          "bd": [
+            {
+              "c": "得",
+              "j": "dak1",
+              "e": "OK / can do"
+            },
+            {
+              "c": "冇",
+              "j": "mou5",
+              "e": "no / don't have"
+            },
+            {
+              "c": "問題",
+              "j": "man6 tai4",
+              "e": "problem"
+            }
+          ]
+        },
+        {
+          "c": "請坐。",
+          "j": "cing2 co5.",
+          "e": "Please sit down.",
+          "bd": [
+            {
+              "c": "請",
+              "j": "cing2",
+              "e": "please (formal)"
+            },
+            {
+              "c": "坐",
+              "j": "co5",
+              "e": "sit"
+            }
+          ]
+        },
+        {
+          "c": "歡迎你嚟。",
+          "j": "fun1 jing4 nei5 lai4.",
+          "e": "Welcome / glad you came.",
+          "bd": [
+            {
+              "c": "歡迎",
+              "j": "fun1 jing4",
+              "e": "welcome"
+            },
+            {
+              "c": "你",
+              "j": "nei5",
+              "e": "you"
+            },
+            {
+              "c": "嚟",
+              "j": "lai4",
+              "e": "come / coming"
+            }
+          ]
+        }
+      ],
+      "convo": {
+        "title": "Polite exchanges at a shop",
+        "speakers": [
+          "Shopkeeper",
+          "You"
+        ],
+        "lines": [
+          {
+            "u": false,
+            "c": "歡迎光臨！想搵咩？",
+            "j": "fun1 jing4 gwong1 lam4! soeng2 wan2 me1?",
+            "e": "Welcome! What are you looking for?",
+            "bd": [
+              {
+                "c": "歡迎光臨",
+                "j": "fun1 jing4 gwong1 lam4",
+                "e": "welcome (to the shop)"
+              },
+              {
+                "c": "想",
+                "j": "soeng2",
+                "e": "want to"
+              },
+              {
+                "c": "搵",
+                "j": "wan2",
+                "e": "look for"
+              },
+              {
+                "c": "咩",
+                "j": "me1",
+                "e": "what"
+              }
+            ]
+          },
+          {
+            "u": true,
+            "c": "唔該，我想睇吓。",
+            "j": "m4 goi1, ngo5 soeng2 tai2 haa5.",
+            "e": "Excuse me, I'd like to look around.",
+            "opts": [
+              "唔該，我想睇吓。",
+              "唔好，多謝。",
+              "幾錢？"
+            ],
+            "optsJ": [
+              "m4 goi1, ngo5 soeng2 tai2 haa5.",
+              "m4 hou2, do1 ze6.",
+              "gei2 cin2?"
+            ],
+            "bd": [
+              {
+                "c": "唔該",
+                "j": "m4 goi1",
+                "e": "excuse me / please"
+              },
+              {
+                "c": "我",
+                "j": "ngo5",
+                "e": "I"
+              },
+              {
+                "c": "想",
+                "j": "soeng2",
+                "e": "want to"
+              },
+              {
+                "c": "睇吓",
+                "j": "tai2 haa5",
+                "e": "have a look"
+              }
+            ]
+          },
+          {
+            "u": false,
+            "c": "好呀，慢慢睇。",
+            "j": "hou2 aa3, maan6 maan6 tai2.",
+            "e": "Sure, take your time.",
+            "bd": [
+              {
+                "c": "好",
+                "j": "hou2",
+                "e": "OK / good"
+              },
+              {
+                "c": "呀",
+                "j": "aa3",
+                "e": "(soft particle)"
+              },
+              {
+                "c": "慢慢",
+                "j": "maan6 maan6",
+                "e": "slowly / take time"
+              },
+              {
+                "c": "睇",
+                "j": "tai2",
+                "e": "look"
+              }
+            ]
+          },
+          {
+            "u": true,
+            "c": "請問呢個係咩？",
+            "j": "cing2 man6 ni1 go3 hai6 me1?",
+            "e": "Excuse me, what is this?",
+            "opts": [
+              "請問呢個係咩？",
+              "唔該，再見。",
+              "唔要喇。"
+            ],
+            "optsJ": [
+              "cing2 man6 ni1 go3 hai6 me1?",
+              "m4 goi1, zoi3 gin3.",
+              "m4 jiu3 laa3."
+            ],
+            "bd": [
+              {
+                "c": "請問",
+                "j": "cing2 man6",
+                "e": "may I ask"
+              },
+              {
+                "c": "呢個",
+                "j": "ni1 go3",
+                "e": "this one"
+              },
+              {
+                "c": "係",
+                "j": "hai6",
+                "e": "is"
+              },
+              {
+                "c": "咩",
+                "j": "me1",
+                "e": "what"
+              }
+            ]
+          },
+          {
+            "u": false,
+            "c": "呢個係新嘢，好正！",
+            "j": "ni1 go3 hai6 san1 je5, hou2 zeng3!",
+            "e": "This is a new item, very nice!",
+            "bd": [
+              {
+                "c": "呢個",
+                "j": "ni1 go3",
+                "e": "this one"
+              },
+              {
+                "c": "係",
+                "j": "hai6",
+                "e": "is"
+              },
+              {
+                "c": "新嘢",
+                "j": "san1 je5",
+                "e": "new thing"
+              },
+              {
+                "c": "好正",
+                "j": "hou2 zeng3",
+                "e": "really cool / great"
+              }
+            ]
+          },
+          {
+            "u": true,
+            "c": "多謝！我諗吓先。",
+            "j": "do1 ze6! ngo5 lam2 haa5 sin1.",
+            "e": "Thanks! Let me think first.",
+            "opts": [
+              "多謝！我諗吓先。",
+              "唔該，再見。",
+              "好，我買。"
+            ],
+            "optsJ": [
+              "do1 ze6! ngo5 lam2 haa5 sin1.",
+              "m4 goi1, zoi3 gin3.",
+              "hou2, ngo5 maai5."
+            ],
+            "bd": [
+              {
+                "c": "多謝",
+                "j": "do1 ze6",
+                "e": "thanks"
+              },
+              {
+                "c": "我",
+                "j": "ngo5",
+                "e": "I"
+              },
+              {
+                "c": "諗吓",
+                "j": "lam2 haa5",
+                "e": "think it over"
+              },
+              {
+                "c": "先",
+                "j": "sin1",
+                "e": "first"
+              }
+            ]
+          }
+        ]
+      }
+    }
+  }
+}

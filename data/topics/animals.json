@@ -1,0 +1,398 @@
+{
+  "meta": {
+    "label": "Animals & Pets",
+    "icon": "🐶",
+    "color": "#138D75"
+  },
+  "rounds": {
+    "1": {
+      "note": "<em>cung2 mat6</em> (寵物) means pet, and the verb <strong>joeng5</strong> (養) covers raising or keeping any animal. The diminutive suffix <em>zai2</em> (仔) attaches to many small animals: <em>gau2 zai2</em> (狗仔, puppy), <em>maau1 zai2</em> (貓仔, kitten), <em>tou3 zai2</em> (兔仔, rabbit — the standard form). Note <strong>ngau4 juk6</strong> (牛肉, beef) and <strong>zyu1 juk6</strong> (豬肉, pork) — same animal words plus <em>juk6</em> (肉, meat).",
+      "words": [
+        {
+          "c": "狗",
+          "j": "gau2",
+          "e": "Dog"
+        },
+        {
+          "c": "貓",
+          "j": "maau1",
+          "e": "Cat"
+        },
+        {
+          "c": "鳥",
+          "j": "niu5",
+          "e": "Bird"
+        },
+        {
+          "c": "兔仔",
+          "j": "tou3 zai2",
+          "e": "Rabbit"
+        },
+        {
+          "c": "馬",
+          "j": "maa5",
+          "e": "Horse"
+        },
+        {
+          "c": "牛",
+          "j": "ngau4",
+          "e": "Cow / cattle"
+        },
+        {
+          "c": "豬",
+          "j": "zyu1",
+          "e": "Pig"
+        },
+        {
+          "c": "寵物",
+          "j": "cung2 mat6",
+          "e": "Pet"
+        },
+        {
+          "c": "養",
+          "j": "joeng5",
+          "e": "Raise / keep (a pet)"
+        },
+        {
+          "c": "可愛",
+          "j": "ho2 oi3",
+          "e": "Cute"
+        }
+      ],
+      "sentences": [
+        {
+          "c": "我屋企有一隻貓。",
+          "j": "ngo5 uk1 kei2 jau5 jat1 zek3 maau1.",
+          "e": "I have a cat at home.",
+          "bd": [
+            {
+              "c": "我",
+              "j": "ngo5",
+              "e": "I"
+            },
+            {
+              "c": "屋企",
+              "j": "uk1 kei2",
+              "e": "home"
+            },
+            {
+              "c": "有",
+              "j": "jau5",
+              "e": "have"
+            },
+            {
+              "c": "一隻",
+              "j": "jat1 zek3",
+              "e": "one (animal)"
+            },
+            {
+              "c": "貓",
+              "j": "maau1",
+              "e": "cat"
+            }
+          ]
+        },
+        {
+          "c": "呢隻狗好可愛！",
+          "j": "ni1 zek3 gau2 hou2 ho2 oi3!",
+          "e": "This dog is so cute!",
+          "bd": [
+            {
+              "c": "呢隻",
+              "j": "ni1 zek3",
+              "e": "this (animal)"
+            },
+            {
+              "c": "狗",
+              "j": "gau2",
+              "e": "dog"
+            },
+            {
+              "c": "好",
+              "j": "hou2",
+              "e": "so / very"
+            },
+            {
+              "c": "可愛",
+              "j": "ho2 oi3",
+              "e": "cute"
+            }
+          ]
+        },
+        {
+          "c": "你養唔養寵物？",
+          "j": "nei5 joeng5 m4 joeng5 cung2 mat6?",
+          "e": "Do you keep pets?",
+          "bd": [
+            {
+              "c": "你",
+              "j": "nei5",
+              "e": "you"
+            },
+            {
+              "c": "養唔養",
+              "j": "joeng5 m4 joeng5",
+              "e": "keep or not (yes/no)"
+            },
+            {
+              "c": "寵物",
+              "j": "cung2 mat6",
+              "e": "pet"
+            }
+          ]
+        },
+        {
+          "c": "我鍾意馬。",
+          "j": "ngo5 zung1 ji3 maa5.",
+          "e": "I like horses.",
+          "bd": [
+            {
+              "c": "我",
+              "j": "ngo5",
+              "e": "I"
+            },
+            {
+              "c": "鍾意",
+              "j": "zung1 ji3",
+              "e": "like"
+            },
+            {
+              "c": "馬",
+              "j": "maa5",
+              "e": "horse"
+            }
+          ]
+        },
+        {
+          "c": "兔仔食蔬菜。",
+          "j": "tou3 zai2 sik6 so1 coi3.",
+          "e": "Rabbits eat vegetables.",
+          "bd": [
+            {
+              "c": "兔仔",
+              "j": "tou3 zai2",
+              "e": "rabbit"
+            },
+            {
+              "c": "食",
+              "j": "sik6",
+              "e": "eat"
+            },
+            {
+              "c": "蔬菜",
+              "j": "so1 coi3",
+              "e": "vegetables"
+            }
+          ]
+        }
+      ],
+      "convo": {
+        "title": "Talking about pets",
+        "speakers": [
+          "Friend",
+          "You"
+        ],
+        "lines": [
+          {
+            "u": false,
+            "c": "你屋企有冇養寵物呀？",
+            "j": "nei5 uk1 kei2 jau5 mou5 joeng5 cung2 mat6 aa3?",
+            "e": "Do you have pets at home?",
+            "bd": [
+              {
+                "c": "你",
+                "j": "nei5",
+                "e": "your"
+              },
+              {
+                "c": "屋企",
+                "j": "uk1 kei2",
+                "e": "home"
+              },
+              {
+                "c": "有冇",
+                "j": "jau5 mou5",
+                "e": "have or not"
+              },
+              {
+                "c": "養",
+                "j": "joeng5",
+                "e": "keep"
+              },
+              {
+                "c": "寵物",
+                "j": "cung2 mat6",
+                "e": "pets"
+              }
+            ]
+          },
+          {
+            "u": true,
+            "c": "有呀，一隻貓同一隻狗。",
+            "j": "jau5 aa3, jat1 zek3 maau1 tung4 jat1 zek3 gau2.",
+            "e": "Yes, a cat and a dog.",
+            "opts": [
+              "有呀，一隻貓同一隻狗。",
+              "冇。",
+              "我唔知。"
+            ],
+            "optsJ": [
+              "jau5 aa3, jat1 zek3 maau1 tung4 jat1 zek3 gau2.",
+              "mou5.",
+              "ngo5 m4 zi1."
+            ],
+            "bd": [
+              {
+                "c": "有呀",
+                "j": "jau5 aa3",
+                "e": "yes"
+              },
+              {
+                "c": "一隻",
+                "j": "jat1 zek3",
+                "e": "one (animal)"
+              },
+              {
+                "c": "貓",
+                "j": "maau1",
+                "e": "cat"
+              },
+              {
+                "c": "同",
+                "j": "tung4",
+                "e": "and"
+              },
+              {
+                "c": "狗",
+                "j": "gau2",
+                "e": "dog"
+              }
+            ]
+          },
+          {
+            "u": false,
+            "c": "嘩，叫咩名？",
+            "j": "waa3, giu3 me1 meng2?",
+            "e": "Wow, what are their names?",
+            "bd": [
+              {
+                "c": "嘩",
+                "j": "waa3",
+                "e": "wow"
+              },
+              {
+                "c": "叫",
+                "j": "giu3",
+                "e": "are called"
+              },
+              {
+                "c": "咩名",
+                "j": "me1 meng2",
+                "e": "what name"
+              }
+            ]
+          },
+          {
+            "u": true,
+            "c": "貓叫Mochi，狗叫Buddy。",
+            "j": "maau1 giu3 Mochi, gau2 giu3 Buddy.",
+            "e": "The cat is Mochi, the dog is Buddy.",
+            "opts": [
+              "貓叫Mochi，狗叫Buddy。",
+              "我唔知。",
+              "佢哋冇名。"
+            ],
+            "optsJ": [
+              "maau1 giu3 Mochi, gau2 giu3 Buddy.",
+              "ngo5 m4 zi1.",
+              "keoi5 dei6 mou5 meng2."
+            ],
+            "bd": [
+              {
+                "c": "貓",
+                "j": "maau1",
+                "e": "cat"
+              },
+              {
+                "c": "叫",
+                "j": "giu3",
+                "e": "is called"
+              },
+              {
+                "c": "狗",
+                "j": "gau2",
+                "e": "dog"
+              }
+            ]
+          },
+          {
+            "u": false,
+            "c": "邊隻乖啲？",
+            "j": "bin1 zek3 gwaai1 di1?",
+            "e": "Which one is better behaved?",
+            "bd": [
+              {
+                "c": "邊隻",
+                "j": "bin1 zek3",
+                "e": "which one"
+              },
+              {
+                "c": "乖",
+                "j": "gwaai1",
+                "e": "well-behaved"
+              },
+              {
+                "c": "啲",
+                "j": "di1",
+                "e": "more"
+              }
+            ]
+          },
+          {
+            "u": true,
+            "c": "貓乖啲，狗就好頑皮。",
+            "j": "maau1 gwaai1 di1, gau2 zau6 hou2 waan4 pei4.",
+            "e": "The cat is better behaved, the dog is naughty.",
+            "opts": [
+              "貓乖啲，狗就好頑皮。",
+              "都好乖。",
+              "都好頑皮。"
+            ],
+            "optsJ": [
+              "maau1 gwaai1 di1, gau2 zau6 hou2 waan4 pei4.",
+              "dou1 hou2 gwaai1.",
+              "dou1 hou2 waan4 pei4."
+            ],
+            "bd": [
+              {
+                "c": "貓",
+                "j": "maau1",
+                "e": "cat"
+              },
+              {
+                "c": "乖啲",
+                "j": "gwaai1 di1",
+                "e": "better behaved"
+              },
+              {
+                "c": "狗",
+                "j": "gau2",
+                "e": "dog"
+              },
+              {
+                "c": "就",
+                "j": "zau6",
+                "e": "is (contrast)"
+              },
+              {
+                "c": "好頑皮",
+                "j": "hou2 waan4 pei4",
+                "e": "very naughty"
+              }
+            ]
+          }
+        ]
+      }
+    }
+  }
+}

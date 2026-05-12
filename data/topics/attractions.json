@@ -1,0 +1,378 @@
+{
+  "meta": {
+    "label": "Tourist Attractions",
+    "icon": "🎡",
+    "color": "#5499C7"
+  },
+  "rounds": {
+    "1": {
+      "note": "Sightseeing relies on a few useful patterns. <strong>hoi1 gei2 dim2</strong> (開幾點) = 'opens at what time' — works for shops, restaurants, anywhere with hours. <em>mun4 piu3</em> (門票) is your entry ticket; <em>jap6 coeng4</em> (入場) is the act of entering. Watch for <em>m4 ho2 ji5 paak3 ziu3</em> ('photos not allowed') signs at many HK museums and temples.",
+      "words": [
+        {
+          "c": "景點",
+          "j": "ging2 dim2",
+          "e": "Attraction"
+        },
+        {
+          "c": "門票",
+          "j": "mun4 piu3",
+          "e": "Entry ticket"
+        },
+        {
+          "c": "拍照",
+          "j": "paak3 ziu3",
+          "e": "Take photos"
+        },
+        {
+          "c": "開放",
+          "j": "hoi1 fong3",
+          "e": "Open (for visitors)"
+        },
+        {
+          "c": "排隊",
+          "j": "paai4 deoi2",
+          "e": "Queue / line up"
+        },
+        {
+          "c": "入場",
+          "j": "jap6 coeng4",
+          "e": "Entry"
+        },
+        {
+          "c": "紀念品",
+          "j": "gei2 nim6 ban2",
+          "e": "Souvenir"
+        },
+        {
+          "c": "地圖",
+          "j": "dei6 tou4",
+          "e": "Map"
+        },
+        {
+          "c": "開幾點",
+          "j": "hoi1 gei2 dim2",
+          "e": "What time does it open"
+        },
+        {
+          "c": "導遊",
+          "j": "dou6 jau4",
+          "e": "Tour guide"
+        }
+      ],
+      "sentences": [
+        {
+          "c": "呢個景點幾時開？",
+          "j": "ni1 go3 ging2 dim2 gei2 si4 hoi1?",
+          "e": "When does this attraction open?",
+          "bd": [
+            {
+              "c": "呢個",
+              "j": "ni1 go3",
+              "e": "this"
+            },
+            {
+              "c": "景點",
+              "j": "ging2 dim2",
+              "e": "attraction"
+            },
+            {
+              "c": "幾時",
+              "j": "gei2 si4",
+              "e": "when"
+            },
+            {
+              "c": "開",
+              "j": "hoi1",
+              "e": "open"
+            }
+          ]
+        },
+        {
+          "c": "一張門票幾錢？",
+          "j": "jat1 zoeng1 mun4 piu3 gei2 cin2?",
+          "e": "How much is one ticket?",
+          "bd": [
+            {
+              "c": "一張",
+              "j": "jat1 zoeng1",
+              "e": "one (ticket)"
+            },
+            {
+              "c": "門票",
+              "j": "mun4 piu3",
+              "e": "ticket"
+            },
+            {
+              "c": "幾錢",
+              "j": "gei2 cin2",
+              "e": "how much"
+            }
+          ]
+        },
+        {
+          "c": "我哋去拍照啦！",
+          "j": "ngo5 dei6 heoi3 paak3 ziu3 laa1!",
+          "e": "Let's go take photos!",
+          "bd": [
+            {
+              "c": "我哋",
+              "j": "ngo5 dei6",
+              "e": "we"
+            },
+            {
+              "c": "去",
+              "j": "heoi3",
+              "e": "go"
+            },
+            {
+              "c": "拍照",
+              "j": "paak3 ziu3",
+              "e": "take photos"
+            },
+            {
+              "c": "啦",
+              "j": "laa1",
+              "e": "(let's)"
+            }
+          ]
+        },
+        {
+          "c": "要排幾耐隊？",
+          "j": "jiu3 paai4 gei2 noi6 deoi2?",
+          "e": "How long is the queue?",
+          "bd": [
+            {
+              "c": "要",
+              "j": "jiu3",
+              "e": "need"
+            },
+            {
+              "c": "排",
+              "j": "paai4",
+              "e": "line up"
+            },
+            {
+              "c": "幾耐",
+              "j": "gei2 noi6",
+              "e": "how long"
+            },
+            {
+              "c": "隊",
+              "j": "deoi2",
+              "e": "queue"
+            }
+          ]
+        },
+        {
+          "c": "你有冇地圖？",
+          "j": "nei5 jau5 mou5 dei6 tou4?",
+          "e": "Do you have a map?",
+          "bd": [
+            {
+              "c": "你",
+              "j": "nei5",
+              "e": "you"
+            },
+            {
+              "c": "有冇",
+              "j": "jau5 mou5",
+              "e": "have or not"
+            },
+            {
+              "c": "地圖",
+              "j": "dei6 tou4",
+              "e": "map"
+            }
+          ]
+        }
+      ],
+      "convo": {
+        "title": "Buying tickets at a tourist spot",
+        "speakers": [
+          "Staff",
+          "You"
+        ],
+        "lines": [
+          {
+            "u": false,
+            "c": "你好，幾多位呀？",
+            "j": "nei5 hou2, gei2 do1 wai2 aa3?",
+            "e": "Hello, how many people?",
+            "bd": [
+              {
+                "c": "你好",
+                "j": "nei5 hou2",
+                "e": "hello"
+              },
+              {
+                "c": "幾多",
+                "j": "gei2 do1",
+                "e": "how many"
+              },
+              {
+                "c": "位",
+                "j": "wai2",
+                "e": "people (polite)"
+              },
+              {
+                "c": "呀",
+                "j": "aa3",
+                "e": "(soft particle)"
+              }
+            ]
+          },
+          {
+            "u": true,
+            "c": "兩位，一個大人一個細路。",
+            "j": "loeng5 wai2, jat1 go3 daai6 jan4 jat1 go3 sai3 lou6.",
+            "e": "Two, one adult and one child.",
+            "opts": [
+              "兩位，一個大人一個細路。",
+              "得我一個。",
+              "唔買。"
+            ],
+            "optsJ": [
+              "loeng5 wai2, jat1 go3 daai6 jan4 jat1 go3 sai3 lou6.",
+              "dak1 ngo5 jat1 go3.",
+              "m4 maai5."
+            ],
+            "bd": [
+              {
+                "c": "兩位",
+                "j": "loeng5 wai2",
+                "e": "two (people)"
+              },
+              {
+                "c": "大人",
+                "j": "daai6 jan4",
+                "e": "adult"
+              },
+              {
+                "c": "細路",
+                "j": "sai3 lou6",
+                "e": "child"
+              }
+            ]
+          },
+          {
+            "u": false,
+            "c": "大人一百，細路五十。",
+            "j": "daai6 jan4 jat1 baak3, sai3 lou6 ng5 sap6.",
+            "e": "Adult $100, child $50.",
+            "bd": [
+              {
+                "c": "大人",
+                "j": "daai6 jan4",
+                "e": "adult"
+              },
+              {
+                "c": "一百",
+                "j": "jat1 baak3",
+                "e": "100"
+              },
+              {
+                "c": "細路",
+                "j": "sai3 lou6",
+                "e": "child"
+              },
+              {
+                "c": "五十",
+                "j": "ng5 sap6",
+                "e": "50"
+              }
+            ]
+          },
+          {
+            "u": true,
+            "c": "開幾點呀？",
+            "j": "hoi1 gei2 dim2 aa3?",
+            "e": "What time do you open?",
+            "opts": [
+              "開幾點呀？",
+              "幾耐排隊？",
+              "唔該。"
+            ],
+            "optsJ": [
+              "hoi1 gei2 dim2 aa3?",
+              "gei2 noi6 paai4 deoi2?",
+              "m4 goi1."
+            ],
+            "bd": [
+              {
+                "c": "開",
+                "j": "hoi1",
+                "e": "open"
+              },
+              {
+                "c": "幾點",
+                "j": "gei2 dim2",
+                "e": "what time"
+              },
+              {
+                "c": "呀",
+                "j": "aa3",
+                "e": "(soft)"
+              }
+            ]
+          },
+          {
+            "u": false,
+            "c": "九點到六點。",
+            "j": "gau2 dim2 dou3 luk6 dim2.",
+            "e": "9 to 6.",
+            "bd": [
+              {
+                "c": "九點",
+                "j": "gau2 dim2",
+                "e": "9 o'clock"
+              },
+              {
+                "c": "到",
+                "j": "dou3",
+                "e": "to / until"
+              },
+              {
+                "c": "六點",
+                "j": "luk6 dim2",
+                "e": "6 o'clock"
+              }
+            ]
+          },
+          {
+            "u": true,
+            "c": "好，俾兩張。",
+            "j": "hou2, bei2 loeng5 zoeng1.",
+            "e": "OK, give me two.",
+            "opts": [
+              "好，俾兩張。",
+              "太貴喇。",
+              "改日先。"
+            ],
+            "optsJ": [
+              "hou2, bei2 loeng5 zoeng1.",
+              "taai3 gwai3 laa3.",
+              "goi2 jat6 sin1."
+            ],
+            "bd": [
+              {
+                "c": "好",
+                "j": "hou2",
+                "e": "OK"
+              },
+              {
+                "c": "俾",
+                "j": "bei2",
+                "e": "give"
+              },
+              {
+                "c": "兩張",
+                "j": "loeng5 zoeng1",
+                "e": "two (tickets)"
+              }
+            ]
+          }
+        ]
+      }
+    }
+  }
+}

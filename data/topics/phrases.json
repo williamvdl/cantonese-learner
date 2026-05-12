@@ -1,0 +1,393 @@
+{
+  "meta": {
+    "label": "Useful Phrases",
+    "icon": "💬",
+    "color": "#884EA0"
+  },
+  "rounds": {
+    "1": {
+      "note": null,
+      "words": [
+        {
+          "c": "你叫乜名？",
+          "j": "nei5 giu3 mat1 meng2",
+          "e": "What is your name?"
+        },
+        {
+          "c": "我叫…",
+          "j": "ngo5 giu3",
+          "e": "My name is…"
+        },
+        {
+          "c": "你好嗎？",
+          "j": "nei5 hou2 maa3",
+          "e": "How are you?"
+        },
+        {
+          "c": "我好好",
+          "j": "ngo5 hou2 hou2",
+          "e": "I am very well"
+        },
+        {
+          "c": "幾錢？",
+          "j": "gei2 cin2",
+          "e": "How much?"
+        },
+        {
+          "c": "喺邊度？",
+          "j": "hai2 bin1 dou6",
+          "e": "Where is it?"
+        },
+        {
+          "c": "我唔明",
+          "j": "ngo5 m4 ming4",
+          "e": "I don't understand"
+        },
+        {
+          "c": "請講慢啲",
+          "j": "cing2 gong2 maan6 di1",
+          "e": "Please speak slowly"
+        },
+        {
+          "c": "洗手間喺邊？",
+          "j": "sai2 sau2 gaan1 hai2 bin1",
+          "e": "Where is the bathroom?"
+        },
+        {
+          "c": "我要呢個",
+          "j": "ngo5 jiu3 ni1 go3",
+          "e": "I want this one"
+        }
+      ],
+      "sentences": [
+        {
+          "c": "唔該，洗手間喺邊度？",
+          "j": "m4 goi1, sai2 sau2 gaan1 hai2 bin1 dou6?",
+          "e": "Excuse me, where is the bathroom?",
+          "bd": [
+            {
+              "c": "唔該",
+              "j": "m4 goi1",
+              "e": "excuse me / please"
+            },
+            {
+              "c": "洗手間",
+              "j": "sai2 sau2 gaan1",
+              "e": "bathroom"
+            },
+            {
+              "c": "喺邊度",
+              "j": "hai2 bin1 dou6",
+              "e": "is where"
+            }
+          ]
+        },
+        {
+          "c": "我唔明，請講慢啲。",
+          "j": "ngo5 m4 ming4, cing2 gong2 maan6 di1.",
+          "e": "I don't understand, please speak slowly.",
+          "bd": [
+            {
+              "c": "我",
+              "j": "ngo5",
+              "e": "I"
+            },
+            {
+              "c": "唔明",
+              "j": "m4 ming4",
+              "e": "don't understand"
+            },
+            {
+              "c": "請",
+              "j": "cing2",
+              "e": "please"
+            },
+            {
+              "c": "講",
+              "j": "gong2",
+              "e": "speak"
+            },
+            {
+              "c": "慢啲",
+              "j": "maan6 di1",
+              "e": "a bit slower"
+            }
+          ]
+        },
+        {
+          "c": "呢個幾錢？",
+          "j": "ni1 go3 gei2 cin2?",
+          "e": "How much is this?",
+          "bd": [
+            {
+              "c": "呢個",
+              "j": "ni1 go3",
+              "e": "this one"
+            },
+            {
+              "c": "幾錢",
+              "j": "gei2 cin2",
+              "e": "how much money"
+            }
+          ]
+        },
+        {
+          "c": "我叫William，你呢？",
+          "j": "ngo5 giu3 William, nei5 ne1?",
+          "e": "I'm William, and you?",
+          "bd": [
+            {
+              "c": "我",
+              "j": "ngo5",
+              "e": "I"
+            },
+            {
+              "c": "叫",
+              "j": "giu3",
+              "e": "am called"
+            },
+            {
+              "c": "William",
+              "j": "William",
+              "e": "William"
+            },
+            {
+              "c": "你呢",
+              "j": "nei5 ne1",
+              "e": "and you?"
+            }
+          ]
+        },
+        {
+          "c": "我要呢個，多謝。",
+          "j": "ngo5 jiu3 ni1 go3, do1 ze6.",
+          "e": "I want this one, thanks.",
+          "bd": [
+            {
+              "c": "我要",
+              "j": "ngo5 jiu3",
+              "e": "I want"
+            },
+            {
+              "c": "呢個",
+              "j": "ni1 go3",
+              "e": "this one"
+            },
+            {
+              "c": "多謝",
+              "j": "do1 ze6",
+              "e": "thank you"
+            }
+          ]
+        }
+      ],
+      "convo": {
+        "title": "Asking for directions",
+        "speakers": [
+          "Stranger",
+          "You"
+        ],
+        "lines": [
+          {
+            "u": true,
+            "c": "唔該，地鐵站喺邊度？",
+            "j": "m4 goi1, dei6 tit3 zaam6 hai2 bin1 dou6?",
+            "e": "Excuse me, where is the MTR?",
+            "opts": [
+              "唔該，地鐵站喺邊度？",
+              "你好嗎？",
+              "幾錢？"
+            ],
+            "optsJ": [
+              "m4 goi1, dei6 tit3 zaam6 hai2 bin1 dou6?",
+              "nei5 hou2 maa3?",
+              "gei2 cin2?"
+            ],
+            "bd": [
+              {
+                "c": "唔該",
+                "j": "m4 goi1",
+                "e": "excuse me / please"
+              },
+              {
+                "c": "地鐵站",
+                "j": "dei6 tit3 zaam6",
+                "e": "MTR station"
+              },
+              {
+                "c": "喺",
+                "j": "hai2",
+                "e": "is at"
+              },
+              {
+                "c": "邊度",
+                "j": "bin1 dou6",
+                "e": "where"
+              }
+            ]
+          },
+          {
+            "u": false,
+            "c": "喺前面，行五分鐘。",
+            "j": "hai2 cin4 min6, haang4 ng5 fan1 zung1.",
+            "e": "It's ahead, five minutes walk.",
+            "bd": [
+              {
+                "c": "喺",
+                "j": "hai2",
+                "e": "is at"
+              },
+              {
+                "c": "前面",
+                "j": "cin4 min6",
+                "e": "ahead / in front"
+              },
+              {
+                "c": "行",
+                "j": "haang4",
+                "e": "walk"
+              },
+              {
+                "c": "五分鐘",
+                "j": "ng5 fan1 zung1",
+                "e": "five minutes"
+              }
+            ]
+          },
+          {
+            "u": true,
+            "c": "唔係好明，可唔可以講慢啲？",
+            "j": "m4 hai6 hou2 ming4, ho2 m4 ho2 ji5 gong2 maan6 di1?",
+            "e": "I didn't quite understand, can you speak more slowly?",
+            "opts": [
+              "唔係好明，可唔可以講慢啲？",
+              "唔該，再見。",
+              "我唔知。"
+            ],
+            "optsJ": [
+              "m4 hai6 hou2 ming4, ho2 m4 ho2 ji5 gong2 maan6 di1?",
+              "m4 goi1, zoi3 gin3.",
+              "ngo5 m4 zi1."
+            ],
+            "bd": [
+              {
+                "c": "唔係好明",
+                "j": "m4 hai6 hou2 ming4",
+                "e": "not quite understand"
+              },
+              {
+                "c": "可唔可以",
+                "j": "ho2 m4 ho2 ji5",
+                "e": "can or not? (may I?)"
+              },
+              {
+                "c": "講",
+                "j": "gong2",
+                "e": "speak"
+              },
+              {
+                "c": "慢啲",
+                "j": "maan6 di1",
+                "e": "a bit slower"
+              }
+            ]
+          },
+          {
+            "u": false,
+            "c": "當然！喺前面，行五分鐘。",
+            "j": "dong1 jin4! hai2 cin4 min6, haang4 ng5 fan1 zung1.",
+            "e": "Of course! Ahead, five minutes walk.",
+            "bd": [
+              {
+                "c": "當然",
+                "j": "dong1 jin4",
+                "e": "of course"
+              },
+              {
+                "c": "喺前面",
+                "j": "hai2 cin4 min6",
+                "e": "ahead / in front"
+              },
+              {
+                "c": "行",
+                "j": "haang4",
+                "e": "walk"
+              },
+              {
+                "c": "五分鐘",
+                "j": "ng5 fan1 zung1",
+                "e": "five minutes"
+              }
+            ]
+          },
+          {
+            "u": true,
+            "c": "明白喇，多謝你！",
+            "j": "ming4 baak6 laa3, do1 ze6 nei5!",
+            "e": "I understand, thank you!",
+            "opts": [
+              "明白喇，多謝你！",
+              "我唔明。",
+              "對唔住。"
+            ],
+            "optsJ": [
+              "ming4 baak6 laa3, do1 ze6 nei5!",
+              "ngo5 m4 ming4.",
+              "deoi3 m4 zyu6."
+            ],
+            "bd": [
+              {
+                "c": "明白",
+                "j": "ming4 baak6",
+                "e": "understand"
+              },
+              {
+                "c": "喇",
+                "j": "laa3",
+                "e": "(completion particle)"
+              },
+              {
+                "c": "多謝",
+                "j": "do1 ze6",
+                "e": "thank you"
+              },
+              {
+                "c": "你",
+                "j": "nei5",
+                "e": "you"
+              }
+            ]
+          },
+          {
+            "u": false,
+            "c": "唔緊要，祝你好運！",
+            "j": "m4 gan2 jiu3, zuk1 nei5 hou2 wan6!",
+            "e": "No problem, good luck!",
+            "bd": [
+              {
+                "c": "唔緊要",
+                "j": "m4 gan2 jiu3",
+                "e": "no problem / never mind"
+              },
+              {
+                "c": "祝",
+                "j": "zuk1",
+                "e": "wish"
+              },
+              {
+                "c": "你",
+                "j": "nei5",
+                "e": "you"
+              },
+              {
+                "c": "好運",
+                "j": "hou2 wan6",
+                "e": "good luck"
+              }
+            ]
+          }
+        ]
+      }
+    }
+  }
+}

@@ -1,0 +1,802 @@
+{
+  "meta": {
+    "label": "Feelings & Emotions",
+    "icon": "😊",
+    "color": "#E91E63"
+  },
+  "rounds": {
+    "1": {
+      "note": null,
+      "words": [
+        {
+          "c": "開心",
+          "j": "hoi1 sam1",
+          "e": "Happy"
+        },
+        {
+          "c": "唔開心",
+          "j": "m4 hoi1 sam1",
+          "e": "Unhappy"
+        },
+        {
+          "c": "嬲",
+          "j": "nau1",
+          "e": "Angry"
+        },
+        {
+          "c": "攰",
+          "j": "gui6",
+          "e": "Tired"
+        },
+        {
+          "c": "驚",
+          "j": "geng1",
+          "e": "Scared"
+        },
+        {
+          "c": "擔心",
+          "j": "daam1 sam1",
+          "e": "Worried"
+        },
+        {
+          "c": "激動",
+          "j": "gik1 dung6",
+          "e": "Excited"
+        },
+        {
+          "c": "緊張",
+          "j": "gan2 zoeng1",
+          "e": "Nervous"
+        },
+        {
+          "c": "無聊",
+          "j": "mou4 liu4",
+          "e": "Bored"
+        },
+        {
+          "c": "傷心",
+          "j": "soeng1 sam1",
+          "e": "Sad / heartbroken"
+        }
+      ],
+      "sentences": [
+        {
+          "c": "我好開心！",
+          "j": "ngo5 hou2 hoi1 sam1!",
+          "e": "I'm very happy!",
+          "bd": [
+            {
+              "c": "我",
+              "j": "ngo5",
+              "e": "I"
+            },
+            {
+              "c": "好",
+              "j": "hou2",
+              "e": "very"
+            },
+            {
+              "c": "開心",
+              "j": "hoi1 sam1",
+              "e": "happy"
+            }
+          ]
+        },
+        {
+          "c": "佢好攰。",
+          "j": "keoi5 hou2 gui6.",
+          "e": "He's very tired.",
+          "bd": [
+            {
+              "c": "佢",
+              "j": "keoi5",
+              "e": "he / she"
+            },
+            {
+              "c": "好",
+              "j": "hou2",
+              "e": "very"
+            },
+            {
+              "c": "攰",
+              "j": "gui6",
+              "e": "tired"
+            }
+          ]
+        },
+        {
+          "c": "唔好擔心！",
+          "j": "m4 hou2 daam1 sam1!",
+          "e": "Don't worry!",
+          "bd": [
+            {
+              "c": "唔好",
+              "j": "m4 hou2",
+              "e": "don't"
+            },
+            {
+              "c": "擔心",
+              "j": "daam1 sam1",
+              "e": "worry"
+            }
+          ]
+        },
+        {
+          "c": "我覺得好緊張。",
+          "j": "ngo5 gok3 dak1 hou2 gan2 zoeng1.",
+          "e": "I feel very nervous.",
+          "bd": [
+            {
+              "c": "我",
+              "j": "ngo5",
+              "e": "I"
+            },
+            {
+              "c": "覺得",
+              "j": "gok3 dak1",
+              "e": "feel"
+            },
+            {
+              "c": "好",
+              "j": "hou2",
+              "e": "very"
+            },
+            {
+              "c": "緊張",
+              "j": "gan2 zoeng1",
+              "e": "nervous"
+            }
+          ]
+        },
+        {
+          "c": "點解你嬲？",
+          "j": "dim2 gaai3 nei5 nau1?",
+          "e": "Why are you angry?",
+          "bd": [
+            {
+              "c": "點解",
+              "j": "dim2 gaai3",
+              "e": "why"
+            },
+            {
+              "c": "你",
+              "j": "nei5",
+              "e": "you"
+            },
+            {
+              "c": "嬲",
+              "j": "nau1",
+              "e": "angry"
+            }
+          ]
+        }
+      ],
+      "convo": {
+        "title": "Comforting a friend",
+        "speakers": [
+          "Friend",
+          "You"
+        ],
+        "lines": [
+          {
+            "u": false,
+            "c": "我今日好唔開心。",
+            "j": "ngo5 gam1 jat6 hou2 m4 hoi1 sam1.",
+            "e": "I'm really unhappy today.",
+            "bd": [
+              {
+                "c": "我",
+                "j": "ngo5",
+                "e": "I"
+              },
+              {
+                "c": "今日",
+                "j": "gam1 jat6",
+                "e": "today"
+              },
+              {
+                "c": "好",
+                "j": "hou2",
+                "e": "very"
+              },
+              {
+                "c": "唔開心",
+                "j": "m4 hoi1 sam1",
+                "e": "unhappy"
+              }
+            ]
+          },
+          {
+            "u": true,
+            "c": "點解呀？發生咗咩事？",
+            "j": "dim2 gaai3 aa3? faat3 sang1 zo2 me1 si6?",
+            "e": "Why? What happened?",
+            "opts": [
+              "點解呀？發生咗咩事？",
+              "冇所謂啦。",
+              "我唔想知。"
+            ],
+            "optsJ": [
+              "dim2 gaai3 aa3? faat3 sang1 zo2 me1 si6?",
+              "mou5 so2 wai6 laa1.",
+              "ngo5 m4 soeng2 zi1."
+            ],
+            "bd": [
+              {
+                "c": "點解",
+                "j": "dim2 gaai3",
+                "e": "why"
+              },
+              {
+                "c": "呀",
+                "j": "aa3",
+                "e": "(soft particle)"
+              },
+              {
+                "c": "發生",
+                "j": "faat3 sang1",
+                "e": "happen"
+              },
+              {
+                "c": "咗",
+                "j": "zo2",
+                "e": "(completed)"
+              },
+              {
+                "c": "咩事",
+                "j": "me1 si6",
+                "e": "what thing"
+              }
+            ]
+          },
+          {
+            "u": false,
+            "c": "工作好辛苦，又有好多嘢做。",
+            "j": "gung1 zok3 hou2 san1 fu2, jau6 jau5 hou2 do1 je5 zou6.",
+            "e": "Work is exhausting, and so much to do.",
+            "bd": [
+              {
+                "c": "工作",
+                "j": "gung1 zok3",
+                "e": "work"
+              },
+              {
+                "c": "好辛苦",
+                "j": "hou2 san1 fu2",
+                "e": "very tough"
+              },
+              {
+                "c": "又",
+                "j": "jau6",
+                "e": "and"
+              },
+              {
+                "c": "有",
+                "j": "jau5",
+                "e": "there is"
+              },
+              {
+                "c": "好多",
+                "j": "hou2 do1",
+                "e": "a lot of"
+              },
+              {
+                "c": "嘢做",
+                "j": "je5 zou6",
+                "e": "things to do"
+              }
+            ]
+          },
+          {
+            "u": true,
+            "c": "唔好擔心，慢慢嚟。",
+            "j": "m4 hou2 daam1 sam1, maan6 maan6 lai4.",
+            "e": "Don't worry, take it slow.",
+            "opts": [
+              "唔好擔心，慢慢嚟。",
+              "你應該放棄。",
+              "我唔識。"
+            ],
+            "optsJ": [
+              "m4 hou2 daam1 sam1, maan6 maan6 lai4.",
+              "nei5 jing1 goi1 fong3 hei3.",
+              "ngo5 m4 sik1."
+            ],
+            "bd": [
+              {
+                "c": "唔好",
+                "j": "m4 hou2",
+                "e": "don't"
+              },
+              {
+                "c": "擔心",
+                "j": "daam1 sam1",
+                "e": "worry"
+              },
+              {
+                "c": "慢慢",
+                "j": "maan6 maan6",
+                "e": "slowly"
+              },
+              {
+                "c": "嚟",
+                "j": "lai4",
+                "e": "(come / do it)"
+              }
+            ]
+          },
+          {
+            "u": false,
+            "c": "多謝你聽我講。",
+            "j": "do1 ze6 nei5 teng1 ngo5 gong2.",
+            "e": "Thanks for listening to me.",
+            "bd": [
+              {
+                "c": "多謝",
+                "j": "do1 ze6",
+                "e": "thank you"
+              },
+              {
+                "c": "你",
+                "j": "nei5",
+                "e": "you"
+              },
+              {
+                "c": "聽",
+                "j": "teng1",
+                "e": "listen"
+              },
+              {
+                "c": "我",
+                "j": "ngo5",
+                "e": "me"
+              },
+              {
+                "c": "講",
+                "j": "gong2",
+                "e": "talk / speak"
+              }
+            ]
+          },
+          {
+            "u": true,
+            "c": "唔使客氣，我哋係朋友。",
+            "j": "m4 sai2 haak3 hei3, ngo5 dei6 hai6 pang4 jau5.",
+            "e": "Don't mention it, we're friends.",
+            "opts": [
+              "唔使客氣，我哋係朋友。",
+              "唔關我事。",
+              "我要走。"
+            ],
+            "optsJ": [
+              "m4 sai2 haak3 hei3, ngo5 dei6 hai6 pang4 jau5.",
+              "m4 gwaan1 ngo5 si6.",
+              "ngo5 jiu3 zau2."
+            ],
+            "bd": [
+              {
+                "c": "唔使",
+                "j": "m4 sai2",
+                "e": "no need"
+              },
+              {
+                "c": "客氣",
+                "j": "haak3 hei3",
+                "e": "polite / formal"
+              },
+              {
+                "c": "我哋",
+                "j": "ngo5 dei6",
+                "e": "we"
+              },
+              {
+                "c": "係",
+                "j": "hai6",
+                "e": "are"
+              },
+              {
+                "c": "朋友",
+                "j": "pang4 jau5",
+                "e": "friends"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "2": {
+      "note": "Tier 1 was about emotional states ('I'm happy/sad'). Tier 2 shifts to character — describing what someone is like as a person. The structure stays simple: subject + <em>hou2</em> + adjective ('X is very [trait]'). To negate, use <strong>m4</strong> before the adjective: <em>m4 sin6 loeng4</em> means 'not kind'. Most traits are two-character compounds learned as units rather than syllables.",
+      "words": [
+        {
+          "c": "善良",
+          "j": "sin6 loeng4",
+          "e": "Kind"
+        },
+        {
+          "c": "聰明",
+          "j": "cung1 ming4",
+          "e": "Smart / clever"
+        },
+        {
+          "c": "搞笑",
+          "j": "gaau2 siu3",
+          "e": "Funny"
+        },
+        {
+          "c": "怕醜",
+          "j": "paa3 cau2",
+          "e": "Shy"
+        },
+        {
+          "c": "嚴肅",
+          "j": "jim4 suk1",
+          "e": "Serious"
+        },
+        {
+          "c": "懶",
+          "j": "laan5",
+          "e": "Lazy"
+        },
+        {
+          "c": "勤力",
+          "j": "kan4 lik6",
+          "e": "Hardworking"
+        },
+        {
+          "c": "友善",
+          "j": "jau5 sin6",
+          "e": "Friendly"
+        },
+        {
+          "c": "細心",
+          "j": "sai3 sam1",
+          "e": "Careful / attentive"
+        },
+        {
+          "c": "大方",
+          "j": "daai6 fong1",
+          "e": "Generous"
+        }
+      ],
+      "sentences": [
+        {
+          "c": "佢好善良。",
+          "j": "keoi5 hou2 sin6 loeng4.",
+          "e": "He/she is very kind.",
+          "bd": [
+            {
+              "c": "佢",
+              "j": "keoi5",
+              "e": "he/she"
+            },
+            {
+              "c": "好",
+              "j": "hou2",
+              "e": "very"
+            },
+            {
+              "c": "善良",
+              "j": "sin6 loeng4",
+              "e": "kind"
+            }
+          ]
+        },
+        {
+          "c": "我細佬好聰明。",
+          "j": "ngo5 sai3 lou2 hou2 cung1 ming4.",
+          "e": "My younger brother is very smart.",
+          "bd": [
+            {
+              "c": "我",
+              "j": "ngo5",
+              "e": "my"
+            },
+            {
+              "c": "細佬",
+              "j": "sai3 lou2",
+              "e": "younger brother"
+            },
+            {
+              "c": "好",
+              "j": "hou2",
+              "e": "very"
+            },
+            {
+              "c": "聰明",
+              "j": "cung1 ming4",
+              "e": "smart"
+            }
+          ]
+        },
+        {
+          "c": "佢哋好搞笑。",
+          "j": "keoi5 dei6 hou2 gaau2 siu3.",
+          "e": "They are very funny.",
+          "bd": [
+            {
+              "c": "佢哋",
+              "j": "keoi5 dei6",
+              "e": "they"
+            },
+            {
+              "c": "好",
+              "j": "hou2",
+              "e": "very"
+            },
+            {
+              "c": "搞笑",
+              "j": "gaau2 siu3",
+              "e": "funny"
+            }
+          ]
+        },
+        {
+          "c": "我怕醜，唔識講嘢。",
+          "j": "ngo5 paa3 cau2, m4 sik1 gong2 je5.",
+          "e": "I'm shy, not good at speaking.",
+          "bd": [
+            {
+              "c": "我",
+              "j": "ngo5",
+              "e": "I"
+            },
+            {
+              "c": "怕醜",
+              "j": "paa3 cau2",
+              "e": "shy"
+            },
+            {
+              "c": "唔識",
+              "j": "m4 sik1",
+              "e": "don't know how"
+            },
+            {
+              "c": "講嘢",
+              "j": "gong2 je5",
+              "e": "to speak"
+            }
+          ]
+        },
+        {
+          "c": "你好友善！",
+          "j": "nei5 hou2 jau5 sin6!",
+          "e": "You're so friendly!",
+          "bd": [
+            {
+              "c": "你",
+              "j": "nei5",
+              "e": "you"
+            },
+            {
+              "c": "好",
+              "j": "hou2",
+              "e": "so / very"
+            },
+            {
+              "c": "友善",
+              "j": "jau5 sin6",
+              "e": "friendly"
+            }
+          ]
+        }
+      ],
+      "convo": {
+        "title": "Describing a new colleague",
+        "speakers": [
+          "Friend",
+          "You"
+        ],
+        "lines": [
+          {
+            "u": false,
+            "c": "你個新同事點呀？",
+            "j": "nei5 go3 san1 tung4 si6 dim2 aa3?",
+            "e": "How's your new colleague?",
+            "bd": [
+              {
+                "c": "你",
+                "j": "nei5",
+                "e": "your"
+              },
+              {
+                "c": "個",
+                "j": "go3",
+                "e": "(measure word)"
+              },
+              {
+                "c": "新",
+                "j": "san1",
+                "e": "new"
+              },
+              {
+                "c": "同事",
+                "j": "tung4 si6",
+                "e": "colleague"
+              },
+              {
+                "c": "點呀",
+                "j": "dim2 aa3",
+                "e": "how"
+              }
+            ]
+          },
+          {
+            "u": true,
+            "c": "佢好友善，仲好勤力。",
+            "j": "keoi5 hou2 jau5 sin6, zung6 hou2 kan4 lik6.",
+            "e": "He/she's very friendly, and hardworking too.",
+            "opts": [
+              "佢好友善，仲好勤力。",
+              "我好攰。",
+              "唔知。"
+            ],
+            "optsJ": [
+              "keoi5 hou2 jau5 sin6, zung6 hou2 kan4 lik6.",
+              "ngo5 hou2 gui6.",
+              "m4 zi1."
+            ],
+            "bd": [
+              {
+                "c": "佢",
+                "j": "keoi5",
+                "e": "he/she"
+              },
+              {
+                "c": "好",
+                "j": "hou2",
+                "e": "very"
+              },
+              {
+                "c": "友善",
+                "j": "jau5 sin6",
+                "e": "friendly"
+              },
+              {
+                "c": "仲",
+                "j": "zung6",
+                "e": "also"
+              },
+              {
+                "c": "勤力",
+                "j": "kan4 lik6",
+                "e": "hardworking"
+              }
+            ]
+          },
+          {
+            "u": false,
+            "c": "聰唔聰明？",
+            "j": "cung1 m4 cung1 ming4?",
+            "e": "Is he/she smart?",
+            "bd": [
+              {
+                "c": "聰唔聰明",
+                "j": "cung1 m4 cung1 ming4",
+                "e": "smart-not-smart? (yes/no pattern)"
+              }
+            ]
+          },
+          {
+            "u": true,
+            "c": "好聰明，細心又大方。",
+            "j": "hou2 cung1 ming4, sai3 sam1 jau6 daai6 fong1.",
+            "e": "Very smart, careful and generous.",
+            "opts": [
+              "好聰明，細心又大方。",
+              "唔係。",
+              "你呢？"
+            ],
+            "optsJ": [
+              "hou2 cung1 ming4, sai3 sam1 jau6 daai6 fong1.",
+              "m4 hai6.",
+              "nei5 ne1?"
+            ],
+            "bd": [
+              {
+                "c": "好",
+                "j": "hou2",
+                "e": "very"
+              },
+              {
+                "c": "聰明",
+                "j": "cung1 ming4",
+                "e": "smart"
+              },
+              {
+                "c": "細心",
+                "j": "sai3 sam1",
+                "e": "careful"
+              },
+              {
+                "c": "又",
+                "j": "jau6",
+                "e": "and / also"
+              },
+              {
+                "c": "大方",
+                "j": "daai6 fong1",
+                "e": "generous"
+              }
+            ]
+          },
+          {
+            "u": false,
+            "c": "好彩你揾到好同事。",
+            "j": "hou2 coi2 nei5 wan2 dou2 hou2 tung4 si6.",
+            "e": "Lucky you found good colleagues.",
+            "bd": [
+              {
+                "c": "好彩",
+                "j": "hou2 coi2",
+                "e": "lucky"
+              },
+              {
+                "c": "你",
+                "j": "nei5",
+                "e": "you"
+              },
+              {
+                "c": "揾到",
+                "j": "wan2 dou2",
+                "e": "found"
+              },
+              {
+                "c": "好",
+                "j": "hou2",
+                "e": "good"
+              },
+              {
+                "c": "同事",
+                "j": "tung4 si6",
+                "e": "colleague"
+              }
+            ]
+          },
+          {
+            "u": true,
+            "c": "係呀，我都好開心。",
+            "j": "hai6 aa3, ngo5 dou1 hou2 hoi1 sam1.",
+            "e": "Yes, I'm happy too.",
+            "opts": [
+              "係呀，我都好開心。",
+              "我好懶。",
+              "點解？"
+            ],
+            "optsJ": [
+              "hai6 aa3, ngo5 dou1 hou2 hoi1 sam1.",
+              "ngo5 hou2 laan5.",
+              "dim2 gaai2?"
+            ],
+            "bd": [
+              {
+                "c": "係呀",
+                "j": "hai6 aa3",
+                "e": "yes"
+              },
+              {
+                "c": "我",
+                "j": "ngo5",
+                "e": "I"
+              },
+              {
+                "c": "都",
+                "j": "dou1",
+                "e": "also"
+              },
+              {
+                "c": "好",
+                "j": "hou2",
+                "e": "very"
+              },
+              {
+                "c": "開心",
+                "j": "hoi1 sam1",
+                "e": "happy"
+              }
+            ]
+          }
+        ]
+      }
+    }
+  }
+}

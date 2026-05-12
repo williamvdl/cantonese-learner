@@ -1,0 +1,358 @@
+{
+  "meta": {
+    "label": "Money & Banking",
+    "icon": "💰",
+    "color": "#6E2C00"
+  },
+  "rounds": {
+    "1": {
+      "note": "<em>cin2</em> (錢, money) is the base; specific contexts build on it. <strong>zaau2 cin2</strong> (找錢) is the change you get back at a shop. <strong>saan3 zi2</strong> (散紙) means coins or small notes — you'll be asked <em>jau5 mou5 saan3 zi2?</em> when paying. <strong>tai4 fun2 gei1</strong> (提款機) is an ATM, literally 'withdraw money machine'. <strong>ngan4 hong4</strong> (銀行) is bank, literally 'silver firm' — silver being the historical currency.",
+      "words": [
+        {
+          "c": "錢",
+          "j": "cin2",
+          "e": "Money"
+        },
+        {
+          "c": "銀行",
+          "j": "ngan4 hong4",
+          "e": "Bank"
+        },
+        {
+          "c": "提款機",
+          "j": "tai4 fun2 gei1",
+          "e": "ATM"
+        },
+        {
+          "c": "現金",
+          "j": "jin6 gam1",
+          "e": "Cash"
+        },
+        {
+          "c": "信用卡",
+          "j": "seon3 jung6 kaat1",
+          "e": "Credit card"
+        },
+        {
+          "c": "找錢",
+          "j": "zaau2 cin2",
+          "e": "Change (returned)"
+        },
+        {
+          "c": "散紙",
+          "j": "saan3 zi2",
+          "e": "Coins / small change"
+        },
+        {
+          "c": "戶口",
+          "j": "wu6 hau2",
+          "e": "Account"
+        },
+        {
+          "c": "匯錢",
+          "j": "wui6 cin2",
+          "e": "Transfer money"
+        },
+        {
+          "c": "唱錢",
+          "j": "coeng3 cin2",
+          "e": "Change / exchange money"
+        }
+      ],
+      "sentences": [
+        {
+          "c": "提款機喺邊度？",
+          "j": "tai4 fun2 gei1 hai2 bin1 dou6?",
+          "e": "Where is the ATM?",
+          "bd": [
+            {
+              "c": "提款機",
+              "j": "tai4 fun2 gei1",
+              "e": "ATM"
+            },
+            {
+              "c": "喺",
+              "j": "hai2",
+              "e": "is at"
+            },
+            {
+              "c": "邊度",
+              "j": "bin1 dou6",
+              "e": "where"
+            }
+          ]
+        },
+        {
+          "c": "我要用現金。",
+          "j": "ngo5 jiu3 jung6 jin6 gam1.",
+          "e": "I'll use cash.",
+          "bd": [
+            {
+              "c": "我",
+              "j": "ngo5",
+              "e": "I"
+            },
+            {
+              "c": "要",
+              "j": "jiu3",
+              "e": "will"
+            },
+            {
+              "c": "用",
+              "j": "jung6",
+              "e": "use"
+            },
+            {
+              "c": "現金",
+              "j": "jin6 gam1",
+              "e": "cash"
+            }
+          ]
+        },
+        {
+          "c": "有冇散紙？",
+          "j": "jau5 mou5 saan3 zi2?",
+          "e": "Got any small change?",
+          "bd": [
+            {
+              "c": "有冇",
+              "j": "jau5 mou5",
+              "e": "have or not"
+            },
+            {
+              "c": "散紙",
+              "j": "saan3 zi2",
+              "e": "small change"
+            }
+          ]
+        },
+        {
+          "c": "信用卡得唔得？",
+          "j": "seon3 jung6 kaat1 dak1 m4 dak1?",
+          "e": "Can I use credit card?",
+          "bd": [
+            {
+              "c": "信用卡",
+              "j": "seon3 jung6 kaat1",
+              "e": "credit card"
+            },
+            {
+              "c": "得唔得",
+              "j": "dak1 m4 dak1",
+              "e": "OK or not?"
+            }
+          ]
+        },
+        {
+          "c": "唔該找錢俾我。",
+          "j": "m4 goi1 zaau2 cin2 bei2 ngo5.",
+          "e": "Please give me my change.",
+          "bd": [
+            {
+              "c": "唔該",
+              "j": "m4 goi1",
+              "e": "please"
+            },
+            {
+              "c": "找錢",
+              "j": "zaau2 cin2",
+              "e": "change"
+            },
+            {
+              "c": "俾",
+              "j": "bei2",
+              "e": "give"
+            },
+            {
+              "c": "我",
+              "j": "ngo5",
+              "e": "me"
+            }
+          ]
+        }
+      ],
+      "convo": {
+        "title": "At the bank",
+        "speakers": [
+          "Friend",
+          "You"
+        ],
+        "lines": [
+          {
+            "u": false,
+            "c": "你要去邊度？",
+            "j": "nei5 jiu3 heoi3 bin1 dou6?",
+            "e": "Where are you going?",
+            "bd": [
+              {
+                "c": "你",
+                "j": "nei5",
+                "e": "you"
+              },
+              {
+                "c": "要",
+                "j": "jiu3",
+                "e": "need to"
+              },
+              {
+                "c": "去",
+                "j": "heoi3",
+                "e": "go"
+              },
+              {
+                "c": "邊度",
+                "j": "bin1 dou6",
+                "e": "where"
+              }
+            ]
+          },
+          {
+            "u": true,
+            "c": "去銀行唱錢。",
+            "j": "heoi3 ngan4 hong4 coeng3 cin2.",
+            "e": "To the bank to change money.",
+            "opts": [
+              "去銀行唱錢。",
+              "去食飯。",
+              "我唔知。"
+            ],
+            "optsJ": [
+              "heoi3 ngan4 hong4 coeng3 cin2.",
+              "heoi3 sik6 faan6.",
+              "ngo5 m4 zi1."
+            ],
+            "bd": [
+              {
+                "c": "去",
+                "j": "heoi3",
+                "e": "go to"
+              },
+              {
+                "c": "銀行",
+                "j": "ngan4 hong4",
+                "e": "bank"
+              },
+              {
+                "c": "唱錢",
+                "j": "coeng3 cin2",
+                "e": "change money"
+              }
+            ]
+          },
+          {
+            "u": false,
+            "c": "用提款機唔好啲咩？",
+            "j": "jung6 tai4 fun2 gei1 m4 hou2 di1 me1?",
+            "e": "Wouldn't the ATM be better?",
+            "bd": [
+              {
+                "c": "用",
+                "j": "jung6",
+                "e": "use"
+              },
+              {
+                "c": "提款機",
+                "j": "tai4 fun2 gei1",
+                "e": "ATM"
+              },
+              {
+                "c": "唔好啲咩",
+                "j": "m4 hou2 di1 me1",
+                "e": "wouldn't be better?"
+              }
+            ]
+          },
+          {
+            "u": true,
+            "c": "提款機冇外幣。",
+            "j": "tai4 fun2 gei1 mou5 ngoi6 bai6.",
+            "e": "ATMs don't do foreign currency.",
+            "opts": [
+              "提款機冇外幣。",
+              "好呀。",
+              "唔知。"
+            ],
+            "optsJ": [
+              "tai4 fun2 gei1 mou5 ngoi6 bai6.",
+              "hou2 aa3.",
+              "m4 zi1."
+            ],
+            "bd": [
+              {
+                "c": "提款機",
+                "j": "tai4 fun2 gei1",
+                "e": "ATM"
+              },
+              {
+                "c": "冇",
+                "j": "mou5",
+                "e": "doesn't have"
+              },
+              {
+                "c": "外幣",
+                "j": "ngoi6 bai6",
+                "e": "foreign currency"
+              }
+            ]
+          },
+          {
+            "u": false,
+            "c": "哦，明白。",
+            "j": "o4, ming4 baak6.",
+            "e": "Oh, I see.",
+            "bd": [
+              {
+                "c": "哦",
+                "j": "o4",
+                "e": "oh"
+              },
+              {
+                "c": "明白",
+                "j": "ming4 baak6",
+                "e": "understand"
+              }
+            ]
+          },
+          {
+            "u": true,
+            "c": "你都要唱嗎？",
+            "j": "nei5 dou1 jiu3 coeng3 maa3?",
+            "e": "Do you need to change money too?",
+            "opts": [
+              "你都要唱嗎？",
+              "等我先。",
+              "唔該。"
+            ],
+            "optsJ": [
+              "nei5 dou1 jiu3 coeng3 maa3?",
+              "dang2 ngo5 sin1.",
+              "m4 goi1."
+            ],
+            "bd": [
+              {
+                "c": "你",
+                "j": "nei5",
+                "e": "you"
+              },
+              {
+                "c": "都",
+                "j": "dou1",
+                "e": "also"
+              },
+              {
+                "c": "要唱",
+                "j": "jiu3 coeng3",
+                "e": "need to change"
+              },
+              {
+                "c": "嗎",
+                "j": "maa3",
+                "e": "(yes/no)"
+              }
+            ]
+          }
+        ]
+      }
+    }
+  }
+}

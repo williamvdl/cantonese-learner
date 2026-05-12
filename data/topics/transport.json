@@ -1,0 +1,368 @@
+{
+  "meta": {
+    "label": "Transport",
+    "icon": "🚇",
+    "color": "#1A7FA8"
+  },
+  "rounds": {
+    "1": {
+      "note": null,
+      "words": [
+        {
+          "c": "地鐵",
+          "j": "dei6 tit3",
+          "e": "MTR / Subway"
+        },
+        {
+          "c": "巴士",
+          "j": "baa1 si2",
+          "e": "Bus"
+        },
+        {
+          "c": "的士",
+          "j": "dik1 si2",
+          "e": "Taxi"
+        },
+        {
+          "c": "飛機",
+          "j": "fei1 gei1",
+          "e": "Airplane"
+        },
+        {
+          "c": "船",
+          "j": "syun4",
+          "e": "Boat / Ferry"
+        },
+        {
+          "c": "火車",
+          "j": "fo2 ce1",
+          "e": "Train"
+        },
+        {
+          "c": "單車",
+          "j": "daan1 ce1",
+          "e": "Bicycle"
+        },
+        {
+          "c": "去邊度？",
+          "j": "heoi3 bin1 dou6",
+          "e": "Where to?"
+        },
+        {
+          "c": "幾遠？",
+          "j": "gei2 jyun5",
+          "e": "How far?"
+        },
+        {
+          "c": "停",
+          "j": "ting4",
+          "e": "Stop"
+        }
+      ],
+      "sentences": [
+        {
+          "c": "我坐地鐵去。",
+          "j": "ngo5 co5 dei6 tit3 heoi3.",
+          "e": "I'm taking the MTR.",
+          "bd": [
+            {
+              "c": "我",
+              "j": "ngo5",
+              "e": "I"
+            },
+            {
+              "c": "坐",
+              "j": "co5",
+              "e": "take / sit"
+            },
+            {
+              "c": "地鐵",
+              "j": "dei6 tit3",
+              "e": "MTR / subway"
+            },
+            {
+              "c": "去",
+              "j": "heoi3",
+              "e": "go"
+            }
+          ]
+        },
+        {
+          "c": "的士幾錢？",
+          "j": "dik1 si2 gei2 cin2?",
+          "e": "How much is the taxi?",
+          "bd": [
+            {
+              "c": "的士",
+              "j": "dik1 si2",
+              "e": "taxi"
+            },
+            {
+              "c": "幾錢",
+              "j": "gei2 cin2",
+              "e": "how much"
+            }
+          ]
+        },
+        {
+          "c": "巴士喺邊度停？",
+          "j": "baa1 si2 hai2 bin1 dou6 ting4?",
+          "e": "Where does the bus stop?",
+          "bd": [
+            {
+              "c": "巴士",
+              "j": "baa1 si2",
+              "e": "bus"
+            },
+            {
+              "c": "喺邊度",
+              "j": "hai2 bin1 dou6",
+              "e": "at where"
+            },
+            {
+              "c": "停",
+              "j": "ting4",
+              "e": "stop"
+            }
+          ]
+        },
+        {
+          "c": "飛機聽日去。",
+          "j": "fei1 gei1 ting1 jat6 heoi3.",
+          "e": "The plane goes tomorrow.",
+          "bd": [
+            {
+              "c": "飛機",
+              "j": "fei1 gei1",
+              "e": "airplane"
+            },
+            {
+              "c": "聽日",
+              "j": "ting1 jat6",
+              "e": "tomorrow"
+            },
+            {
+              "c": "去",
+              "j": "heoi3",
+              "e": "goes"
+            }
+          ]
+        },
+        {
+          "c": "我踩單車返工。",
+          "j": "ngo5 caai2 daan1 ce1 faan1 gung1.",
+          "e": "I cycle to work.",
+          "bd": [
+            {
+              "c": "我",
+              "j": "ngo5",
+              "e": "I"
+            },
+            {
+              "c": "踩",
+              "j": "caai2",
+              "e": "ride / pedal"
+            },
+            {
+              "c": "單車",
+              "j": "daan1 ce1",
+              "e": "bicycle"
+            },
+            {
+              "c": "返工",
+              "j": "faan1 gung1",
+              "e": "to work"
+            }
+          ]
+        }
+      ],
+      "convo": {
+        "title": "Getting a taxi",
+        "speakers": [
+          "Driver",
+          "You"
+        ],
+        "lines": [
+          {
+            "u": false,
+            "c": "你好！去邊度？",
+            "j": "nei5 hou2! heoi3 bin1 dou6?",
+            "e": "Hello! Where are you going?",
+            "bd": [
+              {
+                "c": "你好",
+                "j": "nei5 hou2",
+                "e": "hello"
+              },
+              {
+                "c": "去",
+                "j": "heoi3",
+                "e": "go to"
+              },
+              {
+                "c": "邊度",
+                "j": "bin1 dou6",
+                "e": "where"
+              }
+            ]
+          },
+          {
+            "u": true,
+            "c": "去中環，唔該。",
+            "j": "heoi3 zung1 waan4, m4 goi1.",
+            "e": "To Central, please.",
+            "opts": [
+              "去中環，唔該。",
+              "我想坐地鐵。",
+              "去機場。"
+            ],
+            "optsJ": [
+              "heoi3 zung1 waan4, m4 goi1.",
+              "ngo5 soeng2 co5 dei6 tit3.",
+              "heoi3 gei1 coeng4."
+            ],
+            "bd": [
+              {
+                "c": "去",
+                "j": "heoi3",
+                "e": "go to"
+              },
+              {
+                "c": "中環",
+                "j": "zung1 waan4",
+                "e": "Central (HK district)"
+              },
+              {
+                "c": "唔該",
+                "j": "m4 goi1",
+                "e": "please / thank you"
+              }
+            ]
+          },
+          {
+            "u": false,
+            "c": "好，大概三十分鐘。",
+            "j": "hou2, daai6 koi3 saam1 sap6 fan1 zung1.",
+            "e": "Sure, about thirty minutes.",
+            "bd": [
+              {
+                "c": "好",
+                "j": "hou2",
+                "e": "ok"
+              },
+              {
+                "c": "大概",
+                "j": "daai6 koi3",
+                "e": "approximately"
+              },
+              {
+                "c": "三十",
+                "j": "saam1 sap6",
+                "e": "thirty"
+              },
+              {
+                "c": "分鐘",
+                "j": "fan1 zung1",
+                "e": "minutes"
+              }
+            ]
+          },
+          {
+            "u": true,
+            "c": "大概幾錢？",
+            "j": "daai6 koi3 gei2 cin2?",
+            "e": "About how much will it cost?",
+            "opts": [
+              "大概幾錢？",
+              "幾遠？",
+              "幾時到？"
+            ],
+            "optsJ": [
+              "daai6 koi3 gei2 cin2?",
+              "gei2 jyun5?",
+              "gei2 si4 dou3?"
+            ],
+            "bd": [
+              {
+                "c": "大概",
+                "j": "daai6 koi3",
+                "e": "approximately"
+              },
+              {
+                "c": "幾錢",
+                "j": "gei2 cin2",
+                "e": "how much money"
+              }
+            ]
+          },
+          {
+            "u": false,
+            "c": "大概一百蚊左右。",
+            "j": "daai6 koi3 jat1 baak3 man1 zo2 jau6.",
+            "e": "Around a hundred dollars.",
+            "bd": [
+              {
+                "c": "大概",
+                "j": "daai6 koi3",
+                "e": "approximately"
+              },
+              {
+                "c": "一百",
+                "j": "jat1 baak3",
+                "e": "one hundred"
+              },
+              {
+                "c": "蚊",
+                "j": "man1",
+                "e": "dollars"
+              },
+              {
+                "c": "左右",
+                "j": "zo2 jau6",
+                "e": "around / about"
+              }
+            ]
+          },
+          {
+            "u": true,
+            "c": "好，多謝！到咗叫我。",
+            "j": "hou2, do1 ze6! dou3 zo2 giu3 ngo5.",
+            "e": "OK thanks! Let me know when we arrive.",
+            "opts": [
+              "好，多謝！到咗叫我。",
+              "太貴喇，唔坐。",
+              "可唔可以快啲？"
+            ],
+            "optsJ": [
+              "hou2, do1 ze6! dou3 zo2 giu3 ngo5.",
+              "taai3 gwai3 laa3, m4 co5.",
+              "ho2 m4 ho2 ji5 faai3 di1?"
+            ],
+            "bd": [
+              {
+                "c": "好",
+                "j": "hou2",
+                "e": "ok"
+              },
+              {
+                "c": "多謝",
+                "j": "do1 ze6",
+                "e": "thank you"
+              },
+              {
+                "c": "到咗",
+                "j": "dou3 zo2",
+                "e": "arrived / when we arrive"
+              },
+              {
+                "c": "叫我",
+                "j": "giu3 ngo5",
+                "e": "tell me / call me"
+              }
+            ]
+          }
+        ]
+      }
+    }
+  }
+}

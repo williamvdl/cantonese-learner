@@ -1,0 +1,383 @@
+{
+  "meta": {
+    "label": "Cooking & Kitchen",
+    "icon": "🍳",
+    "color": "#784212"
+  },
+  "rounds": {
+    "1": {
+      "note": "Cantonese cooking has three signature methods. <strong>zyu2</strong> (煮) is general cooking — boiling, simmering. <strong>caau2</strong> (炒) is stir-frying in a wok — high heat, quick motion. <strong>zing1</strong> (蒸) is steaming — used heavily for fish, dim sum, and Chinese desserts. The wok (<em>wok6</em>, 鑊) is the iconic Cantonese kitchen tool. Verb-object pattern: <em>caau2 coi3</em> (炒菜, stir-fried vegetables), <em>zing1 jyu2</em> (蒸魚, steamed fish).",
+      "words": [
+        {
+          "c": "煮",
+          "j": "zyu2",
+          "e": "Cook"
+        },
+        {
+          "c": "炒",
+          "j": "caau2",
+          "e": "Stir-fry"
+        },
+        {
+          "c": "蒸",
+          "j": "zing1",
+          "e": "Steam"
+        },
+        {
+          "c": "鑊",
+          "j": "wok6",
+          "e": "Wok"
+        },
+        {
+          "c": "鹽",
+          "j": "jim4",
+          "e": "Salt"
+        },
+        {
+          "c": "糖",
+          "j": "tong4",
+          "e": "Sugar"
+        },
+        {
+          "c": "油",
+          "j": "jau4",
+          "e": "Oil"
+        },
+        {
+          "c": "切",
+          "j": "cit3",
+          "e": "Cut"
+        },
+        {
+          "c": "食材",
+          "j": "sik6 coi4",
+          "e": "Ingredients"
+        },
+        {
+          "c": "醬油",
+          "j": "zoeng3 jau4",
+          "e": "Soy sauce"
+        }
+      ],
+      "sentences": [
+        {
+          "c": "我喺度煮飯。",
+          "j": "ngo5 hai2 dou6 zyu2 faan6.",
+          "e": "I'm cooking.",
+          "bd": [
+            {
+              "c": "我",
+              "j": "ngo5",
+              "e": "I"
+            },
+            {
+              "c": "喺度",
+              "j": "hai2 dou6",
+              "e": "am here / currently"
+            },
+            {
+              "c": "煮飯",
+              "j": "zyu2 faan6",
+              "e": "cook"
+            }
+          ]
+        },
+        {
+          "c": "加多啲鹽。",
+          "j": "gaa1 do1 di1 jim4.",
+          "e": "Add more salt.",
+          "bd": [
+            {
+              "c": "加多",
+              "j": "gaa1 do1",
+              "e": "add more"
+            },
+            {
+              "c": "啲",
+              "j": "di1",
+              "e": "some"
+            },
+            {
+              "c": "鹽",
+              "j": "jim4",
+              "e": "salt"
+            }
+          ]
+        },
+        {
+          "c": "我鍾意食蒸魚。",
+          "j": "ngo5 zung1 ji3 sik6 zing1 jyu2.",
+          "e": "I like steamed fish.",
+          "bd": [
+            {
+              "c": "我",
+              "j": "ngo5",
+              "e": "I"
+            },
+            {
+              "c": "鍾意",
+              "j": "zung1 ji3",
+              "e": "like"
+            },
+            {
+              "c": "食",
+              "j": "sik6",
+              "e": "eat"
+            },
+            {
+              "c": "蒸魚",
+              "j": "zing1 jyu2",
+              "e": "steamed fish"
+            }
+          ]
+        },
+        {
+          "c": "切啲蔬菜。",
+          "j": "cit3 di1 so1 coi3.",
+          "e": "Cut some vegetables.",
+          "bd": [
+            {
+              "c": "切",
+              "j": "cit3",
+              "e": "cut"
+            },
+            {
+              "c": "啲",
+              "j": "di1",
+              "e": "some"
+            },
+            {
+              "c": "蔬菜",
+              "j": "so1 coi3",
+              "e": "vegetables"
+            }
+          ]
+        },
+        {
+          "c": "你識唔識炒飯？",
+          "j": "nei5 sik1 m4 sik1 caau2 faan6?",
+          "e": "Can you make fried rice?",
+          "bd": [
+            {
+              "c": "你",
+              "j": "nei5",
+              "e": "you"
+            },
+            {
+              "c": "識唔識",
+              "j": "sik1 m4 sik1",
+              "e": "know how or not"
+            },
+            {
+              "c": "炒飯",
+              "j": "caau2 faan6",
+              "e": "fried rice"
+            }
+          ]
+        }
+      ],
+      "convo": {
+        "title": "Cooking together",
+        "speakers": [
+          "Friend",
+          "You"
+        ],
+        "lines": [
+          {
+            "u": false,
+            "c": "你今晚煮咩呀？",
+            "j": "nei5 gam1 maan5 zyu2 me1 aa3?",
+            "e": "What are you cooking tonight?",
+            "bd": [
+              {
+                "c": "你",
+                "j": "nei5",
+                "e": "you"
+              },
+              {
+                "c": "今晚",
+                "j": "gam1 maan5",
+                "e": "tonight"
+              },
+              {
+                "c": "煮",
+                "j": "zyu2",
+                "e": "cook"
+              },
+              {
+                "c": "咩",
+                "j": "me1",
+                "e": "what"
+              },
+              {
+                "c": "呀",
+                "j": "aa3",
+                "e": "(soft particle)"
+              }
+            ]
+          },
+          {
+            "u": true,
+            "c": "我想炒個菜，蒸條魚。",
+            "j": "ngo5 soeng2 caau2 go3 coi3, zing1 tiu4 jyu2.",
+            "e": "I want to stir-fry vegetables and steam a fish.",
+            "opts": [
+              "我想炒個菜，蒸條魚。",
+              "我唔識煮。",
+              "出去食。"
+            ],
+            "optsJ": [
+              "ngo5 soeng2 caau2 go3 coi3, zing1 tiu4 jyu2.",
+              "ngo5 m4 sik1 zyu2.",
+              "ceot1 heoi3 sik6."
+            ],
+            "bd": [
+              {
+                "c": "我",
+                "j": "ngo5",
+                "e": "I"
+              },
+              {
+                "c": "想",
+                "j": "soeng2",
+                "e": "want to"
+              },
+              {
+                "c": "炒",
+                "j": "caau2",
+                "e": "stir-fry"
+              },
+              {
+                "c": "個菜",
+                "j": "go3 coi3",
+                "e": "vegetables"
+              },
+              {
+                "c": "蒸",
+                "j": "zing1",
+                "e": "steam"
+              },
+              {
+                "c": "條魚",
+                "j": "tiu4 jyu2",
+                "e": "a fish"
+              }
+            ]
+          },
+          {
+            "u": false,
+            "c": "要幫手嗎？",
+            "j": "jiu3 bong1 sau2 maa3?",
+            "e": "Need help?",
+            "bd": [
+              {
+                "c": "要",
+                "j": "jiu3",
+                "e": "need"
+              },
+              {
+                "c": "幫手",
+                "j": "bong1 sau2",
+                "e": "help"
+              },
+              {
+                "c": "嗎",
+                "j": "maa3",
+                "e": "(yes/no)"
+              }
+            ]
+          },
+          {
+            "u": true,
+            "c": "好呀，幫我切啲菜。",
+            "j": "hou2 aa3, bong1 ngo5 cit3 di1 coi3.",
+            "e": "Sure, help me cut some vegetables.",
+            "opts": [
+              "好呀，幫我切啲菜。",
+              "唔使。",
+              "你坐低啦。"
+            ],
+            "optsJ": [
+              "hou2 aa3, bong1 ngo5 cit3 di1 coi3.",
+              "m4 sai2.",
+              "nei5 co5 dai1 laa1."
+            ],
+            "bd": [
+              {
+                "c": "好呀",
+                "j": "hou2 aa3",
+                "e": "sure"
+              },
+              {
+                "c": "幫我",
+                "j": "bong1 ngo5",
+                "e": "help me"
+              },
+              {
+                "c": "切",
+                "j": "cit3",
+                "e": "cut"
+              },
+              {
+                "c": "啲菜",
+                "j": "di1 coi3",
+                "e": "some vegetables"
+              }
+            ]
+          },
+          {
+            "u": false,
+            "c": "加唔加醬油？",
+            "j": "gaa1 m4 gaa1 zoeng3 jau4?",
+            "e": "Add soy sauce or not?",
+            "bd": [
+              {
+                "c": "加唔加",
+                "j": "gaa1 m4 gaa1",
+                "e": "add or not"
+              },
+              {
+                "c": "醬油",
+                "j": "zoeng3 jau4",
+                "e": "soy sauce"
+              }
+            ]
+          },
+          {
+            "u": true,
+            "c": "加少少，唔該。",
+            "j": "gaa1 siu2 siu2, m4 goi1.",
+            "e": "A little, thanks.",
+            "opts": [
+              "加少少，唔該。",
+              "好多。",
+              "我唔知。"
+            ],
+            "optsJ": [
+              "gaa1 siu2 siu2, m4 goi1.",
+              "hou2 do1.",
+              "ngo5 m4 zi1."
+            ],
+            "bd": [
+              {
+                "c": "加",
+                "j": "gaa1",
+                "e": "add"
+              },
+              {
+                "c": "少少",
+                "j": "siu2 siu2",
+                "e": "a little"
+              },
+              {
+                "c": "唔該",
+                "j": "m4 goi1",
+                "e": "thanks"
+              }
+            ]
+          }
+        ]
+      }
+    }
+  }
+}

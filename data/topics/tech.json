@@ -1,0 +1,393 @@
+{
+  "meta": {
+    "label": "Technology",
+    "icon": "💻",
+    "color": "#21618C"
+  },
+  "rounds": {
+    "1": {
+      "note": "Tech vocabulary mixes English loanwords (<em>WiFi</em>, <em>app</em>) with native compounds. <strong>din6</strong> (電, electric) prefixes most modern tech: <em>din6 nou5</em> (電腦, computer = electric brain), <em>din6 waa2</em> (電話, phone = electric speech). <strong>soeng5 mong5</strong> (上網) literally 'ascend the net' = go online. <strong>cung1 din6</strong> (充電) literally 'fill electricity' = charge a battery. The adjective <em>waai6</em> (壞, broken) covers anything not working.",
+      "words": [
+        {
+          "c": "電腦",
+          "j": "din6 nou5",
+          "e": "Computer"
+        },
+        {
+          "c": "電話",
+          "j": "din6 waa2",
+          "e": "Phone"
+        },
+        {
+          "c": "上網",
+          "j": "soeng5 mong5",
+          "e": "Go online"
+        },
+        {
+          "c": "程式",
+          "j": "cing4 sik1",
+          "e": "App / program"
+        },
+        {
+          "c": "密碼",
+          "j": "mat6 maa5",
+          "e": "Password"
+        },
+        {
+          "c": "充電",
+          "j": "cung1 din6",
+          "e": "Charge battery"
+        },
+        {
+          "c": "訊號",
+          "j": "seon3 hou6",
+          "e": "Signal"
+        },
+        {
+          "c": "屏幕",
+          "j": "ping4 mok6",
+          "e": "Screen"
+        },
+        {
+          "c": "壞",
+          "j": "waai6",
+          "e": "Broken / not working"
+        },
+        {
+          "c": "WiFi",
+          "j": "WiFi",
+          "e": "WiFi"
+        }
+      ],
+      "sentences": [
+        {
+          "c": "我嘅電話冇電。",
+          "j": "ngo5 ge3 din6 waa2 mou5 din6.",
+          "e": "My phone has no battery.",
+          "bd": [
+            {
+              "c": "我嘅",
+              "j": "ngo5 ge3",
+              "e": "my"
+            },
+            {
+              "c": "電話",
+              "j": "din6 waa2",
+              "e": "phone"
+            },
+            {
+              "c": "冇電",
+              "j": "mou5 din6",
+              "e": "no battery"
+            }
+          ]
+        },
+        {
+          "c": "WiFi密碼係咩？",
+          "j": "WiFi mat6 maa5 hai6 me1?",
+          "e": "What's the WiFi password?",
+          "bd": [
+            {
+              "c": "WiFi",
+              "j": "WiFi",
+              "e": "WiFi"
+            },
+            {
+              "c": "密碼",
+              "j": "mat6 maa5",
+              "e": "password"
+            },
+            {
+              "c": "係",
+              "j": "hai6",
+              "e": "is"
+            },
+            {
+              "c": "咩",
+              "j": "me1",
+              "e": "what"
+            }
+          ]
+        },
+        {
+          "c": "個程式壞咗。",
+          "j": "go3 cing4 sik1 waai6 zo2.",
+          "e": "The app is broken.",
+          "bd": [
+            {
+              "c": "個",
+              "j": "go3",
+              "e": "(measure word)"
+            },
+            {
+              "c": "程式",
+              "j": "cing4 sik1",
+              "e": "app"
+            },
+            {
+              "c": "壞咗",
+              "j": "waai6 zo2",
+              "e": "is broken"
+            }
+          ]
+        },
+        {
+          "c": "我要充電。",
+          "j": "ngo5 jiu3 cung1 din6.",
+          "e": "I need to charge.",
+          "bd": [
+            {
+              "c": "我",
+              "j": "ngo5",
+              "e": "I"
+            },
+            {
+              "c": "要",
+              "j": "jiu3",
+              "e": "need to"
+            },
+            {
+              "c": "充電",
+              "j": "cung1 din6",
+              "e": "charge"
+            }
+          ]
+        },
+        {
+          "c": "屏幕太細。",
+          "j": "ping4 mok6 taai3 sai3.",
+          "e": "The screen is too small.",
+          "bd": [
+            {
+              "c": "屏幕",
+              "j": "ping4 mok6",
+              "e": "screen"
+            },
+            {
+              "c": "太",
+              "j": "taai3",
+              "e": "too"
+            },
+            {
+              "c": "細",
+              "j": "sai3",
+              "e": "small"
+            }
+          ]
+        }
+      ],
+      "convo": {
+        "title": "Sorting out WiFi",
+        "speakers": [
+          "Friend",
+          "You"
+        ],
+        "lines": [
+          {
+            "u": false,
+            "c": "嗰度有冇WiFi呀？",
+            "j": "go2 dou6 jau5 mou5 WiFi aa3?",
+            "e": "Is there WiFi there?",
+            "bd": [
+              {
+                "c": "嗰度",
+                "j": "go2 dou6",
+                "e": "there"
+              },
+              {
+                "c": "有冇",
+                "j": "jau5 mou5",
+                "e": "have or not"
+              },
+              {
+                "c": "WiFi",
+                "j": "WiFi",
+                "e": "WiFi"
+              },
+              {
+                "c": "呀",
+                "j": "aa3",
+                "e": "(soft)"
+              }
+            ]
+          },
+          {
+            "u": true,
+            "c": "有，但係要密碼。",
+            "j": "jau5, daan6 hai6 jiu3 mat6 maa5.",
+            "e": "Yes, but you need a password.",
+            "opts": [
+              "有，但係要密碼。",
+              "冇。",
+              "我唔知。"
+            ],
+            "optsJ": [
+              "jau5, daan6 hai6 jiu3 mat6 maa5.",
+              "mou5.",
+              "ngo5 m4 zi1."
+            ],
+            "bd": [
+              {
+                "c": "有",
+                "j": "jau5",
+                "e": "yes / there is"
+              },
+              {
+                "c": "但係",
+                "j": "daan6 hai6",
+                "e": "but"
+              },
+              {
+                "c": "要",
+                "j": "jiu3",
+                "e": "need"
+              },
+              {
+                "c": "密碼",
+                "j": "mat6 maa5",
+                "e": "password"
+              }
+            ]
+          },
+          {
+            "u": false,
+            "c": "密碼係咩呀？",
+            "j": "mat6 maa5 hai6 me1 aa3?",
+            "e": "What's the password?",
+            "bd": [
+              {
+                "c": "密碼",
+                "j": "mat6 maa5",
+                "e": "password"
+              },
+              {
+                "c": "係",
+                "j": "hai6",
+                "e": "is"
+              },
+              {
+                "c": "咩",
+                "j": "me1",
+                "e": "what"
+              }
+            ]
+          },
+          {
+            "u": true,
+            "c": "等我問下侍應。",
+            "j": "dang2 ngo5 man6 haa5 si6 jing3.",
+            "e": "Let me ask the waiter.",
+            "opts": [
+              "等我問下侍應。",
+              "我唔知。",
+              "唔該。"
+            ],
+            "optsJ": [
+              "dang2 ngo5 man6 haa5 si6 jing3.",
+              "ngo5 m4 zi1.",
+              "m4 goi1."
+            ],
+            "bd": [
+              {
+                "c": "等",
+                "j": "dang2",
+                "e": "wait / let"
+              },
+              {
+                "c": "我",
+                "j": "ngo5",
+                "e": "me"
+              },
+              {
+                "c": "問",
+                "j": "man6",
+                "e": "ask"
+              },
+              {
+                "c": "下",
+                "j": "haa5",
+                "e": "a bit"
+              },
+              {
+                "c": "侍應",
+                "j": "si6 jing3",
+                "e": "waiter"
+              }
+            ]
+          },
+          {
+            "u": false,
+            "c": "我電話冇電喇。",
+            "j": "ngo5 din6 waa2 mou5 din6 laa3.",
+            "e": "My phone is out of battery.",
+            "bd": [
+              {
+                "c": "我",
+                "j": "ngo5",
+                "e": "my"
+              },
+              {
+                "c": "電話",
+                "j": "din6 waa2",
+                "e": "phone"
+              },
+              {
+                "c": "冇電",
+                "j": "mou5 din6",
+                "e": "no battery"
+              },
+              {
+                "c": "喇",
+                "j": "laa3",
+                "e": "(particle - now)"
+              }
+            ]
+          },
+          {
+            "u": true,
+            "c": "我借個叉電器你。",
+            "j": "ngo5 ze3 go3 caa1 din6 hei3 nei5.",
+            "e": "I'll lend you a charger.",
+            "opts": [
+              "我借個叉電器你。",
+              "唔得。",
+              "我都冇電。"
+            ],
+            "optsJ": [
+              "ngo5 ze3 go3 caa1 din6 hei3 nei5.",
+              "m4 dak1.",
+              "ngo5 dou1 mou5 din6."
+            ],
+            "bd": [
+              {
+                "c": "我",
+                "j": "ngo5",
+                "e": "I"
+              },
+              {
+                "c": "借",
+                "j": "ze3",
+                "e": "lend"
+              },
+              {
+                "c": "個",
+                "j": "go3",
+                "e": "(measure word)"
+              },
+              {
+                "c": "叉電器",
+                "j": "caa1 din6 hei3",
+                "e": "charger"
+              },
+              {
+                "c": "你",
+                "j": "nei5",
+                "e": "you"
+              }
+            ]
+          }
+        ]
+      }
+    }
+  }
+}

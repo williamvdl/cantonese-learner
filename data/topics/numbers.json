@@ -1,0 +1,797 @@
+{
+  "meta": {
+    "label": "Numbers",
+    "icon": "🔢",
+    "color": "#1A5276"
+  },
+  "rounds": {
+    "1": {
+      "note": null,
+      "words": [
+        {
+          "c": "零",
+          "j": "ling4",
+          "e": "Zero"
+        },
+        {
+          "c": "一",
+          "j": "jat1",
+          "e": "One"
+        },
+        {
+          "c": "二",
+          "j": "ji6",
+          "e": "Two"
+        },
+        {
+          "c": "三",
+          "j": "saam1",
+          "e": "Three"
+        },
+        {
+          "c": "四",
+          "j": "sei3",
+          "e": "Four"
+        },
+        {
+          "c": "五",
+          "j": "ng5",
+          "e": "Five"
+        },
+        {
+          "c": "六",
+          "j": "luk6",
+          "e": "Six"
+        },
+        {
+          "c": "七",
+          "j": "cat1",
+          "e": "Seven"
+        },
+        {
+          "c": "八",
+          "j": "baat3",
+          "e": "Eight"
+        },
+        {
+          "c": "九",
+          "j": "gau2",
+          "e": "Nine"
+        },
+        {
+          "c": "十",
+          "j": "sap6",
+          "e": "Ten"
+        }
+      ],
+      "sentences": [
+        {
+          "c": "我有三個蘋果。",
+          "j": "ngo5 jau5 saam1 go3 ping4 gwo2.",
+          "e": "I have three apples.",
+          "bd": [
+            {
+              "c": "我",
+              "j": "ngo5",
+              "e": "I"
+            },
+            {
+              "c": "有",
+              "j": "jau5",
+              "e": "have"
+            },
+            {
+              "c": "三個",
+              "j": "saam1 go3",
+              "e": "three (items)"
+            },
+            {
+              "c": "蘋果",
+              "j": "ping4 gwo2",
+              "e": "apple"
+            }
+          ]
+        },
+        {
+          "c": "呢度有十個人。",
+          "j": "ni1 dou6 jau5 sap6 go3 jan4.",
+          "e": "There are ten people here.",
+          "bd": [
+            {
+              "c": "呢度",
+              "j": "ni1 dou6",
+              "e": "here"
+            },
+            {
+              "c": "有",
+              "j": "jau5",
+              "e": "there are"
+            },
+            {
+              "c": "十個",
+              "j": "sap6 go3",
+              "e": "ten (items)"
+            },
+            {
+              "c": "人",
+              "j": "jan4",
+              "e": "people"
+            }
+          ]
+        },
+        {
+          "c": "一加二係三。",
+          "j": "jat1 gaa1 ji6 hai6 saam1.",
+          "e": "One plus two is three.",
+          "bd": [
+            {
+              "c": "一",
+              "j": "jat1",
+              "e": "one"
+            },
+            {
+              "c": "加",
+              "j": "gaa1",
+              "e": "plus"
+            },
+            {
+              "c": "二",
+              "j": "ji6",
+              "e": "two"
+            },
+            {
+              "c": "係",
+              "j": "hai6",
+              "e": "is / equals"
+            },
+            {
+              "c": "三",
+              "j": "saam1",
+              "e": "three"
+            }
+          ]
+        },
+        {
+          "c": "我兩歲。",
+          "j": "ngo5 loeng5 seoi3.",
+          "e": "I'm two years old.",
+          "bd": [
+            {
+              "c": "我",
+              "j": "ngo5",
+              "e": "I"
+            },
+            {
+              "c": "兩",
+              "j": "loeng5",
+              "e": "two (with measure)"
+            },
+            {
+              "c": "歲",
+              "j": "seoi3",
+              "e": "years old"
+            }
+          ]
+        },
+        {
+          "c": "佢有五個朋友。",
+          "j": "keoi5 jau5 ng5 go3 pang4 jau5.",
+          "e": "He has five friends.",
+          "bd": [
+            {
+              "c": "佢",
+              "j": "keoi5",
+              "e": "he / she"
+            },
+            {
+              "c": "有",
+              "j": "jau5",
+              "e": "has"
+            },
+            {
+              "c": "五個",
+              "j": "ng5 go3",
+              "e": "five (items)"
+            },
+            {
+              "c": "朋友",
+              "j": "pang4 jau5",
+              "e": "friends"
+            }
+          ]
+        }
+      ],
+      "convo": {
+        "title": "Buying fruit at the market",
+        "speakers": [
+          "Vendor",
+          "You"
+        ],
+        "lines": [
+          {
+            "u": false,
+            "c": "你好！想買啲咩？",
+            "j": "nei5 hou2! soeng2 maai5 di1 me1?",
+            "e": "Hello! What would you like?",
+            "bd": [
+              {
+                "c": "你好",
+                "j": "nei5 hou2",
+                "e": "hello"
+              },
+              {
+                "c": "想",
+                "j": "soeng2",
+                "e": "want to"
+              },
+              {
+                "c": "買",
+                "j": "maai5",
+                "e": "buy"
+              },
+              {
+                "c": "啲咩",
+                "j": "di1 me1",
+                "e": "what things"
+              }
+            ]
+          },
+          {
+            "u": true,
+            "c": "我想買蘋果。有幾多個？",
+            "j": "ngo5 soeng2 maai5 ping4 gwo2. jau5 gei2 do1 go3?",
+            "e": "I'd like apples. How many are there?",
+            "opts": [
+              "我想買蘋果。有幾多個？",
+              "我想食飯。",
+              "唔該，再見。"
+            ],
+            "optsJ": [
+              "ngo5 soeng2 maai5 ping4 gwo2. jau5 gei2 do1 go3?",
+              "ngo5 soeng2 sik6 faan6.",
+              "m4 goi1, zoi3 gin3."
+            ],
+            "bd": [
+              {
+                "c": "我",
+                "j": "ngo5",
+                "e": "I"
+              },
+              {
+                "c": "想買",
+                "j": "soeng2 maai5",
+                "e": "want to buy"
+              },
+              {
+                "c": "蘋果",
+                "j": "ping4 gwo2",
+                "e": "apple"
+              },
+              {
+                "c": "有",
+                "j": "jau5",
+                "e": "have / there are"
+              },
+              {
+                "c": "幾多個",
+                "j": "gei2 do1 go3",
+                "e": "how many (items)"
+              }
+            ]
+          },
+          {
+            "u": false,
+            "c": "有十個，每個五蚊。",
+            "j": "jau5 sap6 go3, mui5 go3 ng5 man1.",
+            "e": "Ten available, five dollars each.",
+            "bd": [
+              {
+                "c": "有",
+                "j": "jau5",
+                "e": "there are"
+              },
+              {
+                "c": "十個",
+                "j": "sap6 go3",
+                "e": "ten (items)"
+              },
+              {
+                "c": "每個",
+                "j": "mui5 go3",
+                "e": "each one"
+              },
+              {
+                "c": "五蚊",
+                "j": "ng5 man1",
+                "e": "five dollars"
+              }
+            ]
+          },
+          {
+            "u": true,
+            "c": "我要三個，多謝。",
+            "j": "ngo5 jiu3 saam1 go3, do1 ze6.",
+            "e": "I'll take three, thank you.",
+            "opts": [
+              "我要三個，多謝。",
+              "我要一百個。",
+              "唔要，太貴。"
+            ],
+            "optsJ": [
+              "ngo5 jiu3 saam1 go3, do1 ze6.",
+              "ngo5 jiu3 jat1 baak3 go3.",
+              "m4 jiu3, taai3 gwai3."
+            ],
+            "bd": [
+              {
+                "c": "我要",
+                "j": "ngo5 jiu3",
+                "e": "I want / I'll take"
+              },
+              {
+                "c": "三個",
+                "j": "saam1 go3",
+                "e": "three (items)"
+              },
+              {
+                "c": "多謝",
+                "j": "do1 ze6",
+                "e": "thank you"
+              }
+            ]
+          },
+          {
+            "u": false,
+            "c": "好，三個係十五蚊。",
+            "j": "hou2, saam1 go3 hai6 sap6 ng5 man1.",
+            "e": "Sure, three is fifteen dollars.",
+            "bd": [
+              {
+                "c": "好",
+                "j": "hou2",
+                "e": "good / ok"
+              },
+              {
+                "c": "三個",
+                "j": "saam1 go3",
+                "e": "three (items)"
+              },
+              {
+                "c": "係",
+                "j": "hai6",
+                "e": "is / equals"
+              },
+              {
+                "c": "十五蚊",
+                "j": "sap6 ng5 man1",
+                "e": "fifteen dollars"
+              }
+            ]
+          },
+          {
+            "u": true,
+            "c": "好的，多謝！",
+            "j": "hou2 dik1, do1 ze6!",
+            "e": "Great, thank you!",
+            "opts": [
+              "好的，多謝！",
+              "我唔明。",
+              "再買多一個。"
+            ],
+            "optsJ": [
+              "hou2 dik1, do1 ze6!",
+              "ngo5 m4 ming4.",
+              "zoi3 maai5 do1 jat1 go3."
+            ],
+            "bd": [
+              {
+                "c": "好的",
+                "j": "hou2 dik1",
+                "e": "alright / great"
+              },
+              {
+                "c": "多謝",
+                "j": "do1 ze6",
+                "e": "thank you"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "2": {
+      "note": "Bigger numbers in Cantonese are built like Lego: <em>ji6 sap6</em> (二十) is literally \"two-ten\" = 20, <em>saam1 sap6 ng5</em> (三十五) is \"three-ten-five\" = 35. Hundreds use <strong>baak3</strong> (百) and thousands use <strong>cin1</strong> (千). For Hong Kong money, <strong>man1</strong> (蚊) is the colloquial word for dollar (HKD) — you'll hear it everywhere from markets to taxis. <em>gei2 do1</em> (幾多) means \"how many\" or \"how much\" — pair it with <em>cin2</em> (錢, money) to ask prices.",
+      "words": [
+        {
+          "c": "二十",
+          "j": "ji6 sap6",
+          "e": "Twenty"
+        },
+        {
+          "c": "三十",
+          "j": "saam1 sap6",
+          "e": "Thirty"
+        },
+        {
+          "c": "五十",
+          "j": "ng5 sap6",
+          "e": "Fifty"
+        },
+        {
+          "c": "一百",
+          "j": "jat1 baak3",
+          "e": "One hundred"
+        },
+        {
+          "c": "五百",
+          "j": "ng5 baak3",
+          "e": "Five hundred"
+        },
+        {
+          "c": "一千",
+          "j": "jat1 cin1",
+          "e": "One thousand"
+        },
+        {
+          "c": "蚊",
+          "j": "man1",
+          "e": "Dollar (HKD)"
+        },
+        {
+          "c": "毫子",
+          "j": "hou4 zi2",
+          "e": "Cents (10c coins)"
+        },
+        {
+          "c": "一半",
+          "j": "jat1 bun3",
+          "e": "Half"
+        },
+        {
+          "c": "幾多",
+          "j": "gei2 do1",
+          "e": "How many / much"
+        }
+      ],
+      "sentences": [
+        {
+          "c": "呢個三十蚊。",
+          "j": "ni1 go3 saam1 sap6 man1.",
+          "e": "This is thirty dollars.",
+          "bd": [
+            {
+              "c": "呢個",
+              "j": "ni1 go3",
+              "e": "this one"
+            },
+            {
+              "c": "三十",
+              "j": "saam1 sap6",
+              "e": "thirty"
+            },
+            {
+              "c": "蚊",
+              "j": "man1",
+              "e": "dollars"
+            }
+          ]
+        },
+        {
+          "c": "我有一百蚊。",
+          "j": "ngo5 jau5 jat1 baak3 man1.",
+          "e": "I have one hundred dollars.",
+          "bd": [
+            {
+              "c": "我",
+              "j": "ngo5",
+              "e": "I"
+            },
+            {
+              "c": "有",
+              "j": "jau5",
+              "e": "have"
+            },
+            {
+              "c": "一百",
+              "j": "jat1 baak3",
+              "e": "one hundred"
+            },
+            {
+              "c": "蚊",
+              "j": "man1",
+              "e": "dollars"
+            }
+          ]
+        },
+        {
+          "c": "幾多錢？",
+          "j": "gei2 do1 cin2?",
+          "e": "How much money?",
+          "bd": [
+            {
+              "c": "幾多",
+              "j": "gei2 do1",
+              "e": "how much / many"
+            },
+            {
+              "c": "錢",
+              "j": "cin2",
+              "e": "money"
+            }
+          ]
+        },
+        {
+          "c": "一千蚊太貴喇。",
+          "j": "jat1 cin1 man1 taai3 gwai3 laa3.",
+          "e": "A thousand dollars is too expensive.",
+          "bd": [
+            {
+              "c": "一千",
+              "j": "jat1 cin1",
+              "e": "one thousand"
+            },
+            {
+              "c": "蚊",
+              "j": "man1",
+              "e": "dollars"
+            },
+            {
+              "c": "太",
+              "j": "taai3",
+              "e": "too"
+            },
+            {
+              "c": "貴",
+              "j": "gwai3",
+              "e": "expensive"
+            },
+            {
+              "c": "喇",
+              "j": "laa3",
+              "e": "(particle)"
+            }
+          ]
+        },
+        {
+          "c": "我食咗一半。",
+          "j": "ngo5 sik6 zo2 jat1 bun3.",
+          "e": "I ate half of it.",
+          "bd": [
+            {
+              "c": "我",
+              "j": "ngo5",
+              "e": "I"
+            },
+            {
+              "c": "食",
+              "j": "sik6",
+              "e": "eat"
+            },
+            {
+              "c": "咗",
+              "j": "zo2",
+              "e": "(completed)"
+            },
+            {
+              "c": "一半",
+              "j": "jat1 bun3",
+              "e": "half"
+            }
+          ]
+        }
+      ],
+      "convo": {
+        "title": "Negotiating prices at a market",
+        "speakers": [
+          "Vendor",
+          "You"
+        ],
+        "lines": [
+          {
+            "u": false,
+            "c": "呢啲生果好新鮮，要幾多？",
+            "j": "ni1 di1 saang1 gwo2 hou2 san1 sin1, jiu3 gei2 do1?",
+            "e": "This fruit is very fresh, how much do you want?",
+            "bd": [
+              {
+                "c": "呢啲",
+                "j": "ni1 di1",
+                "e": "these"
+              },
+              {
+                "c": "生果",
+                "j": "saang1 gwo2",
+                "e": "fruit"
+              },
+              {
+                "c": "好",
+                "j": "hou2",
+                "e": "very"
+              },
+              {
+                "c": "新鮮",
+                "j": "san1 sin1",
+                "e": "fresh"
+              },
+              {
+                "c": "要",
+                "j": "jiu3",
+                "e": "want"
+              },
+              {
+                "c": "幾多",
+                "j": "gei2 do1",
+                "e": "how many"
+              }
+            ]
+          },
+          {
+            "u": true,
+            "c": "我要五個，幾錢呀？",
+            "j": "ngo5 jiu3 ng5 go3, gei2 cin2 aa3?",
+            "e": "I'll take five, how much?",
+            "opts": [
+              "我要五個，幾錢呀？",
+              "我要一千個。",
+              "太貴啦。"
+            ],
+            "optsJ": [
+              "ngo5 jiu3 ng5 go3, gei2 cin2 aa3?",
+              "ngo5 jiu3 jat1 cin1 go3.",
+              "taai3 gwai3 laa1."
+            ],
+            "bd": [
+              {
+                "c": "我",
+                "j": "ngo5",
+                "e": "I"
+              },
+              {
+                "c": "要",
+                "j": "jiu3",
+                "e": "want"
+              },
+              {
+                "c": "五個",
+                "j": "ng5 go3",
+                "e": "five (items)"
+              },
+              {
+                "c": "幾錢",
+                "j": "gei2 cin2",
+                "e": "how much"
+              },
+              {
+                "c": "呀",
+                "j": "aa3",
+                "e": "(soft particle)"
+              }
+            ]
+          },
+          {
+            "u": false,
+            "c": "一個八蚊，五個四十蚊。",
+            "j": "jat1 go3 baat3 man1, ng5 go3 sei3 sap6 man1.",
+            "e": "Eight dollars each, five for forty dollars.",
+            "bd": [
+              {
+                "c": "一個",
+                "j": "jat1 go3",
+                "e": "one (item)"
+              },
+              {
+                "c": "八蚊",
+                "j": "baat3 man1",
+                "e": "eight dollars"
+              },
+              {
+                "c": "五個",
+                "j": "ng5 go3",
+                "e": "five (items)"
+              },
+              {
+                "c": "四十蚊",
+                "j": "sei3 sap6 man1",
+                "e": "forty dollars"
+              }
+            ]
+          },
+          {
+            "u": true,
+            "c": "三十五蚊得唔得？",
+            "j": "saam1 sap6 ng5 man1 dak1 m4 dak1?",
+            "e": "Thirty-five dollars, OK?",
+            "opts": [
+              "三十五蚊得唔得？",
+              "好貴啦。",
+              "唔買喇。"
+            ],
+            "optsJ": [
+              "saam1 sap6 ng5 man1 dak1 m4 dak1?",
+              "hou2 gwai3 laa1.",
+              "m4 maai5 laa3."
+            ],
+            "bd": [
+              {
+                "c": "三十五",
+                "j": "saam1 sap6 ng5",
+                "e": "thirty-five"
+              },
+              {
+                "c": "蚊",
+                "j": "man1",
+                "e": "dollars"
+              },
+              {
+                "c": "得唔得",
+                "j": "dak1 m4 dak1",
+                "e": "OK or not?"
+              }
+            ]
+          },
+          {
+            "u": false,
+            "c": "好啦好啦，三十八蚊先得。",
+            "j": "hou2 laa1 hou2 laa1, saam1 sap6 baat3 man1 sin1 dak1.",
+            "e": "OK OK, thirty-eight dollars then.",
+            "bd": [
+              {
+                "c": "好啦",
+                "j": "hou2 laa1",
+                "e": "OK"
+              },
+              {
+                "c": "三十八",
+                "j": "saam1 sap6 baat3",
+                "e": "thirty-eight"
+              },
+              {
+                "c": "蚊",
+                "j": "man1",
+                "e": "dollars"
+              },
+              {
+                "c": "先",
+                "j": "sin1",
+                "e": "then / first"
+              },
+              {
+                "c": "得",
+                "j": "dak1",
+                "e": "OK"
+              }
+            ]
+          },
+          {
+            "u": true,
+            "c": "成交！多謝！",
+            "j": "sing4 gaau1! do1 ze6!",
+            "e": "Deal! Thanks!",
+            "opts": [
+              "成交！多謝！",
+              "唔要喇。",
+              "太貴！"
+            ],
+            "optsJ": [
+              "sing4 gaau1! do1 ze6!",
+              "m4 jiu3 laa3.",
+              "taai3 gwai3!"
+            ],
+            "bd": [
+              {
+                "c": "成交",
+                "j": "sing4 gaau1",
+                "e": "deal"
+              },
+              {
+                "c": "多謝",
+                "j": "do1 ze6",
+                "e": "thanks"
+              }
+            ]
+          }
+        ]
+      }
+    }
+  }
+}

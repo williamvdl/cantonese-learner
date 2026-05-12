@@ -1,0 +1,348 @@
+{
+  "meta": {
+    "label": "Emergencies",
+    "icon": "🚨",
+    "color": "#922B21"
+  },
+  "rounds": {
+    "1": {
+      "note": "<strong>gau3 meng6</strong> (救命, literally 'save life') is the universal cry for help. Hong Kong's emergency number is <strong>999</strong>, which connects to police, fire, and ambulance. <em>gap1 zing3 sat1</em> (急症室) is the A&E department; <em>gau3 wu6 ce1</em> (救護車) is the ambulance, literally 'save-protect car'. Note <strong>zau2</strong> (走) — context matters: in everyday speech it means 'leave/go', but in emergencies it means 'flee/run away'.",
+      "words": [
+        {
+          "c": "救命",
+          "j": "gau3 meng6",
+          "e": "Help! / Save me!"
+        },
+        {
+          "c": "報警",
+          "j": "bou3 ging2",
+          "e": "Call the police"
+        },
+        {
+          "c": "火",
+          "j": "fo2",
+          "e": "Fire"
+        },
+        {
+          "c": "急症室",
+          "j": "gap1 zing3 sat1",
+          "e": "A&E / ER"
+        },
+        {
+          "c": "救護車",
+          "j": "gau3 wu6 ce1",
+          "e": "Ambulance"
+        },
+        {
+          "c": "危險",
+          "j": "ngai4 him2",
+          "e": "Dangerous"
+        },
+        {
+          "c": "走",
+          "j": "zau2",
+          "e": "Flee / escape"
+        },
+        {
+          "c": "警察",
+          "j": "ging2 caat3",
+          "e": "Police"
+        },
+        {
+          "c": "受傷",
+          "j": "sau6 soeng1",
+          "e": "Injured"
+        },
+        {
+          "c": "999",
+          "j": "gau2 gau2 gau2",
+          "e": "999 (HK emergency)"
+        }
+      ],
+      "sentences": [
+        {
+          "c": "救命呀！",
+          "j": "gau3 meng6 aa3!",
+          "e": "Help!",
+          "bd": [
+            {
+              "c": "救命",
+              "j": "gau3 meng6",
+              "e": "help / save me"
+            },
+            {
+              "c": "呀",
+              "j": "aa3",
+              "e": "(urgency)"
+            }
+          ]
+        },
+        {
+          "c": "唔該叫救護車。",
+          "j": "m4 goi1 giu3 gau3 wu6 ce1.",
+          "e": "Please call an ambulance.",
+          "bd": [
+            {
+              "c": "唔該",
+              "j": "m4 goi1",
+              "e": "please"
+            },
+            {
+              "c": "叫",
+              "j": "giu3",
+              "e": "call"
+            },
+            {
+              "c": "救護車",
+              "j": "gau3 wu6 ce1",
+              "e": "ambulance"
+            }
+          ]
+        },
+        {
+          "c": "有人受傷。",
+          "j": "jau5 jan4 sau6 soeng1.",
+          "e": "Someone is hurt.",
+          "bd": [
+            {
+              "c": "有人",
+              "j": "jau5 jan4",
+              "e": "someone"
+            },
+            {
+              "c": "受傷",
+              "j": "sau6 soeng1",
+              "e": "is injured"
+            }
+          ]
+        },
+        {
+          "c": "報警啦！",
+          "j": "bou3 ging2 laa1!",
+          "e": "Call the police!",
+          "bd": [
+            {
+              "c": "報警",
+              "j": "bou3 ging2",
+              "e": "call police"
+            },
+            {
+              "c": "啦",
+              "j": "laa1",
+              "e": "(urgency)"
+            }
+          ]
+        },
+        {
+          "c": "急症室喺邊度？",
+          "j": "gap1 zing3 sat1 hai2 bin1 dou6?",
+          "e": "Where is A&E?",
+          "bd": [
+            {
+              "c": "急症室",
+              "j": "gap1 zing3 sat1",
+              "e": "A&E"
+            },
+            {
+              "c": "喺",
+              "j": "hai2",
+              "e": "is at"
+            },
+            {
+              "c": "邊度",
+              "j": "bin1 dou6",
+              "e": "where"
+            }
+          ]
+        }
+      ],
+      "convo": {
+        "title": "Reporting an accident",
+        "speakers": [
+          "999 Operator",
+          "You"
+        ],
+        "lines": [
+          {
+            "u": false,
+            "c": "999，咩事呀？",
+            "j": "gau2 gau2 gau2, me1 si6 aa3?",
+            "e": "999, what's happening?",
+            "bd": [
+              {
+                "c": "999",
+                "j": "gau2 gau2 gau2",
+                "e": "999"
+              },
+              {
+                "c": "咩事",
+                "j": "me1 si6",
+                "e": "what's the matter"
+              },
+              {
+                "c": "呀",
+                "j": "aa3",
+                "e": "(soft)"
+              }
+            ]
+          },
+          {
+            "u": true,
+            "c": "有交通意外，有人受傷。",
+            "j": "jau5 gaau1 tung1 ji3 ngoi6, jau5 jan4 sau6 soeng1.",
+            "e": "There's a traffic accident, someone is hurt.",
+            "opts": [
+              "有交通意外，有人受傷。",
+              "我唔知。",
+              "冇事。"
+            ],
+            "optsJ": [
+              "jau5 gaau1 tung1 ji3 ngoi6, jau5 jan4 sau6 soeng1.",
+              "ngo5 m4 zi1.",
+              "mou5 si6."
+            ],
+            "bd": [
+              {
+                "c": "有",
+                "j": "jau5",
+                "e": "there is"
+              },
+              {
+                "c": "交通意外",
+                "j": "gaau1 tung1 ji3 ngoi6",
+                "e": "traffic accident"
+              },
+              {
+                "c": "有人",
+                "j": "jau5 jan4",
+                "e": "someone"
+              },
+              {
+                "c": "受傷",
+                "j": "sau6 soeng1",
+                "e": "is hurt"
+              }
+            ]
+          },
+          {
+            "u": false,
+            "c": "喺邊度？",
+            "j": "hai2 bin1 dou6?",
+            "e": "Where?",
+            "bd": [
+              {
+                "c": "喺",
+                "j": "hai2",
+                "e": "at"
+              },
+              {
+                "c": "邊度",
+                "j": "bin1 dou6",
+                "e": "where"
+              }
+            ]
+          },
+          {
+            "u": true,
+            "c": "我喺中環，皇后大道。",
+            "j": "ngo5 hai2 zung1 waan4, wong4 hau6 daai6 dou6.",
+            "e": "I'm in Central, Queen's Road.",
+            "opts": [
+              "我喺中環，皇后大道。",
+              "我唔知。",
+              "我喺屋企。"
+            ],
+            "optsJ": [
+              "ngo5 hai2 zung1 waan4, wong4 hau6 daai6 dou6.",
+              "ngo5 m4 zi1.",
+              "ngo5 hai2 uk1 kei2."
+            ],
+            "bd": [
+              {
+                "c": "我",
+                "j": "ngo5",
+                "e": "I"
+              },
+              {
+                "c": "喺",
+                "j": "hai2",
+                "e": "am at"
+              },
+              {
+                "c": "中環",
+                "j": "zung1 waan4",
+                "e": "Central"
+              },
+              {
+                "c": "皇后大道",
+                "j": "wong4 hau6 daai6 dou6",
+                "e": "Queen's Road"
+              }
+            ]
+          },
+          {
+            "u": false,
+            "c": "留喺度，救護車快到。",
+            "j": "lau4 hai2 dou6, gau3 wu6 ce1 faai3 dou3.",
+            "e": "Stay there, ambulance is on the way.",
+            "bd": [
+              {
+                "c": "留",
+                "j": "lau4",
+                "e": "stay"
+              },
+              {
+                "c": "喺度",
+                "j": "hai2 dou6",
+                "e": "here"
+              },
+              {
+                "c": "救護車",
+                "j": "gau3 wu6 ce1",
+                "e": "ambulance"
+              },
+              {
+                "c": "快到",
+                "j": "faai3 dou3",
+                "e": "arriving soon"
+              }
+            ]
+          },
+          {
+            "u": true,
+            "c": "好，多謝你！",
+            "j": "hou2, do1 ze6 nei5!",
+            "e": "OK, thank you!",
+            "opts": [
+              "好，多謝你！",
+              "唔得。",
+              "走啦！"
+            ],
+            "optsJ": [
+              "hou2, do1 ze6 nei5!",
+              "m4 dak1.",
+              "zau2 laa1!"
+            ],
+            "bd": [
+              {
+                "c": "好",
+                "j": "hou2",
+                "e": "OK"
+              },
+              {
+                "c": "多謝",
+                "j": "do1 ze6",
+                "e": "thank you"
+              },
+              {
+                "c": "你",
+                "j": "nei5",
+                "e": "you"
+              }
+            ]
+          }
+        ]
+      }
+    }
+  }
+}

@@ -1,0 +1,747 @@
+{
+  "meta": {
+    "label": "Shopping",
+    "icon": "🛍️",
+    "color": "#A93226"
+  },
+  "rounds": {
+    "1": {
+      "note": null,
+      "words": [
+        {
+          "c": "超市",
+          "j": "ciu1 si5",
+          "e": "Supermarket"
+        },
+        {
+          "c": "商場",
+          "j": "soeng1 coeng4",
+          "e": "Shopping mall"
+        },
+        {
+          "c": "貴",
+          "j": "gwai3",
+          "e": "Expensive"
+        },
+        {
+          "c": "平",
+          "j": "peng4",
+          "e": "Cheap"
+        },
+        {
+          "c": "買",
+          "j": "maai5",
+          "e": "Buy"
+        },
+        {
+          "c": "賣",
+          "j": "maai6",
+          "e": "Sell"
+        },
+        {
+          "c": "找換",
+          "j": "zaau2 wun6",
+          "e": "Change money"
+        },
+        {
+          "c": "收據",
+          "j": "sau1 geoi3",
+          "e": "Receipt"
+        },
+        {
+          "c": "有冇折？",
+          "j": "jau5 mou5 zit3",
+          "e": "Any discount?"
+        },
+        {
+          "c": "唔要",
+          "j": "m4 jiu3",
+          "e": "Don't want it"
+        }
+      ],
+      "sentences": [
+        {
+          "c": "呢個好貴喎。",
+          "j": "ni1 go3 hou2 gwai3 wo3.",
+          "e": "This is really expensive.",
+          "bd": [
+            {
+              "c": "呢個",
+              "j": "ni1 go3",
+              "e": "this one"
+            },
+            {
+              "c": "好貴",
+              "j": "hou2 gwai3",
+              "e": "very expensive"
+            },
+            {
+              "c": "喎",
+              "j": "wo3",
+              "e": "(particle - really)"
+            }
+          ]
+        },
+        {
+          "c": "有冇平啲嘅？",
+          "j": "jau5 mou5 peng4 di1 ge3?",
+          "e": "Is there a cheaper one?",
+          "bd": [
+            {
+              "c": "有冇",
+              "j": "jau5 mou5",
+              "e": "do you have?"
+            },
+            {
+              "c": "平啲",
+              "j": "peng4 di1",
+              "e": "a bit cheaper"
+            },
+            {
+              "c": "嘅",
+              "j": "ge3",
+              "e": "one (particle)"
+            }
+          ]
+        },
+        {
+          "c": "我想買呢件。",
+          "j": "ngo5 soeng2 maai5 ni1 gin6.",
+          "e": "I want to buy this one.",
+          "bd": [
+            {
+              "c": "我想",
+              "j": "ngo5 soeng2",
+              "e": "I want to"
+            },
+            {
+              "c": "買",
+              "j": "maai5",
+              "e": "buy"
+            },
+            {
+              "c": "呢件",
+              "j": "ni1 gin6",
+              "e": "this one (item)"
+            }
+          ]
+        },
+        {
+          "c": "商場好多人。",
+          "j": "soeng1 coeng4 hou2 do1 jan4.",
+          "e": "The mall is very crowded.",
+          "bd": [
+            {
+              "c": "商場",
+              "j": "soeng1 coeng4",
+              "e": "shopping mall"
+            },
+            {
+              "c": "好多",
+              "j": "hou2 do1",
+              "e": "a lot of"
+            },
+            {
+              "c": "人",
+              "j": "jan4",
+              "e": "people"
+            }
+          ]
+        },
+        {
+          "c": "唔該俾收據我。",
+          "j": "m4 goi1 bei2 sau1 geoi3 ngo5.",
+          "e": "Please give me the receipt.",
+          "bd": [
+            {
+              "c": "唔該",
+              "j": "m4 goi1",
+              "e": "please"
+            },
+            {
+              "c": "俾",
+              "j": "bei2",
+              "e": "give"
+            },
+            {
+              "c": "收據",
+              "j": "sau1 geoi3",
+              "e": "receipt"
+            },
+            {
+              "c": "我",
+              "j": "ngo5",
+              "e": "me"
+            }
+          ]
+        }
+      ],
+      "convo": {
+        "title": "Bargaining at a market stall",
+        "speakers": [
+          "Vendor",
+          "You"
+        ],
+        "lines": [
+          {
+            "u": false,
+            "c": "你好！想買咩？",
+            "j": "nei5 hou2! soeng2 maai5 me1?",
+            "e": "Hello! What would you like to buy?",
+            "bd": [
+              {
+                "c": "你好",
+                "j": "nei5 hou2",
+                "e": "hello"
+              },
+              {
+                "c": "想買",
+                "j": "soeng2 maai5",
+                "e": "want to buy"
+              },
+              {
+                "c": "咩",
+                "j": "me1",
+                "e": "what"
+              }
+            ]
+          },
+          {
+            "u": true,
+            "c": "呢個幾錢？",
+            "j": "ni1 go3 gei2 cin2?",
+            "e": "How much is this?",
+            "opts": [
+              "呢個幾錢？",
+              "有冇折？",
+              "我唔要。"
+            ],
+            "optsJ": [
+              "ni1 go3 gei2 cin2?",
+              "jau5 mou5 zit3?",
+              "ngo5 m4 jiu3."
+            ],
+            "bd": [
+              {
+                "c": "呢個",
+                "j": "ni1 go3",
+                "e": "this one"
+              },
+              {
+                "c": "幾錢",
+                "j": "gei2 cin2",
+                "e": "how much money"
+              }
+            ]
+          },
+          {
+            "u": false,
+            "c": "呢個二百蚊。",
+            "j": "ni1 go3 ji6 baak3 man1.",
+            "e": "This one is two hundred dollars.",
+            "bd": [
+              {
+                "c": "呢個",
+                "j": "ni1 go3",
+                "e": "this one"
+              },
+              {
+                "c": "二百",
+                "j": "ji6 baak3",
+                "e": "two hundred"
+              },
+              {
+                "c": "蚊",
+                "j": "man1",
+                "e": "dollars"
+              }
+            ]
+          },
+          {
+            "u": true,
+            "c": "咁貴！有冇折㗎？",
+            "j": "gam3 gwai3! jau5 mou5 zit3 gaa3?",
+            "e": "So expensive! Any discount?",
+            "opts": [
+              "咁貴！有冇折㗎？",
+              "好，我買。",
+              "有冇平啲嘅？"
+            ],
+            "optsJ": [
+              "gam3 gwai3! jau5 mou5 zit3 gaa3?",
+              "hou2, ngo5 maai5.",
+              "jau5 mou5 peng4 di1 ge3?"
+            ],
+            "bd": [
+              {
+                "c": "咁貴",
+                "j": "gam3 gwai3",
+                "e": "so expensive"
+              },
+              {
+                "c": "有冇",
+                "j": "jau5 mou5",
+                "e": "do you have?"
+              },
+              {
+                "c": "折",
+                "j": "zit3",
+                "e": "discount"
+              },
+              {
+                "c": "㗎",
+                "j": "gaa3",
+                "e": "(emphasis particle)"
+              }
+            ]
+          },
+          {
+            "u": false,
+            "c": "好，俾一百八十蚊你啦。",
+            "j": "hou2, bei2 jat1 baak3 baat3 sap6 man1 nei5 laa1.",
+            "e": "Ok, one hundred and eighty dollars for you.",
+            "bd": [
+              {
+                "c": "好",
+                "j": "hou2",
+                "e": "ok"
+              },
+              {
+                "c": "俾",
+                "j": "bei2",
+                "e": "give"
+              },
+              {
+                "c": "一百八十",
+                "j": "jat1 baak3 baat3 sap6",
+                "e": "one hundred eighty"
+              },
+              {
+                "c": "蚊",
+                "j": "man1",
+                "e": "dollars"
+              },
+              {
+                "c": "你",
+                "j": "nei5",
+                "e": "you"
+              },
+              {
+                "c": "啦",
+                "j": "laa1",
+                "e": "(softening particle)"
+              }
+            ]
+          },
+          {
+            "u": true,
+            "c": "好，成交！多謝！",
+            "j": "hou2, sing4 gaau1! do1 ze6!",
+            "e": "Deal! Thank you!",
+            "opts": [
+              "好，成交！多謝！",
+              "唔要喇，太貴。",
+              "平啲先得。"
+            ],
+            "optsJ": [
+              "hou2, sing4 gaau1! do1 ze6!",
+              "m4 jiu3 laa3, taai3 gwai3.",
+              "peng4 di1 sin1 dak1."
+            ],
+            "bd": [
+              {
+                "c": "好",
+                "j": "hou2",
+                "e": "ok"
+              },
+              {
+                "c": "成交",
+                "j": "sing4 gaau1",
+                "e": "deal / agreed"
+              },
+              {
+                "c": "多謝",
+                "j": "do1 ze6",
+                "e": "thank you"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "2": {
+      "note": "Tier 2 zooms in on shopping for clothes. Sizes use a <em>maa5</em> (碼) suffix: <em>daai6 maa5</em> (大碼, large), <em>zung1 maa5</em> (中碼, medium), <em>sai3 maa5</em> (細碼, small). The most useful verb is <strong>si3</strong> (試, to try on) — almost always paired with <em>haa5</em> as <em>si3 haa5</em> ('try a bit'). Note <em>gan2</em> (緊, tight) and <em>sung1</em> (鬆, loose) — these describe how clothes fit and also work in general 'tight/loose' contexts.",
+      "words": [
+        {
+          "c": "恤衫",
+          "j": "seot1 saam1",
+          "e": "Shirt"
+        },
+        {
+          "c": "褲",
+          "j": "fu3",
+          "e": "Pants / trousers"
+        },
+        {
+          "c": "裙",
+          "j": "kwan4",
+          "e": "Skirt / dress"
+        },
+        {
+          "c": "鞋",
+          "j": "haai4",
+          "e": "Shoes"
+        },
+        {
+          "c": "尺碼",
+          "j": "cek3 maa5",
+          "e": "Size"
+        },
+        {
+          "c": "試吓",
+          "j": "si3 haa5",
+          "e": "Try on"
+        },
+        {
+          "c": "緊",
+          "j": "gan2",
+          "e": "Tight"
+        },
+        {
+          "c": "鬆",
+          "j": "sung1",
+          "e": "Loose"
+        },
+        {
+          "c": "大碼",
+          "j": "daai6 maa5",
+          "e": "Large size"
+        },
+        {
+          "c": "細碼",
+          "j": "sai3 maa5",
+          "e": "Small size"
+        }
+      ],
+      "sentences": [
+        {
+          "c": "我想試呢件恤衫。",
+          "j": "ngo5 soeng2 si3 ni1 gin6 seot1 saam1.",
+          "e": "I'd like to try this shirt.",
+          "bd": [
+            {
+              "c": "我",
+              "j": "ngo5",
+              "e": "I"
+            },
+            {
+              "c": "想",
+              "j": "soeng2",
+              "e": "would like"
+            },
+            {
+              "c": "試",
+              "j": "si3",
+              "e": "try"
+            },
+            {
+              "c": "呢件",
+              "j": "ni1 gin6",
+              "e": "this (clothing item)"
+            },
+            {
+              "c": "恤衫",
+              "j": "seot1 saam1",
+              "e": "shirt"
+            }
+          ]
+        },
+        {
+          "c": "有冇大碼？",
+          "j": "jau5 mou5 daai6 maa5?",
+          "e": "Do you have a large size?",
+          "bd": [
+            {
+              "c": "有冇",
+              "j": "jau5 mou5",
+              "e": "have or not (yes/no)"
+            },
+            {
+              "c": "大碼",
+              "j": "daai6 maa5",
+              "e": "large size"
+            }
+          ]
+        },
+        {
+          "c": "件褲太緊喇。",
+          "j": "gin6 fu3 taai3 gan2 laa3.",
+          "e": "These pants are too tight.",
+          "bd": [
+            {
+              "c": "件",
+              "j": "gin6",
+              "e": "(measure word)"
+            },
+            {
+              "c": "褲",
+              "j": "fu3",
+              "e": "pants"
+            },
+            {
+              "c": "太",
+              "j": "taai3",
+              "e": "too"
+            },
+            {
+              "c": "緊",
+              "j": "gan2",
+              "e": "tight"
+            },
+            {
+              "c": "喇",
+              "j": "laa3",
+              "e": "(particle)"
+            }
+          ]
+        },
+        {
+          "c": "對鞋好靚。",
+          "j": "deoi3 haai4 hou2 leng3.",
+          "e": "These shoes are nice.",
+          "bd": [
+            {
+              "c": "對",
+              "j": "deoi3",
+              "e": "(pair - measure word)"
+            },
+            {
+              "c": "鞋",
+              "j": "haai4",
+              "e": "shoes"
+            },
+            {
+              "c": "好",
+              "j": "hou2",
+              "e": "very"
+            },
+            {
+              "c": "靚",
+              "j": "leng3",
+              "e": "pretty / nice"
+            }
+          ]
+        },
+        {
+          "c": "我可以試吓嗎？",
+          "j": "ngo5 ho2 ji5 si3 haa5 maa3?",
+          "e": "Can I try it on?",
+          "bd": [
+            {
+              "c": "我",
+              "j": "ngo5",
+              "e": "I"
+            },
+            {
+              "c": "可以",
+              "j": "ho2 ji5",
+              "e": "can"
+            },
+            {
+              "c": "試吓",
+              "j": "si3 haa5",
+              "e": "try on"
+            },
+            {
+              "c": "嗎",
+              "j": "maa3",
+              "e": "(yes/no)"
+            }
+          ]
+        }
+      ],
+      "convo": {
+        "title": "Buying shoes at a shop",
+        "speakers": [
+          "Clerk",
+          "You"
+        ],
+        "lines": [
+          {
+            "u": false,
+            "c": "你要乜嘢尺碼？",
+            "j": "nei5 jiu3 mat1 je5 cek3 maa5?",
+            "e": "What size do you need?",
+            "bd": [
+              {
+                "c": "你",
+                "j": "nei5",
+                "e": "you"
+              },
+              {
+                "c": "要",
+                "j": "jiu3",
+                "e": "want / need"
+              },
+              {
+                "c": "乜嘢",
+                "j": "mat1 je5",
+                "e": "what"
+              },
+              {
+                "c": "尺碼",
+                "j": "cek3 maa5",
+                "e": "size"
+              }
+            ]
+          },
+          {
+            "u": true,
+            "c": "細碼，唔該。",
+            "j": "sai3 maa5, m4 goi1.",
+            "e": "Small, please.",
+            "opts": [
+              "細碼，唔該。",
+              "唔知道。",
+              "好貴呀。"
+            ],
+            "optsJ": [
+              "sai3 maa5, m4 goi1.",
+              "m4 zi1 dou3.",
+              "hou2 gwai3 aa3."
+            ],
+            "bd": [
+              {
+                "c": "細碼",
+                "j": "sai3 maa5",
+                "e": "small size"
+              },
+              {
+                "c": "唔該",
+                "j": "m4 goi1",
+                "e": "please / thanks"
+              }
+            ]
+          },
+          {
+            "u": false,
+            "c": "試吓呢對啦。",
+            "j": "si3 haa5 ni1 deoi3 laa1.",
+            "e": "Try this pair.",
+            "bd": [
+              {
+                "c": "試吓",
+                "j": "si3 haa5",
+                "e": "try on"
+              },
+              {
+                "c": "呢對",
+                "j": "ni1 deoi3",
+                "e": "this pair"
+              },
+              {
+                "c": "啦",
+                "j": "laa1",
+                "e": "(suggestion)"
+              }
+            ]
+          },
+          {
+            "u": true,
+            "c": "有啲緊。",
+            "j": "jau5 di1 gan2.",
+            "e": "A bit tight.",
+            "opts": [
+              "有啲緊。",
+              "啱晒。",
+              "唔該。"
+            ],
+            "optsJ": [
+              "jau5 di1 gan2.",
+              "ngaam1 saai3.",
+              "m4 goi1."
+            ],
+            "bd": [
+              {
+                "c": "有啲",
+                "j": "jau5 di1",
+                "e": "a bit"
+              },
+              {
+                "c": "緊",
+                "j": "gan2",
+                "e": "tight"
+              }
+            ]
+          },
+          {
+            "u": false,
+            "c": "咁試大一碼啦。",
+            "j": "gam2 si3 daai6 jat1 maa5 laa1.",
+            "e": "Then try one size larger.",
+            "bd": [
+              {
+                "c": "咁",
+                "j": "gam2",
+                "e": "then"
+              },
+              {
+                "c": "試",
+                "j": "si3",
+                "e": "try"
+              },
+              {
+                "c": "大",
+                "j": "daai6",
+                "e": "larger"
+              },
+              {
+                "c": "一碼",
+                "j": "jat1 maa5",
+                "e": "one size"
+              },
+              {
+                "c": "啦",
+                "j": "laa1",
+                "e": "(suggestion)"
+              }
+            ]
+          },
+          {
+            "u": true,
+            "c": "好！呢對啱晒。",
+            "j": "hou2! ni1 deoi3 ngaam1 saai3.",
+            "e": "OK! This pair fits perfectly.",
+            "opts": [
+              "好！呢對啱晒。",
+              "太貴喇。",
+              "點解？"
+            ],
+            "optsJ": [
+              "hou2! ni1 deoi3 ngaam1 saai3.",
+              "taai3 gwai3 laa3.",
+              "dim2 gaai2?"
+            ],
+            "bd": [
+              {
+                "c": "好",
+                "j": "hou2",
+                "e": "OK / good"
+              },
+              {
+                "c": "呢對",
+                "j": "ni1 deoi3",
+                "e": "this pair"
+              },
+              {
+                "c": "啱晒",
+                "j": "ngaam1 saai3",
+                "e": "fits perfectly"
+              }
+            ]
+          }
+        ]
+      }
+    }
+  }
+}

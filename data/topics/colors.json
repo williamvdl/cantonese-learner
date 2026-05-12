@@ -1,0 +1,413 @@
+{
+  "meta": {
+    "label": "Colors",
+    "icon": "🎨",
+    "color": "#D35400"
+  },
+  "rounds": {
+    "1": {
+      "note": null,
+      "words": [
+        {
+          "c": "紅色",
+          "j": "hung4 sik1",
+          "e": "Red"
+        },
+        {
+          "c": "橙色",
+          "j": "caang2 sik1",
+          "e": "Orange"
+        },
+        {
+          "c": "黃色",
+          "j": "wong4 sik1",
+          "e": "Yellow"
+        },
+        {
+          "c": "綠色",
+          "j": "luk6 sik1",
+          "e": "Green"
+        },
+        {
+          "c": "藍色",
+          "j": "laam4 sik1",
+          "e": "Blue"
+        },
+        {
+          "c": "紫色",
+          "j": "zi2 sik1",
+          "e": "Purple"
+        },
+        {
+          "c": "白色",
+          "j": "baak6 sik1",
+          "e": "White"
+        },
+        {
+          "c": "黑色",
+          "j": "hak1 sik1",
+          "e": "Black"
+        },
+        {
+          "c": "粉紅色",
+          "j": "fan2 hung4 sik1",
+          "e": "Pink"
+        },
+        {
+          "c": "棕色",
+          "j": "zung1 sik1",
+          "e": "Brown"
+        }
+      ],
+      "sentences": [
+        {
+          "c": "我鍾意紅色。",
+          "j": "ngo5 zung1 ji3 hung4 sik1.",
+          "e": "I like red.",
+          "bd": [
+            {
+              "c": "我",
+              "j": "ngo5",
+              "e": "I"
+            },
+            {
+              "c": "鍾意",
+              "j": "zung1 ji3",
+              "e": "like"
+            },
+            {
+              "c": "紅色",
+              "j": "hung4 sik1",
+              "e": "red"
+            }
+          ]
+        },
+        {
+          "c": "天空係藍色。",
+          "j": "tin1 hung1 hai6 laam4 sik1.",
+          "e": "The sky is blue.",
+          "bd": [
+            {
+              "c": "天空",
+              "j": "tin1 hung1",
+              "e": "sky"
+            },
+            {
+              "c": "係",
+              "j": "hai6",
+              "e": "is"
+            },
+            {
+              "c": "藍色",
+              "j": "laam4 sik1",
+              "e": "blue"
+            }
+          ]
+        },
+        {
+          "c": "呢件衫係白色。",
+          "j": "ni1 gin6 saam1 hai6 baak6 sik1.",
+          "e": "This shirt is white.",
+          "bd": [
+            {
+              "c": "呢件",
+              "j": "ni1 gin6",
+              "e": "this (clothing)"
+            },
+            {
+              "c": "衫",
+              "j": "saam1",
+              "e": "shirt / clothing"
+            },
+            {
+              "c": "係",
+              "j": "hai6",
+              "e": "is"
+            },
+            {
+              "c": "白色",
+              "j": "baak6 sik1",
+              "e": "white"
+            }
+          ]
+        },
+        {
+          "c": "佢著綠色嘅褲。",
+          "j": "keoi5 zoek3 luk6 sik1 ge3 fu3.",
+          "e": "He's wearing green pants.",
+          "bd": [
+            {
+              "c": "佢",
+              "j": "keoi5",
+              "e": "he / she"
+            },
+            {
+              "c": "著",
+              "j": "zoek3",
+              "e": "wearing"
+            },
+            {
+              "c": "綠色",
+              "j": "luk6 sik1",
+              "e": "green"
+            },
+            {
+              "c": "嘅",
+              "j": "ge3",
+              "e": "(possessive particle)"
+            },
+            {
+              "c": "褲",
+              "j": "fu3",
+              "e": "pants"
+            }
+          ]
+        },
+        {
+          "c": "我唔鍾意黃色。",
+          "j": "ngo5 m4 zung1 ji3 wong4 sik1.",
+          "e": "I don't like yellow.",
+          "bd": [
+            {
+              "c": "我",
+              "j": "ngo5",
+              "e": "I"
+            },
+            {
+              "c": "唔",
+              "j": "m4",
+              "e": "don't / not"
+            },
+            {
+              "c": "鍾意",
+              "j": "zung1 ji3",
+              "e": "like"
+            },
+            {
+              "c": "黃色",
+              "j": "wong4 sik1",
+              "e": "yellow"
+            }
+          ]
+        }
+      ],
+      "convo": {
+        "title": "Shopping for clothes",
+        "speakers": [
+          "Shop assistant",
+          "You"
+        ],
+        "lines": [
+          {
+            "u": false,
+            "c": "你好，你想搵咩顏色？",
+            "j": "nei5 hou2, nei5 soeng2 wan2 me1 ngaan4 sik1?",
+            "e": "Hello, what colour are you looking for?",
+            "bd": [
+              {
+                "c": "你好",
+                "j": "nei5 hou2",
+                "e": "hello"
+              },
+              {
+                "c": "你",
+                "j": "nei5",
+                "e": "you"
+              },
+              {
+                "c": "想",
+                "j": "soeng2",
+                "e": "want to"
+              },
+              {
+                "c": "搵",
+                "j": "wan2",
+                "e": "look for / find"
+              },
+              {
+                "c": "咩顏色",
+                "j": "me1 ngaan4 sik1",
+                "e": "what colour"
+              }
+            ]
+          },
+          {
+            "u": true,
+            "c": "我想要藍色或者黑色。",
+            "j": "ngo5 soeng2 jiu3 laam4 sik1 waak6 ze2 hak1 sik1.",
+            "e": "I'd like blue or black.",
+            "opts": [
+              "我想要藍色或者黑色。",
+              "我鍾意紅色同綠色。",
+              "我唔知。"
+            ],
+            "optsJ": [
+              "ngo5 soeng2 jiu3 laam4 sik1 waak6 ze2 hak1 sik1.",
+              "ngo5 zung1 ji3 hung4 sik1 tung4 luk6 sik1.",
+              "ngo5 m4 zi1."
+            ],
+            "bd": [
+              {
+                "c": "我想要",
+                "j": "ngo5 soeng2 jiu3",
+                "e": "I would like"
+              },
+              {
+                "c": "藍色",
+                "j": "laam4 sik1",
+                "e": "blue"
+              },
+              {
+                "c": "或者",
+                "j": "waak6 ze2",
+                "e": "or"
+              },
+              {
+                "c": "黑色",
+                "j": "hak1 sik1",
+                "e": "black"
+              }
+            ]
+          },
+          {
+            "u": false,
+            "c": "呢件係藍色，你覺得點？",
+            "j": "ni1 gin6 hai6 laam4 sik1, nei5 gok3 dak1 dim2?",
+            "e": "This one is blue, what do you think?",
+            "bd": [
+              {
+                "c": "呢件",
+                "j": "ni1 gin6",
+                "e": "this one (clothing)"
+              },
+              {
+                "c": "係",
+                "j": "hai6",
+                "e": "is"
+              },
+              {
+                "c": "藍色",
+                "j": "laam4 sik1",
+                "e": "blue"
+              },
+              {
+                "c": "你",
+                "j": "nei5",
+                "e": "you"
+              },
+              {
+                "c": "覺得點",
+                "j": "gok3 dak1 dim2",
+                "e": "what do you think?"
+              }
+            ]
+          },
+          {
+            "u": true,
+            "c": "好靚！有冇白色？",
+            "j": "hou2 leng3! jau5 mou5 baak6 sik1?",
+            "e": "Very nice! Do you have white?",
+            "opts": [
+              "好靚！有冇白色？",
+              "太貴喇。",
+              "唔啱我。"
+            ],
+            "optsJ": [
+              "hou2 leng3! jau5 mou5 baak6 sik1?",
+              "taai3 gwai3 laa3.",
+              "m4 ngaam1 ngo5."
+            ],
+            "bd": [
+              {
+                "c": "好靚",
+                "j": "hou2 leng3",
+                "e": "very nice / beautiful"
+              },
+              {
+                "c": "有冇",
+                "j": "jau5 mou5",
+                "e": "do you have?"
+              },
+              {
+                "c": "白色",
+                "j": "baak6 sik1",
+                "e": "white"
+              }
+            ]
+          },
+          {
+            "u": false,
+            "c": "有，呢件白色都好好睇。",
+            "j": "jau5, ni1 gin6 baak6 sik1 dou1 hou2 hou2 tai2.",
+            "e": "Yes, this white one is also very nice.",
+            "bd": [
+              {
+                "c": "有",
+                "j": "jau5",
+                "e": "yes / have"
+              },
+              {
+                "c": "呢件",
+                "j": "ni1 gin6",
+                "e": "this one"
+              },
+              {
+                "c": "白色",
+                "j": "baak6 sik1",
+                "e": "white"
+              },
+              {
+                "c": "都",
+                "j": "dou1",
+                "e": "also"
+              },
+              {
+                "c": "好好睇",
+                "j": "hou2 hou2 tai2",
+                "e": "very nice looking"
+              }
+            ]
+          },
+          {
+            "u": true,
+            "c": "我買白色嗰件，多謝！",
+            "j": "ngo5 maai5 baak6 sik1 go2 gin6, do1 ze6!",
+            "e": "I'll take the white one, thanks!",
+            "opts": [
+              "我買白色嗰件，多謝！",
+              "兩件都唔要。",
+              "有冇平啲？"
+            ],
+            "optsJ": [
+              "ngo5 maai5 baak6 sik1 go2 gin6, do1 ze6!",
+              "loeng5 gin6 dou1 m4 jiu3.",
+              "jau5 mou5 peng4 di1?"
+            ],
+            "bd": [
+              {
+                "c": "我買",
+                "j": "ngo5 maai5",
+                "e": "I'll buy"
+              },
+              {
+                "c": "白色",
+                "j": "baak6 sik1",
+                "e": "white"
+              },
+              {
+                "c": "嗰件",
+                "j": "go2 gin6",
+                "e": "that one (clothing)"
+              },
+              {
+                "c": "多謝",
+                "j": "do1 ze6",
+                "e": "thank you"
+              }
+            ]
+          }
+        ]
+      }
+    }
+  }
+}

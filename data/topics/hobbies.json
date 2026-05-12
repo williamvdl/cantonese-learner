@@ -1,0 +1,408 @@
+{
+  "meta": {
+    "label": "Hobbies & Free Time",
+    "icon": "🎨",
+    "color": "#196F3D"
+  },
+  "rounds": {
+    "1": {
+      "note": "Hobbies use lots of verb-noun pairs. <strong>tai2</strong> (睇, watch/read/look) prefixes many media activities: <em>tai2 hei3</em> (睇戲, watch a movie), <em>tai2 syu1</em> (睇書, read a book), <em>tai2 din6 si6</em> (睇電視, watch TV). <strong>haang4 saan1</strong> (行山) literally 'walk mountain' = hiking, a hugely popular weekend activity in HK. <strong>daa2 gei1</strong> (打機) literally 'hit machine' = play video games.",
+      "words": [
+        {
+          "c": "興趣",
+          "j": "hing3 ceoi3",
+          "e": "Hobby / interest"
+        },
+        {
+          "c": "睇戲",
+          "j": "tai2 hei3",
+          "e": "Watch a movie"
+        },
+        {
+          "c": "聽歌",
+          "j": "ting1 go1",
+          "e": "Listen to music"
+        },
+        {
+          "c": "睇書",
+          "j": "tai2 syu1",
+          "e": "Read a book"
+        },
+        {
+          "c": "行山",
+          "j": "haang4 saan1",
+          "e": "Hiking"
+        },
+        {
+          "c": "畫畫",
+          "j": "waak6 waa2",
+          "e": "Drawing / painting"
+        },
+        {
+          "c": "唱歌",
+          "j": "coeng3 go1",
+          "e": "Sing"
+        },
+        {
+          "c": "跳舞",
+          "j": "tiu3 mou5",
+          "e": "Dance"
+        },
+        {
+          "c": "打機",
+          "j": "daa2 gei1",
+          "e": "Play video games"
+        },
+        {
+          "c": "影相",
+          "j": "jing2 soeng2",
+          "e": "Take photos (hobby)"
+        }
+      ],
+      "sentences": [
+        {
+          "c": "我嘅興趣係影相。",
+          "j": "ngo5 ge3 hing3 ceoi3 hai6 jing2 soeng2.",
+          "e": "My hobby is photography.",
+          "bd": [
+            {
+              "c": "我嘅",
+              "j": "ngo5 ge3",
+              "e": "my"
+            },
+            {
+              "c": "興趣",
+              "j": "hing3 ceoi3",
+              "e": "hobby"
+            },
+            {
+              "c": "係",
+              "j": "hai6",
+              "e": "is"
+            },
+            {
+              "c": "影相",
+              "j": "jing2 soeng2",
+              "e": "photography"
+            }
+          ]
+        },
+        {
+          "c": "你鍾意睇咩戲？",
+          "j": "nei5 zung1 ji3 tai2 me1 hei3?",
+          "e": "What kind of movies do you like?",
+          "bd": [
+            {
+              "c": "你",
+              "j": "nei5",
+              "e": "you"
+            },
+            {
+              "c": "鍾意",
+              "j": "zung1 ji3",
+              "e": "like"
+            },
+            {
+              "c": "睇",
+              "j": "tai2",
+              "e": "watch"
+            },
+            {
+              "c": "咩戲",
+              "j": "me1 hei3",
+              "e": "what movies"
+            }
+          ]
+        },
+        {
+          "c": "週末一齊行山啦。",
+          "j": "zau1 mut6 jat1 cai4 haang4 saan1 laa1.",
+          "e": "Let's go hiking this weekend.",
+          "bd": [
+            {
+              "c": "週末",
+              "j": "zau1 mut6",
+              "e": "weekend"
+            },
+            {
+              "c": "一齊",
+              "j": "jat1 cai4",
+              "e": "together"
+            },
+            {
+              "c": "行山",
+              "j": "haang4 saan1",
+              "e": "hiking"
+            },
+            {
+              "c": "啦",
+              "j": "laa1",
+              "e": "(let's)"
+            }
+          ]
+        },
+        {
+          "c": "我細個學跳舞。",
+          "j": "ngo5 sai3 go3 hok6 tiu3 mou5.",
+          "e": "I learned to dance as a child.",
+          "bd": [
+            {
+              "c": "我",
+              "j": "ngo5",
+              "e": "I"
+            },
+            {
+              "c": "細個",
+              "j": "sai3 go3",
+              "e": "as a child"
+            },
+            {
+              "c": "學",
+              "j": "hok6",
+              "e": "learned"
+            },
+            {
+              "c": "跳舞",
+              "j": "tiu3 mou5",
+              "e": "dance"
+            }
+          ]
+        },
+        {
+          "c": "佢成日打機。",
+          "j": "keoi5 sing4 jat6 daa2 gei1.",
+          "e": "He plays video games all the time.",
+          "bd": [
+            {
+              "c": "佢",
+              "j": "keoi5",
+              "e": "he"
+            },
+            {
+              "c": "成日",
+              "j": "sing4 jat6",
+              "e": "all the time"
+            },
+            {
+              "c": "打機",
+              "j": "daa2 gei1",
+              "e": "play games"
+            }
+          ]
+        }
+      ],
+      "convo": {
+        "title": "Sharing weekend plans",
+        "speakers": [
+          "Friend",
+          "You"
+        ],
+        "lines": [
+          {
+            "u": false,
+            "c": "你週末做咩呀？",
+            "j": "nei5 zau1 mut6 zou6 me1 aa3?",
+            "e": "What do you do on weekends?",
+            "bd": [
+              {
+                "c": "你",
+                "j": "nei5",
+                "e": "you"
+              },
+              {
+                "c": "週末",
+                "j": "zau1 mut6",
+                "e": "weekend"
+              },
+              {
+                "c": "做",
+                "j": "zou6",
+                "e": "do"
+              },
+              {
+                "c": "咩",
+                "j": "me1",
+                "e": "what"
+              },
+              {
+                "c": "呀",
+                "j": "aa3",
+                "e": "(soft)"
+              }
+            ]
+          },
+          {
+            "u": true,
+            "c": "我鍾意行山，有時影相。",
+            "j": "ngo5 zung1 ji3 haang4 saan1, jau5 si4 jing2 soeng2.",
+            "e": "I like hiking, sometimes photography.",
+            "opts": [
+              "我鍾意行山，有時影相。",
+              "瞓覺。",
+              "唔知。"
+            ],
+            "optsJ": [
+              "ngo5 zung1 ji3 haang4 saan1, jau5 si4 jing2 soeng2.",
+              "fan3 gaau3.",
+              "m4 zi1."
+            ],
+            "bd": [
+              {
+                "c": "我",
+                "j": "ngo5",
+                "e": "I"
+              },
+              {
+                "c": "鍾意",
+                "j": "zung1 ji3",
+                "e": "like"
+              },
+              {
+                "c": "行山",
+                "j": "haang4 saan1",
+                "e": "hiking"
+              },
+              {
+                "c": "有時",
+                "j": "jau5 si4",
+                "e": "sometimes"
+              },
+              {
+                "c": "影相",
+                "j": "jing2 soeng2",
+                "e": "photography"
+              }
+            ]
+          },
+          {
+            "u": false,
+            "c": "嘩，咁有意義！",
+            "j": "waa3, gam3 jau5 ji3 ji6!",
+            "e": "Wow, so meaningful!",
+            "bd": [
+              {
+                "c": "嘩",
+                "j": "waa3",
+                "e": "wow"
+              },
+              {
+                "c": "咁",
+                "j": "gam3",
+                "e": "so"
+              },
+              {
+                "c": "有意義",
+                "j": "jau5 ji3 ji6",
+                "e": "meaningful"
+              }
+            ]
+          },
+          {
+            "u": true,
+            "c": "你呢？得閒做咩？",
+            "j": "nei5 ne1? dak1 haan4 zou6 me1?",
+            "e": "And you? What do you do in your free time?",
+            "opts": [
+              "你呢？得閒做咩？",
+              "我唔知。",
+              "得閒？"
+            ],
+            "optsJ": [
+              "nei5 ne1? dak1 haan4 zou6 me1?",
+              "ngo5 m4 zi1.",
+              "dak1 haan4?"
+            ],
+            "bd": [
+              {
+                "c": "你呢",
+                "j": "nei5 ne1",
+                "e": "and you"
+              },
+              {
+                "c": "得閒",
+                "j": "dak1 haan4",
+                "e": "free time"
+              },
+              {
+                "c": "做咩",
+                "j": "zou6 me1",
+                "e": "do what"
+              }
+            ]
+          },
+          {
+            "u": false,
+            "c": "我成日睇戲，又鍾意打機。",
+            "j": "ngo5 sing4 jat6 tai2 hei3, jau6 zung1 ji3 daa2 gei1.",
+            "e": "I watch movies a lot, and I like games.",
+            "bd": [
+              {
+                "c": "我",
+                "j": "ngo5",
+                "e": "I"
+              },
+              {
+                "c": "成日",
+                "j": "sing4 jat6",
+                "e": "all the time"
+              },
+              {
+                "c": "睇戲",
+                "j": "tai2 hei3",
+                "e": "watch movies"
+              },
+              {
+                "c": "又",
+                "j": "jau6",
+                "e": "also"
+              },
+              {
+                "c": "打機",
+                "j": "daa2 gei1",
+                "e": "play games"
+              }
+            ]
+          },
+          {
+            "u": true,
+            "c": "下次一齊睇戲啦！",
+            "j": "haa6 ci3 jat1 cai4 tai2 hei3 laa1!",
+            "e": "Let's watch a movie together sometime!",
+            "opts": [
+              "下次一齊睇戲啦！",
+              "我唔睇戲。",
+              "唔得閒。"
+            ],
+            "optsJ": [
+              "haa6 ci3 jat1 cai4 tai2 hei3 laa1!",
+              "ngo5 m4 tai2 hei3.",
+              "m4 dak1 haan4."
+            ],
+            "bd": [
+              {
+                "c": "下次",
+                "j": "haa6 ci3",
+                "e": "next time"
+              },
+              {
+                "c": "一齊",
+                "j": "jat1 cai4",
+                "e": "together"
+              },
+              {
+                "c": "睇戲",
+                "j": "tai2 hei3",
+                "e": "watch a movie"
+              },
+              {
+                "c": "啦",
+                "j": "laa1",
+                "e": "(let's)"
+              }
+            ]
+          }
+        ]
+      }
+    }
+  }
+}

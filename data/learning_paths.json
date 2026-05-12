@@ -1,0 +1,179 @@
+{
+  "paths": [
+    {
+      "key": "beginner",
+      "label": "Beginner",
+      "icon": "🌱",
+      "level": "Beginner",
+      "desc": "Foundations: greet people, count, talk about family, food, time, and getting around.",
+      "lessons": [
+        {
+          "topic": "greetings",
+          "round": 1
+        },
+        {
+          "topic": "yesno",
+          "round": 1
+        },
+        {
+          "topic": "numbers",
+          "round": 1
+        },
+        {
+          "topic": "phrases",
+          "round": 1
+        },
+        {
+          "topic": "questions",
+          "round": 1
+        },
+        {
+          "topic": "family",
+          "round": 1
+        },
+        {
+          "topic": "time",
+          "round": 1
+        },
+        {
+          "topic": "tense",
+          "round": 1
+        },
+        {
+          "topic": "food",
+          "round": 1
+        },
+        {
+          "topic": "feelings",
+          "round": 1
+        },
+        {
+          "topic": "particles",
+          "round": 1
+        },
+        {
+          "topic": "colors",
+          "round": 1
+        },
+        {
+          "topic": "body",
+          "round": 1
+        },
+        {
+          "topic": "shopping",
+          "round": 1
+        },
+        {
+          "topic": "directions",
+          "round": 1
+        },
+        {
+          "topic": "transport",
+          "round": 1
+        }
+      ]
+    },
+    {
+      "key": "intermediate",
+      "label": "Intermediate",
+      "icon": "🌿",
+      "level": "Intermediate",
+      "desc": "Going deeper: harder vocabulary on familiar topics, plus new everyday contexts.",
+      "lessons": [
+        {
+          "topic": "greetings",
+          "round": 2
+        },
+        {
+          "topic": "numbers",
+          "round": 2
+        },
+        {
+          "topic": "food",
+          "round": 2
+        },
+        {
+          "topic": "feelings",
+          "round": 2
+        },
+        {
+          "topic": "body",
+          "round": 2
+        },
+        {
+          "topic": "shopping",
+          "round": 2
+        },
+        {
+          "topic": "restaurant",
+          "round": 1
+        },
+        {
+          "topic": "weather",
+          "round": 1
+        },
+        {
+          "topic": "friends",
+          "round": 1
+        },
+        {
+          "topic": "home",
+          "round": 1
+        },
+        {
+          "topic": "cooking",
+          "round": 1
+        },
+        {
+          "topic": "animals",
+          "round": 1
+        },
+        {
+          "topic": "hotels",
+          "round": 1
+        },
+        {
+          "topic": "attractions",
+          "round": 1
+        },
+        {
+          "topic": "work",
+          "round": 1
+        },
+        {
+          "topic": "school",
+          "round": 1
+        },
+        {
+          "topic": "tech",
+          "round": 1
+        },
+        {
+          "topic": "money",
+          "round": 1
+        },
+        {
+          "topic": "hobbies",
+          "round": 1
+        },
+        {
+          "topic": "sports",
+          "round": 1
+        },
+        {
+          "topic": "emergencies",
+          "round": 1
+        }
+      ]
+    },
+    {
+      "key": "advanced",
+      "label": "Advanced",
+      "icon": "🌳",
+      "level": "Advanced",
+      "desc": "Coming soon — natural register, idioms, and family-context conversation.",
+      "comingSoon": true,
+      "lessons": []
+    }
+  ]
+}

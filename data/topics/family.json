@@ -1,0 +1,443 @@
+{
+  "meta": {
+    "label": "Family",
+    "icon": "👨‍👩‍👧",
+    "color": "#1E8449"
+  },
+  "rounds": {
+    "1": {
+      "note": null,
+      "words": [
+        {
+          "c": "爸爸",
+          "j": "baa4 baa1",
+          "e": "Father"
+        },
+        {
+          "c": "媽媽",
+          "j": "maa4 maa1",
+          "e": "Mother"
+        },
+        {
+          "c": "哥哥",
+          "j": "go4 go1",
+          "e": "Older brother"
+        },
+        {
+          "c": "姐姐",
+          "j": "ze4 ze1",
+          "e": "Older sister"
+        },
+        {
+          "c": "弟弟",
+          "j": "dai6 dai2",
+          "e": "Younger brother"
+        },
+        {
+          "c": "妹妹",
+          "j": "mui4 mui2",
+          "e": "Younger sister"
+        },
+        {
+          "c": "爺爺",
+          "j": "je4 je2",
+          "e": "Paternal grandfather"
+        },
+        {
+          "c": "嫲嫲",
+          "j": "maa4 maa2",
+          "e": "Paternal grandmother"
+        },
+        {
+          "c": "外公",
+          "j": "ngoi6 gung1",
+          "e": "Maternal grandfather"
+        },
+        {
+          "c": "外婆",
+          "j": "ngoi6 po4",
+          "e": "Maternal grandmother"
+        },
+        {
+          "c": "兒子",
+          "j": "ji4 zi2",
+          "e": "Son"
+        },
+        {
+          "c": "女兒",
+          "j": "neoi5 ji4",
+          "e": "Daughter"
+        }
+      ],
+      "sentences": [
+        {
+          "c": "我爸爸好高。",
+          "j": "ngo5 baa4 baa1 hou2 gou1.",
+          "e": "My father is very tall.",
+          "bd": [
+            {
+              "c": "我",
+              "j": "ngo5",
+              "e": "my"
+            },
+            {
+              "c": "爸爸",
+              "j": "baa4 baa1",
+              "e": "father"
+            },
+            {
+              "c": "好高",
+              "j": "hou2 gou1",
+              "e": "very tall"
+            }
+          ]
+        },
+        {
+          "c": "我媽媽係老師。",
+          "j": "ngo5 maa4 maa1 hai6 lou5 si1.",
+          "e": "My mother is a teacher.",
+          "bd": [
+            {
+              "c": "我",
+              "j": "ngo5",
+              "e": "my"
+            },
+            {
+              "c": "媽媽",
+              "j": "maa4 maa1",
+              "e": "mother"
+            },
+            {
+              "c": "係",
+              "j": "hai6",
+              "e": "is"
+            },
+            {
+              "c": "老師",
+              "j": "lou5 si1",
+              "e": "teacher"
+            }
+          ]
+        },
+        {
+          "c": "我有一個哥哥。",
+          "j": "ngo5 jau5 jat1 go3 go4 go1.",
+          "e": "I have one older brother.",
+          "bd": [
+            {
+              "c": "我",
+              "j": "ngo5",
+              "e": "I"
+            },
+            {
+              "c": "有",
+              "j": "jau5",
+              "e": "have"
+            },
+            {
+              "c": "一個",
+              "j": "jat1 go3",
+              "e": "one (person)"
+            },
+            {
+              "c": "哥哥",
+              "j": "go4 go1",
+              "e": "older brother"
+            }
+          ]
+        },
+        {
+          "c": "妹妹好細個。",
+          "j": "mui4 mui2 hou2 sai3 go3.",
+          "e": "Younger sister is very young.",
+          "bd": [
+            {
+              "c": "妹妹",
+              "j": "mui4 mui2",
+              "e": "younger sister"
+            },
+            {
+              "c": "好",
+              "j": "hou2",
+              "e": "very"
+            },
+            {
+              "c": "細個",
+              "j": "sai3 go3",
+              "e": "young / small"
+            }
+          ]
+        },
+        {
+          "c": "爺爺住喺香港。",
+          "j": "je4 je2 zyu6 hai2 hoeng1 gong2.",
+          "e": "Grandfather lives in Hong Kong.",
+          "bd": [
+            {
+              "c": "爺爺",
+              "j": "je4 je2",
+              "e": "paternal grandfather"
+            },
+            {
+              "c": "住",
+              "j": "zyu6",
+              "e": "lives"
+            },
+            {
+              "c": "喺",
+              "j": "hai2",
+              "e": "in / at"
+            },
+            {
+              "c": "香港",
+              "j": "hoeng1 gong2",
+              "e": "Hong Kong"
+            }
+          ]
+        }
+      ],
+      "convo": {
+        "title": "Introducing your family",
+        "speakers": [
+          "Friend",
+          "You"
+        ],
+        "lines": [
+          {
+            "u": false,
+            "c": "你有冇兄弟姐妹？",
+            "j": "nei5 jau5 mou5 hing1 dai6 ze2 mui6?",
+            "e": "Do you have brothers or sisters?",
+            "bd": [
+              {
+                "c": "你",
+                "j": "nei5",
+                "e": "you"
+              },
+              {
+                "c": "有冇",
+                "j": "jau5 mou5",
+                "e": "have or not?"
+              },
+              {
+                "c": "兄弟",
+                "j": "hing1 dai6",
+                "e": "brothers"
+              },
+              {
+                "c": "姐妹",
+                "j": "ze2 mui6",
+                "e": "sisters"
+              }
+            ]
+          },
+          {
+            "u": true,
+            "c": "有，我有一個哥哥同一個妹妹。",
+            "j": "jau5, ngo5 jau5 jat1 go3 go4 go1 tung4 jat1 go3 mui4 mui2.",
+            "e": "Yes, one older brother and one younger sister.",
+            "opts": [
+              "有，我有一個哥哥同一個妹妹。",
+              "冇，我係獨生子。",
+              "我唔知。"
+            ],
+            "optsJ": [
+              "jau5, ngo5 jau5 jat1 go3 go4 go1 tung4 jat1 go3 mui4 mui2.",
+              "mou5, ngo5 hai6 duk6 sang1 zi2.",
+              "ngo5 m4 zi1."
+            ],
+            "bd": [
+              {
+                "c": "有",
+                "j": "jau5",
+                "e": "yes / have"
+              },
+              {
+                "c": "我有",
+                "j": "ngo5 jau5",
+                "e": "I have"
+              },
+              {
+                "c": "一個",
+                "j": "jat1 go3",
+                "e": "one (person)"
+              },
+              {
+                "c": "哥哥",
+                "j": "go4 go1",
+                "e": "older brother"
+              },
+              {
+                "c": "同",
+                "j": "tung4",
+                "e": "and"
+              },
+              {
+                "c": "一個",
+                "j": "jat1 go3",
+                "e": "one (person)"
+              },
+              {
+                "c": "妹妹",
+                "j": "mui4 mui2",
+                "e": "younger sister"
+              }
+            ]
+          },
+          {
+            "u": false,
+            "c": "你爸爸媽媽做咩工作？",
+            "j": "nei5 baa4 baa1 maa4 maa1 zou6 me1 gung1 zok3?",
+            "e": "What do your parents do for work?",
+            "bd": [
+              {
+                "c": "你",
+                "j": "nei5",
+                "e": "your"
+              },
+              {
+                "c": "爸爸",
+                "j": "baa4 baa1",
+                "e": "father"
+              },
+              {
+                "c": "媽媽",
+                "j": "maa4 maa1",
+                "e": "mother"
+              },
+              {
+                "c": "做",
+                "j": "zou6",
+                "e": "do"
+              },
+              {
+                "c": "咩",
+                "j": "me1",
+                "e": "what"
+              },
+              {
+                "c": "工作",
+                "j": "gung1 zok3",
+                "e": "work / job"
+              }
+            ]
+          },
+          {
+            "u": true,
+            "c": "我爸爸係醫生，媽媽係老師。",
+            "j": "ngo5 baa4 baa1 hai6 ji1 sang1, maa4 maa1 hai6 lou5 si1.",
+            "e": "My dad is a doctor, my mum is a teacher.",
+            "opts": [
+              "我爸爸係醫生，媽媽係老師。",
+              "我唔知佢哋做咩。",
+              "佢哋唔工作。"
+            ],
+            "optsJ": [
+              "ngo5 baa4 baa1 hai6 ji1 sang1, maa4 maa1 hai6 lou5 si1.",
+              "ngo5 m4 zi1 keoi5 dei6 zou6 me1.",
+              "keoi5 dei6 m4 gung1 zok3."
+            ],
+            "bd": [
+              {
+                "c": "我爸爸",
+                "j": "ngo5 baa4 baa1",
+                "e": "my father"
+              },
+              {
+                "c": "係",
+                "j": "hai6",
+                "e": "is"
+              },
+              {
+                "c": "醫生",
+                "j": "ji1 sang1",
+                "e": "doctor"
+              },
+              {
+                "c": "媽媽",
+                "j": "maa4 maa1",
+                "e": "mother"
+              },
+              {
+                "c": "係",
+                "j": "hai6",
+                "e": "is"
+              },
+              {
+                "c": "老師",
+                "j": "lou5 si1",
+                "e": "teacher"
+              }
+            ]
+          },
+          {
+            "u": false,
+            "c": "你哋住喺邊度？",
+            "j": "nei5 dei6 zyu6 hai2 bin1 dou6?",
+            "e": "Where do you all live?",
+            "bd": [
+              {
+                "c": "你哋",
+                "j": "nei5 dei6",
+                "e": "you all"
+              },
+              {
+                "c": "住",
+                "j": "zyu6",
+                "e": "live"
+              },
+              {
+                "c": "喺",
+                "j": "hai2",
+                "e": "at / in"
+              },
+              {
+                "c": "邊度",
+                "j": "bin1 dou6",
+                "e": "where"
+              }
+            ]
+          },
+          {
+            "u": true,
+            "c": "我哋住喺悉尼。",
+            "j": "ngo5 dei6 zyu6 hai2 Sat1 nei4.",
+            "e": "We live in Sydney.",
+            "opts": [
+              "我哋住喺悉尼。",
+              "我唔知。",
+              "我哋住喺飛機。"
+            ],
+            "optsJ": [
+              "ngo5 dei6 zyu6 hai2 Sat1 nei4.",
+              "ngo5 m4 zi1.",
+              "ngo5 dei6 zyu6 hai2 fei1 gei1."
+            ],
+            "bd": [
+              {
+                "c": "我哋",
+                "j": "ngo5 dei6",
+                "e": "we / us"
+              },
+              {
+                "c": "住",
+                "j": "zyu6",
+                "e": "live"
+              },
+              {
+                "c": "喺",
+                "j": "hai2",
+                "e": "in / at"
+              },
+              {
+                "c": "悉尼",
+                "j": "Sat1 nei4",
+                "e": "Sydney"
+              }
+            ]
+          }
+        ]
+      }
+    }
+  }
+}

@@ -1,0 +1,72 @@
+{
+  "list": [
+    {
+      "key": "everyday",
+      "label": "Everyday Essentials",
+      "icon": "🌟"
+    },
+    {
+      "key": "people",
+      "label": "People & Relationships",
+      "icon": "👨‍👩‍👧"
+    },
+    {
+      "key": "food",
+      "label": "Food & Dining",
+      "icon": "🍜"
+    },
+    {
+      "key": "outabout",
+      "label": "Out & About",
+      "icon": "🛍️"
+    },
+    {
+      "key": "daily",
+      "label": "Daily Life",
+      "icon": "🌤️"
+    },
+    {
+      "key": "work",
+      "label": "Work & Education",
+      "icon": "💼"
+    },
+    {
+      "key": "practical",
+      "label": "Practical Situations",
+      "icon": "🆘"
+    }
+  ],
+  "topic_map": {
+    "greetings": "everyday",
+    "numbers": "everyday",
+    "time": "everyday",
+    "phrases": "everyday",
+    "questions": "everyday",
+    "yesno": "everyday",
+    "tense": "everyday",
+    "particles": "everyday",
+    "family": "people",
+    "body": "people",
+    "feelings": "people",
+    "friends": "people",
+    "food": "food",
+    "restaurant": "food",
+    "cooking": "food",
+    "shopping": "outabout",
+    "transport": "outabout",
+    "directions": "outabout",
+    "hotels": "outabout",
+    "attractions": "outabout",
+    "weather": "daily",
+    "colors": "daily",
+    "home": "daily",
+    "animals": "daily",
+    "work": "work",
+    "school": "work",
+    "tech": "work",
+    "money": "work",
+    "hobbies": "practical",
+    "sports": "practical",
+    "emergencies": "practical"
+  }
+}
