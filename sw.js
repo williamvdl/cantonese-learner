@@ -1,101 +1,66 @@
-// ── Cantonese Learner — Service Worker ───────────────────────────────────────
-// VERSION: bump this string every time you push a new index.html to GitHub.
-// Change cantonese-v1 → cantonese-v2, etc. That's the only thing needed.
-const CACHE_NAME = 'cantonese-v1';
+// ── Cantonese Learner — Service Worker ──────────────────────────────────────
+// Cache-first strategy with stale-while-revalidate. Caches the app shell and
+// all data files on install, so the app works fully offline.
+//
+// IMPORTANT — increment CACHE_VERSION on every deploy. The browser only picks
+// up a new service worker when this string changes. If you forget to bump it,
+// users will keep serving the old index.html from cache.
 
-// Files to pre-cache on first install.
-// If you later add icon files or split data into /data/ folder, add them here.
-const PRECACHE_ASSETS = [
+const CACHE_VERSION = 'cantonese-v3';
+
+// App shell — fetched at install time
+const SHELL_ASSETS = [
+  './',
   './index.html',
+  './manifest.json',
+  './data/topics_index.json',
+  './data/categories.json',
+  './data/learning_paths.json',
 ];
 
-// ── Install ───────────────────────────────────────────────────────────────────
-// Runs once when the service worker is first registered.
-// Downloads and stores the listed files so they're available offline.
+// Topic JSONs — pre-cached so every topic works offline from first install
+const TOPIC_KEYS = [
+  'animals','attractions','body','colors','cooking','directions','emergencies',
+  'family','feelings','food','friends','greetings','hobbies','home','hotels',
+  'money','numbers','particles','phrases','questions','restaurant','school',
+  'shopping','sports','tech','tense','time','transport','weather','work','yesno',
+];
+const TOPIC_ASSETS = TOPIC_KEYS.map(k => `./data/topics/${k}.json`);
+
+const PRECACHE = [...SHELL_ASSETS, ...TOPIC_ASSETS];
+
+// ── Install — cache the shell + all data ──
 self.addEventListener('install', event => {
   event.waitUntil(
-    caches.open(CACHE_NAME)
-      .then(cache => cache.addAll(PRECACHE_ASSETS))
-      .then(() => self.skipWaiting()) // activate immediately, don't wait for old tabs to close
+    caches.open(CACHE_VERSION)
+      .then(cache => cache.addAll(PRECACHE))
+      .then(() => self.skipWaiting())
   );
 });
 
-// ── Activate ──────────────────────────────────────────────────────────────────
-// Runs after install. Deletes any old caches from previous versions.
-// This is what keeps storage tidy when you bump the version number above.
+// ── Activate — clean up old caches ──
 self.addEventListener('activate', event => {
   event.waitUntil(
     caches.keys()
-      .then(cacheNames =>
-        Promise.all(
-          cacheNames
-            .filter(name => name !== CACHE_NAME) // find caches that aren't the current version
-            .map(name => caches.delete(name))     // delete them
-        )
-      )
-      .then(() => self.clients.claim()) // take control of open pages immediately
+      .then(keys => Promise.all(keys.filter(k => k !== CACHE_VERSION).map(k => caches.delete(k))))
+      .then(() => self.clients.claim())
   );
 });
 
-// ── Fetch ─────────────────────────────────────────────────────────────────────
-// Intercepts every network request the app makes and decides what to return.
-//
-// Strategy:
-//   HTML files  → Network-first: always try to get fresh content when online,
-//                 fall back to cached copy when offline. This means your updates
-//                 appear immediately on refresh, same as before — no version
-//                 bump needed just to see HTML changes when you have signal.
-//
-//   Everything else → Cache-first: return cached copy instantly (fast), then
-//                 update the cache from network in the background for next time.
-//
+// ── Fetch — cache-first with background refresh (stale-while-revalidate) ──
 self.addEventListener('fetch', event => {
-  const request = event.request;
-
-  // Only handle GET requests (not POST etc.)
-  if (request.method !== 'GET') return;
-
-  // Only handle requests to the same origin (your GitHub Pages domain)
-  // Ignore requests to external APIs like the translation provider
-  const url = new URL(request.url);
-  if (url.origin !== self.location.origin) return;
-
-  // HTML files — network-first
-  if (request.destination === 'document') {
-    event.respondWith(
-      fetch(request)
-        .then(networkResponse => {
-          // Got a fresh response — save a copy to cache and return it
-          const responseToCache = networkResponse.clone();
-          caches.open(CACHE_NAME).then(cache => cache.put(request, responseToCache));
-          return networkResponse;
-        })
-        .catch(() =>
-          // Network failed (offline) — return the cached copy
-          caches.match(request).then(cached => cached || new Response('Offline', { status: 503 }))
-        )
-    );
-    return;
-  }
-
-  // Everything else — cache-first
+  if (event.request.method !== 'GET') return;
   event.respondWith(
-    caches.match(request)
-      .then(cached => {
-        if (cached) {
-          // Return cached version immediately
-          // Also fetch a fresh copy in the background for next time
-          fetch(request).then(networkResponse => {
-            caches.open(CACHE_NAME).then(cache => cache.put(request, networkResponse));
-          }).catch(() => {}); // silently ignore network errors for background refresh
-          return cached;
+    caches.match(event.request).then(cached => {
+      const networkFetch = fetch(event.request).then(resp => {
+        // Only cache successful, basic-origin responses
+        if (resp && resp.status === 200 && resp.type === 'basic') {
+          const copy = resp.clone();
+          caches.open(CACHE_VERSION).then(cache => cache.put(event.request, copy));
         }
-        // Not in cache — fetch from network and cache it
-        return fetch(request).then(networkResponse => {
-          const responseToCache = networkResponse.clone();
-          caches.open(CACHE_NAME).then(cache => cache.put(request, responseToCache));
-          return networkResponse;
-        });
-      })
+        return resp;
+      }).catch(() => cached);  // offline → fall back to cache
+      return cached || networkFetch;
+    })
   );
 });

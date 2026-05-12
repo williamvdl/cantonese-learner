@@ -356,798 +356,111 @@
 <div id="app"></div>
 
 <script>
-// ── Data ──────────────────────────────────────────────────────────────────────
-// ── Categories & rounds ─────────────────────────────────────────────────────
-// Category metadata (display order set by array order)
-const CATEGORIES = [
-  { key:'everyday',  label:'Everyday Essentials', icon:'🌟' },
-  { key:'people',    label:'People & Relationships', icon:'👨‍👩‍👧' },
-  { key:'food',      label:'Food & Dining', icon:'🍜' },
-  { key:'outabout',  label:'Out & About', icon:'🛍️' },
-  { key:'daily',     label:'Daily Life', icon:'🌤️' },
-  { key:'work',      label:'Work & Education', icon:'💼' },
-  { key:'practical', label:'Practical Situations', icon:'🆘' },
-];
+// ── Data Store ──────────────────────────────────────────────────────────────
+// All content lives in /data/ as JSON. The store loads reference data on init
+// and lazy-loads per-topic JSON on demand, caching in memory.
+const store = {
+  index:           null,   // [ {key, label, icon, color, rounds} ]
+  categoryList:    null,   // [ {key, label, icon} ]
+  topicCategories: null,   // { greetings: 'everyday', ... }
+  paths:           null,   // [ {key, label, ..., lessons} ]
+  topicCache:      {},     // { greetings: {meta, rounds}, ... }
 
-// Map each topic to its category. To move a topic between categories, change its value here.
-const TOPIC_CATEGORIES = {
-  greetings:    'everyday',
-  numbers:      'everyday',
-  time:         'everyday',
-  phrases:      'everyday',
-  questions:    'everyday',
-  yesno:        'everyday',
-  tense:        'everyday',
-  particles:    'everyday',
-  family:       'people',
-  body:         'people',
-  feelings:     'people',
-  friends:      'people',
-  food:         'food',
-  restaurant:   'food',
-  cooking:      'food',
-  shopping:     'outabout',
-  transport:    'outabout',
-  directions:   'outabout',
-  hotels:       'outabout',
-  attractions:  'outabout',
-  weather:      'daily',
-  colors:       'daily',
-  home:         'daily',
-  animals:      'daily',
-  work:         'work',
-  school:       'work',
-  tech:         'work',
-  money:        'work',
-  hobbies:      'practical',
-  sports:       'practical',
-  emergencies:  'practical',
-};
-
-// Learning Paths — curated curriculum that reuses existing topic content.
-// Each path lesson references an existing topic key + round. Add notes/sub-content later via ROUND_DATA.
-const LEARNING_PATHS = [
-  { key:'beginner', label:'Beginner', icon:'🌱', level:'Beginner', desc:'Foundations: greet people, count, talk about family, food, time, and getting around.',
-    lessons: [
-      { topic:'greetings',  round:1 },
-      { topic:'yesno',      round:1 },
-      { topic:'numbers',    round:1 },
-      { topic:'phrases',    round:1 },
-      { topic:'questions',  round:1 },
-      { topic:'family',     round:1 },
-      { topic:'time',       round:1 },
-      { topic:'tense',      round:1 },
-      { topic:'food',       round:1 },
-      { topic:'feelings',   round:1 },
-      { topic:'particles',  round:1 },
-      { topic:'colors',     round:1 },
-      { topic:'body',       round:1 },
-      { topic:'shopping',   round:1 },
-      { topic:'directions', round:1 },
-      { topic:'transport',  round:1 },
-    ],
+  // Index lookups — synchronous after init
+  indexEntry(key) { return (this.index || []).find(t => t.key === key); },
+  availableRounds(key) {
+    const e = this.indexEntry(key);
+    return e ? e.rounds.slice() : [1];
   },
-  { key:'intermediate', label:'Intermediate', icon:'🌿', level:'Intermediate', desc:'Going deeper: harder vocabulary on familiar topics, plus new everyday contexts.',
-    lessons: [
-      { topic:'greetings',   round:2 },
-      { topic:'numbers',     round:2 },
-      { topic:'food',        round:2 },
-      { topic:'feelings',    round:2 },
-      { topic:'body',        round:2 },
-      { topic:'shopping',    round:2 },
-      { topic:'restaurant',  round:1 },
-      { topic:'weather',     round:1 },
-      { topic:'friends',     round:1 },
-      { topic:'home',        round:1 },
-      { topic:'cooking',     round:1 },
-      { topic:'animals',     round:1 },
-      { topic:'hotels',      round:1 },
-      { topic:'attractions', round:1 },
-      { topic:'work',        round:1 },
-      { topic:'school',      round:1 },
-      { topic:'tech',        round:1 },
-      { topic:'money',       round:1 },
-      { topic:'hobbies',     round:1 },
-      { topic:'sports',      round:1 },
-      { topic:'emergencies', round:1 },
-    ],
-  },
-  { key:'advanced',     label:'Advanced',     icon:'🌳', level:'Advanced',     desc:'Coming soon — natural register, idioms, and family-context conversation.', comingSoon:true, lessons: [] },
-];
-
-// Round data (wraps existing data as Round 1, ready for Round 2/3 to be added per-topic)
-// Structure: TOPIC_ROUNDS[topic] = { 1: {wordsKey, sentencesKey, convoKey}, 2: {...}, ... }
-// For Round 1, keys reference existing LESSONS/SENTENCES/CONVOS data.
-// For higher rounds, data lives in ROUND_DATA below.
-const ROUND_DATA = {
-  // ── Greetings Round 2 — formal & nuanced greetings ──
-  'greetings-r2': {
-    words: [
-      {c:"幸會",     j:"hang6 wui6",       e:"Pleased to meet you (formal)"},
-      {c:"久仰",     j:"gau2 joeng5",      e:"Long admired (formal)"},
-      {c:"請多關照", j:"cing2 do1 gwaan1 ziu3", e:"Please take care of me"},
-      {c:"麻煩你",   j:"maa4 faan4 nei5",  e:"Sorry to trouble you"},
-      {c:"失禮",     j:"sat1 lai5",        e:"Excuse my rudeness"},
-      {c:"歡迎",     j:"fun1 jing4",       e:"Welcome"},
-      {c:"返工",     j:"faan1 gung1",      e:"Going to work"},
-      {c:"放工",     j:"fong3 gung1",      e:"Off work"},
-      {c:"好耐冇見", j:"hou2 noi6 mou5 gin3", e:"Long time no see"},
-      {c:"近排點呀", j:"gan6 paai2 dim2 aa3", e:"How have you been lately?"},
-    ],
-    sentences: [
-      {c:"幸會幸會！", j:"hang6 wui6 hang6 wui6!", e:"A pleasure to meet you!",
-        bd:[{c:"幸會",j:"hang6 wui6",e:"pleased to meet (formal)"}]},
-      {c:"好耐冇見，你點呀？", j:"hou2 noi6 mou5 gin3, nei5 dim2 aa3?", e:"Long time no see, how are you?",
-        bd:[{c:"好耐",j:"hou2 noi6",e:"long time"},{c:"冇見",j:"mou5 gin3",e:"haven't seen"},{c:"你",j:"nei5",e:"you"},{c:"點呀",j:"dim2 aa3",e:"how / what"}]},
-      {c:"麻煩你幫我。", j:"maa4 faan4 nei5 bong1 ngo5.", e:"Sorry to trouble you, please help me.",
-        bd:[{c:"麻煩",j:"maa4 faan4",e:"trouble"},{c:"你",j:"nei5",e:"you"},{c:"幫",j:"bong1",e:"help"},{c:"我",j:"ngo5",e:"me"}]},
-      {c:"請多關照我。", j:"cing2 do1 gwaan1 ziu3 ngo5.", e:"Please take care of me / look out for me.",
-        bd:[{c:"請",j:"cing2",e:"please"},{c:"多",j:"do1",e:"much"},{c:"關照",j:"gwaan1 ziu3",e:"look after"},{c:"我",j:"ngo5",e:"me"}]},
-      {c:"放工嘞，再見！", j:"fong3 gung1 laak3, zoi3 gin3!", e:"Off work now, goodbye!",
-        bd:[{c:"放工",j:"fong3 gung1",e:"off work"},{c:"嘞",j:"laak3",e:"(now / completion)"},{c:"再見",j:"zoi3 gin3",e:"goodbye"}]},
-    ],
-    convo: { title:"Bumping into a former colleague", speakers:["Former colleague","You"],
-      lines:[
-        {u:false, c:"嘩！好耐冇見，你近排點呀？", j:"waa3! hou2 noi6 mou5 gin3, nei5 gan6 paai2 dim2 aa3?", e:"Wow! Long time no see, how have you been lately?",
-          bd:[{c:"嘩",j:"waa3",e:"(exclamation - wow)"},{c:"好耐冇見",j:"hou2 noi6 mou5 gin3",e:"long time no see"},{c:"你",j:"nei5",e:"you"},{c:"近排",j:"gan6 paai2",e:"lately"},{c:"點呀",j:"dim2 aa3",e:"how"}]},
-        {u:true,  c:"係呀！我都係幾忙，你呢？", j:"hai6 aa3! ngo5 dou1 hai6 gei2 mong4, nei5 ne1?", e:"Yeah! I've been pretty busy, and you?",
-          opts:["係呀！我都係幾忙，你呢？","唔知喎。","好攰啦。"], optsJ:["hai6 aa3! ngo5 dou1 hai6 gei2 mong4, nei5 ne1?","m4 zi1 wo3.","hou2 gui6 laa1."],
-          bd:[{c:"係呀",j:"hai6 aa3",e:"yes / right"},{c:"我",j:"ngo5",e:"I"},{c:"都係",j:"dou1 hai6",e:"also am"},{c:"幾忙",j:"gei2 mong4",e:"pretty busy"},{c:"你呢",j:"nei5 ne1",e:"and you?"}]},
-        {u:false, c:"我啱啱換咗份工，仲喺度適應緊。", j:"ngo5 ngaam1 ngaam1 wun6 zo2 fan6 gung1, zung6 hai2 dou6 sik1 jing3 gan2.", e:"I just changed jobs, still adjusting.",
-          bd:[{c:"我",j:"ngo5",e:"I"},{c:"啱啱",j:"ngaam1 ngaam1",e:"just"},{c:"換咗",j:"wun6 zo2",e:"changed"},{c:"份工",j:"fan6 gung1",e:"a job"},{c:"仲",j:"zung6",e:"still"},{c:"適應緊",j:"sik1 jing3 gan2",e:"adjusting (currently)"}]},
-        {u:true,  c:"咁就辛苦你喇，加油呀！", j:"gam2 zau6 san1 fu2 nei5 laa3, gaa1 jau4 aa3!", e:"That's tough, hang in there!",
-          opts:["咁就辛苦你喇，加油呀！","唔關我事。","我要走啦。"], optsJ:["gam2 zau6 san1 fu2 nei5 laa3, gaa1 jau4 aa3!","m4 gwaan1 ngo5 si6.","ngo5 jiu3 zau2 laa1."],
-          bd:[{c:"咁就",j:"gam2 zau6",e:"then it's"},{c:"辛苦",j:"san1 fu2",e:"hard / tough"},{c:"你",j:"nei5",e:"you"},{c:"喇",j:"laa3",e:"(particle)"},{c:"加油",j:"gaa1 jau4",e:"hang in there"},{c:"呀",j:"aa3",e:"(soft)"}]},
-        {u:false, c:"多謝！下次一齊食飯啦。", j:"do1 ze6! haa6 ci3 jat1 cai4 sik6 faan6 laa1.", e:"Thanks! Let's eat together next time.",
-          bd:[{c:"多謝",j:"do1 ze6",e:"thanks"},{c:"下次",j:"haa6 ci3",e:"next time"},{c:"一齊",j:"jat1 cai4",e:"together"},{c:"食飯",j:"sik6 faan6",e:"eat / have a meal"},{c:"啦",j:"laa1",e:"(suggestion)"}]},
-        {u:true,  c:"好呀，得閒再傾。", j:"hou2 aa3, dak1 haan4 zoi3 king1.", e:"Sure, let's catch up when free.",
-          opts:["好呀，得閒再傾。","唔得閒。","我唔識你。"], optsJ:["hou2 aa3, dak1 haan4 zoi3 king1.","m4 dak1 haan4.","ngo5 m4 sik1 nei5."],
-          bd:[{c:"好呀",j:"hou2 aa3",e:"OK / sure"},{c:"得閒",j:"dak1 haan4",e:"have time / free"},{c:"再",j:"zoi3",e:"again"},{c:"傾",j:"king1",e:"chat"}]},
-        {u:false, c:"OK，再見啦！", j:"OK, zoi3 gin3 laa1!", e:"OK, see you!",
-          bd:[{c:"OK",j:"OK",e:"OK"},{c:"再見",j:"zoi3 gin3",e:"goodbye"},{c:"啦",j:"laa1",e:"(softening)"}]},
-      ]},
+  topicsByCategory(catKey) {
+    if (!this.topicCategories) return [];
+    return Object.keys(this.topicCategories).filter(t => this.topicCategories[t] === catKey);
   },
 
-  // ── Numbers Round 2 — tens, hundreds, money ──
-  'numbers-r2': {
-    note:"Bigger numbers in Cantonese are built like Lego: <em>ji6 sap6</em> (二十) is literally \"two-ten\" = 20, <em>saam1 sap6 ng5</em> (三十五) is \"three-ten-five\" = 35. Hundreds use <strong>baak3</strong> (百) and thousands use <strong>cin1</strong> (千). For Hong Kong money, <strong>man1</strong> (蚊) is the colloquial word for dollar (HKD) — you'll hear it everywhere from markets to taxis. <em>gei2 do1</em> (幾多) means \"how many\" or \"how much\" — pair it with <em>cin2</em> (錢, money) to ask prices.",
-    words: [
-      {c:"二十",   j:"ji6 sap6",        e:"Twenty"},
-      {c:"三十",   j:"saam1 sap6",      e:"Thirty"},
-      {c:"五十",   j:"ng5 sap6",        e:"Fifty"},
-      {c:"一百",   j:"jat1 baak3",      e:"One hundred"},
-      {c:"五百",   j:"ng5 baak3",       e:"Five hundred"},
-      {c:"一千",   j:"jat1 cin1",       e:"One thousand"},
-      {c:"蚊",     j:"man1",            e:"Dollar (HKD)"},
-      {c:"毫子",   j:"hou4 zi2",        e:"Cents (10c coins)"},
-      {c:"一半",   j:"jat1 bun3",       e:"Half"},
-      {c:"幾多",   j:"gei2 do1",        e:"How many / much"},
-    ],
-    sentences: [
-      {c:"呢個三十蚊。", j:"ni1 go3 saam1 sap6 man1.", e:"This is thirty dollars.",
-        bd:[{c:"呢個",j:"ni1 go3",e:"this one"},{c:"三十",j:"saam1 sap6",e:"thirty"},{c:"蚊",j:"man1",e:"dollars"}]},
-      {c:"我有一百蚊。", j:"ngo5 jau5 jat1 baak3 man1.", e:"I have one hundred dollars.",
-        bd:[{c:"我",j:"ngo5",e:"I"},{c:"有",j:"jau5",e:"have"},{c:"一百",j:"jat1 baak3",e:"one hundred"},{c:"蚊",j:"man1",e:"dollars"}]},
-      {c:"幾多錢？", j:"gei2 do1 cin2?", e:"How much money?",
-        bd:[{c:"幾多",j:"gei2 do1",e:"how much / many"},{c:"錢",j:"cin2",e:"money"}]},
-      {c:"一千蚊太貴喇。", j:"jat1 cin1 man1 taai3 gwai3 laa3.", e:"A thousand dollars is too expensive.",
-        bd:[{c:"一千",j:"jat1 cin1",e:"one thousand"},{c:"蚊",j:"man1",e:"dollars"},{c:"太",j:"taai3",e:"too"},{c:"貴",j:"gwai3",e:"expensive"},{c:"喇",j:"laa3",e:"(particle)"}]},
-      {c:"我食咗一半。", j:"ngo5 sik6 zo2 jat1 bun3.", e:"I ate half of it.",
-        bd:[{c:"我",j:"ngo5",e:"I"},{c:"食",j:"sik6",e:"eat"},{c:"咗",j:"zo2",e:"(completed)"},{c:"一半",j:"jat1 bun3",e:"half"}]},
-    ],
-    convo: { title:"Negotiating prices at a market", speakers:["Vendor","You"],
-      lines:[
-        {u:false, c:"呢啲生果好新鮮，要幾多？", j:"ni1 di1 saang1 gwo2 hou2 san1 sin1, jiu3 gei2 do1?", e:"This fruit is very fresh, how much do you want?",
-          bd:[{c:"呢啲",j:"ni1 di1",e:"these"},{c:"生果",j:"saang1 gwo2",e:"fruit"},{c:"好",j:"hou2",e:"very"},{c:"新鮮",j:"san1 sin1",e:"fresh"},{c:"要",j:"jiu3",e:"want"},{c:"幾多",j:"gei2 do1",e:"how many"}]},
-        {u:true,  c:"我要五個，幾錢呀？", j:"ngo5 jiu3 ng5 go3, gei2 cin2 aa3?", e:"I'll take five, how much?",
-          opts:["我要五個，幾錢呀？","我要一千個。","太貴啦。"], optsJ:["ngo5 jiu3 ng5 go3, gei2 cin2 aa3?","ngo5 jiu3 jat1 cin1 go3.","taai3 gwai3 laa1."],
-          bd:[{c:"我",j:"ngo5",e:"I"},{c:"要",j:"jiu3",e:"want"},{c:"五個",j:"ng5 go3",e:"five (items)"},{c:"幾錢",j:"gei2 cin2",e:"how much"},{c:"呀",j:"aa3",e:"(soft particle)"}]},
-        {u:false, c:"一個八蚊，五個四十蚊。", j:"jat1 go3 baat3 man1, ng5 go3 sei3 sap6 man1.", e:"Eight dollars each, five for forty dollars.",
-          bd:[{c:"一個",j:"jat1 go3",e:"one (item)"},{c:"八蚊",j:"baat3 man1",e:"eight dollars"},{c:"五個",j:"ng5 go3",e:"five (items)"},{c:"四十蚊",j:"sei3 sap6 man1",e:"forty dollars"}]},
-        {u:true,  c:"三十五蚊得唔得？", j:"saam1 sap6 ng5 man1 dak1 m4 dak1?", e:"Thirty-five dollars, OK?",
-          opts:["三十五蚊得唔得？","好貴啦。","唔買喇。"], optsJ:["saam1 sap6 ng5 man1 dak1 m4 dak1?","hou2 gwai3 laa1.","m4 maai5 laa3."],
-          bd:[{c:"三十五",j:"saam1 sap6 ng5",e:"thirty-five"},{c:"蚊",j:"man1",e:"dollars"},{c:"得唔得",j:"dak1 m4 dak1",e:"OK or not?"}]},
-        {u:false, c:"好啦好啦，三十八蚊先得。", j:"hou2 laa1 hou2 laa1, saam1 sap6 baat3 man1 sin1 dak1.", e:"OK OK, thirty-eight dollars then.",
-          bd:[{c:"好啦",j:"hou2 laa1",e:"OK"},{c:"三十八",j:"saam1 sap6 baat3",e:"thirty-eight"},{c:"蚊",j:"man1",e:"dollars"},{c:"先",j:"sin1",e:"then / first"},{c:"得",j:"dak1",e:"OK"}]},
-        {u:true,  c:"成交！多謝！", j:"sing4 gaau1! do1 ze6!", e:"Deal! Thanks!",
-          opts:["成交！多謝！","唔要喇。","太貴！"], optsJ:["sing4 gaau1! do1 ze6!","m4 jiu3 laa3.","taai3 gwai3!"],
-          bd:[{c:"成交",j:"sing4 gaau1",e:"deal"},{c:"多謝",j:"do1 ze6",e:"thanks"}]},
-      ]},
+  // Topic metadata — falls back to index entry when topic file not yet loaded
+  topicMeta(key) {
+    const cached = this.topicCache[key];
+    if (cached) return cached.meta;
+    const e = this.indexEntry(key);
+    return e ? { label: e.label, icon: e.icon, color: e.color } : null;
   },
 
-  // ── Food Round 2 — restaurant nuance & customisation ──
-  'food-r2': {
-    words: [
-      {c:"早餐",     j:"zou2 caan1",       e:"Breakfast"},
-      {c:"午餐",     j:"ng5 caan1",        e:"Lunch"},
-      {c:"晚餐",     j:"maan5 caan1",      e:"Dinner"},
-      {c:"凍飲",     j:"dung3 jam2",       e:"Cold drink"},
-      {c:"熱飲",     j:"jit6 jam2",        e:"Hot drink"},
-      {c:"加冰",     j:"gaa1 bing1",       e:"Add ice"},
-      {c:"走甜",     j:"zau2 tim4",        e:"No sugar / less sweet"},
-      {c:"少冰",     j:"siu2 bing1",       e:"Less ice"},
-      {c:"飽",       j:"baau2",            e:"Full"},
-      {c:"嘥嘢",     j:"saai1 je5",        e:"Wasteful"},
-    ],
-    sentences: [
-      {c:"我要凍奶茶，走甜。", j:"ngo5 jiu3 dung3 naai5 caa4, zau2 tim4.", e:"I want iced milk tea, no sugar.",
-        bd:[{c:"我要",j:"ngo5 jiu3",e:"I want"},{c:"凍",j:"dung3",e:"cold"},{c:"奶茶",j:"naai5 caa4",e:"milk tea"},{c:"走甜",j:"zau2 tim4",e:"no sugar"}]},
-      {c:"早餐食咗未？", j:"zou2 caan1 sik6 zo2 mei6?", e:"Have you eaten breakfast yet?",
-        bd:[{c:"早餐",j:"zou2 caan1",e:"breakfast"},{c:"食",j:"sik6",e:"eat"},{c:"咗",j:"zo2",e:"(completed)"},{c:"未",j:"mei6",e:"yet"}]},
-      {c:"我好飽，唔食得喇。", j:"ngo5 hou2 baau2, m4 sik6 dak1 laa3.", e:"I'm so full, can't eat anymore.",
-        bd:[{c:"我",j:"ngo5",e:"I"},{c:"好飽",j:"hou2 baau2",e:"very full"},{c:"唔食得",j:"m4 sik6 dak1",e:"can't eat"},{c:"喇",j:"laa3",e:"(particle)"}]},
-      {c:"少冰多奶，唔該。", j:"siu2 bing1 do1 naai5, m4 goi1.", e:"Less ice, more milk, please.",
-        bd:[{c:"少冰",j:"siu2 bing1",e:"less ice"},{c:"多奶",j:"do1 naai5",e:"more milk"},{c:"唔該",j:"m4 goi1",e:"please"}]},
-      {c:"剩咗咁多嘢，好嘥。", j:"zing6 zo2 gam3 do1 je5, hou2 saai1.", e:"So much left over, what a waste.",
-        bd:[{c:"剩咗",j:"zing6 zo2",e:"left over"},{c:"咁多",j:"gam3 do1",e:"so much"},{c:"嘢",j:"je5",e:"things / stuff"},{c:"好嘥",j:"hou2 saai1",e:"such a waste"}]},
-    ],
-    convo: { title:"Customising an order at a cha chaan teng", speakers:["Waiter","You"],
-      lines:[
-        {u:false, c:"飲咩呀？", j:"jam2 me1 aa3?", e:"What would you like to drink?",
-          bd:[{c:"飲",j:"jam2",e:"drink"},{c:"咩",j:"me1",e:"what"},{c:"呀",j:"aa3",e:"(soft particle)"}]},
-        {u:true,  c:"凍奶茶，走甜，唔該。", j:"dung3 naai5 caa4, zau2 tim4, m4 goi1.", e:"Iced milk tea, no sugar, please.",
-          opts:["凍奶茶，走甜，唔該。","熱咖啡，加糖。","水就得啦。"], optsJ:["dung3 naai5 caa4, zau2 tim4, m4 goi1.","jit6 gaa3 fe1, gaa1 tong4.","seoi2 zau6 dak1 laa1."],
-          bd:[{c:"凍",j:"dung3",e:"cold"},{c:"奶茶",j:"naai5 caa4",e:"milk tea"},{c:"走甜",j:"zau2 tim4",e:"no sugar"},{c:"唔該",j:"m4 goi1",e:"please"}]},
-        {u:false, c:"少冰呢？", j:"siu2 bing1 ne1?", e:"Less ice?",
-          bd:[{c:"少冰",j:"siu2 bing1",e:"less ice"},{c:"呢",j:"ne1",e:"(question particle)"}]},
-        {u:true,  c:"好呀，少冰。仲有西多士。", j:"hou2 aa3, siu2 bing1. zung6 jau5 sai1 do1 si2.", e:"Yes, less ice. Also french toast.",
-          opts:["好呀，少冰。仲有西多士。","正常冰。","唔要冰。"], optsJ:["hou2 aa3, siu2 bing1. zung6 jau5 sai1 do1 si2.","zing3 soeng4 bing1.","m4 jiu3 bing1."],
-          bd:[{c:"好呀",j:"hou2 aa3",e:"OK"},{c:"少冰",j:"siu2 bing1",e:"less ice"},{c:"仲有",j:"zung6 jau5",e:"and also"},{c:"西多士",j:"sai1 do1 si2",e:"french toast"}]},
-        {u:false, c:"西多士走牛油得唔得？", j:"sai1 do1 si2 zau2 ngau4 jau4 dak1 m4 dak1?", e:"French toast without butter, OK?",
-          bd:[{c:"西多士",j:"sai1 do1 si2",e:"french toast"},{c:"走",j:"zau2",e:"without"},{c:"牛油",j:"ngau4 jau4",e:"butter"},{c:"得唔得",j:"dak1 m4 dak1",e:"OK?"}]},
-        {u:true,  c:"得呀，唔該！", j:"dak1 aa3, m4 goi1!", e:"Sure, thanks!",
-          opts:["得呀，唔該！","唔要喇。","加多啲牛油。"], optsJ:["dak1 aa3, m4 goi1!","m4 jiu3 laa3.","gaa1 do1 di1 ngau4 jau4."],
-          bd:[{c:"得呀",j:"dak1 aa3",e:"OK / sure"},{c:"唔該",j:"m4 goi1",e:"thanks"}]},
-        {u:false, c:"等陣就嚟。", j:"dang2 zan6 zau6 lai4.", e:"Coming right up.",
-          bd:[{c:"等陣",j:"dang2 zan6",e:"in a moment"},{c:"就",j:"zau6",e:"will"},{c:"嚟",j:"lai4",e:"come"}]},
-      ]},
+  // Topic content — must be loaded first; returns null otherwise
+  isTopicLoaded(key) { return !!this.topicCache[key]; },
+  roundData(key, round) {
+    const t = this.topicCache[key];
+    return t ? (t.rounds[String(round)] || null) : null;
   },
 
-  // ── Body Tier 2 — Health & Symptoms ──
-  'body-r2': {
-    note:"Tier 1 covered anatomy; Tier 2 puts it to use when you're unwell. The structure is simple: <strong>body part + tung3</strong> (痛, pain) describes any ache — <em>tau4 tung3</em> (頭痛, headache), <em>tou5 tung3</em> (肚痛, stomachache). The verb <strong>beng6</strong> (病) covers being ill generally. At the pharmacy (<em>joek6 fong2</em>, 藥房) you'll buy <em>joek6</em> (藥, medicine) — same character, different role.",
-    words:[
-      {c:"痛",     j:"tung3",         e:"Pain / sore / ache"},
-      {c:"病",     j:"beng6",         e:"Sick / illness"},
-      {c:"發燒",   j:"faat3 siu1",    e:"Fever"},
-      {c:"咳",     j:"kat1",          e:"Cough"},
-      {c:"頭痛",   j:"tau4 tung3",    e:"Headache"},
-      {c:"肚痛",   j:"tou5 tung3",    e:"Stomachache"},
-      {c:"醫生",   j:"ji1 sang1",     e:"Doctor"},
-      {c:"醫院",   j:"ji1 jyun2",     e:"Hospital"},
-      {c:"藥",     j:"joek6",         e:"Medicine"},
-      {c:"藥房",   j:"joek6 fong2",   e:"Pharmacy"},
-    ],
-    sentences:[
-      {c:"我頭痛。", j:"ngo5 tau4 tung3.", e:"I have a headache.",
-        bd:[{c:"我",j:"ngo5",e:"I"},{c:"頭痛",j:"tau4 tung3",e:"headache"}]},
-      {c:"我發燒。", j:"ngo5 faat3 siu1.", e:"I have a fever.",
-        bd:[{c:"我",j:"ngo5",e:"I"},{c:"發燒",j:"faat3 siu1",e:"have a fever"}]},
-      {c:"我要去睇醫生。", j:"ngo5 jiu3 heoi3 tai2 ji1 sang1.", e:"I need to see a doctor.",
-        bd:[{c:"我",j:"ngo5",e:"I"},{c:"要",j:"jiu3",e:"need to"},{c:"去",j:"heoi3",e:"go"},{c:"睇",j:"tai2",e:"see"},{c:"醫生",j:"ji1 sang1",e:"doctor"}]},
-      {c:"藥房喺邊度？", j:"joek6 fong2 hai2 bin1 dou6?", e:"Where is the pharmacy?",
-        bd:[{c:"藥房",j:"joek6 fong2",e:"pharmacy"},{c:"喺",j:"hai2",e:"is at"},{c:"邊度",j:"bin1 dou6",e:"where"}]},
-      {c:"食咗藥未呀？", j:"sik6 zo2 joek6 mei6 aa3?", e:"Have you taken your medicine?",
-        bd:[{c:"食咗",j:"sik6 zo2",e:"taken / eaten"},{c:"藥",j:"joek6",e:"medicine"},{c:"未",j:"mei6",e:"yet"},{c:"呀",j:"aa3",e:"(soft particle)"}]},
-    ],
-    convo: { title:"At the pharmacy", speakers:["Pharmacist","You"],
-      lines:[
-        {u:false, c:"係咩問題？", j:"hai6 me1 man6 tai4?", e:"What's the problem?",
-          bd:[{c:"係",j:"hai6",e:"is"},{c:"咩",j:"me1",e:"what"},{c:"問題",j:"man6 tai4",e:"problem"}]},
-        {u:true,  c:"我頭痛同發燒。", j:"ngo5 tau4 tung3 tung4 faat3 siu1.", e:"I have a headache and a fever.",
-          opts:["我頭痛同發燒。","我好開心。","幾錢？"], optsJ:["ngo5 tau4 tung3 tung4 faat3 siu1.","ngo5 hou2 hoi1 sam1.","gei2 cin2?"],
-          bd:[{c:"我",j:"ngo5",e:"I"},{c:"頭痛",j:"tau4 tung3",e:"headache"},{c:"同",j:"tung4",e:"and"},{c:"發燒",j:"faat3 siu1",e:"fever"}]},
-        {u:false, c:"幾耐喇？", j:"gei2 noi6 laa3?", e:"How long has it been?",
-          bd:[{c:"幾耐",j:"gei2 noi6",e:"how long"},{c:"喇",j:"laa3",e:"(particle - now)"}]},
-        {u:true,  c:"兩日喇。", j:"loeng5 jat6 laa3.", e:"Two days now.",
-          opts:["兩日喇。","我好飽。","唔該晒。"], optsJ:["loeng5 jat6 laa3.","ngo5 hou2 baau2.","m4 goi1 saai3."],
-          bd:[{c:"兩日",j:"loeng5 jat6",e:"two days"},{c:"喇",j:"laa3",e:"(particle - now)"}]},
-        {u:false, c:"食呢隻藥啦，一日三次。", j:"sik6 ni1 zek3 joek6 laa1, jat1 jat6 saam1 ci3.", e:"Take this medicine, three times a day.",
-          bd:[{c:"食",j:"sik6",e:"take"},{c:"呢隻",j:"ni1 zek3",e:"this (type)"},{c:"藥",j:"joek6",e:"medicine"},{c:"啦",j:"laa1",e:"(suggestion)"},{c:"一日",j:"jat1 jat6",e:"one day"},{c:"三次",j:"saam1 ci3",e:"three times"}]},
-        {u:true,  c:"好，唔該。", j:"hou2, m4 goi1.", e:"OK, thanks.",
-          opts:["好，唔該。","唔好。","你係邊個？"], optsJ:["hou2, m4 goi1.","m4 hou2.","nei5 hai6 bin1 go3?"],
-          bd:[{c:"好",j:"hou2",e:"OK"},{c:"唔該",j:"m4 goi1",e:"thanks"}]},
-      ]},
+  // Reference-data loaders (called once on init)
+  async loadIndex() {
+    const r = await fetch('./data/topics_index.json');
+    this.index = (await r.json()).topics;
+  },
+  async loadCategories() {
+    const r = await fetch('./data/categories.json');
+    const j = await r.json();
+    this.categoryList = j.list;
+    this.topicCategories = j.topic_map;
+  },
+  async loadPaths() {
+    const r = await fetch('./data/learning_paths.json');
+    this.paths = (await r.json()).paths;
   },
 
-  // ── Feelings Tier 2 — Personality & Description ──
-  'feelings-r2': {
-    note:"Tier 1 was about emotional states ('I'm happy/sad'). Tier 2 shifts to character — describing what someone is like as a person. The structure stays simple: subject + <em>hou2</em> + adjective ('X is very [trait]'). To negate, use <strong>m4</strong> before the adjective: <em>m4 sin6 loeng4</em> means 'not kind'. Most traits are two-character compounds learned as units rather than syllables.",
-    words:[
-      {c:"善良",   j:"sin6 loeng4",    e:"Kind"},
-      {c:"聰明",   j:"cung1 ming4",    e:"Smart / clever"},
-      {c:"搞笑",   j:"gaau2 siu3",     e:"Funny"},
-      {c:"怕醜",   j:"paa3 cau2",      e:"Shy"},
-      {c:"嚴肅",   j:"jim4 suk1",      e:"Serious"},
-      {c:"懶",     j:"laan5",          e:"Lazy"},
-      {c:"勤力",   j:"kan4 lik6",      e:"Hardworking"},
-      {c:"友善",   j:"jau5 sin6",      e:"Friendly"},
-      {c:"細心",   j:"sai3 sam1",      e:"Careful / attentive"},
-      {c:"大方",   j:"daai6 fong1",    e:"Generous"},
-    ],
-    sentences:[
-      {c:"佢好善良。", j:"keoi5 hou2 sin6 loeng4.", e:"He/she is very kind.",
-        bd:[{c:"佢",j:"keoi5",e:"he/she"},{c:"好",j:"hou2",e:"very"},{c:"善良",j:"sin6 loeng4",e:"kind"}]},
-      {c:"我細佬好聰明。", j:"ngo5 sai3 lou2 hou2 cung1 ming4.", e:"My younger brother is very smart.",
-        bd:[{c:"我",j:"ngo5",e:"my"},{c:"細佬",j:"sai3 lou2",e:"younger brother"},{c:"好",j:"hou2",e:"very"},{c:"聰明",j:"cung1 ming4",e:"smart"}]},
-      {c:"佢哋好搞笑。", j:"keoi5 dei6 hou2 gaau2 siu3.", e:"They are very funny.",
-        bd:[{c:"佢哋",j:"keoi5 dei6",e:"they"},{c:"好",j:"hou2",e:"very"},{c:"搞笑",j:"gaau2 siu3",e:"funny"}]},
-      {c:"我怕醜，唔識講嘢。", j:"ngo5 paa3 cau2, m4 sik1 gong2 je5.", e:"I'm shy, not good at speaking.",
-        bd:[{c:"我",j:"ngo5",e:"I"},{c:"怕醜",j:"paa3 cau2",e:"shy"},{c:"唔識",j:"m4 sik1",e:"don't know how"},{c:"講嘢",j:"gong2 je5",e:"to speak"}]},
-      {c:"你好友善！", j:"nei5 hou2 jau5 sin6!", e:"You're so friendly!",
-        bd:[{c:"你",j:"nei5",e:"you"},{c:"好",j:"hou2",e:"so / very"},{c:"友善",j:"jau5 sin6",e:"friendly"}]},
-    ],
-    convo: { title:"Describing a new colleague", speakers:["Friend","You"],
-      lines:[
-        {u:false, c:"你個新同事點呀？", j:"nei5 go3 san1 tung4 si6 dim2 aa3?", e:"How's your new colleague?",
-          bd:[{c:"你",j:"nei5",e:"your"},{c:"個",j:"go3",e:"(measure word)"},{c:"新",j:"san1",e:"new"},{c:"同事",j:"tung4 si6",e:"colleague"},{c:"點呀",j:"dim2 aa3",e:"how"}]},
-        {u:true,  c:"佢好友善，仲好勤力。", j:"keoi5 hou2 jau5 sin6, zung6 hou2 kan4 lik6.", e:"He/she's very friendly, and hardworking too.",
-          opts:["佢好友善，仲好勤力。","我好攰。","唔知。"], optsJ:["keoi5 hou2 jau5 sin6, zung6 hou2 kan4 lik6.","ngo5 hou2 gui6.","m4 zi1."],
-          bd:[{c:"佢",j:"keoi5",e:"he/she"},{c:"好",j:"hou2",e:"very"},{c:"友善",j:"jau5 sin6",e:"friendly"},{c:"仲",j:"zung6",e:"also"},{c:"勤力",j:"kan4 lik6",e:"hardworking"}]},
-        {u:false, c:"聰唔聰明？", j:"cung1 m4 cung1 ming4?", e:"Is he/she smart?",
-          bd:[{c:"聰唔聰明",j:"cung1 m4 cung1 ming4",e:"smart-not-smart? (yes/no pattern)"}]},
-        {u:true,  c:"好聰明，細心又大方。", j:"hou2 cung1 ming4, sai3 sam1 jau6 daai6 fong1.", e:"Very smart, careful and generous.",
-          opts:["好聰明，細心又大方。","唔係。","你呢？"], optsJ:["hou2 cung1 ming4, sai3 sam1 jau6 daai6 fong1.","m4 hai6.","nei5 ne1?"],
-          bd:[{c:"好",j:"hou2",e:"very"},{c:"聰明",j:"cung1 ming4",e:"smart"},{c:"細心",j:"sai3 sam1",e:"careful"},{c:"又",j:"jau6",e:"and / also"},{c:"大方",j:"daai6 fong1",e:"generous"}]},
-        {u:false, c:"好彩你揾到好同事。", j:"hou2 coi2 nei5 wan2 dou2 hou2 tung4 si6.", e:"Lucky you found good colleagues.",
-          bd:[{c:"好彩",j:"hou2 coi2",e:"lucky"},{c:"你",j:"nei5",e:"you"},{c:"揾到",j:"wan2 dou2",e:"found"},{c:"好",j:"hou2",e:"good"},{c:"同事",j:"tung4 si6",e:"colleague"}]},
-        {u:true,  c:"係呀，我都好開心。", j:"hai6 aa3, ngo5 dou1 hou2 hoi1 sam1.", e:"Yes, I'm happy too.",
-          opts:["係呀，我都好開心。","我好懶。","點解？"], optsJ:["hai6 aa3, ngo5 dou1 hou2 hoi1 sam1.","ngo5 hou2 laan5.","dim2 gaai2?"],
-          bd:[{c:"係呀",j:"hai6 aa3",e:"yes"},{c:"我",j:"ngo5",e:"I"},{c:"都",j:"dou1",e:"also"},{c:"好",j:"hou2",e:"very"},{c:"開心",j:"hoi1 sam1",e:"happy"}]},
-      ]},
+  // Topic loader (cached) — returns the cached topic object
+  async loadTopic(key) {
+    if (this.topicCache[key]) return this.topicCache[key];
+    const r = await fetch('./data/topics/' + key + '.json');
+    if (!r.ok) throw new Error('Topic ' + key + ' failed to load: ' + r.status);
+    const j = await r.json();
+    this.topicCache[key] = j;
+    return j;
   },
 
-  // ── Shopping Tier 2 — Clothing & Fashion ──
-  'shopping-r2': {
-    note:"Tier 2 zooms in on shopping for clothes. Sizes use a <em>maa5</em> (碼) suffix: <em>daai6 maa5</em> (大碼, large), <em>zung1 maa5</em> (中碼, medium), <em>sai3 maa5</em> (細碼, small). The most useful verb is <strong>si3</strong> (試, to try on) — almost always paired with <em>haa5</em> as <em>si3 haa5</em> ('try a bit'). Note <em>gan2</em> (緊, tight) and <em>sung1</em> (鬆, loose) — these describe how clothes fit and also work in general 'tight/loose' contexts.",
-    words:[
-      {c:"恤衫",   j:"seot1 saam1",   e:"Shirt"},
-      {c:"褲",     j:"fu3",           e:"Pants / trousers"},
-      {c:"裙",     j:"kwan4",         e:"Skirt / dress"},
-      {c:"鞋",     j:"haai4",         e:"Shoes"},
-      {c:"尺碼",   j:"cek3 maa5",     e:"Size"},
-      {c:"試吓",   j:"si3 haa5",      e:"Try on"},
-      {c:"緊",     j:"gan2",          e:"Tight"},
-      {c:"鬆",     j:"sung1",         e:"Loose"},
-      {c:"大碼",   j:"daai6 maa5",    e:"Large size"},
-      {c:"細碼",   j:"sai3 maa5",     e:"Small size"},
-    ],
-    sentences:[
-      {c:"我想試呢件恤衫。", j:"ngo5 soeng2 si3 ni1 gin6 seot1 saam1.", e:"I'd like to try this shirt.",
-        bd:[{c:"我",j:"ngo5",e:"I"},{c:"想",j:"soeng2",e:"would like"},{c:"試",j:"si3",e:"try"},{c:"呢件",j:"ni1 gin6",e:"this (clothing item)"},{c:"恤衫",j:"seot1 saam1",e:"shirt"}]},
-      {c:"有冇大碼？", j:"jau5 mou5 daai6 maa5?", e:"Do you have a large size?",
-        bd:[{c:"有冇",j:"jau5 mou5",e:"have or not (yes/no)"},{c:"大碼",j:"daai6 maa5",e:"large size"}]},
-      {c:"件褲太緊喇。", j:"gin6 fu3 taai3 gan2 laa3.", e:"These pants are too tight.",
-        bd:[{c:"件",j:"gin6",e:"(measure word)"},{c:"褲",j:"fu3",e:"pants"},{c:"太",j:"taai3",e:"too"},{c:"緊",j:"gan2",e:"tight"},{c:"喇",j:"laa3",e:"(particle)"}]},
-      {c:"對鞋好靚。", j:"deoi3 haai4 hou2 leng3.", e:"These shoes are nice.",
-        bd:[{c:"對",j:"deoi3",e:"(pair - measure word)"},{c:"鞋",j:"haai4",e:"shoes"},{c:"好",j:"hou2",e:"very"},{c:"靚",j:"leng3",e:"pretty / nice"}]},
-      {c:"我可以試吓嗎？", j:"ngo5 ho2 ji5 si3 haa5 maa3?", e:"Can I try it on?",
-        bd:[{c:"我",j:"ngo5",e:"I"},{c:"可以",j:"ho2 ji5",e:"can"},{c:"試吓",j:"si3 haa5",e:"try on"},{c:"嗎",j:"maa3",e:"(yes/no)"}]},
-    ],
-    convo: { title:"Buying shoes at a shop", speakers:["Clerk","You"],
-      lines:[
-        {u:false, c:"你要乜嘢尺碼？", j:"nei5 jiu3 mat1 je5 cek3 maa5?", e:"What size do you need?",
-          bd:[{c:"你",j:"nei5",e:"you"},{c:"要",j:"jiu3",e:"want / need"},{c:"乜嘢",j:"mat1 je5",e:"what"},{c:"尺碼",j:"cek3 maa5",e:"size"}]},
-        {u:true,  c:"細碼，唔該。", j:"sai3 maa5, m4 goi1.", e:"Small, please.",
-          opts:["細碼，唔該。","唔知道。","好貴呀。"], optsJ:["sai3 maa5, m4 goi1.","m4 zi1 dou3.","hou2 gwai3 aa3."],
-          bd:[{c:"細碼",j:"sai3 maa5",e:"small size"},{c:"唔該",j:"m4 goi1",e:"please / thanks"}]},
-        {u:false, c:"試吓呢對啦。", j:"si3 haa5 ni1 deoi3 laa1.", e:"Try this pair.",
-          bd:[{c:"試吓",j:"si3 haa5",e:"try on"},{c:"呢對",j:"ni1 deoi3",e:"this pair"},{c:"啦",j:"laa1",e:"(suggestion)"}]},
-        {u:true,  c:"有啲緊。", j:"jau5 di1 gan2.", e:"A bit tight.",
-          opts:["有啲緊。","啱晒。","唔該。"], optsJ:["jau5 di1 gan2.","ngaam1 saai3.","m4 goi1."],
-          bd:[{c:"有啲",j:"jau5 di1",e:"a bit"},{c:"緊",j:"gan2",e:"tight"}]},
-        {u:false, c:"咁試大一碼啦。", j:"gam2 si3 daai6 jat1 maa5 laa1.", e:"Then try one size larger.",
-          bd:[{c:"咁",j:"gam2",e:"then"},{c:"試",j:"si3",e:"try"},{c:"大",j:"daai6",e:"larger"},{c:"一碼",j:"jat1 maa5",e:"one size"},{c:"啦",j:"laa1",e:"(suggestion)"}]},
-        {u:true,  c:"好！呢對啱晒。", j:"hou2! ni1 deoi3 ngaam1 saai3.", e:"OK! This pair fits perfectly.",
-          opts:["好！呢對啱晒。","太貴喇。","點解？"], optsJ:["hou2! ni1 deoi3 ngaam1 saai3.","taai3 gwai3 laa3.","dim2 gaai2?"],
-          bd:[{c:"好",j:"hou2",e:"OK / good"},{c:"呢對",j:"ni1 deoi3",e:"this pair"},{c:"啱晒",j:"ngaam1 saai3",e:"fits perfectly"}]},
-      ]},
+  // Convenience: load several topics in parallel
+  async loadTopics(keys) {
+    await Promise.all(keys.filter(k => !this.topicCache[k]).map(k => this.loadTopic(k)));
   },
 };
 
-// Round accessors — single point of truth for "what content is in this topic+round"
+// ── Round accessors — single point of truth for "what content is in topic+round" ──
+// These assume the topic has been loaded; return safe defaults otherwise.
 function getAvailableRounds(topic) {
-  // Round 1 is always available (existing data). Higher rounds exist if entries in ROUND_DATA.
-  const rounds = [1];
-  if (ROUND_DATA[topic + '-r2']) rounds.push(2);
-  if (ROUND_DATA[topic + '-r3']) rounds.push(3);
-  return rounds;
+  return store.availableRounds(topic);
 }
-
 function getRoundWords(topic, round) {
-  if (round === 1) return LESSONS[topic]?.words || [];
-  return ROUND_DATA[topic + '-r' + round]?.words || [];
+  return store.roundData(topic, round)?.words || [];
 }
-
 function getRoundSentences(topic, round) {
-  if (round === 1) return SENTENCES[topic] || [];
-  return ROUND_DATA[topic + '-r' + round]?.sentences || [];
+  return store.roundData(topic, round)?.sentences || [];
 }
-
 function getRoundConvo(topic, round) {
-  if (round === 1) return CONVOS[topic] || null;
-  return ROUND_DATA[topic + '-r' + round]?.convo || null;
+  return store.roundData(topic, round)?.convo || null;
 }
-
 function getRoundNote(topic, round) {
-  if (round === 1) return LESSONS[topic]?.note || null;
-  return ROUND_DATA[topic + '-r' + round]?.note || null;
+  return store.roundData(topic, round)?.note || null;
 }
-
 function getTopicsByCategory(categoryKey) {
-  return Object.keys(TOPIC_CATEGORIES).filter(t => TOPIC_CATEGORIES[t] === categoryKey);
+  return store.topicsByCategory(categoryKey);
 }
 
-const LESSONS = {
-  greetings: { label:"Greetings", icon:"👋", color:"#C0392B", words:[
-    {c:"你好",   j:"nei5 hou2",        e:"Hello"},
-    {c:"早晨",   j:"zou2 san4",         e:"Good morning"},
-    {c:"晚上好", j:"maan5 soeng6 hou2", e:"Good evening"},
-    {c:"再見",   j:"zoi3 gin3",         e:"Goodbye"},
-    {c:"唔該",   j:"m4 goi1",           e:"Thank you / Excuse me"},
-    {c:"多謝",   j:"do1 ze6",           e:"Thank you (for a gift)"},
-    {c:"唔緊要", j:"m4 gan2 jiu3",      e:"You're welcome"},
-    {c:"對唔住", j:"deoi3 m4 zyu6",     e:"Sorry"},
-    {c:"係",     j:"hai6",              e:"Yes"},
-    {c:"唔係",   j:"m4 hai6",           e:"No"},
-  ]},
-  numbers: { label:"Numbers", icon:"🔢", color:"#1A5276", words:[
-    {c:"零",j:"ling4",e:"Zero"},{c:"一",j:"jat1",e:"One"},{c:"二",j:"ji6",e:"Two"},
-    {c:"三",j:"saam1",e:"Three"},{c:"四",j:"sei3",e:"Four"},{c:"五",j:"ng5",e:"Five"},
-    {c:"六",j:"luk6",e:"Six"},{c:"七",j:"cat1",e:"Seven"},{c:"八",j:"baat3",e:"Eight"},
-    {c:"九",j:"gau2",e:"Nine"},{c:"十",j:"sap6",e:"Ten"},
-  ]},
-  food: { label:"Food & Drink", icon:"🍜", color:"#7D6608", words:[
-    {c:"飯",  j:"faan6",      e:"Rice / Meal"},{c:"麵",  j:"min6",        e:"Noodles"},
-    {c:"水",  j:"seoi2",      e:"Water"},     {c:"茶",  j:"caa4",        e:"Tea"},
-    {c:"咖啡",j:"gaa3 fe1",   e:"Coffee"},    {c:"雞",  j:"gai1",        e:"Chicken"},
-    {c:"魚",  j:"jyu2",       e:"Fish"},      {c:"豬肉",j:"zyu1 juk6",   e:"Pork"},
-    {c:"蔬菜",j:"so1 coi3",   e:"Vegetables"},{c:"生果",j:"saang1 gwo2", e:"Fruit"},
-    {c:"好味",j:"hou2 mei6",  e:"Delicious"}, {c:"餓",  j:"ngo6",        e:"Hungry"},
-  ]},
-  restaurant: { label:"Restaurant & Ordering", icon:"🍴", color:"#A04000",
-    note:"Eating out in Hong Kong has its own ritual. You'll hear <em>dim2 sam1</em> (點心 — dim sum, literally 'touch the heart') at yum cha, and the waiter asking <em>jiu3 dim2 je5?</em> ('what would you like?'). Note <strong>lok6 daan1</strong> (落單) for placing an order, and <strong>maai4 daan1</strong> (埋單) for asking for the bill — both are fixed compound verbs worth learning as units. Most everyday eating happens at a <em>caa4 caan1 teng1</em> (茶餐廳 — HK-style cafe).",
-    words:[
-    {c:"餐牌", j:"caan1 paai4",  e:"Menu"},
-    {c:"侍應", j:"si6 jing3",    e:"Waiter / Waitress"},
-    {c:"點心", j:"dim2 sam1",    e:"Dim sum"},
-    {c:"落單", j:"lok6 daan1",   e:"To order (place an order)"},
-    {c:"埋單", j:"maai4 daan1",  e:"Ask for the bill"},
-    {c:"凍",   j:"dung3",        e:"Cold (drink)"},
-    {c:"熱",   j:"jit6",         e:"Hot"},
-    {c:"少冰", j:"siu2 bing1",   e:"Less ice"},
-    {c:"飽",   j:"baau2",        e:"Full (after eating)"},
-    {c:"好食", j:"hou2 sik6",    e:"Delicious / tasty"},
-  ]},
-  family: { label:"Family", icon:"👨‍👩‍👧", color:"#1E8449", words:[
-    {c:"爸爸",j:"baa4 baa1",  e:"Father"},   {c:"媽媽",j:"maa4 maa1",  e:"Mother"},
-    {c:"哥哥",j:"go4 go1",    e:"Older brother"},{c:"姐姐",j:"ze4 ze1",e:"Older sister"},
-    {c:"弟弟",j:"dai6 dai2",  e:"Younger brother"},{c:"妹妹",j:"mui4 mui2",e:"Younger sister"},
-    {c:"爺爺",j:"je4 je2",    e:"Paternal grandfather"},{c:"嫲嫲",j:"maa4 maa2",e:"Paternal grandmother"},
-    {c:"外公",j:"ngoi6 gung1",e:"Maternal grandfather"},{c:"外婆",j:"ngoi6 po4",e:"Maternal grandmother"},
-    {c:"兒子",j:"ji4 zi2",    e:"Son"},{c:"女兒",j:"neoi5 ji4",e:"Daughter"},
-  ]},
-  time: { label:"Days & Time", icon:"🕐", color:"#6C3483", words:[
-    {c:"今日",   j:"gam1 jat6",       e:"Today"},      {c:"聽日",  j:"ting1 jat6",       e:"Tomorrow"},
-    {c:"琴日",   j:"kam4 jat6",       e:"Yesterday"},  {c:"星期一",j:"sing1 kei4 jat1",  e:"Monday"},
-    {c:"星期二", j:"sing1 kei4 ji6",  e:"Tuesday"},    {c:"星期三",j:"sing1 kei4 saam1", e:"Wednesday"},
-    {c:"星期四", j:"sing1 kei4 sei3", e:"Thursday"},   {c:"星期五",j:"sing1 kei4 ng5",   e:"Friday"},
-    {c:"星期六", j:"sing1 kei4 luk6", e:"Saturday"},   {c:"星期日",j:"sing1 kei4 jat6",  e:"Sunday"},
-    {c:"朝早",   j:"ziu1 zou2",       e:"Morning"},    {c:"夜晚",  j:"je6 maan5",        e:"Night"},
-  ]},
-  phrases: { label:"Useful Phrases", icon:"💬", color:"#884EA0", words:[
-    {c:"你叫乜名？",  j:"nei5 giu3 mat1 meng2",      e:"What is your name?"},
-    {c:"我叫…",      j:"ngo5 giu3",                 e:"My name is…"},
-    {c:"你好嗎？",    j:"nei5 hou2 maa3",            e:"How are you?"},
-    {c:"我好好",      j:"ngo5 hou2 hou2",            e:"I am very well"},
-    {c:"幾錢？",      j:"gei2 cin2",                 e:"How much?"},
-    {c:"喺邊度？",    j:"hai2 bin1 dou6",            e:"Where is it?"},
-    {c:"我唔明",      j:"ngo5 m4 ming4",             e:"I don't understand"},
-    {c:"請講慢啲",    j:"cing2 gong2 maan6 di1",     e:"Please speak slowly"},
-    {c:"洗手間喺邊？",j:"sai2 sau2 gaan1 hai2 bin1", e:"Where is the bathroom?"},
-    {c:"我要呢個",    j:"ngo5 jiu3 ni1 go3",         e:"I want this one"},
-  ]},
-  questions: { label:"Asking Questions", icon:"❓", color:"#34495E",
-    note:"Question words in Cantonese usually sit where the answer would go: 'who is going?' becomes <em>bin1 go3 heoi3?</em> — literally 'who go?'. To form a yes/no question, add <strong>maa3</strong> to the end of any statement. To ask 'why', put <strong>dim2 gaai2</strong> at the start. The particle <strong>ne1</strong> attaches to a noun or pronoun to mean 'and you?' / 'what about X?' — a tiny but very useful word for keeping conversation flowing.",
-    words:[
-    {c:"邊個", j:"bin1 go3",     e:"Who"},
-    {c:"乜嘢", j:"mat1 je5",     e:"What"},
-    {c:"邊度", j:"bin1 dou6",    e:"Where"},
-    {c:"幾時", j:"gei2 si4",     e:"When"},
-    {c:"點解", j:"dim2 gaai2",   e:"Why"},
-    {c:"點樣", j:"dim2 joeng2",  e:"How"},
-    {c:"幾多", j:"gei2 do1",     e:"How many / much"},
-    {c:"邊",   j:"bin1",         e:"Which"},
-    {c:"嗎",   j:"maa3",         e:"(yes/no question)"},
-    {c:"呢",   j:"ne1",          e:"(and you? / what about?)"},
-  ]},
-  colors: { label:"Colors", icon:"🎨", color:"#D35400", words:[
-    {c:"紅色",  j:"hung4 sik1",      e:"Red"},   {c:"橙色",  j:"caang2 sik1",    e:"Orange"},
-    {c:"黃色",  j:"wong4 sik1",      e:"Yellow"},{c:"綠色",  j:"luk6 sik1",      e:"Green"},
-    {c:"藍色",  j:"laam4 sik1",      e:"Blue"},  {c:"紫色",  j:"zi2 sik1",       e:"Purple"},
-    {c:"白色",  j:"baak6 sik1",      e:"White"}, {c:"黑色",  j:"hak1 sik1",      e:"Black"},
-    {c:"粉紅色",j:"fan2 hung4 sik1", e:"Pink"},  {c:"棕色",  j:"zung1 sik1",     e:"Brown"},
-  ]},
-  body: { label:"Body Parts", icon:"🧍", color:"#B03A2E", words:[
-    {c:"頭",j:"tau4",   e:"Head"},  {c:"眼",j:"ngaan5",e:"Eyes"},
-    {c:"耳",j:"ji5",    e:"Ears"},  {c:"鼻",j:"bei6",  e:"Nose"},
-    {c:"嘴",j:"zeoi2",  e:"Mouth"}, {c:"手",j:"sau2",  e:"Hand"},
-    {c:"腳",j:"goek3",  e:"Foot"},  {c:"心",j:"sam1",  e:"Heart"},
-    {c:"肚",j:"tou5",   e:"Stomach"},{c:"背",j:"bui3",  e:"Back"},
-  ]},
-  transport: { label:"Transport", icon:"🚇", color:"#1A7FA8", words:[
-    {c:"地鐵",   j:"dei6 tit3",      e:"MTR / Subway"},{c:"巴士",   j:"baa1 si2",       e:"Bus"},
-    {c:"的士",   j:"dik1 si2",       e:"Taxi"},        {c:"飛機",   j:"fei1 gei1",      e:"Airplane"},
-    {c:"船",     j:"syun4",          e:"Boat / Ferry"},{c:"火車",   j:"fo2 ce1",        e:"Train"},
-    {c:"單車",   j:"daan1 ce1",      e:"Bicycle"},     {c:"去邊度？",j:"heoi3 bin1 dou6",e:"Where to?"},
-    {c:"幾遠？", j:"gei2 jyun5",     e:"How far?"},    {c:"停",     j:"ting4",          e:"Stop"},
-  ]},
-  weather: { label:"Weather", icon:"⛅", color:"#2E86C1", words:[
-    {c:"天氣",j:"tin1 hei3",    e:"Weather"},{c:"熱",  j:"jit6",         e:"Hot"},
-    {c:"凍",  j:"dung3",        e:"Cold"},   {c:"落雨",j:"lok6 jyu5",    e:"Raining"},
-    {c:"太陽",j:"taai3 joeng4", e:"Sun"},    {c:"颱風",j:"toi4 fung1",   e:"Typhoon"},
-    {c:"雲",  j:"wan4",         e:"Cloud"},  {c:"風",  j:"fung1",        e:"Wind"},
-    {c:"雪",  j:"syut3",        e:"Snow"},   {c:"潮濕",j:"ciu4 sap1",    e:"Humid"},
-  ]},
-  shopping: { label:"Shopping", icon:"🛍️", color:"#A93226", words:[
-    {c:"超市",   j:"ciu1 si5",       e:"Supermarket"},  {c:"商場",   j:"soeng1 coeng4",  e:"Shopping mall"},
-    {c:"貴",     j:"gwai3",          e:"Expensive"},    {c:"平",     j:"peng4",          e:"Cheap"},
-    {c:"買",     j:"maai5",          e:"Buy"},          {c:"賣",     j:"maai6",          e:"Sell"},
-    {c:"找換",   j:"zaau2 wun6",     e:"Change money"}, {c:"收據",   j:"sau1 geoi3",     e:"Receipt"},
-    {c:"有冇折？",j:"jau5 mou5 zit3",e:"Any discount?"},{c:"唔要",  j:"m4 jiu3",        e:"Don't want it"},
-  ]},
-
-  yesno: { label:"Yes/No & Politeness", icon:"🙏", color:"#16A085", words:[
-    {c:"係",     j:"hai6",           e:"Yes / It is"},
-    {c:"唔係",   j:"m4 hai6",        e:"No / It isn't"},
-    {c:"好",     j:"hou2",           e:"OK / Good"},
-    {c:"唔好",   j:"m4 hou2",        e:"No / Not good"},
-    {c:"得",     j:"dak1",           e:"OK / Can do"},
-    {c:"唔得",   j:"m4 dak1",        e:"Not OK / Can't"},
-    {c:"唔該",   j:"m4 goi1",        e:"Please / Excuse me"},
-    {c:"多謝",   j:"do1 ze6",        e:"Thank you (gift)"},
-    {c:"請",     j:"cing2",          e:"Please (formal)"},
-    {c:"歡迎",   j:"fun1 jing4",     e:"Welcome"},
-  ]},
-
-  tense: { label:"Verb Tense", icon:"⏳", color:"#5D6D7E",
-    note:"Cantonese verbs don't change form for past, present, or future — instead, small particles and time words do the work. <strong>zo2</strong>, <strong>gan2</strong>, <strong>gwo3</strong>, and <strong>zyu6</strong> attach <strong>after</strong> the verb (e.g. <em>sik6 zo2</em> = ate, <em>sik6 gan2</em> = eating). Modals like <strong>wui5</strong> (will) and <strong>jiu3</strong> (need to) come <strong>before</strong> the verb. Time words like <em>ji5 ging1</em> (already) and <em>mei6</em> (not yet) sit at the start or before the verb to anchor when something happens.",
-    words:[
-    {c:"咗",     j:"zo2",            e:"(completed action)"},
-    {c:"緊",     j:"gan2",           e:"(currently happening)"},
-    {c:"過",     j:"gwo3",           e:"(experienced before)"},
-    {c:"住",     j:"zyu6",           e:"(ongoing state)"},
-    {c:"會",     j:"wui5",           e:"will / would"},
-    {c:"要",     j:"jiu3",           e:"need to / will"},
-    {c:"未",     j:"mei6",           e:"not yet"},
-    {c:"已經",   j:"ji5 ging1",      e:"already"},
-    {c:"剛剛",   j:"gong1 gong1",    e:"just now"},
-    {c:"快啲",   j:"faai3 di1",      e:"soon / quickly"},
-  ]},
-
-  particles: { label:"Sentence Particles", icon:"💭", color:"#76448A",
-    note:"Sentence-final particles sit at the very end of a sentence and add emotional or grammatical flavour without changing the literal meaning. They're what makes Cantonese sound natural — speech without them feels flat and robotic. <strong>Tone matters a lot</strong>: <em>laa1</em> (softening) and <em>laa3</em> (now / completion) are different particles, not variants. Don't try to translate each one literally — instead, learn the feeling each adds: certainty, surprise, gentleness, limitation, or inviting agreement.",
-    words:[
-    {c:"喇",     j:"laa3",           e:"(now / completion)"},
-    {c:"啦",     j:"laa1",           e:"(softening / suggestion)"},
-    {c:"呀",     j:"aa3",            e:"(soft confirmation)"},
-    {c:"嗎",     j:"maa3",           e:"(yes/no question)"},
-    {c:"喎",     j:"wo3",            e:"(emphasis / surprise)"},
-    {c:"囉",     j:"lo3",            e:"(obviously / exasperation)"},
-    {c:"㗎",     j:"gaa3",           e:"(matter-of-fact)"},
-    {c:"咋",     j:"zaa3",           e:"(only / limitation)"},
-    {c:"咩",     j:"me1",            e:"(surprised question)"},
-    {c:"吖",     j:"aa1",            e:"(gentle prompt)"},
-  ]},
-
-  feelings: { label:"Feelings & Emotions", icon:"😊", color:"#E91E63", words:[
-    {c:"開心",   j:"hoi1 sam1",      e:"Happy"},
-    {c:"唔開心", j:"m4 hoi1 sam1",   e:"Unhappy"},
-    {c:"嬲",     j:"nau1",           e:"Angry"},
-    {c:"攰",     j:"gui6",           e:"Tired"},
-    {c:"驚",     j:"geng1",          e:"Scared"},
-    {c:"擔心",   j:"daam1 sam1",     e:"Worried"},
-    {c:"激動",   j:"gik1 dung6",     e:"Excited"},
-    {c:"緊張",   j:"gan2 zoeng1",    e:"Nervous"},
-    {c:"無聊",   j:"mou4 liu4",      e:"Bored"},
-    {c:"傷心",   j:"soeng1 sam1",    e:"Sad / heartbroken"},
-  ]},
-
-  directions: { label:"Asking Directions", icon:"🧭", color:"#117864", words:[
-    {c:"左邊",   j:"zo2 bin1",       e:"Left side"},
-    {c:"右邊",   j:"jau6 bin1",      e:"Right side"},
-    {c:"前面",   j:"cin4 min6",      e:"In front / ahead"},
-    {c:"後面",   j:"hau6 min6",      e:"Behind"},
-    {c:"直行",   j:"zik6 haang4",    e:"Straight ahead"},
-    {c:"轉",     j:"zyun3",          e:"Turn"},
-    {c:"對面",   j:"deoi3 min6",     e:"Opposite"},
-    {c:"附近",   j:"fu6 gan6",       e:"Nearby"},
-    {c:"遠",     j:"jyun5",          e:"Far"},
-    {c:"近",     j:"kan5",           e:"Close / near"},
-  ]},
-  friends: { label:"Friends & Social", icon:"👫", color:"#AD1457",
-    note:"Making plans uses <strong>joek3</strong> (約) as its core verb — it covers everything from arranging a meet-up to making a date. To accept, <em>hou2</em> (好). To decline politely, the cultural move is <em>goi2 jat6 laa1</em> ('another day') rather than a flat no. The compound <em>dak1 haan4</em> (得閒, free/available) is paired with most invitation questions: <em>nei5 gei2 si4 dak1 haan4?</em> = 'when are you free?'",
-    words:[
-    {c:"朋友",     j:"pang4 jau5",      e:"Friend"},
-    {c:"約",       j:"joek3",           e:"Make plans / appointment"},
-    {c:"一齊",     j:"jat1 cai4",       e:"Together"},
-    {c:"得閒",     j:"dak1 haan4",      e:"Free / have time"},
-    {c:"派對",     j:"paai3 deoi3",     e:"Party"},
-    {c:"出街",     j:"ceot1 gaai1",     e:"Go out"},
-    {c:"改日",     j:"goi2 jat6",       e:"Another day (rain check)"},
-    {c:"邀請",     j:"jiu1 cing2",      e:"Invite"},
-    {c:"玩",       j:"waan2",           e:"Hang out / play"},
-    {c:"慶祝",     j:"hing3 zuk1",      e:"Celebrate"},
-  ]},
-  hotels: { label:"Hotels & Accommodation", icon:"🏨", color:"#5B2C6F",
-    note:"Hotel vocabulary leans toward the formal end of Cantonese — it lives in service contexts. <em>zau2 dim3</em> (酒店) is the standard word for hotel. Expect the receptionist to ask <em>nei5 deng6 zo2 fong2 mei6 aa3?</em> ('have you booked?'). The verbs <strong>jap6 zyu6</strong> (入住, check in, literally 'enter and stay') and <strong>teoi3 fong2</strong> (退房, check out, 'return room') are compound expressions worth learning whole.",
-    words:[
-    {c:"酒店",     j:"zau2 dim3",       e:"Hotel"},
-    {c:"房間",     j:"fong4 gaan1",     e:"Room"},
-    {c:"鎖匙",     j:"so2 si4",         e:"Key"},
-    {c:"早餐",     j:"zou2 caan1",      e:"Breakfast"},
-    {c:"行李",     j:"hang4 lei5",      e:"Luggage"},
-    {c:"訂房",     j:"deng6 fong2",     e:"Book a room"},
-    {c:"入住",     j:"jap6 zyu6",       e:"Check in"},
-    {c:"退房",     j:"teoi3 fong2",     e:"Check out"},
-    {c:"服務員",   j:"fuk6 mou6 jyun4", e:"Service staff"},
-    {c:"幾樓",     j:"gei2 lau2",       e:"What floor"},
-  ]},
-  attractions: { label:"Tourist Attractions", icon:"🎡", color:"#5499C7",
-    note:"Sightseeing relies on a few useful patterns. <strong>hoi1 gei2 dim2</strong> (開幾點) = 'opens at what time' — works for shops, restaurants, anywhere with hours. <em>mun4 piu3</em> (門票) is your entry ticket; <em>jap6 coeng4</em> (入場) is the act of entering. Watch for <em>m4 ho2 ji5 paak3 ziu3</em> ('photos not allowed') signs at many HK museums and temples.",
-    words:[
-    {c:"景點",     j:"ging2 dim2",      e:"Attraction"},
-    {c:"門票",     j:"mun4 piu3",       e:"Entry ticket"},
-    {c:"拍照",     j:"paak3 ziu3",      e:"Take photos"},
-    {c:"開放",     j:"hoi1 fong3",      e:"Open (for visitors)"},
-    {c:"排隊",     j:"paai4 deoi2",     e:"Queue / line up"},
-    {c:"入場",     j:"jap6 coeng4",     e:"Entry"},
-    {c:"紀念品",   j:"gei2 nim6 ban2",  e:"Souvenir"},
-    {c:"地圖",     j:"dei6 tou4",       e:"Map"},
-    {c:"開幾點",   j:"hoi1 gei2 dim2",  e:"What time does it open"},
-    {c:"導遊",     j:"dou6 jau4",       e:"Tour guide"},
-  ]},
-  home: { label:"Home & Rooms", icon:"🏠", color:"#1F618D",
-    note:"<em>uk1 kei2</em> (屋企) is the natural Cantonese for 'home' — much more colloquial than the formal 家. To talk about going home, <strong>faan1 uk1 kei2</strong> (返屋企, literally 'return home'). Room names are distinct compounds rather than English-style: <em>cyu4 fong2</em> (廚房, kitchen), <em>ci3 so2</em> (廁所, toilet), <em>haak3 teng1</em> (客廳, living room). For 'bedroom', most people just say <em>fong2</em> (房) — the formal <em>fong4 gaan1</em> (房間) sits in writing or service contexts.",
-    words:[
-    {c:"屋企",     j:"uk1 kei2",        e:"Home"},
-    {c:"廚房",     j:"cyu4 fong2",      e:"Kitchen"},
-    {c:"廁所",     j:"ci3 so2",         e:"Toilet"},
-    {c:"客廳",     j:"haak3 teng1",     e:"Living room"},
-    {c:"房",       j:"fong2",           e:"Room / bedroom"},
-    {c:"床",       j:"cong4",           e:"Bed"},
-    {c:"枱",       j:"toi2",            e:"Table"},
-    {c:"椅",       j:"ji2",             e:"Chair"},
-    {c:"窗",       j:"coeng1",          e:"Window"},
-    {c:"門",       j:"mun4",            e:"Door"},
-  ]},
-  animals: { label:"Animals & Pets", icon:"🐶", color:"#138D75",
-    note:"<em>cung2 mat6</em> (寵物) means pet, and the verb <strong>joeng5</strong> (養) covers raising or keeping any animal. The diminutive suffix <em>zai2</em> (仔) attaches to many small animals: <em>gau2 zai2</em> (狗仔, puppy), <em>maau1 zai2</em> (貓仔, kitten), <em>tou3 zai2</em> (兔仔, rabbit — the standard form). Note <strong>ngau4 juk6</strong> (牛肉, beef) and <strong>zyu1 juk6</strong> (豬肉, pork) — same animal words plus <em>juk6</em> (肉, meat).",
-    words:[
-    {c:"狗",       j:"gau2",            e:"Dog"},
-    {c:"貓",       j:"maau1",           e:"Cat"},
-    {c:"鳥",       j:"niu5",            e:"Bird"},
-    {c:"兔仔",     j:"tou3 zai2",       e:"Rabbit"},
-    {c:"馬",       j:"maa5",            e:"Horse"},
-    {c:"牛",       j:"ngau4",           e:"Cow / cattle"},
-    {c:"豬",       j:"zyu1",            e:"Pig"},
-    {c:"寵物",     j:"cung2 mat6",      e:"Pet"},
-    {c:"養",       j:"joeng5",          e:"Raise / keep (a pet)"},
-    {c:"可愛",     j:"ho2 oi3",         e:"Cute"},
-  ]},
-  cooking: { label:"Cooking & Kitchen", icon:"🍳", color:"#784212",
-    note:"Cantonese cooking has three signature methods. <strong>zyu2</strong> (煮) is general cooking — boiling, simmering. <strong>caau2</strong> (炒) is stir-frying in a wok — high heat, quick motion. <strong>zing1</strong> (蒸) is steaming — used heavily for fish, dim sum, and Chinese desserts. The wok (<em>wok6</em>, 鑊) is the iconic Cantonese kitchen tool. Verb-object pattern: <em>caau2 coi3</em> (炒菜, stir-fried vegetables), <em>zing1 jyu2</em> (蒸魚, steamed fish).",
-    words:[
-    {c:"煮",       j:"zyu2",            e:"Cook"},
-    {c:"炒",       j:"caau2",           e:"Stir-fry"},
-    {c:"蒸",       j:"zing1",           e:"Steam"},
-    {c:"鑊",       j:"wok6",            e:"Wok"},
-    {c:"鹽",       j:"jim4",            e:"Salt"},
-    {c:"糖",       j:"tong4",           e:"Sugar"},
-    {c:"油",       j:"jau4",            e:"Oil"},
-    {c:"切",       j:"cit3",            e:"Cut"},
-    {c:"食材",     j:"sik6 coi4",       e:"Ingredients"},
-    {c:"醬油",     j:"zoeng3 jau4",     e:"Soy sauce"},
-  ]},
-  work: { label:"Office & Work", icon:"💼", color:"#1B4F72",
-    note:"Cantonese work vocabulary is built around <em>gung1</em> (工, work). <strong>faan1 gung1</strong> (返工) literally 'return work' = go to work. <strong>fong3 gung1</strong> (放工) literally 'release work' = finish work. <strong>gaa1 baan1</strong> (加班) = overtime. The HK workplace runs on these compounds — you'll hear them daily. <em>tung4 si6</em> (同事, colleague) shares the root <em>tung4</em> (same) you've seen in 'with/and'.",
-    words:[
-    {c:"公司",     j:"gung1 si1",       e:"Company"},
-    {c:"老闆",     j:"lou5 baan2",      e:"Boss"},
-    {c:"同事",     j:"tung4 si6",       e:"Colleague"},
-    {c:"工作",     j:"gung1 zok3",      e:"Work / job"},
-    {c:"開會",     j:"hoi1 wui2",       e:"Meeting"},
-    {c:"返工",     j:"faan1 gung1",     e:"Go to work"},
-    {c:"放工",     j:"fong3 gung1",     e:"Finish work"},
-    {c:"加班",     j:"gaa1 baan1",      e:"Overtime"},
-    {c:"出糧",     j:"ceot1 loeng4",    e:"Get paid"},
-    {c:"截止日期", j:"zit6 zi2 jat6 kei4", e:"Deadline"},
-  ]},
-  school: { label:"School & Studying", icon:"📚", color:"#7D3C98",
-    note:"Cantonese school life uses verb-object compounds. <strong>duk6 syu1</strong> (讀書) literally 'read book' = study generally. <strong>soeng5 tong4</strong> (上堂) literally 'ascend class' = attend a lesson. <strong>haau2 si3</strong> (考試) = take an exam. Two words for 'knowing': <em>sik1</em> (識) = know how to / be able to (skills), versus <em>zi1</em> (知, knowing a fact). 'I can speak Cantonese' uses <em>sik1</em>; 'I know that' uses <em>zi1</em>.",
-    words:[
-    {c:"學校",     j:"hok6 haau6",      e:"School"},
-    {c:"老師",     j:"lou5 si1",        e:"Teacher"},
-    {c:"學生",     j:"hok6 saang1",     e:"Student"},
-    {c:"功課",     j:"gung1 fo3",       e:"Homework"},
-    {c:"考試",     j:"haau2 si3",       e:"Exam"},
-    {c:"讀書",     j:"duk6 syu1",       e:"Study / read"},
-    {c:"上堂",     j:"soeng5 tong4",    e:"Go to class"},
-    {c:"同學",     j:"tung4 hok6",      e:"Classmate"},
-    {c:"識",       j:"sik1",            e:"Know how to"},
-    {c:"答",       j:"daap3",           e:"Answer"},
-  ]},
-  tech: { label:"Technology", icon:"💻", color:"#21618C",
-    note:"Tech vocabulary mixes English loanwords (<em>WiFi</em>, <em>app</em>) with native compounds. <strong>din6</strong> (電, electric) prefixes most modern tech: <em>din6 nou5</em> (電腦, computer = electric brain), <em>din6 waa2</em> (電話, phone = electric speech). <strong>soeng5 mong5</strong> (上網) literally 'ascend the net' = go online. <strong>cung1 din6</strong> (充電) literally 'fill electricity' = charge a battery. The adjective <em>waai6</em> (壞, broken) covers anything not working.",
-    words:[
-    {c:"電腦",     j:"din6 nou5",       e:"Computer"},
-    {c:"電話",     j:"din6 waa2",       e:"Phone"},
-    {c:"上網",     j:"soeng5 mong5",    e:"Go online"},
-    {c:"程式",     j:"cing4 sik1",      e:"App / program"},
-    {c:"密碼",     j:"mat6 maa5",       e:"Password"},
-    {c:"充電",     j:"cung1 din6",      e:"Charge battery"},
-    {c:"訊號",     j:"seon3 hou6",      e:"Signal"},
-    {c:"屏幕",     j:"ping4 mok6",      e:"Screen"},
-    {c:"壞",       j:"waai6",           e:"Broken / not working"},
-    {c:"WiFi",     j:"WiFi",            e:"WiFi"},
-  ]},
-  money: { label:"Money & Banking", icon:"💰", color:"#6E2C00",
-    note:"<em>cin2</em> (錢, money) is the base; specific contexts build on it. <strong>zaau2 cin2</strong> (找錢) is the change you get back at a shop. <strong>saan3 zi2</strong> (散紙) means coins or small notes — you'll be asked <em>jau5 mou5 saan3 zi2?</em> when paying. <strong>tai4 fun2 gei1</strong> (提款機) is an ATM, literally 'withdraw money machine'. <strong>ngan4 hong4</strong> (銀行) is bank, literally 'silver firm' — silver being the historical currency.",
-    words:[
-    {c:"錢",       j:"cin2",            e:"Money"},
-    {c:"銀行",     j:"ngan4 hong4",     e:"Bank"},
-    {c:"提款機",   j:"tai4 fun2 gei1",  e:"ATM"},
-    {c:"現金",     j:"jin6 gam1",       e:"Cash"},
-    {c:"信用卡",   j:"seon3 jung6 kaat1", e:"Credit card"},
-    {c:"找錢",     j:"zaau2 cin2",      e:"Change (returned)"},
-    {c:"散紙",     j:"saan3 zi2",       e:"Coins / small change"},
-    {c:"戶口",     j:"wu6 hau2",        e:"Account"},
-    {c:"匯錢",     j:"wui6 cin2",       e:"Transfer money"},
-    {c:"唱錢",     j:"coeng3 cin2",     e:"Change / exchange money"},
-  ]},
-  hobbies: { label:"Hobbies & Free Time", icon:"🎨", color:"#196F3D",
-    note:"Hobbies use lots of verb-noun pairs. <strong>tai2</strong> (睇, watch/read/look) prefixes many media activities: <em>tai2 hei3</em> (睇戲, watch a movie), <em>tai2 syu1</em> (睇書, read a book), <em>tai2 din6 si6</em> (睇電視, watch TV). <strong>haang4 saan1</strong> (行山) literally 'walk mountain' = hiking, a hugely popular weekend activity in HK. <strong>daa2 gei1</strong> (打機) literally 'hit machine' = play video games.",
-    words:[
-    {c:"興趣",     j:"hing3 ceoi3",     e:"Hobby / interest"},
-    {c:"睇戲",     j:"tai2 hei3",       e:"Watch a movie"},
-    {c:"聽歌",     j:"ting1 go1",       e:"Listen to music"},
-    {c:"睇書",     j:"tai2 syu1",       e:"Read a book"},
-    {c:"行山",     j:"haang4 saan1",    e:"Hiking"},
-    {c:"畫畫",     j:"waak6 waa2",      e:"Drawing / painting"},
-    {c:"唱歌",     j:"coeng3 go1",      e:"Sing"},
-    {c:"跳舞",     j:"tiu3 mou5",       e:"Dance"},
-    {c:"打機",     j:"daa2 gei1",       e:"Play video games"},
-    {c:"影相",     j:"jing2 soeng2",    e:"Take photos (hobby)"},
-  ]},
-  sports: { label:"Sports & Exercise", icon:"⚽", color:"#0B5345",
-    note:"Sports use the all-purpose verb <strong>daa2</strong> (打, hit) for almost any ball sport: <em>daa2 bo1</em> (打波, play ball), <em>daa2 zuk1 kau4</em> (打足球, play football), <em>daa2 laam4 kau4</em> (打籃球, play basketball). For running and swimming, different verbs: <em>paau2 bou6</em> (跑步, run a step) and <em>jau4 seoi2</em> (游水, swim in water). <strong>gin6 san1</strong> (健身) literally 'strengthen body' = work out at the gym.",
-    words:[
-    {c:"運動",     j:"wan6 dung6",      e:"Sports / exercise"},
-    {c:"健身",     j:"gin6 san1",       e:"Work out / gym"},
-    {c:"跑步",     j:"paau2 bou6",      e:"Run / jog"},
-    {c:"游水",     j:"jau4 seoi2",      e:"Swim"},
-    {c:"打波",     j:"daa2 bo1",        e:"Play ball"},
-    {c:"足球",     j:"zuk1 kau4",       e:"Football / soccer"},
-    {c:"籃球",     j:"laam4 kau4",      e:"Basketball"},
-    {c:"球場",     j:"kau4 coeng4",     e:"Court / field"},
-    {c:"隊",       j:"deoi6",           e:"Team"},
-    {c:"贏",       j:"jeng4",           e:"Win"},
-  ]},
-  emergencies: { label:"Emergencies", icon:"🚨", color:"#922B21",
-    note:"<strong>gau3 meng6</strong> (救命, literally 'save life') is the universal cry for help. Hong Kong's emergency number is <strong>999</strong>, which connects to police, fire, and ambulance. <em>gap1 zing3 sat1</em> (急症室) is the A&E department; <em>gau3 wu6 ce1</em> (救護車) is the ambulance, literally 'save-protect car'. Note <strong>zau2</strong> (走) — context matters: in everyday speech it means 'leave/go', but in emergencies it means 'flee/run away'.",
-    words:[
-    {c:"救命",     j:"gau3 meng6",      e:"Help! / Save me!"},
-    {c:"報警",     j:"bou3 ging2",      e:"Call the police"},
-    {c:"火",       j:"fo2",             e:"Fire"},
-    {c:"急症室",   j:"gap1 zing3 sat1", e:"A&E / ER"},
-    {c:"救護車",   j:"gau3 wu6 ce1",    e:"Ambulance"},
-    {c:"危險",     j:"ngai4 him2",      e:"Dangerous"},
-    {c:"走",       j:"zau2",            e:"Flee / escape"},
-    {c:"警察",     j:"ging2 caat3",     e:"Police"},
-    {c:"受傷",     j:"sau6 soeng1",     e:"Injured"},
-    {c:"999",      j:"gau2 gau2 gau2",  e:"999 (HK emergency)"},
-  ]},
-};
+// ── Lesson shape helper ──
+// Synthesises the legacy { label, icon, color, words, note } object that the
+// existing render functions expect, drawn from the cached topic file.
+// Falls back to index metadata if topic file isn't loaded yet.
+function lessonShape(key) {
+  const meta = store.topicMeta(key);
+  if (!meta) return { label: '', icon: '', color: '#888', words: [], note: null };
+  const r1 = store.roundData(key, 1) || {};
+  return {
+    label: meta.label,
+    icon:  meta.icon,
+    color: meta.color,
+    words: r1.words || [],
+    note:  r1.note  || null,
+  };
+}
 
 const TONES = {
   "1":{"color":"#E74C3C","desc":"High level",  "ex":"詩 si1"},
@@ -1251,958 +564,6 @@ const PATTERNS = [
     note:"dang2 means 'wait'. Use alone for 'wait a moment' or add who/how long to wait.",
     examples:[{c:"等我",j:"dang2 ngo5",e:"Wait for me"},{c:"等吓",j:"dang2 haa5",e:"Wait a moment"},{c:"等一陣",j:"dang2 jat1 zan6",e:"Wait a little while"}]},
 ];
-
-// ── Sentences ─────────────────────────────────────────────────────────────────
-const SENTENCES = {
-  greetings: [
-    {c:"你好！我叫William。", j:"nei5 hou2! ngo5 giu3 William.", e:"Hello! My name is William.",
-      bd:[{c:"你好",j:"nei5 hou2",e:"hello"},{c:"我",j:"ngo5",e:"I / me"},{c:"叫",j:"giu3",e:"am called"},{c:"William",j:"William",e:"William"}]},
-    {c:"早晨！你好嗎？", j:"zou2 san4! nei5 hou2 maa3?", e:"Good morning! How are you?",
-      bd:[{c:"早晨",j:"zou2 san4",e:"good morning"},{c:"你",j:"nei5",e:"you"},{c:"好嗎",j:"hou2 maa3",e:"are you well?"}]},
-    {c:"多謝，再見！", j:"do1 ze6, zoi3 gin3!", e:"Thank you, goodbye!",
-      bd:[{c:"多謝",j:"do1 ze6",e:"thank you (for a gift)"},{c:"再見",j:"zoi3 gin3",e:"goodbye"}]},
-    {c:"對唔住，我遲到。", j:"deoi3 m4 zyu6, ngo5 ci4 dou3.", e:"Sorry, I'm late.",
-      bd:[{c:"對唔住",j:"deoi3 m4 zyu6",e:"sorry"},{c:"我",j:"ngo5",e:"I"},{c:"遲到",j:"ci4 dou3",e:"late / arrive late"}]},
-    {c:"好高興認識你！", j:"hou2 gou1 hing3 jing6 sik1 nei5!", e:"Nice to meet you!",
-      bd:[{c:"好",j:"hou2",e:"very"},{c:"高興",j:"gou1 hing3",e:"happy / pleased"},{c:"認識",j:"jing6 sik1",e:"to meet / know"},{c:"你",j:"nei5",e:"you"}]},
-  ],
-  numbers: [
-    {c:"我有三個蘋果。", j:"ngo5 jau5 saam1 go3 ping4 gwo2.", e:"I have three apples.",
-      bd:[{c:"我",j:"ngo5",e:"I"},{c:"有",j:"jau5",e:"have"},{c:"三個",j:"saam1 go3",e:"three (items)"},{c:"蘋果",j:"ping4 gwo2",e:"apple"}]},
-    {c:"呢度有十個人。", j:"ni1 dou6 jau5 sap6 go3 jan4.", e:"There are ten people here.",
-      bd:[{c:"呢度",j:"ni1 dou6",e:"here"},{c:"有",j:"jau5",e:"there are"},{c:"十個",j:"sap6 go3",e:"ten (items)"},{c:"人",j:"jan4",e:"people"}]},
-    {c:"一加二係三。", j:"jat1 gaa1 ji6 hai6 saam1.", e:"One plus two is three.",
-      bd:[{c:"一",j:"jat1",e:"one"},{c:"加",j:"gaa1",e:"plus"},{c:"二",j:"ji6",e:"two"},{c:"係",j:"hai6",e:"is / equals"},{c:"三",j:"saam1",e:"three"}]},
-    {c:"我兩歲。", j:"ngo5 loeng5 seoi3.", e:"I'm two years old.",
-      bd:[{c:"我",j:"ngo5",e:"I"},{c:"兩",j:"loeng5",e:"two (with measure)"},{c:"歲",j:"seoi3",e:"years old"}]},
-    {c:"佢有五個朋友。", j:"keoi5 jau5 ng5 go3 pang4 jau5.", e:"He has five friends.",
-      bd:[{c:"佢",j:"keoi5",e:"he / she"},{c:"有",j:"jau5",e:"has"},{c:"五個",j:"ng5 go3",e:"five (items)"},{c:"朋友",j:"pang4 jau5",e:"friends"}]},
-  ],
-  food: [
-    {c:"我想飲茶。", j:"ngo5 soeng2 jam2 caa4.", e:"I want to drink tea.",
-      bd:[{c:"我",j:"ngo5",e:"I"},{c:"想",j:"soeng2",e:"want to"},{c:"飲",j:"jam2",e:"drink"},{c:"茶",j:"caa4",e:"tea"}]},
-    {c:"呢個飯好味！", j:"ni1 go3 faan6 hou2 mei6!", e:"This rice is delicious!",
-      bd:[{c:"呢個",j:"ni1 go3",e:"this"},{c:"飯",j:"faan6",e:"rice / meal"},{c:"好味",j:"hou2 mei6",e:"delicious"}]},
-    {c:"我好餓，想食麵。", j:"ngo5 hou2 ngo6, soeng2 sik6 min6.", e:"I'm hungry, I want noodles.",
-      bd:[{c:"我",j:"ngo5",e:"I"},{c:"好餓",j:"hou2 ngo6",e:"very hungry"},{c:"想食",j:"soeng2 sik6",e:"want to eat"},{c:"麵",j:"min6",e:"noodles"}]},
-    {c:"佢鍾意食魚。", j:"keoi5 zung1 ji3 sik6 jyu2.", e:"He likes eating fish.",
-      bd:[{c:"佢",j:"keoi5",e:"he / she"},{c:"鍾意",j:"zung1 ji3",e:"likes"},{c:"食",j:"sik6",e:"eat"},{c:"魚",j:"jyu2",e:"fish"}]},
-    {c:"咖啡同水，唔該。", j:"gaa3 fe1 tung4 seoi2, m4 goi1.", e:"Coffee and water, please.",
-      bd:[{c:"咖啡",j:"gaa3 fe1",e:"coffee"},{c:"同",j:"tung4",e:"and"},{c:"水",j:"seoi2",e:"water"},{c:"唔該",j:"m4 goi1",e:"please"}]},
-  ],
-  restaurant: [
-    {c:"唔該，俾我個餐牌。", j:"m4 goi1, bei2 ngo5 go3 caan1 paai4.", e:"Excuse me, please give me the menu.",
-      bd:[{c:"唔該",j:"m4 goi1",e:"excuse me / please"},{c:"俾",j:"bei2",e:"give"},{c:"我",j:"ngo5",e:"me"},{c:"個",j:"go3",e:"(measure word)"},{c:"餐牌",j:"caan1 paai4",e:"menu"}]},
-    {c:"我想叫凍檸茶。", j:"ngo5 soeng2 giu3 dung3 ning4 caa4.", e:"I'd like to order iced lemon tea.",
-      bd:[{c:"我",j:"ngo5",e:"I"},{c:"想",j:"soeng2",e:"would like"},{c:"叫",j:"giu3",e:"order"},{c:"凍",j:"dung3",e:"cold / iced"},{c:"檸茶",j:"ning4 caa4",e:"lemon tea"}]},
-    {c:"我好餓呀！", j:"ngo5 hou2 ngo6 aa3!", e:"I'm so hungry!",
-      bd:[{c:"我",j:"ngo5",e:"I"},{c:"好",j:"hou2",e:"very"},{c:"餓",j:"ngo6",e:"hungry"},{c:"呀",j:"aa3",e:"(emphasis)"}]},
-    {c:"唔該，埋單。", j:"m4 goi1, maai4 daan1.", e:"Excuse me, the bill please.",
-      bd:[{c:"唔該",j:"m4 goi1",e:"excuse me"},{c:"埋單",j:"maai4 daan1",e:"the bill"}]},
-    {c:"呢個好食！", j:"ni1 go3 hou2 sik6!", e:"This is delicious!",
-      bd:[{c:"呢個",j:"ni1 go3",e:"this one"},{c:"好食",j:"hou2 sik6",e:"delicious"}]},
-  ],
-  family: [
-    {c:"我爸爸好高。", j:"ngo5 baa4 baa1 hou2 gou1.", e:"My father is very tall.",
-      bd:[{c:"我",j:"ngo5",e:"my"},{c:"爸爸",j:"baa4 baa1",e:"father"},{c:"好高",j:"hou2 gou1",e:"very tall"}]},
-    {c:"我媽媽係老師。", j:"ngo5 maa4 maa1 hai6 lou5 si1.", e:"My mother is a teacher.",
-      bd:[{c:"我",j:"ngo5",e:"my"},{c:"媽媽",j:"maa4 maa1",e:"mother"},{c:"係",j:"hai6",e:"is"},{c:"老師",j:"lou5 si1",e:"teacher"}]},
-    {c:"我有一個哥哥。", j:"ngo5 jau5 jat1 go3 go4 go1.", e:"I have one older brother.",
-      bd:[{c:"我",j:"ngo5",e:"I"},{c:"有",j:"jau5",e:"have"},{c:"一個",j:"jat1 go3",e:"one (person)"},{c:"哥哥",j:"go4 go1",e:"older brother"}]},
-    {c:"妹妹好細個。", j:"mui4 mui2 hou2 sai3 go3.", e:"Younger sister is very young.",
-      bd:[{c:"妹妹",j:"mui4 mui2",e:"younger sister"},{c:"好",j:"hou2",e:"very"},{c:"細個",j:"sai3 go3",e:"young / small"}]},
-    {c:"爺爺住喺香港。", j:"je4 je2 zyu6 hai2 hoeng1 gong2.", e:"Grandfather lives in Hong Kong.",
-      bd:[{c:"爺爺",j:"je4 je2",e:"paternal grandfather"},{c:"住",j:"zyu6",e:"lives"},{c:"喺",j:"hai2",e:"in / at"},{c:"香港",j:"hoeng1 gong2",e:"Hong Kong"}]},
-  ],
-  time: [
-    {c:"今日係星期一。", j:"gam1 jat6 hai6 sing1 kei4 jat1.", e:"Today is Monday.",
-      bd:[{c:"今日",j:"gam1 jat6",e:"today"},{c:"係",j:"hai6",e:"is"},{c:"星期一",j:"sing1 kei4 jat1",e:"Monday"}]},
-    {c:"琴日係星期六。", j:"kam4 jat6 hai6 sing1 kei4 luk6.", e:"Yesterday was Saturday.",
-      bd:[{c:"琴日",j:"kam4 jat6",e:"yesterday"},{c:"係",j:"hai6",e:"was"},{c:"星期六",j:"sing1 kei4 luk6",e:"Saturday"}]},
-    {c:"聽日朝早見。", j:"ting1 jat6 ziu1 zou2 gin3.", e:"See you tomorrow morning.",
-      bd:[{c:"聽日",j:"ting1 jat6",e:"tomorrow"},{c:"朝早",j:"ziu1 zou2",e:"morning"},{c:"見",j:"gin3",e:"see / meet"}]},
-    {c:"夜晚十點瞓覺。", j:"je6 maan5 sap6 dim2 fan3 gaau3.", e:"Sleep at 10pm.",
-      bd:[{c:"夜晚",j:"je6 maan5",e:"night"},{c:"十點",j:"sap6 dim2",e:"10 o'clock"},{c:"瞓覺",j:"fan3 gaau3",e:"to sleep"}]},
-    {c:"星期日休息。", j:"sing1 kei4 jat6 jau1 sik1.", e:"Sunday is for resting.",
-      bd:[{c:"星期日",j:"sing1 kei4 jat6",e:"Sunday"},{c:"休息",j:"jau1 sik1",e:"to rest"}]},
-  ],
-  phrases: [
-    {c:"唔該，洗手間喺邊度？", j:"m4 goi1, sai2 sau2 gaan1 hai2 bin1 dou6?", e:"Excuse me, where is the bathroom?",
-      bd:[{c:"唔該",j:"m4 goi1",e:"excuse me / please"},{c:"洗手間",j:"sai2 sau2 gaan1",e:"bathroom"},{c:"喺邊度",j:"hai2 bin1 dou6",e:"is where"}]},
-    {c:"我唔明，請講慢啲。", j:"ngo5 m4 ming4, cing2 gong2 maan6 di1.", e:"I don't understand, please speak slowly.",
-      bd:[{c:"我",j:"ngo5",e:"I"},{c:"唔明",j:"m4 ming4",e:"don't understand"},{c:"請",j:"cing2",e:"please"},{c:"講",j:"gong2",e:"speak"},{c:"慢啲",j:"maan6 di1",e:"a bit slower"}]},
-    {c:"呢個幾錢？", j:"ni1 go3 gei2 cin2?", e:"How much is this?",
-      bd:[{c:"呢個",j:"ni1 go3",e:"this one"},{c:"幾錢",j:"gei2 cin2",e:"how much money"}]},
-    {c:"我叫William，你呢？", j:"ngo5 giu3 William, nei5 ne1?", e:"I'm William, and you?",
-      bd:[{c:"我",j:"ngo5",e:"I"},{c:"叫",j:"giu3",e:"am called"},{c:"William",j:"William",e:"William"},{c:"你呢",j:"nei5 ne1",e:"and you?"}]},
-    {c:"我要呢個，多謝。", j:"ngo5 jiu3 ni1 go3, do1 ze6.", e:"I want this one, thanks.",
-      bd:[{c:"我要",j:"ngo5 jiu3",e:"I want"},{c:"呢個",j:"ni1 go3",e:"this one"},{c:"多謝",j:"do1 ze6",e:"thank you"}]},
-  ],
-  questions: [
-    {c:"你係邊個？", j:"nei5 hai6 bin1 go3?", e:"Who are you?",
-      bd:[{c:"你",j:"nei5",e:"you"},{c:"係",j:"hai6",e:"are"},{c:"邊個",j:"bin1 go3",e:"who"}]},
-    {c:"幾時走？", j:"gei2 si4 zau2?", e:"When are we leaving?",
-      bd:[{c:"幾時",j:"gei2 si4",e:"when"},{c:"走",j:"zau2",e:"leave / go"}]},
-    {c:"點解唔嚟？", j:"dim2 gaai2 m4 lai4?", e:"Why aren't you coming?",
-      bd:[{c:"點解",j:"dim2 gaai2",e:"why"},{c:"唔",j:"m4",e:"not"},{c:"嚟",j:"lai4",e:"come"}]},
-    {c:"你住喺邊度？", j:"nei5 zyu6 hai2 bin1 dou6?", e:"Where do you live?",
-      bd:[{c:"你",j:"nei5",e:"you"},{c:"住",j:"zyu6",e:"live"},{c:"喺",j:"hai2",e:"at"},{c:"邊度",j:"bin1 dou6",e:"where"}]},
-    {c:"你叫乜嘢名？", j:"nei5 giu3 mat1 je5 meng2?", e:"What's your name?",
-      bd:[{c:"你",j:"nei5",e:"you"},{c:"叫",j:"giu3",e:"are called"},{c:"乜嘢",j:"mat1 je5",e:"what"},{c:"名",j:"meng2",e:"name"}]},
-  ],
-  colors: [
-    {c:"我鍾意紅色。", j:"ngo5 zung1 ji3 hung4 sik1.", e:"I like red.",
-      bd:[{c:"我",j:"ngo5",e:"I"},{c:"鍾意",j:"zung1 ji3",e:"like"},{c:"紅色",j:"hung4 sik1",e:"red"}]},
-    {c:"天空係藍色。", j:"tin1 hung1 hai6 laam4 sik1.", e:"The sky is blue.",
-      bd:[{c:"天空",j:"tin1 hung1",e:"sky"},{c:"係",j:"hai6",e:"is"},{c:"藍色",j:"laam4 sik1",e:"blue"}]},
-    {c:"呢件衫係白色。", j:"ni1 gin6 saam1 hai6 baak6 sik1.", e:"This shirt is white.",
-      bd:[{c:"呢件",j:"ni1 gin6",e:"this (clothing)"},{c:"衫",j:"saam1",e:"shirt / clothing"},{c:"係",j:"hai6",e:"is"},{c:"白色",j:"baak6 sik1",e:"white"}]},
-    {c:"佢著綠色嘅褲。", j:"keoi5 zoek3 luk6 sik1 ge3 fu3.", e:"He's wearing green pants.",
-      bd:[{c:"佢",j:"keoi5",e:"he / she"},{c:"著",j:"zoek3",e:"wearing"},{c:"綠色",j:"luk6 sik1",e:"green"},{c:"嘅",j:"ge3",e:"(possessive particle)"},{c:"褲",j:"fu3",e:"pants"}]},
-    {c:"我唔鍾意黃色。", j:"ngo5 m4 zung1 ji3 wong4 sik1.", e:"I don't like yellow.",
-      bd:[{c:"我",j:"ngo5",e:"I"},{c:"唔",j:"m4",e:"don't / not"},{c:"鍾意",j:"zung1 ji3",e:"like"},{c:"黃色",j:"wong4 sik1",e:"yellow"}]},
-  ],
-  body: [
-    {c:"我頭好痛。", j:"ngo5 tau4 hou2 tung3.", e:"My head really hurts.",
-      bd:[{c:"我",j:"ngo5",e:"my"},{c:"頭",j:"tau4",e:"head"},{c:"好痛",j:"hou2 tung3",e:"really hurts"}]},
-    {c:"我眼好攰。", j:"ngo5 ngaan5 hou2 gui6.", e:"My eyes are very tired.",
-      bd:[{c:"我",j:"ngo5",e:"my"},{c:"眼",j:"ngaan5",e:"eyes"},{c:"好攰",j:"hou2 gui6",e:"very tired"}]},
-    {c:"洗手要用水。", j:"sai2 sau2 jiu3 jung6 seoi2.", e:"Washing hands requires water.",
-      bd:[{c:"洗手",j:"sai2 sau2",e:"wash hands"},{c:"要",j:"jiu3",e:"need / require"},{c:"用",j:"jung6",e:"use"},{c:"水",j:"seoi2",e:"water"}]},
-    {c:"我心好痛。", j:"ngo5 sam1 hou2 tung3.", e:"My heart hurts (sad).",
-      bd:[{c:"我",j:"ngo5",e:"my"},{c:"心",j:"sam1",e:"heart"},{c:"好痛",j:"hou2 tung3",e:"really hurts"}]},
-    {c:"佢腳受傷。", j:"keoi5 goek3 sau6 soeng1.", e:"His leg is injured.",
-      bd:[{c:"佢",j:"keoi5",e:"he / she"},{c:"腳",j:"goek3",e:"leg / foot"},{c:"受傷",j:"sau6 soeng1",e:"injured"}]},
-  ],
-  transport: [
-    {c:"我坐地鐵去。", j:"ngo5 co5 dei6 tit3 heoi3.", e:"I'm taking the MTR.",
-      bd:[{c:"我",j:"ngo5",e:"I"},{c:"坐",j:"co5",e:"take / sit"},{c:"地鐵",j:"dei6 tit3",e:"MTR / subway"},{c:"去",j:"heoi3",e:"go"}]},
-    {c:"的士幾錢？", j:"dik1 si2 gei2 cin2?", e:"How much is the taxi?",
-      bd:[{c:"的士",j:"dik1 si2",e:"taxi"},{c:"幾錢",j:"gei2 cin2",e:"how much"}]},
-    {c:"巴士喺邊度停？", j:"baa1 si2 hai2 bin1 dou6 ting4?", e:"Where does the bus stop?",
-      bd:[{c:"巴士",j:"baa1 si2",e:"bus"},{c:"喺邊度",j:"hai2 bin1 dou6",e:"at where"},{c:"停",j:"ting4",e:"stop"}]},
-    {c:"飛機聽日去。", j:"fei1 gei1 ting1 jat6 heoi3.", e:"The plane goes tomorrow.",
-      bd:[{c:"飛機",j:"fei1 gei1",e:"airplane"},{c:"聽日",j:"ting1 jat6",e:"tomorrow"},{c:"去",j:"heoi3",e:"goes"}]},
-    {c:"我踩單車返工。", j:"ngo5 caai2 daan1 ce1 faan1 gung1.", e:"I cycle to work.",
-      bd:[{c:"我",j:"ngo5",e:"I"},{c:"踩",j:"caai2",e:"ride / pedal"},{c:"單車",j:"daan1 ce1",e:"bicycle"},{c:"返工",j:"faan1 gung1",e:"to work"}]},
-  ],
-  weather: [
-    {c:"今日天氣好熱。", j:"gam1 jat6 tin1 hei3 hou2 jit6.", e:"The weather today is very hot.",
-      bd:[{c:"今日",j:"gam1 jat6",e:"today"},{c:"天氣",j:"tin1 hei3",e:"weather"},{c:"好熱",j:"hou2 jit6",e:"very hot"}]},
-    {c:"落雨喇，帶遮啦。", j:"lok6 jyu5 laa3, daai3 ze1 laa1.", e:"It's raining, bring an umbrella.",
-      bd:[{c:"落雨",j:"lok6 jyu5",e:"raining"},{c:"喇",j:"laa3",e:"(particle - now)"},{c:"帶",j:"daai3",e:"bring"},{c:"遮",j:"ze1",e:"umbrella"},{c:"啦",j:"laa1",e:"(softening particle)"}]},
-    {c:"颱風嚟喇！", j:"toi4 fung1 lai4 laa3!", e:"The typhoon is coming!",
-      bd:[{c:"颱風",j:"toi4 fung1",e:"typhoon"},{c:"嚟",j:"lai4",e:"is coming"},{c:"喇",j:"laa3",e:"(particle - now)"}]},
-    {c:"今日好凍，著多件。", j:"gam1 jat6 hou2 dung3, zoek3 do1 gin6.", e:"It's cold today, wear extra layers.",
-      bd:[{c:"今日",j:"gam1 jat6",e:"today"},{c:"好凍",j:"hou2 dung3",e:"very cold"},{c:"著",j:"zoek3",e:"wear"},{c:"多件",j:"do1 gin6",e:"more (items)"}]},
-    {c:"太陽好猛！", j:"taai3 joeng4 hou2 maang5!", e:"The sun is so strong!",
-      bd:[{c:"太陽",j:"taai3 joeng4",e:"sun"},{c:"好猛",j:"hou2 maang5",e:"very strong / intense"}]},
-  ],
-  shopping: [
-    {c:"呢個好貴喎。", j:"ni1 go3 hou2 gwai3 wo3.", e:"This is really expensive.",
-      bd:[{c:"呢個",j:"ni1 go3",e:"this one"},{c:"好貴",j:"hou2 gwai3",e:"very expensive"},{c:"喎",j:"wo3",e:"(particle - really)"}]},
-    {c:"有冇平啲嘅？", j:"jau5 mou5 peng4 di1 ge3?", e:"Is there a cheaper one?",
-      bd:[{c:"有冇",j:"jau5 mou5",e:"do you have?"},{c:"平啲",j:"peng4 di1",e:"a bit cheaper"},{c:"嘅",j:"ge3",e:"one (particle)"}]},
-    {c:"我想買呢件。", j:"ngo5 soeng2 maai5 ni1 gin6.", e:"I want to buy this one.",
-      bd:[{c:"我想",j:"ngo5 soeng2",e:"I want to"},{c:"買",j:"maai5",e:"buy"},{c:"呢件",j:"ni1 gin6",e:"this one (item)"}]},
-    {c:"商場好多人。", j:"soeng1 coeng4 hou2 do1 jan4.", e:"The mall is very crowded.",
-      bd:[{c:"商場",j:"soeng1 coeng4",e:"shopping mall"},{c:"好多",j:"hou2 do1",e:"a lot of"},{c:"人",j:"jan4",e:"people"}]},
-    {c:"唔該俾收據我。", j:"m4 goi1 bei2 sau1 geoi3 ngo5.", e:"Please give me the receipt.",
-      bd:[{c:"唔該",j:"m4 goi1",e:"please"},{c:"俾",j:"bei2",e:"give"},{c:"收據",j:"sau1 geoi3",e:"receipt"},{c:"我",j:"ngo5",e:"me"}]},
-  ],
-
-  yesno: [
-    {c:"係，我係。", j:"hai6, ngo5 hai6.", e:"Yes, I am.",
-      bd:[{c:"係",j:"hai6",e:"yes"},{c:"我",j:"ngo5",e:"I"},{c:"係",j:"hai6",e:"am"}]},
-    {c:"唔係，唔該。", j:"m4 hai6, m4 goi1.", e:"No, thank you.",
-      bd:[{c:"唔係",j:"m4 hai6",e:"no"},{c:"唔該",j:"m4 goi1",e:"thank you / please"}]},
-    {c:"得，冇問題。", j:"dak1, mou5 man6 tai4.", e:"OK, no problem.",
-      bd:[{c:"得",j:"dak1",e:"OK / can do"},{c:"冇",j:"mou5",e:"no / don't have"},{c:"問題",j:"man6 tai4",e:"problem"}]},
-    {c:"請坐。", j:"cing2 co5.", e:"Please sit down.",
-      bd:[{c:"請",j:"cing2",e:"please (formal)"},{c:"坐",j:"co5",e:"sit"}]},
-    {c:"歡迎你嚟。", j:"fun1 jing4 nei5 lai4.", e:"Welcome / glad you came.",
-      bd:[{c:"歡迎",j:"fun1 jing4",e:"welcome"},{c:"你",j:"nei5",e:"you"},{c:"嚟",j:"lai4",e:"come / coming"}]},
-  ],
-
-  tense: [
-    {c:"我食咗飯。", j:"ngo5 sik6 zo2 faan6.", e:"I have eaten.",
-      bd:[{c:"我",j:"ngo5",e:"I"},{c:"食",j:"sik6",e:"eat"},{c:"咗",j:"zo2",e:"(completed)"},{c:"飯",j:"faan6",e:"rice / meal"}]},
-    {c:"佢食緊飯。", j:"keoi5 sik6 gan2 faan6.", e:"He's eating now.",
-      bd:[{c:"佢",j:"keoi5",e:"he / she"},{c:"食",j:"sik6",e:"eat"},{c:"緊",j:"gan2",e:"(currently)"},{c:"飯",j:"faan6",e:"rice"}]},
-    {c:"我去過香港。", j:"ngo5 heoi3 gwo3 hoeng1 gong2.", e:"I have been to Hong Kong.",
-      bd:[{c:"我",j:"ngo5",e:"I"},{c:"去",j:"heoi3",e:"go"},{c:"過",j:"gwo3",e:"(experienced)"},{c:"香港",j:"hoeng1 gong2",e:"Hong Kong"}]},
-    {c:"我未食。", j:"ngo5 mei6 sik6.", e:"I haven't eaten yet.",
-      bd:[{c:"我",j:"ngo5",e:"I"},{c:"未",j:"mei6",e:"not yet"},{c:"食",j:"sik6",e:"eat"}]},
-    {c:"我會去。", j:"ngo5 wui5 heoi3.", e:"I will go.",
-      bd:[{c:"我",j:"ngo5",e:"I"},{c:"會",j:"wui5",e:"will"},{c:"去",j:"heoi3",e:"go"}]},
-  ],
-
-  particles: [
-    {c:"食飯喇！", j:"sik6 faan6 laa3!", e:"Time to eat!",
-      bd:[{c:"食",j:"sik6",e:"eat"},{c:"飯",j:"faan6",e:"meal"},{c:"喇",j:"laa3",e:"(now / let's)"}]},
-    {c:"一齊去啦。", j:"jat1 cai4 heoi3 laa1.", e:"Let's go together.",
-      bd:[{c:"一齊",j:"jat1 cai4",e:"together"},{c:"去",j:"heoi3",e:"go"},{c:"啦",j:"laa1",e:"(softening)"}]},
-    {c:"係呀！", j:"hai6 aa3!", e:"That's right!",
-      bd:[{c:"係",j:"hai6",e:"yes / is"},{c:"呀",j:"aa3",e:"(soft confirmation)"}]},
-    {c:"咁貴喎！", j:"gam3 gwai3 wo3!", e:"That's so expensive!",
-      bd:[{c:"咁",j:"gam3",e:"so"},{c:"貴",j:"gwai3",e:"expensive"},{c:"喎",j:"wo3",e:"(emphasis)"}]},
-    {c:"你係咩？", j:"nei5 hai6 me1?", e:"Are you really?",
-      bd:[{c:"你",j:"nei5",e:"you"},{c:"係",j:"hai6",e:"are"},{c:"咩",j:"me1",e:"(surprised question)"}]},
-  ],
-
-  feelings: [
-    {c:"我好開心！", j:"ngo5 hou2 hoi1 sam1!", e:"I'm very happy!",
-      bd:[{c:"我",j:"ngo5",e:"I"},{c:"好",j:"hou2",e:"very"},{c:"開心",j:"hoi1 sam1",e:"happy"}]},
-    {c:"佢好攰。", j:"keoi5 hou2 gui6.", e:"He's very tired.",
-      bd:[{c:"佢",j:"keoi5",e:"he / she"},{c:"好",j:"hou2",e:"very"},{c:"攰",j:"gui6",e:"tired"}]},
-    {c:"唔好擔心！", j:"m4 hou2 daam1 sam1!", e:"Don't worry!",
-      bd:[{c:"唔好",j:"m4 hou2",e:"don't"},{c:"擔心",j:"daam1 sam1",e:"worry"}]},
-    {c:"我覺得好緊張。", j:"ngo5 gok3 dak1 hou2 gan2 zoeng1.", e:"I feel very nervous.",
-      bd:[{c:"我",j:"ngo5",e:"I"},{c:"覺得",j:"gok3 dak1",e:"feel"},{c:"好",j:"hou2",e:"very"},{c:"緊張",j:"gan2 zoeng1",e:"nervous"}]},
-    {c:"點解你嬲？", j:"dim2 gaai3 nei5 nau1?", e:"Why are you angry?",
-      bd:[{c:"點解",j:"dim2 gaai3",e:"why"},{c:"你",j:"nei5",e:"you"},{c:"嬲",j:"nau1",e:"angry"}]},
-  ],
-
-  directions: [
-    {c:"轉左。", j:"zyun3 zo2.", e:"Turn left.",
-      bd:[{c:"轉",j:"zyun3",e:"turn"},{c:"左",j:"zo2",e:"left"}]},
-    {c:"直行就到。", j:"zik6 haang4 zau6 dou3.", e:"Go straight, you'll arrive.",
-      bd:[{c:"直行",j:"zik6 haang4",e:"go straight"},{c:"就",j:"zau6",e:"then"},{c:"到",j:"dou3",e:"arrive"}]},
-    {c:"喺前面。", j:"hai2 cin4 min6.", e:"It's ahead.",
-      bd:[{c:"喺",j:"hai2",e:"is at"},{c:"前面",j:"cin4 min6",e:"ahead / in front"}]},
-    {c:"好近，行幾分鐘。", j:"hou2 kan5, haang4 gei2 fan1 zung1.", e:"Very close, just a few minutes walk.",
-      bd:[{c:"好近",j:"hou2 kan5",e:"very close"},{c:"行",j:"haang4",e:"walk"},{c:"幾分鐘",j:"gei2 fan1 zung1",e:"a few minutes"}]},
-    {c:"喺對面。", j:"hai2 deoi3 min6.", e:"It's opposite.",
-      bd:[{c:"喺",j:"hai2",e:"is at"},{c:"對面",j:"deoi3 min6",e:"opposite"}]},
-  ],
-  friends: [
-    {c:"我哋約星期六食飯。", j:"ngo5 dei6 joek3 sing1 kei4 luk6 sik6 faan6.", e:"We're meeting for lunch on Saturday.",
-      bd:[{c:"我哋",j:"ngo5 dei6",e:"we"},{c:"約",j:"joek3",e:"made plans"},{c:"星期六",j:"sing1 kei4 luk6",e:"Saturday"},{c:"食飯",j:"sik6 faan6",e:"eat / have a meal"}]},
-    {c:"你今晚得閒嗎？", j:"nei5 gam1 maan5 dak1 haan4 maa3?", e:"Are you free tonight?",
-      bd:[{c:"你",j:"nei5",e:"you"},{c:"今晚",j:"gam1 maan5",e:"tonight"},{c:"得閒",j:"dak1 haan4",e:"free"},{c:"嗎",j:"maa3",e:"(yes/no)"}]},
-    {c:"我哋一齊出街啦！", j:"ngo5 dei6 jat1 cai4 ceot1 gaai1 laa1!", e:"Let's go out together!",
-      bd:[{c:"我哋",j:"ngo5 dei6",e:"we / us"},{c:"一齊",j:"jat1 cai4",e:"together"},{c:"出街",j:"ceot1 gaai1",e:"go out"},{c:"啦",j:"laa1",e:"(suggestion)"}]},
-    {c:"對唔住，改日啦。", j:"deoi3 m4 zyu6, goi2 jat6 laa1.", e:"Sorry, another day.",
-      bd:[{c:"對唔住",j:"deoi3 m4 zyu6",e:"sorry"},{c:"改日",j:"goi2 jat6",e:"another day"},{c:"啦",j:"laa1",e:"(softening)"}]},
-    {c:"多謝你嘅邀請。", j:"do1 ze6 nei5 ge3 jiu1 cing2.", e:"Thank you for the invitation.",
-      bd:[{c:"多謝",j:"do1 ze6",e:"thank you"},{c:"你",j:"nei5",e:"your"},{c:"嘅",j:"ge3",e:"(possessive)"},{c:"邀請",j:"jiu1 cing2",e:"invitation"}]},
-  ],
-  hotels: [
-    {c:"我訂咗一間房。", j:"ngo5 deng6 zo2 jat1 gaan1 fong2.", e:"I booked a room.",
-      bd:[{c:"我",j:"ngo5",e:"I"},{c:"訂咗",j:"deng6 zo2",e:"booked"},{c:"一間",j:"jat1 gaan1",e:"one (room)"},{c:"房",j:"fong2",e:"room"}]},
-    {c:"我想入住。", j:"ngo5 soeng2 jap6 zyu6.", e:"I'd like to check in.",
-      bd:[{c:"我",j:"ngo5",e:"I"},{c:"想",j:"soeng2",e:"would like"},{c:"入住",j:"jap6 zyu6",e:"check in"}]},
-    {c:"鎖匙俾我，唔該。", j:"so2 si4 bei2 ngo5, m4 goi1.", e:"The key please.",
-      bd:[{c:"鎖匙",j:"so2 si4",e:"key"},{c:"俾",j:"bei2",e:"give"},{c:"我",j:"ngo5",e:"me"},{c:"唔該",j:"m4 goi1",e:"please"}]},
-    {c:"早餐喺幾樓？", j:"zou2 caan1 hai2 gei2 lau2?", e:"What floor is breakfast on?",
-      bd:[{c:"早餐",j:"zou2 caan1",e:"breakfast"},{c:"喺",j:"hai2",e:"is at"},{c:"幾樓",j:"gei2 lau2",e:"what floor"}]},
-    {c:"我聽朝退房。", j:"ngo5 ting1 ziu1 teoi3 fong2.", e:"I'm checking out tomorrow morning.",
-      bd:[{c:"我",j:"ngo5",e:"I"},{c:"聽朝",j:"ting1 ziu1",e:"tomorrow morning"},{c:"退房",j:"teoi3 fong2",e:"check out"}]},
-  ],
-  attractions: [
-    {c:"呢個景點幾時開？", j:"ni1 go3 ging2 dim2 gei2 si4 hoi1?", e:"When does this attraction open?",
-      bd:[{c:"呢個",j:"ni1 go3",e:"this"},{c:"景點",j:"ging2 dim2",e:"attraction"},{c:"幾時",j:"gei2 si4",e:"when"},{c:"開",j:"hoi1",e:"open"}]},
-    {c:"一張門票幾錢？", j:"jat1 zoeng1 mun4 piu3 gei2 cin2?", e:"How much is one ticket?",
-      bd:[{c:"一張",j:"jat1 zoeng1",e:"one (ticket)"},{c:"門票",j:"mun4 piu3",e:"ticket"},{c:"幾錢",j:"gei2 cin2",e:"how much"}]},
-    {c:"我哋去拍照啦！", j:"ngo5 dei6 heoi3 paak3 ziu3 laa1!", e:"Let's go take photos!",
-      bd:[{c:"我哋",j:"ngo5 dei6",e:"we"},{c:"去",j:"heoi3",e:"go"},{c:"拍照",j:"paak3 ziu3",e:"take photos"},{c:"啦",j:"laa1",e:"(let's)"}]},
-    {c:"要排幾耐隊？", j:"jiu3 paai4 gei2 noi6 deoi2?", e:"How long is the queue?",
-      bd:[{c:"要",j:"jiu3",e:"need"},{c:"排",j:"paai4",e:"line up"},{c:"幾耐",j:"gei2 noi6",e:"how long"},{c:"隊",j:"deoi2",e:"queue"}]},
-    {c:"你有冇地圖？", j:"nei5 jau5 mou5 dei6 tou4?", e:"Do you have a map?",
-      bd:[{c:"你",j:"nei5",e:"you"},{c:"有冇",j:"jau5 mou5",e:"have or not"},{c:"地圖",j:"dei6 tou4",e:"map"}]},
-  ],
-  home: [
-    {c:"我返屋企。", j:"ngo5 faan1 uk1 kei2.", e:"I'm going home.",
-      bd:[{c:"我",j:"ngo5",e:"I"},{c:"返",j:"faan1",e:"return"},{c:"屋企",j:"uk1 kei2",e:"home"}]},
-    {c:"廁所喺邊度？", j:"ci3 so2 hai2 bin1 dou6?", e:"Where is the toilet?",
-      bd:[{c:"廁所",j:"ci3 so2",e:"toilet"},{c:"喺",j:"hai2",e:"is at"},{c:"邊度",j:"bin1 dou6",e:"where"}]},
-    {c:"我喺廚房煮飯。", j:"ngo5 hai2 cyu4 fong2 zyu2 faan6.", e:"I'm cooking in the kitchen.",
-      bd:[{c:"我",j:"ngo5",e:"I"},{c:"喺",j:"hai2",e:"at"},{c:"廚房",j:"cyu4 fong2",e:"kitchen"},{c:"煮飯",j:"zyu2 faan6",e:"cook"}]},
-    {c:"我嘅房好細。", j:"ngo5 ge3 fong2 hou2 sai3.", e:"My room is very small.",
-      bd:[{c:"我嘅",j:"ngo5 ge3",e:"my"},{c:"房",j:"fong2",e:"room"},{c:"好細",j:"hou2 sai3",e:"very small"}]},
-    {c:"開窗，唔該。", j:"hoi1 coeng1, m4 goi1.", e:"Open the window, please.",
-      bd:[{c:"開",j:"hoi1",e:"open"},{c:"窗",j:"coeng1",e:"window"},{c:"唔該",j:"m4 goi1",e:"please"}]},
-  ],
-  animals: [
-    {c:"我屋企有一隻貓。", j:"ngo5 uk1 kei2 jau5 jat1 zek3 maau1.", e:"I have a cat at home.",
-      bd:[{c:"我",j:"ngo5",e:"I"},{c:"屋企",j:"uk1 kei2",e:"home"},{c:"有",j:"jau5",e:"have"},{c:"一隻",j:"jat1 zek3",e:"one (animal)"},{c:"貓",j:"maau1",e:"cat"}]},
-    {c:"呢隻狗好可愛！", j:"ni1 zek3 gau2 hou2 ho2 oi3!", e:"This dog is so cute!",
-      bd:[{c:"呢隻",j:"ni1 zek3",e:"this (animal)"},{c:"狗",j:"gau2",e:"dog"},{c:"好",j:"hou2",e:"so / very"},{c:"可愛",j:"ho2 oi3",e:"cute"}]},
-    {c:"你養唔養寵物？", j:"nei5 joeng5 m4 joeng5 cung2 mat6?", e:"Do you keep pets?",
-      bd:[{c:"你",j:"nei5",e:"you"},{c:"養唔養",j:"joeng5 m4 joeng5",e:"keep or not (yes/no)"},{c:"寵物",j:"cung2 mat6",e:"pet"}]},
-    {c:"我鍾意馬。", j:"ngo5 zung1 ji3 maa5.", e:"I like horses.",
-      bd:[{c:"我",j:"ngo5",e:"I"},{c:"鍾意",j:"zung1 ji3",e:"like"},{c:"馬",j:"maa5",e:"horse"}]},
-    {c:"兔仔食蔬菜。", j:"tou3 zai2 sik6 so1 coi3.", e:"Rabbits eat vegetables.",
-      bd:[{c:"兔仔",j:"tou3 zai2",e:"rabbit"},{c:"食",j:"sik6",e:"eat"},{c:"蔬菜",j:"so1 coi3",e:"vegetables"}]},
-  ],
-  cooking: [
-    {c:"我喺度煮飯。", j:"ngo5 hai2 dou6 zyu2 faan6.", e:"I'm cooking.",
-      bd:[{c:"我",j:"ngo5",e:"I"},{c:"喺度",j:"hai2 dou6",e:"am here / currently"},{c:"煮飯",j:"zyu2 faan6",e:"cook"}]},
-    {c:"加多啲鹽。", j:"gaa1 do1 di1 jim4.", e:"Add more salt.",
-      bd:[{c:"加多",j:"gaa1 do1",e:"add more"},{c:"啲",j:"di1",e:"some"},{c:"鹽",j:"jim4",e:"salt"}]},
-    {c:"我鍾意食蒸魚。", j:"ngo5 zung1 ji3 sik6 zing1 jyu2.", e:"I like steamed fish.",
-      bd:[{c:"我",j:"ngo5",e:"I"},{c:"鍾意",j:"zung1 ji3",e:"like"},{c:"食",j:"sik6",e:"eat"},{c:"蒸魚",j:"zing1 jyu2",e:"steamed fish"}]},
-    {c:"切啲蔬菜。", j:"cit3 di1 so1 coi3.", e:"Cut some vegetables.",
-      bd:[{c:"切",j:"cit3",e:"cut"},{c:"啲",j:"di1",e:"some"},{c:"蔬菜",j:"so1 coi3",e:"vegetables"}]},
-    {c:"你識唔識炒飯？", j:"nei5 sik1 m4 sik1 caau2 faan6?", e:"Can you make fried rice?",
-      bd:[{c:"你",j:"nei5",e:"you"},{c:"識唔識",j:"sik1 m4 sik1",e:"know how or not"},{c:"炒飯",j:"caau2 faan6",e:"fried rice"}]},
-  ],
-  work: [
-    {c:"我返工。", j:"ngo5 faan1 gung1.", e:"I'm going to work.",
-      bd:[{c:"我",j:"ngo5",e:"I"},{c:"返工",j:"faan1 gung1",e:"go to work"}]},
-    {c:"我哋公司好大。", j:"ngo5 dei6 gung1 si1 hou2 daai6.", e:"Our company is big.",
-      bd:[{c:"我哋",j:"ngo5 dei6",e:"our"},{c:"公司",j:"gung1 si1",e:"company"},{c:"好大",j:"hou2 daai6",e:"very big"}]},
-    {c:"老闆叫我加班。", j:"lou5 baan2 giu3 ngo5 gaa1 baan1.", e:"The boss told me to do overtime.",
-      bd:[{c:"老闆",j:"lou5 baan2",e:"boss"},{c:"叫",j:"giu3",e:"told"},{c:"我",j:"ngo5",e:"me"},{c:"加班",j:"gaa1 baan1",e:"do overtime"}]},
-    {c:"幾時放工呀？", j:"gei2 si4 fong3 gung1 aa3?", e:"When do you finish work?",
-      bd:[{c:"幾時",j:"gei2 si4",e:"when"},{c:"放工",j:"fong3 gung1",e:"finish work"},{c:"呀",j:"aa3",e:"(soft particle)"}]},
-    {c:"開會喺三點。", j:"hoi1 wui2 hai2 saam1 dim2.", e:"The meeting is at 3.",
-      bd:[{c:"開會",j:"hoi1 wui2",e:"meeting"},{c:"喺",j:"hai2",e:"at"},{c:"三點",j:"saam1 dim2",e:"3 o'clock"}]},
-  ],
-  school: [
-    {c:"我去學校。", j:"ngo5 heoi3 hok6 haau6.", e:"I go to school.",
-      bd:[{c:"我",j:"ngo5",e:"I"},{c:"去",j:"heoi3",e:"go to"},{c:"學校",j:"hok6 haau6",e:"school"}]},
-    {c:"我做緊功課。", j:"ngo5 zou6 gan2 gung1 fo3.", e:"I'm doing homework.",
-      bd:[{c:"我",j:"ngo5",e:"I"},{c:"做緊",j:"zou6 gan2",e:"doing"},{c:"功課",j:"gung1 fo3",e:"homework"}]},
-    {c:"聽日有考試。", j:"ting1 jat6 jau5 haau2 si3.", e:"There's an exam tomorrow.",
-      bd:[{c:"聽日",j:"ting1 jat6",e:"tomorrow"},{c:"有",j:"jau5",e:"have / there is"},{c:"考試",j:"haau2 si3",e:"exam"}]},
-    {c:"我同學好聰明。", j:"ngo5 tung4 hok6 hou2 cung1 ming4.", e:"My classmate is very smart.",
-      bd:[{c:"我",j:"ngo5",e:"my"},{c:"同學",j:"tung4 hok6",e:"classmate"},{c:"好",j:"hou2",e:"very"},{c:"聰明",j:"cung1 ming4",e:"smart"}]},
-    {c:"我唔識答呢題。", j:"ngo5 m4 sik1 daap3 ni1 tai4.", e:"I don't know the answer to this question.",
-      bd:[{c:"我",j:"ngo5",e:"I"},{c:"唔識",j:"m4 sik1",e:"don't know how"},{c:"答",j:"daap3",e:"answer"},{c:"呢題",j:"ni1 tai4",e:"this question"}]},
-  ],
-  tech: [
-    {c:"我嘅電話冇電。", j:"ngo5 ge3 din6 waa2 mou5 din6.", e:"My phone has no battery.",
-      bd:[{c:"我嘅",j:"ngo5 ge3",e:"my"},{c:"電話",j:"din6 waa2",e:"phone"},{c:"冇電",j:"mou5 din6",e:"no battery"}]},
-    {c:"WiFi密碼係咩？", j:"WiFi mat6 maa5 hai6 me1?", e:"What's the WiFi password?",
-      bd:[{c:"WiFi",j:"WiFi",e:"WiFi"},{c:"密碼",j:"mat6 maa5",e:"password"},{c:"係",j:"hai6",e:"is"},{c:"咩",j:"me1",e:"what"}]},
-    {c:"個程式壞咗。", j:"go3 cing4 sik1 waai6 zo2.", e:"The app is broken.",
-      bd:[{c:"個",j:"go3",e:"(measure word)"},{c:"程式",j:"cing4 sik1",e:"app"},{c:"壞咗",j:"waai6 zo2",e:"is broken"}]},
-    {c:"我要充電。", j:"ngo5 jiu3 cung1 din6.", e:"I need to charge.",
-      bd:[{c:"我",j:"ngo5",e:"I"},{c:"要",j:"jiu3",e:"need to"},{c:"充電",j:"cung1 din6",e:"charge"}]},
-    {c:"屏幕太細。", j:"ping4 mok6 taai3 sai3.", e:"The screen is too small.",
-      bd:[{c:"屏幕",j:"ping4 mok6",e:"screen"},{c:"太",j:"taai3",e:"too"},{c:"細",j:"sai3",e:"small"}]},
-  ],
-  money: [
-    {c:"提款機喺邊度？", j:"tai4 fun2 gei1 hai2 bin1 dou6?", e:"Where is the ATM?",
-      bd:[{c:"提款機",j:"tai4 fun2 gei1",e:"ATM"},{c:"喺",j:"hai2",e:"is at"},{c:"邊度",j:"bin1 dou6",e:"where"}]},
-    {c:"我要用現金。", j:"ngo5 jiu3 jung6 jin6 gam1.", e:"I'll use cash.",
-      bd:[{c:"我",j:"ngo5",e:"I"},{c:"要",j:"jiu3",e:"will"},{c:"用",j:"jung6",e:"use"},{c:"現金",j:"jin6 gam1",e:"cash"}]},
-    {c:"有冇散紙？", j:"jau5 mou5 saan3 zi2?", e:"Got any small change?",
-      bd:[{c:"有冇",j:"jau5 mou5",e:"have or not"},{c:"散紙",j:"saan3 zi2",e:"small change"}]},
-    {c:"信用卡得唔得？", j:"seon3 jung6 kaat1 dak1 m4 dak1?", e:"Can I use credit card?",
-      bd:[{c:"信用卡",j:"seon3 jung6 kaat1",e:"credit card"},{c:"得唔得",j:"dak1 m4 dak1",e:"OK or not?"}]},
-    {c:"唔該找錢俾我。", j:"m4 goi1 zaau2 cin2 bei2 ngo5.", e:"Please give me my change.",
-      bd:[{c:"唔該",j:"m4 goi1",e:"please"},{c:"找錢",j:"zaau2 cin2",e:"change"},{c:"俾",j:"bei2",e:"give"},{c:"我",j:"ngo5",e:"me"}]},
-  ],
-  hobbies: [
-    {c:"我嘅興趣係影相。", j:"ngo5 ge3 hing3 ceoi3 hai6 jing2 soeng2.", e:"My hobby is photography.",
-      bd:[{c:"我嘅",j:"ngo5 ge3",e:"my"},{c:"興趣",j:"hing3 ceoi3",e:"hobby"},{c:"係",j:"hai6",e:"is"},{c:"影相",j:"jing2 soeng2",e:"photography"}]},
-    {c:"你鍾意睇咩戲？", j:"nei5 zung1 ji3 tai2 me1 hei3?", e:"What kind of movies do you like?",
-      bd:[{c:"你",j:"nei5",e:"you"},{c:"鍾意",j:"zung1 ji3",e:"like"},{c:"睇",j:"tai2",e:"watch"},{c:"咩戲",j:"me1 hei3",e:"what movies"}]},
-    {c:"週末一齊行山啦。", j:"zau1 mut6 jat1 cai4 haang4 saan1 laa1.", e:"Let's go hiking this weekend.",
-      bd:[{c:"週末",j:"zau1 mut6",e:"weekend"},{c:"一齊",j:"jat1 cai4",e:"together"},{c:"行山",j:"haang4 saan1",e:"hiking"},{c:"啦",j:"laa1",e:"(let's)"}]},
-    {c:"我細個學跳舞。", j:"ngo5 sai3 go3 hok6 tiu3 mou5.", e:"I learned to dance as a child.",
-      bd:[{c:"我",j:"ngo5",e:"I"},{c:"細個",j:"sai3 go3",e:"as a child"},{c:"學",j:"hok6",e:"learned"},{c:"跳舞",j:"tiu3 mou5",e:"dance"}]},
-    {c:"佢成日打機。", j:"keoi5 sing4 jat6 daa2 gei1.", e:"He plays video games all the time.",
-      bd:[{c:"佢",j:"keoi5",e:"he"},{c:"成日",j:"sing4 jat6",e:"all the time"},{c:"打機",j:"daa2 gei1",e:"play games"}]},
-  ],
-  sports: [
-    {c:"我鍾意打籃球。", j:"ngo5 zung1 ji3 daa2 laam4 kau4.", e:"I like playing basketball.",
-      bd:[{c:"我",j:"ngo5",e:"I"},{c:"鍾意",j:"zung1 ji3",e:"like"},{c:"打",j:"daa2",e:"play"},{c:"籃球",j:"laam4 kau4",e:"basketball"}]},
-    {c:"我每朝跑步。", j:"ngo5 mui5 ziu1 paau2 bou6.", e:"I run every morning.",
-      bd:[{c:"我",j:"ngo5",e:"I"},{c:"每朝",j:"mui5 ziu1",e:"every morning"},{c:"跑步",j:"paau2 bou6",e:"run"}]},
-    {c:"我哋隊贏咗！", j:"ngo5 dei6 deoi6 jeng4 zo2!", e:"Our team won!",
-      bd:[{c:"我哋",j:"ngo5 dei6",e:"our"},{c:"隊",j:"deoi6",e:"team"},{c:"贏咗",j:"jeng4 zo2",e:"won"}]},
-    {c:"你去唔去健身？", j:"nei5 heoi3 m4 heoi3 gin6 san1?", e:"Are you going to the gym?",
-      bd:[{c:"你",j:"nei5",e:"you"},{c:"去唔去",j:"heoi3 m4 heoi3",e:"go or not"},{c:"健身",j:"gin6 san1",e:"gym"}]},
-    {c:"球場喺嗰邊。", j:"kau4 coeng4 hai2 go2 bin1.", e:"The court is over there.",
-      bd:[{c:"球場",j:"kau4 coeng4",e:"court"},{c:"喺",j:"hai2",e:"is at"},{c:"嗰邊",j:"go2 bin1",e:"over there"}]},
-  ],
-  emergencies: [
-    {c:"救命呀！", j:"gau3 meng6 aa3!", e:"Help!",
-      bd:[{c:"救命",j:"gau3 meng6",e:"help / save me"},{c:"呀",j:"aa3",e:"(urgency)"}]},
-    {c:"唔該叫救護車。", j:"m4 goi1 giu3 gau3 wu6 ce1.", e:"Please call an ambulance.",
-      bd:[{c:"唔該",j:"m4 goi1",e:"please"},{c:"叫",j:"giu3",e:"call"},{c:"救護車",j:"gau3 wu6 ce1",e:"ambulance"}]},
-    {c:"有人受傷。", j:"jau5 jan4 sau6 soeng1.", e:"Someone is hurt.",
-      bd:[{c:"有人",j:"jau5 jan4",e:"someone"},{c:"受傷",j:"sau6 soeng1",e:"is injured"}]},
-    {c:"報警啦！", j:"bou3 ging2 laa1!", e:"Call the police!",
-      bd:[{c:"報警",j:"bou3 ging2",e:"call police"},{c:"啦",j:"laa1",e:"(urgency)"}]},
-    {c:"急症室喺邊度？", j:"gap1 zing3 sat1 hai2 bin1 dou6?", e:"Where is A&E?",
-      bd:[{c:"急症室",j:"gap1 zing3 sat1",e:"A&E"},{c:"喺",j:"hai2",e:"is at"},{c:"邊度",j:"bin1 dou6",e:"where"}]},
-  ],
-};
-
-// ── Conversations ─────────────────────────────────────────────────────────────
-const CONVOS = {
-  greetings: { title:"Meeting someone new", speakers:["Mei (Friend)","You"],
-    lines:[
-      {u:false, c:"你好！我叫阿梅。你叫咩名？", j:"nei5 hou2! ngo5 giu3 aa3 Mui4. nei5 giu3 me1 meng2?", e:"Hi! I'm Mei. What's your name?",
-        bd:[{c:"你好",j:"nei5 hou2",e:"hello"},{c:"我",j:"ngo5",e:"I / me"},{c:"叫",j:"giu3",e:"am called"},{c:"阿梅",j:"aa3 Mui4",e:"Mei (name)"},{c:"你",j:"nei5",e:"you"},{c:"叫",j:"giu3",e:"are called"},{c:"咩名",j:"me1 meng2",e:"what name"}]},
-      {u:true,  c:"你好！我叫William。", j:"nei5 hou2! ngo5 giu3 William.", e:"Hi! I'm William.",
-        opts:["你好！我叫William。","對唔住，我唔知。","再見！"], optsJ:["nei5 hou2! ngo5 giu3 William.","deoi3 m4 zyu6, ngo5 m4 zi1.","zoi3 gin3!"],
-        bd:[{c:"你好",j:"nei5 hou2",e:"hello"},{c:"我",j:"ngo5",e:"I / me"},{c:"叫",j:"giu3",e:"am called"},{c:"William",j:"William",e:"William (name)"}]},
-      {u:false, c:"好高興認識你！你好嗎？", j:"hou2 gou1 hing3 jing6 sik1 nei5! nei5 hou2 maa3?", e:"Nice to meet you! How are you?",
-        bd:[{c:"好高興",j:"hou2 gou1 hing3",e:"very happy / pleased"},{c:"認識",j:"jing6 sik1",e:"to meet / know"},{c:"你",j:"nei5",e:"you"},{c:"你好嗎",j:"nei5 hou2 maa3",e:"how are you?"}]},
-      {u:true,  c:"我好好，多謝！你呢？", j:"ngo5 hou2 hou2, do1 ze6! nei5 ne1?", e:"I'm great, thanks! And you?",
-        opts:["我好好，多謝！你呢？","唔係，我唔好。","我唔識。"], optsJ:["ngo5 hou2 hou2, do1 ze6! nei5 ne1?","m4 hai6, ngo5 m4 hou2.","ngo5 m4 sik1."],
-        bd:[{c:"我",j:"ngo5",e:"I"},{c:"好好",j:"hou2 hou2",e:"very good"},{c:"多謝",j:"do1 ze6",e:"thank you"},{c:"你呢",j:"nei5 ne1",e:"and you?"}]},
-      {u:false, c:"我都好好！再見！", j:"ngo5 dou1 hou2 hou2! zoi3 gin3!", e:"I'm great too! Goodbye!",
-        bd:[{c:"我",j:"ngo5",e:"I"},{c:"都",j:"dou1",e:"also / too"},{c:"好好",j:"hou2 hou2",e:"very good"},{c:"再見",j:"zoi3 gin3",e:"goodbye"}]},
-      {u:true,  c:"再見！多謝！", j:"zoi3 gin3! do1 ze6!", e:"Goodbye! Thank you!",
-        opts:["再見！多謝！","唔該，對唔住。","你好嗎？"], optsJ:["zoi3 gin3! do1 ze6!","m4 goi1, deoi3 m4 zyu6.","nei5 hou2 maa3?"],
-        bd:[{c:"再見",j:"zoi3 gin3",e:"goodbye"},{c:"多謝",j:"do1 ze6",e:"thank you"}]},
-    ]},
-  numbers: { title:"Buying fruit at the market", speakers:["Vendor","You"],
-    lines:[
-      {u:false, c:"你好！想買啲咩？", j:"nei5 hou2! soeng2 maai5 di1 me1?", e:"Hello! What would you like?",
-        bd:[{c:"你好",j:"nei5 hou2",e:"hello"},{c:"想",j:"soeng2",e:"want to"},{c:"買",j:"maai5",e:"buy"},{c:"啲咩",j:"di1 me1",e:"what things"}]},
-      {u:true,  c:"我想買蘋果。有幾多個？", j:"ngo5 soeng2 maai5 ping4 gwo2. jau5 gei2 do1 go3?", e:"I'd like apples. How many are there?",
-        opts:["我想買蘋果。有幾多個？","我想食飯。","唔該，再見。"], optsJ:["ngo5 soeng2 maai5 ping4 gwo2. jau5 gei2 do1 go3?","ngo5 soeng2 sik6 faan6.","m4 goi1, zoi3 gin3."],
-        bd:[{c:"我",j:"ngo5",e:"I"},{c:"想買",j:"soeng2 maai5",e:"want to buy"},{c:"蘋果",j:"ping4 gwo2",e:"apple"},{c:"有",j:"jau5",e:"have / there are"},{c:"幾多個",j:"gei2 do1 go3",e:"how many (items)"}]},
-      {u:false, c:"有十個，每個五蚊。", j:"jau5 sap6 go3, mui5 go3 ng5 man1.", e:"Ten available, five dollars each.",
-        bd:[{c:"有",j:"jau5",e:"there are"},{c:"十個",j:"sap6 go3",e:"ten (items)"},{c:"每個",j:"mui5 go3",e:"each one"},{c:"五蚊",j:"ng5 man1",e:"five dollars"}]},
-      {u:true,  c:"我要三個，多謝。", j:"ngo5 jiu3 saam1 go3, do1 ze6.", e:"I'll take three, thank you.",
-        opts:["我要三個，多謝。","我要一百個。","唔要，太貴。"], optsJ:["ngo5 jiu3 saam1 go3, do1 ze6.","ngo5 jiu3 jat1 baak3 go3.","m4 jiu3, taai3 gwai3."],
-        bd:[{c:"我要",j:"ngo5 jiu3",e:"I want / I'll take"},{c:"三個",j:"saam1 go3",e:"three (items)"},{c:"多謝",j:"do1 ze6",e:"thank you"}]},
-      {u:false, c:"好，三個係十五蚊。", j:"hou2, saam1 go3 hai6 sap6 ng5 man1.", e:"Sure, three is fifteen dollars.",
-        bd:[{c:"好",j:"hou2",e:"good / ok"},{c:"三個",j:"saam1 go3",e:"three (items)"},{c:"係",j:"hai6",e:"is / equals"},{c:"十五蚊",j:"sap6 ng5 man1",e:"fifteen dollars"}]},
-      {u:true,  c:"好的，多謝！", j:"hou2 dik1, do1 ze6!", e:"Great, thank you!",
-        opts:["好的，多謝！","我唔明。","再買多一個。"], optsJ:["hou2 dik1, do1 ze6!","ngo5 m4 ming4.","zoi3 maai5 do1 jat1 go3."],
-        bd:[{c:"好的",j:"hou2 dik1",e:"alright / great"},{c:"多謝",j:"do1 ze6",e:"thank you"}]},
-    ]},
-  food: { title:"Ordering at a dim sum restaurant", speakers:["Waiter","You"],
-    lines:[
-      {u:false, c:"你好，想食啲咩？", j:"nei5 hou2, soeng2 sik6 di1 me1?", e:"Hello, what would you like to eat?",
-        bd:[{c:"你好",j:"nei5 hou2",e:"hello"},{c:"想",j:"soeng2",e:"want to"},{c:"食",j:"sik6",e:"eat"},{c:"啲咩",j:"di1 me1",e:"what things"}]},
-      {u:true,  c:"我想食魚同飯，唔該。", j:"ngo5 soeng2 sik6 jyu2 tung4 faan6, m4 goi1.", e:"I'd like fish and rice, please.",
-        opts:["我想食魚同飯，唔該。","我唔餓。","我想飲咖啡。"], optsJ:["ngo5 soeng2 sik6 jyu2 tung4 faan6, m4 goi1.","ngo5 m4 ngo6.","ngo5 soeng2 jam2 gaa3 fe1."],
-        bd:[{c:"我",j:"ngo5",e:"I"},{c:"想食",j:"soeng2 sik6",e:"want to eat"},{c:"魚",j:"jyu2",e:"fish"},{c:"同",j:"tung4",e:"and"},{c:"飯",j:"faan6",e:"rice"},{c:"唔該",j:"m4 goi1",e:"please / excuse me"}]},
-      {u:false, c:"好，飲啲咩？", j:"hou2, jam2 di1 me1?", e:"Sure, what would you like to drink?",
-        bd:[{c:"好",j:"hou2",e:"good / ok"},{c:"飲",j:"jam2",e:"drink"},{c:"啲咩",j:"di1 me1",e:"what things"}]},
-      {u:true,  c:"唔該俾杯茶我。", j:"m4 goi1 bei2 bui1 caa4 ngo5.", e:"Please give me a cup of tea.",
-        opts:["唔該俾杯茶我。","我想食麵。","唔要，多謝。"], optsJ:["m4 goi1 bei2 bui1 caa4 ngo5.","ngo5 soeng2 sik6 min6.","m4 jiu3, do1 ze6."],
-        bd:[{c:"唔該",j:"m4 goi1",e:"please"},{c:"俾",j:"bei2",e:"give"},{c:"杯",j:"bui1",e:"cup (measure word)"},{c:"茶",j:"caa4",e:"tea"},{c:"我",j:"ngo5",e:"me"}]},
-      {u:false, c:"好！仲要啲咩嗎？", j:"hou2! zung6 jiu3 di1 me1 maa3?", e:"Great! Would you like anything else?",
-        bd:[{c:"好",j:"hou2",e:"good"},{c:"仲",j:"zung6",e:"still / also"},{c:"要",j:"jiu3",e:"want"},{c:"啲咩",j:"di1 me1",e:"what else"},{c:"嗎",j:"maa3",e:"(question particle)"}]},
-      {u:true,  c:"唔要喇，多謝！好味！", j:"m4 jiu3 laa3, do1 ze6! hou2 mei6!", e:"No thanks! It's delicious!",
-        opts:["唔要喇，多謝！好味！","我仲好餓。","再嚟多碗飯。"], optsJ:["m4 jiu3 laa3, do1 ze6! hou2 mei6!","ngo5 zung6 hou2 ngo6.","zoi3 lai4 do1 wun2 faan6."],
-        bd:[{c:"唔要",j:"m4 jiu3",e:"don't want"},{c:"喇",j:"laa3",e:"(sentence final particle)"},{c:"多謝",j:"do1 ze6",e:"thank you"},{c:"好味",j:"hou2 mei6",e:"delicious"}]},
-    ]},
-  restaurant: { title:"Lunch at a cha chaan teng", speakers:["Waiter","You"],
-    lines:[
-      {u:false, c:"你好！要點嘢呀？", j:"nei5 hou2! jiu3 dim2 je5 aa3?", e:"Hello! What would you like?",
-        bd:[{c:"你好",j:"nei5 hou2",e:"hello"},{c:"要",j:"jiu3",e:"want"},{c:"點嘢",j:"dim2 je5",e:"what"},{c:"呀",j:"aa3",e:"(soft particle)"}]},
-      {u:true,  c:"我要叉燒飯，唔該。", j:"ngo5 jiu3 caa1 siu1 faan6, m4 goi1.", e:"I'd like char siu rice, please.",
-        opts:["我要叉燒飯，唔該。","我唔餓。","你係邊個？"], optsJ:["ngo5 jiu3 caa1 siu1 faan6, m4 goi1.","ngo5 m4 ngo6.","nei5 hai6 bin1 go3?"],
-        bd:[{c:"我",j:"ngo5",e:"I"},{c:"要",j:"jiu3",e:"want"},{c:"叉燒飯",j:"caa1 siu1 faan6",e:"char siu rice"},{c:"唔該",j:"m4 goi1",e:"please"}]},
-      {u:false, c:"飲乜嘢？", j:"jam2 mat1 je5?", e:"What would you like to drink?",
-        bd:[{c:"飲",j:"jam2",e:"drink"},{c:"乜嘢",j:"mat1 je5",e:"what"}]},
-      {u:true,  c:"凍檸茶，少冰。", j:"dung3 ning4 caa4, siu2 bing1.", e:"Iced lemon tea, less ice.",
-        opts:["凍檸茶，少冰。","我好飽。","唔該埋單。"], optsJ:["dung3 ning4 caa4, siu2 bing1.","ngo5 hou2 baau2.","m4 goi1 maai4 daan1."],
-        bd:[{c:"凍",j:"dung3",e:"cold / iced"},{c:"檸茶",j:"ning4 caa4",e:"lemon tea"},{c:"少冰",j:"siu2 bing1",e:"less ice"}]},
-      {u:false, c:"好，等陣就嚟。", j:"hou2, dang2 zan6 zau6 lai4.", e:"OK, coming right up.",
-        bd:[{c:"好",j:"hou2",e:"OK"},{c:"等陣",j:"dang2 zan6",e:"in a moment"},{c:"就",j:"zau6",e:"will"},{c:"嚟",j:"lai4",e:"come"}]},
-      {u:true,  c:"唔該晒。", j:"m4 goi1 saai3.", e:"Thanks a lot.",
-        opts:["唔該晒。","唔好。","好食呀！"], optsJ:["m4 goi1 saai3.","m4 hou2.","hou2 sik6 aa3!"],
-        bd:[{c:"唔該",j:"m4 goi1",e:"thanks"},{c:"晒",j:"saai3",e:"(emphasizer - a lot)"}]},
-    ]},
-  family: { title:"Introducing your family", speakers:["Friend","You"],
-    lines:[
-      {u:false, c:"你有冇兄弟姐妹？", j:"nei5 jau5 mou5 hing1 dai6 ze2 mui6?", e:"Do you have brothers or sisters?",
-        bd:[{c:"你",j:"nei5",e:"you"},{c:"有冇",j:"jau5 mou5",e:"have or not?"},{c:"兄弟",j:"hing1 dai6",e:"brothers"},{c:"姐妹",j:"ze2 mui6",e:"sisters"}]},
-      {u:true,  c:"有，我有一個哥哥同一個妹妹。", j:"jau5, ngo5 jau5 jat1 go3 go4 go1 tung4 jat1 go3 mui4 mui2.", e:"Yes, one older brother and one younger sister.",
-        opts:["有，我有一個哥哥同一個妹妹。","冇，我係獨生子。","我唔知。"], optsJ:["jau5, ngo5 jau5 jat1 go3 go4 go1 tung4 jat1 go3 mui4 mui2.","mou5, ngo5 hai6 duk6 sang1 zi2.","ngo5 m4 zi1."],
-        bd:[{c:"有",j:"jau5",e:"yes / have"},{c:"我有",j:"ngo5 jau5",e:"I have"},{c:"一個",j:"jat1 go3",e:"one (person)"},{c:"哥哥",j:"go4 go1",e:"older brother"},{c:"同",j:"tung4",e:"and"},{c:"一個",j:"jat1 go3",e:"one (person)"},{c:"妹妹",j:"mui4 mui2",e:"younger sister"}]},
-      {u:false, c:"你爸爸媽媽做咩工作？", j:"nei5 baa4 baa1 maa4 maa1 zou6 me1 gung1 zok3?", e:"What do your parents do for work?",
-        bd:[{c:"你",j:"nei5",e:"your"},{c:"爸爸",j:"baa4 baa1",e:"father"},{c:"媽媽",j:"maa4 maa1",e:"mother"},{c:"做",j:"zou6",e:"do"},{c:"咩",j:"me1",e:"what"},{c:"工作",j:"gung1 zok3",e:"work / job"}]},
-      {u:true,  c:"我爸爸係醫生，媽媽係老師。", j:"ngo5 baa4 baa1 hai6 ji1 sang1, maa4 maa1 hai6 lou5 si1.", e:"My dad is a doctor, my mum is a teacher.",
-        opts:["我爸爸係醫生，媽媽係老師。","我唔知佢哋做咩。","佢哋唔工作。"], optsJ:["ngo5 baa4 baa1 hai6 ji1 sang1, maa4 maa1 hai6 lou5 si1.","ngo5 m4 zi1 keoi5 dei6 zou6 me1.","keoi5 dei6 m4 gung1 zok3."],
-        bd:[{c:"我爸爸",j:"ngo5 baa4 baa1",e:"my father"},{c:"係",j:"hai6",e:"is"},{c:"醫生",j:"ji1 sang1",e:"doctor"},{c:"媽媽",j:"maa4 maa1",e:"mother"},{c:"係",j:"hai6",e:"is"},{c:"老師",j:"lou5 si1",e:"teacher"}]},
-      {u:false, c:"你哋住喺邊度？", j:"nei5 dei6 zyu6 hai2 bin1 dou6?", e:"Where do you all live?",
-        bd:[{c:"你哋",j:"nei5 dei6",e:"you all"},{c:"住",j:"zyu6",e:"live"},{c:"喺",j:"hai2",e:"at / in"},{c:"邊度",j:"bin1 dou6",e:"where"}]},
-      {u:true,  c:"我哋住喺悉尼。", j:"ngo5 dei6 zyu6 hai2 Sat1 nei4.", e:"We live in Sydney.",
-        opts:["我哋住喺悉尼。","我唔知。","我哋住喺飛機。"], optsJ:["ngo5 dei6 zyu6 hai2 Sat1 nei4.","ngo5 m4 zi1.","ngo5 dei6 zyu6 hai2 fei1 gei1."],
-        bd:[{c:"我哋",j:"ngo5 dei6",e:"we / us"},{c:"住",j:"zyu6",e:"live"},{c:"喺",j:"hai2",e:"in / at"},{c:"悉尼",j:"Sat1 nei4",e:"Sydney"}]},
-    ]},
-  time: { title:"Making weekend plans", speakers:["Friend","You"],
-    lines:[
-      {u:false, c:"今個週末你有冇空？", j:"gam1 go3 zau1 mut6 nei5 jau5 mou5 hung1?", e:"Are you free this weekend?",
-        bd:[{c:"今個",j:"gam1 go3",e:"this (one)"},{c:"週末",j:"zau1 mut6",e:"weekend"},{c:"你",j:"nei5",e:"you"},{c:"有冇空",j:"jau5 mou5 hung1",e:"free or not? (have time?)"}]},
-      {u:true,  c:"星期六得，星期日唔得。", j:"sing1 kei4 luk6 dak1, sing1 kei4 jat6 m4 dak1.", e:"Saturday is fine, Sunday I can't.",
-        opts:["星期六得，星期日唔得。","今日唔得。","我唔知幾時。"], optsJ:["sing1 kei4 luk6 dak1, sing1 kei4 jat6 m4 dak1.","gam1 jat6 m4 dak1.","ngo5 m4 zi1 gei2 si4."],
-        bd:[{c:"星期六",j:"sing1 kei4 luk6",e:"Saturday"},{c:"得",j:"dak1",e:"ok / can do"},{c:"星期日",j:"sing1 kei4 jat6",e:"Sunday"},{c:"唔得",j:"m4 dak1",e:"not ok / can't"}]},
-      {u:false, c:"星期六朝早幾點見？", j:"sing1 kei4 luk6 ziu1 zou2 gei2 dim2 gin3?", e:"What time shall we meet Saturday morning?",
-        bd:[{c:"星期六",j:"sing1 kei4 luk6",e:"Saturday"},{c:"朝早",j:"ziu1 zou2",e:"morning"},{c:"幾點",j:"gei2 dim2",e:"what time"},{c:"見",j:"gin3",e:"meet / see"}]},
-      {u:true,  c:"朝早十點見，好嗎？", j:"ziu1 zou2 sap6 dim2 gin3, hou2 maa3?", e:"Meet at 10am, is that ok?",
-        opts:["朝早十點見，好嗎？","夜晚三點。","琴日見。"], optsJ:["ziu1 zou2 sap6 dim2 gin3, hou2 maa3?","je6 maan5 saam1 dim2.","kam4 jat6 gin3."],
-        bd:[{c:"朝早",j:"ziu1 zou2",e:"morning"},{c:"十點",j:"sap6 dim2",e:"10 o'clock"},{c:"見",j:"gin3",e:"meet"},{c:"好嗎",j:"hou2 maa3",e:"is that ok?"}]},
-      {u:false, c:"好呀！聽日見！", j:"hou2 aa3! ting1 jat6 gin3!", e:"Great! See you tomorrow!",
-        bd:[{c:"好呀",j:"hou2 aa3",e:"great / sounds good"},{c:"聽日",j:"ting1 jat6",e:"tomorrow"},{c:"見",j:"gin3",e:"see / meet"}]},
-      {u:true,  c:"好的！聽日朝早見！", j:"hou2 dik1! ting1 jat6 ziu1 zou2 gin3!", e:"Sure! See you tomorrow morning!",
-        opts:["好的！聽日朝早見！","唔好，我唔得閒。","琴日見。"], optsJ:["hou2 dik1! ting1 jat6 ziu1 zou2 gin3!","m4 hou2, ngo5 m4 dak1 haan4.","kam4 jat6 gin3."],
-        bd:[{c:"好的",j:"hou2 dik1",e:"alright"},{c:"聽日",j:"ting1 jat6",e:"tomorrow"},{c:"朝早",j:"ziu1 zou2",e:"morning"},{c:"見",j:"gin3",e:"see / meet"}]},
-    ]},
-  phrases: { title:"Asking for directions", speakers:["Stranger","You"],
-    lines:[
-      {u:true,  c:"唔該，地鐵站喺邊度？", j:"m4 goi1, dei6 tit3 zaam6 hai2 bin1 dou6?", e:"Excuse me, where is the MTR?",
-        opts:["唔該，地鐵站喺邊度？","你好嗎？","幾錢？"], optsJ:["m4 goi1, dei6 tit3 zaam6 hai2 bin1 dou6?","nei5 hou2 maa3?","gei2 cin2?"],
-        bd:[{c:"唔該",j:"m4 goi1",e:"excuse me / please"},{c:"地鐵站",j:"dei6 tit3 zaam6",e:"MTR station"},{c:"喺",j:"hai2",e:"is at"},{c:"邊度",j:"bin1 dou6",e:"where"}]},
-      {u:false, c:"喺前面，行五分鐘。", j:"hai2 cin4 min6, haang4 ng5 fan1 zung1.", e:"It's ahead, five minutes walk.",
-        bd:[{c:"喺",j:"hai2",e:"is at"},{c:"前面",j:"cin4 min6",e:"ahead / in front"},{c:"行",j:"haang4",e:"walk"},{c:"五分鐘",j:"ng5 fan1 zung1",e:"five minutes"}]},
-      {u:true,  c:"唔係好明，可唔可以講慢啲？", j:"m4 hai6 hou2 ming4, ho2 m4 ho2 ji5 gong2 maan6 di1?", e:"I didn't quite understand, can you speak more slowly?",
-        opts:["唔係好明，可唔可以講慢啲？","唔該，再見。","我唔知。"], optsJ:["m4 hai6 hou2 ming4, ho2 m4 ho2 ji5 gong2 maan6 di1?","m4 goi1, zoi3 gin3.","ngo5 m4 zi1."],
-        bd:[{c:"唔係好明",j:"m4 hai6 hou2 ming4",e:"not quite understand"},{c:"可唔可以",j:"ho2 m4 ho2 ji5",e:"can or not? (may I?)"},{c:"講",j:"gong2",e:"speak"},{c:"慢啲",j:"maan6 di1",e:"a bit slower"}]},
-      {u:false, c:"當然！喺前面，行五分鐘。", j:"dong1 jin4! hai2 cin4 min6, haang4 ng5 fan1 zung1.", e:"Of course! Ahead, five minutes walk.",
-        bd:[{c:"當然",j:"dong1 jin4",e:"of course"},{c:"喺前面",j:"hai2 cin4 min6",e:"ahead / in front"},{c:"行",j:"haang4",e:"walk"},{c:"五分鐘",j:"ng5 fan1 zung1",e:"five minutes"}]},
-      {u:true,  c:"明白喇，多謝你！", j:"ming4 baak6 laa3, do1 ze6 nei5!", e:"I understand, thank you!",
-        opts:["明白喇，多謝你！","我唔明。","對唔住。"], optsJ:["ming4 baak6 laa3, do1 ze6 nei5!","ngo5 m4 ming4.","deoi3 m4 zyu6."],
-        bd:[{c:"明白",j:"ming4 baak6",e:"understand"},{c:"喇",j:"laa3",e:"(completion particle)"},{c:"多謝",j:"do1 ze6",e:"thank you"},{c:"你",j:"nei5",e:"you"}]},
-      {u:false, c:"唔緊要，祝你好運！", j:"m4 gan2 jiu3, zuk1 nei5 hou2 wan6!", e:"No problem, good luck!",
-        bd:[{c:"唔緊要",j:"m4 gan2 jiu3",e:"no problem / never mind"},{c:"祝",j:"zuk1",e:"wish"},{c:"你",j:"nei5",e:"you"},{c:"好運",j:"hou2 wan6",e:"good luck"}]},
-    ]},
-  questions: { title:"Meeting someone new", speakers:["Stranger","You"],
-    lines:[
-      {u:false, c:"你好！你叫乜嘢名？", j:"nei5 hou2! nei5 giu3 mat1 je5 meng2?", e:"Hello! What's your name?",
-        bd:[{c:"你好",j:"nei5 hou2",e:"hello"},{c:"你",j:"nei5",e:"you"},{c:"叫",j:"giu3",e:"are called"},{c:"乜嘢",j:"mat1 je5",e:"what"},{c:"名",j:"meng2",e:"name"}]},
-      {u:true,  c:"我叫David。你呢？", j:"ngo5 giu3 David. nei5 ne1?", e:"I'm David. And you?",
-        opts:["我叫David。你呢？","我食緊飯。","我唔知。"], optsJ:["ngo5 giu3 David. nei5 ne1?","ngo5 sik6 gan2 faan6.","ngo5 m4 zi1."],
-        bd:[{c:"我",j:"ngo5",e:"I"},{c:"叫",j:"giu3",e:"am called"},{c:"David",j:"David",e:"David"},{c:"你呢",j:"nei5 ne1",e:"and you?"}]},
-      {u:false, c:"我叫Sarah。你住喺邊度？", j:"ngo5 giu3 Sarah. nei5 zyu6 hai2 bin1 dou6?", e:"I'm Sarah. Where do you live?",
-        bd:[{c:"我",j:"ngo5",e:"I"},{c:"叫",j:"giu3",e:"am called"},{c:"Sarah",j:"Sarah",e:"Sarah"},{c:"你",j:"nei5",e:"you"},{c:"住",j:"zyu6",e:"live"},{c:"喺",j:"hai2",e:"at"},{c:"邊度",j:"bin1 dou6",e:"where"}]},
-      {u:true,  c:"我住喺香港。你呢？", j:"ngo5 zyu6 hai2 hoeng1 gong2. nei5 ne1?", e:"I live in Hong Kong. And you?",
-        opts:["我住喺香港。你呢？","我食緊飯。","我去街。"], optsJ:["ngo5 zyu6 hai2 hoeng1 gong2. nei5 ne1?","ngo5 sik6 gan2 faan6.","ngo5 heoi3 gaai1."],
-        bd:[{c:"我",j:"ngo5",e:"I"},{c:"住",j:"zyu6",e:"live"},{c:"喺",j:"hai2",e:"at"},{c:"香港",j:"hoeng1 gong2",e:"Hong Kong"},{c:"你呢",j:"nei5 ne1",e:"and you?"}]},
-      {u:false, c:"我都係。點解嚟香港？", j:"ngo5 dou1 hai6. dim2 gaai2 lai4 hoeng1 gong2?", e:"Me too. Why did you come to Hong Kong?",
-        bd:[{c:"我",j:"ngo5",e:"I"},{c:"都係",j:"dou1 hai6",e:"also am"},{c:"點解",j:"dim2 gaai2",e:"why"},{c:"嚟",j:"lai4",e:"come"},{c:"香港",j:"hoeng1 gong2",e:"Hong Kong"}]},
-      {u:true,  c:"我嚟做嘢。", j:"ngo5 lai4 zou6 je5.", e:"I came for work.",
-        opts:["我嚟做嘢。","我唔知。","你係邊個？"], optsJ:["ngo5 lai4 zou6 je5.","ngo5 m4 zi1.","nei5 hai6 bin1 go3?"],
-        bd:[{c:"我",j:"ngo5",e:"I"},{c:"嚟",j:"lai4",e:"come"},{c:"做嘢",j:"zou6 je5",e:"to work"}]},
-    ]},
-  colors: { title:"Shopping for clothes", speakers:["Shop assistant","You"],
-    lines:[
-      {u:false, c:"你好，你想搵咩顏色？", j:"nei5 hou2, nei5 soeng2 wan2 me1 ngaan4 sik1?", e:"Hello, what colour are you looking for?",
-        bd:[{c:"你好",j:"nei5 hou2",e:"hello"},{c:"你",j:"nei5",e:"you"},{c:"想",j:"soeng2",e:"want to"},{c:"搵",j:"wan2",e:"look for / find"},{c:"咩顏色",j:"me1 ngaan4 sik1",e:"what colour"}]},
-      {u:true,  c:"我想要藍色或者黑色。", j:"ngo5 soeng2 jiu3 laam4 sik1 waak6 ze2 hak1 sik1.", e:"I'd like blue or black.",
-        opts:["我想要藍色或者黑色。","我鍾意紅色同綠色。","我唔知。"], optsJ:["ngo5 soeng2 jiu3 laam4 sik1 waak6 ze2 hak1 sik1.","ngo5 zung1 ji3 hung4 sik1 tung4 luk6 sik1.","ngo5 m4 zi1."],
-        bd:[{c:"我想要",j:"ngo5 soeng2 jiu3",e:"I would like"},{c:"藍色",j:"laam4 sik1",e:"blue"},{c:"或者",j:"waak6 ze2",e:"or"},{c:"黑色",j:"hak1 sik1",e:"black"}]},
-      {u:false, c:"呢件係藍色，你覺得點？", j:"ni1 gin6 hai6 laam4 sik1, nei5 gok3 dak1 dim2?", e:"This one is blue, what do you think?",
-        bd:[{c:"呢件",j:"ni1 gin6",e:"this one (clothing)"},{c:"係",j:"hai6",e:"is"},{c:"藍色",j:"laam4 sik1",e:"blue"},{c:"你",j:"nei5",e:"you"},{c:"覺得點",j:"gok3 dak1 dim2",e:"what do you think?"}]},
-      {u:true,  c:"好靚！有冇白色？", j:"hou2 leng3! jau5 mou5 baak6 sik1?", e:"Very nice! Do you have white?",
-        opts:["好靚！有冇白色？","太貴喇。","唔啱我。"], optsJ:["hou2 leng3! jau5 mou5 baak6 sik1?","taai3 gwai3 laa3.","m4 ngaam1 ngo5."],
-        bd:[{c:"好靚",j:"hou2 leng3",e:"very nice / beautiful"},{c:"有冇",j:"jau5 mou5",e:"do you have?"},{c:"白色",j:"baak6 sik1",e:"white"}]},
-      {u:false, c:"有，呢件白色都好好睇。", j:"jau5, ni1 gin6 baak6 sik1 dou1 hou2 hou2 tai2.", e:"Yes, this white one is also very nice.",
-        bd:[{c:"有",j:"jau5",e:"yes / have"},{c:"呢件",j:"ni1 gin6",e:"this one"},{c:"白色",j:"baak6 sik1",e:"white"},{c:"都",j:"dou1",e:"also"},{c:"好好睇",j:"hou2 hou2 tai2",e:"very nice looking"}]},
-      {u:true,  c:"我買白色嗰件，多謝！", j:"ngo5 maai5 baak6 sik1 go2 gin6, do1 ze6!", e:"I'll take the white one, thanks!",
-        opts:["我買白色嗰件，多謝！","兩件都唔要。","有冇平啲？"], optsJ:["ngo5 maai5 baak6 sik1 go2 gin6, do1 ze6!","loeng5 gin6 dou1 m4 jiu3.","jau5 mou5 peng4 di1?"],
-        bd:[{c:"我買",j:"ngo5 maai5",e:"I'll buy"},{c:"白色",j:"baak6 sik1",e:"white"},{c:"嗰件",j:"go2 gin6",e:"that one (clothing)"},{c:"多謝",j:"do1 ze6",e:"thank you"}]},
-    ]},
-  body: { title:"At the doctor", speakers:["Doctor","You"],
-    lines:[
-      {u:false, c:"你好，你有咩唔舒服？", j:"nei5 hou2, nei5 jau5 me1 m4 syu1 fuk6?", e:"Hello, what seems to be the problem?",
-        bd:[{c:"你好",j:"nei5 hou2",e:"hello"},{c:"你",j:"nei5",e:"you"},{c:"有",j:"jau5",e:"have"},{c:"咩",j:"me1",e:"what"},{c:"唔舒服",j:"m4 syu1 fuk6",e:"unwell / discomfort"}]},
-      {u:true,  c:"我頭好痛，同埋肚都唔舒服。", j:"ngo5 tau4 hou2 tung3, tung4 maai4 tou5 dou1 m4 syu1 fuk6.", e:"I have a bad headache and stomach ache.",
-        opts:["我頭好痛，同埋肚都唔舒服。","我眼好攰。","我腳痛。"], optsJ:["ngo5 tau4 hou2 tung3, tung4 maai4 tou5 dou1 m4 syu1 fuk6.","ngo5 ngaan5 hou2 gui6.","ngo5 goek3 tung3."],
-        bd:[{c:"我頭",j:"ngo5 tau4",e:"my head"},{c:"好痛",j:"hou2 tung3",e:"really hurts"},{c:"同埋",j:"tung4 maai4",e:"and also"},{c:"肚",j:"tou5",e:"stomach"},{c:"都",j:"dou1",e:"also"},{c:"唔舒服",j:"m4 syu1 fuk6",e:"unwell"}]},
-      {u:false, c:"你係咪有發燒？", j:"nei5 hai6 mai6 jau5 faat3 siu1?", e:"Do you have a fever?",
-        bd:[{c:"你",j:"nei5",e:"you"},{c:"係咪",j:"hai6 mai6",e:"are you? / is it?"},{c:"有",j:"jau5",e:"have"},{c:"發燒",j:"faat3 siu1",e:"fever"}]},
-      {u:true,  c:"唔知，但係我覺得好凍。", j:"m4 zi1, daan6 hai6 ngo5 gok3 dak1 hou2 dung3.", e:"I'm not sure, but I feel very cold.",
-        opts:["唔知，但係我覺得好凍。","唔係，我好熱。","我唔知。"], optsJ:["m4 zi1, daan6 hai6 ngo5 gok3 dak1 hou2 dung3.","m4 hai6, ngo5 hou2 jit6.","ngo5 m4 zi1."],
-        bd:[{c:"唔知",j:"m4 zi1",e:"don't know / not sure"},{c:"但係",j:"daan6 hai6",e:"but"},{c:"我",j:"ngo5",e:"I"},{c:"覺得",j:"gok3 dak1",e:"feel"},{c:"好凍",j:"hou2 dung3",e:"very cold"}]},
-      {u:false, c:"我幫你量體溫。請坐。", j:"ngo5 bong1 nei5 loeng4 tai2 wan1. cing2 co5.", e:"Let me take your temperature. Please sit.",
-        bd:[{c:"我幫你",j:"ngo5 bong1 nei5",e:"let me help you"},{c:"量",j:"loeng4",e:"measure"},{c:"體溫",j:"tai2 wan1",e:"body temperature"},{c:"請坐",j:"cing2 co5",e:"please sit"}]},
-      {u:true,  c:"好，多謝醫生。", j:"hou2, do1 ze6 ji1 sang1.", e:"Ok, thank you doctor.",
-        opts:["好，多謝醫生。","唔使喇。","我想走。"], optsJ:["hou2, do1 ze6 ji1 sang1.","m4 sai2 laa3.","ngo5 soeng2 zau2."],
-        bd:[{c:"好",j:"hou2",e:"ok"},{c:"多謝",j:"do1 ze6",e:"thank you"},{c:"醫生",j:"ji1 sang1",e:"doctor"}]},
-    ]},
-  transport: { title:"Getting a taxi", speakers:["Driver","You"],
-    lines:[
-      {u:false, c:"你好！去邊度？", j:"nei5 hou2! heoi3 bin1 dou6?", e:"Hello! Where are you going?",
-        bd:[{c:"你好",j:"nei5 hou2",e:"hello"},{c:"去",j:"heoi3",e:"go to"},{c:"邊度",j:"bin1 dou6",e:"where"}]},
-      {u:true,  c:"去中環，唔該。", j:"heoi3 zung1 waan4, m4 goi1.", e:"To Central, please.",
-        opts:["去中環，唔該。","我想坐地鐵。","去機場。"], optsJ:["heoi3 zung1 waan4, m4 goi1.","ngo5 soeng2 co5 dei6 tit3.","heoi3 gei1 coeng4."],
-        bd:[{c:"去",j:"heoi3",e:"go to"},{c:"中環",j:"zung1 waan4",e:"Central (HK district)"},{c:"唔該",j:"m4 goi1",e:"please / thank you"}]},
-      {u:false, c:"好，大概三十分鐘。", j:"hou2, daai6 koi3 saam1 sap6 fan1 zung1.", e:"Sure, about thirty minutes.",
-        bd:[{c:"好",j:"hou2",e:"ok"},{c:"大概",j:"daai6 koi3",e:"approximately"},{c:"三十",j:"saam1 sap6",e:"thirty"},{c:"分鐘",j:"fan1 zung1",e:"minutes"}]},
-      {u:true,  c:"大概幾錢？", j:"daai6 koi3 gei2 cin2?", e:"About how much will it cost?",
-        opts:["大概幾錢？","幾遠？","幾時到？"], optsJ:["daai6 koi3 gei2 cin2?","gei2 jyun5?","gei2 si4 dou3?"],
-        bd:[{c:"大概",j:"daai6 koi3",e:"approximately"},{c:"幾錢",j:"gei2 cin2",e:"how much money"}]},
-      {u:false, c:"大概一百蚊左右。", j:"daai6 koi3 jat1 baak3 man1 zo2 jau6.", e:"Around a hundred dollars.",
-        bd:[{c:"大概",j:"daai6 koi3",e:"approximately"},{c:"一百",j:"jat1 baak3",e:"one hundred"},{c:"蚊",j:"man1",e:"dollars"},{c:"左右",j:"zo2 jau6",e:"around / about"}]},
-      {u:true,  c:"好，多謝！到咗叫我。", j:"hou2, do1 ze6! dou3 zo2 giu3 ngo5.", e:"OK thanks! Let me know when we arrive.",
-        opts:["好，多謝！到咗叫我。","太貴喇，唔坐。","可唔可以快啲？"], optsJ:["hou2, do1 ze6! dou3 zo2 giu3 ngo5.","taai3 gwai3 laa3, m4 co5.","ho2 m4 ho2 ji5 faai3 di1?"],
-        bd:[{c:"好",j:"hou2",e:"ok"},{c:"多謝",j:"do1 ze6",e:"thank you"},{c:"到咗",j:"dou3 zo2",e:"arrived / when we arrive"},{c:"叫我",j:"giu3 ngo5",e:"tell me / call me"}]},
-    ]},
-  weather: { title:"Chatting about the weather", speakers:["Neighbour","You"],
-    lines:[
-      {u:false, c:"今日天氣好熱呀！", j:"gam1 jat6 tin1 hei3 hou2 jit6 aa3!", e:"The weather is so hot today!",
-        bd:[{c:"今日",j:"gam1 jat6",e:"today"},{c:"天氣",j:"tin1 hei3",e:"weather"},{c:"好熱",j:"hou2 jit6",e:"very hot"},{c:"呀",j:"aa3",e:"(exclamation particle)"}]},
-      {u:true,  c:"係呀！我好唔鍾意熱天。", j:"hai6 aa3! ngo5 hou2 m4 zung1 ji3 jit6 tin1.", e:"Yeah! I really don't like hot weather.",
-        opts:["係呀！我好唔鍾意熱天。","我鍾意熱天。","今日落雨。"], optsJ:["hai6 aa3! ngo5 hou2 m4 zung1 ji3 jit6 tin1.","ngo5 zung1 ji3 jit6 tin1.","gam1 jat6 lok6 jyu5."],
-        bd:[{c:"係呀",j:"hai6 aa3",e:"yes / that's right"},{c:"我",j:"ngo5",e:"I"},{c:"好唔鍾意",j:"hou2 m4 zung1 ji3",e:"really don't like"},{c:"熱天",j:"jit6 tin1",e:"hot weather"}]},
-      {u:false, c:"聽日好似會落雨。", j:"ting1 jat6 hou2 ci5 wui5 lok6 jyu5.", e:"It looks like it will rain tomorrow.",
-        bd:[{c:"聽日",j:"ting1 jat6",e:"tomorrow"},{c:"好似",j:"hou2 ci5",e:"seems like / looks like"},{c:"會",j:"wui5",e:"will"},{c:"落雨",j:"lok6 jyu5",e:"rain (fall rain)"}]},
-      {u:true,  c:"真係？我要帶遮喇。", j:"zan1 hai6? ngo5 jiu3 daai3 ze1 laa3.", e:"Really? I'll need to bring an umbrella.",
-        opts:["真係？我要帶遮喇。","我鍾意落雨。","唔緊要。"], optsJ:["zan1 hai6? ngo5 jiu3 daai3 ze1 laa3.","ngo5 zung1 ji3 lok6 jyu5.","m4 gan2 jiu3."],
-        bd:[{c:"真係",j:"zan1 hai6",e:"really?"},{c:"我要",j:"ngo5 jiu3",e:"I need to"},{c:"帶",j:"daai3",e:"bring / carry"},{c:"遮",j:"ze1",e:"umbrella"},{c:"喇",j:"laa3",e:"(particle — now/already)"}]},
-      {u:false, c:"係呀，颱風季節都嚟喇。", j:"hai6 aa3, toi4 fung1 gwai3 zit3 dou1 lai4 laa3.", e:"Yes, and the typhoon season is coming.",
-        bd:[{c:"係呀",j:"hai6 aa3",e:"yes"},{c:"颱風",j:"toi4 fung1",e:"typhoon"},{c:"季節",j:"gwai3 zit3",e:"season"},{c:"都",j:"dou1",e:"also"},{c:"嚟喇",j:"lai4 laa3",e:"is coming"}]},
-      {u:true,  c:"係囉！希望天氣快啲好番。", j:"hai6 lo3! hei1 mong6 tin1 hei3 faai3 di1 hou2 faan1.", e:"Right! I hope the weather improves soon.",
-        opts:["係囉！希望天氣快啲好番。","我鍾意颱風。","唔緊要。"], optsJ:["hai6 lo3! hei1 mong6 tin1 hei3 faai3 di1 hou2 faan1.","ngo5 zung1 ji3 toi4 fung1.","m4 gan2 jiu3."],
-        bd:[{c:"係囉",j:"hai6 lo3",e:"right / exactly"},{c:"希望",j:"hei1 mong6",e:"hope"},{c:"天氣",j:"tin1 hei3",e:"weather"},{c:"快啲",j:"faai3 di1",e:"sooner / faster"},{c:"好番",j:"hou2 faan1",e:"get better"}]},
-    ]},
-  shopping: { title:"Bargaining at a market stall", speakers:["Vendor","You"],
-    lines:[
-      {u:false, c:"你好！想買咩？", j:"nei5 hou2! soeng2 maai5 me1?", e:"Hello! What would you like to buy?",
-        bd:[{c:"你好",j:"nei5 hou2",e:"hello"},{c:"想買",j:"soeng2 maai5",e:"want to buy"},{c:"咩",j:"me1",e:"what"}]},
-      {u:true,  c:"呢個幾錢？", j:"ni1 go3 gei2 cin2?", e:"How much is this?",
-        opts:["呢個幾錢？","有冇折？","我唔要。"], optsJ:["ni1 go3 gei2 cin2?","jau5 mou5 zit3?","ngo5 m4 jiu3."],
-        bd:[{c:"呢個",j:"ni1 go3",e:"this one"},{c:"幾錢",j:"gei2 cin2",e:"how much money"}]},
-      {u:false, c:"呢個二百蚊。", j:"ni1 go3 ji6 baak3 man1.", e:"This one is two hundred dollars.",
-        bd:[{c:"呢個",j:"ni1 go3",e:"this one"},{c:"二百",j:"ji6 baak3",e:"two hundred"},{c:"蚊",j:"man1",e:"dollars"}]},
-      {u:true,  c:"咁貴！有冇折㗎？", j:"gam3 gwai3! jau5 mou5 zit3 gaa3?", e:"So expensive! Any discount?",
-        opts:["咁貴！有冇折㗎？","好，我買。","有冇平啲嘅？"], optsJ:["gam3 gwai3! jau5 mou5 zit3 gaa3?","hou2, ngo5 maai5.","jau5 mou5 peng4 di1 ge3?"],
-        bd:[{c:"咁貴",j:"gam3 gwai3",e:"so expensive"},{c:"有冇",j:"jau5 mou5",e:"do you have?"},{c:"折",j:"zit3",e:"discount"},{c:"㗎",j:"gaa3",e:"(emphasis particle)"}]},
-      {u:false, c:"好，俾一百八十蚊你啦。", j:"hou2, bei2 jat1 baak3 baat3 sap6 man1 nei5 laa1.", e:"Ok, one hundred and eighty dollars for you.",
-        bd:[{c:"好",j:"hou2",e:"ok"},{c:"俾",j:"bei2",e:"give"},{c:"一百八十",j:"jat1 baak3 baat3 sap6",e:"one hundred eighty"},{c:"蚊",j:"man1",e:"dollars"},{c:"你",j:"nei5",e:"you"},{c:"啦",j:"laa1",e:"(softening particle)"}]},
-      {u:true,  c:"好，成交！多謝！", j:"hou2, sing4 gaau1! do1 ze6!", e:"Deal! Thank you!",
-        opts:["好，成交！多謝！","唔要喇，太貴。","平啲先得。"], optsJ:["hou2, sing4 gaau1! do1 ze6!","m4 jiu3 laa3, taai3 gwai3.","peng4 di1 sin1 dak1."],
-        bd:[{c:"好",j:"hou2",e:"ok"},{c:"成交",j:"sing4 gaau1",e:"deal / agreed"},{c:"多謝",j:"do1 ze6",e:"thank you"}]},
-    ]},
-
-  yesno: { title:"Polite exchanges at a shop", speakers:["Shopkeeper","You"],
-    lines:[
-      {u:false, c:"歡迎光臨！想搵咩？", j:"fun1 jing4 gwong1 lam4! soeng2 wan2 me1?", e:"Welcome! What are you looking for?",
-        bd:[{c:"歡迎光臨",j:"fun1 jing4 gwong1 lam4",e:"welcome (to the shop)"},{c:"想",j:"soeng2",e:"want to"},{c:"搵",j:"wan2",e:"look for"},{c:"咩",j:"me1",e:"what"}]},
-      {u:true,  c:"唔該，我想睇吓。", j:"m4 goi1, ngo5 soeng2 tai2 haa5.", e:"Excuse me, I'd like to look around.",
-        opts:["唔該，我想睇吓。","唔好，多謝。","幾錢？"], optsJ:["m4 goi1, ngo5 soeng2 tai2 haa5.","m4 hou2, do1 ze6.","gei2 cin2?"],
-        bd:[{c:"唔該",j:"m4 goi1",e:"excuse me / please"},{c:"我",j:"ngo5",e:"I"},{c:"想",j:"soeng2",e:"want to"},{c:"睇吓",j:"tai2 haa5",e:"have a look"}]},
-      {u:false, c:"好呀，慢慢睇。", j:"hou2 aa3, maan6 maan6 tai2.", e:"Sure, take your time.",
-        bd:[{c:"好",j:"hou2",e:"OK / good"},{c:"呀",j:"aa3",e:"(soft particle)"},{c:"慢慢",j:"maan6 maan6",e:"slowly / take time"},{c:"睇",j:"tai2",e:"look"}]},
-      {u:true,  c:"請問呢個係咩？", j:"cing2 man6 ni1 go3 hai6 me1?", e:"Excuse me, what is this?",
-        opts:["請問呢個係咩？","唔該，再見。","唔要喇。"], optsJ:["cing2 man6 ni1 go3 hai6 me1?","m4 goi1, zoi3 gin3.","m4 jiu3 laa3."],
-        bd:[{c:"請問",j:"cing2 man6",e:"may I ask"},{c:"呢個",j:"ni1 go3",e:"this one"},{c:"係",j:"hai6",e:"is"},{c:"咩",j:"me1",e:"what"}]},
-      {u:false, c:"呢個係新嘢，好正！", j:"ni1 go3 hai6 san1 je5, hou2 zeng3!", e:"This is a new item, very nice!",
-        bd:[{c:"呢個",j:"ni1 go3",e:"this one"},{c:"係",j:"hai6",e:"is"},{c:"新嘢",j:"san1 je5",e:"new thing"},{c:"好正",j:"hou2 zeng3",e:"really cool / great"}]},
-      {u:true,  c:"多謝！我諗吓先。", j:"do1 ze6! ngo5 lam2 haa5 sin1.", e:"Thanks! Let me think first.",
-        opts:["多謝！我諗吓先。","唔該，再見。","好，我買。"], optsJ:["do1 ze6! ngo5 lam2 haa5 sin1.","m4 goi1, zoi3 gin3.","hou2, ngo5 maai5."],
-        bd:[{c:"多謝",j:"do1 ze6",e:"thanks"},{c:"我",j:"ngo5",e:"I"},{c:"諗吓",j:"lam2 haa5",e:"think it over"},{c:"先",j:"sin1",e:"first"}]},
-    ]},
-
-  tense: { title:"Catching up with a friend", speakers:["Friend","You"],
-    lines:[
-      {u:false, c:"你食咗飯未？", j:"nei5 sik6 zo2 faan6 mei6?", e:"Have you eaten yet?",
-        bd:[{c:"你",j:"nei5",e:"you"},{c:"食",j:"sik6",e:"eat"},{c:"咗",j:"zo2",e:"(completed)"},{c:"飯",j:"faan6",e:"meal"},{c:"未",j:"mei6",e:"yet?"}]},
-      {u:true,  c:"未呀，仲未食。", j:"mei6 aa3, zung6 mei6 sik6.", e:"Not yet, haven't eaten.",
-        opts:["未呀，仲未食。","食咗喇。","我唔餓。"], optsJ:["mei6 aa3, zung6 mei6 sik6.","sik6 zo2 laa3.","ngo5 m4 ngo6."],
-        bd:[{c:"未",j:"mei6",e:"not yet"},{c:"呀",j:"aa3",e:"(particle)"},{c:"仲",j:"zung6",e:"still"},{c:"未食",j:"mei6 sik6",e:"haven't eaten"}]},
-      {u:false, c:"我都未食。一齊去食啦！", j:"ngo5 dou1 mei6 sik6. jat1 cai4 heoi3 sik6 laa1!", e:"I haven't either. Let's go eat together!",
-        bd:[{c:"我",j:"ngo5",e:"I"},{c:"都",j:"dou1",e:"also"},{c:"未食",j:"mei6 sik6",e:"haven't eaten"},{c:"一齊",j:"jat1 cai4",e:"together"},{c:"去食",j:"heoi3 sik6",e:"go eat"},{c:"啦",j:"laa1",e:"(suggestion)"}]},
-      {u:true,  c:"好呀！你食過呢間嗎？", j:"hou2 aa3! nei5 sik6 gwo3 ni1 gaan1 maa3?", e:"Sure! Have you tried this place?",
-        opts:["好呀！你食過呢間嗎？","唔得，我冇空。","我唔知。"], optsJ:["hou2 aa3! nei5 sik6 gwo3 ni1 gaan1 maa3?","m4 dak1, ngo5 mou5 hung1.","ngo5 m4 zi1."],
-        bd:[{c:"好呀",j:"hou2 aa3",e:"sure / great"},{c:"你",j:"nei5",e:"you"},{c:"食過",j:"sik6 gwo3",e:"have eaten / tried"},{c:"呢間",j:"ni1 gaan1",e:"this place"},{c:"嗎",j:"maa3",e:"(question)"}]},
-      {u:false, c:"未食過，但係聽講好正。", j:"mei6 sik6 gwo3, daan6 hai6 teng1 gong2 hou2 zeng3.", e:"Haven't tried it, but heard it's great.",
-        bd:[{c:"未食過",j:"mei6 sik6 gwo3",e:"never tried"},{c:"但係",j:"daan6 hai6",e:"but"},{c:"聽講",j:"teng1 gong2",e:"heard"},{c:"好正",j:"hou2 zeng3",e:"really good"}]},
-      {u:true,  c:"咁我哋而家就去啦。", j:"gam2 ngo5 dei6 ji4 gaa1 zau6 heoi3 laa1.", e:"Then let's go now.",
-        opts:["咁我哋而家就去啦。","聽日先去。","我唔想去。"], optsJ:["gam2 ngo5 dei6 ji4 gaa1 zau6 heoi3 laa1.","ting1 jat6 sin1 heoi3.","ngo5 m4 soeng2 heoi3."],
-        bd:[{c:"咁",j:"gam2",e:"then / so"},{c:"我哋",j:"ngo5 dei6",e:"we / us"},{c:"而家",j:"ji4 gaa1",e:"now"},{c:"就",j:"zau6",e:"then / will"},{c:"去",j:"heoi3",e:"go"},{c:"啦",j:"laa1",e:"(suggestion)"}]},
-    ]},
-
-  particles: { title:"A casual chat with a flatmate", speakers:["Flatmate","You"],
-    lines:[
-      {u:false, c:"今日好攰呀！", j:"gam1 jat6 hou2 gui6 aa3!", e:"Today was so tiring!",
-        bd:[{c:"今日",j:"gam1 jat6",e:"today"},{c:"好",j:"hou2",e:"very"},{c:"攰",j:"gui6",e:"tired"},{c:"呀",j:"aa3",e:"(soft confirmation)"}]},
-      {u:true,  c:"係囉，我都係。", j:"hai6 lo3, ngo5 dou1 hai6.", e:"Yeah, me too.",
-        opts:["係囉，我都係。","唔係，我好精神。","我唔知。"], optsJ:["hai6 lo3, ngo5 dou1 hai6.","m4 hai6, ngo5 hou2 zing1 san4.","ngo5 m4 zi1."],
-        bd:[{c:"係",j:"hai6",e:"yes / right"},{c:"囉",j:"lo3",e:"(obviously)"},{c:"我",j:"ngo5",e:"I"},{c:"都",j:"dou1",e:"also"},{c:"係",j:"hai6",e:"am"}]},
-      {u:false, c:"睇套戲先啦？", j:"tai2 tou3 hei3 sin1 laa1?", e:"Want to watch a movie first?",
-        bd:[{c:"睇",j:"tai2",e:"watch"},{c:"套戲",j:"tou3 hei3",e:"a movie"},{c:"先",j:"sin1",e:"first"},{c:"啦",j:"laa1",e:"(suggestion)"}]},
-      {u:true,  c:"好呀！睇咩戲？", j:"hou2 aa3! tai2 me1 hei3?", e:"Sure! What movie?",
-        opts:["好呀！睇咩戲？","唔得，我要瞓。","下次先。"], optsJ:["hou2 aa3! tai2 me1 hei3?","m4 dak1, ngo5 jiu3 fan3.","haa6 ci3 sin1."],
-        bd:[{c:"好",j:"hou2",e:"OK"},{c:"呀",j:"aa3",e:"(soft particle)"},{c:"睇",j:"tai2",e:"watch"},{c:"咩",j:"me1",e:"what"},{c:"戲",j:"hei3",e:"movie"}]},
-      {u:false, c:"鍾意咩都得啦。", j:"zung1 ji3 me1 dou1 dak1 laa1.", e:"Whatever you like is fine.",
-        bd:[{c:"鍾意",j:"zung1 ji3",e:"like"},{c:"咩",j:"me1",e:"whatever"},{c:"都",j:"dou1",e:"also"},{c:"得",j:"dak1",e:"OK"},{c:"啦",j:"laa1",e:"(softening)"}]},
-      {u:true,  c:"咁睇喜劇喎！", j:"gam2 tai2 hei2 kek6 wo3!", e:"Then let's watch a comedy!",
-        opts:["咁睇喜劇喎！","睇驚悚片。","我唔知。"], optsJ:["gam2 tai2 hei2 kek6 wo3!","tai2 ging1 sung2 pin2.","ngo5 m4 zi1."],
-        bd:[{c:"咁",j:"gam2",e:"then"},{c:"睇",j:"tai2",e:"watch"},{c:"喜劇",j:"hei2 kek6",e:"comedy"},{c:"喎",j:"wo3",e:"(emphasis)"}]},
-    ]},
-
-  feelings: { title:"Comforting a friend", speakers:["Friend","You"],
-    lines:[
-      {u:false, c:"我今日好唔開心。", j:"ngo5 gam1 jat6 hou2 m4 hoi1 sam1.", e:"I'm really unhappy today.",
-        bd:[{c:"我",j:"ngo5",e:"I"},{c:"今日",j:"gam1 jat6",e:"today"},{c:"好",j:"hou2",e:"very"},{c:"唔開心",j:"m4 hoi1 sam1",e:"unhappy"}]},
-      {u:true,  c:"點解呀？發生咗咩事？", j:"dim2 gaai3 aa3? faat3 sang1 zo2 me1 si6?", e:"Why? What happened?",
-        opts:["點解呀？發生咗咩事？","冇所謂啦。","我唔想知。"], optsJ:["dim2 gaai3 aa3? faat3 sang1 zo2 me1 si6?","mou5 so2 wai6 laa1.","ngo5 m4 soeng2 zi1."],
-        bd:[{c:"點解",j:"dim2 gaai3",e:"why"},{c:"呀",j:"aa3",e:"(soft particle)"},{c:"發生",j:"faat3 sang1",e:"happen"},{c:"咗",j:"zo2",e:"(completed)"},{c:"咩事",j:"me1 si6",e:"what thing"}]},
-      {u:false, c:"工作好辛苦，又有好多嘢做。", j:"gung1 zok3 hou2 san1 fu2, jau6 jau5 hou2 do1 je5 zou6.", e:"Work is exhausting, and so much to do.",
-        bd:[{c:"工作",j:"gung1 zok3",e:"work"},{c:"好辛苦",j:"hou2 san1 fu2",e:"very tough"},{c:"又",j:"jau6",e:"and"},{c:"有",j:"jau5",e:"there is"},{c:"好多",j:"hou2 do1",e:"a lot of"},{c:"嘢做",j:"je5 zou6",e:"things to do"}]},
-      {u:true,  c:"唔好擔心，慢慢嚟。", j:"m4 hou2 daam1 sam1, maan6 maan6 lai4.", e:"Don't worry, take it slow.",
-        opts:["唔好擔心，慢慢嚟。","你應該放棄。","我唔識。"], optsJ:["m4 hou2 daam1 sam1, maan6 maan6 lai4.","nei5 jing1 goi1 fong3 hei3.","ngo5 m4 sik1."],
-        bd:[{c:"唔好",j:"m4 hou2",e:"don't"},{c:"擔心",j:"daam1 sam1",e:"worry"},{c:"慢慢",j:"maan6 maan6",e:"slowly"},{c:"嚟",j:"lai4",e:"(come / do it)"}]},
-      {u:false, c:"多謝你聽我講。", j:"do1 ze6 nei5 teng1 ngo5 gong2.", e:"Thanks for listening to me.",
-        bd:[{c:"多謝",j:"do1 ze6",e:"thank you"},{c:"你",j:"nei5",e:"you"},{c:"聽",j:"teng1",e:"listen"},{c:"我",j:"ngo5",e:"me"},{c:"講",j:"gong2",e:"talk / speak"}]},
-      {u:true,  c:"唔使客氣，我哋係朋友。", j:"m4 sai2 haak3 hei3, ngo5 dei6 hai6 pang4 jau5.", e:"Don't mention it, we're friends.",
-        opts:["唔使客氣，我哋係朋友。","唔關我事。","我要走。"], optsJ:["m4 sai2 haak3 hei3, ngo5 dei6 hai6 pang4 jau5.","m4 gwaan1 ngo5 si6.","ngo5 jiu3 zau2."],
-        bd:[{c:"唔使",j:"m4 sai2",e:"no need"},{c:"客氣",j:"haak3 hei3",e:"polite / formal"},{c:"我哋",j:"ngo5 dei6",e:"we"},{c:"係",j:"hai6",e:"are"},{c:"朋友",j:"pang4 jau5",e:"friends"}]},
-    ]},
-
-  directions: { title:"Asking the way to the museum", speakers:["Local","You"],
-    lines:[
-      {u:true,  c:"唔該，博物館喺邊度？", j:"m4 goi1, bok3 mat6 gun2 hai2 bin1 dou6?", e:"Excuse me, where is the museum?",
-        opts:["唔該，博物館喺邊度？","你好嗎？","我唔知。"], optsJ:["m4 goi1, bok3 mat6 gun2 hai2 bin1 dou6?","nei5 hou2 maa3?","ngo5 m4 zi1."],
-        bd:[{c:"唔該",j:"m4 goi1",e:"excuse me"},{c:"博物館",j:"bok3 mat6 gun2",e:"museum"},{c:"喺邊度",j:"hai2 bin1 dou6",e:"is where"}]},
-      {u:false, c:"直行，然後轉左。", j:"zik6 haang4, jin4 hau6 zyun3 zo2.", e:"Go straight, then turn left.",
-        bd:[{c:"直行",j:"zik6 haang4",e:"go straight"},{c:"然後",j:"jin4 hau6",e:"then"},{c:"轉",j:"zyun3",e:"turn"},{c:"左",j:"zo2",e:"left"}]},
-      {u:true,  c:"行幾耐？", j:"haang4 gei2 noi6?", e:"How long does it take?",
-        opts:["行幾耐？","好遠嗎？","唔該。"], optsJ:["haang4 gei2 noi6?","hou2 jyun5 maa3?","m4 goi1."],
-        bd:[{c:"行",j:"haang4",e:"walk"},{c:"幾耐",j:"gei2 noi6",e:"how long"}]},
-      {u:false, c:"大概十分鐘，唔係好遠。", j:"daai6 koi3 sap6 fan1 zung1, m4 hai6 hou2 jyun5.", e:"About ten minutes, not very far.",
-        bd:[{c:"大概",j:"daai6 koi3",e:"about"},{c:"十分鐘",j:"sap6 fan1 zung1",e:"ten minutes"},{c:"唔係",j:"m4 hai6",e:"not"},{c:"好遠",j:"hou2 jyun5",e:"very far"}]},
-      {u:true,  c:"博物館對面有冇餐廳？", j:"bok3 mat6 gun2 deoi3 min6 jau5 mou5 caan1 teng1?", e:"Is there a restaurant opposite the museum?",
-        opts:["博物館對面有冇餐廳？","幾錢？","唔該。"], optsJ:["bok3 mat6 gun2 deoi3 min6 jau5 mou5 caan1 teng1?","gei2 cin2?","m4 goi1."],
-        bd:[{c:"博物館",j:"bok3 mat6 gun2",e:"museum"},{c:"對面",j:"deoi3 min6",e:"opposite"},{c:"有冇",j:"jau5 mou5",e:"is there?"},{c:"餐廳",j:"caan1 teng1",e:"restaurant"}]},
-      {u:false, c:"有，附近有幾間餐廳。", j:"jau5, fu6 gan6 jau5 gei2 gaan1 caan1 teng1.", e:"Yes, there are a few restaurants nearby.",
-        bd:[{c:"有",j:"jau5",e:"yes / there is"},{c:"附近",j:"fu6 gan6",e:"nearby"},{c:"幾間",j:"gei2 gaan1",e:"a few"},{c:"餐廳",j:"caan1 teng1",e:"restaurants"}]},
-      {u:true,  c:"明白，多謝你！", j:"ming4 baak6, do1 ze6 nei5!", e:"Got it, thank you!",
-        opts:["明白，多謝你！","我唔明。","再見。"], optsJ:["ming4 baak6, do1 ze6 nei5!","ngo5 m4 ming4.","zoi3 gin3."],
-        bd:[{c:"明白",j:"ming4 baak6",e:"understand"},{c:"多謝",j:"do1 ze6",e:"thank you"},{c:"你",j:"nei5",e:"you"}]},
-    ]},
-  friends: { title:"Making weekend plans", speakers:["Friend","You"],
-    lines:[
-      {u:false, c:"你聽日得唔得閒呀？", j:"nei5 ting1 jat6 dak1 m4 dak1 haan4 aa3?", e:"Are you free tomorrow?",
-        bd:[{c:"你",j:"nei5",e:"you"},{c:"聽日",j:"ting1 jat6",e:"tomorrow"},{c:"得唔得閒",j:"dak1 m4 dak1 haan4",e:"free or not"},{c:"呀",j:"aa3",e:"(soft particle)"}]},
-      {u:true,  c:"得呀，做咩？", j:"dak1 aa3, zou6 me1?", e:"Yes, what's up?",
-        opts:["得呀，做咩？","唔得閒。","我唔知。"], optsJ:["dak1 aa3, zou6 me1?","m4 dak1 haan4.","ngo5 m4 zi1."],
-        bd:[{c:"得呀",j:"dak1 aa3",e:"OK / yes"},{c:"做咩",j:"zou6 me1",e:"do what"}]},
-      {u:false, c:"我哋去飲茶啦。", j:"ngo5 dei6 heoi3 jam2 caa4 laa1.", e:"Let's go for yum cha.",
-        bd:[{c:"我哋",j:"ngo5 dei6",e:"we"},{c:"去",j:"heoi3",e:"go"},{c:"飲茶",j:"jam2 caa4",e:"yum cha"},{c:"啦",j:"laa1",e:"(let's)"}]},
-      {u:true,  c:"好呀！幾點？", j:"hou2 aa3! gei2 dim2?", e:"Sure! What time?",
-        opts:["好呀！幾點？","唔好。","改日啦。"], optsJ:["hou2 aa3! gei2 dim2?","m4 hou2.","goi2 jat6 laa1."],
-        bd:[{c:"好呀",j:"hou2 aa3",e:"sure / OK"},{c:"幾點",j:"gei2 dim2",e:"what time"}]},
-      {u:false, c:"朝早十一點，喺尖沙咀。", j:"ziu1 zou2 sap6 jat1 dim2, hai2 zim1 saa1 zeoi2.", e:"11am, in Tsim Sha Tsui.",
-        bd:[{c:"朝早",j:"ziu1 zou2",e:"morning"},{c:"十一點",j:"sap6 jat1 dim2",e:"11 o'clock"},{c:"喺",j:"hai2",e:"at"},{c:"尖沙咀",j:"zim1 saa1 zeoi2",e:"Tsim Sha Tsui"}]},
-      {u:true,  c:"OK！見！", j:"OK! gin3!", e:"OK! See you!",
-        opts:["OK！見！","我去唔到。","點解？"], optsJ:["OK! gin3!","ngo5 heoi3 m4 dou3.","dim2 gaai2?"],
-        bd:[{c:"OK",j:"OK",e:"OK"},{c:"見",j:"gin3",e:"see you"}]},
-    ]},
-  hotels: { title:"Checking in at a hotel", speakers:["Receptionist","You"],
-    lines:[
-      {u:false, c:"你好，請問訂咗房未？", j:"nei5 hou2, cing2 man6 deng6 zo2 fong2 mei6?", e:"Hello, have you booked a room?",
-        bd:[{c:"你好",j:"nei5 hou2",e:"hello"},{c:"請問",j:"cing2 man6",e:"may I ask"},{c:"訂咗",j:"deng6 zo2",e:"booked"},{c:"房",j:"fong2",e:"room"},{c:"未",j:"mei6",e:"yet (in question form)"}]},
-      {u:true,  c:"訂咗，姓Chan。", j:"deng6 zo2, sing3 Chan.", e:"Yes, the name is Chan.",
-        opts:["訂咗，姓Chan。","未訂。","我唔知。"], optsJ:["deng6 zo2, sing3 Chan.","mei6 deng6.","ngo5 m4 zi1."],
-        bd:[{c:"訂咗",j:"deng6 zo2",e:"booked"},{c:"姓",j:"sing3",e:"surname"},{c:"Chan",j:"Chan",e:"Chan"}]},
-      {u:false, c:"一間雙人房，三晚。", j:"jat1 gaan1 soeng1 jan4 fong2, saam1 maan5.", e:"One double room, three nights.",
-        bd:[{c:"一間",j:"jat1 gaan1",e:"one (room)"},{c:"雙人房",j:"soeng1 jan4 fong2",e:"double room"},{c:"三晚",j:"saam1 maan5",e:"three nights"}]},
-      {u:true,  c:"啱，請問幾點退房？", j:"ngaam1, cing2 man6 gei2 dim2 teoi3 fong2?", e:"Right, what's the checkout time?",
-        opts:["啱，請問幾點退房？","唔啱。","唔該。"], optsJ:["ngaam1, cing2 man6 gei2 dim2 teoi3 fong2?","m4 ngaam1.","m4 goi1."],
-        bd:[{c:"啱",j:"ngaam1",e:"correct"},{c:"請問",j:"cing2 man6",e:"may I ask"},{c:"幾點",j:"gei2 dim2",e:"what time"},{c:"退房",j:"teoi3 fong2",e:"check out"}]},
-      {u:false, c:"中午十二點，房間喺八樓。", j:"zung1 ng5 sap6 ji6 dim2, fong4 gaan1 hai2 baat3 lau2.", e:"Noon, room is on the 8th floor.",
-        bd:[{c:"中午",j:"zung1 ng5",e:"noon"},{c:"十二點",j:"sap6 ji6 dim2",e:"12 o'clock"},{c:"房間",j:"fong4 gaan1",e:"room"},{c:"喺",j:"hai2",e:"is at"},{c:"八樓",j:"baat3 lau2",e:"8th floor"}]},
-      {u:true,  c:"多謝你！", j:"do1 ze6 nei5!", e:"Thank you!",
-        opts:["多謝你！","我唔住。","好貴。"], optsJ:["do1 ze6 nei5!","ngo5 m4 zyu6.","hou2 gwai3."],
-        bd:[{c:"多謝",j:"do1 ze6",e:"thank you"},{c:"你",j:"nei5",e:"you"}]},
-    ]},
-  attractions: { title:"Buying tickets at a tourist spot", speakers:["Staff","You"],
-    lines:[
-      {u:false, c:"你好，幾多位呀？", j:"nei5 hou2, gei2 do1 wai2 aa3?", e:"Hello, how many people?",
-        bd:[{c:"你好",j:"nei5 hou2",e:"hello"},{c:"幾多",j:"gei2 do1",e:"how many"},{c:"位",j:"wai2",e:"people (polite)"},{c:"呀",j:"aa3",e:"(soft particle)"}]},
-      {u:true,  c:"兩位，一個大人一個細路。", j:"loeng5 wai2, jat1 go3 daai6 jan4 jat1 go3 sai3 lou6.", e:"Two, one adult and one child.",
-        opts:["兩位，一個大人一個細路。","得我一個。","唔買。"], optsJ:["loeng5 wai2, jat1 go3 daai6 jan4 jat1 go3 sai3 lou6.","dak1 ngo5 jat1 go3.","m4 maai5."],
-        bd:[{c:"兩位",j:"loeng5 wai2",e:"two (people)"},{c:"大人",j:"daai6 jan4",e:"adult"},{c:"細路",j:"sai3 lou6",e:"child"}]},
-      {u:false, c:"大人一百，細路五十。", j:"daai6 jan4 jat1 baak3, sai3 lou6 ng5 sap6.", e:"Adult $100, child $50.",
-        bd:[{c:"大人",j:"daai6 jan4",e:"adult"},{c:"一百",j:"jat1 baak3",e:"100"},{c:"細路",j:"sai3 lou6",e:"child"},{c:"五十",j:"ng5 sap6",e:"50"}]},
-      {u:true,  c:"開幾點呀？", j:"hoi1 gei2 dim2 aa3?", e:"What time do you open?",
-        opts:["開幾點呀？","幾耐排隊？","唔該。"], optsJ:["hoi1 gei2 dim2 aa3?","gei2 noi6 paai4 deoi2?","m4 goi1."],
-        bd:[{c:"開",j:"hoi1",e:"open"},{c:"幾點",j:"gei2 dim2",e:"what time"},{c:"呀",j:"aa3",e:"(soft)"}]},
-      {u:false, c:"九點到六點。", j:"gau2 dim2 dou3 luk6 dim2.", e:"9 to 6.",
-        bd:[{c:"九點",j:"gau2 dim2",e:"9 o'clock"},{c:"到",j:"dou3",e:"to / until"},{c:"六點",j:"luk6 dim2",e:"6 o'clock"}]},
-      {u:true,  c:"好，俾兩張。", j:"hou2, bei2 loeng5 zoeng1.", e:"OK, give me two.",
-        opts:["好，俾兩張。","太貴喇。","改日先。"], optsJ:["hou2, bei2 loeng5 zoeng1.","taai3 gwai3 laa3.","goi2 jat6 sin1."],
-        bd:[{c:"好",j:"hou2",e:"OK"},{c:"俾",j:"bei2",e:"give"},{c:"兩張",j:"loeng5 zoeng1",e:"two (tickets)"}]},
-    ]},
-  home: { title:"Showing someone your new place", speakers:["Friend","You"],
-    lines:[
-      {u:false, c:"嘩，你個屋企好大呀！", j:"waa3, nei5 go3 uk1 kei2 hou2 daai6 aa3!", e:"Wow, your place is huge!",
-        bd:[{c:"嘩",j:"waa3",e:"wow"},{c:"你",j:"nei5",e:"your"},{c:"個",j:"go3",e:"(measure word)"},{c:"屋企",j:"uk1 kei2",e:"home"},{c:"好大",j:"hou2 daai6",e:"very big"}]},
-      {u:true,  c:"多謝，呢個係客廳。", j:"do1 ze6, ni1 go3 hai6 haak3 teng1.", e:"Thanks, this is the living room.",
-        opts:["多謝，呢個係客廳。","唔好意思。","邊度都好。"], optsJ:["do1 ze6, ni1 go3 hai6 haak3 teng1.","m4 hou2 ji3 si3.","bin1 dou6 dou1 hou2."],
-        bd:[{c:"多謝",j:"do1 ze6",e:"thanks"},{c:"呢個",j:"ni1 go3",e:"this"},{c:"係",j:"hai6",e:"is"},{c:"客廳",j:"haak3 teng1",e:"living room"}]},
-      {u:false, c:"廚房喺邊度？", j:"cyu4 fong2 hai2 bin1 dou6?", e:"Where's the kitchen?",
-        bd:[{c:"廚房",j:"cyu4 fong2",e:"kitchen"},{c:"喺",j:"hai2",e:"is at"},{c:"邊度",j:"bin1 dou6",e:"where"}]},
-      {u:true,  c:"喺嗰邊，行入去就見到。", j:"hai2 go2 bin1, haang4 jap6 heoi3 zau6 gin3 dou2.", e:"Over there, walk in and you'll see.",
-        opts:["喺嗰邊，行入去就見到。","我唔知。","冇廚房。"], optsJ:["hai2 go2 bin1, haang4 jap6 heoi3 zau6 gin3 dou2.","ngo5 m4 zi1.","mou5 cyu4 fong2."],
-        bd:[{c:"喺",j:"hai2",e:"is at"},{c:"嗰邊",j:"go2 bin1",e:"over there"},{c:"行入去",j:"haang4 jap6 heoi3",e:"walk in"},{c:"就見到",j:"zau6 gin3 dou2",e:"and you'll see"}]},
-      {u:false, c:"你個房幾大呀？", j:"nei5 go3 fong2 gei2 daai6 aa3?", e:"How big is your bedroom?",
-        bd:[{c:"你",j:"nei5",e:"your"},{c:"房",j:"fong2",e:"room"},{c:"幾大",j:"gei2 daai6",e:"how big"},{c:"呀",j:"aa3",e:"(soft particle)"}]},
-      {u:true,  c:"細細個，但係夠瞓。", j:"sai3 sai3 go3, daan6 hai6 gau3 fan3.", e:"A bit small, but enough to sleep.",
-        opts:["細細個，但係夠瞓。","好大！","我冇床。"], optsJ:["sai3 sai3 go3, daan6 hai6 gau3 fan3.","hou2 daai6!","ngo5 mou5 cong4."],
-        bd:[{c:"細細個",j:"sai3 sai3 go3",e:"smallish"},{c:"但係",j:"daan6 hai6",e:"but"},{c:"夠瞓",j:"gau3 fan3",e:"enough to sleep"}]},
-    ]},
-  animals: { title:"Talking about pets", speakers:["Friend","You"],
-    lines:[
-      {u:false, c:"你屋企有冇養寵物呀？", j:"nei5 uk1 kei2 jau5 mou5 joeng5 cung2 mat6 aa3?", e:"Do you have pets at home?",
-        bd:[{c:"你",j:"nei5",e:"your"},{c:"屋企",j:"uk1 kei2",e:"home"},{c:"有冇",j:"jau5 mou5",e:"have or not"},{c:"養",j:"joeng5",e:"keep"},{c:"寵物",j:"cung2 mat6",e:"pets"}]},
-      {u:true,  c:"有呀，一隻貓同一隻狗。", j:"jau5 aa3, jat1 zek3 maau1 tung4 jat1 zek3 gau2.", e:"Yes, a cat and a dog.",
-        opts:["有呀，一隻貓同一隻狗。","冇。","我唔知。"], optsJ:["jau5 aa3, jat1 zek3 maau1 tung4 jat1 zek3 gau2.","mou5.","ngo5 m4 zi1."],
-        bd:[{c:"有呀",j:"jau5 aa3",e:"yes"},{c:"一隻",j:"jat1 zek3",e:"one (animal)"},{c:"貓",j:"maau1",e:"cat"},{c:"同",j:"tung4",e:"and"},{c:"狗",j:"gau2",e:"dog"}]},
-      {u:false, c:"嘩，叫咩名？", j:"waa3, giu3 me1 meng2?", e:"Wow, what are their names?",
-        bd:[{c:"嘩",j:"waa3",e:"wow"},{c:"叫",j:"giu3",e:"are called"},{c:"咩名",j:"me1 meng2",e:"what name"}]},
-      {u:true,  c:"貓叫Mochi，狗叫Buddy。", j:"maau1 giu3 Mochi, gau2 giu3 Buddy.", e:"The cat is Mochi, the dog is Buddy.",
-        opts:["貓叫Mochi，狗叫Buddy。","我唔知。","佢哋冇名。"], optsJ:["maau1 giu3 Mochi, gau2 giu3 Buddy.","ngo5 m4 zi1.","keoi5 dei6 mou5 meng2."],
-        bd:[{c:"貓",j:"maau1",e:"cat"},{c:"叫",j:"giu3",e:"is called"},{c:"狗",j:"gau2",e:"dog"}]},
-      {u:false, c:"邊隻乖啲？", j:"bin1 zek3 gwaai1 di1?", e:"Which one is better behaved?",
-        bd:[{c:"邊隻",j:"bin1 zek3",e:"which one"},{c:"乖",j:"gwaai1",e:"well-behaved"},{c:"啲",j:"di1",e:"more"}]},
-      {u:true,  c:"貓乖啲，狗就好頑皮。", j:"maau1 gwaai1 di1, gau2 zau6 hou2 waan4 pei4.", e:"The cat is better behaved, the dog is naughty.",
-        opts:["貓乖啲，狗就好頑皮。","都好乖。","都好頑皮。"], optsJ:["maau1 gwaai1 di1, gau2 zau6 hou2 waan4 pei4.","dou1 hou2 gwaai1.","dou1 hou2 waan4 pei4."],
-        bd:[{c:"貓",j:"maau1",e:"cat"},{c:"乖啲",j:"gwaai1 di1",e:"better behaved"},{c:"狗",j:"gau2",e:"dog"},{c:"就",j:"zau6",e:"is (contrast)"},{c:"好頑皮",j:"hou2 waan4 pei4",e:"very naughty"}]},
-    ]},
-  cooking: { title:"Cooking together", speakers:["Friend","You"],
-    lines:[
-      {u:false, c:"你今晚煮咩呀？", j:"nei5 gam1 maan5 zyu2 me1 aa3?", e:"What are you cooking tonight?",
-        bd:[{c:"你",j:"nei5",e:"you"},{c:"今晚",j:"gam1 maan5",e:"tonight"},{c:"煮",j:"zyu2",e:"cook"},{c:"咩",j:"me1",e:"what"},{c:"呀",j:"aa3",e:"(soft particle)"}]},
-      {u:true,  c:"我想炒個菜，蒸條魚。", j:"ngo5 soeng2 caau2 go3 coi3, zing1 tiu4 jyu2.", e:"I want to stir-fry vegetables and steam a fish.",
-        opts:["我想炒個菜，蒸條魚。","我唔識煮。","出去食。"], optsJ:["ngo5 soeng2 caau2 go3 coi3, zing1 tiu4 jyu2.","ngo5 m4 sik1 zyu2.","ceot1 heoi3 sik6."],
-        bd:[{c:"我",j:"ngo5",e:"I"},{c:"想",j:"soeng2",e:"want to"},{c:"炒",j:"caau2",e:"stir-fry"},{c:"個菜",j:"go3 coi3",e:"vegetables"},{c:"蒸",j:"zing1",e:"steam"},{c:"條魚",j:"tiu4 jyu2",e:"a fish"}]},
-      {u:false, c:"要幫手嗎？", j:"jiu3 bong1 sau2 maa3?", e:"Need help?",
-        bd:[{c:"要",j:"jiu3",e:"need"},{c:"幫手",j:"bong1 sau2",e:"help"},{c:"嗎",j:"maa3",e:"(yes/no)"}]},
-      {u:true,  c:"好呀，幫我切啲菜。", j:"hou2 aa3, bong1 ngo5 cit3 di1 coi3.", e:"Sure, help me cut some vegetables.",
-        opts:["好呀，幫我切啲菜。","唔使。","你坐低啦。"], optsJ:["hou2 aa3, bong1 ngo5 cit3 di1 coi3.","m4 sai2.","nei5 co5 dai1 laa1."],
-        bd:[{c:"好呀",j:"hou2 aa3",e:"sure"},{c:"幫我",j:"bong1 ngo5",e:"help me"},{c:"切",j:"cit3",e:"cut"},{c:"啲菜",j:"di1 coi3",e:"some vegetables"}]},
-      {u:false, c:"加唔加醬油？", j:"gaa1 m4 gaa1 zoeng3 jau4?", e:"Add soy sauce or not?",
-        bd:[{c:"加唔加",j:"gaa1 m4 gaa1",e:"add or not"},{c:"醬油",j:"zoeng3 jau4",e:"soy sauce"}]},
-      {u:true,  c:"加少少，唔該。", j:"gaa1 siu2 siu2, m4 goi1.", e:"A little, thanks.",
-        opts:["加少少，唔該。","好多。","我唔知。"], optsJ:["gaa1 siu2 siu2, m4 goi1.","hou2 do1.","ngo5 m4 zi1."],
-        bd:[{c:"加",j:"gaa1",e:"add"},{c:"少少",j:"siu2 siu2",e:"a little"},{c:"唔該",j:"m4 goi1",e:"thanks"}]},
-    ]},
-  work: { title:"Catching up with a colleague", speakers:["Colleague","You"],
-    lines:[
-      {u:false, c:"今日點呀，忙唔忙？", j:"gam1 jat6 dim2 aa3, mong4 m4 mong4?", e:"How's today, are you busy?",
-        bd:[{c:"今日",j:"gam1 jat6",e:"today"},{c:"點呀",j:"dim2 aa3",e:"how"},{c:"忙唔忙",j:"mong4 m4 mong4",e:"busy or not"}]},
-      {u:true,  c:"好忙，老闆叫我加班。", j:"hou2 mong4, lou5 baan2 giu3 ngo5 gaa1 baan1.", e:"Very busy, the boss told me to do overtime.",
-        opts:["好忙，老闆叫我加班。","好得閒。","唔知。"], optsJ:["hou2 mong4, lou5 baan2 giu3 ngo5 gaa1 baan1.","hou2 dak1 haan4.","m4 zi1."],
-        bd:[{c:"好忙",j:"hou2 mong4",e:"very busy"},{c:"老闆",j:"lou5 baan2",e:"boss"},{c:"叫我",j:"giu3 ngo5",e:"told me"},{c:"加班",j:"gaa1 baan1",e:"overtime"}]},
-      {u:false, c:"截止日期係幾時？", j:"zit6 zi2 jat6 kei4 hai6 gei2 si4?", e:"When's the deadline?",
-        bd:[{c:"截止日期",j:"zit6 zi2 jat6 kei4",e:"deadline"},{c:"係",j:"hai6",e:"is"},{c:"幾時",j:"gei2 si4",e:"when"}]},
-      {u:true,  c:"聽日朝早。", j:"ting1 jat6 ziu1 zou2.", e:"Tomorrow morning.",
-        opts:["聽日朝早。","下星期。","我唔知。"], optsJ:["ting1 jat6 ziu1 zou2.","haa6 sing1 kei4.","ngo5 m4 zi1."],
-        bd:[{c:"聽日",j:"ting1 jat6",e:"tomorrow"},{c:"朝早",j:"ziu1 zou2",e:"morning"}]},
-      {u:false, c:"加油呀！", j:"gaa1 jau4 aa3!", e:"Hang in there!",
-        bd:[{c:"加油",j:"gaa1 jau4",e:"hang in there / go for it"},{c:"呀",j:"aa3",e:"(soft)"}]},
-      {u:true,  c:"多謝你！", j:"do1 ze6 nei5!", e:"Thanks!",
-        opts:["多謝你！","唔係。","你呢？"], optsJ:["do1 ze6 nei5!","m4 hai6.","nei5 ne1?"],
-        bd:[{c:"多謝",j:"do1 ze6",e:"thanks"},{c:"你",j:"nei5",e:"you"}]},
-    ]},
-  school: { title:"Asking about exams", speakers:["Classmate","You"],
-    lines:[
-      {u:false, c:"你準備好考試未？", j:"nei5 zeon2 bei6 hou2 haau2 si3 mei6?", e:"Have you prepared for the exam?",
-        bd:[{c:"你",j:"nei5",e:"you"},{c:"準備好",j:"zeon2 bei6 hou2",e:"prepared"},{c:"考試",j:"haau2 si3",e:"exam"},{c:"未",j:"mei6",e:"yet"}]},
-      {u:true,  c:"未呀，仲有好多功課。", j:"mei6 aa3, zung6 jau5 hou2 do1 gung1 fo3.", e:"Not yet, still lots of homework.",
-        opts:["未呀，仲有好多功課。","已經準備好。","我唔知。"], optsJ:["mei6 aa3, zung6 jau5 hou2 do1 gung1 fo3.","ji5 ging1 zeon2 bei6 hou2.","ngo5 m4 zi1."],
-        bd:[{c:"未呀",j:"mei6 aa3",e:"not yet"},{c:"仲",j:"zung6",e:"still"},{c:"有好多",j:"jau5 hou2 do1",e:"lots of"},{c:"功課",j:"gung1 fo3",e:"homework"}]},
-      {u:false, c:"一齊讀書，得唔得？", j:"jat1 cai4 duk6 syu1, dak1 m4 dak1?", e:"Study together, OK?",
-        bd:[{c:"一齊",j:"jat1 cai4",e:"together"},{c:"讀書",j:"duk6 syu1",e:"study"},{c:"得唔得",j:"dak1 m4 dak1",e:"OK or not"}]},
-      {u:true,  c:"好呀，幾時？", j:"hou2 aa3, gei2 si4?", e:"Sure, when?",
-        opts:["好呀，幾時？","唔得閒。","改日啦。"], optsJ:["hou2 aa3, gei2 si4?","m4 dak1 haan4.","goi2 jat6 laa1."],
-        bd:[{c:"好呀",j:"hou2 aa3",e:"sure"},{c:"幾時",j:"gei2 si4",e:"when"}]},
-      {u:false, c:"今晚七點，去圖書館。", j:"gam1 maan5 cat1 dim2, heoi3 tou4 syu1 gun2.", e:"Tonight at 7, at the library.",
-        bd:[{c:"今晚",j:"gam1 maan5",e:"tonight"},{c:"七點",j:"cat1 dim2",e:"7 o'clock"},{c:"去",j:"heoi3",e:"go"},{c:"圖書館",j:"tou4 syu1 gun2",e:"library"}]},
-      {u:true,  c:"好！見！", j:"hou2! gin3!", e:"OK! See you!",
-        opts:["好！見！","唔好。","點解？"], optsJ:["hou2! gin3!","m4 hou2.","dim2 gaai2?"],
-        bd:[{c:"好",j:"hou2",e:"OK"},{c:"見",j:"gin3",e:"see you"}]},
-    ]},
-  tech: { title:"Sorting out WiFi", speakers:["Friend","You"],
-    lines:[
-      {u:false, c:"嗰度有冇WiFi呀？", j:"go2 dou6 jau5 mou5 WiFi aa3?", e:"Is there WiFi there?",
-        bd:[{c:"嗰度",j:"go2 dou6",e:"there"},{c:"有冇",j:"jau5 mou5",e:"have or not"},{c:"WiFi",j:"WiFi",e:"WiFi"},{c:"呀",j:"aa3",e:"(soft)"}]},
-      {u:true,  c:"有，但係要密碼。", j:"jau5, daan6 hai6 jiu3 mat6 maa5.", e:"Yes, but you need a password.",
-        opts:["有，但係要密碼。","冇。","我唔知。"], optsJ:["jau5, daan6 hai6 jiu3 mat6 maa5.","mou5.","ngo5 m4 zi1."],
-        bd:[{c:"有",j:"jau5",e:"yes / there is"},{c:"但係",j:"daan6 hai6",e:"but"},{c:"要",j:"jiu3",e:"need"},{c:"密碼",j:"mat6 maa5",e:"password"}]},
-      {u:false, c:"密碼係咩呀？", j:"mat6 maa5 hai6 me1 aa3?", e:"What's the password?",
-        bd:[{c:"密碼",j:"mat6 maa5",e:"password"},{c:"係",j:"hai6",e:"is"},{c:"咩",j:"me1",e:"what"}]},
-      {u:true,  c:"等我問下侍應。", j:"dang2 ngo5 man6 haa5 si6 jing3.", e:"Let me ask the waiter.",
-        opts:["等我問下侍應。","我唔知。","唔該。"], optsJ:["dang2 ngo5 man6 haa5 si6 jing3.","ngo5 m4 zi1.","m4 goi1."],
-        bd:[{c:"等",j:"dang2",e:"wait / let"},{c:"我",j:"ngo5",e:"me"},{c:"問",j:"man6",e:"ask"},{c:"下",j:"haa5",e:"a bit"},{c:"侍應",j:"si6 jing3",e:"waiter"}]},
-      {u:false, c:"我電話冇電喇。", j:"ngo5 din6 waa2 mou5 din6 laa3.", e:"My phone is out of battery.",
-        bd:[{c:"我",j:"ngo5",e:"my"},{c:"電話",j:"din6 waa2",e:"phone"},{c:"冇電",j:"mou5 din6",e:"no battery"},{c:"喇",j:"laa3",e:"(particle - now)"}]},
-      {u:true,  c:"我借個叉電器你。", j:"ngo5 ze3 go3 caa1 din6 hei3 nei5.", e:"I'll lend you a charger.",
-        opts:["我借個叉電器你。","唔得。","我都冇電。"], optsJ:["ngo5 ze3 go3 caa1 din6 hei3 nei5.","m4 dak1.","ngo5 dou1 mou5 din6."],
-        bd:[{c:"我",j:"ngo5",e:"I"},{c:"借",j:"ze3",e:"lend"},{c:"個",j:"go3",e:"(measure word)"},{c:"叉電器",j:"caa1 din6 hei3",e:"charger"},{c:"你",j:"nei5",e:"you"}]},
-    ]},
-  money: { title:"At the bank", speakers:["Friend","You"],
-    lines:[
-      {u:false, c:"你要去邊度？", j:"nei5 jiu3 heoi3 bin1 dou6?", e:"Where are you going?",
-        bd:[{c:"你",j:"nei5",e:"you"},{c:"要",j:"jiu3",e:"need to"},{c:"去",j:"heoi3",e:"go"},{c:"邊度",j:"bin1 dou6",e:"where"}]},
-      {u:true,  c:"去銀行唱錢。", j:"heoi3 ngan4 hong4 coeng3 cin2.", e:"To the bank to change money.",
-        opts:["去銀行唱錢。","去食飯。","我唔知。"], optsJ:["heoi3 ngan4 hong4 coeng3 cin2.","heoi3 sik6 faan6.","ngo5 m4 zi1."],
-        bd:[{c:"去",j:"heoi3",e:"go to"},{c:"銀行",j:"ngan4 hong4",e:"bank"},{c:"唱錢",j:"coeng3 cin2",e:"change money"}]},
-      {u:false, c:"用提款機唔好啲咩？", j:"jung6 tai4 fun2 gei1 m4 hou2 di1 me1?", e:"Wouldn't the ATM be better?",
-        bd:[{c:"用",j:"jung6",e:"use"},{c:"提款機",j:"tai4 fun2 gei1",e:"ATM"},{c:"唔好啲咩",j:"m4 hou2 di1 me1",e:"wouldn't be better?"}]},
-      {u:true,  c:"提款機冇外幣。", j:"tai4 fun2 gei1 mou5 ngoi6 bai6.", e:"ATMs don't do foreign currency.",
-        opts:["提款機冇外幣。","好呀。","唔知。"], optsJ:["tai4 fun2 gei1 mou5 ngoi6 bai6.","hou2 aa3.","m4 zi1."],
-        bd:[{c:"提款機",j:"tai4 fun2 gei1",e:"ATM"},{c:"冇",j:"mou5",e:"doesn't have"},{c:"外幣",j:"ngoi6 bai6",e:"foreign currency"}]},
-      {u:false, c:"哦，明白。", j:"o4, ming4 baak6.", e:"Oh, I see.",
-        bd:[{c:"哦",j:"o4",e:"oh"},{c:"明白",j:"ming4 baak6",e:"understand"}]},
-      {u:true,  c:"你都要唱嗎？", j:"nei5 dou1 jiu3 coeng3 maa3?", e:"Do you need to change money too?",
-        opts:["你都要唱嗎？","等我先。","唔該。"], optsJ:["nei5 dou1 jiu3 coeng3 maa3?","dang2 ngo5 sin1.","m4 goi1."],
-        bd:[{c:"你",j:"nei5",e:"you"},{c:"都",j:"dou1",e:"also"},{c:"要唱",j:"jiu3 coeng3",e:"need to change"},{c:"嗎",j:"maa3",e:"(yes/no)"}]},
-    ]},
-  hobbies: { title:"Sharing weekend plans", speakers:["Friend","You"],
-    lines:[
-      {u:false, c:"你週末做咩呀？", j:"nei5 zau1 mut6 zou6 me1 aa3?", e:"What do you do on weekends?",
-        bd:[{c:"你",j:"nei5",e:"you"},{c:"週末",j:"zau1 mut6",e:"weekend"},{c:"做",j:"zou6",e:"do"},{c:"咩",j:"me1",e:"what"},{c:"呀",j:"aa3",e:"(soft)"}]},
-      {u:true,  c:"我鍾意行山，有時影相。", j:"ngo5 zung1 ji3 haang4 saan1, jau5 si4 jing2 soeng2.", e:"I like hiking, sometimes photography.",
-        opts:["我鍾意行山，有時影相。","瞓覺。","唔知。"], optsJ:["ngo5 zung1 ji3 haang4 saan1, jau5 si4 jing2 soeng2.","fan3 gaau3.","m4 zi1."],
-        bd:[{c:"我",j:"ngo5",e:"I"},{c:"鍾意",j:"zung1 ji3",e:"like"},{c:"行山",j:"haang4 saan1",e:"hiking"},{c:"有時",j:"jau5 si4",e:"sometimes"},{c:"影相",j:"jing2 soeng2",e:"photography"}]},
-      {u:false, c:"嘩，咁有意義！", j:"waa3, gam3 jau5 ji3 ji6!", e:"Wow, so meaningful!",
-        bd:[{c:"嘩",j:"waa3",e:"wow"},{c:"咁",j:"gam3",e:"so"},{c:"有意義",j:"jau5 ji3 ji6",e:"meaningful"}]},
-      {u:true,  c:"你呢？得閒做咩？", j:"nei5 ne1? dak1 haan4 zou6 me1?", e:"And you? What do you do in your free time?",
-        opts:["你呢？得閒做咩？","我唔知。","得閒？"], optsJ:["nei5 ne1? dak1 haan4 zou6 me1?","ngo5 m4 zi1.","dak1 haan4?"],
-        bd:[{c:"你呢",j:"nei5 ne1",e:"and you"},{c:"得閒",j:"dak1 haan4",e:"free time"},{c:"做咩",j:"zou6 me1",e:"do what"}]},
-      {u:false, c:"我成日睇戲，又鍾意打機。", j:"ngo5 sing4 jat6 tai2 hei3, jau6 zung1 ji3 daa2 gei1.", e:"I watch movies a lot, and I like games.",
-        bd:[{c:"我",j:"ngo5",e:"I"},{c:"成日",j:"sing4 jat6",e:"all the time"},{c:"睇戲",j:"tai2 hei3",e:"watch movies"},{c:"又",j:"jau6",e:"also"},{c:"打機",j:"daa2 gei1",e:"play games"}]},
-      {u:true,  c:"下次一齊睇戲啦！", j:"haa6 ci3 jat1 cai4 tai2 hei3 laa1!", e:"Let's watch a movie together sometime!",
-        opts:["下次一齊睇戲啦！","我唔睇戲。","唔得閒。"], optsJ:["haa6 ci3 jat1 cai4 tai2 hei3 laa1!","ngo5 m4 tai2 hei3.","m4 dak1 haan4."],
-        bd:[{c:"下次",j:"haa6 ci3",e:"next time"},{c:"一齊",j:"jat1 cai4",e:"together"},{c:"睇戲",j:"tai2 hei3",e:"watch a movie"},{c:"啦",j:"laa1",e:"(let's)"}]},
-    ]},
-  sports: { title:"Inviting someone to play", speakers:["Friend","You"],
-    lines:[
-      {u:false, c:"你聽日得唔得閒？", j:"nei5 ting1 jat6 dak1 m4 dak1 haan4?", e:"Are you free tomorrow?",
-        bd:[{c:"你",j:"nei5",e:"you"},{c:"聽日",j:"ting1 jat6",e:"tomorrow"},{c:"得唔得閒",j:"dak1 m4 dak1 haan4",e:"free or not"}]},
-      {u:true,  c:"得呀，做咩？", j:"dak1 aa3, zou6 me1?", e:"Yes, what's up?",
-        opts:["得呀，做咩？","唔得閒。","唔知。"], optsJ:["dak1 aa3, zou6 me1?","m4 dak1 haan4.","m4 zi1."],
-        bd:[{c:"得呀",j:"dak1 aa3",e:"yes / OK"},{c:"做咩",j:"zou6 me1",e:"do what"}]},
-      {u:false, c:"我哋去打籃球啦。", j:"ngo5 dei6 heoi3 daa2 laam4 kau4 laa1.", e:"Let's go play basketball.",
-        bd:[{c:"我哋",j:"ngo5 dei6",e:"we"},{c:"去",j:"heoi3",e:"go"},{c:"打",j:"daa2",e:"play"},{c:"籃球",j:"laam4 kau4",e:"basketball"},{c:"啦",j:"laa1",e:"(let's)"}]},
-      {u:true,  c:"好呀！邊個球場？", j:"hou2 aa3! bin1 go3 kau4 coeng4?", e:"Sure! Which court?",
-        opts:["好呀！邊個球場？","我唔會打。","唔該。"], optsJ:["hou2 aa3! bin1 go3 kau4 coeng4?","ngo5 m4 wui5 daa2.","m4 goi1."],
-        bd:[{c:"好呀",j:"hou2 aa3",e:"sure"},{c:"邊個",j:"bin1 go3",e:"which"},{c:"球場",j:"kau4 coeng4",e:"court"}]},
-      {u:false, c:"學校嗰個。", j:"hok6 haau6 go2 go3.", e:"The one at the school.",
-        bd:[{c:"學校",j:"hok6 haau6",e:"school"},{c:"嗰個",j:"go2 go3",e:"that one"}]},
-      {u:true,  c:"OK，幾點？", j:"OK, gei2 dim2?", e:"OK, what time?",
-        opts:["OK，幾點？","改日啦。","唔該。"], optsJ:["OK, gei2 dim2?","goi2 jat6 laa1.","m4 goi1."],
-        bd:[{c:"OK",j:"OK",e:"OK"},{c:"幾點",j:"gei2 dim2",e:"what time"}]},
-    ]},
-  emergencies: { title:"Reporting an accident", speakers:["999 Operator","You"],
-    lines:[
-      {u:false, c:"999，咩事呀？", j:"gau2 gau2 gau2, me1 si6 aa3?", e:"999, what's happening?",
-        bd:[{c:"999",j:"gau2 gau2 gau2",e:"999"},{c:"咩事",j:"me1 si6",e:"what's the matter"},{c:"呀",j:"aa3",e:"(soft)"}]},
-      {u:true,  c:"有交通意外，有人受傷。", j:"jau5 gaau1 tung1 ji3 ngoi6, jau5 jan4 sau6 soeng1.", e:"There's a traffic accident, someone is hurt.",
-        opts:["有交通意外，有人受傷。","我唔知。","冇事。"], optsJ:["jau5 gaau1 tung1 ji3 ngoi6, jau5 jan4 sau6 soeng1.","ngo5 m4 zi1.","mou5 si6."],
-        bd:[{c:"有",j:"jau5",e:"there is"},{c:"交通意外",j:"gaau1 tung1 ji3 ngoi6",e:"traffic accident"},{c:"有人",j:"jau5 jan4",e:"someone"},{c:"受傷",j:"sau6 soeng1",e:"is hurt"}]},
-      {u:false, c:"喺邊度？", j:"hai2 bin1 dou6?", e:"Where?",
-        bd:[{c:"喺",j:"hai2",e:"at"},{c:"邊度",j:"bin1 dou6",e:"where"}]},
-      {u:true,  c:"我喺中環，皇后大道。", j:"ngo5 hai2 zung1 waan4, wong4 hau6 daai6 dou6.", e:"I'm in Central, Queen's Road.",
-        opts:["我喺中環，皇后大道。","我唔知。","我喺屋企。"], optsJ:["ngo5 hai2 zung1 waan4, wong4 hau6 daai6 dou6.","ngo5 m4 zi1.","ngo5 hai2 uk1 kei2."],
-        bd:[{c:"我",j:"ngo5",e:"I"},{c:"喺",j:"hai2",e:"am at"},{c:"中環",j:"zung1 waan4",e:"Central"},{c:"皇后大道",j:"wong4 hau6 daai6 dou6",e:"Queen's Road"}]},
-      {u:false, c:"留喺度，救護車快到。", j:"lau4 hai2 dou6, gau3 wu6 ce1 faai3 dou3.", e:"Stay there, ambulance is on the way.",
-        bd:[{c:"留",j:"lau4",e:"stay"},{c:"喺度",j:"hai2 dou6",e:"here"},{c:"救護車",j:"gau3 wu6 ce1",e:"ambulance"},{c:"快到",j:"faai3 dou3",e:"arriving soon"}]},
-      {u:true,  c:"好，多謝你！", j:"hou2, do1 ze6 nei5!", e:"OK, thank you!",
-        opts:["好，多謝你！","唔得。","走啦！"], optsJ:["hou2, do1 ze6 nei5!","m4 dak1.","zau2 laa1!"],
-        bd:[{c:"好",j:"hou2",e:"OK"},{c:"多謝",j:"do1 ze6",e:"thank you"},{c:"你",j:"nei5",e:"you"}]},
-    ]},
-};
-
 // ── Audio ─────────────────────────────────────────────────────────────────────
 let _voices = null;
 
@@ -2416,13 +777,13 @@ function toggleLessonComplete(pathKey, topicKey, tier) {
 function pathCompleteCount(pathKey) {
   const p = state.pathProgress[pathKey];
   if (!p) return 0;
-  const path = LEARNING_PATHS.find(x => x.key === pathKey);
+  const path = store.paths.find(x => x.key === pathKey);
   if (!path) return 0;
   return path.lessons.filter(l => p[lessonKey(l.topic, l.round)]).length;
 }
 // Returns the first incomplete lesson as { topic, tier }, or null if all done.
 function nextIncompleteLesson(pathKey) {
-  const path = LEARNING_PATHS.find(x => x.key === pathKey);
+  const path = store.paths.find(x => x.key === pathKey);
   if (!path) return null;
   const p = state.pathProgress[pathKey] || {};
   const next = path.lessons.find(l => !p[lessonKey(l.topic, l.round)]);
@@ -2741,7 +1102,7 @@ function renderDrawer() {
       </span>
       ${allActive ? '<span style="margin-left:auto;color:#e8c97e;font-size:12px;padding-right:14px">●</span>' : ''}
     </button>`;
-  const categorySubLinks = allLink + CATEGORIES.map(cat => {
+  const categorySubLinks = allLink + store.categoryList.map(cat => {
     const active = state.selectedCategory === cat.key;
     return `
     <button class="nav-item nav-subitem${active?' subitem-active':''}" data-cat-jump="${cat.key}" style="padding-left:50px;border-bottom:none">
@@ -2938,7 +1299,7 @@ function renderLearningPath() {
 function renderPathList() {
   // Group paths by level
   const byLevel = {};
-  LEARNING_PATHS.forEach(p => {
+  store.paths.forEach(p => {
     if (!byLevel[p.level]) byLevel[p.level] = [];
     byLevel[p.level].push(p);
   });
@@ -2984,7 +1345,7 @@ function renderPathList() {
 }
 
 function renderPathTimeline(pathKey) {
-  const path = LEARNING_PATHS.find(p => p.key === pathKey);
+  const path = store.paths.find(p => p.key === pathKey);
   if (!path) return `<div class="path-empty-msg">Path not found.</div>`;
   if (!path.lessons.length) {
     return `
@@ -2999,7 +1360,7 @@ function renderPathTimeline(pathKey) {
   const nextLesson = nextIncompleteLesson(pathKey);
 
   const steps = path.lessons.map((l, i) => {
-    const lesson = LESSONS[l.topic];
+    const lesson = lessonShape(l.topic);
     if (!lesson) return ''; // Defensive — skip if topic doesn't exist
     const tier = l.round;
     const complete = isLessonComplete(pathKey, l.topic, tier);
@@ -3057,8 +1418,55 @@ function renderPlaceholder(icon, title, subtitle) {
 
 function render() {
   const app = document.getElementById('app');
-  const lesson = LESSONS[state.topic];
-  const color  = lesson.color;
+
+  // ── Lazy-load gate ──────────────────────────────────────────────────────
+  // If the current view requires content that hasn't been fetched yet,
+  // show a loading shell and trigger a fetch. render() will be called
+  // again once the fetch resolves.
+  const needsTopic = state.nav === 'topics' && !state.homeView;
+  if (needsTopic && !store.isTopicLoaded(state.topic)) {
+    app.innerHTML = `
+      ${renderHeader(null)}
+      ${renderVoiceBanner()}
+      <div class="content"><div style="padding:40px 20px;text-align:center;color:#888;font-size:14px;">Loading topic…</div></div>
+      ${renderDrawer()}
+    `;
+    attachEvents(null, null);
+    store.loadTopic(state.topic).then(render).catch(err => {
+      console.error('[topic load]', err);
+      app.innerHTML = `
+        ${renderHeader(null)}
+        <div class="content"><div style="padding:40px 20px;text-align:center;color:#922B21;font-size:14px;">Couldn't load topic. Check console.</div></div>
+        ${renderDrawer()}
+      `;
+      attachEvents(null, null);
+    });
+    return;
+  }
+
+  // If the path timeline is open, pre-warm all of its topics so word counts render.
+  if (state.nav === 'path' && state.pathView === 'timeline') {
+    const path = (store.paths || []).find(p => p.key === state.activePath);
+    if (path) {
+      const missing = path.lessons.map(l => l.topic).filter(k => !store.isTopicLoaded(k));
+      if (missing.length) {
+        app.innerHTML = `
+          ${renderHeader(null)}
+          ${renderVoiceBanner()}
+          <div class="content"><div style="padding:40px 20px;text-align:center;color:#888;font-size:14px;">Loading path…</div></div>
+          ${renderDrawer()}
+        `;
+        attachEvents(null, null);
+        store.loadTopics(missing).then(render).catch(err => {
+          console.error('[path load]', err);
+        });
+        return;
+      }
+    }
+  }
+
+  const lesson = needsTopic ? lessonShape(state.topic) : null;
+  const color  = lesson ? lesson.color : null;
 
   let mainContent = '';
   if (state.nav === 'topics') {
@@ -3142,10 +1550,10 @@ function renderVoiceBanner() {
 }
 
 function renderCategoryFilter() {
-  const allCount = Object.keys(TOPIC_CATEGORIES).length;
+  const allCount = Object.keys(store.topicCategories).length;
   const options = [
     { key:'all', label:`📚 All Categories (${allCount})` },
-    ...CATEGORIES.map(c => ({
+    ...store.categoryList.map(c => ({
       key:   c.key,
       label: `${c.icon} ${c.label} (${getTopicsByCategory(c.key).length})`,
     })),
@@ -3160,23 +1568,26 @@ function renderCategoryFilter() {
 }
 
 function renderTopicCard(topicKey) {
-  const lesson = LESSONS[topicKey];
+  const lesson = lessonShape(topicKey);
   if (!lesson) return '';
   const rounds = getAvailableRounds(topicKey);
+  const entry = store.indexEntry(topicKey);
+  // Word count for Round 1, pulled from the index so we don't need to load the topic file.
+  const wordCount = entry?.wordCounts?.['1'] ?? lesson.words.length;
   const pips = rounds.map(r => `<span class="topic-card-pip" style="background:${lesson.color}"></span>`).join('') +
                (rounds.length < 3 ? `<span class="topic-card-pip" style="background:${lesson.color}33"></span>`.repeat(3 - rounds.length) : '');
   return `
     <div class="topic-card" data-topic-card="${topicKey}" style="border-color:${lesson.color}">
       <div class="topic-card-icon">${lesson.icon}</div>
       <div class="topic-card-label">${lesson.label}</div>
-      <div class="topic-card-meta">${rounds.length} tier${rounds.length>1?'s':''} · ${lesson.words.length} words</div>
+      <div class="topic-card-meta">${rounds.length} tier${rounds.length>1?'s':''} · ${wordCount} words</div>
       <div class="topic-card-rounds">${pips}</div>
     </div>`;
 }
 
 function renderHomeScreen() {
   const filter = state.selectedCategory;
-  const sections = CATEGORIES
+  const sections = store.categoryList
     .filter(cat => filter === 'all' || filter === cat.key)
     .map(cat => {
       const topics = getTopicsByCategory(cat.key);
@@ -3219,7 +1630,8 @@ function renderRoundSelector(topicKey, color) {
 }
 
 function renderTopics() {
-  const btns = Object.entries(LESSONS).map(([key, l]) => {
+  const btns = (store.index || []).map(l => {
+    const key = l.key;
     const active = state.topic === key;
     const style = active
       ? `background:${l.color};color:#fff;border-color:${l.color}`
@@ -4194,7 +2606,23 @@ function attachEvents(lesson, color) {
   state.pathProgress = loadPathProgress();   // restore saved completion state
   migratePathProgressIfNeeded();             // convert any legacy keys to composite form
 
-  render(); // first paint immediately
+  // Boot-loading shell while reference data fetches
+  const app = document.getElementById('app');
+  app.innerHTML = `<div style="padding:60px 20px;text-align:center;color:#888;font-family:'Helvetica Neue',Arial,sans-serif;font-size:14px;">Loading…</div>`;
+
+  try {
+    await Promise.all([
+      store.loadIndex(),
+      store.loadCategories(),
+      store.loadPaths(),
+    ]);
+  } catch (err) {
+    console.error('[init] reference data load failed', err);
+    app.innerHTML = `<div style="padding:60px 20px;text-align:center;color:#922B21;font-family:'Helvetica Neue',Arial,sans-serif;font-size:14px;">Couldn't load app data. Check console and reload.</div>`;
+    return;
+  }
+
+  render(); // first paint with index/categories/paths available
 
   const voices = await loadVoices();
   const zhVoices = voices.filter(v => v.lang === 'zh-HK' || v.lang === 'zh-TW' || v.lang.startsWith('zh'));
