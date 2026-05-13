@@ -1,0 +1,2674 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#1a1a2e">
+<link rel="manifest" href="./manifest.json">
+<title>廣東話 Cantonese Learner</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: system-ui, -apple-system, sans-serif; background: #f7f3ee; min-height: 100vh; padding-bottom: 70px; }
+  button { font-family: inherit; }
+  ::-webkit-scrollbar { display: none; }
+
+  /* Hamburger menu */
+  .hamburger { background: transparent; border: none; cursor: pointer; padding: 4px; display: flex; flex-direction: column; gap: 5px; }
+  .hamburger span { display: block; width: 22px; height: 2px; background: #e8c97e; border-radius: 2px; transition: all 0.2s; }
+  .nav-drawer { position: fixed; top: 0; left: 0; right: 0; bottom: 0; z-index: 50; display: none; }
+  .nav-drawer.open { display: block; }
+  .nav-backdrop { position: absolute; inset: 0; background: rgba(0,0,0,0.45); }
+  .nav-panel { position: absolute; top: 0; right: 0; width: 240px; height: 100%; background: #1a1a2e; padding: 0; display: flex; flex-direction: column; box-shadow: -4px 0 24px rgba(0,0,0,0.3); }
+  .nav-panel-header { padding: 20px 20px 16px; border-bottom: 1px solid #2e2e4e; display: flex; align-items: center; justify-content: space-between; }
+  .nav-panel-title { font-size: 13px; color: #e8c97e; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; }
+  .nav-close { background: transparent; border: none; color: #aaa; font-size: 20px; cursor: pointer; padding: 0; line-height: 1; }
+  .nav-item { display: flex; align-items: center; gap: 14px; padding: 16px 20px; cursor: pointer; border: none; background: transparent; width: 100%; text-align: left; transition: background 0.15s; border-bottom: 1px solid #2e2e4e22; }
+  .nav-item:hover { background: #252540; }
+  .nav-item.active { background: #252540; }
+  .nav-item .ni-icon { font-size: 22px; }
+  .nav-item .ni-text { display: flex; flex-direction: column; gap: 2px; }
+  .nav-item .ni-label { font-size: 15px; font-weight: 700; color: #fff; }
+  .nav-item .ni-desc { font-size: 11px; color: #666; }
+  .nav-item.active .ni-label { color: #e8c97e; }
+  .nav-item .ni-tick { margin-left: auto; color: #e8c97e; font-size: 16px; opacity: 0; }
+  .nav-item.active .ni-tick { opacity: 1; }
+
+  /* Header */
+  .header { background: #1a1a2e; padding: 16px 20px 12px; position: sticky; top: 0; z-index: 10; }
+  .header-title { display: flex; align-items: baseline; gap: 10px; }
+  .header-title .zh { font-size: 24px; color: #e8c97e; }
+  .header-title .en { font-size: 11px; color: #aaa; letter-spacing: 2px; text-transform: uppercase; }
+  .tone-key { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px; align-items: center; }
+  .tone-key span { font-size: 11px; font-weight: 700; }
+  .tone-key .label { color: #555; font-weight: 400; }
+
+  /* Voice banner */
+  .voice-banner { margin: 10px 20px 0; padding: 8px 14px; border-radius: 10px; font-size: 11px; display: flex; align-items: center; gap: 6px; }
+  .voice-ok  { background: #eafaf1; border: 1px solid #27AE60; color: #1E8449; }
+  .voice-warn{ background: #fef9e7; border: 1px solid #F0B27A; color: #935116; }
+  .voice-none{ background: #fdedec; border: 1px solid #E74C3C; color: #922B21; }
+
+  /* Topic pills */
+  .topics { display: flex; gap: 8px; overflow-x: auto; padding: 14px 20px 6px; scrollbar-width: none; }
+  .topic-btn { flex-shrink: 0; padding: 7px 13px; border-radius: 30px; cursor: pointer; font-size: 13px; font-weight: 600; border: 2px solid #ddd; background: #fff; color: #555; white-space: nowrap; transition: all 0.18s; }
+  .topic-btn.active { color: #fff; }
+
+  /* Content */
+  .content { padding: 12px 20px 40px; max-width: 680px; margin: 0 auto; }
+  .lesson-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
+  .lesson-title { font-size: 20px; font-weight: 700; margin: 0; }
+  .lesson-count { font-size: 12px; color: #999; margin-top: 2px; }
+  .mode-btn { padding: 7px 16px; border-radius: 30px; cursor: pointer; font-size: 13px; font-weight: 700; transition: all 0.15s; }
+  .hint { font-size: 11px; color: #aaa; margin-bottom: 12px; }
+
+  /* Word grid */
+  .word-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(145px, 1fr)); gap: 10px; }
+
+  /* Word card */
+  .word-card { cursor: pointer; border-radius: 14px; padding: 24px 14px 14px; min-height: 130px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 5px; position: relative; transition: background 0.2s, box-shadow 0.2s; border: 2px solid; user-select: none; }
+  .card-chinese { font-size: 34px; color: #1a1a2e; line-height: 1.2; }
+  .card-jyutping { font-size: 12px; margin-top: 2px; }
+  .card-hint { font-size: 11px; color: #bbb; margin-top: 1px; }
+  .card-english { font-size: 15px; font-weight: 700; color: #fff; text-align: center; padding: 0 8px; }
+  .speak-btn { position: absolute; top: 6px; right: 6px; width: 54px; height: 54px; border-radius: 50%; cursor: pointer; font-size: 22px; display: flex; align-items: center; justify-content: center; transition: all 0.15s; }
+  @keyframes pulse { from { opacity:1; } to { opacity:0.4; } }
+  .speaking { animation: pulse 0.6s infinite alternate; }
+
+  /* Home screen — categorised topic cards */
+  .home-wrap { padding: 12px 20px 32px; max-width: 760px; margin: 0 auto; }
+  .home-header { margin-bottom: 14px; }
+  .home-title { font-size: 20px; font-weight: 700; color: #1a1a2e; margin-bottom: 4px; }
+  .home-subtitle { font-size: 12px; color: #999; }
+
+  .cat-filter-wrap { margin-bottom: 14px; }
+  .cat-filter-select { width: 100%; padding: 12px 36px 12px 14px; font-size: 14px; font-weight: 600; color: #1a1a2e; background: #fff; border: 2px solid #ddd; border-radius: 12px; cursor: pointer; appearance: none; -webkit-appearance: none; -moz-appearance: none; background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%231a1a2e'><path d='M7 10l5 5 5-5z'/></svg>"); background-repeat: no-repeat; background-position: right 10px center; background-size: 22px; font-family: inherit; }
+  .cat-filter-select:focus { outline: none; border-color: #1a1a2e; }
+
+  .cat-section { margin-bottom: 24px; }
+  .cat-section-header { display: flex; align-items: baseline; gap: 8px; margin-bottom: 10px; padding: 0 4px; }
+  .cat-section-title { font-size: 14px; font-weight: 700; color: #1a1a2e; }
+  .cat-section-count { font-size: 11px; color: #aaa; font-weight: 600; }
+
+  .topic-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 10px; }
+  .topic-card { cursor: pointer; border-radius: 14px; padding: 16px 14px; background: #fff; border: 2px solid; min-height: 100px; display: flex; flex-direction: column; gap: 4px; transition: all 0.15s; position: relative; user-select: none; }
+  .topic-card:active { transform: scale(0.97); }
+  .topic-card-icon { font-size: 28px; line-height: 1; margin-bottom: 4px; }
+  .topic-card-label { font-size: 14px; font-weight: 700; color: #1a1a2e; line-height: 1.2; }
+  .topic-card-meta { font-size: 11px; color: #888; margin-top: auto; }
+  .topic-card-rounds { display: flex; gap: 3px; margin-top: 4px; }
+  .topic-card-pip { width: 6px; height: 6px; border-radius: 50%; }
+
+  /* Round selector inside topic page */
+  .round-selector { display: flex; gap: 6px; margin-bottom: 12px; align-items: center; }
+  .round-label { font-size: 11px; color: #888; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; margin-right: 4px; }
+  .round-btn { padding: 5px 12px; border-radius: 16px; border: 2px solid; background: #fff; cursor: pointer; font-size: 12px; font-weight: 700; transition: all 0.15s; }
+  .round-btn.active { color: #fff; }
+
+  /* Back-to-home button */
+  .back-home-btn { display: inline-flex; align-items: center; gap: 5px; background: transparent; border: none; color: #888; font-size: 13px; cursor: pointer; padding: 4px 0; margin-bottom: 8px; font-weight: 600; }
+  .back-home-btn:hover { color: #1a1a2e; }
+
+  /* Translate */
+  .translate-wrap { padding: 16px 20px 32px; max-width: 680px; margin: 0 auto; }
+  .translate-header { margin-bottom: 16px; }
+  .translate-header h2 { font-size: 20px; font-weight: 700; color: #2C3E7A; margin-bottom: 4px; }
+  .translate-header p { font-size: 12px; color: #999; }
+  .translate-input-wrap { background: #fff; border-radius: 14px; padding: 14px; border: 1px solid #eee; margin-bottom: 12px; }
+  .translate-input { width: 100%; min-height: 60px; border: none; outline: none; font-size: 16px; font-family: inherit; resize: vertical; color: #1a1a2e; background: transparent; }
+  .translate-input::placeholder { color: #bbb; }
+  .translate-input-actions { display: flex; gap: 8px; align-items: center; margin-top: 10px; padding-top: 10px; border-top: 1px solid #f4f0eb; }
+  .translate-mic { width: 38px; height: 38px; border-radius: 50%; border: 1.5px solid #2C3E7A; background: transparent; color: #2C3E7A; cursor: pointer; font-size: 16px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: all 0.15s; }
+  .translate-mic.listening { background: #E74C3C; border-color: #E74C3C; color: #fff; animation: micPulse 1s infinite; }
+  .translate-direction-row { display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 12px; padding: 8px 14px; background: #fff; border-radius: 30px; border: 1px solid #eee; }
+  .translate-dir-label { font-size: 13px; font-weight: 700; color: #2C3E7A; padding: 4px 10px; border-radius: 16px; }
+  .translate-dir-label.muted { color: #aaa; font-weight: 500; }
+  .translate-dir-swap { background: #2C3E7A; border: none; cursor: pointer; font-size: 16px; color: #fff; width: 38px; height: 38px; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 6px rgba(44,62,122,0.3); transition: all 0.15s; flex-shrink: 0; }
+  .translate-dir-swap:active { transform: scale(0.92); }
+  .translate-listening-hint { font-size: 11px; color: #E74C3C; font-weight: 700; margin-top: 6px; text-align: center; animation: pulse 0.6s infinite alternate; }
+  .translate-go { flex: 1; padding: 10px 18px; background: #2C3E7A; color: #fff; border: none; border-radius: 10px; font-size: 14px; font-weight: 700; cursor: pointer; }
+  .translate-go:disabled { opacity: 0.5; cursor: default; }
+  .translate-clear { padding: 10px 14px; background: transparent; color: #888; border: 1px solid #ddd; border-radius: 10px; font-size: 13px; cursor: pointer; }
+  .translate-loading { padding: 30px 16px; text-align: center; color: #888; font-size: 13px; }
+  .translate-error { background: #fde8ea; border: 1px solid #E74C3C; color: #7b1c1c; padding: 12px 16px; border-radius: 10px; font-size: 13px; margin-bottom: 12px; }
+  .translate-result { background: #fff; border-radius: 14px; padding: 16px 18px; border: 2px solid #2C3E7A22; }
+  .translate-zh { font-size: 22px; line-height: 1.4; color: #1a1a2e; margin-bottom: 8px; }
+  .translate-jp { font-size: 14px; margin-bottom: 8px; }
+  .translate-result-actions { display: flex; gap: 8px; margin-top: 10px; padding-top: 10px; border-top: 1px solid #f4f0eb; }
+  .translate-action-btn { flex: 1; padding: 8px 12px; border-radius: 8px; border: 1.5px solid #2C3E7A; background: transparent; color: #2C3E7A; font-size: 12px; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 4px; }
+  .translate-action-btn.primary { background: #2C3E7A; color: #fff; }
+
+  /* API key setup */
+  .apikey-setup { background: #fff; border-radius: 14px; padding: 22px 18px; border: 2px dashed #2C3E7A; margin-bottom: 16px; text-align: center; }
+  .apikey-setup h3 { font-size: 16px; color: #2C3E7A; margin-bottom: 8px; }
+  .apikey-setup p { font-size: 13px; color: #666; line-height: 1.5; margin-bottom: 12px; }
+  .apikey-setup small { color: #aaa; font-size: 11px; }
+  .apikey-input { width: 100%; padding: 10px 12px; border: 1px solid #ddd; border-radius: 8px; font-size: 13px; font-family: monospace; margin-bottom: 10px; box-sizing: border-box; }
+  .apikey-save { padding: 10px 18px; background: #2C3E7A; color: #fff; border: none; border-radius: 8px; font-size: 13px; font-weight: 700; cursor: pointer; width: 100%; }
+  .apikey-toggle-row { display: flex; justify-content: flex-end; margin-top: 6px; }
+  .apikey-toggle-btn { background: transparent; border: none; color: #999; font-size: 11px; cursor: pointer; padding: 0; text-decoration: underline; }
+
+  /* Patterns section */
+  .patterns-header { padding: 16px 20px 0; max-width: 680px; margin: 0 auto; }
+  .patterns-header h2 { font-size: 20px; font-weight: 700; color: #2C3E7A; margin-bottom: 4px; }
+  .patterns-header p { font-size: 12px; color: #999; margin-bottom: 16px; }
+  .pattern-card { background: #fff; border-radius: 16px; margin: 0 20px 14px; border: 1px solid #eee; overflow: hidden; max-width: 680px; }
+  .pattern-head { padding: 14px 16px 12px; background: #2C3E7A; }
+  .pattern-number { font-size: 10px; color: rgba(255,255,255,0.5); font-weight: 700; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 2px; }
+  .pattern-label { font-size: 17px; font-weight: 700; color: #fff; margin-bottom: 6px; }
+  .pattern-structure { display: inline-block; background: rgba(255,255,255,0.12); border-radius: 8px; padding: 4px 10px; font-size: 12px; color: rgba(255,255,255,0.85); font-family: monospace; }
+  .pattern-body { padding: 12px 16px 14px; }
+  .pattern-note { font-size: 12px; color: #888; margin-bottom: 12px; line-height: 1.5; font-style: italic; }
+  .pattern-examples { display: flex; flex-direction: column; gap: 8px; }
+  .pattern-example { display: flex; align-items: center; gap: 10px; background: #f7f3ee; border-radius: 10px; padding: 10px 12px; }
+  .pattern-ex-text { flex: 1; }
+  .pattern-ex-zh { font-size: 17px; color: #1a1a2e; margin-bottom: 3px; line-height: 1.3; }
+  .pattern-ex-jp { font-size: 12px; margin-bottom: 3px; }
+  .pattern-ex-en { font-size: 11px; color: #888; }
+  .pattern-ex-play { width: 36px; height: 36px; border-radius: 50%; border: 1.5px solid #2C3E7A; background: transparent; color: #2C3E7A; cursor: pointer; font-size: 14px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: all 0.15s; }
+  .pattern-ex-play.speaking { background: #2C3E7A; color: #fff; animation: pulse 0.6s infinite alternate; }
+
+  /* Sentences */
+  .sentences { margin-top: 28px; }
+  .sentences h3 { font-size: 14px; font-weight: 700; margin-bottom: 12px; color: #1a1a2e; }
+  .sentence-card { background: #fff; border-radius: 12px; padding: 14px 16px; margin-bottom: 10px; border: 1px solid #eee; display: flex; align-items: flex-start; gap: 12px; }
+  .sentence-body { flex: 1; }
+  .sentence-chinese { font-size: 17px; color: #1a1a2e; margin-bottom: 4px; line-height: 1.4; }
+  .sentence-jyutping { font-size: 12px; margin-bottom: 4px; }
+  .sentence-english { font-size: 12px; color: #888; }
+  .sentence-play { flex-shrink: 0; width: 44px; height: 44px; border-radius: 50%; cursor: pointer; font-size: 18px; display: flex; align-items: center; justify-content: center; transition: all 0.15s; border: 1.5px solid; background: transparent; margin-top: 2px; }
+
+  .bubble-row.right .bubble .bubble-jyutping span { color: rgba(255,255,255,0.88) !important; }
+
+  /* Sub-tabs (Words | Conversation) */
+  .subtabs { display: flex; gap: 6px; margin-bottom: 16px; }
+  .subtab-btn { flex: 1; padding: 8px 10px; border-radius: 10px; border: 2px solid #ddd; background: #fff; color: #888; font-size: 13px; font-weight: 600; cursor: pointer; transition: all 0.15s; text-align: center; }
+  .subtab-btn.active { color: #fff; border-color: transparent; }
+
+  /* Conversation */
+  .convo-scenario { font-size: 12px; color: #888; margin-bottom: 14px; font-style: italic; }
+  .convo-controls { display: flex; gap: 8px; margin-bottom: 18px; flex-wrap: wrap; }
+  .convo-ctrl-btn { padding: 7px 14px; border-radius: 20px; border: 2px solid #ddd; background: #fff; color: #555; font-size: 12px; font-weight: 600; cursor: pointer; transition: all 0.15s; }
+  .convo-ctrl-btn.on { color: #fff; border-color: transparent; }
+  .bubble-row { display: flex; margin-bottom: 14px; }
+  .bubble-row.left  { justify-content: flex-start; }
+  .bubble-row.right { justify-content: flex-end; }
+  .bubble-wrap { max-width: 80%; }
+  .bubble-name { font-size: 10px; color: #aaa; margin-bottom: 3px; padding: 0 4px; }
+  .bubble-row.right .bubble-name { text-align: right; }
+  .bubble { border-radius: 16px; padding: 12px 14px; position: relative; }
+  .bubble-row.left  .bubble { background: #fff; border: 1px solid #eee; border-bottom-left-radius: 4px; }
+  .bubble-row.right .bubble { border-bottom-right-radius: 4px; color: #fff; }
+  .bubble-chinese  { font-size: 17px; line-height: 1.4; margin-bottom: 4px; }
+  .bubble-jyutping { font-size: 11px; margin-bottom: 3px; }
+  .bubble-english  { font-size: 11px; opacity: 0.75; }
+  .bubble-play-row { display: flex; justify-content: flex-end; margin-top: 8px; }
+  .bubble-row.left .bubble-play-row { justify-content: flex-start; }
+  .bubble-play { width: 32px; height: 32px; border-radius: 50%; border: 1.5px solid; background: transparent; cursor: pointer; font-size: 13px; display: flex; align-items: center; justify-content: center; transition: all 0.15s; }
+  .gap-prompt { font-size: 12px; color: #888; margin-bottom: 8px; font-style: italic; }
+  .gap-options { display: flex; flex-direction: column; gap: 7px; }
+  .gap-btn { padding: 10px 14px; border-radius: 10px; border: 2px solid #ddd; background: #fff; color: #1a1a2e; font-size: 13px; font-weight: 600; cursor: pointer; text-align: left; transition: all 0.15s; }
+  .gap-btn.correct { background: #d4edda; border-color: #27AE60; color: #1a5e2a; }
+  .gap-btn.wrong   { background: #fde8ea; border-color: #E74C3C; color: #7b1c1c; }
+  .gap-btn:disabled { cursor: default; }
+
+  /* Speak mode */
+  .speak-card { background: #fff; border-radius: 16px; padding: 24px 20px; border: 3px solid; margin-bottom: 16px; text-align: center; }
+  .speak-prompt { font-size: 11px; color: #aaa; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 8px; }
+  .speak-target-zh { font-size: 28px; line-height: 1.3; margin-bottom: 8px; color: #1a1a2e; }
+  .speak-target-jp { font-size: 14px; margin-bottom: 6px; }
+  .speak-target-en { font-size: 12px; color: #888; margin-bottom: 18px; }
+  .mic-btn { width: 80px; height: 80px; border-radius: 50%; border: none; font-size: 32px; cursor: pointer; display: flex; align-items: center; justify-content: center; margin: 0 auto 14px; transition: all 0.2s; box-shadow: 0 4px 16px rgba(0,0,0,0.15); }
+  .mic-btn.idle { background: #fff; }
+  .mic-btn.listening { animation: micPulse 1s infinite; box-shadow: 0 0 0 0 currentColor; }
+  @keyframes micPulse { 0% { box-shadow: 0 0 0 0 rgba(231,76,60,0.6); } 100% { box-shadow: 0 0 0 18px rgba(231,76,60,0); } }
+  .speak-status { font-size: 13px; color: #888; min-height: 20px; margin-bottom: 14px; }
+  .speak-heard { background: #f7f3ee; border-radius: 10px; padding: 10px 14px; margin-bottom: 14px; font-size: 18px; color: #1a1a2e; }
+  .speak-result-good { background: #d4edda; border: 2px solid #27AE60; color: #1a5e2a; padding: 12px 16px; border-radius: 10px; font-weight: 700; margin-bottom: 14px; }
+  .speak-result-bad  { background: #fde8ea; border: 2px solid #E74C3C; color: #7b1c1c; padding: 12px 16px; border-radius: 10px; margin-bottom: 14px; font-size: 13px; }
+  .speak-actions { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+  .speak-action-btn { padding: 9px 20px; border-radius: 20px; border: none; font-size: 13px; font-weight: 700; cursor: pointer; }
+  .speak-unsupported { padding: 30px 20px; text-align: center; background: #fef9e7; border: 1px solid #F0B27A; border-radius: 12px; color: #935116; font-size: 13px; line-height: 1.6; }
+
+  .speak-nav { display: flex; justify-content: space-between; align-items: center; font-size: 12px; color: #aaa; margin-bottom: 12px; }
+
+  /* Breakdown panel */
+  .breakdown-panel { margin-top: 8px; background: #f7f3ee; border-radius: 10px; padding: 10px 12px; border: 1px solid #e8e4df; }
+  .breakdown-row { display: flex; align-items: baseline; gap: 8px; padding: 5px 0; border-bottom: 1px solid #eee; }
+  .breakdown-row:last-child { border-bottom: none; }
+  .breakdown-zh { font-size: 16px; color: #1a1a2e; min-width: 36px; }
+  .breakdown-jp { font-size: 12px; flex: 1; }
+  .breakdown-en { font-size: 11px; color: #888; text-align: right; }
+  .breakdown-btn { display: flex; align-items: center; gap: 4px; margin-top: 6px; background: transparent; border: none; cursor: pointer; font-size: 11px; font-weight: 700; padding: 0; }
+
+  /* Bottom nav */
+  .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; background: #1a1a2e; display: flex; border-top: 1px solid #2e2e4e; z-index: 20; }
+  .nav-btn { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 10px 0 12px; cursor: pointer; border: none; background: transparent; gap: 4px; transition: all 0.15s; }
+  .nav-btn .nav-icon { font-size: 22px; line-height: 1; }
+  .nav-btn .nav-label { font-size: 10px; font-weight: 600; letter-spacing: 0.5px; text-transform: uppercase; color: #555; transition: color 0.15s; }
+  .nav-btn.active .nav-label { color: #e8c97e; }
+  .nav-btn.active .nav-icon { filter: drop-shadow(0 0 4px #e8c97e88); }
+
+  /* Placeholder screens */
+  .placeholder-screen { padding: 60px 24px; text-align: center; }
+  .placeholder-screen .ph-icon { font-size: 52px; margin-bottom: 16px; }
+  .placeholder-screen h2 { font-size: 22px; font-weight: 700; color: #1a1a2e; margin-bottom: 8px; }
+  .placeholder-screen p { font-size: 14px; color: #aaa; line-height: 1.6; max-width: 280px; margin: 0 auto; }
+  .placeholder-screen .ph-tag { display: inline-block; margin-top: 20px; padding: 6px 16px; border-radius: 20px; background: #1a1a2e; color: #e8c97e; font-size: 12px; font-weight: 700; }
+
+  /* Tone guide */
+  .tone-guide { margin-top: 28px; background: #fff; border-radius: 14px; padding: 16px 18px; border: 1px solid #eee; }
+  .tone-guide h3 { font-size: 14px; font-weight: 700; margin-bottom: 10px; }
+  .tone-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .tone-row { display: flex; align-items: center; gap: 7px; font-size: 12px; }
+  .tone-dot { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; }
+  .tone-desc { color: #666; }
+  .tone-ex { font-weight: 700; margin-left: auto; }
+  .tone-note { font-size: 11px; color: #bbb; margin-top: 10px; line-height: 1.5; }
+
+  /* Quiz */
+  .quiz-meta { display: flex; justify-content: space-between; margin-bottom: 10px; }
+  .quiz-meta span { font-size: 13px; }
+  .progress-bar { height: 4px; background: #eee; border-radius: 4px; margin-bottom: 20px; }
+  .progress-fill { height: 4px; border-radius: 4px; transition: width 0.35s; }
+  .quiz-card { text-align: center; background: #fafafa; border-radius: 16px; padding: 24px 16px; margin-bottom: 20px; }
+  .quiz-label { font-size: 11px; color: #aaa; letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 6px; }
+  .quiz-chinese { font-size: 44px; color: #1a1a2e; line-height: 1.2; }
+  .quiz-jyutping { font-size: 13px; margin-top: 6px; }
+  .quiz-listen { margin-top: 10px; background: transparent; border-radius: 20px; padding: 4px 14px; cursor: pointer; font-size: 12px; }
+  .choices { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .choice-btn { padding: 13px 10px; border-radius: 12px; cursor: pointer; font-size: 14px; font-weight: 600; color: #1a1a2e; transition: all 0.15s; border: 2px solid #ddd; background: #fff; }
+  .choice-btn.correct { background: #d4edda; border-color: #27AE60; }
+  .choice-btn.wrong   { background: #f8d7da; border-color: #E74C3C; }
+  .choice-btn:disabled { cursor: default; }
+
+  /* Quiz result */
+  .result { text-align: center; padding: 40px 16px; }
+  .result-emoji { font-size: 56px; }
+  .result-score { font-size: 26px; font-weight: 700; margin-top: 8px; }
+  .result-msg { font-size: 14px; color: #666; margin-top: 6px; }
+  .back-btn { margin-top: 24px; padding: 10px 28px; color: #fff; border: none; border-radius: 30px; font-size: 14px; cursor: pointer; font-weight: 700; }
+
+  /* Lesson note panel (intro context above words) */
+  .lesson-note { border-radius: 12px; padding: 12px 14px; margin-bottom: 14px; border-left: 4px solid; background: #fff; box-shadow: 0 1px 4px rgba(0,0,0,0.04); }
+  .lesson-note-title { font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 6px; }
+  .lesson-note-body { font-size: 13px; line-height: 1.5; color: #333; }
+  .lesson-note-body strong { color: #1a1a2e; }
+
+  /* Learning Path */
+  .path-list { padding: 12px 20px 40px; max-width: 680px; margin: 0 auto; }
+  .path-level-header { font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: #888; margin: 18px 4px 10px; }
+  .path-level-header:first-child { margin-top: 4px; }
+  .path-card { background: #fff; border-radius: 14px; padding: 16px 18px; border: 2px solid #e8c97e; cursor: pointer; transition: all 0.15s; user-select: none; margin-bottom: 12px; }
+  .path-card:active { transform: scale(0.98); }
+  .path-card.locked { border-color: #ddd; cursor: default; opacity: 0.7; }
+  .path-card.locked:active { transform: none; }
+  .path-card-top { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; }
+  .path-card-icon { font-size: 28px; line-height: 1; }
+  .path-card-title { flex: 1; font-size: 16px; font-weight: 700; color: #1a1a2e; }
+  .path-card-badge { font-size: 10px; font-weight: 700; padding: 3px 8px; border-radius: 10px; letter-spacing: 0.5px; text-transform: uppercase; }
+  .path-card-badge.coming { background: #eee; color: #888; }
+  .path-card-desc { font-size: 12px; color: #777; margin-bottom: 10px; line-height: 1.4; }
+  .path-card-progress { display: flex; align-items: center; gap: 10px; }
+  .path-progress-bar { flex: 1; height: 6px; background: #f0e6d2; border-radius: 3px; overflow: hidden; }
+  .path-progress-fill { height: 100%; background: #e8c97e; transition: width 0.3s; }
+  .path-progress-count { font-size: 11px; color: #777; font-weight: 700; white-space: nowrap; }
+
+  /* Path timeline */
+  .path-timeline-wrap { padding: 12px 20px 40px; max-width: 680px; margin: 0 auto; }
+  .path-timeline-back { display: inline-flex; align-items: center; gap: 5px; background: transparent; border: none; color: #888; font-size: 13px; cursor: pointer; padding: 4px 0; margin-bottom: 8px; font-weight: 600; }
+  .path-timeline-back:hover { color: #1a1a2e; }
+  .path-timeline-header { margin-bottom: 18px; }
+  .path-timeline-title { font-size: 22px; font-weight: 700; color: #1a1a2e; margin-bottom: 4px; }
+  .path-timeline-sub { font-size: 12px; color: #888; margin-bottom: 10px; }
+  .path-timeline-progress { display: flex; align-items: center; gap: 10px; margin-top: 10px; }
+
+  .path-timeline { position: relative; padding-left: 8px; }
+  .path-step { position: relative; display: flex; gap: 14px; padding: 0 0 4px 0; min-height: 64px; }
+  .path-step-rail { position: relative; width: 32px; flex-shrink: 0; display: flex; flex-direction: column; align-items: center; }
+  .path-step-node { width: 32px; height: 32px; border-radius: 50%; background: #fff; border: 2.5px solid #ccc; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; color: #888; z-index: 1; flex-shrink: 0; }
+  .path-step-line { position: absolute; top: 32px; bottom: -4px; left: 50%; width: 2px; background: #e0e0e0; transform: translateX(-50%); }
+  .path-step:last-child .path-step-line { display: none; }
+  .path-step.done .path-step-node { background: #4CAF50; border-color: #4CAF50; color: #fff; }
+  .path-step.done .path-step-line { background: #4CAF50; }
+  .path-step.next .path-step-node { border-color: #e8c97e; box-shadow: 0 0 0 4px #e8c97e33; color: #1a1a2e; }
+
+  .path-step-body { flex: 1; padding-bottom: 14px; }
+  .path-step-card { background: #fff; border-radius: 12px; padding: 12px 14px; border: 1.5px solid #eee; cursor: pointer; transition: all 0.15s; user-select: none; }
+  .path-step-card:active { transform: scale(0.98); }
+  .path-step.next .path-step-card { border-color: #e8c97e; box-shadow: 0 2px 12px #e8c97e22; }
+  .path-step.done .path-step-card { background: #f7faf5; border-color: #d4e7c5; }
+  .path-step-row { display: flex; align-items: center; gap: 10px; }
+  .path-step-icon { font-size: 22px; line-height: 1; }
+  .path-step-text { flex: 1; min-width: 0; }
+  .path-step-title { font-size: 14px; font-weight: 700; color: #1a1a2e; line-height: 1.2; }
+  .path-step-meta { font-size: 11px; color: #888; margin-top: 2px; }
+  .path-next-badge { display: inline-block; font-size: 9px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: #1a1a2e; background: #e8c97e; padding: 2px 7px; border-radius: 8px; margin-bottom: 5px; }
+
+  .path-complete-btn { background: transparent; border: 2px solid #ccc; border-radius: 50%; width: 28px; height: 28px; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 14px; color: transparent; flex-shrink: 0; transition: all 0.15s; padding: 0; }
+  .path-complete-btn:active { transform: scale(0.9); }
+  .path-step.done .path-complete-btn { background: #4CAF50; border-color: #4CAF50; color: #fff; }
+
+  .path-empty-msg { text-align: center; padding: 40px 16px; color: #888; font-size: 13px; }
+</style>
+</head>
+<body>
+
+<div id="app"></div>
+
+<script>
+// ── Data Store ──────────────────────────────────────────────────────────────
+// All content lives in /data/ as JSON. The store loads reference data on init
+// and lazy-loads per-topic JSON on demand, caching in memory.
+const store = {
+  index:           null,   // [ {key, label, icon, color, rounds} ]
+  categoryList:    null,   // [ {key, label, icon} ]
+  topicCategories: null,   // { greetings: 'everyday', ... }
+  paths:           null,   // [ {key, label, ..., lessons} ]
+  topicCache:      {},     // { greetings: {meta, rounds}, ... }
+
+  // Index lookups — synchronous after init
+  indexEntry(key) { return (this.index || []).find(t => t.key === key); },
+  availableRounds(key) {
+    const e = this.indexEntry(key);
+    return e ? e.rounds.slice() : [1];
+  },
+  topicsByCategory(catKey) {
+    if (!this.topicCategories) return [];
+    return Object.keys(this.topicCategories).filter(t => this.topicCategories[t] === catKey);
+  },
+
+  // Topic metadata — falls back to index entry when topic file not yet loaded
+  topicMeta(key) {
+    const cached = this.topicCache[key];
+    if (cached) return cached.meta;
+    const e = this.indexEntry(key);
+    return e ? { label: e.label, icon: e.icon, color: e.color } : null;
+  },
+
+  // Topic content — must be loaded first; returns null otherwise
+  isTopicLoaded(key) { return !!this.topicCache[key]; },
+  roundData(key, round) {
+    const t = this.topicCache[key];
+    return t ? (t.rounds[String(round)] || null) : null;
+  },
+
+  // Reference-data loaders (called once on init)
+  async loadIndex() {
+    const r = await fetch('./data/topics_index.json');
+    this.index = (await r.json()).topics;
+  },
+  async loadCategories() {
+    const r = await fetch('./data/categories.json');
+    const j = await r.json();
+    this.categoryList = j.list;
+    this.topicCategories = j.topic_map;
+  },
+  async loadPaths() {
+    const r = await fetch('./data/learning_paths.json');
+    this.paths = (await r.json()).paths;
+  },
+
+  // Topic loader (cached) — returns the cached topic object
+  async loadTopic(key) {
+    if (this.topicCache[key]) return this.topicCache[key];
+    const r = await fetch('./data/topics/' + key + '.json');
+    if (!r.ok) throw new Error('Topic ' + key + ' failed to load: ' + r.status);
+    const j = await r.json();
+    this.topicCache[key] = j;
+    return j;
+  },
+
+  // Convenience: load several topics in parallel
+  async loadTopics(keys) {
+    await Promise.all(keys.filter(k => !this.topicCache[k]).map(k => this.loadTopic(k)));
+  },
+};
+
+// ── Round accessors — single point of truth for "what content is in topic+round" ──
+// These assume the topic has been loaded; return safe defaults otherwise.
+function getAvailableRounds(topic) {
+  return store.availableRounds(topic);
+}
+function getRoundWords(topic, round) {
+  return store.roundData(topic, round)?.words || [];
+}
+function getRoundSentences(topic, round) {
+  return store.roundData(topic, round)?.sentences || [];
+}
+function getRoundConvo(topic, round) {
+  return store.roundData(topic, round)?.convo || null;
+}
+function getRoundNote(topic, round) {
+  return store.roundData(topic, round)?.note || null;
+}
+function getTopicsByCategory(categoryKey) {
+  return store.topicsByCategory(categoryKey);
+}
+
+// ── Lesson shape helper ──
+// Synthesises the legacy { label, icon, color, words, note } object that the
+// existing render functions expect, drawn from the cached topic file.
+// Falls back to index metadata if topic file isn't loaded yet.
+function lessonShape(key) {
+  const meta = store.topicMeta(key);
+  if (!meta) return { label: '', icon: '', color: '#888', words: [], note: null };
+  const r1 = store.roundData(key, 1) || {};
+  return {
+    label: meta.label,
+    icon:  meta.icon,
+    color: meta.color,
+    words: r1.words || [],
+    note:  r1.note  || null,
+  };
+}
+
+const TONES = {
+  "1":{"color":"#E74C3C","desc":"High level",  "ex":"詩 si1"},
+  "2":{"color":"#E67E22","desc":"High rising", "ex":"史 si2"},
+  "3":{"color":"#c8a200","desc":"Mid level",   "ex":"試 si3"},
+  "4":{"color":"#27AE60","desc":"Low falling", "ex":"時 si4"},
+  "5":{"color":"#2980B9","desc":"Low rising",  "ex":"市 si5"},
+  "6":{"color":"#8E44AD","desc":"Low level",   "ex":"事 si6"},
+};
+
+// ── Patterns ──────────────────────────────────────────────────────────────────
+const PATTERNS = [
+  { label:"I want to…",              structure:"ngo5 soeng2 + [verb]",
+    note:"The most useful starter — attach any verb to express what you want to do.",
+    examples:[{c:"我想食",j:"ngo5 soeng2 sik6",e:"I want to eat"},{c:"我想飲茶",j:"ngo5 soeng2 jam2 caa4",e:"I want to drink tea"},{c:"我想去",j:"ngo5 soeng2 heoi3",e:"I want to go"}]},
+  { label:"I'll have / I need…",     structure:"ngo5 jiu3 + [noun]",
+    note:"Use for ordering food, asking for things, or stating what you need.",
+    examples:[{c:"我要水",j:"ngo5 jiu3 seoi2",e:"I need water"},{c:"我要三個",j:"ngo5 jiu3 saam1 go3",e:"I'll take three"},{c:"我要呢個",j:"ngo5 jiu3 ni1 go3",e:"I want this one"}]},
+  { label:"Do you have…?",           structure:"jau5 mou5 + [noun]?",
+    note:"A very natural way to ask about availability — literally 'have or not have?'",
+    examples:[{c:"有冇茶？",j:"jau5 mou5 caa4?",e:"Do you have tea?"},{c:"有冇折？",j:"jau5 mou5 zit3?",e:"Is there a discount?"},{c:"有冇平啲？",j:"jau5 mou5 peng4 di1?",e:"Is there a cheaper one?"}]},
+  { label:"Where is…?",              structure:"[noun] + hai2 bin1 dou6?",
+    note:"Put the thing you're looking for at the start, then ask where it is.",
+    examples:[{c:"洗手間喺邊度？",j:"sai2 sau2 gaan1 hai2 bin1 dou6?",e:"Where is the bathroom?"},{c:"地鐵站喺邊度？",j:"dei6 tit3 zaam6 hai2 bin1 dou6?",e:"Where is the MTR station?"},{c:"呢個喺邊度？",j:"ni1 go3 hai2 bin1 dou6?",e:"Where is this?"}]},
+  { label:"How much?",               structure:"gei2 cin2?",
+    note:"Works alone or after pointing at something. Add ni1 go3 (this one) for clarity.",
+    examples:[{c:"幾錢？",j:"gei2 cin2?",e:"How much?"},{c:"呢個幾錢？",j:"ni1 go3 gei2 cin2?",e:"How much is this one?"},{c:"大概幾錢？",j:"daai6 koi3 gei2 cin2?",e:"Approximately how much?"}]},
+  { label:"Please give me…",         structure:"m4 goi1 bei2 + [noun] + ngo5",
+    note:"Very common in restaurants and shops. Note how 'me' comes at the end.",
+    examples:[{c:"唔該俾杯茶我",j:"m4 goi1 bei2 bui1 caa4 ngo5",e:"Please give me a cup of tea"},{c:"唔該俾個袋我",j:"m4 goi1 bei2 go3 doi2 ngo5",e:"Please give me a bag"},{c:"唔該俾筷子我",j:"m4 goi1 bei2 faai3 zi2 ngo5",e:"Please give me chopsticks"}]},
+  { label:"Very…",                   structure:"hou2 + [adjective]",
+    note:"hou2 intensifies any adjective. Stack it for extra emphasis — hou2 hou2 means 'very very good'.",
+    examples:[{c:"好熱",j:"hou2 jit6",e:"Very hot"},{c:"好味",j:"hou2 mei6",e:"Very delicious"},{c:"好貴",j:"hou2 gwai3",e:"Very expensive"},{c:"好好",j:"hou2 hou2",e:"Very good"}]},
+  { label:"Not / Don't…",            structure:"m4 + [verb or adjective]",
+    note:"m4 is the general negation particle. Place it directly before the verb or adjective.",
+    examples:[{c:"我唔明",j:"ngo5 m4 ming4",e:"I don't understand"},{c:"唔貴",j:"m4 gwai3",e:"Not expensive"},{c:"我唔要",j:"ngo5 m4 jiu3",e:"I don't want it"},{c:"唔係",j:"m4 hai6",e:"That's not right"}]},
+  { label:"Yes/no question",         structure:"[statement] + maa3?",
+    note:"Add maa3 to the end of any statement to turn it into a yes/no question.",
+    examples:[{c:"你好嗎？",j:"nei5 hou2 maa3?",e:"Are you well?"},{c:"貴嗎？",j:"gwai3 maa3?",e:"Is it expensive?"},{c:"你識講廣東話嗎？",j:"nei5 sik1 gong2 gwong2 dung1 waa6 maa3?",e:"Do you speak Cantonese?"}]},
+  { label:"What would you like to…?",structure:"soeng2 + [verb] + di1 me1?",
+    note:"A polite way to ask what someone wants — common in service situations.",
+    examples:[{c:"想食啲咩？",j:"soeng2 sik6 di1 me1?",e:"What would you like to eat?"},{c:"想飲啲咩？",j:"soeng2 jam2 di1 me1?",e:"What would you like to drink?"},{c:"想買啲咩？",j:"soeng2 maai5 di1 me1?",e:"What would you like to buy?"}]},
+  { label:"I feel…",                 structure:"ngo5 gok3 dak1 + [adjective]",
+    note:"Use this to describe how you're feeling physically or emotionally.",
+    examples:[{c:"我覺得好攰",j:"ngo5 gok3 dak1 hou2 gui6",e:"I feel very tired"},{c:"我覺得好凍",j:"ngo5 gok3 dak1 hou2 dung3",e:"I feel very cold"},{c:"我覺得唔舒服",j:"ngo5 gok3 dak1 m4 syu1 fuk6",e:"I feel unwell"}]},
+  { label:"Going to…",               structure:"heoi3 + [place]",
+    note:"Simple and direct. Works for saying where you're going or asking where to go.",
+    examples:[{c:"去中環",j:"heoi3 zung1 waan4",e:"Going to Central"},{c:"去邊度？",j:"heoi3 bin1 dou6?",e:"Where are you going?"},{c:"我去超市",j:"ngo5 heoi3 ciu1 si5",e:"I'm going to the supermarket"}]},
+  { label:"See you at / on…",        structure:"[time] + gin3",
+    note:"Put any time word before gin3 to arrange when to meet.",
+    examples:[{c:"聽日見",j:"ting1 jat6 gin3",e:"See you tomorrow"},{c:"朝早見",j:"ziu1 zou2 gin3",e:"See you in the morning"},{c:"星期六見",j:"sing1 kei4 luk6 gin3",e:"See you Saturday"}]},
+  { label:"Is that ok / Can I?",     structure:"dak1 m4 dak1?",
+    note:"Literally 'ok or not ok?' — use to seek permission or check if something works.",
+    examples:[{c:"咁得唔得？",j:"gam2 dak1 m4 dak1?",e:"Is this ok?"},{c:"我坐喺呢度得唔得？",j:"ngo5 co5 hai2 ni1 dou6 dak1 m4 dak1?",e:"Can I sit here?"},{c:"而家去得唔得？",j:"ji4 gaa1 heoi3 dak1 m4 dak1?",e:"Can we go now?"}]},
+  { label:"Too…!",                   structure:"taai3 + [adjective] + laa3",
+    note:"Express that something is excessive. laa3 adds a sense of finality or mild complaint.",
+    examples:[{c:"太貴喇",j:"taai3 gwai3 laa3",e:"Too expensive!"},{c:"太熱喇",j:"taai3 jit6 laa3",e:"Too hot!"},{c:"太多喇",j:"taai3 do1 laa3",e:"Too much!"}]},
+  { label:"Can I / May I…?",         structure:"ho2 m4 ho2 ji5 + [verb]?",
+    note:"A polite way to ask permission — more formal than dak1 m4 dak1.",
+    examples:[{c:"可唔可以講慢啲？",j:"ho2 m4 ho2 ji5 gong2 maan6 di1?",e:"Can you speak more slowly?"},{c:"可唔可以睇吓？",j:"ho2 m4 ho2 ji5 tai2 haa5?",e:"Can I take a look?"},{c:"可唔可以等我？",j:"ho2 m4 ho2 ji5 dang2 ngo5?",e:"Can you wait for me?"}]},
+  { label:"What is…?",               structure:"[noun] + hai6 mat1 je5?",
+    note:"Use when you want to know what something is called or what something means.",
+    examples:[{c:"呢個係咩嘢？",j:"ni1 go3 hai6 mat1 je5?",e:"What is this?"},{c:"呢個字係咩嘢？",j:"ni1 go3 zi6 hai6 mat1 je5?",e:"What does this word mean?"},{c:"果個係咩嘢？",j:"go2 go3 hai6 mat1 je5?",e:"What is that?"}]},
+  { label:"Why…?",                   structure:"dim2 gaai3 + [statement]?",
+    note:"Place dim2 gaai3 at the start of any statement to turn it into a 'why' question.",
+    examples:[{c:"點解咁貴？",j:"dim2 gaai3 gam3 gwai3?",e:"Why is it so expensive?"},{c:"點解唔去？",j:"dim2 gaai3 m4 heoi3?",e:"Why aren't you going?"},{c:"點解咁熱？",j:"dim2 gaai3 gam3 jit6?",e:"Why is it so hot?"}]},
+  { label:"There's also… / And also…",structure:"zung6 jau5 + [noun/verb]",
+    note:"Use to add something on top of what's already been said — great for ordering.",
+    examples:[{c:"仲有茶",j:"zung6 jau5 caa4",e:"And also tea"},{c:"仲有一個",j:"zung6 jau5 jat1 go3",e:"One more"},{c:"仲有咩嘢？",j:"zung6 jau5 mat1 je5?",e:"What else is there?"}]},
+  { label:"A bit more / less…",      structure:"[adjective] + di1",
+    note:"Adding di1 after an adjective softens it — useful for polite requests.",
+    examples:[{c:"慢啲",j:"maan6 di1",e:"A bit slower"},{c:"平啲",j:"peng4 di1",e:"A bit cheaper"},{c:"多啲",j:"do1 di1",e:"A bit more"},{c:"少啲",j:"siu2 di1",e:"A bit less"}]},
+  { label:"I like…",                 structure:"ngo5 zung1 ji3 + [noun/verb]",
+    note:"Express preferences for things, food, activities or people.",
+    examples:[{c:"我鍾意食",j:"ngo5 zung1 ji3 sik6",e:"I like eating"},{c:"我鍾意茶",j:"ngo5 zung1 ji3 caa4",e:"I like tea"},{c:"我鍾意呢個",j:"ngo5 zung1 ji3 ni1 go3",e:"I like this one"}]},
+  { label:"Give [someone] [something]",structure:"bei2 + [thing] + [person]",
+    note:"bei2 means 'give' or 'let'. The person receiving comes at the end — opposite to English.",
+    examples:[{c:"俾我",j:"bei2 ngo5",e:"Give me / let me"},{c:"俾佢睇",j:"bei2 keoi5 tai2",e:"Let him see it"},{c:"我俾你",j:"ngo5 bei2 nei5",e:"I'll give you"}]},
+  { label:"I will…",                 structure:"ngo5 wui5 + [verb]",
+    note:"Use wui5 to talk about future intentions or promises.",
+    examples:[{c:"我會去",j:"ngo5 wui5 heoi3",e:"I will go"},{c:"我會記得",j:"ngo5 wui5 gei3 dak1",e:"I will remember"},{c:"我會打俾你",j:"ngo5 wui5 daa2 bei2 nei5",e:"I will call you"}]},
+  { label:"Have never / Not yet done",structure:"mei6 + [verb] + gwo",
+    note:"mei6...gwo expresses something you haven't experienced yet. Very useful for travel.",
+    examples:[{c:"我未食過",j:"ngo5 mei6 sik6 gwo",e:"I've never eaten it"},{c:"我未去過",j:"ngo5 mei6 heoi3 gwo",e:"I've never been there"},{c:"我未見過",j:"ngo5 mei6 gin3 gwo",e:"I've never seen it"}]},
+  { label:"Already done…",           structure:"[verb] + zo2 laa3",
+    note:"zo2 marks completion — something has already happened. laa3 adds a sense of 'just now'.",
+    examples:[{c:"食咗喇",j:"sik6 zo2 laa3",e:"Already eaten"},{c:"去咗喇",j:"heoi3 zo2 laa3",e:"Already gone"},{c:"買咗喇",j:"maai5 zo2 laa3",e:"Already bought it"}]},
+  { label:"How long?",               structure:"gei2 noi6?",
+    note:"Use to ask about duration — how long something takes or lasts.",
+    examples:[{c:"幾耐？",j:"gei2 noi6?",e:"How long?"},{c:"要等幾耐？",j:"jiu3 dang2 gei2 noi6?",e:"How long do I have to wait?"},{c:"去幾耐？",j:"heoi3 gei2 noi6?",e:"How long does it take to get there?"}]},
+  { label:"Together / Let's…",       structure:"jat1 cai4 + [verb]",
+    note:"jat1 cai4 means 'together' — add it before any verb to suggest doing something jointly.",
+    examples:[{c:"一齊去",j:"jat1 cai4 heoi3",e:"Let's go together"},{c:"一齊食",j:"jat1 cai4 sik6",e:"Let's eat together"},{c:"一齊啦",j:"jat1 cai4 laa1",e:"Come on, let's do it together"}]},
+  { label:"First… then…",            structure:"sin1 + [verb]… zoi3 + [verb]",
+    note:"sin1 means 'first' and zoi3 means 'then/again' — use them to sequence actions.",
+    examples:[{c:"先食，再去",j:"sin1 sik6, zoi3 heoi3",e:"First eat, then go"},{c:"先講，再做",j:"sin1 gong2, zoi3 zou6",e:"First talk, then act"},{c:"先等我",j:"sin1 dang2 ngo5",e:"Wait for me first"}]},
+  { label:"I think…",                structure:"ngo5 lam2 + [statement]",
+    note:"ngo5 lam2 softly expresses an opinion or guess — less certain than stating a fact.",
+    examples:[{c:"我諗係",j:"ngo5 lam2 hai6",e:"I think so"},{c:"我諗唔係",j:"ngo5 lam2 m4 hai6",e:"I don't think so"},{c:"我諗佢唔嚟",j:"ngo5 lam2 keoi5 m4 lai4",e:"I think he's not coming"}]},
+  { label:"Wait a moment / Wait for…",structure:"dang2 + [person/time]",
+    note:"dang2 means 'wait'. Use alone for 'wait a moment' or add who/how long to wait.",
+    examples:[{c:"等我",j:"dang2 ngo5",e:"Wait for me"},{c:"等吓",j:"dang2 haa5",e:"Wait a moment"},{c:"等一陣",j:"dang2 jat1 zan6",e:"Wait a little while"}]},
+];
+// ── Audio ─────────────────────────────────────────────────────────────────────
+let _voices = null;
+
+function loadVoices() {
+  return new Promise(resolve => {
+    const v = window.speechSynthesis.getVoices();
+    if (v.length > 0) { _voices = v; resolve(v); return; }
+    const handler = () => {
+      _voices = window.speechSynthesis.getVoices();
+      resolve(_voices);
+      window.speechSynthesis.removeEventListener('voiceschanged', handler);
+    };
+    window.speechSynthesis.addEventListener('voiceschanged', handler);
+    setTimeout(() => { _voices = window.speechSynthesis.getVoices(); resolve(_voices); }, 2500);
+  });
+}
+
+function pickVoicePair(voices) {
+  const zh = voices.filter(v => v.lang === 'zh-HK' || v.lang === 'zh-TW' || v.lang.startsWith('zh'));
+  if (zh.length === 0) return { a: null, b: null };
+  const a = zh[0];
+  // Prefer the 5th voice (index 4) as speaker B — user confirmed it's male on their device
+  const b = zh[4] || zh.find(v => v !== a) || null;
+  return { a, b };
+}
+
+async function speak(text, onEnd, voiceOverride, pitchOverride, langOverride) {
+  if (!window.speechSynthesis) return;
+  window.speechSynthesis.cancel();
+  const voices = _voices || await loadVoices();
+  const utt = new SpeechSynthesisUtterance(text);
+  utt.lang = langOverride || 'zh-HK';
+  const rates = { slow: 0.6, normal: 0.8, fast: 1.1 };
+  utt.rate  = rates[state.speed] || 0.8;
+  utt.pitch = pitchOverride !== undefined ? pitchOverride : 1.0;
+  const { a } = pickVoicePair(voices);
+  if (voiceOverride) utt.voice = voiceOverride;
+  else if (a) utt.voice = a;
+  if (onEnd) utt.onend = onEnd;
+  window.speechSynthesis.speak(utt);
+}
+
+// Speak as a specific conversation speaker — uses subtle pitch variation
+async function speakAs(text, isUser, onEnd) {
+  const voices = _voices || await loadVoices();
+  const { a } = pickVoicePair(voices);
+  const pitch = isUser ? 0.85 : 1.1;
+  speak(text, onEnd, a, pitch, 'zh-HK');
+}
+
+// ── Helpers ───────────────────────────────────────────────────────────────────
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length-1; i>0; i--) {
+    const j = Math.floor(Math.random()*(i+1));
+    [a[i],a[j]]=[a[j],a[i]];
+  }
+  return a;
+}
+
+function colorJyutping(text) {
+  return text.split(' ').map(syl => {
+    const tone = syl.match(/[1-6]/);
+    const color = tone ? TONES[tone[0]].color : '#777';
+    return `<span style="color:${color};font-weight:700;margin-right:3px">${syl}</span>`;
+  }).join('');
+}
+
+// ── State ─────────────────────────────────────────────────────────────────────
+let state = {
+  speed: 'normal',
+  nav: 'topics',
+  drawerOpen: false,
+  homeView: true,                 // true = show home screen, false = inside a topic
+  selectedCategory: 'all',        // 'all' or a category key
+  currentRound: 1,
+  pathView: 'list',               // 'list' = paths list, 'timeline' = inside a path
+  activePath: 'beginner',         // which path is being viewed
+  pathProgress: {},               // { beginner: { greetings:true, ... }, ... } — loaded from localStorage
+  fromPath: false,                // true when user entered a topic via the Learning Path
+  translate: {
+    direction:   'en-yue',     // 'en-yue' | 'yue-en'
+    inputText:   '',
+    result:      null,
+    loading:     false,
+    error:       null,
+    showApiKey:  false,
+    listening:   false,
+  },
+  topic: 'greetings',
+  mode:  'study',
+  tab:   'words',          // 'words' | 'convo'
+  flipped: {},
+  speaking: null,
+  sentenceBreakdownOpen: {},
+  sentenceRevealed: {},
+  patternRevealed: {},
+  voiceInfo: null,
+  quiz: null,
+  convo: {
+    convMode: 'read',
+    playingLine: null,
+    gapAnswers: {},
+    bubbleRevealed: {},
+    breakdownOpen: {},
+    speakStep: 0,
+    speakStatus: 'idle',     // 'idle' | 'listening' | 'matched' | 'mismatch'
+    speakHeard: '',
+    speakAutoPlayed: false,
+    speakRevealed: {},
+  },
+};
+
+function getQuizInitState(words) {
+  const queue = shuffle(words).slice(0, Math.min(words.length, 8));
+  return {
+    queue,
+    idx: 0,
+    score: 0,
+    selected: null,
+    done: false,
+    choices: buildChoices(queue[0], words),
+  };
+}
+
+function buildChoices(answer, all) {
+  const others = shuffle(all.filter(w => w.c !== answer.c)).slice(0, 3);
+  return shuffle([...others, answer]);
+}
+
+function playAllConvo(lines, idx) {
+  if (idx >= lines.length) { state.convo.playingLine = null; render(); return; }
+  state.convo.playingLine = idx;
+  render();
+  const line = lines[idx];
+  speakAs(line.c, line.u, () => setTimeout(() => playAllConvo(lines, idx + 1), 500));
+}
+
+// ── Translation (provider-abstracted) ─────────────────────────────────────────
+// Configuration — change provider here to swap. Each provider implementation
+// returns the same standardised shape: { zh, jp, en, bd, pattern? }
+const TRANSLATION_PROVIDER = 'gemini';   // 'gemini' | 'claude' | 'openai'
+
+function getApiKey() {
+  return localStorage.getItem('cantonese_api_key') || '';
+}
+function setApiKey(key) {
+  localStorage.setItem('cantonese_api_key', key);
+}
+
+// Path progress persistence
+const PATH_PROGRESS_KEY = 'cantonese_path_progress';
+
+// Composite lesson key: 'greetings-t1', 'greetings-t2' etc.
+// Allows the same topic at multiple tiers within a single path.
+function lessonKey(topicKey, tier) {
+  return topicKey + '-t' + tier;
+}
+
+function loadPathProgress() {
+  try {
+    const raw = localStorage.getItem(PATH_PROGRESS_KEY);
+    return raw ? JSON.parse(raw) : {};
+  } catch (e) {
+    return {};
+  }
+}
+function savePathProgress() {
+  try {
+    localStorage.setItem(PATH_PROGRESS_KEY, JSON.stringify(state.pathProgress));
+  } catch (e) {
+    // localStorage full or unavailable — fail silently, in-memory state still works
+  }
+}
+
+// One-time migration: convert legacy progress keys (no tier suffix) to composite keys.
+// Pre-refactor data was stored as pathProgress.beginner.greetings = true.
+// Post-refactor it should be pathProgress.beginner['greetings-t1'] = true.
+// Legacy entries are assumed to be tier 1 since that's all the previous build referenced.
+function migratePathProgressIfNeeded() {
+  let changed = false;
+  Object.keys(state.pathProgress).forEach(pathKey => {
+    const bucket = state.pathProgress[pathKey];
+    if (!bucket || typeof bucket !== 'object') return;
+    Object.keys(bucket).forEach(key => {
+      // Composite keys end with -t<number>. Anything else is legacy.
+      if (!/-t\d+$/.test(key)) {
+        bucket[lessonKey(key, 1)] = bucket[key];
+        delete bucket[key];
+        changed = true;
+      }
+    });
+  });
+  if (changed) savePathProgress();
+}
+
+function isLessonComplete(pathKey, topicKey, tier) {
+  const bucket = state.pathProgress[pathKey];
+  return !!(bucket && bucket[lessonKey(topicKey, tier)]);
+}
+function toggleLessonComplete(pathKey, topicKey, tier) {
+  if (!state.pathProgress[pathKey]) state.pathProgress[pathKey] = {};
+  const k = lessonKey(topicKey, tier);
+  if (state.pathProgress[pathKey][k]) {
+    delete state.pathProgress[pathKey][k];
+  } else {
+    state.pathProgress[pathKey][k] = true;
+  }
+  savePathProgress();
+}
+function pathCompleteCount(pathKey) {
+  const p = state.pathProgress[pathKey];
+  if (!p) return 0;
+  const path = store.paths.find(x => x.key === pathKey);
+  if (!path) return 0;
+  return path.lessons.filter(l => p[lessonKey(l.topic, l.round)]).length;
+}
+// Returns the first incomplete lesson as { topic, tier }, or null if all done.
+function nextIncompleteLesson(pathKey) {
+  const path = store.paths.find(x => x.key === pathKey);
+  if (!path) return null;
+  const p = state.pathProgress[pathKey] || {};
+  const next = path.lessons.find(l => !p[lessonKey(l.topic, l.round)]);
+  return next ? { topic: next.topic, tier: next.round } : null;
+}
+
+function buildPrompt(text, direction) {
+  const isToYue = direction === 'en-yue';
+  const sourceLabel = isToYue ? 'English' : 'Cantonese (in characters or jyutping)';
+  const targetLabel = isToYue ? 'Cantonese' : 'English';
+  return `You are a Cantonese language learning assistant. Translate the following ${sourceLabel} text to ${targetLabel}.
+
+Important rules:
+- Use COLLOQUIAL Cantonese (HK style), not Mandarin/Standard Written Chinese
+- Use Cantonese-specific characters where appropriate (e.g. 嘅, 咗, 嚟, 喺, 唔, 啲, 咁, 嗰)
+- Use jyutping romanization (with tone numbers 1-6)
+- Provide a word-by-word breakdown grouping characters into meaningful chunks
+
+Input: "${text}"
+
+Respond ONLY with valid JSON in this exact format (no markdown, no code fences, no commentary):
+{
+  "zh": "Cantonese characters here",
+  "jp": "jyutping with tone numbers here",
+  "en": "English meaning here",
+  "bd": [
+    {"c": "chunk in Chinese", "j": "chunk in jyutping", "e": "chunk meaning in English"}
+  ]
+}`;
+}
+
+function parseAiResponse(text) {
+  // Strip code fences if present, find first { ... } block
+  const cleaned = text.replace(/```json\s*|\s*```/g, '').trim();
+  const match = cleaned.match(/\{[\s\S]*\}/);
+  if (!match) throw new Error('No JSON found in response');
+  const obj = JSON.parse(match[0]);
+  if (!obj.zh || !obj.jp || !obj.en || !Array.isArray(obj.bd)) {
+    throw new Error('Response missing required fields');
+  }
+  return obj;
+}
+
+// ── Provider implementations ──
+async function callGemini(prompt, apiKey) {
+  const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-lite:generateContent?key=${encodeURIComponent(apiKey)}`;
+  const body = JSON.stringify({
+    contents: [{ parts: [{ text: prompt }] }],
+    generationConfig: { temperature: 0.3, responseMimeType: 'application/json' },
+  });
+
+  // Retry up to 3 times on transient errors (503, 502, 429-with-retry)
+  const maxAttempts = 3;
+  let lastErr;
+  for (let attempt = 1; attempt <= maxAttempts; attempt++) {
+    const res = await fetch(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body,
+    });
+    if (res.ok) {
+      const data = await res.json();
+      const text = data?.candidates?.[0]?.content?.parts?.[0]?.text;
+      if (!text) throw new Error('Gemini returned empty response');
+      return text;
+    }
+    const errText = await res.text();
+    const isTransient = res.status === 503 || res.status === 502 || res.status === 504;
+    lastErr = `Gemini error ${res.status}: ${errText.slice(0, 200)}`;
+    if (!isTransient || attempt === maxAttempts) {
+      throw new Error(lastErr);
+    }
+    // Exponential backoff: 1s, then 2s
+    await new Promise(r => setTimeout(r, attempt * 1000));
+  }
+  throw new Error(lastErr);
+}
+
+async function callClaude(prompt, apiKey) {
+  const res = await fetch('https://api.anthropic.com/v1/messages', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'x-api-key': apiKey,
+      'anthropic-version': '2023-06-01',
+    },
+    body: JSON.stringify({
+      model: 'claude-haiku-4-5-20251001',
+      max_tokens: 1024,
+      messages: [{ role: 'user', content: prompt }],
+    }),
+  });
+  if (!res.ok) {
+    const errText = await res.text();
+    throw new Error(`Claude error ${res.status}: ${errText.slice(0, 200)}`);
+  }
+  const data = await res.json();
+  const text = data?.content?.[0]?.text;
+  if (!text) throw new Error('Claude returned empty response');
+  return text;
+}
+
+async function callOpenAI(prompt, apiKey) {
+  const res = await fetch('https://api.openai.com/v1/chat/completions', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + apiKey },
+    body: JSON.stringify({
+      model: 'gpt-4o-mini',
+      messages: [{ role: 'user', content: prompt }],
+      response_format: { type: 'json_object' },
+    }),
+  });
+  if (!res.ok) {
+    const errText = await res.text();
+    throw new Error(`OpenAI error ${res.status}: ${errText.slice(0, 200)}`);
+  }
+  const data = await res.json();
+  const text = data?.choices?.[0]?.message?.content;
+  if (!text) throw new Error('OpenAI returned empty response');
+  return text;
+}
+
+// Single entry point — rest of app calls only this
+async function translateText(text, direction = 'en-yue') {
+  const apiKey = getApiKey();
+  if (!apiKey) throw new Error('Missing API key');
+  const prompt = buildPrompt(text, direction);
+  let raw;
+  switch (TRANSLATION_PROVIDER) {
+    case 'gemini': raw = await callGemini(prompt, apiKey); break;
+    case 'claude': raw = await callClaude(prompt, apiKey); break;
+    case 'openai': raw = await callOpenAI(prompt, apiKey); break;
+    default: throw new Error('Unknown provider: ' + TRANSLATION_PROVIDER);
+  }
+  return parseAiResponse(raw);
+}
+
+// ── Speech recognition ───────────────────────────────────────────────────────
+let _recognition = null;
+
+function normalizeChinese(text) {
+  // Strip whitespace and Chinese punctuation for comparison
+  return (text || '').replace(/[\s，。！？、,!?.\-]/g, '');
+}
+
+// Edit-distance (Levenshtein) between two strings. Order-sensitive.
+function editDistance(a, b) {
+  if (a === b) return 0;
+  if (!a.length) return b.length;
+  if (!b.length) return a.length;
+  // Use a rolling row of size b.length+1
+  let prev = new Array(b.length + 1);
+  let curr = new Array(b.length + 1);
+  for (let j = 0; j <= b.length; j++) prev[j] = j;
+  for (let i = 1; i <= a.length; i++) {
+    curr[0] = i;
+    for (let j = 1; j <= b.length; j++) {
+      const cost = a[i - 1] === b[j - 1] ? 0 : 1;
+      curr[j] = Math.min(
+        curr[j - 1] + 1,       // insertion
+        prev[j]   + 1,         // deletion
+        prev[j - 1] + cost     // substitution
+      );
+    }
+    [prev, curr] = [curr, prev];
+  }
+  return prev[b.length];
+}
+
+function fuzzyMatch(heard, target) {
+  const h = normalizeChinese(heard);
+  const t = normalizeChinese(target);
+  if (!h || !t) return false;
+  if (h === t) return true;
+  // Allow edits up to ~30% of target length, with a small floor for very
+  // short utterances (so 1-char slip on a 3-char phrase still counts).
+  const dist = editDistance(h, t);
+  const allowed = Math.max(1, Math.floor(t.length * 0.3));
+  return dist <= allowed;
+}
+
+function startListening() {
+  const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SpeechRec) return;
+  if (_recognition) { try { _recognition.abort(); } catch(e){} }
+
+  const rec = new SpeechRec();
+  rec.lang = 'yue-Hant-HK';
+  rec.continuous = true;        // keep listening until user stops
+  rec.interimResults = true;    // capture words as they're heard
+  rec.maxAlternatives = 3;
+
+  let finalTranscript = '';
+  let interimTranscript = '';
+
+  rec.onresult = (e) => {
+    interimTranscript = '';
+    for (let i = e.resultIndex; i < e.results.length; i++) {
+      const transcript = e.results[i][0].transcript;
+      if (e.results[i].isFinal) {
+        finalTranscript += transcript;
+      } else {
+        interimTranscript += transcript;
+      }
+    }
+    state.convo.speakHeard = (finalTranscript + interimTranscript).trim() || '…';
+    render();
+  };
+  rec.onerror = (e) => {
+    if (e.error === 'no-speech' || e.error === 'aborted') return;  // user-initiated stop
+    state.convo.speakStatus = 'mismatch';
+    state.convo.speakHeard = '(error: ' + e.error + ')';
+    render();
+  };
+  rec.onend = () => {
+    // Recognition session ended — if user is still in 'listening' mode, evaluate result
+    if (state.convo.speakStatus === 'listening') {
+      const heard = finalTranscript.trim();
+      if (!heard) {
+        state.convo.speakStatus = 'idle';
+        state.convo.speakHeard  = '';
+      } else {
+        const target = getRoundConvo(state.topic, state.currentRound).lines[state.convo.speakStep].c;
+        const matched = fuzzyMatch(heard, target);
+        state.convo.speakHeard  = heard;
+        state.convo.speakStatus = matched ? 'matched' : 'mismatch';
+        if (matched) speak(target);
+      }
+      render();
+    }
+  };
+
+  state.convo.speakStatus = 'listening';
+  state.convo.speakHeard = '';
+  render();
+  try { rec.start(); } catch(e) {
+    state.convo.speakStatus = 'idle';
+    render();
+  }
+  _recognition = rec;
+}
+
+function stopListening() {
+  if (_recognition) { try { _recognition.abort(); } catch(e){} _recognition = null; }
+}
+
+// User pressed stop — gracefully end so onend fires and processes result
+function finishListening() {
+  if (_recognition) { try { _recognition.stop(); } catch(e){} }
+}
+
+// ── Translate speech input ───────────────────────────────────────────────────
+let _translateRec = null;
+
+function startTranslateListening() {
+  const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SpeechRec) {
+    state.translate.error = 'Speech recognition not supported on this browser';
+    render();
+    return;
+  }
+  if (_translateRec) { try { _translateRec.abort(); } catch(e){} }
+
+  const isToYue = state.translate.direction === 'en-yue';
+  const rec = new SpeechRec();
+  // For en-yue mode: input is English. For yue-en mode: input is Cantonese.
+  rec.lang = isToYue ? 'en-US' : 'yue-Hant-HK';
+  rec.continuous = true;
+  rec.interimResults = true;
+  rec.maxAlternatives = 1;
+
+  let finalTranscript = '';
+
+  rec.onresult = (e) => {
+    // Same pattern as the Convo speech handler: only process results from
+    // event.resultIndex onwards, with finalTranscript persisting across events.
+    // Looping from 0 stutters on devices where e.results accumulates cumulative
+    // entries instead of deltas (Chrome Android with continuous:true).
+    let interimText = '';
+    for (let i = e.resultIndex; i < e.results.length; i++) {
+      const seg = e.results[i][0].transcript;
+      if (e.results[i].isFinal) finalTranscript += seg;
+      else                      interimText     += seg;
+    }
+    state.translate.inputText = (finalTranscript + interimText).trim();
+    // Update textarea directly without full re-render to avoid focus loss
+    const ta = document.getElementById('translate-input');
+    if (ta) ta.value = state.translate.inputText;
+  };
+  rec.onerror = (e) => {
+    if (e.error === 'no-speech' || e.error === 'aborted') return;
+    state.translate.error = 'Speech error: ' + e.error;
+    state.translate.listening = false;
+    render();
+  };
+  rec.onend = () => {
+    if (state.translate.listening) {
+      state.translate.listening = false;
+      state.translate.inputText = finalTranscript.trim() || state.translate.inputText;
+      render();
+    }
+  };
+
+  state.translate.listening = true;
+  state.translate.error = null;
+  render();
+  try { rec.start(); } catch(e) {
+    state.translate.listening = false;
+    state.translate.error = 'Could not start microphone';
+    render();
+  }
+  _translateRec = rec;
+}
+
+function stopTranslateListening() {
+  if (_translateRec) { try { _translateRec.stop(); } catch(e){} }
+}
+
+// ── Render ────────────────────────────────────────────────────────────────────
+function renderDrawer() {
+  const items = [
+    { key:'topics',    icon:'📖', label:'Topics',         desc:'Vocabulary, sentences & conversations' },
+    { key:'path',      icon:'🛤️', label:'Learning Path',  desc:'Curated curriculum, ordered & tracked'  },
+    { key:'patterns',  icon:'🔨', label:'Patterns',        desc:'Sentence building blocks'              },
+    { key:'translate', icon:'🌐', label:'Translate',       desc:'AI-powered translation & breakdown'    },
+  ];
+  const open = state.drawerOpen ? 'open' : '';
+  const allActive = state.selectedCategory === 'all';
+  const allLink = `
+    <button class="nav-item nav-subitem${allActive?' subitem-active':''}" data-cat-jump="all" style="padding-left:50px;border-bottom:none">
+      <span class="ni-icon" style="font-size:14px">📚</span>
+      <span class="ni-text">
+        <span class="ni-label" style="font-size:13px;color:${allActive?'#e8c97e':'#bbb'};font-weight:${allActive?'700':'500'}">All Categories</span>
+      </span>
+      ${allActive ? '<span style="margin-left:auto;color:#e8c97e;font-size:12px;padding-right:14px">●</span>' : ''}
+    </button>`;
+  const categorySubLinks = allLink + store.categoryList.map(cat => {
+    const active = state.selectedCategory === cat.key;
+    return `
+    <button class="nav-item nav-subitem${active?' subitem-active':''}" data-cat-jump="${cat.key}" style="padding-left:50px;border-bottom:none">
+      <span class="ni-icon" style="font-size:14px">${cat.icon}</span>
+      <span class="ni-text">
+        <span class="ni-label" style="font-size:13px;color:${active?'#e8c97e':'#bbb'};font-weight:${active?'700':'500'}">${cat.label}</span>
+      </span>
+      ${active ? '<span style="margin-left:auto;color:#e8c97e;font-size:12px;padding-right:14px">●</span>' : ''}
+    </button>`;
+  }).join('');
+  return `
+    <div class="nav-drawer ${open}" id="nav-drawer">
+      <div class="nav-backdrop" id="nav-backdrop"></div>
+      <div class="nav-panel">
+        <div class="nav-panel-header">
+          <span class="nav-panel-title">Menu</span>
+          <button class="nav-close" id="nav-close">✕</button>
+        </div>
+        ${items.map(item => {
+          const main = `
+            <button class="nav-item${state.nav===item.key?' active':''}" data-nav="${item.key}">
+              <span class="ni-icon">${item.icon}</span>
+              <span class="ni-text">
+                <span class="ni-label">${item.label}</span>
+                <span class="ni-desc">${item.desc}</span>
+              </span>
+              <span class="ni-tick">✓</span>
+            </button>`;
+          // Show category quick-jump under Topics
+          if (item.key === 'topics' && state.nav === 'topics') {
+            return main + categorySubLinks;
+          }
+          return main;
+        }).join('')}
+      </div>
+    </div>`;
+}
+
+function renderPatterns() {
+  const cards = PATTERNS.map((p, pi) => {
+    const examples = p.examples.map((ex, ei) => {
+      const key = `p${pi}-e${ei}`;
+      const speaking = state.speaking === key;
+      const revealed = state.patternRevealed[key];
+      const englishEl = revealed
+        ? `<div class="pattern-ex-en">${ex.e}</div>`
+        : `<div class="pattern-ex-en pattern-ex-eng-hint" data-pat-reveal="${key}" style="font-style:italic;color:#bbb;cursor:pointer">tap to see English</div>`;
+      return `
+        <div class="pattern-example">
+          <div class="pattern-ex-text">
+            <div class="pattern-ex-zh">${ex.c}</div>
+            <div class="pattern-ex-jp">${colorJyutping(ex.j)}</div>
+            ${englishEl}
+          </div>
+          <button class="pattern-ex-play${speaking?' speaking':''}" data-pex="${key}" data-pex-chinese="${ex.c}">
+            ${speaking?'🔊':'▶'}
+          </button>
+        </div>`;
+    }).join('');
+    return `
+      <div class="pattern-card">
+        <div class="pattern-head">
+          <div class="pattern-number">Pattern ${pi+1} of ${PATTERNS.length}</div>
+          <div class="pattern-label">${p.label}</div>
+          <span class="pattern-structure">${colorJyutping(p.structure)}</span>
+        </div>
+        <div class="pattern-body">
+          <div class="pattern-note">${p.note}</div>
+          <div class="pattern-examples">${examples}</div>
+        </div>
+      </div>`;
+  }).join('');
+
+  return `
+    <div class="patterns-header">
+      <h2>🔨 Sentence Patterns</h2>
+      <p>${PATTERNS.length} building blocks — tap ▶ to hear any example</p>
+    </div>
+    ${cards}`;
+}
+
+function renderTranslate() {
+  const tr = state.translate;
+  const hasKey = !!getApiKey();
+
+  // API key setup screen if no key
+  if (!hasKey) {
+    return `
+      <div class="translate-wrap">
+        <div class="translate-header">
+          <h2>🌐 Translate</h2>
+          <p>AI-powered translation with word-by-word breakdown</p>
+        </div>
+        <div class="apikey-setup">
+          <h3>🔑 One-time setup</h3>
+          <p>Paste your <strong>Google Gemini API key</strong> to enable translations. It's saved securely on your device only — never uploaded anywhere.</p>
+          <input type="${tr.showApiKey ? 'text' : 'password'}" id="apikey-input" class="apikey-input" placeholder="AIza..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+          <button class="apikey-save" id="apikey-save">Save Key & Continue</button>
+          <div class="apikey-toggle-row">
+            <button class="apikey-toggle-btn" id="apikey-toggle">${tr.showApiKey ? 'Hide' : 'Show'} key</button>
+          </div>
+          <p style="margin-top:14px;font-size:11px;color:#aaa;line-height:1.5">
+            Don't have one? Get a free key in 90 seconds at <strong>aistudio.google.com</strong> — no credit card needed.
+          </p>
+        </div>
+      </div>`;
+  }
+
+  // Main translate UI
+  const result = tr.result;
+  const isToYue = tr.direction === 'en-yue';
+  const fromLabel = isToYue ? '🇬🇧 English' : '🇭🇰 Cantonese';
+  const toLabel   = isToYue ? '🇭🇰 Cantonese' : '🇬🇧 English';
+  const placeholder = isToYue
+    ? "Type or speak English, e.g. 'I want to drink tea'"
+    : "Type or speak Cantonese characters, e.g. '我想飲茶'";
+  const bdHtml = result?.bd ? result.bd.map(w => `
+    <div class="breakdown-row">
+      <span class="breakdown-zh">${w.c}</span>
+      <span class="breakdown-jp">${colorJyutping(w.j)}</span>
+      <span class="breakdown-en">${w.e}</span>
+    </div>`).join('') : '';
+
+  const speaking = state.speaking === 'translate-result';
+  const listening = tr.listening;
+
+  // Show result fields based on direction
+  // For en-yue: zh + jp + en (English is the original input)
+  // For yue-en: zh + jp + en (English is the translation)
+  // Same shape works either way.
+
+  return `
+    <div class="translate-wrap">
+      <div class="translate-header">
+        <h2>🌐 Translate</h2>
+        <p>Type or speak · word-by-word breakdown · powered by Gemini</p>
+      </div>
+
+      <div class="translate-direction-row">
+        <span class="translate-dir-label">${fromLabel}</span>
+        <button class="translate-dir-swap" id="translate-swap" title="Swap direction">⇄</button>
+        <span class="translate-dir-label">${toLabel}</span>
+      </div>
+
+      <div class="translate-input-wrap">
+        <textarea class="translate-input" id="translate-input" placeholder="${placeholder}" rows="3">${tr.inputText.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}</textarea>
+        ${listening ? '<div class="translate-listening-hint">🎙 Listening… speak now, then tap mic to stop</div>' : ''}
+        <div class="translate-input-actions">
+          <button class="translate-mic ${listening?'listening':''}" id="translate-mic" title="${listening?'Stop listening':'Speak instead of typing'}">
+            ${listening?'🔴':'🎙'}
+          </button>
+          ${tr.inputText ? '<button class="translate-clear" id="translate-clear">Clear</button>' : ''}
+          <button class="translate-go" id="translate-go" ${tr.loading ? 'disabled' : ''}>
+            ${tr.loading ? '⏳ Translating…' : '✨ Translate'}
+          </button>
+        </div>
+      </div>
+
+      ${tr.error ? `<div class="translate-error">⚠ ${tr.error}</div>` : ''}
+
+      ${tr.loading ? `<div class="translate-loading">Translating with Gemini… <br><small style="color:#bbb">May retry automatically if the server is busy</small></div>` : ''}
+
+      ${result ? `
+        <div class="translate-result">
+          <div class="translate-zh">${result.zh}</div>
+          <div class="translate-jp">${colorJyutping(result.jp)}</div>
+          <div class="bubble-english" style="font-size:12px;color:#888;margin-bottom:6px">${result.en}</div>
+          <div class="translate-result-actions">
+            <button class="translate-action-btn primary" id="translate-listen" data-tr-text="${result.zh}">
+              ${speaking ? '🔊 Playing…' : '▶ Listen'}
+            </button>
+          </div>
+          ${bdHtml ? `
+            <div style="margin-top:14px;padding-top:12px;border-top:1px solid #f4f0eb">
+              <div style="font-size:11px;color:#888;font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:8px">Word-by-word breakdown</div>
+              ${bdHtml}
+            </div>` : ''}
+        </div>
+      ` : ''}
+
+      <div style="margin-top:20px;text-align:center">
+        <button class="apikey-toggle-btn" id="translate-reset-key">Reset API key</button>
+      </div>
+    </div>`;
+}
+
+function renderLearningPath() {
+  if (state.pathView === 'timeline') {
+    return renderPathTimeline(state.activePath);
+  }
+  return renderPathList();
+}
+
+function renderPathList() {
+  // Group paths by level
+  const byLevel = {};
+  store.paths.forEach(p => {
+    if (!byLevel[p.level]) byLevel[p.level] = [];
+    byLevel[p.level].push(p);
+  });
+  const levelOrder = ['Beginner', 'Intermediate', 'Advanced'];
+  const sections = levelOrder.filter(l => byLevel[l]).map(level => {
+    const cards = byLevel[level].map(p => {
+      const total = p.lessons.length;
+      const done = pathCompleteCount(p.key);
+      const pct = total > 0 ? Math.round((done / total) * 100) : 0;
+      const locked = !!p.comingSoon;
+      const cardCls = 'path-card' + (locked ? ' locked' : '');
+      const dataAttr = locked ? '' : `data-path-open="${p.key}"`;
+      const badge = locked
+        ? `<span class="path-card-badge coming">Coming Soon</span>`
+        : (total > 0 && done === total ? `<span class="path-card-badge" style="background:#4CAF50;color:#fff">Complete</span>` : '');
+      const progress = locked ? '' : `
+        <div class="path-card-progress">
+          <div class="path-progress-bar"><div class="path-progress-fill" style="width:${pct}%"></div></div>
+          <span class="path-progress-count">${done} / ${total}</span>
+        </div>`;
+      return `
+        <div class="${cardCls}" ${dataAttr}>
+          <div class="path-card-top">
+            <span class="path-card-icon">${p.icon}</span>
+            <span class="path-card-title">${p.label}</span>
+            ${badge}
+          </div>
+          <div class="path-card-desc">${p.desc}</div>
+          ${progress}
+        </div>`;
+    }).join('');
+    return `
+      <div class="path-level-header">${level}</div>
+      ${cards}`;
+  }).join('');
+
+  return `
+    <div class="path-list">
+      <h2 style="font-size:22px;font-weight:700;color:#1a1a2e;margin-bottom:4px;">🛤️ Learning Path</h2>
+      <div style="font-size:12px;color:#888;margin-bottom:14px;">Curated lessons in order. Tap any to jump in — nothing is locked.</div>
+      ${sections}
+    </div>`;
+}
+
+function renderPathTimeline(pathKey) {
+  const path = store.paths.find(p => p.key === pathKey);
+  if (!path) return `<div class="path-empty-msg">Path not found.</div>`;
+  if (!path.lessons.length) {
+    return `
+      <div class="path-timeline-wrap">
+        <button class="path-timeline-back" data-path-back>← Back to Learning Paths</button>
+        <div class="path-empty-msg">${path.icon} ${path.label} — coming soon.</div>
+      </div>`;
+  }
+  const total = path.lessons.length;
+  const done = pathCompleteCount(pathKey);
+  const pct = Math.round((done / total) * 100);
+  const nextLesson = nextIncompleteLesson(pathKey);
+
+  const steps = path.lessons.map((l, i) => {
+    const lesson = lessonShape(l.topic);
+    if (!lesson) return ''; // Defensive — skip if topic doesn't exist
+    const tier = l.round;
+    const complete = isLessonComplete(pathKey, l.topic, tier);
+    const isNext = !complete && nextLesson && l.topic === nextLesson.topic && tier === nextLesson.tier;
+    const stepCls = 'path-step' + (complete ? ' done' : '') + (isNext ? ' next' : '');
+    const nextBadge = isNext ? `<span class="path-next-badge">Next up</span>` : '';
+    const wordCount = (getRoundWords(l.topic, tier) || []).length;
+    // Show tier in meta only when above 1, to keep Tier 1 displays clean
+    const tierLabel = tier > 1 ? `Tier ${tier} · ` : '';
+    return `
+      <div class="${stepCls}">
+        <div class="path-step-rail">
+          <div class="path-step-node">${complete ? '✓' : (i + 1)}</div>
+          <div class="path-step-line"></div>
+        </div>
+        <div class="path-step-body">
+          <div class="path-step-card" data-path-lesson="${l.topic}" data-path-tier="${tier}">
+            ${nextBadge}
+            <div class="path-step-row">
+              <span class="path-step-icon">${lesson.icon}</span>
+              <div class="path-step-text">
+                <div class="path-step-title">${lesson.label}</div>
+                <div class="path-step-meta">${tierLabel}${wordCount} word${wordCount !== 1 ? 's' : ''}</div>
+              </div>
+              <button class="path-complete-btn" data-path-toggle="${l.topic}" data-path-tier="${tier}" aria-label="${complete ? 'Mark incomplete' : 'Mark complete'}">${complete ? '✓' : '✓'}</button>
+            </div>
+          </div>
+        </div>
+      </div>`;
+  }).join('');
+
+  return `
+    <div class="path-timeline-wrap">
+      <button class="path-timeline-back" data-path-back>← Back to Learning Paths</button>
+      <div class="path-timeline-header">
+        <div class="path-timeline-title">${path.icon} ${path.label}</div>
+        <div class="path-timeline-sub">${path.desc}</div>
+        <div class="path-timeline-progress">
+          <div class="path-progress-bar"><div class="path-progress-fill" style="width:${pct}%"></div></div>
+          <span class="path-progress-count">${done} / ${total} complete</span>
+        </div>
+      </div>
+      <div class="path-timeline">${steps}</div>
+    </div>`;
+}
+
+function renderPlaceholder(icon, title, subtitle) {
+  return `
+    <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;padding:60px 30px;text-align:center;min-height:300px;">
+      <div style="font-size:52px;margin-bottom:16px;">${icon}</div>
+      <div style="font-size:20px;font-weight:700;color:#1a1a2e;margin-bottom:8px;">${title}</div>
+      <div style="font-size:13px;color:#aaa;line-height:1.6;max-width:260px;">${subtitle}</div>
+    </div>`;
+}
+
+function render() {
+  const app = document.getElementById('app');
+
+  // ── Lazy-load gate ──────────────────────────────────────────────────────
+  // If the current view requires content that hasn't been fetched yet,
+  // show a loading shell and trigger a fetch. render() will be called
+  // again once the fetch resolves.
+  const needsTopic = state.nav === 'topics' && !state.homeView;
+  if (needsTopic && !store.isTopicLoaded(state.topic)) {
+    app.innerHTML = `
+      ${renderHeader(null)}
+      ${renderVoiceBanner()}
+      <div class="content"><div style="padding:40px 20px;text-align:center;color:#888;font-size:14px;">Loading topic…</div></div>
+      ${renderDrawer()}
+    `;
+    attachEvents(null, null);
+    store.loadTopic(state.topic).then(render).catch(err => {
+      console.error('[topic load]', err);
+      app.innerHTML = `
+        ${renderHeader(null)}
+        <div class="content"><div style="padding:40px 20px;text-align:center;color:#922B21;font-size:14px;">Couldn't load topic. Check console.</div></div>
+        ${renderDrawer()}
+      `;
+      attachEvents(null, null);
+    });
+    return;
+  }
+
+  // If the path timeline is open, pre-warm all of its topics so word counts render.
+  if (state.nav === 'path' && state.pathView === 'timeline') {
+    const path = (store.paths || []).find(p => p.key === state.activePath);
+    if (path) {
+      const missing = path.lessons.map(l => l.topic).filter(k => !store.isTopicLoaded(k));
+      if (missing.length) {
+        app.innerHTML = `
+          ${renderHeader(null)}
+          ${renderVoiceBanner()}
+          <div class="content"><div style="padding:40px 20px;text-align:center;color:#888;font-size:14px;">Loading path…</div></div>
+          ${renderDrawer()}
+        `;
+        attachEvents(null, null);
+        store.loadTopics(missing).then(render).catch(err => {
+          console.error('[path load]', err);
+        });
+        return;
+      }
+    }
+  }
+
+  const lesson = needsTopic ? lessonShape(state.topic) : null;
+  const color  = lesson ? lesson.color : null;
+
+  let mainContent = '';
+  if (state.nav === 'topics') {
+    if (state.homeView) {
+      mainContent = `
+        ${renderVoiceBanner()}
+        ${renderHomeScreen()}`;
+    } else {
+      mainContent = `
+        ${renderVoiceBanner()}
+        <div class="content">
+          <button class="back-home-btn" id="back-home-btn">${state.fromPath ? '← Back to Learning Path' : '← Back to topics'}</button>
+          ${renderRoundSelector(state.topic, color)}
+          ${renderLessonHeader(lesson, color)}
+          ${state.mode === 'quiz' ? renderQuiz(lesson, color) : state.tab === 'convo' ? renderConversation(color) : renderStudy(lesson, color)}
+        </div>`;
+    }
+  } else if (state.nav === 'patterns') {
+    mainContent = renderPatterns();
+  } else if (state.nav === 'translate') {
+    mainContent = renderTranslate();
+  } else if (state.nav === 'path') {
+    mainContent = `${renderVoiceBanner()}${renderLearningPath()}`;
+  }
+
+  app.innerHTML = `
+    ${renderHeader(color)}
+    ${mainContent}
+    ${renderDrawer()}
+  `;
+
+  attachEvents(lesson, color);
+}
+
+function renderHeader(color) {
+  const toneKeys = Object.entries(TONES).map(([t,d]) =>
+    `<span style="color:${d.color}">● T${t}</span>`
+  ).join('');
+  const speeds = [
+    { key:'slow',   label:'🐢 Slow'   },
+    { key:'normal', label:'🚶 Normal' },
+    { key:'fast',   label:'🏃 Fast'   },
+  ];
+  const speedBtns = speeds.map(s => {
+    const active = state.speed === s.key;
+    return `<button id="speed-${s.key}" style="padding:4px 10px;border-radius:20px;border:1.5px solid ${active?'#e8c97e':'#555'};background:${active?'#e8c97e':'transparent'};color:${active?'#1a1a2e':'#aaa'};font-size:11px;font-weight:700;cursor:pointer;">${s.label}</button>`;
+  }).join('');
+  return `
+    <div class="header">
+      <div style="display:flex;align-items:center;justify-content:space-between;">
+        <div class="header-title">
+          <span class="zh">廣東話</span>
+          <span class="en">Cantonese Learner</span>
+        </div>
+        <button class="hamburger" id="hamburger-btn" aria-label="Menu">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+      <div class="tone-key">
+        ${toneKeys}
+        <span class="label">← jyutping tones</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:6px;margin-top:8px;">
+        <span style="font-size:11px;color:#555;">Speed:</span>
+        ${speedBtns}
+      </div>
+    </div>`;
+}
+
+function renderVoiceBanner() {
+  if (!state.voiceInfo) return '';
+  const v = state.voiceInfo;
+  const cls = v.status === 'hk' ? 'voice-ok' : v.status === 'other' ? 'voice-warn' : 'voice-none';
+  const icon = v.status !== 'none' ? '🔊' : '⚠️';
+  const extra = v.status === 'none'
+    ? ' · Try Chrome, or go to Android Settings → General Management → Language → TTS → install Chinese (Hong Kong)'
+    : '';
+  return `<div class="voice-banner ${cls}">${icon} ${v.label}${v.name ? ' — ' + v.name : ''}${extra}</div>`;
+}
+
+function renderCategoryFilter() {
+  const allCount = Object.keys(store.topicCategories).length;
+  const options = [
+    { key:'all', label:`📚 All Categories (${allCount})` },
+    ...store.categoryList.map(c => ({
+      key:   c.key,
+      label: `${c.icon} ${c.label} (${getTopicsByCategory(c.key).length})`,
+    })),
+  ];
+  const opts = options.map(o =>
+    `<option value="${o.key}"${state.selectedCategory === o.key ? ' selected' : ''}>${o.label}</option>`
+  ).join('');
+  return `
+    <div class="cat-filter-wrap">
+      <select class="cat-filter-select" id="cat-filter-select">${opts}</select>
+    </div>`;
+}
+
+function renderTopicCard(topicKey) {
+  const lesson = lessonShape(topicKey);
+  if (!lesson) return '';
+  const rounds = getAvailableRounds(topicKey);
+  const entry = store.indexEntry(topicKey);
+  // Word count for Round 1, pulled from the index so we don't need to load the topic file.
+  const wordCount = entry?.wordCounts?.['1'] ?? lesson.words.length;
+  const pips = rounds.map(r => `<span class="topic-card-pip" style="background:${lesson.color}"></span>`).join('') +
+               (rounds.length < 3 ? `<span class="topic-card-pip" style="background:${lesson.color}33"></span>`.repeat(3 - rounds.length) : '');
+  return `
+    <div class="topic-card" data-topic-card="${topicKey}" style="border-color:${lesson.color}">
+      <div class="topic-card-icon">${lesson.icon}</div>
+      <div class="topic-card-label">${lesson.label}</div>
+      <div class="topic-card-meta">${rounds.length} tier${rounds.length>1?'s':''} · ${wordCount} words</div>
+      <div class="topic-card-rounds">${pips}</div>
+    </div>`;
+}
+
+function renderHomeScreen() {
+  const filter = state.selectedCategory;
+  const sections = store.categoryList
+    .filter(cat => filter === 'all' || filter === cat.key)
+    .map(cat => {
+      const topics = getTopicsByCategory(cat.key);
+      if (topics.length === 0) return '';
+      const cards = topics.map(t => renderTopicCard(t)).join('');
+      return `
+        <div class="cat-section" id="cat-anchor-${cat.key}">
+          <div class="cat-section-header">
+            <span class="cat-section-title">${cat.icon} ${cat.label}</span>
+            <span class="cat-section-count">${topics.length} topic${topics.length>1?'s':''}</span>
+          </div>
+          <div class="topic-grid">${cards}</div>
+        </div>`;
+    }).join('');
+
+  return `
+    <div class="home-wrap">
+      <div class="home-header">
+        <div class="home-title">📖 Topics</div>
+        <div class="home-subtitle">Choose a category and topic to start learning</div>
+      </div>
+      ${renderCategoryFilter()}
+      ${sections}
+    </div>`;
+}
+
+function renderRoundSelector(topicKey, color) {
+  const rounds = getAvailableRounds(topicKey);
+  if (rounds.length <= 1) return '';   // Hide selector if only one round
+  const btns = rounds.map(r => {
+    const active = state.currentRound === r;
+    const style = active ? `background:${color};border-color:${color};color:#fff` : `border-color:${color};color:${color}`;
+    return `<button class="round-btn${active?' active':''}" data-round="${r}" style="${style}">Tier ${r}</button>`;
+  }).join('');
+  return `
+    <div class="round-selector">
+      <span class="round-label">Tier:</span>
+      ${btns}
+    </div>`;
+}
+
+function renderTopics() {
+  const btns = (store.index || []).map(l => {
+    const key = l.key;
+    const active = state.topic === key;
+    const style = active
+      ? `background:${l.color};color:#fff;border-color:${l.color}`
+      : `background:#fff;color:#555;border-color:#ddd`;
+    return `<button class="topic-btn${active?' active':''}" style="${style}" data-topic="${key}">${l.icon} ${l.label}</button>`;
+  }).join('');
+  return `<div class="topics">${btns}</div>`;
+}
+
+function renderLessonHeader(lesson, color) {
+  const isQuiz = state.mode === 'quiz';
+  const btnStyle = isQuiz
+    ? `background:${color};color:#fff;border:2px solid ${color}`
+    : `background:transparent;color:${color};border:2px solid ${color}`;
+  const subtabs = !isQuiz ? `
+    <div class="subtabs">
+      <button class="subtab-btn${state.tab==='words'?' active':''}" id="tab-words"
+        style="${state.tab==='words'?'background:'+color:''}">📖 Words</button>
+      <button class="subtab-btn${state.tab==='convo'?' active':''}" id="tab-convo"
+        style="${state.tab==='convo'?'background:'+color:''}">💬 Conversation</button>
+    </div>` : '';
+  return `
+    <div class="lesson-header">
+      <div>
+        <h2 class="lesson-title" style="color:${color}">${lesson.icon} ${lesson.label}</h2>
+        <div class="lesson-count">${getRoundWords(state.topic, state.currentRound).length} words</div>
+      </div>
+      <button class="mode-btn" id="mode-toggle" style="${btnStyle}">
+        ${isQuiz ? '📖 Study' : '🧠 Quiz me'}
+      </button>
+    </div>
+    ${subtabs}`;
+}
+
+function renderConversation(color) {
+  const convo = getRoundConvo(state.topic, state.currentRound);
+  if (!convo) return '<p style="color:#aaa;padding:20px 0">No conversation for this topic yet.</p>';
+  const cv = state.convo;
+  const lines = convo.lines;
+
+  // ── Control bar ──
+  const playAllStyle = cv.playingLine !== null
+    ? `background:${color};color:#fff;border-color:${color}`
+    : '';
+  const gapOn    = cv.convMode === 'gap';
+  const speakOn  = cv.convMode === 'speak';
+  const controls = `
+    <div class="convo-controls">
+      <button class="convo-ctrl-btn${cv.playingLine!==null?' on':''}" id="play-all-btn"
+        style="${cv.playingLine!==null?'background:'+color+';color:#fff;border-color:'+color:'border-color:'+color+';color:'+color}">
+        ${cv.playingLine!==null?'⏹ Stop':'▶ Play All'}
+      </button>
+      <button class="convo-ctrl-btn${gapOn?' on':''}" id="gap-mode-btn"
+        style="${gapOn?'background:'+color+';color:#fff;border-color:'+color:''}">
+        🧩 Fill-the-Gap
+      </button>
+      <button class="convo-ctrl-btn${speakOn?' on':''}" id="speak-mode-btn"
+        style="${speakOn?'background:'+color+';color:#fff;border-color:'+color:''}">
+        🎙 Speak
+      </button>
+    </div>`;
+
+  // ── Speak mode ──
+  if (speakOn) {
+    const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (!SpeechRec) {
+      return `
+        <div class="convo-scenario">📍 ${convo.title}</div>
+        ${controls}
+        <div class="speak-unsupported">
+          <div style="font-size:24px;margin-bottom:8px">🎙</div>
+          <strong>Speech recognition not supported</strong><br>
+          Your browser doesn't support voice input. Try Chrome on Android or desktop.
+        </div>`;
+    }
+    const step = Math.min(cv.speakStep, lines.length - 1);
+    const line = lines[step];
+    const isUser = line.u;
+    const spkName = isUser ? convo.speakers[1] : convo.speakers[0];
+    const playing = cv.playingLine === step;
+    const status  = cv.speakStatus;
+    const isLast  = step >= lines.length - 1;
+
+    const statusText = {
+      idle:      isUser ? '👇 Press the mic and say the line above' : '👂 Listen, then continue',
+      listening: '🎙 Listening… speak the line, then press Stop',
+      matched:   '',
+      mismatch:  '',
+    }[status] || '';
+
+    const result = status === 'matched'
+      ? `<div class="speak-result-good">✓ Great! You said it correctly.</div>`
+      : status === 'mismatch'
+      ? `<div class="speak-result-bad">
+          <div style="font-weight:700;margin-bottom:4px">Hmm, that didn't quite match.</div>
+          <div>Expected: <strong>${line.c}</strong></div>
+          <div style="font-size:12px;color:#666;margin-top:2px">${colorJyutping(line.j)}</div>
+        </div>`
+      : '';
+
+    const heard = cv.speakHeard
+      ? `<div class="speak-heard">You said: <strong>${cv.speakHeard}</strong></div>`
+      : '';
+
+    const englishEl = cv.speakRevealed[step]
+      ? `<div class="speak-target-en">${line.e}</div>`
+      : `<div class="speak-target-en speak-eng-hint" data-speak-reveal="${step}" style="font-style:italic;color:#bbb;cursor:pointer">tap to see English</div>`;
+
+    return `
+      <div class="convo-scenario">📍 ${convo.title}</div>
+      ${controls}
+      <div class="speak-nav">
+        <span>Line ${step+1} of ${lines.length}</span>
+        <span style="color:${color};font-weight:700">${isUser?'🗣 Your turn':'👂 Listen'}</span>
+      </div>
+      <div class="speak-card" style="border-color:${color}">
+        <div class="speak-prompt">${spkName}</div>
+        <div class="speak-target-zh">${line.c}</div>
+        <div class="speak-target-jp">${colorJyutping(line.j)}</div>
+        ${englishEl}
+        ${isUser ? `
+          <button class="mic-btn ${status==='listening'?'listening':'idle'}" id="mic-btn"
+            style="color:${status==='listening'?'#E74C3C':color};border:3px solid ${status==='listening'?'#E74C3C':color}">
+            ${status==='listening'?'🔴':'🎙'}
+          </button>
+          <div class="speak-status">${statusText}</div>
+          ${status==='listening' ? `
+            <button class="speak-action-btn" id="speak-stop-btn" style="background:#E74C3C;color:#fff;margin-bottom:14px">
+              ⏹ Stop & Check
+            </button>
+          ` : ''}
+          ${heard}
+          ${result}
+        ` : `
+          <button class="speak-action-btn" id="speak-listen-btn"
+            style="background:${playing?color+'cc':color};color:#fff">
+            ${playing?'🔊 Playing…':'▶ Listen'}
+          </button>
+        `}
+        <div class="speak-actions">
+          ${isUser && status === 'mismatch' ? `
+            <button class="speak-action-btn" id="speak-retry" style="background:#eee;color:#555">↻ Try Again</button>
+            <button class="speak-action-btn" id="speak-skip"  style="background:${color};color:#fff">Skip →</button>
+          ` : ''}
+          ${(isUser && status === 'matched') || !isUser ? `
+            <button class="speak-action-btn" id="speak-next" style="background:${color};color:#fff">
+              ${isLast ? '🔁 Restart' : 'Next →'}
+            </button>
+          ` : ''}
+        </div>
+      </div>
+      ${isUser && status === 'idle' ? `<p style="font-size:11px;color:#aaa;text-align:center;margin-top:6px">📱 Allow microphone access if prompted</p>` : ''}`;
+  }
+
+  // ── Read / Gap mode ──
+  const bubbles = lines.map((line, i) => {
+    const isUser   = line.u;
+    const side     = isUser ? 'right' : 'left';
+    const spkName  = isUser ? convo.speakers[1] : convo.speakers[0];
+    const bubbleBg = isUser ? color : '#fff';
+    const playing  = cv.playingLine === i;
+    const playColor = isUser ? 'rgba(255,255,255,0.8)' : color;
+
+    // Gap mode: hide user lines until answered
+    if (gapOn && isUser) {
+      const answered = cv.gapAnswers[i];
+      if (!answered) {
+        // Show choices
+        const paired = shuffle(line.opts.map((c, k) => ({ c, j: line.optsJ[k] })));
+        const opts = paired.map(opt =>
+            `<button class="gap-btn" data-gap-line="${i}" data-gap-ans="${opt.c}">${colorJyutping(opt.j)}</button>`
+          ).join('');
+        return `
+          <div class="bubble-row ${side}">
+            <div class="bubble-wrap">
+              <div class="bubble-name">${spkName}</div>
+              <div class="bubble" style="background:${bubbleBg}22;border:2px dashed ${color}88">
+                <div class="gap-prompt">👆 What would you say?</div>
+                <div class="gap-options">${opts}</div>
+              </div>
+            </div>
+          </div>`;
+      } else {
+        // Show answered line with result highlight
+        const correct = answered === line.c;
+        const hlColor = correct ? '#d4edda' : '#f8d7da';
+        const hlBorder = correct ? '#27AE60' : '#E74C3C';
+        return `
+          <div class="bubble-row ${side}">
+            <div class="bubble-wrap">
+              <div class="bubble-name">${spkName} ${correct?'✓':'✗'}</div>
+              <div class="bubble" style="background:${hlColor};border:2px solid ${hlBorder}">
+                <div class="bubble-chinese" style="color:#1a1a2e">${line.c}</div>
+                <div class="bubble-jyutping">${colorJyutping(line.j)}</div>
+                <div class="bubble-english" style="color:#555">${line.e}</div>
+              </div>
+            </div>
+          </div>`;
+      }
+    }
+
+    // Normal bubble
+    const revealed = cv.bubbleRevealed[i];
+    const bdOpen   = cv.breakdownOpen[i];
+    const engHtml  = revealed
+      ? `<div class="bubble-english" style="margin-top:4px">${line.e}</div>`
+      : `<div class="bubble-eng-hint" style="font-size:11px;opacity:0.5;margin-top:4px;font-style:italic">tap to see English</div>`;
+    const bdPanel  = (bdOpen && line.bd) ? `
+      <div class="breakdown-panel">
+        ${line.bd.map(w => `
+          <div class="breakdown-row">
+            <span class="breakdown-zh">${w.c}</span>
+            <span class="breakdown-jp">${colorJyutping(w.j)}</span>
+            <span class="breakdown-en">${w.e}</span>
+          </div>`).join('')}
+      </div>` : '';
+    const bdBtnColor = isUser ? 'rgba(255,255,255,0.7)' : color;
+    const bdBtn = line.bd ? `
+      <button class="breakdown-btn" data-breakdown="${i}" style="color:${bdBtnColor}">
+        ${bdOpen ? '▲ hide breakdown' : '🔍 word breakdown'}
+      </button>` : '';
+    return `
+      <div class="bubble-row ${side}">
+        <div class="bubble-wrap">
+          <div class="bubble-name">${spkName}</div>
+          <div class="bubble" data-reveal="${i}" style="cursor:pointer;background:${bubbleBg};${playing?'box-shadow:0 0 0 3px '+color+'66':''}">
+            <div class="bubble-chinese" style="${isUser?'color:#fff':''}">${line.c}</div>
+            <div class="bubble-jyutping">${colorJyutping(line.j)}</div>
+            ${engHtml}
+            <div class="bubble-play-row">
+              ${bdBtn}
+              <button class="bubble-play" data-bubble="${i}"
+                style="border-color:${playColor};color:${playing?(isUser?bubbleBg:color)+'':playColor};background:${playing?playColor:'transparent'}">
+                ${playing?'🔊':'▶'}
+              </button>
+            </div>
+          </div>
+          ${bdPanel}
+        </div>
+      </div>`;
+  }).join('');
+
+  return `
+    <div class="convo-scenario">📍 ${convo.title}</div>
+    ${controls}
+    ${bubbles}`;
+}
+
+function renderSentences(topic, color) {
+  const sentences = getRoundSentences(topic, state.currentRound);
+  if (!sentences.length) return '';
+  const items = sentences.map((s, i) => {
+    const speaking = state.speaking === 'sent-' + i;
+    const bdOpen = state.sentenceBreakdownOpen[i];
+    const revealed = state.sentenceRevealed[i];
+    const bdPanel = (bdOpen && s.bd) ? `
+      <div class="breakdown-panel" style="margin:8px 0 4px">
+        ${s.bd.map(w => `
+          <div class="breakdown-row">
+            <span class="breakdown-zh">${w.c}</span>
+            <span class="breakdown-jp">${colorJyutping(w.j)}</span>
+            <span class="breakdown-en">${w.e}</span>
+          </div>`).join('')}
+      </div>` : '';
+    const bdBtn = s.bd ? `
+      <button class="breakdown-btn" data-sent-bd="${i}" style="color:${color};margin-top:6px">
+        ${bdOpen ? '▲ hide breakdown' : '🔍 word breakdown'}
+      </button>` : '';
+    const englishEl = revealed
+      ? `<div class="sentence-english">${s.e}</div>`
+      : `<div class="sentence-eng-hint" style="font-size:11px;color:#aaa;font-style:italic;margin-top:2px;pointer-events:none">tap card to see English</div>`;
+    return `
+      <div class="sentence-wrap" style="margin-bottom:10px">
+        <div class="sentence-card" data-sent-reveal="${i}" style="margin-bottom:0;cursor:pointer">
+          <div class="sentence-body">
+            <div class="sentence-chinese">${s.c}</div>
+            <div class="sentence-jyutping">${colorJyutping(s.j)}</div>
+            ${englishEl}
+            ${bdBtn}
+          </div>
+          <button class="sentence-play${speaking ? ' speaking' : ''}" data-sent="${i}"
+            style="border-color:${color};color:${speaking ? '#fff' : color};background:${speaking ? color : 'transparent'}"
+            title="Listen to sentence">
+            ${speaking ? '🔊' : '▶'}
+          </button>
+        </div>
+        ${bdPanel}
+      </div>`;
+  }).join('');
+  return `
+    <div class="sentences">
+      <h3>💬 Simple Sentences</h3>
+      ${items}
+    </div>`;
+}
+
+function renderStudy(lesson, color) {
+  const words = getRoundWords(state.topic, state.currentRound);
+  const cards = words.map((w, i) => {
+    const flipped = state.flipped[i];
+    const speaking = state.speaking === i;
+    const cardBg  = flipped ? color : '#fff';
+    const cardShadow = flipped ? `0 4px 20px ${color}44` : '0 2px 6px rgba(0,0,0,0.06)';
+    const btnBorder = flipped ? 'rgba(255,255,255,0.6)' : color;
+    const btnColor  = flipped ? '#fff' : color;
+    const btnBg     = speaking ? color : 'transparent';
+    const inner = flipped
+      ? `<div class="card-english">${w.e}</div>`
+      : `<div class="card-chinese">${w.c}</div>
+         <div class="card-jyutping">${colorJyutping(w.j)}</div>
+         <div class="card-hint">tap to reveal</div>`;
+    return `
+      <div class="word-card" data-card="${i}"
+        style="background:${cardBg};border-color:${color};box-shadow:${cardShadow}">
+        ${inner}
+        <button class="speak-btn${speaking?' speaking':''}" data-speak="${i}"
+          style="background:${btnBg};border:1.5px solid ${btnBorder};color:${btnColor}" title="Listen">
+          ${speaking ? '🔊' : '▶'}
+        </button>
+      </div>`;
+  }).join('');
+
+  const toneRows = Object.entries(TONES).map(([t,d]) =>
+    `<div class="tone-row">
+      <span class="tone-dot" style="background:${d.color}"></span>
+      <span class="tone-desc">${t} — ${d.desc}</span>
+      <span class="tone-ex" style="color:${d.color}">${d.ex}</span>
+    </div>`
+  ).join('');
+
+  return `
+    <div class="hint">Tap a card to reveal English · ▶ to hear pronunciation</div>
+    ${(() => {
+      const note = getRoundNote(state.topic, state.currentRound);
+      return note
+        ? `<div class="lesson-note" style="border-left-color:${color}">
+             <div class="lesson-note-title" style="color:${color}">📌 About this lesson</div>
+             <div class="lesson-note-body">${note}</div>
+           </div>`
+        : '';
+    })()}
+    <div class="word-grid">${cards}</div>
+    ${renderSentences(state.topic, color)}
+    <div class="tone-guide">
+      <h3>📖 Jyutping Tone Guide</h3>
+      <div class="tone-grid">${toneRows}</div>
+      <p class="tone-note">The number at the end of each syllable tells you which tone to use. Colours match throughout the app.</p>
+    </div>`;
+}
+
+function renderQuiz(lesson, color) {
+  const q = state.quiz;
+  if (!q) return '';
+
+  if (q.done) {
+    const pct = q.score / q.queue.length;
+    const emoji = pct >= 0.75 ? '🏆' : pct >= 0.5 ? '⭐' : '💪';
+    const msg   = pct >= 0.75 ? "Excellent! You're a natural!" : pct >= 0.5 ? "Good effort! Keep practising." : "Keep going — practice makes perfect!";
+    return `
+      <div class="result">
+        <div class="result-emoji">${emoji}</div>
+        <div class="result-score" style="color:${color}">${q.score} / ${q.queue.length} correct</div>
+        <div class="result-msg">${msg}</div>
+        <button class="back-btn" id="quiz-back" style="background:${color}">← Back to Lesson</button>
+      </div>`;
+  }
+
+  const cw = q.queue[q.idx];
+  const pct = (q.idx / q.queue.length * 100).toFixed(0);
+  const choiceBtns = q.choices.map(c => {
+    const isCorrect = c.c === cw.c;
+    const isChosen  = q.selected === c.c;
+    let cls = 'choice-btn';
+    if (q.selected) { if (isCorrect) cls += ' correct'; else if (isChosen) cls += ' wrong'; }
+    return `<button class="${cls}" data-choice="${c.c}" ${q.selected ? 'disabled' : ''}>${c.e}</button>`;
+  }).join('');
+
+  return `
+    <div class="quiz-meta">
+      <span style="color:#888">Question ${q.idx+1} / ${q.queue.length}</span>
+      <span style="color:${color};font-weight:700">Score: ${q.score}</span>
+    </div>
+    <div class="progress-bar">
+      <div class="progress-fill" style="background:${color};width:${pct}%"></div>
+    </div>
+    <div class="quiz-card" style="border:2px solid ${color}22">
+      <div class="quiz-label">What does this mean?</div>
+      <div class="quiz-chinese">${cw.c}</div>
+      <div class="quiz-jyutping">${colorJyutping(cw.j)}</div>
+      <button class="quiz-listen" id="quiz-listen" style="border:1.5px solid ${color};color:${color}">▶ Listen</button>
+    </div>
+    <div class="choices">${choiceBtns}</div>`;
+}
+
+// ── Events ────────────────────────────────────────────────────────────────────
+function attachEvents(lesson, color) {
+  // Hamburger open
+  const hamburger = document.getElementById('hamburger-btn');
+  if (hamburger) hamburger.addEventListener('click', () => { state.drawerOpen = true; render(); });
+
+  // Drawer close (X button and backdrop)
+  const navClose    = document.getElementById('nav-close');
+  const navBackdrop = document.getElementById('nav-backdrop');
+  if (navClose)    navClose.addEventListener('click',    () => { state.drawerOpen = false; render(); });
+  if (navBackdrop) navBackdrop.addEventListener('click', () => { state.drawerOpen = false; render(); });
+
+  // Nav items
+  document.querySelectorAll('[data-nav]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const target = btn.dataset.nav;
+      // Tapping Topics from the drawer always returns to home view
+      if (target === 'topics') state.homeView = true;
+      // Tapping Learning Path from the drawer always returns to the path list
+      if (target === 'path') state.pathView = 'list';
+      state.nav = target;
+      state.fromPath = false;          // any drawer navigation clears the path-return flag
+      state.drawerOpen = false;
+      render();
+    });
+  });
+
+  // Category quick-jump (drawer sublinks)
+  document.querySelectorAll('[data-cat-jump]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      state.nav = 'topics';
+      state.homeView = true;
+      state.selectedCategory = btn.dataset.catJump;
+      state.fromPath = false;
+      state.drawerOpen = false;
+      window.scrollTo(0, 0);
+      render();
+    });
+  });
+
+  // ── Translate events ──────────────────────────────────────────
+  // API key save
+  const apikeySave = document.getElementById('apikey-save');
+  if (apikeySave) apikeySave.addEventListener('click', () => {
+    const input = document.getElementById('apikey-input');
+    const key = (input?.value || '').trim();
+    if (!key) {
+      state.translate.error = 'Please paste your API key first';
+      render();
+      return;
+    }
+    setApiKey(key);
+    state.translate.error = null;
+    render();
+  });
+
+  // Show/hide API key toggle
+  const apikeyToggle = document.getElementById('apikey-toggle');
+  if (apikeyToggle) apikeyToggle.addEventListener('click', () => {
+    state.translate.showApiKey = !state.translate.showApiKey;
+    render();
+  });
+
+  // Reset API key
+  const apikeyReset = document.getElementById('translate-reset-key');
+  if (apikeyReset) apikeyReset.addEventListener('click', () => {
+    if (confirm('Remove your saved API key? You\'ll need to re-enter it to translate.')) {
+      localStorage.removeItem('cantonese_api_key');
+      state.translate.result = null;
+      state.translate.error = null;
+      state.translate.inputText = '';
+      render();
+    }
+  });
+
+  // Direction swap (en-yue ↔ yue-en)
+  const trSwap = document.getElementById('translate-swap');
+  if (trSwap) trSwap.addEventListener('click', () => {
+    stopTranslateListening();
+    state.translate.direction = state.translate.direction === 'en-yue' ? 'yue-en' : 'en-yue';
+    state.translate.inputText = '';
+    state.translate.result    = null;
+    state.translate.error     = null;
+    state.translate.listening = false;
+    render();
+  });
+
+  // Mic button — toggles speech input
+  const trMic = document.getElementById('translate-mic');
+  if (trMic) trMic.addEventListener('click', () => {
+    if (state.translate.listening) {
+      stopTranslateListening();
+    } else {
+      startTranslateListening();
+    }
+  });
+
+  // Translate input — keep state in sync
+  const translateInput = document.getElementById('translate-input');
+  if (translateInput) {
+    translateInput.addEventListener('input', () => {
+      state.translate.inputText = translateInput.value;
+      // No re-render on every keystroke — would lose focus. Just sync state.
+    });
+  }
+
+  // Clear input
+  const translateClear = document.getElementById('translate-clear');
+  if (translateClear) translateClear.addEventListener('click', () => {
+    state.translate.inputText = '';
+    state.translate.result = null;
+    state.translate.error = null;
+    render();
+  });
+
+  // Translate button
+  const translateGo = document.getElementById('translate-go');
+  if (translateGo) translateGo.addEventListener('click', async () => {
+    const input = document.getElementById('translate-input');
+    const text = (input?.value || '').trim();
+    if (!text) return;
+    state.translate.inputText = text;
+    state.translate.loading = true;
+    state.translate.error   = null;
+    state.translate.result  = null;
+    render();
+    try {
+      const result = await translateText(text, state.translate.direction);
+      state.translate.result  = result;
+      state.translate.loading = false;
+      render();
+    } catch (err) {
+      state.translate.loading = false;
+      state.translate.error   = err.message || 'Translation failed';
+      render();
+    }
+  });
+
+  // Listen button on translation result
+  const translateListen = document.getElementById('translate-listen');
+  if (translateListen) translateListen.addEventListener('click', () => {
+    const text = translateListen.dataset.trText;
+    state.speaking = 'translate-result';
+    render();
+    speak(text, () => { state.speaking = null; render(); });
+    setTimeout(() => { if (state.speaking === 'translate-result') { state.speaking = null; render(); } }, 6000);
+  });
+
+  // Pattern example play buttons
+  document.querySelectorAll('[data-pex]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const key     = btn.dataset.pex;
+      const chinese = btn.dataset.pexChinese;
+      state.speaking = key;
+      render();
+      speak(chinese, () => { state.speaking = null; render(); });
+      setTimeout(() => { if (state.speaking === key) { state.speaking = null; render(); } }, 5000);
+    });
+  });
+
+  // Speed toggle
+  ['slow','normal','fast'].forEach(s => {
+    const btn = document.getElementById('speed-' + s);
+    if (btn) btn.addEventListener('click', () => { state.speed = s; render(); });
+  });
+
+  // Topic buttons (legacy pill bar — still works if shown elsewhere)
+  document.querySelectorAll('[data-topic]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      state.topic   = btn.dataset.topic;
+      state.mode    = 'study';
+      state.tab     = 'words';
+      state.flipped = {};
+      state.speaking= null;
+      state.sentenceBreakdownOpen = {};
+      state.sentenceRevealed = {};
+      state.patternRevealed = {};
+      state.convo   = { convMode:'read', playingLine:null, gapAnswers:{}, bubbleRevealed:{}, breakdownOpen:{}, speakStep:0, speakStatus:'idle', speakHeard:'', speakAutoPlayed:false, speakRevealed:{} };
+      render();
+    });
+  });
+
+  // Topic cards (home screen) — enter the topic
+  document.querySelectorAll('[data-topic-card]').forEach(card => {
+    card.addEventListener('click', () => {
+      state.topic        = card.dataset.topicCard;
+      state.homeView     = false;
+      state.currentRound = 1;
+      state.mode         = 'study';
+      state.tab          = 'words';
+      state.flipped      = {};
+      state.speaking     = null;
+      state.sentenceBreakdownOpen = {};
+      state.sentenceRevealed = {};
+      state.patternRevealed = {};
+      state.convo        = { convMode:'read', playingLine:null, gapAnswers:{}, bubbleRevealed:{}, breakdownOpen:{}, speakStep:0, speakStatus:'idle', speakHeard:'', speakAutoPlayed:false, speakRevealed:{} };
+      window.scrollTo(0, 0);
+      render();
+    });
+  });
+
+  // Back to home button
+  const backHomeBtn = document.getElementById('back-home-btn');
+  if (backHomeBtn) backHomeBtn.addEventListener('click', () => {
+    window.speechSynthesis.cancel();
+    if (state.fromPath) {
+      // Return to the timeline of the path that brought us here
+      state.nav         = 'path';
+      state.pathView    = 'timeline';
+      state.fromPath    = false;
+      state.mode        = 'study';
+      state.tab         = 'words';
+      window.scrollTo(0, 0);
+      render();
+      return;
+    }
+    state.homeView = true;
+    state.mode     = 'study';
+    state.tab      = 'words';
+    window.scrollTo(0, 0);
+    render();
+  });
+
+  // Category filter dropdown
+  const catSelect = document.getElementById('cat-filter-select');
+  if (catSelect) catSelect.addEventListener('change', () => {
+    state.selectedCategory = catSelect.value;
+    window.scrollTo(0, 0);
+    render();
+  });
+
+  // Round selector inside topic
+  document.querySelectorAll('[data-round]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const r = parseInt(btn.dataset.round);
+      if (r === state.currentRound) return;
+      state.currentRound = r;
+      // Reset transient state for new round
+      state.flipped  = {};
+      state.speaking = null;
+      state.sentenceBreakdownOpen = {};
+      state.sentenceRevealed = {};
+      state.patternRevealed = {};
+      state.convo = { convMode:'read', playingLine:null, gapAnswers:{}, bubbleRevealed:{}, breakdownOpen:{}, speakStep:0, speakStatus:'idle', speakHeard:'', speakAutoPlayed:false, speakRevealed:{} };
+      window.scrollTo(0, 0);
+      render();
+    });
+  });
+
+  // Sub-tabs
+  const tabWords = document.getElementById('tab-words');
+  const tabConvo = document.getElementById('tab-convo');
+  if (tabWords) tabWords.addEventListener('click', () => { state.tab = 'words'; render(); });
+  if (tabConvo) tabConvo.addEventListener('click', () => { state.tab = 'convo'; render(); });
+
+  // Conversation: Play All / Stop
+  const playAllBtn = document.getElementById('play-all-btn');
+  if (playAllBtn) playAllBtn.addEventListener('click', () => {
+    if (state.convo.playingLine !== null) {
+      window.speechSynthesis.cancel();
+      state.convo.playingLine = null;
+      render();
+    } else {
+      const lines = getRoundConvo(state.topic, state.currentRound).lines;
+      playAllConvo(lines, 0);
+    }
+  });
+
+  // Conversation: Gap mode toggle
+  const gapBtn = document.getElementById('gap-mode-btn');
+  if (gapBtn) gapBtn.addEventListener('click', () => {
+    state.convo.convMode   = state.convo.convMode === 'gap' ? 'read' : 'gap';
+    state.convo.gapAnswers = {};
+    state.convo.breakdownOpen = {};
+    render();
+  });
+
+  // Conversation: Speak mode toggle
+  const speakBtn = document.getElementById('speak-mode-btn');
+  if (speakBtn) speakBtn.addEventListener('click', () => {
+    stopListening();
+    window.speechSynthesis.cancel();
+    state.convo.convMode    = state.convo.convMode === 'speak' ? 'read' : 'speak';
+    state.convo.speakStep   = 0;
+    state.convo.speakStatus = 'idle';
+    state.convo.speakHeard  = '';
+    state.convo.playingLine = null;
+    render();
+  });
+
+  // Speak: mic button — toggles start/stop
+  const micBtn = document.getElementById('mic-btn');
+  if (micBtn) micBtn.addEventListener('click', () => {
+    if (state.convo.speakStatus === 'listening') {
+      finishListening();   // gracefully stop and process
+    } else {
+      startListening();
+    }
+  });
+
+  // Speak: dedicated stop button
+  const speakStopBtn = document.getElementById('speak-stop-btn');
+  if (speakStopBtn) speakStopBtn.addEventListener('click', () => {
+    finishListening();
+  });
+
+  // Speak: listen button (other speaker's turn)
+  const speakListenBtn = document.getElementById('speak-listen-btn');
+  if (speakListenBtn) speakListenBtn.addEventListener('click', () => {
+    const line = getRoundConvo(state.topic, state.currentRound).lines[state.convo.speakStep];
+    state.convo.playingLine = state.convo.speakStep;
+    render();
+    speakAs(line.c, line.u, () => { state.convo.playingLine = null; render(); });
+  });
+
+  // Speak: next button
+  const speakNext = document.getElementById('speak-next');
+  if (speakNext) speakNext.addEventListener('click', () => {
+    const lines = getRoundConvo(state.topic, state.currentRound).lines;
+    stopListening();
+    window.speechSynthesis.cancel();
+    state.convo.playingLine = null;
+    state.convo.speakStatus = 'idle';
+    state.convo.speakHeard  = '';
+    if (state.convo.speakStep >= lines.length - 1) {
+      state.convo.speakStep = 0;
+    } else {
+      state.convo.speakStep++;
+    }
+    render();
+  });
+
+  // Speak: retry button
+  const speakRetry = document.getElementById('speak-retry');
+  if (speakRetry) speakRetry.addEventListener('click', () => {
+    state.convo.speakStatus = 'idle';
+    state.convo.speakHeard  = '';
+    render();
+  });
+
+  // Speak: skip button
+  const speakSkip = document.getElementById('speak-skip');
+  if (speakSkip) speakSkip.addEventListener('click', () => {
+    const lines = getRoundConvo(state.topic, state.currentRound).lines;
+    state.convo.speakStatus = 'idle';
+    state.convo.speakHeard  = '';
+    if (state.convo.speakStep >= lines.length - 1) {
+      state.convo.speakStep = 0;
+    } else {
+      state.convo.speakStep++;
+    }
+    render();
+  });
+
+  // Breakdown toggle
+  document.querySelectorAll('[data-breakdown]').forEach(btn => {
+    btn.addEventListener('click', e => {
+      e.stopPropagation();
+      const i = parseInt(btn.dataset.breakdown);
+      state.convo.breakdownOpen[i] = !state.convo.breakdownOpen[i];
+      render();
+    });
+  });
+
+  // Bubble English reveal (tap bubble)
+  document.querySelectorAll('[data-reveal]').forEach(bubble => {
+    bubble.addEventListener('click', e => {
+      if (e.target.closest('[data-bubble]')) return; // don't fire when tapping play btn
+      const i = parseInt(bubble.dataset.reveal);
+      state.convo.bubbleRevealed[i] = !state.convo.bubbleRevealed[i];
+      render();
+    });
+  });
+
+  // Bubble play buttons
+  document.querySelectorAll('[data-bubble]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const i = parseInt(btn.dataset.bubble);
+      const line = getRoundConvo(state.topic, state.currentRound).lines[i];
+      state.convo.playingLine = i;
+      render();
+      speakAs(line.c, line.u, () => { state.convo.playingLine = null; render(); });
+      setTimeout(() => { if (state.convo.playingLine === i) { state.convo.playingLine = null; render(); } }, 6000);
+    });
+  });
+
+  // Gap mode answer buttons
+  document.querySelectorAll('[data-gap-line]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const lineIdx = parseInt(btn.dataset.gapLine);
+      const chosen  = btn.dataset.gapAns;
+      state.convo.gapAnswers[lineIdx] = chosen;
+      const correct = chosen === getRoundConvo(state.topic, state.currentRound).lines[lineIdx].c;
+      if (correct) speak(chosen);
+      render();
+    });
+  });
+
+  // Mode toggle
+  const modeBtn = document.getElementById('mode-toggle');
+  if (modeBtn) modeBtn.addEventListener('click', () => {
+    state.mode = state.mode === 'study' ? 'quiz' : 'study';
+    if (state.mode === 'quiz') state.quiz = getQuizInitState(getRoundWords(state.topic, state.currentRound));
+    render();
+  });
+
+  // Flip cards
+  document.querySelectorAll('[data-card]').forEach(card => {
+    card.addEventListener('click', e => {
+      if (e.target.closest('[data-speak]')) return;
+      const i = parseInt(card.dataset.card);
+      state.flipped[i] = !state.flipped[i];
+      render();
+    });
+  });
+
+  // Speak buttons
+  document.querySelectorAll('[data-speak]').forEach(btn => {
+    btn.addEventListener('click', e => {
+      e.stopPropagation();
+      const i = parseInt(btn.dataset.speak);
+      const word = getRoundWords(state.topic, state.currentRound)[i];
+      if (!word) return;
+      state.speaking = i;
+      render();
+      speak(word.c, () => { state.speaking = null; render(); });
+      setTimeout(() => { if (state.speaking === i) { state.speaking = null; render(); } }, 4000);
+    });
+  });
+
+  // Sentence play buttons
+  document.querySelectorAll('[data-sent]').forEach(btn => {
+    btn.addEventListener('click', e => {
+      e.stopPropagation();
+      const i = parseInt(btn.dataset.sent);
+      const sentence = getRoundSentences(state.topic, state.currentRound)[i];
+      state.speaking = 'sent-' + i;
+      render();
+      speak(sentence.c, () => { state.speaking = null; render(); });
+      setTimeout(() => { if (state.speaking === 'sent-' + i) { state.speaking = null; render(); } }, 6000);
+    });
+  });
+
+  // Sentence breakdown toggle
+  document.querySelectorAll('[data-sent-bd]').forEach(btn => {
+    btn.addEventListener('click', e => {
+      e.stopPropagation();
+      const i = parseInt(btn.dataset.sentBd);
+      state.sentenceBreakdownOpen[i] = !state.sentenceBreakdownOpen[i];
+      render();
+    });
+  });
+
+  // Sentence English reveal — whole card clickable, toggles, skips play & breakdown buttons
+  document.querySelectorAll('[data-sent-reveal]').forEach(el => {
+    el.addEventListener('click', e => {
+      if (e.target.closest('[data-sent]') || e.target.closest('[data-sent-bd]')) return;
+      const i = parseInt(el.dataset.sentReveal);
+      state.sentenceRevealed[i] = !state.sentenceRevealed[i];
+      render();
+    });
+  });
+
+  // Pattern example English reveal
+  document.querySelectorAll('[data-pat-reveal]').forEach(el => {
+    el.addEventListener('click', e => {
+      e.stopPropagation();
+      const key = el.dataset.patReveal;
+      state.patternRevealed[key] = true;
+      render();
+    });
+  });
+
+  // Speak target English reveal
+  document.querySelectorAll('[data-speak-reveal]').forEach(el => {
+    el.addEventListener('click', e => {
+      e.stopPropagation();
+      const i = parseInt(el.dataset.speakReveal);
+      state.convo.speakRevealed[i] = true;
+      render();
+    });
+  });
+
+  // Quiz listen
+  const ql = document.getElementById('quiz-listen');
+  if (ql && state.quiz) {
+    ql.addEventListener('click', () => speak(state.quiz.queue[state.quiz.idx].c));
+  }
+
+  // Quiz choices
+  if (state.quiz && !state.quiz.done) {
+    document.querySelectorAll('[data-choice]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        if (state.quiz.selected) return;
+        const chosen = btn.dataset.choice;
+        const cw = state.quiz.queue[state.quiz.idx];
+        const correct = chosen === cw.c;
+        speak(cw.c);
+        state.quiz.selected = chosen;
+        if (correct) state.quiz.score++;
+        render();
+        setTimeout(() => {
+          const next = state.quiz.idx + 1;
+          if (next >= state.quiz.queue.length) {
+            state.quiz.done = true;
+          } else {
+            state.quiz.idx = next;
+            state.quiz.selected = null;
+            state.quiz.choices = buildChoices(state.quiz.queue[next], getRoundWords(state.topic, state.currentRound));
+          }
+          render();
+        }, 950);
+      });
+    });
+  }
+
+  // Quiz back
+  const qb = document.getElementById('quiz-back');
+  if (qb) qb.addEventListener('click', () => { state.mode = 'study'; render(); });
+
+  // ── Learning Path events ──────────────────────────────────────────
+  // Open a path from the list view → switch to that path's timeline
+  document.querySelectorAll('[data-path-open]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      state.activePath = btn.dataset.pathOpen;
+      state.pathView   = 'timeline';
+      window.scrollTo(0, 0);
+      render();
+    });
+  });
+
+  // Back from timeline → path list
+  document.querySelectorAll('[data-path-back]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      state.pathView = 'list';
+      window.scrollTo(0, 0);
+      render();
+    });
+  });
+
+  // Tap a lesson in the timeline → open the topic with fromPath flag
+  document.querySelectorAll('[data-path-lesson]').forEach(card => {
+    card.addEventListener('click', (e) => {
+      // Ignore taps on the mark-complete button (handled separately)
+      if (e.target.closest('[data-path-toggle]')) return;
+      const topicKey = card.dataset.pathLesson;
+      const tier     = parseInt(card.dataset.pathTier, 10) || 1;
+      state.topic        = topicKey;
+      state.currentRound = tier;
+      state.nav          = 'topics';
+      state.homeView     = false;
+      state.fromPath     = true;
+      state.mode         = 'study';
+      state.tab          = 'words';
+      state.flipped      = {};
+      state.speaking     = null;
+      state.sentenceBreakdownOpen = {};
+      state.sentenceRevealed = {};
+      state.patternRevealed = {};
+      state.convo        = { convMode:'read', playingLine:null, gapAnswers:{}, bubbleRevealed:{}, breakdownOpen:{}, speakStep:0, speakStatus:'idle', speakHeard:'', speakAutoPlayed:false, speakRevealed:{} };
+      window.scrollTo(0, 0);
+      render();
+    });
+  });
+
+  // Toggle complete on a timeline lesson (without navigating)
+  document.querySelectorAll('[data-path-toggle]').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const tier = parseInt(btn.dataset.pathTier, 10) || 1;
+      toggleLessonComplete(state.activePath, btn.dataset.pathToggle, tier);
+      render();
+    });
+  });
+}
+
+// ── Init ──────────────────────────────────────────────────────────────────────
+(async function init() {
+  state.pathProgress = loadPathProgress();   // restore saved completion state
+  migratePathProgressIfNeeded();             // convert any legacy keys to composite form
+
+  // Boot-loading shell while reference data fetches
+  const app = document.getElementById('app');
+  app.innerHTML = `<div style="padding:60px 20px;text-align:center;color:#888;font-family:'Helvetica Neue',Arial,sans-serif;font-size:14px;">Loading…</div>`;
+
+  try {
+    await Promise.all([
+      store.loadIndex(),
+      store.loadCategories(),
+      store.loadPaths(),
+    ]);
+  } catch (err) {
+    console.error('[init] reference data load failed', err);
+    app.innerHTML = `<div style="padding:60px 20px;text-align:center;color:#922B21;font-family:'Helvetica Neue',Arial,sans-serif;font-size:14px;">Couldn't load app data. Check console and reload.</div>`;
+    return;
+  }
+
+  render(); // first paint with index/categories/paths available
+
+  const voices = await loadVoices();
+  const zhVoices = voices.filter(v => v.lang === 'zh-HK' || v.lang === 'zh-TW' || v.lang.startsWith('zh'));
+  const hk = voices.find(v => v.lang === 'zh-HK');
+  const tw = voices.find(v => v.lang === 'zh-TW');
+  const zh = zhVoices[0];
+  const count = zhVoices.length;
+  const dualNote = count >= 2 ? ` · ${count} voices found — dual speaker active` : ` · 1 voice found — using pitch to differentiate speakers`;
+  if (hk)      state.voiceInfo = { status:'hk',    label:'Cantonese (zh-HK) ready ✓' + dualNote, name: hk.name };
+  else if (tw) state.voiceInfo = { status:'other', label:'Chinese (zh-TW) in use' + dualNote,     name: tw.name };
+  else if (zh) state.voiceInfo = { status:'other', label:'Chinese voice in use' + dualNote,        name: zh.name };
+  else         state.voiceInfo = { status:'none',  label:'No Chinese voice found — install one via Android Settings → General Management → Language & Input → Text-to-Speech → Google TTS → Install voice data → Chinese (Hong Kong)', name: '' };
+
+  render(); // re-render with voice info
+})();
+</script>
+
+<script>
+// ── Service Worker Registration ───────────────────────────────────────────────
+// Registers sw.js so the app works offline and can be installed to home screen.
+// The 'serviceWorker' in navigator check means this silently does nothing
+// in browsers that don't support it (old browsers, file:// local testing).
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('./sw.js')
+      .then(() => console.log('[SW] Registered'))
+      .catch(err => console.warn('[SW] Registration failed:', err));
+  });
+}
+</script>
+</body>
+</html>
