@@ -929,21 +929,40 @@ function normalizeChinese(text) {
   return (text || '').replace(/[\s，。！？、,!?.\-]/g, '');
 }
 
+// Edit-distance (Levenshtein) between two strings. Order-sensitive.
+function editDistance(a, b) {
+  if (a === b) return 0;
+  if (!a.length) return b.length;
+  if (!b.length) return a.length;
+  // Use a rolling row of size b.length+1
+  let prev = new Array(b.length + 1);
+  let curr = new Array(b.length + 1);
+  for (let j = 0; j <= b.length; j++) prev[j] = j;
+  for (let i = 1; i <= a.length; i++) {
+    curr[0] = i;
+    for (let j = 1; j <= b.length; j++) {
+      const cost = a[i - 1] === b[j - 1] ? 0 : 1;
+      curr[j] = Math.min(
+        curr[j - 1] + 1,       // insertion
+        prev[j]   + 1,         // deletion
+        prev[j - 1] + cost     // substitution
+      );
+    }
+    [prev, curr] = [curr, prev];
+  }
+  return prev[b.length];
+}
+
 function fuzzyMatch(heard, target) {
   const h = normalizeChinese(heard);
   const t = normalizeChinese(target);
   if (!h || !t) return false;
-  // Exact match
   if (h === t) return true;
-  // Substantial overlap — count matching characters
-  const longer = h.length > t.length ? h : t;
-  const shorter = h.length > t.length ? t : h;
-  let matches = 0;
-  for (const ch of shorter) {
-    if (longer.includes(ch)) matches++;
-  }
-  // Require at least 70% character match
-  return (matches / shorter.length) >= 0.7;
+  // Allow edits up to ~30% of target length, with a small floor for very
+  // short utterances (so 1-char slip on a 3-char phrase still counts).
+  const dist = editDistance(h, t);
+  const allowed = Math.max(1, Math.floor(t.length * 0.3));
+  return dist <= allowed;
 }
 
 function startListening() {
@@ -1090,7 +1109,6 @@ function renderDrawer() {
     { key:'path',      icon:'🛤️', label:'Learning Path',  desc:'Curated curriculum, ordered & tracked'  },
     { key:'patterns',  icon:'🔨', label:'Patterns',        desc:'Sentence building blocks'              },
     { key:'translate', icon:'🌐', label:'Translate',       desc:'AI-powered translation & breakdown'    },
-    { key:'progress',  icon:'⭐', label:'Progress',        desc:'Track your learning journey'           },
   ];
   const open = state.drawerOpen ? 'open' : '';
   const allActive = state.selectedCategory === 'all';
@@ -1490,8 +1508,6 @@ function render() {
     mainContent = renderTranslate();
   } else if (state.nav === 'path') {
     mainContent = `${renderVoiceBanner()}${renderLearningPath()}`;
-  } else if (state.nav === 'progress') {
-    mainContent = renderPlaceholder('⭐', 'Progress', 'Coming soon — track completed topics, review scores, and run cross-topic reviews.');
   }
 
   app.innerHTML = `
@@ -1728,6 +1744,7 @@ function renderConversation(color) {
       ? `<div class="speak-result-bad">
           <div style="font-weight:700;margin-bottom:4px">Hmm, that didn't quite match.</div>
           <div>Expected: <strong>${line.c}</strong></div>
+          <div style="font-size:12px;color:#666;margin-top:2px">${colorJyutping(line.j)}</div>
         </div>`
       : '';
 
@@ -1901,10 +1918,10 @@ function renderSentences(topic, color) {
       </button>` : '';
     const englishEl = revealed
       ? `<div class="sentence-english">${s.e}</div>`
-      : `<div class="sentence-eng-hint" data-sent-reveal="${i}" style="font-size:11px;color:#aaa;font-style:italic;cursor:pointer;margin-top:2px">tap to see English</div>`;
+      : `<div class="sentence-eng-hint" style="font-size:11px;color:#aaa;font-style:italic;margin-top:2px;pointer-events:none">tap card to see English</div>`;
     return `
       <div class="sentence-wrap" style="margin-bottom:10px">
-        <div class="sentence-card" style="margin-bottom:0">
+        <div class="sentence-card" data-sent-reveal="${i}" style="margin-bottom:0;cursor:pointer">
           <div class="sentence-body">
             <div class="sentence-chinese">${s.c}</div>
             <div class="sentence-jyutping">${colorJyutping(s.j)}</div>
@@ -2478,12 +2495,12 @@ function attachEvents(lesson, color) {
     });
   });
 
-  // Sentence English reveal
+  // Sentence English reveal — whole card clickable, toggles, skips play & breakdown buttons
   document.querySelectorAll('[data-sent-reveal]').forEach(el => {
     el.addEventListener('click', e => {
-      e.stopPropagation();
+      if (e.target.closest('[data-sent]') || e.target.closest('[data-sent-bd]')) return;
       const i = parseInt(el.dataset.sentReveal);
-      state.sentenceRevealed[i] = true;
+      state.sentenceRevealed[i] = !state.sentenceRevealed[i];
       render();
     });
   });
