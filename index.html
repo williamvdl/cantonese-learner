@@ -958,6 +958,30 @@ function editDistance(a, b) {
   return prev[b.length];
 }
 
+// Collapse consecutive duplicate substrings of length >= minLen. Defends against
+// speech-recognition glitches where the recogniser emits "星期六得星期六得…" instead of
+// "星期六得…" for a single utterance. minLen=4 is safe against legitimate Cantonese
+// reduplications (好好, 慢慢, 馬馬虎虎 etc. are all 1–2 char base patterns).
+function deduplicateRepeats(s, minLen) {
+  minLen = minLen || 4;
+  let changed = true;
+  // Cap iterations defensively in case of pathological input
+  for (let safety = 0; changed && safety < 20; safety++) {
+    changed = false;
+    for (let len = Math.floor(s.length / 2); len >= minLen; len--) {
+      for (let i = 0; i + 2 * len <= s.length; i++) {
+        if (s.substring(i, i + len) === s.substring(i + len, i + 2 * len)) {
+          s = s.substring(0, i + len) + s.substring(i + 2 * len);
+          changed = true;
+          break;
+        }
+      }
+      if (changed) break;
+    }
+  }
+  return s;
+}
+
 function fuzzyMatch(heard, target) {
   const h = normalizeChinese(heard);
   const t = normalizeChinese(target);
@@ -1072,16 +1096,20 @@ function startListening() {
     for (let i = e.resultIndex; i < e.results.length; i++) {
       const transcript = e.results[i][0].transcript;
       if (e.results[i].isFinal) {
-        // Some Android Chrome builds deliver each final result as the CUMULATIVE
-        // transcript so far rather than a delta — detect that and replace, so we
-        // don't end up with "我我想買蘋果我想買蘋果…" style triplication.
-        // We require the new segment to be STRICTLY LONGER than the running transcript;
-        // an equal-length match means the user genuinely repeated a word (好好, 慢慢).
-        if (finalTranscript && transcript.length > finalTranscript.length && transcript.startsWith(finalTranscript)) {
-          finalTranscript = transcript;
+        // Three rules to defend against recogniser quirks:
+        //  1) Skip exact duplicate — recogniser emitted the same segment twice
+        //  2) Replace on cumulative-and-extending — segment is full transcript so far
+        //  3) Otherwise treat as a true delta and append
+        if (finalTranscript && transcript === finalTranscript) {
+          // rule 1 — skip
+        } else if (finalTranscript && transcript.length > finalTranscript.length && transcript.startsWith(finalTranscript)) {
+          finalTranscript = transcript;  // rule 2
         } else {
-          finalTranscript += transcript;
+          finalTranscript += transcript; // rule 3
         }
+        // Post-pass: collapse any consecutive-duplicate substring of length >= 4.
+        // Safety net for delivery patterns that slip past rules 1–3.
+        finalTranscript = deduplicateRepeats(finalTranscript);
       } else {
         interimTranscript += transcript;
       }
@@ -1163,11 +1191,14 @@ function startTranslateListening() {
     for (let i = e.resultIndex; i < e.results.length; i++) {
       const seg = e.results[i][0].transcript;
       if (e.results[i].isFinal) {
-        if (finalTranscript && seg.length > finalTranscript.length && seg.startsWith(finalTranscript)) {
+        if (finalTranscript && seg === finalTranscript) {
+          // rule 1 — skip exact duplicate
+        } else if (finalTranscript && seg.length > finalTranscript.length && seg.startsWith(finalTranscript)) {
           finalTranscript = seg;
         } else {
           finalTranscript += seg;
         }
+        finalTranscript = deduplicateRepeats(finalTranscript);
       } else {
         interimText += seg;
       }
