@@ -983,15 +983,13 @@ function deduplicateRepeats(s, minLen) {
 }
 
 function fuzzyMatch(heard, target) {
+  // Strict: exact character match after normalization. Any difference → mismatch,
+  // which surfaces the per-character breakdown so the user can self-judge whether
+  // a recogniser homophone glitch is really an error or not.
   const h = normalizeChinese(heard);
   const t = normalizeChinese(target);
   if (!h || !t) return false;
-  if (h === t) return true;
-  // Allow edits up to ~30% of target length, with a small floor for very
-  // short utterances (so 1-char slip on a 3-char phrase still counts).
-  const dist = editDistance(h, t);
-  const allowed = Math.max(1, Math.floor(t.length * 0.3));
-  return dist <= allowed;
+  return h === t;
 }
 
 // Align heard text against target text and return per-target-char status:
@@ -1874,7 +1872,13 @@ function renderConversation(color) {
     }[status] || '';
 
     const result = status === 'matched'
-      ? `<div class="speak-result-good">✓ Great! You said it correctly.</div>`
+      ? (() => {
+          const breakdown = renderSpeakBreakdown(cv.speakHeard || line.c, line.c, line.j);
+          return `<div class="speak-result-good">
+            <div>✓ Great! You said it correctly.</div>
+            ${breakdown ? breakdown : ''}
+          </div>`;
+        })()
       : status === 'mismatch'
       ? (() => {
           const breakdown = renderSpeakBreakdown(cv.speakHeard, line.c, line.j);
