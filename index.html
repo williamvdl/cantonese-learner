@@ -1072,7 +1072,16 @@ function startListening() {
     for (let i = e.resultIndex; i < e.results.length; i++) {
       const transcript = e.results[i][0].transcript;
       if (e.results[i].isFinal) {
-        finalTranscript += transcript;
+        // Some Android Chrome builds deliver each final result as the CUMULATIVE
+        // transcript so far rather than a delta — detect that and replace, so we
+        // don't end up with "我我想買蘋果我想買蘋果…" style triplication.
+        // We require the new segment to be STRICTLY LONGER than the running transcript;
+        // an equal-length match means the user genuinely repeated a word (好好, 慢慢).
+        if (finalTranscript && transcript.length > finalTranscript.length && transcript.startsWith(finalTranscript)) {
+          finalTranscript = transcript;
+        } else {
+          finalTranscript += transcript;
+        }
       } else {
         interimTranscript += transcript;
       }
@@ -1146,15 +1155,22 @@ function startTranslateListening() {
   let finalTranscript = '';
 
   rec.onresult = (e) => {
-    // Same pattern as the Convo speech handler: only process results from
-    // event.resultIndex onwards, with finalTranscript persisting across events.
-    // Looping from 0 stutters on devices where e.results accumulates cumulative
-    // entries instead of deltas (Chrome Android with continuous:true).
+    // Process results from e.resultIndex onwards with a persistent finalTranscript.
+    // Some Android Chrome builds deliver each final result as the CUMULATIVE transcript
+    // rather than a delta — detect that and replace, so we don't end up with
+    // "II haveI have green pants" style triplication.
     let interimText = '';
     for (let i = e.resultIndex; i < e.results.length; i++) {
       const seg = e.results[i][0].transcript;
-      if (e.results[i].isFinal) finalTranscript += seg;
-      else                      interimText     += seg;
+      if (e.results[i].isFinal) {
+        if (finalTranscript && seg.length > finalTranscript.length && seg.startsWith(finalTranscript)) {
+          finalTranscript = seg;
+        } else {
+          finalTranscript += seg;
+        }
+      } else {
+        interimText += seg;
+      }
     }
     state.translate.inputText = (finalTranscript + interimText).trim();
     // Update textarea directly without full re-render to avoid focus loss
