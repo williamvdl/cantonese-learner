@@ -225,6 +225,11 @@
   .speak-heard { background: #f7f3ee; border-radius: 10px; padding: 10px 14px; margin-bottom: 14px; font-size: 18px; color: #1a1a2e; }
   .speak-result-good { background: #d4edda; border: 2px solid #27AE60; color: #1a5e2a; padding: 12px 16px; border-radius: 10px; font-weight: 700; margin-bottom: 14px; }
   .speak-result-bad  { background: #fde8ea; border: 2px solid #E74C3C; color: #7b1c1c; padding: 12px 16px; border-radius: 10px; margin-bottom: 14px; font-size: 13px; }
+  .speak-breakdown { display: flex; flex-wrap: wrap; justify-content: center; gap: 4px 10px; margin-top: 10px; padding: 10px; background: #fff; border-radius: 8px; }
+  .speak-breakdown .bd-col { display: flex; flex-direction: column; align-items: center; gap: 2px; min-width: 32px; }
+  .speak-breakdown .bd-char { font-size: 20px; font-weight: 700; line-height: 1; }
+  .speak-breakdown .bd-status { font-size: 13px; line-height: 1; }
+  .speak-breakdown .bd-jp { font-size: 11px; line-height: 1; white-space: nowrap; }
   .speak-actions { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
   .speak-action-btn { padding: 9px 20px; border-radius: 20px; border: none; font-size: 13px; font-weight: 700; cursor: pointer; }
   .speak-unsupported { padding: 30px 20px; text-align: center; background: #fef9e7; border: 1px solid #F0B27A; border-radius: 12px; color: #935116; font-size: 13px; line-height: 1.6; }
@@ -963,6 +968,89 @@ function fuzzyMatch(heard, target) {
   const dist = editDistance(h, t);
   const allowed = Math.max(1, Math.floor(t.length * 0.3));
   return dist <= allowed;
+}
+
+// Align heard text against target text and return per-target-char status:
+//   { status: 'match' }                            — target[j] was said correctly
+//   { status: 'wrong', heardChar: '<char>' }       — target[j] was said as a different char
+//   { status: 'missing' }                          — target[j] was skipped/not heard
+//
+// Standard Needleman-Wunsch / Levenshtein DP, then backtrack the optimal path.
+// Both inputs should be normalized (punctuation/whitespace stripped) before calling.
+function alignChars(heard, target) {
+  const m = heard.length, n = target.length;
+  if (!n) return [];
+  // DP matrix: dp[i][j] = min edits to turn heard[0..i] into target[0..j]
+  const dp = Array.from({ length: m + 1 }, () => new Array(n + 1));
+  for (let i = 0; i <= m; i++) dp[i][0] = i;
+  for (let j = 0; j <= n; j++) dp[0][j] = j;
+  for (let i = 1; i <= m; i++) {
+    for (let j = 1; j <= n; j++) {
+      const cost = heard[i - 1] === target[j - 1] ? 0 : 1;
+      dp[i][j] = Math.min(
+        dp[i - 1][j] + 1,         // deletion from heard
+        dp[i][j - 1] + 1,         // insertion (= target char missing)
+        dp[i - 1][j - 1] + cost   // substitution or match
+      );
+    }
+  }
+  // Backtrack from (m,n) to (0,0) — prefer diagonal moves on ties (more intuitive alignment)
+  const marks = new Array(n);
+  let i = m, j = n;
+  while (i > 0 && j > 0) {
+    const same = heard[i - 1] === target[j - 1];
+    const diag = dp[i - 1][j - 1] + (same ? 0 : 1);
+    if (dp[i][j] === diag) {
+      marks[j - 1] = same ? { status: 'match' } : { status: 'wrong', heardChar: heard[i - 1] };
+      i--; j--;
+    } else if (dp[i][j] === dp[i][j - 1] + 1) {
+      marks[j - 1] = { status: 'missing' };
+      j--;
+    } else {
+      // up: extra heard char — no corresponding target slot
+      i--;
+    }
+  }
+  while (j > 0) { marks[j - 1] = { status: 'missing' }; j--; }
+  return marks;
+}
+
+// Build the visual per-syllable breakdown grid for the Speak mismatch panel.
+// Returns '' when char↔syllable alignment can't be cleanly established (e.g. a
+// foreign word like 'William' embedded in Chinese), so the caller can fall back.
+function renderSpeakBreakdown(heard, targetC, targetJ) {
+  const punct = /[\s，。！？、,!?.\-]/;
+  const charArr = Array.from(targetC).filter(c => !punct.test(c));
+  // Split by whitespace, then strip any trailing punctuation that came with the syllable
+  const jpArr   = (targetJ || '').split(/\s+/)
+    .map(s => s.replace(/[，。！？、,!?.\-]+$/, ''))
+    .filter(Boolean);
+  if (!charArr.length || charArr.length !== jpArr.length) return '';   // alignment-impossible — caller handles fallback
+
+  const heardClean = normalizeChinese(heard);
+  const marks = alignChars(heardClean, charArr.join(''));
+
+  const cols = charArr.map((c, idx) => {
+    const m = marks[idx] || { status: 'missing' };
+    const bad = m.status !== 'match';
+    const tone = jpArr[idx].match(/[1-6]/);
+    const toneColor = tone ? TONES[tone[0]].color : '#777';
+    const charColor = bad ? '#E74C3C' : '#1a1a2e';
+    const jpColor   = bad ? '#E74C3C' : toneColor;
+    const mark = m.status === 'match'   ? '✓'
+               : m.status === 'wrong'   ? m.heardChar
+               : '·';   // missing
+    const markStyle = m.status === 'match' ? 'color:#27AE60;font-weight:700;'
+                    : m.status === 'wrong' ? 'color:#E74C3C;font-weight:700;font-size:14px;'
+                    : 'color:#E74C3C;font-weight:700;';
+    return `<div class="bd-col">
+      <div class="bd-char" style="color:${charColor}">${c}</div>
+      <div class="bd-status" style="${markStyle}">${mark}</div>
+      <div class="bd-jp" style="color:${jpColor};font-weight:700">${jpArr[idx]}</div>
+    </div>`;
+  }).join('');
+
+  return `<div class="speak-breakdown">${cols}</div>`;
 }
 
 function startListening() {
@@ -1741,11 +1829,16 @@ function renderConversation(color) {
     const result = status === 'matched'
       ? `<div class="speak-result-good">✓ Great! You said it correctly.</div>`
       : status === 'mismatch'
-      ? `<div class="speak-result-bad">
-          <div style="font-weight:700;margin-bottom:4px">Hmm, that didn't quite match.</div>
-          <div>Expected: <strong>${line.c}</strong></div>
-          <div style="font-size:12px;color:#666;margin-top:2px">${colorJyutping(line.j)}</div>
-        </div>`
+      ? (() => {
+          const breakdown = renderSpeakBreakdown(cv.speakHeard, line.c, line.j);
+          return `<div class="speak-result-bad">
+            <div style="font-weight:700;margin-bottom:4px">Hmm, that didn't quite match.</div>
+            <div>Expected: <strong>${line.c}</strong></div>
+            ${breakdown
+              ? breakdown
+              : `<div style="font-size:12px;color:#666;margin-top:2px">${colorJyutping(line.j)}</div>`}
+          </div>`;
+        })()
       : '';
 
     const heard = cv.speakHeard
