@@ -589,9 +589,16 @@ function loadVoices() {
 function pickVoicePair(voices) {
   const zh = voices.filter(v => v.lang === 'zh-HK' || v.lang === 'zh-TW' || v.lang.startsWith('zh'));
   if (zh.length === 0) return { a: null, b: null };
-  const a = zh[0];
-  // Prefer the 5th voice (index 4) as speaker B — user confirmed it's male on their device
-  const b = zh[4] || zh.find(v => v !== a) || null;
+  // Primary voice: prefer Cantonese (zh-HK), then any other zh.
+  // Without this, systems that list zh-CN first (e.g. Chrome on Windows) would
+  // play Mandarin audio even though a perfectly good zh-HK voice exists.
+  const a = zh.find(v => v.lang === 'zh-HK')
+          || zh.find(v => v.lang === 'zh-TW')
+          || zh[0];
+  // Secondary voice for the second speaker: prefer another zh-HK voice if
+  // there's more than one, otherwise any other zh voice, otherwise reuse `a`.
+  const sameLang = zh.filter(v => v.lang === a.lang && v !== a);
+  const b = sameLang[0] || zh.find(v => v !== a) || null;
   return { a, b };
 }
 
@@ -2786,16 +2793,21 @@ function attachEvents(lesson, color) {
   render(); // first paint with index/categories/paths available
 
   const voices = await loadVoices();
-  const zhVoices = voices.filter(v => v.lang === 'zh-HK' || v.lang === 'zh-TW' || v.lang.startsWith('zh'));
-  const hk = voices.find(v => v.lang === 'zh-HK');
-  const tw = voices.find(v => v.lang === 'zh-TW');
-  const zh = zhVoices[0];
-  const count = zhVoices.length;
-  const dualNote = count >= 2 ? ` · ${count} voices found — dual speaker active` : ` · 1 voice found — using pitch to differentiate speakers`;
-  if (hk)      state.voiceInfo = { status:'hk',    label:'Cantonese (zh-HK) ready ✓' + dualNote, name: hk.name };
-  else if (tw) state.voiceInfo = { status:'other', label:'Chinese (zh-TW) in use' + dualNote,     name: tw.name };
-  else if (zh) state.voiceInfo = { status:'other', label:'Chinese voice in use' + dualNote,        name: zh.name };
-  else         state.voiceInfo = { status:'none',  label:'No Chinese voice found — install one via Android Settings → General Management → Language & Input → Text-to-Speech → Google TTS → Install voice data → Chinese (Hong Kong)', name: '' };
+  // Count Cantonese voices specifically — dual-speaker only makes sense if we
+  // have 2+ zh-HK voices, since mixing in a Mandarin voice for speaker B would
+  // make the conversation half-Mandarin.
+  const hkVoices    = voices.filter(v => v.lang === 'zh-HK');
+  const otherZh     = voices.filter(v => v.lang.startsWith('zh') && v.lang !== 'zh-HK');
+  const hkCount     = hkVoices.length;
+  if (hkCount >= 2) {
+    state.voiceInfo = { status:'hk',    label:`Cantonese (zh-HK) ready ✓ · ${hkCount} voices found — dual speaker active`, name: hkVoices[0].name };
+  } else if (hkCount === 1) {
+    state.voiceInfo = { status:'hk',    label:'Cantonese (zh-HK) ready ✓ · 1 voice found — using pitch to differentiate speakers', name: hkVoices[0].name };
+  } else if (otherZh.length) {
+    state.voiceInfo = { status:'other', label:`No Cantonese voice — audio will sound like Mandarin (using ${otherZh[0].lang})`, name: otherZh[0].name };
+  } else {
+    state.voiceInfo = { status:'none',  label:'No Chinese voice found — install one via Android Settings → General Management → Language & Input → Text-to-Speech → Google TTS → Install voice data → Chinese (Hong Kong)', name: '' };
+  }
 
   render(); // re-render with voice info
 })();
