@@ -108,6 +108,28 @@
   .back-home-btn { display: inline-flex; align-items: center; gap: 5px; background: transparent; border: none; color: #888; font-size: 13px; cursor: pointer; padding: 4px 0; margin-bottom: 8px; font-weight: 600; }
   .back-home-btn:hover { color: #1a1a2e; }
 
+  /* Path-mode banner — replaces the small back link when entered via a Path */
+  .path-banner { display: flex; align-items: center; gap: 12px; padding: 10px 12px; border-radius: 12px; border: 1.5px solid; margin-bottom: 14px; }
+  .path-banner-back { background: transparent; border: none; font-size: 22px; line-height: 1; color: #1a1a2e; cursor: pointer; padding: 4px 8px; border-radius: 8px; font-weight: 700; }
+  .path-banner-back:active { transform: scale(0.92); }
+  .path-banner-body { flex: 1; min-width: 0; }
+  .path-banner-path { font-size: 13px; font-weight: 700; color: #1a1a2e; line-height: 1.2; }
+  .path-banner-step { font-size: 11px; color: #666; margin-top: 2px; letter-spacing: 0.5px; }
+
+  /* Path-mode completion card — appears below the lesson content */
+  .path-complete-card { margin-top: 20px; padding: 14px 16px; border-radius: 14px; background: #fafafa; border: 1.5px dashed #ddd; text-align: center; }
+  .path-complete-card-done { background: #f0f9f1; border: 1.5px solid #4CAF50; border-style: solid; }
+  .path-complete-status { font-size: 16px; font-weight: 700; color: #1E8449; margin-bottom: 8px; }
+  .path-complete-sub { font-size: 12px; color: #666; margin-top: -4px; }
+  .path-mark-btn, .path-next-btn { display: inline-block; width: 100%; padding: 12px 16px; border-radius: 12px; border: none; color: #fff; font-size: 14px; font-weight: 700; cursor: pointer; }
+  .path-mark-btn:active, .path-next-btn:active { transform: scale(0.98); }
+
+  /* Celebration toast — slides in over the content, dissolves after ~1.4s */
+  .path-toast { position: fixed; left: 50%; top: 28%; transform: translate(-50%, -50%); background: #1E8449; color: #fff; padding: 18px 26px; border-radius: 16px; font-size: 20px; font-weight: 700; box-shadow: 0 8px 28px rgba(0,0,0,0.25); z-index: 10000; animation: pathToastIn 0.25s ease-out, pathToastFade 0.4s ease-in 1s forwards; }
+  .path-toast-final { background: #B7791F; font-size: 22px; padding: 22px 30px; }
+  @keyframes pathToastIn   { from { opacity: 0; transform: translate(-50%, -50%) scale(0.85); } to { opacity: 1; transform: translate(-50%, -50%) scale(1); } }
+  @keyframes pathToastFade { from { opacity: 1; } to { opacity: 0; transform: translate(-50%, -50%) scale(0.95); } }
+
   /* Translate */
   .translate-wrap { padding: 16px 20px 32px; max-width: 680px; margin: 0 auto; }
   .translate-header { margin-bottom: 16px; }
@@ -678,6 +700,8 @@ let state = {
   activePath: 'beginner',         // which path is being viewed
   pathProgress: {},               // { beginner: { greetings:true, ... }, ... } — loaded from localStorage
   fromPath: false,                // true when user entered a topic via the Learning Path
+  fromPathTier: null,             // the tier of the path step they entered — preserved if they switch tier mid-study
+  pathToast: null,                // { text, kind } — transient completion overlay; cleared after timeout
   translate: {
     direction:   'en-yue',     // 'en-yue' | 'yue-en'
     inputText:   '',
@@ -838,6 +862,31 @@ function nextIncompleteLesson(pathKey) {
   const p = state.pathProgress[pathKey] || {};
   const next = path.lessons.find(l => !p[lessonKey(l.topic, l.round)]);
   return next ? { topic: next.topic, tier: next.round } : null;
+}
+
+// Return { path, step, total, isLast, nextStep, nextTopic } for the current path-mode state,
+// or null if the user isn't currently studying inside a path. `step` is 1-indexed.
+function getPathContext() {
+  if (!state.fromPath) return null;
+  const path = (store.paths || []).find(p => p.key === state.activePath);
+  if (!path) return null;
+  const tier = state.fromPathTier || state.currentRound;
+  const stepIdx = path.lessons.findIndex(l => l.topic === state.topic && l.round === tier);
+  if (stepIdx < 0) return null;
+  const total = path.lessons.length;
+  const isLast = stepIdx === total - 1;
+  const nextLesson = isLast ? null : path.lessons[stepIdx + 1];
+  const nextTopicMeta = nextLesson ? store.topicMeta(nextLesson.topic) : null;
+  return {
+    path,
+    step: stepIdx + 1,
+    total,
+    isLast,
+    nextStep: nextLesson,                          // { topic, round } | null
+    nextTopicLabel: nextTopicMeta ? nextTopicMeta.label : null,
+    nextTopicIcon:  nextTopicMeta ? nextTopicMeta.icon  : null,
+    isComplete: isLessonComplete(state.activePath, state.topic, tier),
+  };
 }
 
 function buildPrompt(text, direction) {
@@ -1671,14 +1720,22 @@ function render() {
         ${renderVoiceBanner()}
         ${renderHomeScreen()}`;
     } else {
+      const ctx = getPathContext();
+      const headerEl = ctx
+        ? renderPathBanner(ctx, color)
+        : `<button class="back-home-btn" id="back-home-btn">← Back to topics</button>`;
+      const footerEl = ctx ? renderPathCompletionCard(ctx, color) : '';
+      const toastEl  = state.pathToast ? renderPathToast(state.pathToast) : '';
       mainContent = `
         ${renderVoiceBanner()}
         <div class="content">
-          <button class="back-home-btn" id="back-home-btn">${state.fromPath ? '← Back to Learning Path' : '← Back to topics'}</button>
+          ${headerEl}
           ${renderRoundSelector(state.topic, color)}
           ${renderLessonHeader(lesson, color)}
           ${state.mode === 'quiz' ? renderQuiz(lesson, color) : state.tab === 'convo' ? renderConversation(color) : renderStudy(lesson, color)}
-        </div>`;
+          ${footerEl}
+        </div>
+        ${toastEl}`;
     }
   } else if (state.nav === 'patterns') {
     mainContent = renderPatterns();
@@ -1730,6 +1787,53 @@ function renderHeader(color) {
         ${speedBtns}
       </div>
     </div>`;
+}
+
+// ── PATH-MODE UI ─────────────────────────────────────────────────────────────
+// Banner shown at the top of a topic page when the user entered via a Learning
+// Path. Replaces the small "← Back to topics" link with a richer context strip.
+function renderPathBanner(ctx, color) {
+  return `
+    <div class="path-banner" style="background:${color}15;border-color:${color}55">
+      <button class="path-banner-back" id="back-home-btn" aria-label="Back to Learning Path">←</button>
+      <div class="path-banner-body">
+        <div class="path-banner-path">${ctx.path.icon || '🛤️'} ${ctx.path.label} Path</div>
+        <div class="path-banner-step">Step ${ctx.step} of ${ctx.total}</div>
+      </div>
+    </div>`;
+}
+
+// Footer card: either a "mark complete" button (incomplete) or
+// "next step" navigation (complete). Renders only when in path mode.
+function renderPathCompletionCard(ctx, color) {
+  if (ctx.isComplete) {
+    if (ctx.isLast) {
+      return `
+        <div class="path-complete-card path-complete-card-done">
+          <div class="path-complete-status">🎉 Path complete!</div>
+          <div class="path-complete-sub">You've finished every step of ${ctx.path.label}.</div>
+        </div>`;
+    }
+    return `
+      <div class="path-complete-card path-complete-card-done">
+        <div class="path-complete-status">✓ Step complete</div>
+        <button class="path-next-btn" id="path-next-step" style="background:${color}">
+          Next step → ${ctx.nextTopicIcon || ''} ${ctx.nextTopicLabel || 'continue'}
+        </button>
+      </div>`;
+  }
+  return `
+    <div class="path-complete-card">
+      <button class="path-mark-btn" id="path-mark-complete" style="background:${color}">
+        ✓ Mark step complete
+      </button>
+    </div>`;
+}
+
+// Transient overlay shown after marking complete. Auto-dissolves via setTimeout
+// scheduled in the click handler.
+function renderPathToast(t) {
+  return `<div class="path-toast ${t.kind === 'final' ? 'path-toast-final' : ''}">${t.text}</div>`;
 }
 
 function renderVoiceBanner() {
@@ -2294,6 +2398,7 @@ function attachEvents(lesson, color) {
       if (target === 'path') state.pathView = 'list';
       state.nav = target;
       state.fromPath = false;          // any drawer navigation clears the path-return flag
+      state.fromPathTier = null;
       state.drawerOpen = false;
       render();
     });
@@ -2306,6 +2411,7 @@ function attachEvents(lesson, color) {
       state.homeView = true;
       state.selectedCategory = btn.dataset.catJump;
       state.fromPath = false;
+      state.fromPathTier = null;
       state.drawerOpen = false;
       window.scrollTo(0, 0);
       render();
@@ -2482,6 +2588,7 @@ function attachEvents(lesson, color) {
       state.nav         = 'path';
       state.pathView    = 'timeline';
       state.fromPath    = false;
+      state.fromPathTier = null;
       state.mode        = 'study';
       state.tab         = 'words';
       window.scrollTo(0, 0);
@@ -2827,6 +2934,62 @@ function attachEvents(lesson, color) {
   const qb = document.getElementById('quiz-back');
   if (qb) qb.addEventListener('click', () => { state.mode = 'study'; render(); });
 
+  // ── Path-mode in-topic handlers ─────────────────────────────────────
+  // Mark the current step complete + celebration toast + transition to "Next step" state
+  const pathMark = document.getElementById('path-mark-complete');
+  if (pathMark) {
+    pathMark.addEventListener('click', () => {
+      const ctx = getPathContext();
+      if (!ctx) return;
+      const tier = state.fromPathTier || state.currentRound;
+      // Only act if it's not already complete (defensive — the button shouldn't be visible otherwise)
+      if (!isLessonComplete(state.activePath, state.topic, tier)) {
+        toggleLessonComplete(state.activePath, state.topic, tier);
+      }
+      state.pathToast = ctx.isLast
+        ? { text: '🎉 Path complete!', kind: 'final' }
+        : { text: '✓ Step complete!',  kind: 'step'  };
+      render();
+      // Dissolve the toast after a beat. If it was the final step, also auto-return to the timeline.
+      setTimeout(() => {
+        state.pathToast = null;
+        if (ctx.isLast) {
+          state.nav         = 'path';
+          state.pathView    = 'timeline';
+          state.fromPath    = false;
+          state.fromPathTier = null;
+          state.mode        = 'study';
+          state.tab         = 'words';
+          window.scrollTo(0, 0);
+        }
+        render();
+      }, 1400);
+    });
+  }
+
+  // "Next step → Topic" button (visible after a step is complete and there's a next)
+  const pathNext = document.getElementById('path-next-step');
+  if (pathNext) {
+    pathNext.addEventListener('click', () => {
+      const ctx = getPathContext();
+      if (!ctx || !ctx.nextStep) return;
+      window.speechSynthesis.cancel();
+      state.topic        = ctx.nextStep.topic;
+      state.currentRound = ctx.nextStep.round;
+      state.fromPathTier = ctx.nextStep.round;
+      state.mode         = 'study';
+      state.tab          = 'words';
+      state.flipped      = {};
+      state.speaking     = null;
+      state.sentenceBreakdownOpen = {};
+      state.sentenceRevealed = {};
+      state.patternRevealed = {};
+      state.convo        = { convMode:'read', playingLine:null, gapAnswers:{}, bubbleRevealed:{}, breakdownOpen:{}, speakStep:0, speakStatus:'idle', speakHeard:'', speakAutoPlayed:false, speakRevealed:{} };
+      window.scrollTo(0, 0);
+      render();
+    });
+  }
+
   // ── Learning Path events ──────────────────────────────────────────
   // Open a path from the list view → switch to that path's timeline
   document.querySelectorAll('[data-path-open]').forEach(btn => {
@@ -2859,6 +3022,7 @@ function attachEvents(lesson, color) {
       state.nav          = 'topics';
       state.homeView     = false;
       state.fromPath     = true;
+      state.fromPathTier = tier;
       state.mode         = 'study';
       state.tab          = 'words';
       state.flipped      = {};
