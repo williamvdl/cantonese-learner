@@ -108,24 +108,23 @@
   .back-home-btn { display: inline-flex; align-items: center; gap: 5px; background: transparent; border: none; color: #888; font-size: 13px; cursor: pointer; padding: 4px 0; margin-bottom: 8px; font-weight: 600; }
   .back-home-btn:hover { color: #1a1a2e; }
 
-  /* Path-mode banner — replaces the small back link when entered via a Path */
-  .path-banner { display: flex; align-items: center; gap: 12px; padding: 10px 12px; border-radius: 12px; border: 1.5px solid; margin-bottom: 14px; }
+  /* Path-mode combined banner — context + primary action in one card */
+  .path-banner { display: flex; flex-direction: column; gap: 0; border-radius: 12px; border: 1.5px solid; margin-bottom: 14px; overflow: hidden; }
+  .path-banner-row { display: flex; align-items: center; gap: 12px; padding: 10px 12px; }
   .path-banner-back { background: transparent; border: none; font-size: 22px; line-height: 1; color: #1a1a2e; cursor: pointer; padding: 4px 8px; border-radius: 8px; font-weight: 700; }
   .path-banner-back:active { transform: scale(0.92); }
   .path-banner-body { flex: 1; min-width: 0; }
   .path-banner-path { font-size: 13px; font-weight: 700; color: #1a1a2e; line-height: 1.2; }
-  .path-banner-step { font-size: 11px; color: #666; margin-top: 2px; letter-spacing: 0.5px; }
+  .path-banner-step { font-size: 11px; color: #666; margin-top: 2px; letter-spacing: 0.3px; display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+  .path-banner-done-pill { display: inline-flex; align-items: center; background: #d4edda; color: #1E8449; font-weight: 700; padding: 1px 7px; border-radius: 8px; font-size: 10px; letter-spacing: 0.2px; }
+  .path-banner-final { color: #B7791F; font-weight: 700; font-size: 13px; letter-spacing: 0.2px; }
 
-  /* Path-mode completion card — appears below the lesson content */
-  .path-complete-card { margin-top: 20px; padding: 14px 16px; border-radius: 14px; background: #fafafa; border: 1.5px dashed #ddd; text-align: center; }
-  .path-complete-card-done { background: #f0f9f1; border: 1.5px solid #4CAF50; border-style: solid; }
-  .path-complete-status { font-size: 16px; font-weight: 700; color: #1E8449; margin-bottom: 8px; }
-  .path-complete-sub { font-size: 12px; color: #666; margin-top: -4px; }
-  .path-mark-btn, .path-next-btn { display: inline-block; width: 100%; padding: 12px 16px; border-radius: 12px; border: none; color: #fff; font-size: 14px; font-weight: 700; cursor: pointer; }
-  .path-mark-btn:active, .path-next-btn:active { transform: scale(0.98); }
+  /* Path banner action button — bottom row, full width */
+  .path-banner-action { width: 100%; padding: 11px 14px; border: none; color: #fff; font-size: 14px; font-weight: 700; cursor: pointer; border-radius: 0; border-top: 1.5px solid rgba(0,0,0,0.06); }
+  .path-banner-action:active { transform: scale(0.99); filter: brightness(0.95); }
 
-  /* Celebration toast — slides in over the content, dissolves after ~1.4s */
-  .path-toast { position: fixed; left: 50%; top: 28%; transform: translate(-50%, -50%); background: #1E8449; color: #fff; padding: 18px 26px; border-radius: 16px; font-size: 20px; font-weight: 700; box-shadow: 0 8px 28px rgba(0,0,0,0.25); z-index: 10000; animation: pathToastIn 0.25s ease-out, pathToastFade 0.4s ease-in 1s forwards; }
+  /* Celebration toast — slides in over the content, dissolves after ~3s total */
+  .path-toast { position: fixed; left: 50%; top: 28%; transform: translate(-50%, -50%); background: #1E8449; color: #fff; padding: 18px 26px; border-radius: 16px; font-size: 20px; font-weight: 700; box-shadow: 0 8px 28px rgba(0,0,0,0.25); z-index: 10000; animation: pathToastIn 0.25s ease-out, pathToastFade 0.4s ease-in 2.6s forwards; }
   .path-toast-final { background: #B7791F; font-size: 22px; padding: 22px 30px; }
   @keyframes pathToastIn   { from { opacity: 0; transform: translate(-50%, -50%) scale(0.85); } to { opacity: 1; transform: translate(-50%, -50%) scale(1); } }
   @keyframes pathToastFade { from { opacity: 1; } to { opacity: 0; transform: translate(-50%, -50%) scale(0.95); } }
@@ -307,6 +306,28 @@
   .choice-btn.correct { background: #d4edda; border-color: #27AE60; }
   .choice-btn.wrong   { background: #f8d7da; border-color: #E74C3C; }
   .choice-btn:disabled { cursor: default; }
+
+  /* Direction toggle — sits above the prompt card */
+  .quiz-dir-toggle { display: flex; gap: 6px; justify-content: center; margin-bottom: 12px; }
+  .quiz-dir-btn { padding: 6px 12px; border-radius: 20px; background: transparent; border: 1.5px solid; font-size: 12px; font-weight: 700; cursor: pointer; }
+  .quiz-dir-btn:active { transform: scale(0.96); }
+
+  /* Listen-mode prompt card variant */
+  .quiz-card-listen { padding: 30px 16px; display: flex; flex-direction: column; align-items: center; }
+  .quiz-listen-big { width: 88px; height: 88px; border-radius: 50%; border: none; color: #fff; font-size: 36px; cursor: pointer; margin: 8px 0; box-shadow: 0 4px 16px rgba(0,0,0,0.18); }
+  .quiz-listen-big:active { transform: scale(0.95); }
+  .quiz-listen-hint { font-size: 12px; font-weight: 600; margin-top: 4px; }
+
+  /* en-zh choice button variant — shows Chinese + jyutping stacked */
+  .choice-btn-zh { padding: 12px 8px; display: flex; flex-direction: column; align-items: center; gap: 4px; }
+  .choice-zh-chinese { font-size: 22px; line-height: 1.1; color: #1a1a2e; font-weight: 700; }
+  .choice-zh-jp { font-size: 11px; line-height: 1.1; font-weight: 700; }
+
+  /* en-zh choices: single column so longer Chinese phrases fit cleanly */
+  .choices.choices-zh { grid-template-columns: 1fr; }
+
+  /* Quiz prompt for en-zh direction */
+  .quiz-prompt-en { font-size: 28px; line-height: 1.2; color: #1a1a2e; font-weight: 700; padding: 8px 4px; }
 
   /* Wrong-answer pause panel (inside an active quiz) */
   .quiz-wrong-panel { margin-top: 16px; background: #fff5f5; border: 2px solid #E74C3C; border-radius: 12px; padding: 14px 16px; text-align: center; }
@@ -745,7 +766,18 @@ function getQuizInitState(words) {
     done: false,
     choices: buildChoices(queue[0], words),
     wrongAnswers: [],   // [{ word: <wordObj>, chosen: <wrongChineseChar> }]
+    direction: loadQuizDirection(),   // 'zh-en' | 'en-zh' | 'listen-en'
   };
+}
+
+// Persistence for the user's preferred quiz direction
+const QUIZ_DIRECTION_KEY = 'cantonese.quizDirection';
+function loadQuizDirection() {
+  try { return localStorage.getItem(QUIZ_DIRECTION_KEY) || 'zh-en'; }
+  catch (e) { return 'zh-en'; }
+}
+function saveQuizDirection(dir) {
+  try { localStorage.setItem(QUIZ_DIRECTION_KEY, dir); } catch (e) {}
 }
 
 function buildChoices(answer, all) {
@@ -1724,7 +1756,6 @@ function render() {
       const headerEl = ctx
         ? renderPathBanner(ctx, color)
         : `<button class="back-home-btn" id="back-home-btn">← Back to topics</button>`;
-      const footerEl = ctx ? renderPathCompletionCard(ctx, color) : '';
       const toastEl  = state.pathToast ? renderPathToast(state.pathToast) : '';
       mainContent = `
         ${renderVoiceBanner()}
@@ -1733,7 +1764,6 @@ function render() {
           ${renderRoundSelector(state.topic, color)}
           ${renderLessonHeader(lesson, color)}
           ${state.mode === 'quiz' ? renderQuiz(lesson, color) : state.tab === 'convo' ? renderConversation(color) : renderStudy(lesson, color)}
-          ${footerEl}
         </div>
         ${toastEl}`;
     }
@@ -1790,43 +1820,50 @@ function renderHeader(color) {
 }
 
 // ── PATH-MODE UI ─────────────────────────────────────────────────────────────
-// Banner shown at the top of a topic page when the user entered via a Learning
-// Path. Replaces the small "← Back to topics" link with a richer context strip.
+// Combined banner shown at the top of a topic page when the user entered via a
+// Learning Path. One card containing the path context AND the primary action
+// (mark complete / next step / path complete).
 function renderPathBanner(ctx, color) {
-  return `
-    <div class="path-banner" style="background:${color}15;border-color:${color}55">
-      <button class="path-banner-back" id="back-home-btn" aria-label="Back to Learning Path">←</button>
-      <div class="path-banner-body">
-        <div class="path-banner-path">${ctx.path.icon || '🛤️'} ${ctx.path.label} Path</div>
-        <div class="path-banner-step">Step ${ctx.step} of ${ctx.total}</div>
-      </div>
-    </div>`;
-}
-
-// Footer card: either a "mark complete" button (incomplete) or
-// "next step" navigation (complete). Renders only when in path mode.
-function renderPathCompletionCard(ctx, color) {
+  // Row-2 content depends on completion state
+  let actionRow = '';
   if (ctx.isComplete) {
     if (ctx.isLast) {
-      return `
-        <div class="path-complete-card path-complete-card-done">
-          <div class="path-complete-status">🎉 Path complete!</div>
-          <div class="path-complete-sub">You've finished every step of ${ctx.path.label}.</div>
-        </div>`;
-    }
-    return `
-      <div class="path-complete-card path-complete-card-done">
-        <div class="path-complete-status">✓ Step complete</div>
-        <button class="path-next-btn" id="path-next-step" style="background:${color}">
+      // Final step done — no action row, the status sits in the meta line below the path name
+      actionRow = '';
+    } else {
+      // Step done, more to go — offer "Next step → Topic"
+      actionRow = `
+        <button class="path-banner-action path-banner-next" id="path-next-step" style="background:${color}">
           Next step → ${ctx.nextTopicIcon || ''} ${ctx.nextTopicLabel || 'continue'}
-        </button>
-      </div>`;
-  }
-  return `
-    <div class="path-complete-card">
-      <button class="path-mark-btn" id="path-mark-complete" style="background:${color}">
+        </button>`;
+    }
+  } else {
+    actionRow = `
+      <button class="path-banner-action path-banner-mark" id="path-mark-complete" style="background:${color}">
         ✓ Mark step complete
-      </button>
+      </button>`;
+  }
+
+  // Meta line: "Step N of M" + completion status indicator when relevant
+  let metaLine;
+  if (ctx.isComplete && ctx.isLast) {
+    metaLine = `<span class="path-banner-final">🎉 Path complete!</span>`;
+  } else if (ctx.isComplete) {
+    metaLine = `Step ${ctx.step} of ${ctx.total} <span class="path-banner-done-pill">✓ Complete</span>`;
+  } else {
+    metaLine = `Step ${ctx.step} of ${ctx.total}`;
+  }
+
+  return `
+    <div class="path-banner" style="background:${color}15;border-color:${color}55">
+      <div class="path-banner-row">
+        <button class="path-banner-back" id="back-home-btn" aria-label="Back to Learning Path">←</button>
+        <div class="path-banner-body">
+          <div class="path-banner-path">${ctx.path.icon || '🛤️'} ${ctx.path.label} Path</div>
+          <div class="path-banner-step">${metaLine}</div>
+        </div>
+      </div>
+      ${actionRow}
     </div>`;
 }
 
@@ -2300,14 +2337,16 @@ function renderQuiz(lesson, color) {
     const emoji = pct >= 0.75 ? '🏆' : pct >= 0.5 ? '⭐' : '💪';
     const msg   = pct >= 0.75 ? "Excellent! You're a natural!" : pct >= 0.5 ? "Good effort! Keep practising." : "Keep going — practice makes perfect!";
 
-    // Build the missed-word review list (only when there were misses)
+    // Build the missed-word review list (only when there were misses).
+    // Direction-aware: "You chose" shows English or Chinese depending on what the choice buttons displayed.
     const reviewList = q.wrongAnswers.length
       ? `<div class="quiz-review-wrap">
           <div class="quiz-review-title">Words to review (${q.wrongAnswers.length})</div>
           ${q.wrongAnswers.map(w => {
-            // Find the English of what the user chose, by looking it up in the original word list
             const chosenWord = getRoundWords(state.topic, state.currentRound).find(rw => rw.c === w.chosen);
-            const chosenEn = chosenWord ? chosenWord.e : w.chosen;
+            const chosenLabel = chosenWord
+              ? (q.direction === 'en-zh' ? chosenWord.c : chosenWord.e)
+              : w.chosen;
             return `
             <div class="quiz-review-item">
               <button class="quiz-review-play" data-quiz-review-play="${w.word.c}" style="border-color:${color};color:${color}" aria-label="Listen">▶</button>
@@ -2315,7 +2354,7 @@ function renderQuiz(lesson, color) {
                 <div class="quiz-review-chinese">${w.word.c}</div>
                 <div class="quiz-review-jp">${colorJyutping(w.word.j)}</div>
                 <div class="quiz-review-en"><span style="color:#27AE60">${w.word.e}</span></div>
-                <div class="quiz-review-chose">You chose: <span style="color:#E74C3C">${chosenEn}</span></div>
+                <div class="quiz-review-chose">You chose: <span style="color:#E74C3C">${chosenLabel}</span></div>
               </div>
             </div>`;
           }).join('')}
@@ -2335,12 +2374,61 @@ function renderQuiz(lesson, color) {
 
   const cw = q.queue[q.idx];
   const pct = (q.idx / q.queue.length * 100).toFixed(0);
+
+  // === DIRECTION TOGGLE ==========================================
+  // Three modes: zh-en (Chinese prompt → pick English), en-zh (English prompt → pick Chinese),
+  // listen-en (audio prompt → pick English). Disabled mid-question to avoid mid-quiz confusion.
+  const dirs = [
+    { key:'zh-en',    label:'漢→EN', title:'See Chinese, pick English' },
+    { key:'en-zh',    label:'EN→漢', title:'See English, pick Chinese' },
+    { key:'listen-en',label:'🔊→EN', title:'Listen, pick English' },
+  ];
+  const dirToggle = `
+    <div class="quiz-dir-toggle" role="tablist" aria-label="Quiz direction">
+      ${dirs.map(d => {
+        const active = q.direction === d.key;
+        return `<button class="quiz-dir-btn${active ? ' active' : ''}" data-quiz-dir="${d.key}" title="${d.title}"
+          style="${active ? `background:${color};color:#fff;border-color:${color}` : `color:${color};border-color:${color}66`}">${d.label}</button>`;
+      }).join('')}
+    </div>`;
+
+  // === PROMPT CARD (varies by direction) =========================
+  let promptCard;
+  if (q.direction === 'en-zh') {
+    promptCard = `
+      <div class="quiz-card" style="border:2px solid ${color}22">
+        <div class="quiz-label">Pick the Cantonese for:</div>
+        <div class="quiz-prompt-en">${cw.e}</div>
+      </div>`;
+  } else if (q.direction === 'listen-en') {
+    promptCard = `
+      <div class="quiz-card quiz-card-listen" style="border:2px solid ${color}22">
+        <div class="quiz-label">Listen — what does it mean?</div>
+        <button class="quiz-listen-big" id="quiz-listen" style="background:${color}" aria-label="Play audio">🔊</button>
+        <div class="quiz-listen-hint" style="color:${color}">Tap to replay</div>
+      </div>`;
+  } else {
+    promptCard = `
+      <div class="quiz-card" style="border:2px solid ${color}22">
+        <div class="quiz-label">What does this mean?</div>
+        <div class="quiz-chinese">${cw.c}</div>
+        <div class="quiz-jyutping">${colorJyutping(cw.j)}</div>
+        <button class="quiz-listen" id="quiz-listen" style="border:1.5px solid ${color};color:${color}">▶ Listen</button>
+      </div>`;
+  }
+
+  // === CHOICE BUTTONS (varies by direction) ======================
+  // For en-zh, choices show Chinese + jyutping. For others, English.
   const choiceBtns = q.choices.map(c => {
     const isCorrect = c.c === cw.c;
     const isChosen  = q.selected === c.c;
     let cls = 'choice-btn';
+    if (q.direction === 'en-zh') cls += ' choice-btn-zh';
     if (q.selected) { if (isCorrect) cls += ' correct'; else if (isChosen) cls += ' wrong'; }
-    return `<button class="${cls}" data-choice="${c.c}" ${q.selected ? 'disabled' : ''}>${c.e}</button>`;
+    const body = q.direction === 'en-zh'
+      ? `<div class="choice-zh-chinese">${c.c}</div><div class="choice-zh-jp">${colorJyutping(c.j)}</div>`
+      : c.e;
+    return `<button class="${cls}" data-choice="${c.c}" ${q.selected ? 'disabled' : ''}>${body}</button>`;
   }).join('');
 
   // After a wrong answer, hold the question and show a review panel with
@@ -2366,13 +2454,9 @@ function renderQuiz(lesson, color) {
     <div class="progress-bar">
       <div class="progress-fill" style="background:${color};width:${pct}%"></div>
     </div>
-    <div class="quiz-card" style="border:2px solid ${color}22">
-      <div class="quiz-label">What does this mean?</div>
-      <div class="quiz-chinese">${cw.c}</div>
-      <div class="quiz-jyutping">${colorJyutping(cw.j)}</div>
-      <button class="quiz-listen" id="quiz-listen" style="border:1.5px solid ${color};color:${color}">▶ Listen</button>
-    </div>
-    <div class="choices">${choiceBtns}</div>
+    ${dirToggle}
+    ${promptCard}
+    <div class="choices${q.direction === 'en-zh' ? ' choices-zh' : ''}">${choiceBtns}</div>
     ${wrongPanel}`;
 }
 
@@ -2897,6 +2981,36 @@ function attachEvents(lesson, color) {
   const qNext = document.getElementById('quiz-next');
   if (qNext) qNext.addEventListener('click', () => advanceQuiz());
 
+  // Direction toggle — switching direction restarts the quiz from a clean state
+  // (avoids confusion of half-quiz with mixed prompt types).
+  document.querySelectorAll('[data-quiz-dir]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const newDir = btn.dataset.quizDir;
+      if (state.quiz && state.quiz.direction === newDir) return;
+      saveQuizDirection(newDir);
+      // Reset the quiz with the new direction
+      const words = getRoundWords(state.topic, state.currentRound);
+      state.quiz = getQuizInitState(words);
+      state.quiz.direction = newDir;   // override default from storage in case race
+      state.quiz._listenAutoPlayed = null;
+      render();
+    });
+  });
+
+  // Listen mode: auto-play the audio on each new question (once, not on re-renders)
+  if (state.quiz && !state.quiz.done && state.quiz.direction === 'listen-en') {
+    if (state.quiz._listenAutoPlayed !== state.quiz.idx) {
+      state.quiz._listenAutoPlayed = state.quiz.idx;
+      // Small delay so the new prompt card is on screen first
+      setTimeout(() => {
+        if (state.quiz && !state.quiz.done && state.quiz.direction === 'listen-en' &&
+            state.quiz._listenAutoPlayed === state.quiz.idx) {
+          speak(state.quiz.queue[state.quiz.idx].c);
+        }
+      }, 250);
+    }
+  }
+
   // Replay-correct button on the wrong-answer pause panel
   const qReplay = document.getElementById('quiz-replay');
   if (qReplay && state.quiz) {
@@ -2963,7 +3077,7 @@ function attachEvents(lesson, color) {
           window.scrollTo(0, 0);
         }
         render();
-      }, 1400);
+      }, 3000);
     });
   }
 
