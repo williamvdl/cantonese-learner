@@ -286,6 +286,28 @@
   .choice-btn.wrong   { background: #f8d7da; border-color: #E74C3C; }
   .choice-btn:disabled { cursor: default; }
 
+  /* Wrong-answer pause panel (inside an active quiz) */
+  .quiz-wrong-panel { margin-top: 16px; background: #fff5f5; border: 2px solid #E74C3C; border-radius: 12px; padding: 14px 16px; text-align: center; }
+  .quiz-wrong-heading { font-size: 13px; font-weight: 700; color: #7b1c1c; margin-bottom: 6px; }
+  .quiz-wrong-chinese { font-size: 32px; color: #1a1a2e; line-height: 1.2; }
+  .quiz-wrong-jp { font-size: 13px; margin-top: 4px; }
+  .quiz-wrong-en { font-size: 15px; color: #27AE60; font-weight: 700; margin-top: 4px; }
+  .quiz-wrong-actions { display: flex; gap: 8px; justify-content: center; margin-top: 12px; flex-wrap: wrap; }
+  .quiz-replay { background: transparent; border-radius: 20px; padding: 8px 14px; cursor: pointer; font-size: 13px; font-weight: 600; border: 1.5px solid; }
+  .quiz-next   { background: #1a1a2e; color: #fff; border-radius: 20px; padding: 8px 18px; cursor: pointer; font-size: 13px; font-weight: 700; border: none; }
+
+  /* End-of-quiz review list */
+  .quiz-review-wrap   { margin-top: 24px; text-align: left; }
+  .quiz-review-title  { font-size: 12px; color: #888; letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 10px; text-align: center; }
+  .quiz-review-item   { display: flex; gap: 12px; align-items: flex-start; background: #fff; border: 1px solid #eee; border-radius: 12px; padding: 12px 14px; margin-bottom: 8px; }
+  .quiz-review-play   { flex: 0 0 auto; width: 36px; height: 36px; border-radius: 50%; border: 1.5px solid; background: transparent; font-size: 13px; cursor: pointer; }
+  .quiz-review-body   { flex: 1 1 auto; min-width: 0; }
+  .quiz-review-chinese{ font-size: 22px; color: #1a1a2e; line-height: 1.2; }
+  .quiz-review-jp     { font-size: 12px; margin-top: 2px; }
+  .quiz-review-en     { font-size: 13px; margin-top: 4px; font-weight: 600; }
+  .quiz-review-chose  { font-size: 11px; color: #888; margin-top: 2px; }
+  .quiz-retry-btn     { display: block; width: 100%; margin-top: 14px; color: #fff; padding: 12px; border-radius: 12px; border: none; font-size: 14px; font-weight: 700; cursor: pointer; }
+
   /* Quiz result */
   .result { text-align: center; padding: 40px 16px; }
   .result-emoji { font-size: 56px; }
@@ -698,12 +720,28 @@ function getQuizInitState(words) {
     selected: null,
     done: false,
     choices: buildChoices(queue[0], words),
+    wrongAnswers: [],   // [{ word: <wordObj>, chosen: <wrongChineseChar> }]
   };
 }
 
 function buildChoices(answer, all) {
   const others = shuffle(all.filter(w => w.c !== answer.c)).slice(0, 3);
   return shuffle([...others, answer]);
+}
+
+// Move to the next quiz question, or mark done.
+function advanceQuiz() {
+  const q = state.quiz;
+  if (!q) return;
+  const next = q.idx + 1;
+  if (next >= q.queue.length) {
+    q.done = true;
+  } else {
+    q.idx = next;
+    q.selected = null;
+    q.choices = buildChoices(q.queue[next], getRoundWords(state.topic, state.currentRound));
+  }
+  render();
 }
 
 function playAllConvo(lines, idx) {
@@ -2157,12 +2195,37 @@ function renderQuiz(lesson, color) {
     const pct = q.score / q.queue.length;
     const emoji = pct >= 0.75 ? '🏆' : pct >= 0.5 ? '⭐' : '💪';
     const msg   = pct >= 0.75 ? "Excellent! You're a natural!" : pct >= 0.5 ? "Good effort! Keep practising." : "Keep going — practice makes perfect!";
+
+    // Build the missed-word review list (only when there were misses)
+    const reviewList = q.wrongAnswers.length
+      ? `<div class="quiz-review-wrap">
+          <div class="quiz-review-title">Words to review (${q.wrongAnswers.length})</div>
+          ${q.wrongAnswers.map(w => {
+            // Find the English of what the user chose, by looking it up in the original word list
+            const chosenWord = getRoundWords(state.topic, state.currentRound).find(rw => rw.c === w.chosen);
+            const chosenEn = chosenWord ? chosenWord.e : w.chosen;
+            return `
+            <div class="quiz-review-item">
+              <button class="quiz-review-play" data-quiz-review-play="${w.word.c}" style="border-color:${color};color:${color}" aria-label="Listen">▶</button>
+              <div class="quiz-review-body">
+                <div class="quiz-review-chinese">${w.word.c}</div>
+                <div class="quiz-review-jp">${colorJyutping(w.word.j)}</div>
+                <div class="quiz-review-en"><span style="color:#27AE60">${w.word.e}</span></div>
+                <div class="quiz-review-chose">You chose: <span style="color:#E74C3C">${chosenEn}</span></div>
+              </div>
+            </div>`;
+          }).join('')}
+          <button class="quiz-retry-btn" id="quiz-retry-missed" style="background:${color}">↻ Retry missed words</button>
+        </div>`
+      : '';
+
     return `
       <div class="result">
         <div class="result-emoji">${emoji}</div>
         <div class="result-score" style="color:${color}">${q.score} / ${q.queue.length} correct</div>
         <div class="result-msg">${msg}</div>
         <button class="back-btn" id="quiz-back" style="background:${color}">← Back to Lesson</button>
+        ${reviewList}
       </div>`;
   }
 
@@ -2175,6 +2238,21 @@ function renderQuiz(lesson, color) {
     if (q.selected) { if (isCorrect) cls += ' correct'; else if (isChosen) cls += ' wrong'; }
     return `<button class="${cls}" data-choice="${c.c}" ${q.selected ? 'disabled' : ''}>${c.e}</button>`;
   }).join('');
+
+  // After a wrong answer, hold the question and show a review panel with
+  // correct answer details + a "Got it" button. Correct answers still auto-advance.
+  const wrongPanel = (q.selected && q.selected !== cw.c)
+    ? `<div class="quiz-wrong-panel">
+        <div class="quiz-wrong-heading">Not quite — the answer was:</div>
+        <div class="quiz-wrong-chinese">${cw.c}</div>
+        <div class="quiz-wrong-jp">${colorJyutping(cw.j)}</div>
+        <div class="quiz-wrong-en">${cw.e}</div>
+        <div class="quiz-wrong-actions">
+          <button class="quiz-replay" id="quiz-replay" style="border-color:${color};color:${color}">▶ Hear it again</button>
+          <button class="quiz-next" id="quiz-next" style="background:${color}">Got it — next →</button>
+        </div>
+      </div>`
+    : '';
 
   return `
     <div class="quiz-meta">
@@ -2190,7 +2268,8 @@ function renderQuiz(lesson, color) {
       <div class="quiz-jyutping">${colorJyutping(cw.j)}</div>
       <button class="quiz-listen" id="quiz-listen" style="border:1.5px solid ${color};color:${color}">▶ Listen</button>
     </div>
-    <div class="choices">${choiceBtns}</div>`;
+    <div class="choices">${choiceBtns}</div>
+    ${wrongPanel}`;
 }
 
 // ── Events ────────────────────────────────────────────────────────────────────
@@ -2692,22 +2771,57 @@ function attachEvents(lesson, color) {
         const correct = chosen === cw.c;
         speak(cw.c);
         state.quiz.selected = chosen;
-        if (correct) state.quiz.score++;
+        if (correct) {
+          state.quiz.score++;
+        } else {
+          state.quiz.wrongAnswers.push({ word: cw, chosen });
+        }
         render();
-        setTimeout(() => {
-          const next = state.quiz.idx + 1;
-          if (next >= state.quiz.queue.length) {
-            state.quiz.done = true;
-          } else {
-            state.quiz.idx = next;
-            state.quiz.selected = null;
-            state.quiz.choices = buildChoices(state.quiz.queue[next], getRoundWords(state.topic, state.currentRound));
-          }
-          render();
-        }, 950);
+        // On correct: auto-advance after a short beat so the green tick lands.
+        // On wrong: stay on the question; the user must tap "Got it" to advance.
+        if (correct) {
+          setTimeout(() => advanceQuiz(), 950);
+        }
       });
     });
   }
+
+  // "Got it — next" button shown after wrong answers
+  const qNext = document.getElementById('quiz-next');
+  if (qNext) qNext.addEventListener('click', () => advanceQuiz());
+
+  // Replay-correct button on the wrong-answer pause panel
+  const qReplay = document.getElementById('quiz-replay');
+  if (qReplay && state.quiz) {
+    qReplay.addEventListener('click', () => speak(state.quiz.queue[state.quiz.idx].c));
+  }
+
+  // End-of-quiz: retry just the missed words
+  const qRetry = document.getElementById('quiz-retry-missed');
+  if (qRetry) {
+    qRetry.addEventListener('click', () => {
+      const missed   = state.quiz.wrongAnswers.map(w => w.word);
+      const fullPool = getRoundWords(state.topic, state.currentRound);
+      // Build a fresh quiz where the queue is just the missed words but the
+      // wrong-answer choices are still drawn from the full topic word pool so
+      // each question still has 4 options to pick from.
+      state.quiz = {
+        queue: shuffle(missed),
+        idx: 0,
+        score: 0,
+        selected: null,
+        done: false,
+        choices: buildChoices(missed[0], fullPool),
+        wrongAnswers: [],
+      };
+      render();
+    });
+  }
+
+  // End-of-quiz: play a missed word from the review list
+  document.querySelectorAll('[data-quiz-review-play]').forEach(btn => {
+    btn.addEventListener('click', () => speak(btn.dataset.quizReviewPlay));
+  });
 
   // Quiz back
   const qb = document.getElementById('quiz-back');
