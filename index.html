@@ -5,10 +5,45 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#1A1815">
 <link rel="manifest" href="./manifest.json">
+
+<!-- Font system: Source Serif 4 (English serif headers), Inter (English UI), Noto Serif TC (Chinese) -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&family=Noto+Serif+TC:wght@400;500;600;700&display=swap" rel="stylesheet">
 <title>廣東話 Cantonese Learner</title>
 <style>
+  /* ── Type System ─────────────────────────────────────────────────────────── */
+  :root {
+    /* Font stacks — Chinese face listed FIRST so CJK chars render in Noto Serif TC; English fallback follows */
+    --font-serif:   'Noto Serif TC', 'Source Serif 4', Georgia, 'Times New Roman', serif;
+    --font-ui:      'Inter', 'Noto Serif TC', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+    --font-display: 'Noto Serif TC', 'Source Serif 4', Georgia, serif;
+
+    /* Size scale */
+    --fs-micro:   11px;
+    --fs-meta:    12px;
+    --fs-small:   13px;
+    --fs-body:    15px;
+    --fs-lead:    17px;
+    --fs-h3:      22px;
+    --fs-h2:      28px;
+    --fs-h1:      36px;
+    --fs-display: 56px;
+
+    /* Line heights */
+    --lh-display: 1.1;
+    --lh-heading: 1.25;
+    --lh-body:    1.5;
+
+    /* Weights */
+    --fw-regular: 400;
+    --fw-medium:  500;
+    --fw-semi:    600;
+    --fw-bold:    700;
+  }
+
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: system-ui, -apple-system, sans-serif; background: #F7F1E3; min-height: 100vh; padding-bottom: 70px; }
+  body { font-family: var(--font-ui); background: #F7F1E3; min-height: 100vh; padding-bottom: 70px; font-size: var(--fs-body); line-height: var(--lh-body); color: #2A2422; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
   button { font-family: inherit; }
   ::-webkit-scrollbar { display: none; }
 
@@ -448,6 +483,163 @@
   .voice-banner-text { flex: 1; }
   .voice-banner-dismiss { background: transparent; border: none; color: inherit; font-size: 16px; line-height: 1; cursor: pointer; padding: 0 4px; opacity: 0.6; }
   .voice-banner-dismiss:hover { opacity: 1; }
+  /* ── Type Pass — applied LAST so it overrides earlier ad-hoc rules ──────── */
+
+  /* Display Chinese — use Noto Serif TC weight 600/700 for editorial gravitas */
+  .card-chinese,
+  .quiz-chinese,
+  .sentence-chinese,
+  .bubble-chinese,
+  .pattern-structure,
+  .quiz-review-chinese,
+  .quiz-wrong-chinese,
+  .speak-target-zh,
+  .translate-zh,
+  .pattern-ex-zh,
+  .breakdown-zh,
+  .home-title,
+  .lesson-title,
+  .quiz-prompt-en {
+    font-family: var(--font-display);
+    font-weight: var(--fw-semi);
+    line-height: var(--lh-heading);
+    letter-spacing: -0.005em;
+  }
+
+  /* Hero brand title — Noto Serif TC bold, slightly larger */
+  .header-title .zh {
+    font-family: var(--font-display);
+    font-weight: var(--fw-bold);
+    font-size: 26px;
+    letter-spacing: 0.04em;
+  }
+
+  /* English serif for editorial section heads */
+  .home-title { font-family: var(--font-serif); font-size: var(--fs-h2); font-weight: var(--fw-bold); letter-spacing: -0.01em; }
+  .lesson-title { font-family: var(--font-serif); font-size: var(--fs-h2); font-weight: var(--fw-bold); letter-spacing: -0.01em; }
+
+  /* Big Chinese display sizes — bump and tighten */
+  .quiz-chinese { font-size: var(--fs-display); line-height: var(--lh-display); }
+  .card-chinese { font-size: var(--fs-h1); line-height: var(--lh-display); }
+  .sentence-chinese { font-size: var(--fs-lead); line-height: 1.4; }
+  .bubble-chinese { font-size: var(--fs-lead); line-height: 1.4; }
+  .quiz-prompt-en { font-size: var(--fs-h2); line-height: var(--lh-heading); }
+
+  /* Category section heads — editorial uppercase, refined */
+  .cat-section-title {
+    font-family: var(--font-ui);
+    font-size: var(--fs-meta);
+    font-weight: var(--fw-bold);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+  }
+  .cat-section-count {
+    font-family: var(--font-ui);
+    font-size: 10px;
+    font-weight: var(--fw-semi);
+    letter-spacing: 0.06em;
+  }
+
+  /* Topic card labels — slightly larger, better weight */
+  .topic-card-label {
+    font-family: var(--font-ui);
+    font-size: var(--fs-body);
+    font-weight: var(--fw-semi);
+    line-height: 1.3;
+    letter-spacing: -0.005em;
+  }
+  .topic-card-meta {
+    font-family: var(--font-ui);
+    font-size: var(--fs-meta);
+    font-weight: var(--fw-regular);
+    letter-spacing: 0;
+  }
+
+  /* Meta + UI labels — uppercase tracking for premium "luxury label" feel */
+  .header-title .en,
+  .quiz-label,
+  .quiz-review-title,
+  .pattern-label,
+  .pattern-number,
+  .round-label {
+    font-family: var(--font-ui);
+    font-weight: var(--fw-bold);
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+  }
+
+  /* Jyutping pronunciation — slightly nicer, weight up */
+  .card-jyutping, .sentence-jyutping, .bubble-jyutping,
+  .quiz-jyutping, .quiz-review-jp, .quiz-wrong-jp, .pattern-ex-jp,
+  .translate-jp, .breakdown-jp, .path-banner-step {
+    font-family: var(--font-ui);
+    font-weight: var(--fw-semi);
+    letter-spacing: 0.01em;
+  }
+
+  /* Button labels — tighten and lift */
+  button, .mode-btn, .topic-btn, .quiz-dir-btn, .round-btn,
+  .nav-item, .path-banner-action, .quiz-retry-btn, .back-btn,
+  .speed-btn, .quiz-next {
+    font-family: var(--font-ui);
+    font-weight: var(--fw-semi);
+    letter-spacing: 0.01em;
+  }
+  .nav-item .ni-label {
+    font-family: var(--font-ui);
+    font-weight: var(--fw-semi);
+    font-size: var(--fs-body);
+    letter-spacing: 0;
+  }
+
+  /* Pattern + path titles — proper editorial */
+  .pattern-card .pattern-head .pattern-label {
+    /* already covered */
+  }
+  .path-card-title, .path-timeline-title, .path-step-title {
+    font-family: var(--font-serif);
+    font-weight: var(--fw-bold);
+    letter-spacing: -0.005em;
+  }
+  .path-card-title { font-size: var(--fs-lead); }
+  .path-timeline-title { font-size: var(--fs-h2); }
+  .path-step-title { font-size: var(--fs-body); }
+
+  /* Notes + descriptive prose */
+  .pattern-note, .lesson-note-body, .path-card-desc, .path-timeline-sub,
+  .home-subtitle, .hint {
+    font-family: var(--font-ui);
+    font-weight: var(--fw-regular);
+    line-height: 1.55;
+  }
+  .lesson-note-body { font-size: var(--fs-small); }
+
+  /* English translations — softer */
+  .card-english, .sentence-english, .bubble-english,
+  .pattern-ex-en, .quiz-review-en, .quiz-wrong-en {
+    font-family: var(--font-ui);
+    letter-spacing: 0;
+  }
+  .sentence-english, .pattern-ex-en { font-size: var(--fs-small); }
+
+  /* Result screen — editorial finish */
+  .result-score { font-family: var(--font-serif); font-weight: var(--fw-bold); letter-spacing: -0.01em; }
+
+  /* Path banner — refine the heavy step indicator */
+  .path-banner-path {
+    font-family: var(--font-ui);
+    font-weight: var(--fw-semi);
+    font-size: var(--fs-small);
+    letter-spacing: 0.01em;
+  }
+  .path-banner-step {
+    font-family: var(--font-ui);
+    font-weight: var(--fw-regular);
+    font-size: var(--fs-micro);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+
 </style>
 </head>
 <body>
