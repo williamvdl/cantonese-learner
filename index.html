@@ -40,6 +40,25 @@
     --fw-medium:  500;
     --fw-semi:    600;
     --fw-bold:    700;
+
+    /* Spacing scale — based on 4px grid. Use these instead of arbitrary px values */
+    --sp-1:  4px;
+    --sp-2:  8px;
+    --sp-3:  12px;
+    --sp-4:  16px;
+    --sp-5:  24px;
+    --sp-6:  32px;
+    --sp-7:  48px;
+    --sp-8:  64px;
+
+    /* Radii — consistent corner system */
+    --r-sm:   8px;
+    --r-md:   12px;
+    --r-lg:   16px;
+    --r-pill: 999px;
+
+    /* Touch target minimums — Apple HIG / Material both recommend 44px */
+    --tap-min: 44px;
   }
 
   * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -507,11 +526,23 @@
   }
 
   /* Hero brand title — Noto Serif TC bold, slightly larger */
+  .header-title {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0;
+  }
   .header-title .zh {
     font-family: var(--font-display);
     font-weight: var(--fw-bold);
-    font-size: 26px;
-    letter-spacing: 0.04em;
+    font-size: 24px;
+    letter-spacing: 0.06em;
+    line-height: 1.1;
+  }
+  .header-title .en {
+    font-size: 9px;
+    letter-spacing: 0.22em;
+    margin-top: 1px;
   }
 
   /* English serif for editorial section heads */
@@ -639,6 +670,208 @@
     text-transform: uppercase;
     letter-spacing: 0.1em;
   }
+
+  /* ── Spacing Pass — applied LAST to override earlier ad-hoc values ──────── */
+
+  /* Body — more comfortable bottom padding */
+  body { padding-bottom: var(--sp-7); }
+
+  /* Page chrome — more breathing room */
+  .content { padding: var(--sp-4) var(--sp-5) var(--sp-7); max-width: 680px; margin: 0 auto; }
+  .home-wrap { padding: var(--sp-4) var(--sp-5) var(--sp-7); }
+
+  /* Header — slightly more vertical breathing room */
+  .header { padding: var(--sp-3) var(--sp-5); }
+  .header-details { margin-top: var(--sp-3); padding-top: var(--sp-3); border-top: 1px solid rgba(255,255,255,0.10); }
+  .tone-key { gap: var(--sp-3) var(--sp-3); padding-bottom: var(--sp-2); }
+
+  /* Touch targets — header buttons */
+  .header-info-btn { width: 34px; height: 34px; }
+  .hamburger { padding: var(--sp-2); min-width: 36px; min-height: 36px; align-items: center; justify-content: center; }
+
+  /* Voice banner — quieter spacing */
+  .voice-banner { margin: var(--sp-3) var(--sp-5) 0; padding: var(--sp-2) var(--sp-3); border-radius: var(--r-sm); }
+  .voice-banner-compact { padding: var(--sp-1) var(--sp-3); }
+
+  /* Home page — more dignified rhythm */
+  .home-header { margin-bottom: var(--sp-4); }
+  .home-title { margin-bottom: var(--sp-1); }
+  .cat-filter-wrap { margin-bottom: var(--sp-5); }
+  .cat-section { margin-bottom: var(--sp-6); }                  /* was sometimes 20px, sometimes 22 */
+  .cat-section-header { margin-bottom: var(--sp-3); }
+  .cat-section-title { gap: var(--sp-2); }
+  .topic-grid { gap: var(--sp-3); }                              /* was 10px */
+  .topic-card { padding: var(--sp-4) var(--sp-3); gap: var(--sp-1); }
+  .topic-card-meta { margin-top: var(--sp-2); }
+
+  /* Topic page — better separation between header/tier selector/mode tabs */
+  .back-home-btn { margin-bottom: var(--sp-3); padding: var(--sp-2) 0; }
+  .round-selector { margin-bottom: var(--sp-3); gap: var(--sp-2); }
+  .round-btn { padding: var(--sp-1) var(--sp-3); min-height: 32px; }
+  .lesson-header { margin-bottom: var(--sp-4); }
+  .lesson-count { margin-top: var(--sp-1); }
+  .hint { margin-bottom: var(--sp-3); }
+  .mode-row, .conv-mode-pills { gap: var(--sp-2); margin-bottom: var(--sp-4); }
+  .mode-btn { padding: var(--sp-2) var(--sp-4); min-height: var(--tap-min); display: inline-flex; align-items: center; justify-content: center; }
+  .conv-mode-pill { padding: var(--sp-2) var(--sp-4); min-height: var(--tap-min); display: inline-flex; align-items: center; justify-content: center; }
+
+  /* Word grid — more breathing room between cards */
+  .word-grid { gap: var(--sp-3); }
+  .word-card { padding: var(--sp-5) var(--sp-3); min-height: 140px; gap: var(--sp-1); }
+
+  /* Sentences — more padding inside cards, better gaps */
+  .sentences { margin-top: var(--sp-6); }
+  .sentences h3 { margin-bottom: var(--sp-3); }
+  .sentence-card { padding: var(--sp-3) var(--sp-4); margin-bottom: var(--sp-2); gap: var(--sp-3); }
+  .sentence-card .sentence-chinese { margin-bottom: var(--sp-1); }
+  .sentence-jyutping { margin-top: var(--sp-1); }
+  .sentence-english { margin-top: var(--sp-1); }
+  .breakdown-btn { margin-top: var(--sp-2); padding: var(--sp-1) var(--sp-3); }
+  .sentence-play { width: 44px; height: 44px; }   /* tap target */
+
+  /* Tone guide — refine */
+  .tone-guide { margin-top: var(--sp-6); padding: var(--sp-4); border-radius: var(--r-md); }
+  .tone-guide h3 { margin-bottom: var(--sp-3); }
+  .tone-grid { gap: var(--sp-2); }
+  .tone-row { padding: var(--sp-1) 0; }
+  .tone-note { margin-top: var(--sp-3); }
+
+  /* Path banner — slimmer, more refined */
+  .path-banner { margin-bottom: var(--sp-3); border-radius: var(--r-md); }
+  .path-banner-row { padding: var(--sp-3) var(--sp-3); gap: var(--sp-3); }
+  .path-banner-back { width: var(--tap-min); height: var(--tap-min); display: flex; align-items: center; justify-content: center; font-size: 18px; padding: 0; }
+  .path-banner-body { gap: var(--sp-1); display: flex; flex-direction: column; }
+  .path-banner-action { padding: var(--sp-3) var(--sp-4); min-height: var(--tap-min); }
+  .path-banner-done-pill { padding: 2px var(--sp-2); margin-left: var(--sp-1); }
+
+  /* Path list page */
+  .path-list { gap: var(--sp-3); }
+  .path-card { padding: var(--sp-4); border-radius: var(--r-md); }
+  .path-card-top { margin-bottom: var(--sp-2); gap: var(--sp-3); }
+  .path-card-desc { margin-bottom: var(--sp-3); }
+  .path-level-header { margin: var(--sp-5) 0 var(--sp-2); }
+
+  /* Path timeline page — more breathing room between steps */
+  .path-timeline-header { margin-bottom: var(--sp-5); }
+  .path-timeline-sub { margin-top: var(--sp-1); margin-bottom: var(--sp-3); }
+  .path-timeline-progress { margin-top: var(--sp-2); }
+  .path-step-row { padding: var(--sp-1) 0; }
+  .path-step-card { padding: var(--sp-3) var(--sp-3); border-radius: var(--r-md); }
+  .path-step-body { gap: var(--sp-1); }
+
+  /* Quiz — more breathing room */
+  .quiz-meta { margin-bottom: var(--sp-2); }
+  .progress-bar { margin-bottom: var(--sp-4); height: 4px; }
+  .quiz-dir-toggle { gap: var(--sp-2); margin-bottom: var(--sp-4); }
+  .quiz-dir-btn { padding: var(--sp-2) var(--sp-3); min-height: 36px; }
+  .quiz-card { padding: var(--sp-6) var(--sp-4); margin-bottom: var(--sp-5); border-radius: var(--r-md); }
+  .quiz-card-listen { padding: var(--sp-7) var(--sp-4); gap: var(--sp-2); }
+  .quiz-label { margin-bottom: var(--sp-2); }
+  .quiz-chinese { margin-bottom: var(--sp-3); }
+  .quiz-jyutping { margin-bottom: var(--sp-3); }
+  .quiz-listen { margin-top: var(--sp-2); padding: var(--sp-2) var(--sp-4); min-height: 36px; }
+  .quiz-listen-big { width: 96px; height: 96px; margin: var(--sp-2) 0; }
+  .choices { gap: var(--sp-3); margin-bottom: var(--sp-3); }
+  .choice-btn { padding: var(--sp-3) var(--sp-3); min-height: var(--tap-min); }
+  .choice-btn-zh { padding: var(--sp-3) var(--sp-3); gap: var(--sp-1); }
+
+  /* Quiz wrong-answer panel */
+  .quiz-wrong-panel { margin-top: var(--sp-4); padding: var(--sp-4); border-radius: var(--r-md); }
+  .quiz-wrong-heading { margin-bottom: var(--sp-2); }
+  .quiz-wrong-chinese { margin-bottom: var(--sp-1); }
+  .quiz-wrong-jp { margin-top: var(--sp-1); }
+  .quiz-wrong-en { margin-top: var(--sp-1); }
+  .quiz-wrong-actions { margin-top: var(--sp-4); gap: var(--sp-2); }
+  .quiz-replay, .quiz-next { padding: var(--sp-2) var(--sp-4); min-height: 36px; }
+
+  /* Quiz result + review */
+  .result { padding: var(--sp-7) var(--sp-5); }
+  .result-emoji { margin-bottom: var(--sp-2); }
+  .result-score { margin-top: var(--sp-2); }
+  .result-msg { margin-top: var(--sp-2); }
+  .back-btn { margin-top: var(--sp-5); padding: var(--sp-3) var(--sp-6); min-height: var(--tap-min); }
+  .quiz-review-wrap { margin-top: var(--sp-6); }
+  .quiz-review-title { margin-bottom: var(--sp-3); }
+  .quiz-review-item { padding: var(--sp-3) var(--sp-4); margin-bottom: var(--sp-2); gap: var(--sp-3); }
+  .quiz-review-play { width: 40px; height: 40px; }
+  .quiz-retry-btn { margin-top: var(--sp-4); padding: var(--sp-3); min-height: var(--tap-min); }
+
+  /* Conversation bubbles */
+  .convo-meta { margin-bottom: var(--sp-2); padding: 0 var(--sp-1); }
+  .bubble-wrap { margin-bottom: var(--sp-3); gap: var(--sp-2); }
+  .bubble { padding: var(--sp-3) var(--sp-4); border-radius: var(--r-md); }
+  .bubble-name { margin-bottom: var(--sp-1); }
+  .bubble-chinese { margin-bottom: var(--sp-1); }
+  .bubble-jyutping { margin-top: var(--sp-1); }
+
+  /* Patterns page */
+  .patterns-header { margin-bottom: var(--sp-4); }
+  .pattern-card { padding: var(--sp-4); margin-bottom: var(--sp-3); border-radius: var(--r-md); }
+  .pattern-head { margin-bottom: var(--sp-2); gap: var(--sp-2); }
+  .pattern-number { padding: var(--sp-1) var(--sp-2); }
+  .pattern-structure { margin-bottom: var(--sp-2); }
+  .pattern-note { margin-bottom: var(--sp-3); }
+  .pattern-examples { gap: var(--sp-2); display: flex; flex-direction: column; }
+  .pattern-example { padding: var(--sp-3); gap: var(--sp-3); border-radius: var(--r-sm); }
+  .pattern-ex-zh { margin-bottom: var(--sp-1); }
+  .pattern-ex-jp { margin-bottom: var(--sp-1); }
+  .pattern-ex-play { width: 40px; height: 40px; }
+
+  /* Translate page */
+  .translate-wrap { padding: var(--sp-5); border-radius: var(--r-md); }
+  .translate-header { margin-bottom: var(--sp-4); }
+  .translate-direction-row { margin-bottom: var(--sp-3); }
+  .translate-input-wrap { margin-bottom: var(--sp-3); }
+  .translate-input { padding: var(--sp-3); }
+  .translate-go { padding: var(--sp-3) var(--sp-5); min-height: var(--tap-min); }
+  .translate-result { margin-top: var(--sp-4); padding: var(--sp-4); border-radius: var(--r-md); }
+
+  /* Drawer — Settings section */
+  .nav-panel-body { flex: 1; overflow-y: auto; }
+  .nav-settings { margin-top: var(--sp-4); padding: var(--sp-4) var(--sp-5); border-top: 1px solid rgba(255,255,255,0.08); }
+  .nav-settings-title {
+    font-family: var(--font-ui);
+    font-size: var(--fs-micro);
+    font-weight: var(--fw-bold);
+    color: #B7861E;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    margin-bottom: var(--sp-3);
+  }
+  .nav-settings-row { display: flex; flex-direction: column; gap: var(--sp-2); }
+  .nav-settings-label {
+    font-family: var(--font-ui);
+    font-size: var(--fs-meta);
+    color: #A89882;
+  }
+  .drawer-speed-btns { display: flex; gap: var(--sp-1); }
+  .drawer-speed-btn {
+    flex: 1;
+    padding: var(--sp-2) var(--sp-2);
+    border-radius: var(--r-pill);
+    border: 1.5px solid #B7861E55;
+    background: transparent;
+    color: #B7861E;
+    font-family: var(--font-ui);
+    font-size: var(--fs-micro);
+    font-weight: var(--fw-semi);
+    cursor: pointer;
+    min-height: 36px;
+  }
+  .drawer-speed-btn.active {
+    background: #B7861E;
+    color: #1A1815;
+    border-color: #B7861E;
+  }
+
+  /* Drawer nav items — comfortable tap targets */
+  .nav-item { padding: var(--sp-3) var(--sp-5); min-height: 56px; gap: var(--sp-3); }
+  .nav-subitem { padding-top: var(--sp-2); padding-bottom: var(--sp-2); min-height: 40px; }
+
+  /* Speak-mode polish */
+  .speak-heard { padding: var(--sp-3) var(--sp-4); margin-bottom: var(--sp-4); border-radius: var(--r-md); }
+  .speak-result-good, .speak-result-bad { padding: var(--sp-3) var(--sp-4); margin-bottom: var(--sp-4); border-radius: var(--r-md); }
+  .speak-breakdown { padding: var(--sp-3); gap: var(--sp-1) var(--sp-3); margin-top: var(--sp-3); }
 
 </style>
 </head>
@@ -1626,6 +1859,23 @@ function renderDrawer() {
       ${active ? '<span style="margin-left:auto;color:#e8c97e;font-size:12px;padding-right:14px">●</span>' : ''}
     </button>`;
   }).join('');
+  const speeds = [
+    { key:'slow',   label:'🐢 Slow'   },
+    { key:'normal', label:'🚶 Normal' },
+    { key:'fast',   label:'🏃 Fast'   },
+  ];
+  const speedBtnsDrawer = speeds.map(s => {
+    const active = state.speed === s.key;
+    return `<button class="drawer-speed-btn${active ? ' active' : ''}" data-drawer-speed="${s.key}">${s.label}</button>`;
+  }).join('');
+  const settingsSection = `
+    <div class="nav-settings">
+      <div class="nav-settings-title">Settings</div>
+      <div class="nav-settings-row">
+        <div class="nav-settings-label">Audio speed</div>
+        <div class="drawer-speed-btns">${speedBtnsDrawer}</div>
+      </div>
+    </div>`;
   return `
     <div class="nav-drawer ${open}" id="nav-drawer">
       <div class="nav-backdrop" id="nav-backdrop"></div>
@@ -1634,22 +1884,25 @@ function renderDrawer() {
           <span class="nav-panel-title">Menu</span>
           <button class="nav-close" id="nav-close">✕</button>
         </div>
-        ${items.map(item => {
-          const main = `
-            <button class="nav-item${state.nav===item.key?' active':''}" data-nav="${item.key}">
-              <span class="ni-icon">${item.icon}</span>
-              <span class="ni-text">
-                <span class="ni-label">${item.label}</span>
-                <span class="ni-desc">${item.desc}</span>
-              </span>
-              <span class="ni-tick">✓</span>
-            </button>`;
-          // Show category quick-jump under Topics
-          if (item.key === 'topics' && state.nav === 'topics') {
-            return main + categorySubLinks;
-          }
-          return main;
-        }).join('')}
+        <div class="nav-panel-body">
+          ${items.map(item => {
+            const main = `
+              <button class="nav-item${state.nav===item.key?' active':''}" data-nav="${item.key}">
+                <span class="ni-icon">${item.icon}</span>
+                <span class="ni-text">
+                  <span class="ni-label">${item.label}</span>
+                  <span class="ni-desc">${item.desc}</span>
+                </span>
+                <span class="ni-tick">✓</span>
+              </button>`;
+            // Show category quick-jump under Topics
+            if (item.key === 'topics' && state.nav === 'topics') {
+              return main + categorySubLinks;
+            }
+            return main;
+          }).join('')}
+          ${settingsSection}
+        </div>
       </div>
     </div>`;
 }
@@ -2024,15 +2277,6 @@ function renderHeader(color) {
   const toneKeys = Object.entries(TONES).map(([t,d]) =>
     `<span style="color:${d.color}">● T${t}</span>`
   ).join('');
-  const speeds = [
-    { key:'slow',   label:'🐢 Slow'   },
-    { key:'normal', label:'🚶 Normal' },
-    { key:'fast',   label:'🏃 Fast'   },
-  ];
-  const speedBtns = speeds.map(s => {
-    const active = state.speed === s.key;
-    return `<button class="speed-btn${active ? ' active' : ''}" id="speed-${s.key}">${s.label}</button>`;
-  }).join('');
   const detailsOpen = state.headerDetailsOpen;
   return `
     <div class="header">
@@ -2042,7 +2286,7 @@ function renderHeader(color) {
           <span class="en">Cantonese Learner</span>
         </div>
         <div class="header-actions">
-          <button class="header-info-btn${detailsOpen ? ' open' : ''}" id="header-info-toggle" aria-label="Tone reference and speed settings" aria-expanded="${detailsOpen}">
+          <button class="header-info-btn${detailsOpen ? ' open' : ''}" id="header-info-toggle" aria-label="Show tone reference" aria-expanded="${detailsOpen}">
             <span class="header-info-icon">${detailsOpen ? '×' : 'ⓘ'}</span>
           </button>
           <button class="hamburger" id="hamburger-btn" aria-label="Menu">
@@ -2055,10 +2299,6 @@ function renderHeader(color) {
           <div class="tone-key">
             ${toneKeys}
             <span class="label">jyutping tones</span>
-          </div>
-          <div class="speed-row">
-            <span class="speed-label">Audio speed</span>
-            <div class="speed-btns">${speedBtns}</div>
           </div>
         </div>` : ''}
     </div>`;
@@ -2888,6 +3128,10 @@ function attachEvents(lesson, color) {
   ['slow','normal','fast'].forEach(s => {
     const btn = document.getElementById('speed-' + s);
     if (btn) btn.addEventListener('click', () => { state.speed = s; render(); });
+  });
+  // Drawer speed toggle (Settings section)
+  document.querySelectorAll('[data-drawer-speed]').forEach(btn => {
+    btn.addEventListener('click', () => { state.speed = btn.dataset.drawerSpeed; render(); });
   });
 
   // Topic buttons (legacy pill bar — still works if shown elsewhere)
