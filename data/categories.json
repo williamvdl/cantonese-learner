@@ -1,12 +1,12 @@
 {
   "list": [
-    { "key": "everyday",  "label": "Everyday Essentials",   "icon": "🌟", "color": "#E83A8C" },
-    { "key": "people",    "label": "People & Relationships","icon": "👨‍👩‍👧", "color": "#7B5BE0" },
-    { "key": "food",      "label": "Food & Dining",         "icon": "🍜", "color": "#FFAA2C" },
-    { "key": "outabout",  "label": "Out & About",           "icon": "🛍️", "color": "#3FA0E0" },
-    { "key": "daily",     "label": "Daily Life",            "icon": "🌤️", "color": "#37C9A8" },
-    { "key": "work",      "label": "Work & Education",      "icon": "💼", "color": "#7989A8" },
-    { "key": "practical", "label": "Practical Situations",  "icon": "🆘", "color": "#FF6B7A" }
+    { "key": "everyday",  "label": "Everyday Essentials",   "icon": "🌟", "color": "#9C2D2A" },
+    { "key": "people",    "label": "People & Relationships","icon": "👨‍👩‍👧", "color": "#2D5040" },
+    { "key": "food",      "label": "Food & Dining",         "icon": "🍜", "color": "#B7861E" },
+    { "key": "outabout",  "label": "Out & About",           "icon": "🛍️", "color": "#7A5D3A" },
+    { "key": "daily",     "label": "Daily Life",            "icon": "🌤️", "color": "#5B7C75" },
+    { "key": "work",      "label": "Work & Education",      "icon": "💼", "color": "#3D4659" },
+    { "key": "practical", "label": "Practical Situations",  "icon": "🆘", "color": "#8B3A4E" }
   ],
   "topic_map": {
     "greetings": "everyday", "numbers": "everyday", "time": "everyday", "phrases": "everyday",
