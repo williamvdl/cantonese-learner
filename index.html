@@ -1226,7 +1226,8 @@ let state = {
 };
 
 function getQuizInitState(words) {
-  const queue = shuffle(words).slice(0, Math.min(words.length, 8));
+  // One question per word — no artificial cap. Shuffle so order varies each run.
+  const queue = shuffle(words);
   return {
     queue,
     idx: 0,
@@ -1839,26 +1840,6 @@ function renderDrawer() {
     { key:'translate', icon:'🌐', label:'Translate',       desc:'AI-powered translation & breakdown'    },
   ];
   const open = state.drawerOpen ? 'open' : '';
-  const allActive = state.selectedCategory === 'all';
-  const allLink = `
-    <button class="nav-item nav-subitem${allActive?' subitem-active':''}" data-cat-jump="all" style="padding-left:50px;border-bottom:none">
-      <span class="ni-icon" style="font-size:14px">📚</span>
-      <span class="ni-text">
-        <span class="ni-label" style="font-size:13px;color:${allActive?'#e8c97e':'#bbb'};font-weight:${allActive?'700':'500'}">All Categories</span>
-      </span>
-      ${allActive ? '<span style="margin-left:auto;color:#e8c97e;font-size:12px;padding-right:14px">●</span>' : ''}
-    </button>`;
-  const categorySubLinks = allLink + store.categoryList.map(cat => {
-    const active = state.selectedCategory === cat.key;
-    return `
-    <button class="nav-item nav-subitem${active?' subitem-active':''}" data-cat-jump="${cat.key}" style="padding-left:50px;border-bottom:none">
-      <span class="ni-icon" style="font-size:14px">${cat.icon}</span>
-      <span class="ni-text">
-        <span class="ni-label" style="font-size:13px;color:${active?'#e8c97e':'#bbb'};font-weight:${active?'700':'500'}">${cat.label}</span>
-      </span>
-      ${active ? '<span style="margin-left:auto;color:#e8c97e;font-size:12px;padding-right:14px">●</span>' : ''}
-    </button>`;
-  }).join('');
   const speeds = [
     { key:'slow',   label:'🐢 Slow'   },
     { key:'normal', label:'🚶 Normal' },
@@ -1885,22 +1866,15 @@ function renderDrawer() {
           <button class="nav-close" id="nav-close">✕</button>
         </div>
         <div class="nav-panel-body">
-          ${items.map(item => {
-            const main = `
-              <button class="nav-item${state.nav===item.key?' active':''}" data-nav="${item.key}">
-                <span class="ni-icon">${item.icon}</span>
-                <span class="ni-text">
-                  <span class="ni-label">${item.label}</span>
-                  <span class="ni-desc">${item.desc}</span>
-                </span>
-                <span class="ni-tick">✓</span>
-              </button>`;
-            // Show category quick-jump under Topics
-            if (item.key === 'topics' && state.nav === 'topics') {
-              return main + categorySubLinks;
-            }
-            return main;
-          }).join('')}
+          ${items.map(item => `
+            <button class="nav-item${state.nav===item.key?' active':''}" data-nav="${item.key}">
+              <span class="ni-icon">${item.icon}</span>
+              <span class="ni-text">
+                <span class="ni-label">${item.label}</span>
+                <span class="ni-desc">${item.desc}</span>
+              </span>
+              <span class="ni-tick">✓</span>
+            </button>`).join('')}
           ${settingsSection}
         </div>
       </div>
@@ -2104,7 +2078,7 @@ function renderPathList() {
 
   return `
     <div class="path-list">
-      <h2 style="font-size:22px;font-weight:700;color:#F0EAE0;margin-bottom:4px;">🛤️ Learning Path</h2>
+      <h2 style="font-size:22px;font-weight:700;color:#2A2422;margin-bottom:4px;">🛤️ Learning Path</h2>
       <div style="font-size:12px;color:#888;margin-bottom:14px;">Curated lessons in order. Tap any to jump in — nothing is locked.</div>
       ${sections}
     </div>`;
@@ -2177,7 +2151,7 @@ function renderPlaceholder(icon, title, subtitle) {
   return `
     <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;padding:60px 30px;text-align:center;min-height:300px;">
       <div style="font-size:52px;margin-bottom:16px;">${icon}</div>
-      <div style="font-size:20px;font-weight:700;color:#F0EAE0;margin-bottom:8px;">${title}</div>
+      <div style="font-size:20px;font-weight:700;color:#2A2422;margin-bottom:8px;">${title}</div>
       <div style="font-size:13px;color:#aaa;line-height:1.6;max-width:260px;">${subtitle}</div>
     </div>`;
 }
@@ -2664,7 +2638,7 @@ function renderConversation(color) {
             <div class="bubble-wrap">
               <div class="bubble-name">${spkName} ${correct?'✓':'✗'}</div>
               <div class="bubble" style="background:${hlColor};border:2px solid ${hlBorder}">
-                <div class="bubble-chinese" style="color:#F0EAE0">${line.c}</div>
+                <div class="bubble-chinese" style="color:#2A2422">${line.c}</div>
                 <div class="bubble-jyutping">${colorJyutping(line.j)}</div>
                 <div class="bubble-english" style="color:#555">${line.e}</div>
               </div>
@@ -3503,17 +3477,20 @@ function attachEvents(lesson, color) {
     });
   });
 
-  // Listen mode: auto-play the audio on each new question (once, not on re-renders)
+  // Listen mode: auto-play the audio on each new question (once, not on re-renders).
+  // Longer delay so the previous question's feedback audio (the answer playback after
+  // a correct/wrong tap) has time to finish before the new question starts.
   if (state.quiz && !state.quiz.done && state.quiz.direction === 'listen-en') {
     if (state.quiz._listenAutoPlayed !== state.quiz.idx) {
       state.quiz._listenAutoPlayed = state.quiz.idx;
-      // Small delay so the new prompt card is on screen first
       setTimeout(() => {
         if (state.quiz && !state.quiz.done && state.quiz.direction === 'listen-en' &&
             state.quiz._listenAutoPlayed === state.quiz.idx) {
+          // Explicit cancel before speaking so there's no overlap with prior audio
+          try { window.speechSynthesis.cancel(); } catch(e) {}
           speak(state.quiz.queue[state.quiz.idx].c);
         }
-      }, 250);
+      }, 900);
     }
   }
 
