@@ -59,6 +59,17 @@
 
     /* Touch target minimums — Apple HIG / Material both recommend 44px */
     --tap-min: 44px;
+
+    /* Elevation system — soft, warm-tinted shadows (Tea House) */
+    --elev-1: 0 1px 2px rgba(58, 42, 30, 0.04), 0 1px 3px rgba(58, 42, 30, 0.06);
+    --elev-2: 0 2px 4px rgba(58, 42, 30, 0.05), 0 4px 8px rgba(58, 42, 30, 0.07);
+    --elev-3: 0 4px 8px rgba(58, 42, 30, 0.06), 0 8px 20px rgba(58, 42, 30, 0.10);
+    --elev-4: 0 8px 16px rgba(58, 42, 30, 0.10), 0 16px 40px rgba(58, 42, 30, 0.16);
+
+    /* Interaction timing — one easing curve everywhere */
+    --ease:        cubic-bezier(0.4, 0.0, 0.2, 1);
+    --dur-fast:    120ms;
+    --dur-base:    200ms;
   }
 
   * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -872,6 +883,160 @@
   .speak-heard { padding: var(--sp-3) var(--sp-4); margin-bottom: var(--sp-4); border-radius: var(--r-md); }
   .speak-result-good, .speak-result-bad { padding: var(--sp-3) var(--sp-4); margin-bottom: var(--sp-4); border-radius: var(--r-md); }
   .speak-breakdown { padding: var(--sp-3); gap: var(--sp-1) var(--sp-3); margin-top: var(--sp-3); }
+
+  /* ── Component Polish — applied LAST ────────────────────────────────────── */
+
+  /* Elevation system — replace ad-hoc shadows with consistent tiers */
+  .topic-card        { box-shadow: var(--elev-1); }
+  .word-card         { box-shadow: var(--elev-1); }
+  .sentence-card     { box-shadow: var(--elev-1); }
+  .pattern-card      { box-shadow: var(--elev-1); }
+  .quiz-card         { box-shadow: var(--elev-2); }
+  .path-card         { box-shadow: var(--elev-1); }
+  .path-step-card    { box-shadow: var(--elev-1); }
+  .path-banner       { box-shadow: var(--elev-2); }
+  .quiz-review-item  { box-shadow: var(--elev-1); }
+  .bubble            { box-shadow: var(--elev-1); }
+  .translate-wrap    { box-shadow: var(--elev-1); }
+  .nav-panel         { box-shadow: var(--elev-4); }
+  .header            { box-shadow: var(--elev-2); }
+  .path-toast        { box-shadow: var(--elev-4); }
+  .quiz-wrong-panel  { box-shadow: var(--elev-2); }
+
+  /* Universal smooth transitions on interactive elements */
+  button, .topic-card, .word-card, .sentence-card, .choice-btn,
+  .path-card, .path-step-card, .nav-item, .mode-btn, .quiz-dir-btn,
+  .round-btn, .conv-mode-pill, .drawer-speed-btn {
+    transition: transform var(--dur-fast) var(--ease),
+                box-shadow var(--dur-base) var(--ease),
+                background-color var(--dur-base) var(--ease),
+                border-color var(--dur-base) var(--ease),
+                color var(--dur-base) var(--ease),
+                opacity var(--dur-base) var(--ease);
+  }
+
+  /* Consistent press feedback — one scale value everywhere (was 0.9–0.99 ad-hoc) */
+  button:active,
+  .topic-card:active, .word-card:active, .sentence-card:active,
+  .choice-btn:active, .path-card:active, .path-step-card:active {
+    transform: scale(0.97);
+  }
+  /* Disabled buttons never animate */
+  button:disabled:active { transform: none; }
+
+  /* Card hover lift — elevate on hover (no-op on touch, polish on desktop) */
+  .topic-card:hover, .path-card:hover, .path-step-card:hover {
+    box-shadow: var(--elev-3);
+    transform: translateY(-2px);
+  }
+  .topic-card:active, .path-card:active, .path-step-card:active {
+    transform: translateY(0) scale(0.99);
+  }
+  .word-card:hover, .sentence-card:hover, .pattern-card:hover,
+  .quiz-review-item:hover {
+    box-shadow: var(--elev-2);
+  }
+
+  /* ── Button system — consolidate to coherent primitives ─────────────────── */
+
+  /* Primary action buttons — solid fill, lift on hover */
+  .path-banner-action, .quiz-retry-btn, .back-btn, .quiz-next,
+  .translate-go, .mode-btn.active {
+    box-shadow: var(--elev-1);
+  }
+  .path-banner-action:hover, .quiz-retry-btn:hover, .back-btn:hover,
+  .quiz-next:hover, .translate-go:hover {
+    box-shadow: var(--elev-2);
+    filter: brightness(1.04);
+  }
+  .path-banner-action:active, .quiz-retry-btn:active, .back-btn:active,
+  .quiz-next:active, .translate-go:active {
+    transform: scale(0.98);
+    filter: brightness(0.97);
+    box-shadow: var(--elev-1);
+  }
+
+  /* Pill / toggle buttons — refined hover */
+  .quiz-dir-btn:hover, .round-btn:hover, .mode-btn:hover,
+  .conv-mode-pill:hover, .drawer-speed-btn:hover, .topic-btn:hover {
+    filter: brightness(1.03);
+  }
+
+  /* Choice buttons — clear hover affordance before selection */
+  .choice-btn:not(:disabled):hover {
+    border-color: #C9BFA0;
+    box-shadow: var(--elev-1);
+  }
+
+  /* Circular play buttons — consistent treatment + press feedback */
+  .speak-btn, .sentence-play, .quiz-listen, .pattern-ex-play,
+  .quiz-review-play, .bubble-play, .quiz-replay {
+    transition: transform var(--dur-fast) var(--ease),
+                box-shadow var(--dur-base) var(--ease),
+                background-color var(--dur-base) var(--ease);
+  }
+  .speak-btn:active, .sentence-play:active, .pattern-ex-play:active,
+  .quiz-review-play:active, .bubble-play:active {
+    transform: scale(0.90);
+  }
+  .speak-btn:hover, .sentence-play:hover, .pattern-ex-play:hover,
+  .quiz-review-play:hover, .quiz-review-play:hover {
+    box-shadow: var(--elev-1);
+  }
+  .quiz-listen-big {
+    box-shadow: var(--elev-3);
+    transition: transform var(--dur-fast) var(--ease), box-shadow var(--dur-base) var(--ease);
+  }
+  .quiz-listen-big:hover { box-shadow: var(--elev-4); }
+  .quiz-listen-big:active { transform: scale(0.94); box-shadow: var(--elev-2); }
+
+  /* Hamburger + header info — refined hover */
+  .hamburger:active { transform: scale(0.92); }
+  .header-info-btn:active { transform: scale(0.92); }
+  .header-info-btn { transition: all var(--dur-base) var(--ease); }
+
+  /* Nav drawer items — smoother hover */
+  .nav-item { transition: background-color var(--dur-base) var(--ease); }
+  .nav-item:active { transform: scale(0.99); }
+
+  /* Tier buttons — active state gets subtle lift */
+  .round-btn { box-shadow: none; }
+  .round-btn.active { box-shadow: var(--elev-1); }
+
+  /* Topic / word cards — refine border treatment.
+     Borders were heavy 2px category-colour; soften to a subtle tint + keep colour as a left accent feel via shadow */
+  .topic-card {
+    border-width: 1px;
+    border-color: rgba(201, 191, 160, 0.6);
+    position: relative;
+    overflow: hidden;
+  }
+  /* Category colour now reads as a top accent bar rather than a full loud border */
+  .topic-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: var(--topic-accent, transparent);
+  }
+
+  /* Pulse animation for active audio — smoother */
+  @keyframes pulse-soft {
+    0%, 100% { opacity: 1; }
+    50%      { opacity: 0.55; }
+  }
+  .speaking { animation: pulse-soft 1.1s var(--ease) infinite; }
+
+  /* Progress bars — rounded, subtle */
+  .progress-bar { border-radius: var(--r-pill); overflow: hidden; }
+  .progress-fill { transition: width var(--dur-base) var(--ease); }
+
+  /* Focus-visible — keyboard accessibility (premium apps handle this) */
+  button:focus-visible, select:focus-visible, .topic-card:focus-visible {
+    outline: 2px solid #B7861E;
+    outline-offset: 2px;
+  }
+  button:focus:not(:focus-visible) { outline: none; }
 
 </style>
 </head>
@@ -2380,7 +2545,7 @@ function renderTopicCard(topicKey) {
   const pips = rounds.map(r => `<span class="topic-card-pip" style="background:${lesson.color}"></span>`).join('') +
                (rounds.length < 3 ? `<span class="topic-card-pip" style="background:${lesson.color}33"></span>`.repeat(3 - rounds.length) : '');
   return `
-    <div class="topic-card" data-topic-card="${topicKey}" style="border-color:${lesson.color}">
+    <div class="topic-card" data-topic-card="${topicKey}" tabindex="0" style="--topic-accent:${lesson.color}">
       <div class="topic-card-icon">${lesson.icon}</div>
       <div class="topic-card-label">${lesson.label}</div>
       <div class="topic-card-meta">${rounds.length} tier${rounds.length>1?'s':''} · ${wordCount} words</div>
