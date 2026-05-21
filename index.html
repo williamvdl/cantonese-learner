@@ -241,7 +241,7 @@
   .patterns-header { padding: 16px 20px 0; max-width: 680px; margin: 0 auto; }
   .patterns-header h2 { font-size: 20px; font-weight: 700; color: #2C3E7A; margin-bottom: 4px; }
   .patterns-header p { font-size: 12px; color: #999; margin-bottom: 16px; }
-  .pattern-card { background: #FCFAF4; border-radius: 16px; margin: 0 20px 14px; border: 1px solid #eee; overflow: hidden; max-width: 680px; }
+  .pattern-card { background: #FCFAF4; border-radius: 16px; margin: 0 0 14px; border: 1px solid #eee; overflow: hidden; }
   .pattern-head { padding: 14px 16px 12px; background: #2C3E7A; }
   .pattern-number { font-size: 10px; color: rgba(255,255,255,0.5); font-weight: 700; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 2px; }
   .pattern-label { font-size: 17px; font-weight: 700; color: #FCFAF4; margin-bottom: 6px; }
@@ -889,7 +889,35 @@
   .speak-result-good, .speak-result-bad { padding: var(--sp-3) var(--sp-4); margin-bottom: var(--sp-4); border-radius: var(--r-md); }
   .speak-breakdown { padding: var(--sp-3); gap: var(--sp-1) var(--sp-3); margin-top: var(--sp-3); }
 
+  /* Patterns page container — matches home-wrap / path-list padding */
+  .patterns-wrap { padding: var(--sp-4) var(--sp-5) var(--sp-7); max-width: 680px; margin: 0 auto; }
+
   /* ── Component Polish — applied LAST ────────────────────────────────────── */
+
+  /* Unified page header — Topics / Learning Path / Patterns / Translate.
+     One consistent treatment instead of four different ad-hoc styles. */
+  .page-header { margin-bottom: var(--sp-5); }
+  .page-header-title {
+    font-family: var(--font-serif);
+    font-size: var(--fs-h2);
+    font-weight: var(--fw-bold);
+    color: #2A2422;
+    letter-spacing: -0.01em;
+    line-height: var(--lh-heading);
+    display: flex;
+    align-items: center;
+    gap: var(--sp-2);
+    margin: 0 0 var(--sp-1);
+  }
+  .page-header-emoji { font-size: 0.85em; }
+  .page-header-sub {
+    font-family: var(--font-ui);
+    font-size: var(--fs-small);
+    font-weight: var(--fw-regular);
+    color: #6B5F55;
+    line-height: var(--lh-body);
+    margin: 0;
+  }
 
   /* Inline SVG icons — align with adjacent text, inherit colour */
   .icon { display: inline-block; vertical-align: -0.18em; flex-shrink: 0; }
@@ -934,13 +962,15 @@
   /* Disabled buttons never animate */
   button:disabled:active { transform: none; }
 
-  /* Card hover lift — elevate on hover (no-op on touch, polish on desktop) */
+  /* Card hover — elevate via shadow only.
+     NOTE: do NOT translateY the card on hover. Moving the element shifts its hit-box
+     out from under the cursor, which on desktop causes a hover→unhover flicker loop
+     and makes the card effectively unclickable. Shadow-only hover is safe. */
   .topic-card:hover, .path-card:hover, .path-step-card:hover {
     box-shadow: var(--elev-3);
-    transform: translateY(-2px);
   }
   .topic-card:active, .path-card:active, .path-step-card:active {
-    transform: translateY(0) scale(0.99);
+    transform: scale(0.98);
   }
   .word-card:hover, .sentence-card:hover, .pattern-card:hover,
   .quiz-review-item:hover {
@@ -1082,6 +1112,8 @@ const ICON_PATHS = {
   bookOpen:'<path d="M12 7v14"/><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"/>',
   messageCircle:'<path d="M7.9 20A9 9 0 1 0 4 16.1L2 22z"/>',
   brain:   '<path d="M12 5a3 3 0 1 0-5.997.142M12 5a3 3 0 1 1 5.997.142M12 5v13a3 3 0 0 0 5.997.142M12 18a3 3 0 0 1-5.997.142M6.003 5.142A4 4 0 0 0 4 9a4 4 0 0 0 .064 4M18 5.142A4 4 0 0 1 20 9a4 4 0 0 1-.064 4"/>',
+  // Quiz tab icon — graduation cap reads clearly at small sizes (the brain icon was too intricate)
+  quiz:    '<path d="M21.42 10.922a1 1 0 0 0-.019-1.838L12.83 5.18a2 2 0 0 0-1.66 0L2.6 9.08a1 1 0 0 0 0 1.832l8.57 3.908a2 2 0 0 0 1.66 0z"/><path d="M22 10v6"/><path d="M6 12.5V16a6 3 0 0 0 12 0v-3.5"/>',
 };
 // Render an icon as an inline SVG string. size in px, optional className.
 function icon(name, size, cls) {
@@ -2129,11 +2161,10 @@ function renderPatterns() {
   }).join('');
 
   return `
-    <div class="patterns-header">
-      <h2>🔨 Sentence Patterns</h2>
-      <p>${PATTERNS.length} building blocks — tap ${iconPlay(12)} to hear any example</p>
-    </div>
-    ${cards}`;
+    <div class="patterns-wrap">
+      ${renderPageHeader('🔨', 'Sentence Patterns', `${PATTERNS.length} building blocks — tap ${iconPlay(12)} to hear any example`)}
+      ${cards}
+    </div>`;
 }
 
 function renderTranslate() {
@@ -2144,10 +2175,7 @@ function renderTranslate() {
   if (!hasKey) {
     return `
       <div class="translate-wrap">
-        <div class="translate-header">
-          <h2>🌐 Translate</h2>
-          <p>AI-powered translation with word-by-word breakdown</p>
-        </div>
+        ${renderPageHeader('🌐', 'Translate', 'AI-powered translation with word-by-word breakdown')}
         <div class="apikey-setup">
           <h3>🔑 One-time setup</h3>
           <p>Paste your <strong>Google Gemini API key</strong> to enable translations. It's saved securely on your device only — never uploaded anywhere.</p>
@@ -2188,10 +2216,7 @@ function renderTranslate() {
 
   return `
     <div class="translate-wrap">
-      <div class="translate-header">
-        <h2>🌐 Translate</h2>
-        <p>Type or speak · word-by-word breakdown · powered by Gemini</p>
-      </div>
+      ${renderPageHeader('🌐', 'Translate', 'Type or speak · word-by-word breakdown · powered by Gemini')}
 
       <div class="translate-direction-row">
         <span class="translate-dir-label">${fromLabel}</span>
@@ -2290,8 +2315,7 @@ function renderPathList() {
 
   return `
     <div class="path-list">
-      <h2 style="font-size:22px;font-weight:700;color:#2A2422;margin-bottom:4px;">🛤️ Learning Path</h2>
-      <div style="font-size:12px;color:#888;margin-bottom:14px;">Curated lessons in order. Tap any to jump in — nothing is locked.</div>
+      ${renderPageHeader('🛤️', 'Learning Path', 'Curated lessons in order. Tap any to jump in — nothing is locked.')}
       ${sections}
     </div>`;
 }
@@ -2459,6 +2483,16 @@ function render() {
   attachEvents(lesson, color);
 }
 
+// Unified page-section header — used by Topics, Learning Path, Patterns, Translate
+// so all four read consistently. icon = emoji string, title + subtitle text.
+function renderPageHeader(emoji, title, subtitle) {
+  return `
+    <div class="page-header">
+      <h2 class="page-header-title">${emoji ? `<span class="page-header-emoji">${emoji}</span>` : ''}${title}</h2>
+      ${subtitle ? `<p class="page-header-sub">${subtitle}</p>` : ''}
+    </div>`;
+}
+
 function renderHeader(color) {
   const toneKeys = Object.entries(TONES).map(([t,d]) =>
     `<span style="color:${d.color}">● T${t}</span>`
@@ -2620,10 +2654,7 @@ function renderHomeScreen() {
 
   return `
     <div class="home-wrap">
-      <div class="home-header">
-        <div class="home-title">📖 Topics</div>
-        <div class="home-subtitle">Choose a category and topic to start learning</div>
-      </div>
+      ${renderPageHeader('📖', 'Topics', 'Choose a category and topic to start learning')}
       ${renderCategoryFilter()}
       ${sections}
     </div>`;
@@ -2674,7 +2705,7 @@ function renderLessonHeader(lesson, color) {
       </button>
       <button class="subtab-btn${isQuiz?' active':''}" id="tab-quiz"
         style="${isQuiz?'background:'+color:''}">
-        <span class="icon-label">${icon('brain',14)} Quiz</span>
+        <span class="icon-label">${icon('quiz',14)} Quiz</span>
       </button>
     </div>`;
   return `
