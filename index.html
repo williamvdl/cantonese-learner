@@ -130,12 +130,16 @@
   .word-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(145px, 1fr)); gap: 10px; }
 
   /* Word card */
-  .word-card { cursor: pointer; border-radius: 14px; padding: 24px 14px 14px; min-height: 130px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 5px; position: relative; transition: background 0.2s, box-shadow 0.2s; border: 2px solid; user-select: none; }
+  .word-card { cursor: pointer; border-radius: 14px; padding: 22px 14px 16px; min-height: 130px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 5px; position: relative; transition: background 0.2s, box-shadow 0.2s; border: 2px solid; user-select: none; }
   .card-chinese { font-size: 34px; color: #1A1815; line-height: 1.2; }
   .card-jyutping { font-size: 12px; margin-top: 2px; }
   .card-hint { font-size: 11px; color: #bbb; margin-top: 1px; }
+  /* Study content wrapper — sits centred but its bottom clears the corner play button */
+  .card-study-inner { display: flex; flex-direction: column; align-items: center; gap: 3px; width: 100%; transform: translateY(-6px); }
   .card-english { font-size: 15px; font-weight: 700; color: #FCFAF4; text-align: center; padding: 0 8px; }
-  .speak-btn { position: absolute; top: 6px; right: 6px; width: 54px; height: 54px; border-radius: 50%; cursor: pointer; font-size: 22px; display: flex; align-items: center; justify-content: center; transition: all 0.15s; }
+  /* Speak button — bottom-right corner, clear of the centred Chinese characters.
+     40px keeps a comfortable tap target while being visually distinct from the card body. */
+  .speak-btn { position: absolute; bottom: 8px; right: 8px; width: 38px; height: 38px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.15s; padding: 0; z-index: 2; }
   @keyframes pulse { from { opacity:1; } to { opacity:0.4; } }
   .speaking { animation: pulse 0.6s infinite alternate; }
 
@@ -267,7 +271,8 @@
 
   /* Sub-tabs (Words | Conversation) */
   .subtabs { display: flex; gap: 6px; margin-bottom: 16px; }
-  .subtab-btn { flex: 1; padding: 8px 10px; border-radius: 10px; border: 2px solid #ddd; background: #FCFAF4; color: #888; font-size: 13px; font-weight: 600; cursor: pointer; transition: all 0.15s; text-align: center; }
+  .subtab-btn { flex: 1; padding: 8px 6px; border-radius: 10px; border: 2px solid #ddd; background: #FCFAF4; color: #888; font-size: 13px; font-weight: 600; cursor: pointer; transition: all 0.15s; text-align: center; display: flex; align-items: center; justify-content: center; min-height: 42px; }
+  .subtab-btn .icon-label { gap: 5px; }
   .subtab-btn.active { color: #FCFAF4; border-color: transparent; }
 
   /* Conversation */
@@ -728,7 +733,7 @@
 
   /* Word grid — more breathing room between cards */
   .word-grid { gap: var(--sp-3); }
-  .word-card { padding: var(--sp-5) var(--sp-3); min-height: 140px; gap: var(--sp-1); }
+  .word-card { padding: var(--sp-5) var(--sp-3) var(--sp-6); min-height: 140px; gap: var(--sp-1); }
 
   /* Sentences — more padding inside cards, better gaps */
   .sentences { margin-top: var(--sp-6); }
@@ -1074,6 +1079,9 @@ const ICON_PATHS = {
   refresh: '<path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M8 16H3v5"/>',
   stop:    '<rect x="5" y="5" width="14" height="14" rx="2"/>',
   mic:     '<path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" x2="12" y1="19" y2="22"/>',
+  bookOpen:'<path d="M12 7v14"/><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"/>',
+  messageCircle:'<path d="M7.9 20A9 9 0 1 0 4 16.1L2 22z"/>',
+  brain:   '<path d="M12 5a3 3 0 1 0-5.997.142M12 5a3 3 0 1 1 5.997.142M12 5v13a3 3 0 0 0 5.997.142M12 18a3 3 0 0 1-5.997.142M6.003 5.142A4 4 0 0 0 4 9a4 4 0 0 0 .064 4M18 5.142A4 4 0 0 1 20 9a4 4 0 0 1-.064 4"/>',
 };
 // Render an icon as an inline SVG string. size in px, optional className.
 function icon(name, size, cls) {
@@ -2650,27 +2658,31 @@ function renderTopics() {
 
 function renderLessonHeader(lesson, color) {
   const isQuiz = state.mode === 'quiz';
-  const btnStyle = isQuiz
-    ? `background:${color};color:#fff;border:2px solid ${color}`
-    : `background:transparent;color:${color};border:2px solid ${color}`;
-  const subtabs = !isQuiz ? `
+  // Three mutually-exclusive views: Words, Conversation, Quiz.
+  // 'words' and 'convo' are state.tab values (with mode='study'); 'quiz' is mode='quiz'.
+  const wordsActive = !isQuiz && state.tab === 'words';
+  const convoActive = !isQuiz && state.tab === 'convo';
+  const segTabs = `
     <div class="subtabs">
-      <button class="subtab-btn${state.tab==='words'?' active':''}" id="tab-words"
-        style="${state.tab==='words'?'background:'+color:''}">📖 Words</button>
-      <button class="subtab-btn${state.tab==='convo'?' active':''}" id="tab-convo"
-        style="${state.tab==='convo'?'background:'+color:''}">💬 Conversation</button>
-    </div>` : '';
-  return `
-    <div class="lesson-header">
-      <div>
-        <h2 class="lesson-title" style="color:${color}">${lesson.icon} ${lesson.label}</h2>
-        <div class="lesson-count">${getRoundWords(state.topic, state.currentRound).length} words</div>
-      </div>
-      <button class="mode-btn" id="mode-toggle" style="${btnStyle}">
-        ${isQuiz ? '📖 Study' : '🧠 Quiz me'}
+      <button class="subtab-btn${wordsActive?' active':''}" id="tab-words"
+        style="${wordsActive?'background:'+color:''}">
+        <span class="icon-label">${icon('bookOpen',14)} Words</span>
       </button>
+      <button class="subtab-btn${convoActive?' active':''}" id="tab-convo"
+        style="${convoActive?'background:'+color:''}">
+        <span class="icon-label">${icon('messageCircle',14)} Chat</span>
+      </button>
+      <button class="subtab-btn${isQuiz?' active':''}" id="tab-quiz"
+        style="${isQuiz?'background:'+color:''}">
+        <span class="icon-label">${icon('brain',14)} Quiz</span>
+      </button>
+    </div>`;
+  return `
+    <div class="lesson-header lesson-header-stacked">
+      <h2 class="lesson-title" style="color:${color}">${lesson.icon} ${lesson.label}</h2>
+      <div class="lesson-count">${getRoundWords(state.topic, state.currentRound).length} words</div>
     </div>
-    ${subtabs}`;
+    ${segTabs}`;
 }
 
 function renderConversation(color) {
@@ -2953,21 +2965,25 @@ function renderStudy(lesson, color) {
     const speaking = state.speaking === i;
     const cardBg  = flipped ? color : THEME.cardSurface;
     const cardShadow = flipped ? `0 4px 20px ${color}44` : '0 2px 6px rgba(0,0,0,0.06)';
-    const btnBorder = flipped ? 'rgba(255,255,255,0.6)' : color;
-    const btnColor  = flipped ? THEME.cardInverseText : color;
+    // Speak button: when playing, it fills with `color` so the icon must be light to stay visible.
+    // When idle, it's a transparent button so the icon takes the topic colour.
     const btnBg     = speaking ? color : 'transparent';
+    const btnBorder = flipped ? 'rgba(255,255,255,0.6)' : color;
+    const btnColor  = speaking ? THEME.cardInverseText : (flipped ? THEME.cardInverseText : color);
     const inner = flipped
       ? `<div class="card-english">${w.e}</div>`
-      : `<div class="card-chinese">${w.c}</div>
-         <div class="card-jyutping">${colorJyutping(w.j)}</div>
-         <div class="card-hint">tap to reveal</div>`;
+      : `<div class="card-study-inner">
+           <div class="card-chinese">${w.c}</div>
+           <div class="card-jyutping">${colorJyutping(w.j)}</div>
+           <div class="card-hint">tap to reveal</div>
+         </div>`;
     return `
-      <div class="word-card" data-card="${i}"
+      <div class="word-card${flipped?' flipped':''}" data-card="${i}"
         style="background:${cardBg};border-color:${color};box-shadow:${cardShadow}">
         ${inner}
         <button class="speak-btn${speaking?' speaking':''}" data-speak="${i}"
           style="background:${btnBg};border:1.5px solid ${btnBorder};color:${btnColor}" title="Listen">
-          ${speaking ? icon('volume',20) : iconPlay(18)}
+          ${speaking ? icon('volume',18) : iconPlay(16)}
         </button>
       </div>`;
   }).join('');
@@ -3399,8 +3415,20 @@ function attachEvents(lesson, color) {
   // Sub-tabs
   const tabWords = document.getElementById('tab-words');
   const tabConvo = document.getElementById('tab-convo');
-  if (tabWords) tabWords.addEventListener('click', () => { state.tab = 'words'; render(); });
-  if (tabConvo) tabConvo.addEventListener('click', () => { state.tab = 'convo'; render(); });
+  const tabQuiz  = document.getElementById('tab-quiz');
+  if (tabWords) tabWords.addEventListener('click', () => {
+    state.mode = 'study'; state.tab = 'words'; render();
+  });
+  if (tabConvo) tabConvo.addEventListener('click', () => {
+    state.mode = 'study'; state.tab = 'convo'; render();
+  });
+  if (tabQuiz) tabQuiz.addEventListener('click', () => {
+    if (state.mode !== 'quiz') {
+      state.mode = 'quiz';
+      state.quiz = getQuizInitState(getRoundWords(state.topic, state.currentRound));
+    }
+    render();
+  });
 
   // Conversation: Play All / Stop
   const playAllBtn = document.getElementById('play-all-btn');
@@ -3546,13 +3574,6 @@ function attachEvents(lesson, color) {
   });
 
   // Mode toggle
-  const modeBtn = document.getElementById('mode-toggle');
-  if (modeBtn) modeBtn.addEventListener('click', () => {
-    state.mode = state.mode === 'study' ? 'quiz' : 'study';
-    if (state.mode === 'quiz') state.quiz = getQuizInitState(getRoundWords(state.topic, state.currentRound));
-    render();
-  });
-
   // Flip cards
   document.querySelectorAll('[data-card]').forEach(card => {
     card.addEventListener('click', e => {
