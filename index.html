@@ -178,19 +178,44 @@
   .back-home-btn:hover { color: #1A1815; }
 
   /* Path-mode combined banner — context + primary action in one card */
-  .path-banner { display: flex; flex-direction: column; gap: 0; border-radius: 12px; border: 1.5px solid; margin-bottom: 14px; overflow: hidden; }
-  .path-banner-row { display: flex; align-items: center; gap: 12px; padding: 10px 12px; }
-  .path-banner-back { background: transparent; border: none; font-size: 22px; line-height: 1; color: #1A1815; cursor: pointer; padding: 4px 8px; border-radius: 8px; font-weight: 700; }
+  /* Path banner — Layout 3: progress bar + raised action buttons */
+  .path-banner { display: flex; flex-direction: column; gap: 0; border-radius: 14px; border: 1.5px solid; margin-bottom: 14px; overflow: hidden; background: #FCFAF4; }
+  .path-banner-row { display: flex; align-items: center; gap: 11px; padding: 14px 13px; }
+  .path-banner-back { background: transparent; border: none; line-height: 1; color: #2A2422; cursor: pointer; padding: 0; border-radius: 8px; display: flex; align-items: center; justify-content: center; }
   .path-banner-back:active { transform: scale(0.92); }
-  .path-banner-body { flex: 1; min-width: 0; }
-  .path-banner-path { font-size: 13px; font-weight: 700; color: #1A1815; line-height: 1.2; }
-  .path-banner-step { font-size: 11px; color: #666; margin-top: 2px; letter-spacing: 0.3px; display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
-  .path-banner-done-pill { display: inline-flex; align-items: center; background: #d4edda; color: #2D5040; font-weight: 700; padding: 1px 7px; border-radius: 8px; font-size: 10px; letter-spacing: 0.2px; }
-  .path-banner-final { color: #B7791F; font-weight: 700; font-size: 13px; letter-spacing: 0.2px; }
+  .path-banner-text { flex: 1; min-width: 0; }
+  .path-banner-top { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; margin-bottom: 9px; }
+  .path-banner-name { font-family: var(--font-serif); font-size: 18px; font-weight: 700; color: #2A2422; letter-spacing: -0.01em; line-height: 1.2; }
+  .path-banner-count { font-family: var(--font-ui); font-size: 14px; font-weight: 700; color: #9C2D2A; white-space: nowrap; display: inline-flex; align-items: baseline; }
+  .path-banner-tick { display: inline-flex; align-items: center; color: #2E7D52; margin-right: 3px; transform: translateY(2px); }
+  .path-bar { height: 6px; background: #EAE0C8; border-radius: 999px; overflow: hidden; }
+  .path-bar-fill { height: 100%; background: #9C2D2A; border-radius: 999px; transition: width var(--dur-base) var(--ease); }
+  .path-bar-fill-done { background: #2E7D52; }
+
+  /* Action zone — holds the raised buttons */
+  .path-action-zone { padding: 12px; border-top: 1px solid #EFE7D2; }
+  .path-btn { width: 100%; padding: 15px; border: none; border-radius: 11px; color: #fff; font-size: 15px; font-weight: 700; font-family: var(--font-ui); cursor: pointer; display: flex; align-items: center; justify-content: center; }
+  /* Raised 3D effect — hard bottom shadow reads as a pressable button */
+  .path-btn-mark { background: #2E7D52; box-shadow: 0 3px 0 #1F5638, 0 4px 8px rgba(31,86,56,0.3); }
+  .path-btn-next { background: #9C2D2A; box-shadow: 0 3px 0 #6E1F1C, 0 4px 8px rgba(110,31,28,0.3); flex: 1; }
+  /* Press: button sinks into its shadow */
+  .path-btn:active { transform: translateY(2px); }
+  .path-btn-mark:active { box-shadow: 0 1px 0 #1F5638, 0 2px 4px rgba(31,86,56,0.3); }
+  .path-btn-next:active { box-shadow: 0 1px 0 #6E1F1C, 0 2px 4px rgba(110,31,28,0.3); }
+
+  /* Completed step — green tick badge sits left of the Next step button */
+  .path-next-row { display: flex; align-items: center; gap: 10px; }
+  .path-tick-badge { width: 40px; height: 40px; min-width: 40px; border-radius: 50%; background: #2E7D52; color: #fff; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 5px rgba(31,86,56,0.3); }
+
+  /* Final state — whole path finished */
+  .path-final-msg { display: flex; align-items: center; gap: 11px; padding: 14px 13px; border-top: 1px solid #EFE7D2; }
+  .path-final-badge { width: 42px; height: 42px; min-width: 42px; border-radius: 50%; background: #F2E3BE; display: flex; align-items: center; justify-content: center; font-size: 20px; }
+  .path-final-text { flex: 1; }
+  .path-final-title { font-family: var(--font-serif); font-size: 17px; font-weight: 700; color: #B7861E; line-height: 1.2; }
+  .path-final-sub { font-size: 12px; color: #6B5F55; margin-top: 2px; line-height: 1.4; }
 
   /* Path banner action button — bottom row, full width */
-  .path-banner-action { width: 100%; padding: 11px 14px; border: none; color: #FCFAF4; font-size: 14px; font-weight: 700; cursor: pointer; border-radius: 0; border-top: 1.5px solid rgba(0,0,0,0.06); }
-  .path-banner-action:active { transform: scale(0.99); filter: brightness(0.95); }
+  /* (path banner action buttons are styled in the Path banner block above) */
 
   /* Celebration toast — slides in over the content, dissolves after ~3s total */
   .path-toast { position: fixed; left: 50%; top: 28%; transform: translate(-50%, -50%); background: #2D5040; color: #FCFAF4; padding: 18px 26px; border-radius: 16px; font-size: 20px; font-weight: 700; box-shadow: 0 8px 28px rgba(0,0,0,0.25); z-index: 10000; animation: pathToastIn 0.25s ease-out, pathToastFade 0.4s ease-in 2.6s forwards; }
@@ -618,7 +643,7 @@
   /* Jyutping pronunciation — slightly nicer, weight up */
   .card-jyutping, .sentence-jyutping, .bubble-jyutping,
   .quiz-jyutping, .quiz-review-jp, .quiz-wrong-jp, .pattern-ex-jp,
-  .translate-jp, .breakdown-jp, .path-banner-step {
+  .translate-jp, .breakdown-jp {
     font-family: var(--font-ui);
     font-weight: var(--fw-semi);
     letter-spacing: 0.01em;
@@ -671,21 +696,6 @@
 
   /* Result screen — editorial finish */
   .result-score { font-family: var(--font-serif); font-weight: var(--fw-bold); letter-spacing: -0.01em; }
-
-  /* Path banner — refine the heavy step indicator */
-  .path-banner-path {
-    font-family: var(--font-ui);
-    font-weight: var(--fw-semi);
-    font-size: var(--fs-small);
-    letter-spacing: 0.01em;
-  }
-  .path-banner-step {
-    font-family: var(--font-ui);
-    font-weight: var(--fw-regular);
-    font-size: var(--fs-micro);
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-  }
 
   /* ── Spacing Pass — applied LAST to override earlier ad-hoc values ──────── */
 
@@ -753,12 +763,8 @@
   .tone-note { margin-top: var(--sp-3); }
 
   /* Path banner — slimmer, more refined */
-  .path-banner { margin-bottom: var(--sp-3); border-radius: var(--r-md); }
-  .path-banner-row { padding: var(--sp-3) var(--sp-3); gap: var(--sp-3); }
-  .path-banner-back { width: var(--tap-min); height: var(--tap-min); display: flex; align-items: center; justify-content: center; font-size: 18px; padding: 0; }
-  .path-banner-body { gap: var(--sp-1); display: flex; flex-direction: column; }
-  .path-banner-action { padding: var(--sp-3) var(--sp-4); min-height: var(--tap-min); }
-  .path-banner-done-pill { padding: 2px var(--sp-2); margin-left: var(--sp-1); }
+  .path-banner { margin-bottom: var(--sp-3); }
+  .path-banner-back { width: var(--tap-min); height: var(--tap-min); }
 
   /* Path list page */
   .path-list { gap: var(--sp-3); }
@@ -2529,46 +2535,71 @@ function renderHeader(color) {
 // Learning Path. One card containing the path context AND the primary action
 // (mark complete / next step / path complete).
 function renderPathBanner(ctx, color) {
-  // Row-2 content depends on completion state
-  let actionRow = '';
-  if (ctx.isComplete) {
-    if (ctx.isLast) {
-      // Final step done — no action row, the status sits in the meta line below the path name
-      actionRow = '';
-    } else {
-      // Step done, more to go — offer "Next step → Topic"
-      actionRow = `
-        <button class="path-banner-action path-banner-next" id="path-next-step" style="background:${color}">
-          <span class="icon-label">Next step ${icon('arrowRight',15)} ${ctx.nextTopicIcon || ''} ${ctx.nextTopicLabel || 'continue'}</span>
-        </button>`;
-    }
+  // Progress: how many steps in this path are complete (for the bar fill)
+  const prog = state.pathProgress[state.activePath] || {};
+  const doneCount = ctx.path.lessons.filter(l => prog[lessonKey(l.topic, l.round)]).length;
+  const pct = Math.round((doneCount / ctx.total) * 100);
+
+  // Step count line — gets a green tick prefix once this step is complete
+  const tickSmall = `<span class="path-banner-tick">${icon('check',13)}</span>`;
+  let countLine;
+  if (ctx.isComplete && ctx.isLast) {
+    countLine = `${tickSmall}${ctx.total} / ${ctx.total}`;
+  } else if (ctx.isComplete) {
+    countLine = `${tickSmall}Step ${ctx.step} / ${ctx.total}`;
   } else {
-    actionRow = `
-      <button class="path-banner-action path-banner-mark" id="path-mark-complete" style="background:${color}">
-        ✓ Mark step complete
-      </button>`;
+    countLine = `Step ${ctx.step} / ${ctx.total}`;
   }
 
-  // Meta line: "Step N of M" + completion status indicator when relevant
-  let metaLine;
+  // Progress bar turns green once the current step is done
+  const barFillCls = ctx.isComplete ? 'path-bar-fill path-bar-fill-done' : 'path-bar-fill';
+
+  // Action zone — depends on completion state
+  let actionZone;
   if (ctx.isComplete && ctx.isLast) {
-    metaLine = `<span class="path-banner-final">🎉 Path complete!</span>`;
+    // Whole path finished — celebratory message instead of an action
+    actionZone = `
+      <div class="path-final-msg">
+        <div class="path-final-badge">🎉</div>
+        <div class="path-final-text">
+          <div class="path-final-title">Path complete!</div>
+          <div class="path-final-sub">You've finished every step of ${ctx.path.label} Path.</div>
+        </div>
+      </div>`;
   } else if (ctx.isComplete) {
-    metaLine = `Step ${ctx.step} of ${ctx.total} <span class="path-banner-done-pill">✓ Complete</span>`;
+    // Step done — green tick badge + raised "Next step" button
+    actionZone = `
+      <div class="path-action-zone">
+        <div class="path-next-row">
+          <div class="path-tick-badge" aria-label="Step complete">${icon('check',19)}</div>
+          <button class="path-btn path-btn-next" id="path-next-step">
+            <span class="icon-label">Next step ${icon('arrowRight',16)} ${ctx.nextTopicIcon || ''} ${ctx.nextTopicLabel || 'continue'}</span>
+          </button>
+        </div>
+      </div>`;
   } else {
-    metaLine = `Step ${ctx.step} of ${ctx.total}`;
+    // Incomplete — raised green "Mark step complete" button
+    actionZone = `
+      <div class="path-action-zone">
+        <button class="path-btn path-btn-mark" id="path-mark-complete">
+          <span class="icon-label">${icon('check',18)} Mark step complete</span>
+        </button>
+      </div>`;
   }
 
   return `
-    <div class="path-banner" style="background:${color}15;border-color:${color}55">
+    <div class="path-banner" style="border-color:${color}55">
       <div class="path-banner-row">
-        <button class="path-banner-back" id="back-home-btn" aria-label="Back to Learning Path">${icon('arrowLeft',18)}</button>
-        <div class="path-banner-body">
-          <div class="path-banner-path">${ctx.path.icon || '🛤️'} ${ctx.path.label} Path</div>
-          <div class="path-banner-step">${metaLine}</div>
+        <button class="path-banner-back" id="back-home-btn" aria-label="Back to Learning Path">${icon('arrowLeft',20)}</button>
+        <div class="path-banner-text">
+          <div class="path-banner-top">
+            <span class="path-banner-name">${ctx.path.icon || '🛤️'} ${ctx.path.label} Path</span>
+            <span class="path-banner-count">${countLine}</span>
+          </div>
+          <div class="path-bar"><div class="${barFillCls}" style="width:${Math.max(pct,3)}%"></div></div>
         </div>
       </div>
-      ${actionRow}
+      ${actionZone}
     </div>`;
 }
 
