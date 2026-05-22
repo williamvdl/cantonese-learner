@@ -2622,11 +2622,11 @@ function renderVoiceBanner() {
     </div>`;
   }
   const cls = v.status === 'other' ? 'voice-warn' : 'voice-none';
-  const icon = v.status !== 'none' ? '🔊' : '⚠️';
+  const statusIcon = v.status !== 'none' ? '🔊' : '⚠️';
   const extra = v.status === 'none'
     ? ' · Try Chrome, or go to Android Settings → General Management → Language → TTS → install Chinese (Hong Kong)'
     : '';
-  return `<div class="voice-banner ${cls}">${icon} ${v.label}${v.name ? ' — ' + v.name : ''}${extra}</div>`;
+  return `<div class="voice-banner ${cls}">${statusIcon} ${v.label}${v.name ? ' — ' + v.name : ''}${extra}</div>`;
 }
 
 function renderCategoryFilter() {
