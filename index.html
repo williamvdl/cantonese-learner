@@ -4128,9 +4128,13 @@ function attachEvents(lesson, color) {
           state.quiz.score++;
         } else {
           state.quiz.wrongAnswers.push({ word: cw, chosen });
-          // Capture into the cross-topic Word Review bin. Fire-and-forget —
-          // the await resolves immediately today; quiz flow does not block on it.
-          addMiss(state.topic, state.currentRound, cw.c);
+          // Capture into the cross-topic Word Review bin, then refresh the menu
+          // badge so its count is current even before the user opens Word Review.
+          // refreshReviewBadge re-reads the true entry count from storage, so a
+          // re-missed (already-binned) word correctly leaves the count unchanged.
+          addMiss(state.topic, state.currentRound, cw.c)
+            .then(refreshReviewBadge)
+            .then(render);
         }
         render();
         // On correct: auto-advance after a short beat so the green tick lands.
@@ -4228,6 +4232,9 @@ function attachEvents(lesson, color) {
             item.entry.correctCount = correct
               ? item.entry.correctCount + 1
               : 0;
+            // A graduated word leaves the bin — refresh the badge so the menu
+            // count is current even if the user opens the menu mid-session.
+            if (res.graduated) return refreshReviewBadge().then(render);
           });
         render();
         if (correct) {
