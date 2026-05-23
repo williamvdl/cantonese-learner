@@ -436,6 +436,24 @@
   .quiz-replay { background: transparent; border-radius: 20px; padding: 8px 14px; cursor: pointer; font-size: 13px; font-weight: 600; border: 1.5px solid; }
   .quiz-next   { background: #1A1815; color: #FCFAF4; border-radius: 20px; padding: 8px 18px; cursor: pointer; font-size: 13px; font-weight: 700; border: none; }
 
+  /* Word Review — landing, empty states, progress pips */
+  .review-landing { text-align: center; padding: 28px 20px 8px; }
+  .review-landing-count { font-size: 56px; font-weight: 800; color: #8B3A4E; line-height: 1; }
+  .review-landing-label { font-size: 15px; color: #6A5F4E; font-weight: 600; margin-top: 6px; }
+  .review-landing-note { font-size: 13px; color: #999; margin: 14px auto 20px; max-width: 320px; line-height: 1.5; }
+  .review-start-btn { background: #8B3A4E; color: #FCFAF4; border: none; border-radius: 22px; padding: 12px 28px; font-size: 14px; font-weight: 700; cursor: pointer; box-shadow: 0 2px 8px rgba(139,58,78,0.28); }
+  .review-empty { text-align: center; padding: 40px 24px; }
+  .review-empty-emoji { font-size: 44px; }
+  .review-empty-title { font-size: 17px; font-weight: 700; color: #1A1815; margin-top: 10px; }
+  .review-empty-text { font-size: 13px; color: #999; margin: 8px auto 0; max-width: 300px; line-height: 1.5; }
+  .review-allclear-note { font-size: 13px; color: #6A5F4E; margin: 14px 0 4px; }
+  .review-progress { display: inline-flex; gap: 5px; align-items: center; }
+  .review-pip { width: 9px; height: 9px; border-radius: 50%; background: #DDD3BE; display: inline-block; }
+  .review-pip.filled { background: #2D5040; }
+  /* Word Review menu badge */
+  .ni-badge { margin-left: auto; background: #8B3A4E; color: #FCFAF4; font-size: 11px; font-weight: 700; min-width: 20px; height: 20px; border-radius: 10px; padding: 0 6px; display: inline-flex; align-items: center; justify-content: center; }
+  .ni-badge + .ni-tick { margin-left: 8px; }
+
   /* End-of-quiz review list */
   .quiz-review-wrap   { margin-top: 24px; text-align: left; }
   .quiz-review-title  { font-size: 12px; color: #888; letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 10px; text-align: center; }
@@ -1213,6 +1231,111 @@ const store = {
   },
 };
 
+// ── Word Review storage layer ─────────────────────────────────────────────────
+// ALL persistent access for the Word Review bin goes through these functions.
+// Nothing else in the app touches localStorage for review data. Every function
+// is async — it currently resolves immediately, but this means a future swap to
+// a server API (for a multi-user product) only requires rewriting THIS block;
+// no caller changes, because callers already await.
+//
+// Stored shape under WORD_REVIEW_KEY:
+//   { everUsed: bool, entries: [ {topicKey, round, wordC, missCount, correctCount, addedAt} ] }
+// Entry identity = topicKey | round | wordC  (same word in two topics = two entries).
+const WORD_REVIEW_KEY = 'cantonese-word-review-v1';
+const REVIEW_GRADUATE_AT = 3;   // consecutive correct (in review) to clear a word
+
+function _reviewEntryKey(topicKey, round, wordC) {
+  return topicKey + '|' + round + '|' + wordC;
+}
+
+// Internal: read the raw store object. Not exported — callers use the helpers below.
+async function _readReviewStore() {
+  try {
+    const raw = localStorage.getItem(WORD_REVIEW_KEY);
+    if (!raw) return { everUsed: false, entries: [] };
+    const parsed = JSON.parse(raw);
+    return {
+      everUsed: !!parsed.everUsed,
+      entries: Array.isArray(parsed.entries) ? parsed.entries : [],
+    };
+  } catch (e) {
+    return { everUsed: false, entries: [] };
+  }
+}
+
+// Internal: persist the raw store object.
+async function _writeReviewStore(data) {
+  try {
+    localStorage.setItem(WORD_REVIEW_KEY, JSON.stringify(data));
+  } catch (e) {
+    // localStorage full or unavailable — fail silently, in-memory session still works
+  }
+}
+
+// Return all bin entries (array).
+async function getBin() {
+  return (await _readReviewStore()).entries;
+}
+
+// Record a missed word. New word → new entry. Already-binned word → missCount++,
+// correctCount reset to 0 (a fresh miss undoes review progress).
+async function addMiss(topicKey, round, wordC) {
+  const data = await _readReviewStore();
+  data.everUsed = true;
+  const key = _reviewEntryKey(topicKey, round, wordC);
+  const existing = data.entries.find(e => _reviewEntryKey(e.topicKey, e.round, e.wordC) === key);
+  if (existing) {
+    existing.missCount += 1;
+    existing.correctCount = 0;
+  } else {
+    data.entries.push({
+      topicKey, round, wordC,
+      missCount: 1,
+      correctCount: 0,
+      addedAt: Date.now(),
+    });
+  }
+  await _writeReviewStore(data);
+}
+
+// Record a review-session result for one entry. Correct → correctCount++, and if
+// it reaches REVIEW_GRADUATE_AT the entry is removed (graduated). Wrong → reset to 0.
+// Returns { graduated: bool } so the caller can show feedback.
+async function recordReviewResult(topicKey, round, wordC, wasCorrect) {
+  const data = await _readReviewStore();
+  const key = _reviewEntryKey(topicKey, round, wordC);
+  const entry = data.entries.find(e => _reviewEntryKey(e.topicKey, e.round, e.wordC) === key);
+  if (!entry) { return { graduated: false }; }
+  let graduated = false;
+  if (wasCorrect) {
+    entry.correctCount += 1;
+    if (entry.correctCount >= REVIEW_GRADUATE_AT) {
+      data.entries = data.entries.filter(e => e !== entry);
+      graduated = true;
+    }
+  } else {
+    entry.correctCount = 0;
+  }
+  await _writeReviewStore(data);
+  return { graduated };
+}
+
+// Remove an entry outright — used to silently drop words that can no longer be
+// resolved (their topic/round/word no longer exists in the topic JSON).
+async function dropBinEntry(topicKey, round, wordC) {
+  const data = await _readReviewStore();
+  const key = _reviewEntryKey(topicKey, round, wordC);
+  data.entries = data.entries.filter(e => _reviewEntryKey(e.topicKey, e.round, e.wordC) !== key);
+  await _writeReviewStore(data);
+}
+
+// Stats for the menu badge and empty-state logic.
+// liveCount = words currently in the bin; everUsed = bin has been used at least once.
+async function getReviewStats() {
+  const data = await _readReviewStore();
+  return { liveCount: data.entries.length, everUsed: data.everUsed };
+}
+
 // ── Round accessors — single point of truth for "what content is in topic+round" ──
 // These assume the topic has been loaded; return safe defaults otherwise.
 function getAvailableRounds(topic) {
@@ -1463,6 +1586,10 @@ let state = {
   patternRevealed: {},
   voiceInfo: null,
   quiz: null,
+  // Word Review session — null when not in a session. Shape set by startWordReview().
+  wordReview: null,
+  // Cached {liveCount, everUsed} for the menu badge — refreshed by refreshReviewBadge().
+  reviewBadge: { liveCount: 0, everUsed: false },
   convo: {
     convMode: 'read',
     playingLine: null,
@@ -1519,6 +1646,92 @@ function advanceQuiz() {
     q.selected = null;
     q.choices = buildChoices(q.queue[next], getRoundWords(state.topic, state.currentRound));
   }
+  render();
+}
+
+// ── Word Review session ───────────────────────────────────────────────────────
+const REVIEW_SESSION_CAP = 20;   // max words per review session; oldest-missed first
+                                 // BACKLOG: make this user-configurable in Settings
+
+// Refresh the cached menu badge counts. Call after any bin mutation that the user
+// should see reflected (e.g. finishing a quiz, finishing a review session).
+async function refreshReviewBadge() {
+  state.reviewBadge = await getReviewStats();
+}
+
+// Build and start a Word Review session. Pulls the bin, takes the oldest-missed
+// REVIEW_SESSION_CAP words, loads their topics, rehydrates each word from its
+// topic JSON, and silently drops any entry that can no longer be resolved.
+async function startWordReview() {
+  const bin = await getBin();
+  // Oldest-missed first so long-standing misses surface before recent ones.
+  const ordered = bin.slice().sort((a, b) => a.addedAt - b.addedAt);
+  const picked = ordered.slice(0, REVIEW_SESSION_CAP);
+
+  // Load every topic referenced by the picked entries (parallel, cached).
+  const topicKeys = [...new Set(picked.map(e => e.topicKey))];
+  try {
+    await store.loadTopics(topicKeys);
+  } catch (e) {
+    // A topic failed to load — individual rehydration below will skip what it must.
+  }
+
+  // Rehydrate: pair each bin entry with its live word object from the topic JSON.
+  // If the topic/round/word no longer exists, silently drop the entry from the bin.
+  const items = [];
+  for (const entry of picked) {
+    const words = getRoundWords(entry.topicKey, entry.round);
+    const word = words.find(w => w.c === entry.wordC);
+    if (!word) {
+      await dropBinEntry(entry.topicKey, entry.round, entry.wordC);
+      continue;
+    }
+    items.push({ entry, word, pool: words });
+  }
+
+  if (!items.length) {
+    // Everything we picked was unresolvable (or the bin was empty) — show the
+    // appropriate empty state rather than an empty session.
+    state.wordReview = null;
+    await refreshReviewBadge();
+    render();
+    return;
+  }
+
+  const queue = shuffle(items);
+  state.wordReview = {
+    queue,
+    idx: 0,
+    selected: null,
+    done: false,
+    correctThisSession: 0,
+    graduatedThisSession: 0,
+    direction: loadQuizDirection(),               // shares the quiz's saved preference
+    choices: buildReviewChoices(queue[0]),
+  };
+  render();
+}
+
+// Build the 4 choice options for a review item — 3 distractors drawn from the
+// word's OWN topic round pool, plus the answer, shuffled. Mirrors buildChoices.
+function buildReviewChoices(item) {
+  const others = shuffle(item.pool.filter(w => w.c !== item.word.c)).slice(0, 3);
+  return shuffle([...others, item.word]);
+}
+
+// Advance the review session to the next word, or mark it done.
+function advanceWordReview() {
+  const wr = state.wordReview;
+  if (!wr) return;
+  const next = wr.idx + 1;
+  if (next >= wr.queue.length) {
+    wr.done = true;
+    refreshReviewBadge().then(render);
+    return;
+  }
+  wr.idx = next;
+  wr.selected = null;
+  wr.choices = buildReviewChoices(wr.queue[next]);
   render();
 }
 
@@ -2085,10 +2298,12 @@ function stopTranslateListening() {
 
 // ── Render ────────────────────────────────────────────────────────────────────
 function renderDrawer() {
+  const rc = state.reviewBadge.liveCount;
   const items = [
     { key:'topics',    icon:'📖', label:'Topics',         desc:'Vocabulary, sentences & conversations' },
     { key:'path',      icon:'🛤️', label:'Learning Path',  desc:'Curated curriculum, ordered & tracked'  },
     { key:'patterns',  icon:'🔨', label:'Patterns',        desc:'Sentence building blocks'              },
+    { key:'review',    icon:'🗂️', label:'Word Review',     desc:'Practise words you\'ve missed',        badge: rc },
     { key:'translate', icon:'🌐', label:'Translate',       desc:'AI-powered translation & breakdown'    },
   ];
   const open = state.drawerOpen ? 'open' : '';
@@ -2125,6 +2340,7 @@ function renderDrawer() {
                 <span class="ni-label">${item.label}</span>
                 <span class="ni-desc">${item.desc}</span>
               </span>
+              ${item.badge > 0 ? `<span class="ni-badge">${item.badge}</span>` : ''}
               <span class="ni-tick">✓</span>
             </button>`).join('')}
           ${settingsSection}
@@ -2271,6 +2487,172 @@ function renderTranslate() {
       <div style="margin-top:20px;text-align:center">
         <button class="apikey-toggle-btn" id="translate-reset-key">Reset API key</button>
       </div>
+    </div>`;
+}
+
+// ── Word Review view ──────────────────────────────────────────────────────────
+// Standalone cross-topic review of words missed in any quiz. Reuses the quiz's
+// CSS classes (quiz-card, choice-btn, quiz-dir-toggle, quiz-wrong-panel) so it
+// reads as part of the same family without refactoring renderQuiz itself.
+function renderWordReview() {
+  const wr = state.wordReview;
+
+  // --- Landing state: no active session ---
+  if (!wr) {
+    const { liveCount, everUsed } = state.reviewBadge;
+    let body;
+    if (liveCount > 0) {
+      body = `
+        <div class="review-landing">
+          <div class="review-landing-count">${liveCount}</div>
+          <div class="review-landing-label">word${liveCount === 1 ? '' : 's'} ready to review</div>
+          <p class="review-landing-note">
+            ${liveCount > REVIEW_SESSION_CAP
+              ? `This session will cover the ${REVIEW_SESSION_CAP} oldest. Get a word right 3 times to clear it.`
+              : `Get a word right 3 times to clear it from your review list.`}
+          </p>
+          <button class="review-start-btn" id="review-start">Start review</button>
+        </div>`;
+    } else if (everUsed) {
+      // All caught up — used before, bin now empty.
+      body = `
+        <div class="review-empty">
+          <div class="review-empty-emoji">🎉</div>
+          <div class="review-empty-title">All caught up — great work!</div>
+          <p class="review-empty-text">You've reviewed every word. New ones will appear here as you do more quizzes.</p>
+        </div>`;
+    } else {
+      // Never used — bin has never had anything in it.
+      body = `
+        <div class="review-empty">
+          <div class="review-empty-emoji">📥</div>
+          <div class="review-empty-title">No review words yet</div>
+          <p class="review-empty-text">Words you miss in quizzes will collect here to practise later.</p>
+        </div>`;
+    }
+    return `
+      <div class="content">
+        ${renderPageHeader('🗂️', 'Word Review', 'Practise the words you\'ve missed — from every topic')}
+        ${body}
+      </div>`;
+  }
+
+  const color = '#8B3A4E';   // review uses the brand cinnabar as its accent
+
+  // --- Done state: session summary ---
+  if (wr.done) {
+    const total = wr.queue.length;
+    return `
+      <div class="content">
+        ${renderPageHeader('🗂️', 'Word Review', '')}
+        <div class="result">
+          <div class="result-emoji">${wr.graduatedThisSession > 0 ? '🌟' : '✅'}</div>
+          <div class="result-score" style="color:${color}">${wr.correctThisSession} / ${total} correct</div>
+          <div class="result-msg">
+            ${wr.graduatedThisSession > 0
+              ? `${wr.graduatedThisSession} word${wr.graduatedThisSession === 1 ? '' : 's'} cleared from your review list.`
+              : `Keep going — get a word right 3 times to clear it.`}
+          </div>
+          ${state.reviewBadge.liveCount > 0
+            ? `<button class="review-start-btn" id="review-again">Review ${Math.min(state.reviewBadge.liveCount, REVIEW_SESSION_CAP)} more</button>`
+            : `<div class="review-allclear-note">No words left to review — nicely done.</div>`}
+          <button class="back-btn" id="review-exit" style="background:${color}"><span class="icon-label">${icon('arrowLeft',15)} Done</span></button>
+        </div>
+      </div>`;
+  }
+
+  // --- Active question ---
+  const item = wr.queue[wr.idx];
+  const cw = item.word;
+  const pct = (wr.idx / wr.queue.length * 100).toFixed(0);
+
+  const dirs = [
+    { key:'zh-en',    label:'漢→EN', title:'See Chinese, pick English' },
+    { key:'en-zh',    label:'EN→漢', title:'See English, pick Chinese' },
+    { key:'listen-en',label:'🔊→EN', title:'Listen, pick English' },
+  ];
+  const dirToggle = `
+    <div class="quiz-dir-toggle" role="tablist" aria-label="Review direction">
+      ${dirs.map(d => {
+        const active = wr.direction === d.key;
+        return `<button class="quiz-dir-btn${active ? ' active' : ''}" data-review-dir="${d.key}" title="${d.title}"
+          style="${active ? `background:${color};color:#fff;border-color:${color}` : `color:${color};border-color:${color}66`}">${d.label}</button>`;
+      }).join('')}
+    </div>`;
+
+  let promptCard;
+  if (wr.direction === 'en-zh') {
+    promptCard = `
+      <div class="quiz-card" style="border:2px solid ${color}22">
+        <div class="quiz-label">Pick the Cantonese for:</div>
+        <div class="quiz-prompt-en">${cw.e}</div>
+      </div>`;
+  } else if (wr.direction === 'listen-en') {
+    promptCard = `
+      <div class="quiz-card quiz-card-listen" style="border:2px solid ${color}22">
+        <div class="quiz-label">Listen — what does it mean?</div>
+        <button class="quiz-listen-big" id="review-listen" style="background:${color}" aria-label="Play audio">${icon('volume',38)}</button>
+        <div class="quiz-listen-hint" style="color:${color}">Tap to replay</div>
+      </div>`;
+  } else {
+    promptCard = `
+      <div class="quiz-card" style="border:2px solid ${color}22">
+        <div class="quiz-label">What does this mean?</div>
+        <div class="quiz-chinese">${cw.c}</div>
+        <div class="quiz-jyutping">${colorJyutping(cw.j)}</div>
+        <button class="quiz-listen" id="review-listen" style="border:1.5px solid ${color};color:${color}"><span class="icon-label">${iconPlay(13)} Listen</span></button>
+      </div>`;
+  }
+
+  const choiceBtns = wr.choices.map(c => {
+    const isCorrect = c.c === cw.c;
+    const isChosen  = wr.selected === c.c;
+    let cls = 'choice-btn';
+    if (wr.direction === 'en-zh') cls += ' choice-btn-zh';
+    if (wr.selected) { if (isCorrect) cls += ' correct'; else if (isChosen) cls += ' wrong'; }
+    const body = wr.direction === 'en-zh'
+      ? `<div class="choice-zh-chinese">${c.c}</div><div class="choice-zh-jp">${colorJyutping(c.j)}</div>`
+      : c.e;
+    return `<button class="${cls}" data-review-choice="${c.c}" ${wr.selected ? 'disabled' : ''}>${body}</button>`;
+  }).join('');
+
+  // Progress pips: how close this word is to graduating (3 correct clears it).
+  const progressDots = (() => {
+    const got = item.entry.correctCount;
+    let dots = '';
+    for (let i = 0; i < REVIEW_GRADUATE_AT; i++) {
+      dots += `<span class="review-pip${i < got ? ' filled' : ''}"></span>`;
+    }
+    return `<div class="review-progress" title="${got} of ${REVIEW_GRADUATE_AT} correct">${dots}</div>`;
+  })();
+
+  const wrongPanel = (wr.selected && wr.selected !== cw.c)
+    ? `<div class="quiz-wrong-panel">
+        <div class="quiz-wrong-heading">Not quite — the answer was:</div>
+        <div class="quiz-wrong-chinese">${cw.c}</div>
+        <div class="quiz-wrong-jp">${colorJyutping(cw.j)}</div>
+        <div class="quiz-wrong-en">${cw.e}</div>
+        <div class="quiz-wrong-actions">
+          <button class="quiz-replay" id="review-replay" style="border-color:${color};color:${color}"><span class="icon-label">${iconPlay(13)} Hear it again</span></button>
+          <button class="quiz-next" id="review-next" style="background:${color}"><span class="icon-label">Got it — next ${icon('arrowRight',14)}</span></button>
+        </div>
+      </div>`
+    : '';
+
+  return `
+    <div class="content">
+      ${renderPageHeader('🗂️', 'Word Review', '')}
+      <div class="quiz-meta">
+        <span style="color:#888">Word ${wr.idx+1} / ${wr.queue.length}</span>
+        ${progressDots}
+      </div>
+      <div class="progress-bar">
+        <div class="progress-fill" style="background:${color};width:${pct}%"></div>
+      </div>
+      ${dirToggle}
+      ${promptCard}
+      <div class="choices">${choiceBtns}</div>
+      ${wrongPanel}
     </div>`;
 }
 
@@ -2476,6 +2858,8 @@ function render() {
     }
   } else if (state.nav === 'patterns') {
     mainContent = renderPatterns();
+  } else if (state.nav === 'review') {
+    mainContent = renderWordReview();
   } else if (state.nav === 'translate') {
     mainContent = renderTranslate();
   } else if (state.nav === 'path') {
@@ -3244,6 +3628,11 @@ function attachEvents(lesson, color) {
       if (target === 'topics') state.homeView = true;
       // Tapping Learning Path from the drawer always returns to the path list
       if (target === 'path') state.pathView = 'list';
+      // Entering Word Review always starts at the landing screen, not a stale session
+      if (target === 'review') {
+        state.wordReview = null;
+        refreshReviewBadge().then(render);
+      }
       state.nav = target;
       state.fromPath = false;          // any drawer navigation clears the path-return flag
       state.fromPathTier = null;
@@ -3739,6 +4128,9 @@ function attachEvents(lesson, color) {
           state.quiz.score++;
         } else {
           state.quiz.wrongAnswers.push({ word: cw, chosen });
+          // Capture into the cross-topic Word Review bin. Fire-and-forget —
+          // the await resolves immediately today; quiz flow does not block on it.
+          addMiss(state.topic, state.currentRound, cw.c);
         }
         render();
         // On correct: auto-advance after a short beat so the green tick lands.
@@ -3791,6 +4183,94 @@ function attachEvents(lesson, color) {
   const qReplay = document.getElementById('quiz-replay');
   if (qReplay && state.quiz) {
     qReplay.addEventListener('click', () => speak(state.quiz.queue[state.quiz.idx].c));
+  }
+
+  // ── Word Review session handlers ──
+  // Landing: start a session
+  const reviewStart = document.getElementById('review-start');
+  if (reviewStart) reviewStart.addEventListener('click', () => startWordReview());
+
+  // Done screen: start another session, or exit to landing
+  const reviewAgain = document.getElementById('review-again');
+  if (reviewAgain) reviewAgain.addEventListener('click', () => startWordReview());
+  const reviewExit = document.getElementById('review-exit');
+  if (reviewExit) reviewExit.addEventListener('click', () => {
+    state.wordReview = null;
+    refreshReviewBadge().then(render);
+  });
+
+  // Active review question
+  if (state.wordReview && !state.wordReview.done) {
+    const wr = state.wordReview;
+    const item = wr.queue[wr.idx];
+
+    // Listen button (audio prompt / replay)
+    const rListen = document.getElementById('review-listen');
+    if (rListen) rListen.addEventListener('click', () => speak(item.word.c));
+
+    // Choice buttons
+    document.querySelectorAll('[data-review-choice]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        if (wr.selected) return;
+        const chosen = btn.dataset.reviewChoice;
+        const cw = item.word;
+        const correct = chosen === cw.c;
+        speak(cw.c);
+        wr.selected = chosen;
+        if (correct) wr.correctThisSession++;
+        // Persist the result to the bin. recordReviewResult resolves the graduation;
+        // we capture whether this word graduated so the session tally is accurate.
+        recordReviewResult(item.entry.topicKey, item.entry.round, item.entry.wordC, correct)
+          .then(res => {
+            if (res.graduated) wr.graduatedThisSession++;
+            // Keep the in-memory entry's correctCount in sync so the progress pips
+            // are right if the user lingers on the answered card.
+            item.entry.correctCount = correct
+              ? item.entry.correctCount + 1
+              : 0;
+          });
+        render();
+        if (correct) {
+          setTimeout(() => advanceWordReview(), 950);
+        }
+      });
+    });
+
+    // "Got it — next" after a wrong answer
+    const rNext = document.getElementById('review-next');
+    if (rNext) rNext.addEventListener('click', () => advanceWordReview());
+
+    // Replay on the wrong-answer panel
+    const rReplay = document.getElementById('review-replay');
+    if (rReplay) rReplay.addEventListener('click', () => speak(item.word.c));
+
+    // Direction toggle — switching restarts the session cleanly with the new direction
+    document.querySelectorAll('[data-review-dir]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const newDir = btn.dataset.reviewDir;
+        if (wr.direction === newDir) return;
+        saveQuizDirection(newDir);
+        wr.direction = newDir;
+        wr.selected = null;
+        wr._listenAutoPlayed = null;
+        render();
+      });
+    });
+
+    // Listen mode: auto-play audio on each new word (once per index)
+    if (wr.direction === 'listen-en') {
+      if (wr._listenAutoPlayed !== wr.idx) {
+        wr._listenAutoPlayed = wr.idx;
+        setTimeout(() => {
+          if (state.wordReview && !state.wordReview.done &&
+              state.wordReview.direction === 'listen-en' &&
+              state.wordReview._listenAutoPlayed === state.wordReview.idx) {
+            try { window.speechSynthesis.cancel(); } catch(e) {}
+            speak(state.wordReview.queue[state.wordReview.idx].word.c);
+          }
+        }, 900);
+      }
+    }
   }
 
   // End-of-quiz: retry just the missed words
@@ -3959,6 +4439,9 @@ function attachEvents(lesson, color) {
   }
 
   render(); // first paint with index/categories/paths available
+
+  await refreshReviewBadge();   // populate the Word Review menu count
+  render();                     // re-render so the badge shows
 
   const voices = await loadVoices();
   // Count Cantonese voices specifically — dual-speaker only makes sense if we
