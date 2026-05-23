@@ -6,7 +6,7 @@
 // up a new service worker when this string changes. If you forget to bump it,
 // users will keep serving the old index.html from cache.
 
-const CACHE_VERSION = 'cantonese-teahouse-v13';
+const CACHE_VERSION = 'cantonese-teahouse-v15';
 
 // App shell — fetched at install time
 const SHELL_ASSETS = [

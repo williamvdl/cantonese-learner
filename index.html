@@ -322,7 +322,7 @@
   .bubble-play { width: 32px; height: 32px; border-radius: 50%; border: 1.5px solid; background: transparent; cursor: pointer; font-size: 13px; display: flex; align-items: center; justify-content: center; transition: all 0.15s; }
   .gap-prompt { font-size: 12px; color: #888; margin-bottom: 8px; font-style: italic; }
   .gap-options { display: flex; flex-direction: column; gap: 7px; }
-  .gap-btn { padding: 10px 14px; border-radius: 10px; border: 2px solid #ddd; background: #FCFAF4; color: #1A1815; font-size: 13px; font-weight: 600; cursor: pointer; text-align: left; transition: all 0.15s; }
+  .gap-btn { padding: 10px 14px; border-radius: 10px; border: 2px solid #ddd; background: #FCFAF4; color: #1A1815; font-size: 13px; font-weight: 600; cursor: pointer; text-align: left; transition: all 0.15s; white-space: normal; overflow-wrap: break-word; word-break: break-word; line-height: 1.5; }
   .gap-btn.correct { background: #d4edda; border-color: #2D5040; color: #1a5e2a; }
   .gap-btn.wrong   { background: #fde8ea; border-color: #8B3A4E; color: #7b1c1c; }
   .gap-btn:disabled { cursor: default; }
@@ -346,8 +346,10 @@
   .speak-breakdown .bd-char { font-size: 20px; font-weight: 700; line-height: 1; }
   .speak-breakdown .bd-status { font-size: 13px; line-height: 1; }
   .speak-breakdown .bd-jp { font-size: 11px; line-height: 1; white-space: nowrap; }
-  .speak-actions { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
-  .speak-action-btn { padding: 9px 20px; border-radius: 20px; border: none; font-size: 13px; font-weight: 700; cursor: pointer; }
+  .speak-actions { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-top: 14px; }
+  .speak-action-btn { padding: 10px 22px; border-radius: 20px; border: none; font-size: 13px; font-weight: 700; cursor: pointer; text-align: center; display: inline-flex; align-items: center; justify-content: center; }
+  .speak-action-btn.primary { flex: 1; min-width: 130px; box-shadow: 0 2px 6px rgba(26,24,21,0.18); }
+  .speak-action-btn.secondary { flex: 1; min-width: 130px; background: transparent; border: 1.5px solid #C9BFA8; color: #6A5F4E; font-weight: 600; }
   .speak-unsupported { padding: 30px 20px; text-align: center; background: #F3E5C5; border: 1px solid #B7861E; border-radius: 12px; color: #7A5C18; font-size: 13px; line-height: 1.6; }
 
   .speak-nav { display: flex; justify-content: space-between; align-items: center; font-size: 12px; color: #aaa; margin-bottom: 12px; }
@@ -418,7 +420,7 @@
   .choice-zh-chinese { font-size: 22px; line-height: 1.1; color: #1A1815; font-weight: 700; }
   .choice-zh-jp { font-size: 11px; line-height: 1.1; font-weight: 700; }
 
-  /* en-zh choices: single column so longer Chinese phrases fit cleanly */
+  /* Unused: en-zh quiz now uses the default 2-col grid. Kept for optional single-column layout. */
   .choices.choices-zh { grid-template-columns: 1fr; }
 
   /* Quiz prompt for en-zh direction */
@@ -1422,8 +1424,8 @@ function colorJyutping(text) {
   return text.split(' ').map(syl => {
     const tone = syl.match(/[1-6]/);
     const color = tone ? TONES[tone[0]].color : '#777';
-    return `<span style="color:${color};font-weight:700;margin-right:3px">${syl}</span>`;
-  }).join('');
+    return `<span style="color:${color};font-weight:700">${syl}</span>`;
+  }).join(' ');
 }
 
 // ── State ─────────────────────────────────────────────────────────────────────
@@ -2851,29 +2853,33 @@ function renderConversation(color) {
           </button>
           <div class="speak-status">${statusText}</div>
           ${status==='listening' ? `
-            <button class="speak-action-btn" id="speak-stop-btn" style="background:#E74C3C;color:#fff;margin-bottom:14px">
+            <button class="speak-action-btn primary" id="speak-stop-btn" style="background:#E74C3C;color:#fff;margin-bottom:14px">
               ⏹ Stop & Check
             </button>
           ` : ''}
           ${heard}
           ${result}
         ` : `
-          <button class="speak-action-btn" id="speak-listen-btn"
-            style="background:${playing?color+'cc':color};color:#fff">
-            <span class="icon-label">${playing ? icon('volume',16) : iconPlay(14)} ${playing ? 'Playing…' : 'Listen'}</span>
-          </button>
+          <div class="speak-actions">
+            <button class="speak-action-btn primary" id="speak-listen-btn"
+              style="background:${playing?color+'cc':color};color:#fff">
+              <span class="icon-label">${playing ? icon('volume',16) : iconPlay(14)} ${playing ? 'Playing…' : 'Listen'}</span>
+            </button>
+          </div>
         `}
+        ${(isUser && (status === 'mismatch' || status === 'matched')) || !isUser ? `
         <div class="speak-actions">
           ${isUser && status === 'mismatch' ? `
-            <button class="speak-action-btn" id="speak-retry" style="background:#eee;color:#555"><span class="icon-label">${icon('refresh',14)} Try Again</span></button>
-            <button class="speak-action-btn" id="speak-skip"  style="background:${color};color:#fff"><span class="icon-label">Skip ${icon('arrowRight',14)}</span></button>
+            <button class="speak-action-btn secondary" id="speak-retry"><span class="icon-label">${icon('refresh',14)} Try Again</span></button>
+            <button class="speak-action-btn primary" id="speak-skip"  style="background:${color};color:#fff"><span class="icon-label">Skip ${icon('arrowRight',14)}</span></button>
           ` : ''}
           ${(isUser && status === 'matched') || !isUser ? `
-            <button class="speak-action-btn" id="speak-next" style="background:${color};color:#fff">
+            <button class="speak-action-btn primary" id="speak-next" style="background:${color};color:#fff">
               ${isLast ? "<span class=\"icon-label\">" + icon('refresh',14) + " Restart</span>" : "<span class=\"icon-label\">Next " + icon('arrowRight',14) + "</span>"}
             </button>
           ` : ''}
         </div>
+        ` : ''}
       </div>
       ${isUser && status === 'idle' ? `<p style="font-size:11px;color:#aaa;text-align:center;margin-top:6px">📱 Allow microphone access if prompted</p>` : ''}`;
   }
@@ -3206,7 +3212,7 @@ function renderQuiz(lesson, color) {
     </div>
     ${dirToggle}
     ${promptCard}
-    <div class="choices${q.direction === 'en-zh' ? ' choices-zh' : ''}">${choiceBtns}</div>
+    <div class="choices">${choiceBtns}</div>
     ${wrongPanel}`;
 }
 
