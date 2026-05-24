@@ -3477,7 +3477,7 @@ function renderConversation(color) {
             <div class="bubble-play-row">
               ${bdBtn}
               <button class="bubble-play" data-bubble="${i}"
-                style="border-color:${playColor};color:${playing?(isUser?bubbleBg:color)+'':playColor};background:${playing?playColor:'transparent'}">
+                style="border-color:${playColor};color:${playing?(isUser?color:THEME.bubbleBg):playColor};background:${playing?playColor:'transparent'}">
                 ${playing ? icon('volume',20) : iconPlay(18)}
               </button>
             </div>
