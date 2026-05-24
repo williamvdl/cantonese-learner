@@ -202,6 +202,115 @@ function renderTranslate() {
 // Standalone cross-topic review of words missed in any quiz. Reuses the quiz's
 // CSS classes (quiz-card, choice-btn, quiz-dir-toggle, quiz-wrong-panel) so it
 // reads as part of the same family without refactoring renderQuiz itself.
+// ── Shared quiz UI core ───────────────────────────────────────────────────────
+// The active-question UI is identical between the topic Quiz and Word Review (and
+// will be reused by Pattern Drills). This function renders that shared middle:
+// direction toggle, prompt card, choice grid, progress bar, wrong-answer panel.
+//
+// It generates MARKUP ONLY — it wires no events. Each caller keeps its own click
+// handlers, bound to the data-/id- attribute names it passes in via opts. That
+// keeps the quiz's behaviour and Word Review's behaviour fully independent.
+//
+// opts fields:
+//   word        - the correct word object { c, j, e }
+//   choices     - array of option word objects
+//   selected    - chosen choice INDEX, or null/undefined if unanswered
+//   direction   - 'zh-en' | 'en-zh' | 'listen-en'
+//   color       - accent colour (hex)
+//   idx, total  - question number / queue length (for the progress bar)
+//   ariaLabel   - aria-label for the direction toggle
+//   dirAttr     - data-attribute name for direction buttons (e.g. 'data-quiz-dir')
+//   choiceAttr  - data-attribute name for choice buttons (e.g. 'data-choice')
+//   listenId    - element id for the listen button(s)
+//   replayId    - element id for the wrong-panel replay button
+//   nextId      - element id for the wrong-panel "next" button
+function renderQuizCore(opts) {
+  const { word: cw, choices, selected, direction, color, idx, total,
+          ariaLabel, dirAttr, choiceAttr, listenId, replayId, nextId } = opts;
+  const answered = selected !== null && selected !== undefined;
+  const pct = (idx / total * 100).toFixed(0);
+
+  // --- Direction toggle ---
+  const dirs = [
+    { key:'zh-en',    label:'漢→EN', title:'See Chinese, pick English' },
+    { key:'en-zh',    label:'EN→漢', title:'See English, pick Chinese' },
+    { key:'listen-en',label:'🔊→EN', title:'Listen, pick English' },
+  ];
+  const dirToggle = `
+    <div class="quiz-dir-toggle" role="tablist" aria-label="${ariaLabel}">
+      ${dirs.map(d => {
+        const active = direction === d.key;
+        return `<button class="quiz-dir-btn${active ? ' active' : ''}" ${dirAttr}="${d.key}" title="${d.title}"
+          style="${active ? `background:${color};color:#fff;border-color:${color}` : `color:${color};border-color:${color}66`}">${d.label}</button>`;
+      }).join('')}
+    </div>`;
+
+  // --- Prompt card (varies by direction) ---
+  let promptCard;
+  if (direction === 'en-zh') {
+    promptCard = `
+      <div class="quiz-card" style="border:2px solid ${color}22">
+        <div class="quiz-label">Pick the Cantonese for:</div>
+        <div class="quiz-prompt-en">${cw.e}</div>
+      </div>`;
+  } else if (direction === 'listen-en') {
+    promptCard = `
+      <div class="quiz-card quiz-card-listen" style="border:2px solid ${color}22">
+        <div class="quiz-label">Listen — what does it mean?</div>
+        <button class="quiz-listen-big" id="${listenId}" style="background:${color}" aria-label="Play audio">${icon('volume',38)}</button>
+        <div class="quiz-listen-hint" style="color:${color}">Tap to replay</div>
+      </div>`;
+  } else {
+    promptCard = `
+      <div class="quiz-card" style="border:2px solid ${color}22">
+        <div class="quiz-label">What does this mean?</div>
+        <div class="quiz-chinese">${cw.c}</div>
+        <div class="quiz-jyutping">${colorJyutping(cw.j)}</div>
+        <button class="quiz-listen" id="${listenId}" style="border:1.5px solid ${color};color:${color}"><span class="icon-label">${iconPlay(13)} Listen</span></button>
+      </div>`;
+  }
+
+  // --- Choice buttons ---
+  // Keyed by ARRAY INDEX, not by c.c: a round can contain homographs (same
+  // Chinese, different meaning), so the Chinese string is not a unique id.
+  const choiceBtns = choices.map((c, i) => {
+    const isCorrect = c === cw;                 // object identity — exact option
+    const isChosen  = selected === i;
+    let cls = 'choice-btn';
+    if (direction === 'en-zh') cls += ' choice-btn-zh';
+    if (answered) {
+      if (isCorrect) cls += ' correct'; else if (isChosen) cls += ' wrong';
+    }
+    const body = direction === 'en-zh'
+      ? `<div class="choice-zh-chinese">${c.c}</div><div class="choice-zh-jp">${colorJyutping(c.j)}</div>`
+      : c.e;
+    return `<button class="${cls}" ${choiceAttr}="${i}" ${answered ? 'disabled' : ''}>${body}</button>`;
+  }).join('');
+
+  // --- Wrong-answer panel (shown only when the answered choice was wrong) ---
+  const wasWrong = answered && choices[selected] !== cw;
+  const wrongPanel = wasWrong
+    ? `<div class="quiz-wrong-panel">
+        <div class="quiz-wrong-heading">Not quite — the answer was:</div>
+        <div class="quiz-wrong-chinese">${cw.c}</div>
+        <div class="quiz-wrong-jp">${colorJyutping(cw.j)}</div>
+        <div class="quiz-wrong-en">${cw.e}</div>
+        <div class="quiz-wrong-actions">
+          <button class="quiz-replay" id="${replayId}" style="border-color:${color};color:${color}"><span class="icon-label">${iconPlay(13)} Hear it again</span></button>
+          <button class="quiz-next" id="${nextId}" style="background:${color}"><span class="icon-label">Got it — next ${icon('arrowRight',14)}</span></button>
+        </div>
+      </div>`
+    : '';
+
+  return {
+    progressBar: `<div class="progress-bar"><div class="progress-fill" style="background:${color};width:${pct}%"></div></div>`,
+    dirToggle,
+    promptCard,
+    choiceGrid: `<div class="choices">${choiceBtns}</div>`,
+    wrongPanel,
+  };
+}
+
 function renderWordReview() {
   const wr = state.wordReview;
 
@@ -272,63 +381,26 @@ function renderWordReview() {
   // --- Active question ---
   const item = wr.queue[wr.idx];
   const cw = item.word;
-  const pct = (wr.idx / wr.queue.length * 100).toFixed(0);
 
-  const dirs = [
-    { key:'zh-en',    label:'漢→EN', title:'See Chinese, pick English' },
-    { key:'en-zh',    label:'EN→漢', title:'See English, pick Chinese' },
-    { key:'listen-en',label:'🔊→EN', title:'Listen, pick English' },
-  ];
-  const dirToggle = `
-    <div class="quiz-dir-toggle" role="tablist" aria-label="Review direction">
-      ${dirs.map(d => {
-        const active = wr.direction === d.key;
-        return `<button class="quiz-dir-btn${active ? ' active' : ''}" data-review-dir="${d.key}" title="${d.title}"
-          style="${active ? `background:${color};color:#fff;border-color:${color}` : `color:${color};border-color:${color}66`}">${d.label}</button>`;
-      }).join('')}
-    </div>`;
-
-  let promptCard;
-  if (wr.direction === 'en-zh') {
-    promptCard = `
-      <div class="quiz-card" style="border:2px solid ${color}22">
-        <div class="quiz-label">Pick the Cantonese for:</div>
-        <div class="quiz-prompt-en">${cw.e}</div>
-      </div>`;
-  } else if (wr.direction === 'listen-en') {
-    promptCard = `
-      <div class="quiz-card quiz-card-listen" style="border:2px solid ${color}22">
-        <div class="quiz-label">Listen — what does it mean?</div>
-        <button class="quiz-listen-big" id="review-listen" style="background:${color}" aria-label="Play audio">${icon('volume',38)}</button>
-        <div class="quiz-listen-hint" style="color:${color}">Tap to replay</div>
-      </div>`;
-  } else {
-    promptCard = `
-      <div class="quiz-card" style="border:2px solid ${color}22">
-        <div class="quiz-label">What does this mean?</div>
-        <div class="quiz-chinese">${cw.c}</div>
-        <div class="quiz-jyutping">${colorJyutping(cw.j)}</div>
-        <button class="quiz-listen" id="review-listen" style="border:1.5px solid ${color};color:${color}"><span class="icon-label">${iconPlay(13)} Listen</span></button>
-      </div>`;
-  }
-
-  // Choices keyed by ARRAY INDEX (see renderQuiz) — wordC is not unique when a
-  // round contains homographs. wr.selected holds the chosen index.
-  const choiceBtns = wr.choices.map((c, i) => {
-    const isCorrect = c === cw;                  // object identity
-    const isChosen  = wr.selected === i;
-    let cls = 'choice-btn';
-    if (wr.direction === 'en-zh') cls += ' choice-btn-zh';
-    if (wr.selected !== null && wr.selected !== undefined) {
-      if (isCorrect) cls += ' correct'; else if (isChosen) cls += ' wrong';
-    }
-    const body = wr.direction === 'en-zh'
-      ? `<div class="choice-zh-chinese">${c.c}</div><div class="choice-zh-jp">${colorJyutping(c.j)}</div>`
-      : c.e;
-    return `<button class="${cls}" data-review-choice="${i}" ${(wr.selected !== null && wr.selected !== undefined) ? 'disabled' : ''}>${body}</button>`;
-  }).join('');
+  // Shared quiz UI (toggle, prompt, choices, progress, wrong panel).
+  const core = renderQuizCore({
+    word:       cw,
+    choices:    wr.choices,
+    selected:   wr.selected,
+    direction:  wr.direction,
+    color:      color,
+    idx:        wr.idx,
+    total:      wr.queue.length,
+    ariaLabel:  'Review direction',
+    dirAttr:    'data-review-dir',
+    choiceAttr: 'data-review-choice',
+    listenId:   'review-listen',
+    replayId:   'review-replay',
+    nextId:     'review-next',
+  });
 
   // Progress pips: how close this word is to graduating (3 correct clears it).
+  // This is Word-Review-specific — not part of the shared core.
   const progressDots = (() => {
     const got = item.entry.correctCount;
     let dots = '';
@@ -338,21 +410,6 @@ function renderWordReview() {
     return `<div class="review-progress" title="${got} of ${REVIEW_GRADUATE_AT} correct">${dots}</div>`;
   })();
 
-  const reviewAnswered = wr.selected !== null && wr.selected !== undefined;
-  const reviewWasWrong = reviewAnswered && wr.choices[wr.selected] !== cw;
-  const wrongPanel = reviewWasWrong
-    ? `<div class="quiz-wrong-panel">
-        <div class="quiz-wrong-heading">Not quite — the answer was:</div>
-        <div class="quiz-wrong-chinese">${cw.c}</div>
-        <div class="quiz-wrong-jp">${colorJyutping(cw.j)}</div>
-        <div class="quiz-wrong-en">${cw.e}</div>
-        <div class="quiz-wrong-actions">
-          <button class="quiz-replay" id="review-replay" style="border-color:${color};color:${color}"><span class="icon-label">${iconPlay(13)} Hear it again</span></button>
-          <button class="quiz-next" id="review-next" style="background:${color}"><span class="icon-label">Got it — next ${icon('arrowRight',14)}</span></button>
-        </div>
-      </div>`
-    : '';
-
   return `
     <div class="content">
       ${renderPageHeader('🗂️', 'Word Review', '')}
@@ -360,13 +417,11 @@ function renderWordReview() {
         <span style="color:#888">Word ${wr.idx+1} / ${wr.queue.length}</span>
         ${progressDots}
       </div>
-      <div class="progress-bar">
-        <div class="progress-fill" style="background:${color};width:${pct}%"></div>
-      </div>
-      ${dirToggle}
-      ${promptCard}
-      <div class="choices">${choiceBtns}</div>
-      ${wrongPanel}
+      ${core.progressBar}
+      ${core.dirToggle}
+      ${core.promptCard}
+      ${core.choiceGrid}
+      ${core.wrongPanel}
     </div>`;
 }
 
@@ -1227,96 +1282,34 @@ function renderQuiz(lesson, color) {
   }
 
   const cw = q.queue[q.idx];
-  const pct = (q.idx / q.queue.length * 100).toFixed(0);
 
-  // === DIRECTION TOGGLE ==========================================
-  // Three modes: zh-en (Chinese prompt → pick English), en-zh (English prompt → pick Chinese),
-  // listen-en (audio prompt → pick English). Disabled mid-question to avoid mid-quiz confusion.
-  const dirs = [
-    { key:'zh-en',    label:'漢→EN', title:'See Chinese, pick English' },
-    { key:'en-zh',    label:'EN→漢', title:'See English, pick Chinese' },
-    { key:'listen-en',label:'🔊→EN', title:'Listen, pick English' },
-  ];
-  const dirToggle = `
-    <div class="quiz-dir-toggle" role="tablist" aria-label="Quiz direction">
-      ${dirs.map(d => {
-        const active = q.direction === d.key;
-        return `<button class="quiz-dir-btn${active ? ' active' : ''}" data-quiz-dir="${d.key}" title="${d.title}"
-          style="${active ? `background:${color};color:#fff;border-color:${color}` : `color:${color};border-color:${color}66`}">${d.label}</button>`;
-      }).join('')}
-    </div>`;
-
-  // === PROMPT CARD (varies by direction) =========================
-  let promptCard;
-  if (q.direction === 'en-zh') {
-    promptCard = `
-      <div class="quiz-card" style="border:2px solid ${color}22">
-        <div class="quiz-label">Pick the Cantonese for:</div>
-        <div class="quiz-prompt-en">${cw.e}</div>
-      </div>`;
-  } else if (q.direction === 'listen-en') {
-    promptCard = `
-      <div class="quiz-card quiz-card-listen" style="border:2px solid ${color}22">
-        <div class="quiz-label">Listen — what does it mean?</div>
-        <button class="quiz-listen-big" id="quiz-listen" style="background:${color}" aria-label="Play audio">${icon('volume',38)}</button>
-        <div class="quiz-listen-hint" style="color:${color}">Tap to replay</div>
-      </div>`;
-  } else {
-    promptCard = `
-      <div class="quiz-card" style="border:2px solid ${color}22">
-        <div class="quiz-label">What does this mean?</div>
-        <div class="quiz-chinese">${cw.c}</div>
-        <div class="quiz-jyutping">${colorJyutping(cw.j)}</div>
-        <button class="quiz-listen" id="quiz-listen" style="border:1.5px solid ${color};color:${color}"><span class="icon-label">${iconPlay(13)} Listen</span></button>
-      </div>`;
-  }
-
-  // === CHOICE BUTTONS (varies by direction) ======================
-  // For en-zh, choices show Chinese + jyutping. For others, English.
-  // Choices are keyed by ARRAY INDEX, not by c.c — two words in a round can
-  // share the same Chinese string (homographs with different meanings), so the
-  // Chinese is not a unique identifier. q.selected holds the chosen index.
-  const choiceBtns = q.choices.map((c, i) => {
-    const isCorrect = c === cw;                 // object identity — exact option
-    const isChosen  = q.selected === i;
-    let cls = 'choice-btn';
-    if (q.direction === 'en-zh') cls += ' choice-btn-zh';
-    if (q.selected !== null && q.selected !== undefined) {
-      if (isCorrect) cls += ' correct'; else if (isChosen) cls += ' wrong';
-    }
-    const body = q.direction === 'en-zh'
-      ? `<div class="choice-zh-chinese">${c.c}</div><div class="choice-zh-jp">${colorJyutping(c.j)}</div>`
-      : c.e;
-    return `<button class="${cls}" data-choice="${i}" ${(q.selected !== null && q.selected !== undefined) ? 'disabled' : ''}>${body}</button>`;
-  }).join('');
-
-  // After a wrong answer, hold the question and show a review panel with
-  // correct answer details + a "Got it" button. Correct answers still auto-advance.
-  const wrongPanel = (q.selected && q.selected !== cw.c)
-    ? `<div class="quiz-wrong-panel">
-        <div class="quiz-wrong-heading">Not quite — the answer was:</div>
-        <div class="quiz-wrong-chinese">${cw.c}</div>
-        <div class="quiz-wrong-jp">${colorJyutping(cw.j)}</div>
-        <div class="quiz-wrong-en">${cw.e}</div>
-        <div class="quiz-wrong-actions">
-          <button class="quiz-replay" id="quiz-replay" style="border-color:${color};color:${color}"><span class="icon-label">${iconPlay(13)} Hear it again</span></button>
-          <button class="quiz-next" id="quiz-next" style="background:${color}"><span class="icon-label">Got it — next ${icon('arrowRight',14)}</span></button>
-        </div>
-      </div>`
-    : '';
+  // Shared quiz UI (toggle, prompt, choices, progress, wrong panel).
+  const core = renderQuizCore({
+    word:       cw,
+    choices:    q.choices,
+    selected:   q.selected,
+    direction:  q.direction,
+    color:      color,
+    idx:        q.idx,
+    total:      q.queue.length,
+    ariaLabel:  'Quiz direction',
+    dirAttr:    'data-quiz-dir',
+    choiceAttr: 'data-choice',
+    listenId:   'quiz-listen',
+    replayId:   'quiz-replay',
+    nextId:     'quiz-next',
+  });
 
   return `
     <div class="quiz-meta">
       <span style="color:#888">Question ${q.idx+1} / ${q.queue.length}</span>
       <span style="color:${color};font-weight:700">Score: ${q.score}</span>
     </div>
-    <div class="progress-bar">
-      <div class="progress-fill" style="background:${color};width:${pct}%"></div>
-    </div>
-    ${dirToggle}
-    ${promptCard}
-    <div class="choices">${choiceBtns}</div>
-    ${wrongPanel}`;
+    ${core.progressBar}
+    ${core.dirToggle}
+    ${core.promptCard}
+    ${core.choiceGrid}
+    ${core.wrongPanel}`;
 }
 
 // ── Events ────────────────────────────────────────────────────────────────────
