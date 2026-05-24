@@ -1750,7 +1750,7 @@ function getQuizInitState(words) {
     selected: null,
     done: false,
     choices: buildChoices(queue[0], words),
-    wrongAnswers: [],   // [{ word: <wordObj>, chosen: <wrongChineseChar> }]
+    wrongAnswers: [],   // [{ word: <wordObj>, chosen: <chosen option obj> }]
     direction: loadQuizDirection(),   // 'zh-en' | 'en-zh' | 'listen-en'
   };
 }
@@ -2729,16 +2729,20 @@ function renderWordReview() {
       </div>`;
   }
 
-  const choiceBtns = wr.choices.map(c => {
-    const isCorrect = c.c === cw.c;
-    const isChosen  = wr.selected === c.c;
+  // Choices keyed by ARRAY INDEX (see renderQuiz) — wordC is not unique when a
+  // round contains homographs. wr.selected holds the chosen index.
+  const choiceBtns = wr.choices.map((c, i) => {
+    const isCorrect = c === cw;                  // object identity
+    const isChosen  = wr.selected === i;
     let cls = 'choice-btn';
     if (wr.direction === 'en-zh') cls += ' choice-btn-zh';
-    if (wr.selected) { if (isCorrect) cls += ' correct'; else if (isChosen) cls += ' wrong'; }
+    if (wr.selected !== null && wr.selected !== undefined) {
+      if (isCorrect) cls += ' correct'; else if (isChosen) cls += ' wrong';
+    }
     const body = wr.direction === 'en-zh'
       ? `<div class="choice-zh-chinese">${c.c}</div><div class="choice-zh-jp">${colorJyutping(c.j)}</div>`
       : c.e;
-    return `<button class="${cls}" data-review-choice="${c.c}" ${wr.selected ? 'disabled' : ''}>${body}</button>`;
+    return `<button class="${cls}" data-review-choice="${i}" ${(wr.selected !== null && wr.selected !== undefined) ? 'disabled' : ''}>${body}</button>`;
   }).join('');
 
   // Progress pips: how close this word is to graduating (3 correct clears it).
@@ -2751,7 +2755,9 @@ function renderWordReview() {
     return `<div class="review-progress" title="${got} of ${REVIEW_GRADUATE_AT} correct">${dots}</div>`;
   })();
 
-  const wrongPanel = (wr.selected && wr.selected !== cw.c)
+  const reviewAnswered = wr.selected !== null && wr.selected !== undefined;
+  const reviewWasWrong = reviewAnswered && wr.choices[wr.selected] !== cw;
+  const wrongPanel = reviewWasWrong
     ? `<div class="quiz-wrong-panel">
         <div class="quiz-wrong-heading">Not quite — the answer was:</div>
         <div class="quiz-wrong-chinese">${cw.c}</div>
@@ -3604,14 +3610,14 @@ function renderQuiz(lesson, color) {
 
     // Build the missed-word review list (only when there were misses).
     // Direction-aware: "You chose" shows English or Chinese depending on what the choice buttons displayed.
+    // w.chosen is the actual option object that was picked (not a string), so no lookup is needed.
     const reviewList = q.wrongAnswers.length
       ? `<div class="quiz-review-wrap">
           <div class="quiz-review-title">Words to review (${q.wrongAnswers.length})</div>
           ${q.wrongAnswers.map(w => {
-            const chosenWord = getRoundWords(state.topic, state.currentRound).find(rw => rw.c === w.chosen);
-            const chosenLabel = chosenWord
-              ? (q.direction === 'en-zh' ? chosenWord.c : chosenWord.e)
-              : w.chosen;
+            const chosenLabel = w.chosen
+              ? (q.direction === 'en-zh' ? w.chosen.c : w.chosen.e)
+              : '—';
             return `
             <div class="quiz-review-item">
               <button class="quiz-review-play" data-quiz-review-play="${w.word.c}" style="border-color:${color};color:${color}" aria-label="Listen">${iconPlay(15)}</button>
@@ -3684,16 +3690,21 @@ function renderQuiz(lesson, color) {
 
   // === CHOICE BUTTONS (varies by direction) ======================
   // For en-zh, choices show Chinese + jyutping. For others, English.
-  const choiceBtns = q.choices.map(c => {
-    const isCorrect = c.c === cw.c;
-    const isChosen  = q.selected === c.c;
+  // Choices are keyed by ARRAY INDEX, not by c.c — two words in a round can
+  // share the same Chinese string (homographs with different meanings), so the
+  // Chinese is not a unique identifier. q.selected holds the chosen index.
+  const choiceBtns = q.choices.map((c, i) => {
+    const isCorrect = c === cw;                 // object identity — exact option
+    const isChosen  = q.selected === i;
     let cls = 'choice-btn';
     if (q.direction === 'en-zh') cls += ' choice-btn-zh';
-    if (q.selected) { if (isCorrect) cls += ' correct'; else if (isChosen) cls += ' wrong'; }
+    if (q.selected !== null && q.selected !== undefined) {
+      if (isCorrect) cls += ' correct'; else if (isChosen) cls += ' wrong';
+    }
     const body = q.direction === 'en-zh'
       ? `<div class="choice-zh-chinese">${c.c}</div><div class="choice-zh-jp">${colorJyutping(c.j)}</div>`
       : c.e;
-    return `<button class="${cls}" data-choice="${c.c}" ${q.selected ? 'disabled' : ''}>${body}</button>`;
+    return `<button class="${cls}" data-choice="${i}" ${(q.selected !== null && q.selected !== undefined) ? 'disabled' : ''}>${body}</button>`;
   }).join('');
 
   // After a wrong answer, hold the question and show a review panel with
@@ -4243,16 +4254,17 @@ function attachEvents(lesson, color) {
   if (state.quiz && !state.quiz.done) {
     document.querySelectorAll('[data-choice]').forEach(btn => {
       btn.addEventListener('click', () => {
-        if (state.quiz.selected) return;
-        const chosen = btn.dataset.choice;
+        if (state.quiz.selected !== null && state.quiz.selected !== undefined) return;
+        const idx = parseInt(btn.dataset.choice, 10);
+        const chosenOpt = state.quiz.choices[idx];
         const cw = state.quiz.queue[state.quiz.idx];
-        const correct = chosen === cw.c;
+        const correct = chosenOpt === cw;          // object identity, not string
         speak(cw.c);
-        state.quiz.selected = chosen;
+        state.quiz.selected = idx;
         if (correct) {
           state.quiz.score++;
         } else {
-          state.quiz.wrongAnswers.push({ word: cw, chosen });
+          state.quiz.wrongAnswers.push({ word: cw, chosen: chosenOpt });
           // Capture into the cross-topic Word Review bin, then refresh the menu
           // badge so its count is current even before the user opens Word Review.
           // refreshReviewBadge re-reads the true entry count from storage, so a
@@ -4340,12 +4352,13 @@ function attachEvents(lesson, color) {
     // Choice buttons
     document.querySelectorAll('[data-review-choice]').forEach(btn => {
       btn.addEventListener('click', () => {
-        if (wr.selected) return;
-        const chosen = btn.dataset.reviewChoice;
+        if (wr.selected !== null && wr.selected !== undefined) return;
+        const idx = parseInt(btn.dataset.reviewChoice, 10);
+        const chosenOpt = wr.choices[idx];
         const cw = item.word;
-        const correct = chosen === cw.c;
+        const correct = chosenOpt === cw;          // object identity, not string
         speak(cw.c);
-        wr.selected = chosen;
+        wr.selected = idx;
         if (correct) wr.correctThisSession++;
         // Persist the result to the bin. recordReviewResult resolves the graduation;
         // we capture whether this word graduated so the session tally is accurate.
