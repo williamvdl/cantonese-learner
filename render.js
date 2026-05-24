@@ -1321,9 +1321,9 @@ function renderQuiz(lesson, color) {
 
 // ── Events ────────────────────────────────────────────────────────────────────
 function attachEvents(lesson, color) {
-  // Hamburger open
+  // Hamburger open — pushes history so the BACK button closes the drawer first
   const hamburger = document.getElementById('hamburger-btn');
-  if (hamburger) hamburger.addEventListener('click', () => { state.drawerOpen = true; render(); });
+  if (hamburger) hamburger.addEventListener('click', () => { state.drawerOpen = true; pushNav(); render(); });
 
   // Header info ⓘ toggle — expands/collapses tone legend + speed settings
   const headerInfo = document.getElementById('header-info-toggle');
@@ -1333,11 +1333,13 @@ function attachEvents(lesson, color) {
   const vbd = document.getElementById('voice-banner-dismiss');
   if (vbd) vbd.addEventListener('click', () => { state.voiceBannerDismissed = true; render(); });
 
-  // Drawer close (X button and backdrop)
+  // Drawer close (X button and backdrop). The drawer-open pushed a history entry,
+  // so closing steps back through history — keeping the stack consistent and
+  // letting the popstate handler perform the actual close.
   const navClose    = document.getElementById('nav-close');
   const navBackdrop = document.getElementById('nav-backdrop');
-  if (navClose)    navClose.addEventListener('click',    () => { state.drawerOpen = false; render(); });
-  if (navBackdrop) navBackdrop.addEventListener('click', () => { state.drawerOpen = false; render(); });
+  if (navClose)    navClose.addEventListener('click',    () => { closeDrawer(); });
+  if (navBackdrop) navBackdrop.addEventListener('click', () => { closeDrawer(); });
 
   // Nav items
   document.querySelectorAll('[data-nav]').forEach(btn => {
@@ -1356,6 +1358,9 @@ function attachEvents(lesson, color) {
       state.fromPath = false;          // any drawer navigation clears the path-return flag
       state.fromPathTier = null;
       state.drawerOpen = false;
+      // Navigated from the (open) drawer: overwrite the drawer-open history entry
+      // with this destination, so BACK goes to the pre-drawer screen, not the drawer.
+      navReplace();
       render();
     });
   });
@@ -1369,6 +1374,7 @@ function attachEvents(lesson, color) {
       state.fromPath = false;
       state.fromPathTier = null;
       state.drawerOpen = false;
+      navReplace();              // see nav-items above — replace the drawer entry
       window.scrollTo(0, 0);
       render();
     });
@@ -1534,30 +1540,26 @@ function attachEvents(lesson, color) {
       state.sentenceRevealed = {};
       state.patternRevealed = {};
       state.convo        = { convMode:'read', playingLine:null, gapAnswers:{}, bubbleRevealed:{}, breakdownOpen:{}, speakStep:0, speakStatus:'idle', speakHeard:'', speakAutoPlayed:false, speakRevealed:{} };
+      pushNav();                 // home → topic: BACK returns to home
       window.scrollTo(0, 0);
       render();
     });
   });
-
-  // Back to home button
+  // Back to home button. Routed through history.back() so the on-screen back
+  // button and the phone/browser BACK button behave identically — both pop the
+  // same history entry, and the popstate handler restores the previous screen.
   const backHomeBtn = document.getElementById('back-home-btn');
   if (backHomeBtn) backHomeBtn.addEventListener('click', () => {
     window.speechSynthesis.cancel();
+    if (_navReady) { history.back(); return; }
+    // Fallback if history isn't available — replicate the original logic.
     if (state.fromPath) {
-      // Return to the timeline of the path that brought us here
-      state.nav         = 'path';
-      state.pathView    = 'timeline';
-      state.fromPath    = false;
-      state.fromPathTier = null;
-      state.mode        = 'study';
-      state.tab         = 'words';
-      window.scrollTo(0, 0);
-      render();
-      return;
+      state.nav = 'path'; state.pathView = 'timeline';
+      state.fromPath = false; state.fromPathTier = null;
+      state.mode = 'study'; state.tab = 'words';
+    } else {
+      state.homeView = true; state.mode = 'study'; state.tab = 'words';
     }
-    state.homeView = true;
-    state.mode     = 'study';
-    state.tab      = 'words';
     window.scrollTo(0, 0);
     render();
   });
@@ -1919,6 +1921,9 @@ function attachEvents(lesson, color) {
   if (reviewAgain) reviewAgain.addEventListener('click', () => startWordReview());
   const reviewExit = document.getElementById('review-exit');
   if (reviewExit) reviewExit.addEventListener('click', () => {
+    // history.back() pops the session entry; popstate clears state.wordReview
+    // and renders the landing. Falls back to a direct close if history is absent.
+    if (_navReady) { history.back(); return; }
     state.wordReview = null;
     refreshReviewBadge().then(render);
   });
@@ -2058,6 +2063,7 @@ function attachEvents(lesson, color) {
           state.fromPathTier = null;
           state.mode        = 'study';
           state.tab         = 'words';
+          pushNav();               // auto-returned to timeline: record it in history
           window.scrollTo(0, 0);
         }
         render();
@@ -2083,6 +2089,7 @@ function attachEvents(lesson, color) {
       state.sentenceRevealed = {};
       state.patternRevealed = {};
       state.convo        = { convMode:'read', playingLine:null, gapAnswers:{}, bubbleRevealed:{}, breakdownOpen:{}, speakStep:0, speakStatus:'idle', speakHeard:'', speakAutoPlayed:false, speakRevealed:{} };
+      pushNav();                 // path next-step → next lesson: BACK returns to previous lesson
       window.scrollTo(0, 0);
       render();
     });
@@ -2094,14 +2101,17 @@ function attachEvents(lesson, color) {
     btn.addEventListener('click', () => {
       state.activePath = btn.dataset.pathOpen;
       state.pathView   = 'timeline';
+      pushNav();                 // path list → timeline: BACK returns to the list
       window.scrollTo(0, 0);
       render();
     });
   });
 
-  // Back from timeline → path list
+  // Back from timeline → path list. Routed through history.back() so it matches
+  // the phone BACK button (both pop the entry that path-open pushed).
   document.querySelectorAll('[data-path-back]').forEach(btn => {
     btn.addEventListener('click', () => {
+      if (_navReady) { history.back(); return; }
       state.pathView = 'list';
       window.scrollTo(0, 0);
       render();
@@ -2129,6 +2139,7 @@ function attachEvents(lesson, color) {
       state.sentenceRevealed = {};
       state.patternRevealed = {};
       state.convo        = { convMode:'read', playingLine:null, gapAnswers:{}, bubbleRevealed:{}, breakdownOpen:{}, speakStep:0, speakStatus:'idle', speakHeard:'', speakAutoPlayed:false, speakRevealed:{} };
+      pushNav();                 // path timeline → lesson: BACK returns to timeline
       window.scrollTo(0, 0);
       render();
     });
@@ -2191,4 +2202,41 @@ function attachEvents(lesson, color) {
   }
 
   render(); // re-render with voice info
+
+  // ── Back-button integration ──
+  // Seed the initial history entry (the starting screen) and register the
+  // popstate handler. Done once, here — NOT in attachEvents (which re-runs every
+  // render and would stack duplicate listeners).
+  initNavHistory();
+  window.addEventListener('popstate', (e) => {
+    // BACK was pressed. The browser hands back the snapshot stored for the
+    // entry we moved to. Restore it and re-render.
+    window.speechSynthesis.cancel();   // stop any audio when leaving a screen
+
+    const snap = e.state;
+    if (snap) {
+      applyNavSnapshot(snap);
+    } else {
+      // No snapshot (we're at the very first entry) — treat as the home screen.
+      state.nav = 'topics';
+      state.homeView = true;
+      state.drawerOpen = false;
+    }
+
+    // A review session is not part of the nav snapshot, so backing out of a
+    // session produces a popstate that lands on the review screen. Whenever back
+    // lands on review, clear any session — back should show the LANDING screen.
+    if (state.wordReview) {
+      state.wordReview = null;
+      refreshReviewBadge();
+    }
+
+    // A quiz in progress is likewise not a nav screen. If back has moved us out
+    // of the in-topic view, discard any running quiz.
+    if (state.quiz && (state.homeView || state.nav !== 'topics')) {
+      state.quiz = null;
+    }
+
+    render();
+  });
 })();

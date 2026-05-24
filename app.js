@@ -366,6 +366,91 @@ let state = {
   },
 };
 
+// ── Navigation history ────────────────────────────────────────────────────────
+// Makes the phone/browser BACK button step back through in-app screens instead
+// of exiting the whole app. The app is a single-page app, so the browser only
+// knows about one page unless we tell it otherwise.
+//
+// How it works:
+//  - NAV_FIELDS lists the state fields that together define "which screen".
+//  - navSnapshot() captures those fields into a plain object.
+//  - pushNav() is called AFTER a navigation handler has mutated state; it pushes
+//    the new snapshot onto the browser history stack via history.pushState.
+//  - the popstate listener (in render.js) fires when BACK is pressed; it reads
+//    the snapshot the browser hands back and restores those fields, then renders.
+//
+// Design note: navigation handlers keep their existing mutation logic untouched.
+// pushNav() only OBSERVES the resulting state and records it — it does not change
+// how navigation works, only makes the browser aware of it. Low-risk by design.
+const NAV_FIELDS = [
+  'nav', 'drawerOpen', 'homeView', 'pathView', 'activePath',
+  'topic', 'currentRound', 'fromPath', 'fromPathTier',
+  'mode', 'tab', 'selectedCategory',
+];
+
+// Capture the current navigation-relevant state into a plain snapshot object.
+function navSnapshot() {
+  const snap = {};
+  NAV_FIELDS.forEach(f => { snap[f] = state[f]; });
+  return snap;
+}
+
+// Apply a snapshot back onto state (used by the popstate/back handler).
+function applyNavSnapshot(snap) {
+  if (!snap) return;
+  NAV_FIELDS.forEach(f => {
+    if (f in snap) state[f] = snap[f];
+  });
+}
+
+// True once the initial history entry has been seeded by init().
+let _navReady = false;
+
+// Push the current screen onto the browser history stack. Call this AFTER a
+// navigation handler has finished mutating state. Safe to call before init has
+// seeded history (it simply no-ops until then).
+function pushNav() {
+  if (!_navReady) return;
+  try {
+    history.pushState(navSnapshot(), '');
+  } catch (e) {
+    // pushState can throw in rare sandboxed contexts — navigation still works,
+    // only the back-button integration is unavailable.
+  }
+}
+
+// Seed the very first history entry. Called once by init(). Uses replaceState so
+// the app's starting screen IS the bottom of the history stack — pressing back
+// from there exits the app, which is correct.
+function initNavHistory() {
+  try {
+    history.replaceState(navSnapshot(), '');
+  } catch (e) { /* see pushNav */ }
+  _navReady = true;
+}
+
+// Replace the current history entry with the current screen, instead of pushing
+// a new one. Used when navigating FROM the drawer: the drawer-open entry should
+// be overwritten by the destination, so BACK doesn't reopen the drawer.
+function navReplace() {
+  if (!_navReady) return;
+  try {
+    history.replaceState(navSnapshot(), '');
+  } catch (e) { /* see pushNav */ }
+}
+
+// Close the drawer. If the drawer-open pushed a history entry we step back
+// through it (keeps the stack honest); otherwise just close directly.
+function closeDrawer() {
+  if (!state.drawerOpen) return;
+  if (_navReady) {
+    history.back();          // triggers popstate → restores pre-drawer snapshot
+  } else {
+    state.drawerOpen = false;
+    render();
+  }
+}
+
 function getQuizInitState(words) {
   // One question per word — no artificial cap. Shuffle so order varies each run.
   const queue = shuffle(words);
@@ -469,6 +554,11 @@ async function startWordReview() {
     direction: loadQuizDirection(),               // shares the quiz's saved preference
     choices: buildReviewChoices(queue[0]),
   };
+  // A review session is one "screen" for history. Pushing here means the phone
+  // BACK button (and the on-screen Done button, which calls history.back) exits
+  // the session back to the landing screen. The popstate handler clears
+  // state.wordReview whenever it lands on the review screen via back.
+  pushNav();
   render();
 }
 
