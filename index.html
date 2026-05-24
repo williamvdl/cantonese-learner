@@ -1231,45 +1231,181 @@ const store = {
   },
 };
 
+// ── Storage module ────────────────────────────────────────────────────────────
+// THE single owner of every localStorage access in the app. Nothing else
+// touches localStorage directly. Two design rules make this future-proof:
+//
+//  1. READ-ONCE / WRITE-THROUGH. On init() the module hydrates every stored
+//     area into an in-memory cache (storage._cache). After that, reads are
+//     SYNCHRONOUS (served from cache — instant, no await, callers unchanged)
+//     and writes are ASYNC (update cache, then persist). This is how a
+//     server-backed app works: hold state in memory, sync writes to the
+//     backend. So swapping localStorage for a server later means rewriting
+//     only _persist() and _hydrate() — every accessor and caller stays put.
+//
+//  2. VERSIONED ENVELOPES. Every blob is stored as { v: <schemaVersion>, data: <payload> }.
+//     _readRaw() runs the envelope through _migrate() before returning the
+//     payload, so a future data-shape change just bumps the version and adds
+//     a migration step — existing users' saved data upgrades automatically.
+//
+// Key registry — every storage key defined once, consistent naming.
+const STORAGE_KEYS = {
+  wordReview:    'cantonese:wordReview',
+  quizDirection: 'cantonese:quizDirection',
+  apiKey:        'cantonese:apiKey',
+  pathProgress:  'cantonese:pathProgress',
+};
+
+// Current schema version per area. Bump when the stored shape of an area changes,
+// and add a matching case in _migrate(). All start at 1.
+const STORAGE_SCHEMA = {
+  wordReview:    1,
+  quizDirection: 1,
+  apiKey:        1,
+  pathProgress:  1,
+};
+
+// Legacy keys from before the storage module existed. _hydrate() does a one-time
+// migration: if a new key is absent but its legacy key has data, the legacy value
+// is adopted. Ensures existing users keep their path progress, API key, etc.
+const STORAGE_LEGACY_KEYS = {
+  wordReview:    'cantonese-word-review-v1',
+  quizDirection: 'cantonese.quizDirection',
+  apiKey:        'cantonese_api_key',
+  pathProgress:  'cantonese_path_progress',
+};
+
+const storage = {
+  // In-memory cache, hydrated once by init(). area → payload.
+  _cache: {},
+
+  // --- Core: the ONLY two functions that touch localStorage. ---
+  // Swapping to a server backend = rewriting just these two (plus _hydrate).
+
+  // Read a raw versioned envelope from localStorage, run migrations, return payload.
+  // Returns fallback if absent, malformed, or unparseable (defensive — never throws).
+  _readRaw(area, fallback) {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEYS[area]);
+      if (raw == null) return fallback;
+      const env = JSON.parse(raw);
+      // Envelope shape { v, data }. If it's missing (shouldn't happen for data we
+      // wrote), treat the whole blob as un-versioned legacy payload.
+      if (env && typeof env === 'object' && 'v' in env && 'data' in env) {
+        return this._migrate(area, env.v, env.data);
+      }
+      return this._migrate(area, 0, env);
+    } catch (e) {
+      return fallback;
+    }
+  },
+
+  // Persist a payload to localStorage wrapped in a current-version envelope.
+  _persist(area, payload) {
+    try {
+      const env = { v: STORAGE_SCHEMA[area], data: payload };
+      localStorage.setItem(STORAGE_KEYS[area], JSON.stringify(env));
+    } catch (e) {
+      // localStorage full/unavailable — fail silently; in-memory cache still works.
+    }
+  },
+
+  // --- Migration ---
+  // Upgrade a payload from its stored version to the current schema version.
+  // Today every area is at v1 with no prior shape, so every case is a pass-through.
+  // When a shape changes: bump STORAGE_SCHEMA[area], add `if (fromV < N) { ... }`.
+  _migrate(area, fromV, data) {
+    // Example for the future:
+    //   if (area === 'wordReview' && fromV < 2) { data = upgradeWordReviewV1toV2(data); }
+    return data;
+  },
+
+  // --- Hydration ---
+  // Called once by init(). Loads every area into _cache. Performs one-time
+  // legacy-key migration: new key absent + legacy key present → adopt legacy value
+  // and re-persist under the new key/envelope (so legacy keys are read at most once).
+  _hydrate() {
+    const defaults = {
+      wordReview:    { everUsed: false, entries: [] },
+      quizDirection: 'zh-en',
+      apiKey:        '',
+      pathProgress:  {},
+    };
+    Object.keys(STORAGE_KEYS).forEach(area => {
+      const newKeyPresent = localStorage.getItem(STORAGE_KEYS[area]) != null;
+      if (newKeyPresent) {
+        this._cache[area] = this._readRaw(area, defaults[area]);
+        return;
+      }
+      // New key absent — check for legacy data to migrate.
+      const legacyKey = STORAGE_LEGACY_KEYS[area];
+      const legacyRaw = legacyKey ? localStorage.getItem(legacyKey) : null;
+      if (legacyRaw != null) {
+        let payload = defaults[area];
+        try {
+          // Legacy quizDirection/apiKey were stored as bare strings, not JSON objects.
+          payload = (area === 'quizDirection' || area === 'apiKey')
+            ? legacyRaw
+            : JSON.parse(legacyRaw);
+        } catch (e) {
+          payload = defaults[area];
+        }
+        this._cache[area] = payload;
+        this._persist(area, payload);   // adopt under the new versioned key
+      } else {
+        this._cache[area] = defaults[area];
+      }
+    });
+  },
+
+  // --- Public accessors: SYNC reads (from cache), ASYNC writes (cache + persist) ---
+
+  // Word Review bin: { everUsed, entries }
+  getWordReview()        { return this._cache.wordReview; },
+  async setWordReview(v) { this._cache.wordReview = v; this._persist('wordReview', v); },
+
+  // Quiz direction: string
+  getQuizDirection()        { return this._cache.quizDirection; },
+  async setQuizDirection(v) { this._cache.quizDirection = v; this._persist('quizDirection', v); },
+
+  // API key: string
+  getApiKey()        { return this._cache.apiKey; },
+  async setApiKey(v) { this._cache.apiKey = v; this._persist('apiKey', v); },
+  async clearApiKey() { this._cache.apiKey = ''; this._persist('apiKey', ''); },
+
+  // Path progress: { pathKey: { lessonKey: true } }
+  getPathProgress()        { return this._cache.pathProgress; },
+  async setPathProgress(v) { this._cache.pathProgress = v; this._persist('pathProgress', v); },
+};
+
 // ── Word Review storage layer ─────────────────────────────────────────────────
 // ALL persistent access for the Word Review bin goes through these functions.
-// Nothing else in the app touches localStorage for review data. Every function
-// is async — it currently resolves immediately, but this means a future swap to
-// a server API (for a multi-user product) only requires rewriting THIS block;
-// no caller changes, because callers already await.
+// They now sit on top of the storage module (storage.getWordReview / setWordReview)
+// rather than touching localStorage directly. Public functions below keep their
+// signatures unchanged, so no caller needed updating.
 //
-// Stored shape under WORD_REVIEW_KEY:
+// Stored payload shape (under STORAGE_KEYS.wordReview, versioned envelope):
 //   { everUsed: bool, entries: [ {topicKey, round, wordC, missCount, correctCount, addedAt} ] }
 // Entry identity = topicKey | round | wordC  (same word in two topics = two entries).
-const WORD_REVIEW_KEY = 'cantonese-word-review-v1';
 const REVIEW_GRADUATE_AT = 3;   // consecutive correct (in review) to clear a word
 
 function _reviewEntryKey(topicKey, round, wordC) {
   return topicKey + '|' + round + '|' + wordC;
 }
 
-// Internal: read the raw store object. Not exported — callers use the helpers below.
+// Internal: read the bin payload. Sync under the hood (storage cache) but kept
+// async so the public API and all callers stay unchanged.
 async function _readReviewStore() {
-  try {
-    const raw = localStorage.getItem(WORD_REVIEW_KEY);
-    if (!raw) return { everUsed: false, entries: [] };
-    const parsed = JSON.parse(raw);
-    return {
-      everUsed: !!parsed.everUsed,
-      entries: Array.isArray(parsed.entries) ? parsed.entries : [],
-    };
-  } catch (e) {
-    return { everUsed: false, entries: [] };
-  }
+  const data = storage.getWordReview() || { everUsed: false, entries: [] };
+  return {
+    everUsed: !!data.everUsed,
+    entries: Array.isArray(data.entries) ? data.entries : [],
+  };
 }
 
-// Internal: persist the raw store object.
+// Internal: persist the bin payload via the storage module.
 async function _writeReviewStore(data) {
-  try {
-    localStorage.setItem(WORD_REVIEW_KEY, JSON.stringify(data));
-  } catch (e) {
-    // localStorage full or unavailable — fail silently, in-memory session still works
-  }
+  await storage.setWordReview(data);
 }
 
 // Return all bin entries (array).
@@ -1619,14 +1755,12 @@ function getQuizInitState(words) {
   };
 }
 
-// Persistence for the user's preferred quiz direction
-const QUIZ_DIRECTION_KEY = 'cantonese.quizDirection';
+// Persistence for the user's preferred quiz direction — via the storage module.
 function loadQuizDirection() {
-  try { return localStorage.getItem(QUIZ_DIRECTION_KEY) || 'zh-en'; }
-  catch (e) { return 'zh-en'; }
+  return storage.getQuizDirection() || 'zh-en';
 }
 function saveQuizDirection(dir) {
-  try { localStorage.setItem(QUIZ_DIRECTION_KEY, dir); } catch (e) {}
+  storage.setQuizDirection(dir);
 }
 
 function buildChoices(answer, all) {
@@ -1749,14 +1883,13 @@ function playAllConvo(lines, idx) {
 const TRANSLATION_PROVIDER = 'gemini';   // 'gemini' | 'claude' | 'openai'
 
 function getApiKey() {
-  return localStorage.getItem('cantonese_api_key') || '';
+  return storage.getApiKey() || '';
 }
 function setApiKey(key) {
-  localStorage.setItem('cantonese_api_key', key);
+  storage.setApiKey(key);
 }
 
-// Path progress persistence
-const PATH_PROGRESS_KEY = 'cantonese_path_progress';
+// Path progress persistence — via the storage module.
 
 // Composite lesson key: 'greetings-t1', 'greetings-t2' etc.
 // Allows the same topic at multiple tiers within a single path.
@@ -1765,19 +1898,11 @@ function lessonKey(topicKey, tier) {
 }
 
 function loadPathProgress() {
-  try {
-    const raw = localStorage.getItem(PATH_PROGRESS_KEY);
-    return raw ? JSON.parse(raw) : {};
-  } catch (e) {
-    return {};
-  }
+  const p = storage.getPathProgress();
+  return (p && typeof p === 'object') ? p : {};
 }
 function savePathProgress() {
-  try {
-    localStorage.setItem(PATH_PROGRESS_KEY, JSON.stringify(state.pathProgress));
-  } catch (e) {
-    // localStorage full or unavailable — fail silently, in-memory state still works
-  }
+  storage.setPathProgress(state.pathProgress);
 }
 
 // One-time migration: convert legacy progress keys (no tier suffix) to composite keys.
@@ -3682,7 +3807,7 @@ function attachEvents(lesson, color) {
   const apikeyReset = document.getElementById('translate-reset-key');
   if (apikeyReset) apikeyReset.addEventListener('click', () => {
     if (confirm('Remove your saved API key? You\'ll need to re-enter it to translate.')) {
-      localStorage.removeItem('cantonese_api_key');
+      storage.clearApiKey();
       state.translate.result = null;
       state.translate.error = null;
       state.translate.inputText = '';
@@ -4426,8 +4551,10 @@ function attachEvents(lesson, color) {
 
 // ── Init ──────────────────────────────────────────────────────────────────────
 (async function init() {
+  storage._hydrate();                        // load all persisted data into the storage cache
+                                             // (also migrates any legacy keys) — must run first
   state.pathProgress = loadPathProgress();   // restore saved completion state
-  migratePathProgressIfNeeded();             // convert any legacy keys to composite form
+  migratePathProgressIfNeeded();             // convert any legacy lesson keys to composite form
 
   // Boot-loading shell while reference data fetches
   const app = document.getElementById('app');
