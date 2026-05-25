@@ -184,7 +184,8 @@ function renderPatternDrill(drillCount) {
     nextId:     'drill-next',
   });
 
-  // Drill-specific prompt card: the pattern frame with the slot shown as a blank.
+  // Drill-specific prompt card: the English target sentence (the anchor that
+  // makes exactly one answer correct), then the pattern frame with the slot.
   // Before answering, the blank is empty; after, it's filled with the chosen word.
   const chosenWord = answered ? pd.choices[pd.selected] : null;
   const slotZh = answered
@@ -194,12 +195,14 @@ function renderPatternDrill(drillCount) {
 
   const promptCard = `
     <div class="quiz-card drill-card" style="border:2px solid ${color}22">
-      <div class="quiz-label">${pattern.label} — fill the blank</div>
+      <div class="quiz-label">${pattern.label}</div>
+      <div class="drill-target">${d.english}</div>
+      <div class="drill-target-hint">Build this sentence — pick the missing word</div>
       <div class="drill-frame">${frameDisplay}</div>
       <div class="drill-frame-jp">${colorJyutping(d.frameJ).replace('▢','<span class="drill-slot-jp">▢</span>')}</div>
       ${answered
         ? `<button class="quiz-listen" id="drill-listen" style="border:1.5px solid ${color};color:${color}"><span class="icon-label">${iconPlay(13)} Hear full sentence</span></button>`
-        : `<div class="drill-hint">Pick the word that completes it</div>`}
+        : ''}
     </div>`;
 
   return `
