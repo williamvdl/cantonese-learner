@@ -149,16 +149,32 @@ const TONES = {
 const PATTERNS = [
   { label:"I want to…",              structure:"ngo5 soeng2 + [verb]",
     note:"The most useful starter — attach any verb to express what you want to do.",
-    examples:[{c:"我想食",j:"ngo5 soeng2 sik6",e:"I want to eat"},{c:"我想飲茶",j:"ngo5 soeng2 jam2 caa4",e:"I want to drink tea"},{c:"我想去",j:"ngo5 soeng2 heoi3",e:"I want to go"}]},
+    examples:[{c:"我想食",j:"ngo5 soeng2 sik6",e:"I want to eat"},{c:"我想飲茶",j:"ngo5 soeng2 jam2 caa4",e:"I want to drink tea"},{c:"我想去",j:"ngo5 soeng2 heoi3",e:"I want to go"}],
+    drill:{ frameC:"我想 ▢", frameJ:"ngo5 soeng2 ▢",
+      answer:{c:"飲茶",j:"jam2 caa4",e:"drink tea"},
+      distractors:[{c:"食飯",j:"sik6 faan6",e:"eat"},{c:"瞓覺",j:"fan3 gaau3",e:"sleep"},{c:"行街",j:"haang4 gaai1",e:"go shopping"}],
+      topics:["food","restaurant","shopping","hobbies","transport"] }},
   { label:"I'll have / I need…",     structure:"ngo5 jiu3 + [noun]",
     note:"Use for ordering food, asking for things, or stating what you need.",
-    examples:[{c:"我要水",j:"ngo5 jiu3 seoi2",e:"I need water"},{c:"我要三個",j:"ngo5 jiu3 saam1 go3",e:"I'll take three"},{c:"我要呢個",j:"ngo5 jiu3 ni1 go3",e:"I want this one"}]},
+    examples:[{c:"我要水",j:"ngo5 jiu3 seoi2",e:"I need water"},{c:"我要三個",j:"ngo5 jiu3 saam1 go3",e:"I'll take three"},{c:"我要呢個",j:"ngo5 jiu3 ni1 go3",e:"I want this one"}],
+    drill:{ frameC:"我要 ▢", frameJ:"ngo5 jiu3 ▢",
+      answer:{c:"水",j:"seoi2",e:"water"},
+      distractors:[{c:"茶",j:"caa4",e:"tea"},{c:"飯",j:"faan6",e:"rice"},{c:"咖啡",j:"gaa3 fe1",e:"coffee"}],
+      topics:["restaurant","food","shopping","hotels"] }},
   { label:"Do you have…?",           structure:"jau5 mou5 + [noun]?",
     note:"A very natural way to ask about availability — literally 'have or not have?'",
-    examples:[{c:"有冇茶？",j:"jau5 mou5 caa4?",e:"Do you have tea?"},{c:"有冇折？",j:"jau5 mou5 zit3?",e:"Is there a discount?"},{c:"有冇平啲？",j:"jau5 mou5 peng4 di1?",e:"Is there a cheaper one?"}]},
+    examples:[{c:"有冇茶？",j:"jau5 mou5 caa4?",e:"Do you have tea?"},{c:"有冇折？",j:"jau5 mou5 zit3?",e:"Is there a discount?"},{c:"有冇平啲？",j:"jau5 mou5 peng4 di1?",e:"Is there a cheaper one?"}],
+    drill:{ frameC:"有冇 ▢ ？", frameJ:"jau5 mou5 ▢ ？",
+      answer:{c:"茶",j:"caa4",e:"tea"},
+      distractors:[{c:"房",j:"fong2",e:"a room"},{c:"位",j:"wai2",e:"a seat"},{c:"散紙",j:"saan2 zi2",e:"change"}],
+      topics:["restaurant","shopping","hotels","food"] }},
   { label:"Where is…?",              structure:"[noun] + hai2 bin1 dou6?",
     note:"Put the thing you're looking for at the start, then ask where it is.",
-    examples:[{c:"洗手間喺邊度？",j:"sai2 sau2 gaan1 hai2 bin1 dou6?",e:"Where is the bathroom?"},{c:"地鐵站喺邊度？",j:"dei6 tit3 zaam6 hai2 bin1 dou6?",e:"Where is the MTR station?"},{c:"呢個喺邊度？",j:"ni1 go3 hai2 bin1 dou6?",e:"Where is this?"}]},
+    examples:[{c:"洗手間喺邊度？",j:"sai2 sau2 gaan1 hai2 bin1 dou6?",e:"Where is the bathroom?"},{c:"地鐵站喺邊度？",j:"dei6 tit3 zaam6 hai2 bin1 dou6?",e:"Where is the MTR station?"},{c:"呢個喺邊度？",j:"ni1 go3 hai2 bin1 dou6?",e:"Where is this?"}],
+    drill:{ frameC:"▢ 喺邊度？", frameJ:"▢ hai2 bin1 dou6?",
+      answer:{c:"洗手間",j:"sai2 sau2 gaan1",e:"the bathroom"},
+      distractors:[{c:"地鐵站",j:"dei6 tit3 zaam6",e:"the MTR station"},{c:"酒店",j:"zau2 dim3",e:"the hotel"},{c:"出口",j:"ceot1 hau2",e:"the exit"}],
+      topics:["directions","transport","hotels","attractions"] }},
   { label:"How much?",               structure:"gei2 cin2?",
     note:"Works alone or after pointing at something. Add ni1 go3 (this one) for clarity.",
     examples:[{c:"幾錢？",j:"gei2 cin2?",e:"How much?"},{c:"呢個幾錢？",j:"ni1 go3 gei2 cin2?",e:"How much is this one?"},{c:"大概幾錢？",j:"daai6 koi3 gei2 cin2?",e:"Approximately how much?"}]},
@@ -167,7 +183,11 @@ const PATTERNS = [
     examples:[{c:"唔該俾杯茶我",j:"m4 goi1 bei2 bui1 caa4 ngo5",e:"Please give me a cup of tea"},{c:"唔該俾個袋我",j:"m4 goi1 bei2 go3 doi2 ngo5",e:"Please give me a bag"},{c:"唔該俾筷子我",j:"m4 goi1 bei2 faai3 zi2 ngo5",e:"Please give me chopsticks"}]},
   { label:"Very…",                   structure:"hou2 + [adjective]",
     note:"hou2 intensifies any adjective. Stack it for extra emphasis — hou2 hou2 means 'very very good'.",
-    examples:[{c:"好熱",j:"hou2 jit6",e:"Very hot"},{c:"好味",j:"hou2 mei6",e:"Very delicious"},{c:"好貴",j:"hou2 gwai3",e:"Very expensive"},{c:"好好",j:"hou2 hou2",e:"Very good"}]},
+    examples:[{c:"好熱",j:"hou2 jit6",e:"Very hot"},{c:"好味",j:"hou2 mei6",e:"Very delicious"},{c:"好貴",j:"hou2 gwai3",e:"Very expensive"},{c:"好好",j:"hou2 hou2",e:"Very good"}],
+    drill:{ frameC:"好 ▢", frameJ:"hou2 ▢",
+      answer:{c:"熱",j:"jit6",e:"hot"},
+      distractors:[{c:"凍",j:"dung3",e:"cold"},{c:"貴",j:"gwai3",e:"expensive"},{c:"攰",j:"gui6",e:"tired"}],
+      topics:["weather","feelings","shopping","food"] }},
   { label:"Not / Don't…",            structure:"m4 + [verb or adjective]",
     note:"m4 is the general negation particle. Place it directly before the verb or adjective.",
     examples:[{c:"我唔明",j:"ngo5 m4 ming4",e:"I don't understand"},{c:"唔貴",j:"m4 gwai3",e:"Not expensive"},{c:"我唔要",j:"ngo5 m4 jiu3",e:"I don't want it"},{c:"唔係",j:"m4 hai6",e:"That's not right"}]},
@@ -179,10 +199,18 @@ const PATTERNS = [
     examples:[{c:"想食啲咩？",j:"soeng2 sik6 di1 me1?",e:"What would you like to eat?"},{c:"想飲啲咩？",j:"soeng2 jam2 di1 me1?",e:"What would you like to drink?"},{c:"想買啲咩？",j:"soeng2 maai5 di1 me1?",e:"What would you like to buy?"}]},
   { label:"I feel…",                 structure:"ngo5 gok3 dak1 + [adjective]",
     note:"Use this to describe how you're feeling physically or emotionally.",
-    examples:[{c:"我覺得好攰",j:"ngo5 gok3 dak1 hou2 gui6",e:"I feel very tired"},{c:"我覺得好凍",j:"ngo5 gok3 dak1 hou2 dung3",e:"I feel very cold"},{c:"我覺得唔舒服",j:"ngo5 gok3 dak1 m4 syu1 fuk6",e:"I feel unwell"}]},
+    examples:[{c:"我覺得好攰",j:"ngo5 gok3 dak1 hou2 gui6",e:"I feel very tired"},{c:"我覺得好凍",j:"ngo5 gok3 dak1 hou2 dung3",e:"I feel very cold"},{c:"我覺得唔舒服",j:"ngo5 gok3 dak1 m4 syu1 fuk6",e:"I feel unwell"}],
+    drill:{ frameC:"我覺得 ▢", frameJ:"ngo5 gok3 dak1 ▢",
+      answer:{c:"好攰",j:"hou2 gui6",e:"very tired"},
+      distractors:[{c:"好凍",j:"hou2 dung3",e:"very cold"},{c:"開心",j:"hoi1 sam1",e:"happy"},{c:"肚餓",j:"tou5 ngo6",e:"hungry"}],
+      topics:["feelings","body","weather"] }},
   { label:"Going to…",               structure:"heoi3 + [place]",
     note:"Simple and direct. Works for saying where you're going or asking where to go.",
-    examples:[{c:"去中環",j:"heoi3 zung1 waan4",e:"Going to Central"},{c:"去邊度？",j:"heoi3 bin1 dou6?",e:"Where are you going?"},{c:"我去超市",j:"ngo5 heoi3 ciu1 si5",e:"I'm going to the supermarket"}]},
+    examples:[{c:"去中環",j:"heoi3 zung1 waan4",e:"Going to Central"},{c:"去邊度？",j:"heoi3 bin1 dou6?",e:"Where are you going?"},{c:"我去超市",j:"ngo5 heoi3 ciu1 si5",e:"I'm going to the supermarket"}],
+    drill:{ frameC:"去 ▢", frameJ:"heoi3 ▢",
+      answer:{c:"中環",j:"zung1 waan4",e:"Central"},
+      distractors:[{c:"超市",j:"ciu1 si5",e:"the supermarket"},{c:"酒店",j:"zau2 dim3",e:"the hotel"},{c:"學校",j:"hok6 haau6",e:"school"}],
+      topics:["transport","directions","attractions","shopping"] }},
   { label:"See you at / on…",        structure:"[time] + gin3",
     note:"Put any time word before gin3 to arrange when to meet.",
     examples:[{c:"聽日見",j:"ting1 jat6 gin3",e:"See you tomorrow"},{c:"朝早見",j:"ziu1 zou2 gin3",e:"See you in the morning"},{c:"星期六見",j:"sing1 kei4 luk6 gin3",e:"See you Saturday"}]},
@@ -191,7 +219,11 @@ const PATTERNS = [
     examples:[{c:"咁得唔得？",j:"gam2 dak1 m4 dak1?",e:"Is this ok?"},{c:"我坐喺呢度得唔得？",j:"ngo5 co5 hai2 ni1 dou6 dak1 m4 dak1?",e:"Can I sit here?"},{c:"而家去得唔得？",j:"ji4 gaa1 heoi3 dak1 m4 dak1?",e:"Can we go now?"}]},
   { label:"Too…!",                   structure:"taai3 + [adjective] + laa3",
     note:"Express that something is excessive. laa3 adds a sense of finality or mild complaint.",
-    examples:[{c:"太貴喇",j:"taai3 gwai3 laa3",e:"Too expensive!"},{c:"太熱喇",j:"taai3 jit6 laa3",e:"Too hot!"},{c:"太多喇",j:"taai3 do1 laa3",e:"Too much!"}]},
+    examples:[{c:"太貴喇",j:"taai3 gwai3 laa3",e:"Too expensive!"},{c:"太熱喇",j:"taai3 jit6 laa3",e:"Too hot!"},{c:"太多喇",j:"taai3 do1 laa3",e:"Too much!"}],
+    drill:{ frameC:"太 ▢ 喇", frameJ:"taai3 ▢ laa3",
+      answer:{c:"貴",j:"gwai3",e:"expensive"},
+      distractors:[{c:"熱",j:"jit6",e:"hot"},{c:"多",j:"do1",e:"much"},{c:"遠",j:"jyun5",e:"far"}],
+      topics:["shopping","weather","food","directions"] }},
   { label:"Can I / May I…?",         structure:"ho2 m4 ho2 ji5 + [verb]?",
     note:"A polite way to ask permission — more formal than dak1 m4 dak1.",
     examples:[{c:"可唔可以講慢啲？",j:"ho2 m4 ho2 ji5 gong2 maan6 di1?",e:"Can you speak more slowly?"},{c:"可唔可以睇吓？",j:"ho2 m4 ho2 ji5 tai2 haa5?",e:"Can I take a look?"},{c:"可唔可以等我？",j:"ho2 m4 ho2 ji5 dang2 ngo5?",e:"Can you wait for me?"}]},
@@ -203,13 +235,21 @@ const PATTERNS = [
     examples:[{c:"點解咁貴？",j:"dim2 gaai3 gam3 gwai3?",e:"Why is it so expensive?"},{c:"點解唔去？",j:"dim2 gaai3 m4 heoi3?",e:"Why aren't you going?"},{c:"點解咁熱？",j:"dim2 gaai3 gam3 jit6?",e:"Why is it so hot?"}]},
   { label:"There's also… / And also…",structure:"zung6 jau5 + [noun/verb]",
     note:"Use to add something on top of what's already been said — great for ordering.",
-    examples:[{c:"仲有茶",j:"zung6 jau5 caa4",e:"And also tea"},{c:"仲有一個",j:"zung6 jau5 jat1 go3",e:"One more"},{c:"仲有咩嘢？",j:"zung6 jau5 mat1 je5?",e:"What else is there?"}]},
+    examples:[{c:"仲有茶",j:"zung6 jau5 caa4",e:"And also tea"},{c:"仲有一個",j:"zung6 jau5 jat1 go3",e:"One more"},{c:"仲有咩嘢？",j:"zung6 jau5 mat1 je5?",e:"What else is there?"}],
+    drill:{ frameC:"仲有 ▢", frameJ:"zung6 jau5 ▢",
+      answer:{c:"茶",j:"caa4",e:"tea"},
+      distractors:[{c:"一個",j:"jat1 go3",e:"one more"},{c:"時間",j:"si4 gaan3",e:"time"},{c:"問題",j:"man6 tai4",e:"a question"}],
+      topics:["restaurant","food","shopping"] }},
   { label:"A bit more / less…",      structure:"[adjective] + di1",
     note:"Adding di1 after an adjective softens it — useful for polite requests.",
     examples:[{c:"慢啲",j:"maan6 di1",e:"A bit slower"},{c:"平啲",j:"peng4 di1",e:"A bit cheaper"},{c:"多啲",j:"do1 di1",e:"A bit more"},{c:"少啲",j:"siu2 di1",e:"A bit less"}]},
   { label:"I like…",                 structure:"ngo5 zung1 ji3 + [noun/verb]",
     note:"Express preferences for things, food, activities or people.",
-    examples:[{c:"我鍾意食",j:"ngo5 zung1 ji3 sik6",e:"I like eating"},{c:"我鍾意茶",j:"ngo5 zung1 ji3 caa4",e:"I like tea"},{c:"我鍾意呢個",j:"ngo5 zung1 ji3 ni1 go3",e:"I like this one"}]},
+    examples:[{c:"我鍾意食",j:"ngo5 zung1 ji3 sik6",e:"I like eating"},{c:"我鍾意茶",j:"ngo5 zung1 ji3 caa4",e:"I like tea"},{c:"我鍾意呢個",j:"ngo5 zung1 ji3 ni1 go3",e:"I like this one"}],
+    drill:{ frameC:"我鍾意 ▢", frameJ:"ngo5 zung1 ji3 ▢",
+      answer:{c:"茶",j:"caa4",e:"tea"},
+      distractors:[{c:"跑步",j:"paau2 bou6",e:"running"},{c:"音樂",j:"jam1 ngok6",e:"music"},{c:"狗",j:"gau2",e:"dogs"}],
+      topics:["food","hobbies","sports","animals"] }},
   { label:"Give [someone] [something]",structure:"bei2 + [thing] + [person]",
     note:"bei2 means 'give' or 'let'. The person receiving comes at the end — opposite to English.",
     examples:[{c:"俾我",j:"bei2 ngo5",e:"Give me / let me"},{c:"俾佢睇",j:"bei2 keoi5 tai2",e:"Let him see it"},{c:"我俾你",j:"ngo5 bei2 nei5",e:"I'll give you"}]},
@@ -350,6 +390,10 @@ let state = {
   quiz: null,
   // Word Review session — null when not in a session. Shape set by startWordReview().
   wordReview: null,
+  // Pattern Drill session — null when not in a session. Shape set by startPatternDrill().
+  patternDrill: null,
+  // Which tab the Patterns page shows: 'browse' (reference) or 'drill'.
+  patternsTab: 'browse',
   // Cached {liveCount, everUsed} for the menu badge — refreshed by refreshReviewBadge().
   reviewBadge: { liveCount: 0, everUsed: false },
   convo: {
@@ -582,6 +626,60 @@ function advanceWordReview() {
   wr.idx = next;
   wr.selected = null;
   wr.choices = buildReviewChoices(wr.queue[next]);
+  render();
+}
+
+// ── Pattern Drill session ─────────────────────────────────────────────────────
+// A drill quizzes sentence patterns: a pattern frame with one slot blanked, the
+// learner picks the vocab that fills it. One question per pattern. Only patterns
+// that carry a `drill` object are included. Built on renderQuizCore, same as the
+// quiz and Word Review.
+//
+// state.patternDrill shape (null when not in a drill):
+//   { queue: [pattern,…], idx, selected (choice index|null), done,
+//     score, choices: [option,…] }
+// A drill option is a plain { c, j, e } word object; the answer object is
+// pattern.drill.answer, the distractors are pattern.drill.distractors.
+
+// Build the 4 shuffled choices for one drill pattern: the answer + its 3 distractors.
+function buildDrillChoices(pattern) {
+  const d = pattern.drill;
+  return shuffle([d.answer, ...d.distractors]);
+}
+
+// Start a pattern drill session. Queues every pattern that has a drill object,
+// in shuffled order, one question each.
+function startPatternDrill() {
+  const drillable = PATTERNS.filter(p => p.drill);
+  if (!drillable.length) { state.patternDrill = null; render(); return; }
+  const queue = shuffle(drillable);
+  state.patternDrill = {
+    queue,
+    idx: 0,
+    selected: null,
+    done: false,
+    score: 0,
+    choices: buildDrillChoices(queue[0]),
+  };
+  // A drill session is one "screen" for the back button — entering it pushes a
+  // history entry, so phone BACK (and the on-screen exit) leaves the session.
+  pushNav();
+  render();
+}
+
+// Advance the drill to the next pattern, or mark the session done.
+function advancePatternDrill() {
+  const pd = state.patternDrill;
+  if (!pd) return;
+  const next = pd.idx + 1;
+  if (next >= pd.queue.length) {
+    pd.done = true;
+    render();
+    return;
+  }
+  pd.idx = next;
+  pd.selected = null;
+  pd.choices = buildDrillChoices(pd.queue[next]);
   render();
 }
 

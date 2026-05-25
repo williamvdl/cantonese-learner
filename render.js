@@ -58,6 +58,36 @@ function renderDrawer() {
 }
 
 function renderPatterns() {
+  const tab = state.patternsTab || 'browse';
+  const drillCount = PATTERNS.filter(p => p.drill).length;
+
+  // Browse / Drill segmented control (same component family as topic subtabs).
+  const tabs = `
+    <div class="subtabs patterns-subtabs">
+      <button class="subtab-btn${tab==='browse'?' active':''}" id="patterns-tab-browse"
+        style="${tab==='browse'?'background:#8B3A4E':''}">
+        <span class="icon-label">${icon('bookOpen',14)} Browse</span>
+      </button>
+      <button class="subtab-btn${tab==='drill'?' active':''}" id="patterns-tab-drill"
+        style="${tab==='drill'?'background:#8B3A4E':''}">
+        <span class="icon-label">${icon('quiz',14)} Drill</span>
+      </button>
+    </div>`;
+
+  const body = tab === 'drill'
+    ? renderPatternDrill(drillCount)
+    : renderPatternBrowse();
+
+  return `
+    <div class="patterns-wrap">
+      ${renderPageHeader('🔨', 'Sentence Patterns', `${PATTERNS.length} building blocks`)}
+      ${tabs}
+      ${body}
+    </div>`;
+}
+
+// The reference list — browse all patterns and their example sentences.
+function renderPatternBrowse() {
   const cards = PATTERNS.map((p, pi) => {
     const examples = p.examples.map((ex, ei) => {
       const key = `p${pi}-e${ei}`;
@@ -91,12 +121,96 @@ function renderPatterns() {
         </div>
       </div>`;
   }).join('');
+  return cards;
+}
+
+// The drill — landing screen, active question, or done summary.
+function renderPatternDrill(drillCount) {
+  const pd = state.patternDrill;
+  const color = '#8B3A4E';   // drill uses the brand cinnabar, like Word Review
+
+  // --- Landing (no active session) ---
+  if (!pd) {
+    return `
+      <div class="review-landing">
+        <div class="review-landing-count">${drillCount}</div>
+        <div class="review-landing-label">pattern${drillCount===1?'':'s'} ready to drill</div>
+        <p class="review-landing-note">
+          Fill the blank in each sentence pattern with the word that fits.
+          One question per pattern.
+        </p>
+        <button class="review-start-btn" id="drill-start">Start drill</button>
+      </div>`;
+  }
+
+  // --- Done summary ---
+  if (pd.done) {
+    const total = pd.queue.length;
+    return `
+      <div class="result">
+        <div class="result-emoji">${pd.score === total ? '🌟' : '✅'}</div>
+        <div class="result-score" style="color:${color}">${pd.score} / ${total} correct</div>
+        <div class="result-msg">
+          ${pd.score === total
+            ? 'Perfect — every pattern filled correctly.'
+            : 'Nice work. Drill again to sharpen the ones you missed.'}
+        </div>
+        <button class="review-start-btn" id="drill-again">Drill again</button>
+        <button class="back-btn" id="drill-exit" style="background:${color}"><span class="icon-label">${icon('arrowLeft',15)} Done</span></button>
+      </div>`;
+  }
+
+  // --- Active question ---
+  const pattern = pd.queue[pd.idx];
+  const d = pattern.drill;
+  const answered = pd.selected !== null && pd.selected !== undefined;
+
+  // Shared quiz UI for the choices, progress bar, wrong panel. The prompt card
+  // is drill-specific (a sentence frame with a blank), so we pass direction
+  // 'en-zh'-style choices but build our own prompt below.
+  const core = renderQuizCore({
+    word:       d.answer,
+    choices:    pd.choices,
+    selected:   pd.selected,
+    direction:  'en-zh',          // choices show Chinese + jyutping, like en-zh quiz
+    color:      color,
+    idx:        pd.idx,
+    total:      pd.queue.length,
+    ariaLabel:  'Pattern drill',
+    dirAttr:    'data-drill-dir-unused',   // drill has no direction toggle (see below)
+    choiceAttr: 'data-drill-choice',
+    listenId:   'drill-listen',
+    replayId:   'drill-replay',
+    nextId:     'drill-next',
+  });
+
+  // Drill-specific prompt card: the pattern frame with the slot shown as a blank.
+  // Before answering, the blank is empty; after, it's filled with the chosen word.
+  const chosenWord = answered ? pd.choices[pd.selected] : null;
+  const slotZh = answered
+    ? `<span class="drill-slot ${chosenWord===d.answer?'correct':'wrong'}">${chosenWord.c}</span>`
+    : `<span class="drill-slot drill-slot-empty">▢</span>`;
+  const frameDisplay = d.frameC.replace('▢', slotZh);
+
+  const promptCard = `
+    <div class="quiz-card drill-card" style="border:2px solid ${color}22">
+      <div class="quiz-label">${pattern.label} — fill the blank</div>
+      <div class="drill-frame">${frameDisplay}</div>
+      <div class="drill-frame-jp">${colorJyutping(d.frameJ).replace('▢','<span class="drill-slot-jp">▢</span>')}</div>
+      ${answered
+        ? `<button class="quiz-listen" id="drill-listen" style="border:1.5px solid ${color};color:${color}"><span class="icon-label">${iconPlay(13)} Hear full sentence</span></button>`
+        : `<div class="drill-hint">Pick the word that completes it</div>`}
+    </div>`;
 
   return `
-    <div class="patterns-wrap">
-      ${renderPageHeader('🔨', 'Sentence Patterns', `${PATTERNS.length} building blocks — tap ${iconPlay(12)} to hear any example`)}
-      ${cards}
-    </div>`;
+    <div class="quiz-meta">
+      <span style="color:#888">Pattern ${pd.idx+1} / ${pd.queue.length}</span>
+      <span style="color:${color};font-weight:700">Score: ${pd.score}</span>
+    </div>
+    ${core.progressBar}
+    ${promptCard}
+    ${core.choiceGrid}
+    ${core.wrongPanel}`;
 }
 
 function renderTranslate() {
@@ -1347,6 +1461,11 @@ function attachEvents(lesson, color) {
         state.wordReview = null;
         refreshReviewBadge().then(render);
       }
+      // Entering Patterns always starts on Browse with no stale drill session
+      if (target === 'patterns') {
+        state.patternsTab = 'browse';
+        state.patternDrill = null;
+      }
       state.nav = target;
       state.fromPath = false;          // any drawer navigation clears the path-return flag
       state.fromPathTier = null;
@@ -1492,6 +1611,64 @@ function attachEvents(lesson, color) {
       setTimeout(() => { if (state.speaking === key) { state.speaking = null; render(); } }, 5000);
     });
   });
+
+  // ── Pattern drill events ──
+  // Browse / Drill tab switch (in-screen control — not history-tracked)
+  const ptBrowse = document.getElementById('patterns-tab-browse');
+  if (ptBrowse) ptBrowse.addEventListener('click', () => { state.patternsTab = 'browse'; render(); });
+  const ptDrill = document.getElementById('patterns-tab-drill');
+  if (ptDrill) ptDrill.addEventListener('click', () => { state.patternsTab = 'drill'; render(); });
+
+  // Landing: start a drill
+  const drillStart = document.getElementById('drill-start');
+  if (drillStart) drillStart.addEventListener('click', () => startPatternDrill());
+
+  // Done screen: drill again, or exit
+  const drillAgain = document.getElementById('drill-again');
+  if (drillAgain) drillAgain.addEventListener('click', () => startPatternDrill());
+  const drillExit = document.getElementById('drill-exit');
+  if (drillExit) drillExit.addEventListener('click', () => {
+    // history.back() pops the drill-session entry; popstate clears state.patternDrill.
+    if (_navReady) { history.back(); return; }
+    state.patternDrill = null;
+    render();
+  });
+
+  // Active drill question
+  if (state.patternDrill && !state.patternDrill.done) {
+    const pd = state.patternDrill;
+    const pattern = pd.queue[pd.idx];
+    const d = pattern.drill;
+    // The full assembled sentence — frame with the blank replaced by the answer.
+    const fullSentence = d.frameC.replace('▢', d.answer.c);
+
+    // Listen button (only present after answering) — plays the complete sentence
+    const dListen = document.getElementById('drill-listen');
+    if (dListen) dListen.addEventListener('click', () => speak(fullSentence));
+
+    // Choice buttons
+    document.querySelectorAll('[data-drill-choice]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        if (pd.selected !== null && pd.selected !== undefined) return;
+        const idx = parseInt(btn.dataset.drillChoice, 10);
+        const chosenOpt = pd.choices[idx];
+        const correct = chosenOpt === d.answer;     // object identity
+        pd.selected = idx;
+        if (correct) pd.score++;
+        // Play the full assembled sentence so the learner hears the result.
+        speak(fullSentence);
+        render();
+        // Correct auto-advances; wrong holds on the panel for "Got it — next".
+        if (correct) setTimeout(() => advancePatternDrill(), 1100);
+      });
+    });
+
+    // Wrong-panel buttons
+    const dReplay = document.getElementById('drill-replay');
+    if (dReplay) dReplay.addEventListener('click', () => speak(fullSentence));
+    const dNext = document.getElementById('drill-next');
+    if (dNext) dNext.addEventListener('click', () => advancePatternDrill());
+  }
 
   // Speed toggle
   ['slow','normal','fast'].forEach(s => {
@@ -2222,6 +2399,12 @@ function attachEvents(lesson, color) {
     if (state.wordReview) {
       state.wordReview = null;
       refreshReviewBadge();
+    }
+
+    // Likewise a pattern drill session: backing out returns to the Patterns
+    // page (Drill tab landing). Clear the session so it's not stale.
+    if (state.patternDrill) {
+      state.patternDrill = null;
     }
 
     // A quiz in progress is likewise not a nav screen. If back has moved us out
