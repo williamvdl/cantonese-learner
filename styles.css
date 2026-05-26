@@ -254,7 +254,7 @@
   .translate-clear { padding: 10px 14px; background: transparent; color: #888; border: 1px solid #ddd; border-radius: 10px; font-size: 13px; cursor: pointer; }
   .translate-loading { padding: 30px 16px; text-align: center; color: #888; font-size: 13px; }
   .translate-error { background: #fde8ea; border: 1px solid var(--brand); color: #7b1c1c; padding: 12px 16px; border-radius: 10px; font-size: 13px; margin-bottom: 12px; }
-  .translate-result { background: var(--parchment); border-radius: 14px; padding: 16px 18px; border: 2px solid var(--brand)22; }
+  .translate-result { background: var(--parchment); border-radius: 14px; padding: 16px 18px; border: 2px solid #8B3A4E22; }
   .translate-zh { font-size: 22px; line-height: 1.4; color: var(--ink); margin-bottom: 8px; }
   .translate-jp { font-size: 14px; margin-bottom: 8px; }
   .translate-result-actions { display: flex; gap: 8px; margin-top: 10px; padding-top: 10px; border-top: 1px solid #f4f0eb; }
@@ -392,7 +392,7 @@
   .nav-btn .nav-icon { font-size: 22px; line-height: 1; }
   .nav-btn .nav-label { font-size: 10px; font-weight: 600; letter-spacing: 0.5px; text-transform: uppercase; color: #555; transition: color 0.15s; }
   .nav-btn.active .nav-label { color: var(--gold); }
-  .nav-btn.active .nav-icon { filter: drop-shadow(0 0 4px var(--gold)88); }
+  .nav-btn.active .nav-icon { filter: drop-shadow(0 0 4px #B7861E88); }
 
   /* Placeholder screens */
   .placeholder-screen { padding: 60px 24px; text-align: center; }
@@ -450,12 +450,18 @@
   .quiz-prompt-en { font-size: 28px; line-height: 1.2; color: var(--ink); font-weight: 700; padding: 8px 4px; }
 
   /* Wrong-answer pause panel (inside an active quiz) */
-  .quiz-wrong-panel { margin-top: 16px; background: var(--parchment)5f5; border: 2px solid var(--brand); border-radius: 12px; padding: 14px 16px; text-align: center; }
+  .quiz-wrong-panel { margin-top: 16px; background: #FDF0F0; border: 2px solid var(--brand); border-radius: 12px; padding: 14px 16px; text-align: center; }
   .quiz-wrong-heading { font-size: 13px; font-weight: 700; color: #7b1c1c; margin-bottom: 6px; }
   .quiz-wrong-chinese { font-size: 32px; color: var(--ink); line-height: 1.2; }
   .quiz-wrong-jp { font-size: 13px; margin-top: 4px; }
   .quiz-wrong-en { font-size: 15px; color: var(--jade); font-weight: 700; margin-top: 4px; }
   .quiz-wrong-actions { display: flex; gap: 8px; justify-content: center; margin-top: 12px; flex-wrap: wrap; }
+
+  /* Correct-answer row (Option 2 — light touch). Shown in place of the wrong
+     panel when the answer was right; both states stop and wait for Next. */
+  .quiz-correct-row { margin-top: 16px; display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 4px 2px; }
+  .quiz-correct-msg { font-size: 16px; font-weight: 700; color: #1a5e2a; display: inline-flex; align-items: center; }
+  .quiz-correct-tick { display: inline-flex; width: 22px; height: 22px; border-radius: 50%; background: var(--jade); color: #fff; align-items: center; justify-content: center; margin-right: 7px; }
   .quiz-replay { background: transparent; border-radius: 20px; padding: 8px 14px; cursor: pointer; font-size: 13px; font-weight: 600; border: 1.5px solid; }
   .quiz-next   { background: var(--ink); color: var(--parchment); border-radius: 20px; padding: 8px 18px; cursor: pointer; font-size: 13px; font-weight: 700; border: none; }
 
@@ -538,12 +544,12 @@
   .path-step:last-child .path-step-line { display: none; }
   .path-step.done .path-step-node { background: var(--jade); border-color: var(--jade); color: var(--parchment); }
   .path-step.done .path-step-line { background: var(--jade); }
-  .path-step.next .path-step-node { border-color: var(--gold); box-shadow: 0 0 0 4px var(--gold)33; color: var(--ink); }
+  .path-step.next .path-step-node { border-color: var(--gold); box-shadow: 0 0 0 4px #B7861E33; color: var(--ink); }
 
   .path-step-body { flex: 1; padding-bottom: 14px; }
   .path-step-card { background: var(--parchment); border-radius: 12px; padding: 12px 14px; border: 1.5px solid #eee; cursor: pointer; transition: all 0.15s; user-select: none; }
   .path-step-card:active { transform: scale(0.98); }
-  .path-step.next .path-step-card { border-color: var(--gold); box-shadow: 0 2px 12px var(--gold)22; }
+  .path-step.next .path-step-card { border-color: var(--gold); box-shadow: 0 2px 12px #B7861E22; }
   .path-step.done .path-step-card { background: #F4F0E6; border-color: #C7D2C0; }
   .path-step-row { display: flex; align-items: center; gap: 10px; }
   .path-step-icon { font-size: 22px; line-height: 1; }
@@ -576,7 +582,7 @@
   .speed-btn.active { opacity: 1; }
 
   .header-info-btn { color: var(--gold); }
-  .header .speed-btn { color: var(--gold); border-color: var(--gold)66; }
+  .header .speed-btn { color: var(--gold); border-color: #B7861E66; }
   .header .speed-btn.active { background: var(--gold); color: var(--ink); border-color: var(--gold); }
   .header .speed-label { color: var(--muted); }
   .header .tone-key .label { color: var(--muted); }
@@ -914,7 +920,7 @@
     flex: 1;
     padding: var(--sp-2) var(--sp-2);
     border-radius: var(--r-pill);
-    border: 1.5px solid var(--gold)55;
+    border: 1.5px solid #B7861E55;
     background: transparent;
     color: var(--gold);
     font-family: var(--font-ui);

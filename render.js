@@ -213,7 +213,7 @@ function renderPatternDrill(drillCount) {
     ${core.progressBar}
     ${promptCard}
     ${core.choiceGrid}
-    ${core.wrongPanel}`;
+    ${core.answerPanel}`;
 }
 
 function renderTranslate() {
@@ -404,10 +404,13 @@ function renderQuizCore(opts) {
     return `<button class="${cls}" ${choiceAttr}="${i}" ${answered ? 'disabled' : ''}>${body}</button>`;
   }).join('');
 
-  // --- Wrong-answer panel (shown only when the answered choice was wrong) ---
+  // --- Answer panel (shown once answered) ---
+  // Wrong → the "Not quite…" teaching panel. Correct → a light "Correct!" line.
+  // Either way the question now STOPS and waits for a Next tap (no auto-advance).
   const wasWrong = answered && choices[selected] !== cw;
-  const wrongPanel = wasWrong
-    ? `<div class="quiz-wrong-panel">
+  let answerPanel = '';
+  if (answered && wasWrong) {
+    answerPanel = `<div class="quiz-wrong-panel">
         <div class="quiz-wrong-heading">Not quite — the answer was:</div>
         <div class="quiz-wrong-chinese">${cw.c}</div>
         <div class="quiz-wrong-jp">${colorJyutping(cw.j)}</div>
@@ -416,15 +419,20 @@ function renderQuizCore(opts) {
           <button class="quiz-replay" id="${replayId}" style="border-color:${color};color:${color}"><span class="icon-label">${iconPlay(13)} Hear it again</span></button>
           <button class="quiz-next" id="${nextId}" style="background:${color}"><span class="icon-label">Got it — next ${icon('arrowRight',14)}</span></button>
         </div>
-      </div>`
-    : '';
+      </div>`;
+  } else if (answered) {
+    answerPanel = `<div class="quiz-correct-row">
+        <span class="quiz-correct-msg"><span class="quiz-correct-tick">${icon('check',14)}</span>Correct!</span>
+        <button class="quiz-next" id="${nextId}" style="background:${color}"><span class="icon-label">Next ${icon('arrowRight',14)}</span></button>
+      </div>`;
+  }
 
   return {
     progressBar: `<div class="progress-bar"><div class="progress-fill" style="background:${color};width:${pct}%"></div></div>`,
     dirToggle,
     promptCard,
     choiceGrid: `<div class="choices">${choiceBtns}</div>`,
-    wrongPanel,
+    answerPanel,
   };
 }
 
@@ -538,7 +546,7 @@ function renderWordReview() {
       ${core.dirToggle}
       ${core.promptCard}
       ${core.choiceGrid}
-      ${core.wrongPanel}
+      ${core.answerPanel}
     </div>`;
 }
 
@@ -1426,7 +1434,7 @@ function renderQuiz(lesson, color) {
     ${core.dirToggle}
     ${core.promptCard}
     ${core.choiceGrid}
-    ${core.wrongPanel}`;
+    ${core.answerPanel}`;
 }
 
 // ── Events ────────────────────────────────────────────────────────────────────
@@ -1661,12 +1669,11 @@ function attachEvents(lesson, color) {
         // Play the full assembled sentence so the learner hears the result.
         speak(fullSentence);
         render();
-        // Correct auto-advances; wrong holds on the panel for "Got it — next".
-        if (correct) setTimeout(() => advancePatternDrill(), 1100);
+        // Stop-and-confirm: both correct and wrong wait for the Next tap.
       });
     });
 
-    // Wrong-panel buttons
+    // Answer-panel buttons (present once answered, correct or wrong)
     const dReplay = document.getElementById('drill-replay');
     if (dReplay) dReplay.addEventListener('click', () => speak(fullSentence));
     const dNext = document.getElementById('drill-next');
@@ -2032,11 +2039,9 @@ function attachEvents(lesson, color) {
             .then(render);
         }
         render();
-        // On correct: auto-advance after a short beat so the green tick lands.
-        // On wrong: stay on the question; the user must tap "Got it" to advance.
-        if (correct) {
-          setTimeout(() => advanceQuiz(), 950);
-        }
+        // Both correct and wrong now STOP and wait for a Next tap — no
+        // auto-advance. The answer panel (correct line / wrong panel) carries
+        // the Next button; its handler is wired below.
       });
     });
   }
@@ -2136,9 +2141,7 @@ function attachEvents(lesson, color) {
             if (res.graduated) return refreshReviewBadge().then(render);
           });
         render();
-        if (correct) {
-          setTimeout(() => advanceWordReview(), 950);
-        }
+        // Stop-and-confirm: both correct and wrong wait for the Next tap.
       });
     });
 
