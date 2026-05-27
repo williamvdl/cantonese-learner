@@ -59,7 +59,7 @@ function renderDrawer() {
 
 function renderPatterns() {
   const tab = state.patternsTab || 'browse';
-  const drillCount = PATTERNS.filter(p => p.drill).length;
+  const drillCount = PATTERNS.filter(p => Array.isArray(p.drills) && p.drills.length).length;
 
   // Browse / Drill segmented control (same component family as topic subtabs).
   const tabs = `
@@ -169,8 +169,7 @@ function renderDrillBody(pd) {
   }
 
   // --- Active question ---
-  const pattern = pd.queue[pd.idx];
-  const d = pattern.drill;
+  const { pattern, drill: d } = pd.queue[pd.idx];
   const answered = pd.selected !== null && pd.selected !== undefined;
 
   const core = renderQuizCore({
@@ -1330,11 +1329,10 @@ function renderSentences(topic, color) {
 // vocabulary. Only renders if the topic has associated patterns — a topic with
 // none simply shows nothing here (correct: not every topic is pattern-shaped).
 function renderTopicPatterns(topicKey, color) {
-  const pats = getTopicPatterns(topicKey);
-  if (!pats.length) return '';
+  const items = getTopicDrills(topicKey);
+  if (!items.length) return '';
 
-  const cards = pats.map((p, pi) => {
-    const d = p.drill;
+  const cards = items.map(({ pattern: p, drill: d }, pi) => {
     // Worked example: the assembled correct sentence (frame + answer).
     const exC = d.frameC.replace('▢', d.answer.c);
     const exJ = d.frameJ.replace('▢', d.answer.j);
@@ -1390,7 +1388,7 @@ function renderTopicPatterns(topicKey, color) {
   // The drill button — all topic patterns here are drillable by definition.
   const drillBtn = `
     <button class="topic-drill-btn" id="topic-drill-start" style="background:${color}">
-      <span class="icon-label">${icon('quiz',15)} Drill ${pats.length} pattern${pats.length===1?'':'s'}</span>
+      <span class="icon-label">${icon('quiz',15)} Drill ${items.length} pattern${items.length===1?'':'s'}</span>
     </button>`;
 
   return `
@@ -1787,8 +1785,7 @@ function attachEvents(lesson, color) {
   // Active drill question
   if (state.patternDrill && !state.patternDrill.done) {
     const pd = state.patternDrill;
-    const pattern = pd.queue[pd.idx];
-    const d = pattern.drill;
+    const d = pd.queue[pd.idx].drill;
     // The full assembled sentence — frame with the blank replaced by the answer.
     const fullSentence = d.frameC.replace('▢', d.answer.c);
 

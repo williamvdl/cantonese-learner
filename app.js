@@ -150,31 +150,31 @@ const PATTERNS = [
   { label:"I want to…",              structure:"ngo5 soeng2 + [verb]",
     note:"The most useful starter — attach any verb to express what you want to do.",
     examples:[{c:"我想食",j:"ngo5 soeng2 sik6",e:"I want to eat"},{c:"我想飲茶",j:"ngo5 soeng2 jam2 caa4",e:"I want to drink tea"},{c:"我想去",j:"ngo5 soeng2 heoi3",e:"I want to go"}],
-    drill:{ frameC:"我想 ▢", frameJ:"ngo5 soeng2 ▢", english:"I want to drink tea", frameE:"I want to…",
+    drills:[{ frameC:"我想 ▢", frameJ:"ngo5 soeng2 ▢", english:"I want to drink tea", frameE:"I want to…",
       answer:{c:"飲茶",j:"jam2 caa4",e:"drink tea"},
       distractors:[{c:"食飯",j:"sik6 faan6",e:"eat"},{c:"瞓覺",j:"fan3 gaau3",e:"sleep"},{c:"行街",j:"haang4 gaai1",e:"go shopping"}],
-      topics:["food","restaurant","shopping","hobbies","transport"] }},
+      topics:["food","restaurant","shopping","hobbies","transport"] }]},
   { label:"I'll have / I need…",     structure:"ngo5 jiu3 + [noun]",
     note:"Use for ordering food, asking for things, or stating what you need.",
     examples:[{c:"我要水",j:"ngo5 jiu3 seoi2",e:"I need water"},{c:"我要三個",j:"ngo5 jiu3 saam1 go3",e:"I'll take three"},{c:"我要呢個",j:"ngo5 jiu3 ni1 go3",e:"I want this one"}],
-    drill:{ frameC:"我要 ▢", frameJ:"ngo5 jiu3 ▢", english:"I'll have water", frameE:"I'll have / I need…",
+    drills:[{ frameC:"我要 ▢", frameJ:"ngo5 jiu3 ▢", english:"I'll have water", frameE:"I'll have / I need…",
       answer:{c:"水",j:"seoi2",e:"water"},
       distractors:[{c:"茶",j:"caa4",e:"tea"},{c:"飯",j:"faan6",e:"rice"},{c:"咖啡",j:"gaa3 fe1",e:"coffee"}],
-      topics:["restaurant","food","shopping","hotels"] }},
+      topics:["restaurant","food","shopping","hotels"] }]},
   { label:"Do you have…?",           structure:"jau5 mou5 + [noun]?",
     note:"A very natural way to ask about availability — literally 'have or not have?'",
     examples:[{c:"有冇茶？",j:"jau5 mou5 caa4?",e:"Do you have tea?"},{c:"有冇折？",j:"jau5 mou5 zit3?",e:"Is there a discount?"},{c:"有冇平啲？",j:"jau5 mou5 peng4 di1?",e:"Is there a cheaper one?"}],
-    drill:{ frameC:"有冇 ▢ ？", frameJ:"jau5 mou5 ▢ ？", english:"Do you have tea?", frameE:"Do you have…?",
+    drills:[{ frameC:"有冇 ▢ ？", frameJ:"jau5 mou5 ▢ ？", english:"Do you have tea?", frameE:"Do you have…?",
       answer:{c:"茶",j:"caa4",e:"tea"},
       distractors:[{c:"房",j:"fong2",e:"a room"},{c:"位",j:"wai2",e:"a seat"},{c:"散紙",j:"saan2 zi2",e:"change"}],
-      topics:["restaurant","shopping","hotels","food"] }},
+      topics:["restaurant","shopping","hotels","food"] }]},
   { label:"Where is…?",              structure:"[noun] + hai2 bin1 dou6?",
     note:"Put the thing you're looking for at the start, then ask where it is.",
     examples:[{c:"洗手間喺邊度？",j:"sai2 sau2 gaan1 hai2 bin1 dou6?",e:"Where is the bathroom?"},{c:"地鐵站喺邊度？",j:"dei6 tit3 zaam6 hai2 bin1 dou6?",e:"Where is the MTR station?"},{c:"呢個喺邊度？",j:"ni1 go3 hai2 bin1 dou6?",e:"Where is this?"}],
-    drill:{ frameC:"▢ 喺邊度？", frameJ:"▢ hai2 bin1 dou6?", english:"Where is the bathroom?", frameE:"Where is…?",
+    drills:[{ frameC:"▢ 喺邊度？", frameJ:"▢ hai2 bin1 dou6?", english:"Where is the bathroom?", frameE:"Where is…?",
       answer:{c:"洗手間",j:"sai2 sau2 gaan1",e:"the bathroom"},
       distractors:[{c:"地鐵站",j:"dei6 tit3 zaam6",e:"the MTR station"},{c:"酒店",j:"zau2 dim3",e:"the hotel"},{c:"出口",j:"ceot1 hau2",e:"the exit"}],
-      topics:["directions","transport","hotels","attractions"] }},
+      topics:["directions","transport","hotels","attractions"] }]},
   { label:"How much?",               structure:"gei2 cin2?",
     note:"Works alone or after pointing at something. Add ni1 go3 (this one) for clarity.",
     examples:[{c:"幾錢？",j:"gei2 cin2?",e:"How much?"},{c:"呢個幾錢？",j:"ni1 go3 gei2 cin2?",e:"How much is this one?"},{c:"大概幾錢？",j:"daai6 koi3 gei2 cin2?",e:"Approximately how much?"}]},
@@ -184,10 +184,10 @@ const PATTERNS = [
   { label:"Very…",                   structure:"hou2 + [adjective]",
     note:"hou2 intensifies any adjective. Stack it for extra emphasis — hou2 hou2 means 'very very good'.",
     examples:[{c:"好熱",j:"hou2 jit6",e:"Very hot"},{c:"好味",j:"hou2 mei6",e:"Very delicious"},{c:"好貴",j:"hou2 gwai3",e:"Very expensive"},{c:"好好",j:"hou2 hou2",e:"Very good"}],
-    drill:{ frameC:"好 ▢", frameJ:"hou2 ▢", english:"Very hot", frameE:"Very…",
+    drills:[{ frameC:"好 ▢", frameJ:"hou2 ▢", english:"Very hot", frameE:"Very…",
       answer:{c:"熱",j:"jit6",e:"hot"},
       distractors:[{c:"凍",j:"dung3",e:"cold"},{c:"貴",j:"gwai3",e:"expensive"},{c:"攰",j:"gui6",e:"tired"}],
-      topics:["weather","feelings","shopping","food"] }},
+      topics:["weather","feelings","shopping","food"] }]},
   { label:"Not / Don't…",            structure:"m4 + [verb or adjective]",
     note:"m4 is the general negation particle. Place it directly before the verb or adjective.",
     examples:[{c:"我唔明",j:"ngo5 m4 ming4",e:"I don't understand"},{c:"唔貴",j:"m4 gwai3",e:"Not expensive"},{c:"我唔要",j:"ngo5 m4 jiu3",e:"I don't want it"},{c:"唔係",j:"m4 hai6",e:"That's not right"}]},
@@ -200,17 +200,17 @@ const PATTERNS = [
   { label:"I feel…",                 structure:"ngo5 gok3 dak1 + [adjective]",
     note:"Use this to describe how you're feeling physically or emotionally.",
     examples:[{c:"我覺得好攰",j:"ngo5 gok3 dak1 hou2 gui6",e:"I feel very tired"},{c:"我覺得好凍",j:"ngo5 gok3 dak1 hou2 dung3",e:"I feel very cold"},{c:"我覺得唔舒服",j:"ngo5 gok3 dak1 m4 syu1 fuk6",e:"I feel unwell"}],
-    drill:{ frameC:"我覺得 ▢", frameJ:"ngo5 gok3 dak1 ▢", english:"I feel very tired", frameE:"I feel…",
+    drills:[{ frameC:"我覺得 ▢", frameJ:"ngo5 gok3 dak1 ▢", english:"I feel very tired", frameE:"I feel…",
       answer:{c:"好攰",j:"hou2 gui6",e:"very tired"},
       distractors:[{c:"好凍",j:"hou2 dung3",e:"very cold"},{c:"開心",j:"hoi1 sam1",e:"happy"},{c:"肚餓",j:"tou5 ngo6",e:"hungry"}],
-      topics:["feelings","body","weather"] }},
+      topics:["feelings","body","weather"] }]},
   { label:"Going to…",               structure:"heoi3 + [place]",
     note:"Simple and direct. Works for saying where you're going or asking where to go.",
     examples:[{c:"去中環",j:"heoi3 zung1 waan4",e:"Going to Central"},{c:"去邊度？",j:"heoi3 bin1 dou6?",e:"Where are you going?"},{c:"我去超市",j:"ngo5 heoi3 ciu1 si5",e:"I'm going to the supermarket"}],
-    drill:{ frameC:"去 ▢", frameJ:"heoi3 ▢", english:"Going to Central", frameE:"Going to…",
+    drills:[{ frameC:"去 ▢", frameJ:"heoi3 ▢", english:"Going to Central", frameE:"Going to…",
       answer:{c:"中環",j:"zung1 waan4",e:"Central"},
       distractors:[{c:"超市",j:"ciu1 si5",e:"the supermarket"},{c:"酒店",j:"zau2 dim3",e:"the hotel"},{c:"學校",j:"hok6 haau6",e:"school"}],
-      topics:["transport","directions","attractions","shopping"] }},
+      topics:["transport","directions","attractions","shopping"] }]},
   { label:"See you at / on…",        structure:"[time] + gin3",
     note:"Put any time word before gin3 to arrange when to meet.",
     examples:[{c:"聽日見",j:"ting1 jat6 gin3",e:"See you tomorrow"},{c:"朝早見",j:"ziu1 zou2 gin3",e:"See you in the morning"},{c:"星期六見",j:"sing1 kei4 luk6 gin3",e:"See you Saturday"}]},
@@ -220,10 +220,10 @@ const PATTERNS = [
   { label:"Too…!",                   structure:"taai3 + [adjective] + laa3",
     note:"Express that something is excessive. laa3 adds a sense of finality or mild complaint.",
     examples:[{c:"太貴喇",j:"taai3 gwai3 laa3",e:"Too expensive!"},{c:"太熱喇",j:"taai3 jit6 laa3",e:"Too hot!"},{c:"太多喇",j:"taai3 do1 laa3",e:"Too much!"}],
-    drill:{ frameC:"太 ▢ 喇", frameJ:"taai3 ▢ laa3", english:"Too expensive!", frameE:"Too…!",
+    drills:[{ frameC:"太 ▢ 喇", frameJ:"taai3 ▢ laa3", english:"Too expensive!", frameE:"Too…!",
       answer:{c:"貴",j:"gwai3",e:"expensive"},
       distractors:[{c:"熱",j:"jit6",e:"hot"},{c:"多",j:"do1",e:"much"},{c:"遠",j:"jyun5",e:"far"}],
-      topics:["shopping","weather","food","directions"] }},
+      topics:["shopping","weather","food","directions"] }]},
   { label:"Can I / May I…?",         structure:"ho2 m4 ho2 ji5 + [verb]?",
     note:"A polite way to ask permission — more formal than dak1 m4 dak1.",
     examples:[{c:"可唔可以講慢啲？",j:"ho2 m4 ho2 ji5 gong2 maan6 di1?",e:"Can you speak more slowly?"},{c:"可唔可以睇吓？",j:"ho2 m4 ho2 ji5 tai2 haa5?",e:"Can I take a look?"},{c:"可唔可以等我？",j:"ho2 m4 ho2 ji5 dang2 ngo5?",e:"Can you wait for me?"}]},
@@ -236,20 +236,20 @@ const PATTERNS = [
   { label:"There's also… / And also…",structure:"zung6 jau5 + [noun/verb]",
     note:"Use to add something on top of what's already been said — great for ordering.",
     examples:[{c:"仲有茶",j:"zung6 jau5 caa4",e:"And also tea"},{c:"仲有一個",j:"zung6 jau5 jat1 go3",e:"One more"},{c:"仲有咩嘢？",j:"zung6 jau5 mat1 je5?",e:"What else is there?"}],
-    drill:{ frameC:"仲有 ▢", frameJ:"zung6 jau5 ▢", english:"There's also tea", frameE:"There's also…",
+    drills:[{ frameC:"仲有 ▢", frameJ:"zung6 jau5 ▢", english:"There's also tea", frameE:"There's also…",
       answer:{c:"茶",j:"caa4",e:"tea"},
       distractors:[{c:"一個",j:"jat1 go3",e:"one more"},{c:"時間",j:"si4 gaan3",e:"time"},{c:"問題",j:"man6 tai4",e:"a question"}],
-      topics:["restaurant","food","shopping"] }},
+      topics:["restaurant","food","shopping"] }]},
   { label:"A bit more / less…",      structure:"[adjective] + di1",
     note:"Adding di1 after an adjective softens it — useful for polite requests.",
     examples:[{c:"慢啲",j:"maan6 di1",e:"A bit slower"},{c:"平啲",j:"peng4 di1",e:"A bit cheaper"},{c:"多啲",j:"do1 di1",e:"A bit more"},{c:"少啲",j:"siu2 di1",e:"A bit less"}]},
   { label:"I like…",                 structure:"ngo5 zung1 ji3 + [noun/verb]",
     note:"Express preferences for things, food, activities or people.",
     examples:[{c:"我鍾意食",j:"ngo5 zung1 ji3 sik6",e:"I like eating"},{c:"我鍾意茶",j:"ngo5 zung1 ji3 caa4",e:"I like tea"},{c:"我鍾意呢個",j:"ngo5 zung1 ji3 ni1 go3",e:"I like this one"}],
-    drill:{ frameC:"我鍾意 ▢", frameJ:"ngo5 zung1 ji3 ▢", english:"I like tea", frameE:"I like…",
+    drills:[{ frameC:"我鍾意 ▢", frameJ:"ngo5 zung1 ji3 ▢", english:"I like tea", frameE:"I like…",
       answer:{c:"茶",j:"caa4",e:"tea"},
       distractors:[{c:"跑步",j:"paau2 bou6",e:"running"},{c:"音樂",j:"jam1 ngok6",e:"music"},{c:"狗",j:"gau2",e:"dogs"}],
-      topics:["food","hobbies","sports","animals"] }},
+      topics:["food","hobbies","sports","animals"] }]},
   { label:"Give [someone] [something]",structure:"bei2 + [thing] + [person]",
     note:"bei2 means 'give' or 'let'. The person receiving comes at the end — opposite to English.",
     examples:[{c:"俾我",j:"bei2 ngo5",e:"Give me / let me"},{c:"俾佢睇",j:"bei2 keoi5 tai2",e:"Let him see it"},{c:"我俾你",j:"ngo5 bei2 nei5",e:"I'll give you"}]},
@@ -277,6 +277,78 @@ const PATTERNS = [
   { label:"Wait a moment / Wait for…",structure:"dang2 + [person/time]",
     note:"dang2 means 'wait'. Use alone for 'wait a moment' or add who/how long to wait.",
     examples:[{c:"等我",j:"dang2 ngo5",e:"Wait for me"},{c:"等吓",j:"dang2 haa5",e:"Wait a moment"},{c:"等一陣",j:"dang2 jat1 zan6",e:"Wait a little while"}]},
+  // ── Stage 5 — Greetings ──
+  { label:"Greet, then speak",        structure:"[greeting] + [your sentence]",
+    note:"Cantonese conversations open with a greeting before getting to the point. Lead with a greeting, then say what you came to say.",
+    examples:[{c:"你好！我叫William。",j:"nei5 hou2! ngo5 giu3 William.",e:"Hello! My name is William."},{c:"早晨！食咗飯未？",j:"zou2 san4! sik6 zo2 faan6 mei6?",e:"Good morning! Have you eaten yet?"},{c:"你好！好耐冇見。",j:"nei5 hou2! hou2 noi6 mou5 gin3.",e:"Hi! Long time no see."}],
+    drills:[{ frameC:"▢！我叫William。", frameJ:"▢! ngo5 giu3 William.", english:"Hello! My name is William.", frameE:"…! My name is William.",
+      answer:{c:"你好",j:"nei5 hou2",e:"Hello"},
+      distractors:[{c:"再見",j:"zoi3 gin3",e:"Goodbye"},{c:"對唔住",j:"deoi3 m4 zyu6",e:"Sorry"},{c:"多謝",j:"do1 ze6",e:"Thank you"}],
+      topics:["greetings"] }]},
+  { label:"Match the time of day",    structure:"zou2 san4 / maan5 soeng6 hou2 + …",
+    note:"Cantonese greetings change with the time of day — 早晨 in the morning, 晚上好 in the evening. Pick the one that fits.",
+    examples:[{c:"早晨！瞓得好嗎？",j:"zou2 san4! fan3 dak1 hou2 maa3?",e:"Good morning! Did you sleep well?"},{c:"晚上好！食咗飯未？",j:"maan5 soeng6 hou2! sik6 zo2 faan6 mei6?",e:"Good evening! Have you eaten?"},{c:"早晨！今日返工呀？",j:"zou2 san4! gam1 jat6 faan1 gung1 aa3?",e:"Morning! Heading to work today?"}],
+    drills:[{ frameC:"▢！瞓得好嗎？", frameJ:"▢! fan3 dak1 hou2 maa3?", english:"Good morning! Did you sleep well?", frameE:"…! Did you sleep well?",
+      answer:{c:"早晨",j:"zou2 san4",e:"Good morning"},
+      distractors:[{c:"晚上好",j:"maan5 soeng6 hou2",e:"Good evening"},{c:"再見",j:"zoi3 gin3",e:"Goodbye"},{c:"多謝",j:"do1 ze6",e:"Thank you"}],
+      topics:["greetings"] }]},
+  { label:"Apologise",                structure:"deoi3 m4 zyu6 + [reason]",
+    note:"對唔住 means 'sorry'. Lead with it, then explain — just like in English.",
+    examples:[{c:"對唔住，我遲到。",j:"deoi3 m4 zyu6, ngo5 ci4 dou3.",e:"Sorry, I'm late."},{c:"對唔住，我唔知。",j:"deoi3 m4 zyu6, ngo5 m4 zi1.",e:"Sorry, I didn't know."},{c:"對唔住，唔該借過。",j:"deoi3 m4 zyu6, m4 goi1 ze3 gwo3.",e:"Sorry — excuse me, let me through."}],
+    drills:[{ frameC:"▢，我遲到。", frameJ:"▢, ngo5 ci4 dou3.", english:"Sorry, I'm late.", frameE:"…, I'm late.",
+      answer:{c:"對唔住",j:"deoi3 m4 zyu6",e:"Sorry"},
+      distractors:[{c:"多謝",j:"do1 ze6",e:"Thank you"},{c:"你好",j:"nei5 hou2",e:"Hello"},{c:"早晨",j:"zou2 san4",e:"Good morning"}],
+      topics:["greetings"] }]},
+  { label:"Respond to thanks",        structure:"m4 gan2 jiu3 (reply when thanked)",
+    note:"When someone says 多謝, the natural reply is 唔緊要 — 'it's nothing / you're welcome'.",
+    examples:[{c:"唔緊要，小事啦。",j:"m4 gan2 jiu3, siu2 si6 laa1.",e:"You're welcome, it's nothing."},{c:"唔緊要，唔使客氣。",j:"m4 gan2 jiu3, m4 sai2 haak3 hei3.",e:"You're welcome, no need to be formal."},{c:"多謝！— 唔緊要。",j:"do1 ze6! — m4 gan2 jiu3.",e:"Thank you! — You're welcome."}],
+    drills:[{ frameC:"多謝！— ▢。", frameJ:"do1 ze6! — ▢.", english:"Thank you! — You're welcome.", frameE:"Thank you! — …",
+      answer:{c:"唔緊要",j:"m4 gan2 jiu3",e:"You're welcome"},
+      distractors:[{c:"對唔住",j:"deoi3 m4 zyu6",e:"Sorry"},{c:"早晨",j:"zou2 san4",e:"Good morning"},{c:"再見",j:"zoi3 gin3",e:"Goodbye"}],
+      topics:["greetings"] }]},
+  { label:"Close a conversation",     structure:"… + zoi3 gin3",
+    note:"再見 ends a conversation. It often follows a thank-you — 多謝，再見!",
+    examples:[{c:"多謝，再見！",j:"do1 ze6, zoi3 gin3!",e:"Thank you, goodbye!"},{c:"聽日見，再見！",j:"ting1 jat6 gin3, zoi3 gin3!",e:"See you tomorrow, bye!"},{c:"好啦，再見！",j:"hou2 laa1, zoi3 gin3!",e:"Alright, goodbye!"}],
+    drills:[{ frameC:"多謝，▢！", frameJ:"do1 ze6, ▢!", english:"Thank you, goodbye!", frameE:"Thank you, …!",
+      answer:{c:"再見",j:"zoi3 gin3",e:"Goodbye"},
+      distractors:[{c:"你好",j:"nei5 hou2",e:"Hello"},{c:"早晨",j:"zou2 san4",e:"Good morning"},{c:"係",j:"hai6",e:"Yes"}],
+      topics:["greetings"] }]},
+  // ── Stage 5 — Yes/No & Politeness ──
+  { label:"Answer yes or no",         structure:"hai6 / m4 hai6",
+    note:"Cantonese has no single word for 'yes'. Reply with 係 (it is) or 唔係 (it isn't) to a 係-question.",
+    examples:[{c:"係，我係學生。",j:"hai6, ngo5 hai6 hok6 saang1.",e:"Yes, I'm a student."},{c:"唔係，唔係我。",j:"m4 hai6, m4 hai6 ngo5.",e:"No, it's not me."},{c:"係呀，係呢個。",j:"hai6 aa3, hai6 ni1 go3.",e:"Yes, it's this one."}],
+    drills:[{ frameC:"佢係唔係學生？— ▢。", frameJ:"keoi5 hai6 m4 hai6 hok6 saang1? — ▢.", english:"Is he a student? — Yes.", frameE:"Is he a student? — …",
+      answer:{c:"係",j:"hai6",e:"Yes"},
+      distractors:[{c:"唔該",j:"m4 goi1",e:"Please"},{c:"請",j:"cing2",e:"Please (formal)"},{c:"歡迎",j:"fun1 jing4",e:"Welcome"}],
+      topics:["yesno"] }]},
+  { label:"Say if it's OK",           structure:"dak1 / m4 dak1",
+    note:"得 means 'OK / can do', 唔得 means 'no / can't'. A single word answers a 得唔得 question.",
+    examples:[{c:"得，冇問題。",j:"dak1, mou5 man6 tai4.",e:"OK, no problem."},{c:"唔得，太遲喇。",j:"m4 dak1, taai3 ci4 laa3.",e:"No, it's too late."},{c:"得喇，走啦。",j:"dak1 laa3, zau2 laa1.",e:"OK then, let's go."}],
+    drills:[{ frameC:"而家去得唔得？— ▢。", frameJ:"ji4 gaa1 heoi3 dak1 m4 dak1? — ▢.", english:"Can we go now? — Sure.", frameE:"Can we go now? — …",
+      answer:{c:"得",j:"dak1",e:"OK / can do"},
+      distractors:[{c:"唔得",j:"m4 dak1",e:"Can't"},{c:"唔該",j:"m4 goi1",e:"Please"},{c:"歡迎",j:"fun1 jing4",e:"Welcome"}],
+      topics:["yesno"] }]},
+  { label:"Get attention politely",   structure:"m4 goi1 + [request]",
+    note:"唔該 is the everyday 'excuse me / please' — use it to get attention or ask for service. (多謝 is for thanking someone for a gift.)",
+    examples:[{c:"唔該，借過。",j:"m4 goi1, ze3 gwo3.",e:"Excuse me, let me through."},{c:"唔該埋單。",j:"m4 goi1 maai4 daan1.",e:"Bill, please."},{c:"唔該，幫我。",j:"m4 goi1, bong1 ngo5.",e:"Excuse me, please help me."}],
+    drills:[{ frameC:"▢，借過。", frameJ:"▢, ze3 gwo3.", english:"Excuse me, let me through.", frameE:"…, let me through.",
+      answer:{c:"唔該",j:"m4 goi1",e:"Excuse me / please"},
+      distractors:[{c:"多謝",j:"do1 ze6",e:"Thank you"},{c:"請",j:"cing2",e:"Please (formal)"},{c:"歡迎",j:"fun1 jing4",e:"Welcome"}],
+      topics:["yesno"] }]},
+  { label:"Welcome someone",          structure:"fun1 jing4 + …",
+    note:"歡迎 means 'welcome'. Shops greet customers with the set phrase 歡迎光臨 — 'welcome to our shop'.",
+    examples:[{c:"歡迎光臨！",j:"fun1 jing4 gwong1 lam4!",e:"Welcome (to our shop)!"},{c:"歡迎你嚟。",j:"fun1 jing4 nei5 lai4.",e:"Welcome, glad you came."},{c:"歡迎，請坐。",j:"fun1 jing4, cing2 co5.",e:"Welcome, please sit."}],
+    drills:[{ frameC:"▢光臨！", frameJ:"▢ gwong1 lam4!", english:"Welcome (to our shop)!", frameE:"… (to our shop)!",
+      answer:{c:"歡迎",j:"fun1 jing4",e:"Welcome"},
+      distractors:[{c:"多謝",j:"do1 ze6",e:"Thank you"},{c:"請",j:"cing2",e:"Please (formal)"},{c:"係",j:"hai6",e:"Yes"}],
+      topics:["yesno"] }]},
+  { label:"Invite politely",          structure:"cing2 + [verb]",
+    note:"請 is the formal 'please', placed before a verb — 請坐 (please sit), 請講 (please speak). More formal than 唔該.",
+    examples:[{c:"請坐。",j:"cing2 co5.",e:"Please sit down."},{c:"請講。",j:"cing2 gong2.",e:"Please go ahead (speak)."},{c:"請等一陣。",j:"cing2 dang2 jat1 zan6.",e:"Please wait a moment."}],
+    drills:[{ frameC:"▢坐。", frameJ:"▢ co5.", english:"Please sit down.", frameE:"… sit down.",
+      answer:{c:"請",j:"cing2",e:"Please (formal)"},
+      distractors:[{c:"歡迎",j:"fun1 jing4",e:"Welcome"},{c:"係",j:"hai6",e:"Yes"},{c:"得",j:"dak1",e:"OK"}],
+      topics:["yesno"] }]},
 ];
 // ── Audio ─────────────────────────────────────────────────────────────────────
 let _voices = null;
@@ -632,39 +704,60 @@ function advanceWordReview() {
 
 // ── Pattern Drill session ─────────────────────────────────────────────────────
 // A drill quizzes sentence patterns: a pattern frame with one slot blanked, the
-// learner picks the vocab that fills it. One question per pattern. Only patterns
-// that carry a `drill` object are included. Built on renderQuizCore, same as the
+// learner picks the vocab that fills it. Built on renderQuizCore, same as the
 // quiz and Word Review.
 //
+// MULTI-DRILL MODEL: a pattern carries a `drills` array — one frame, but several
+// topic-scoped fill-in instances, each with its own answer/distractors/topics.
+// This keeps every drill's answer + distractors genuinely the tagged topic's own
+// vocabulary while still letting one grammatical frame serve many topics.
+// A pattern without a `drills` array (or an empty one) is reference-only.
+//
 // state.patternDrill shape (null when not in a drill):
-//   { queue: [pattern,…], idx, selected (choice index|null), done,
-//     score, choices: [option,…] }
-// A drill option is a plain { c, j, e } word object; the answer object is
-// pattern.drill.answer, the distractors are pattern.drill.distractors.
+//   { queue: [{pattern, drill},…], idx, selected (choice index|null), done,
+//     score, topicKey, choices: [option,…] }
+// Each queue entry pairs the parent pattern (for its label/structure) with the
+// specific drill being asked. A drill option is a plain { c, j, e } word object;
+// the answer object is drill.answer, the distractors are drill.distractors.
 
-// Build the 4 shuffled choices for one drill pattern: the answer + its 3 distractors.
-function buildDrillChoices(pattern) {
-  const d = pattern.drill;
-  return shuffle([d.answer, ...d.distractors]);
+// Build the 4 shuffled choices for one drill: the answer + its 3 distractors.
+function buildDrillChoices(drill) {
+  return shuffle([drill.answer, ...drill.distractors]);
 }
 
-// Patterns relevant to a topic = those whose drill.topics array includes the
-// topic key. Single source of truth for "which patterns belong to this topic" —
-// used by the Learn-tab patterns section and the topic-scoped drill.
+// Every drill tagged to a topic, as {pattern, drill} pairs. A pattern may
+// contribute more than one drill if multiple of its drills tag the topic.
+// Single source of truth for "what does this topic drill" — used by the
+// Learn-tab patterns section and the topic-scoped drill.
+function getTopicDrills(topicKey) {
+  const out = [];
+  for (const p of PATTERNS) {
+    if (!Array.isArray(p.drills)) continue;
+    for (const dr of p.drills) {
+      if (Array.isArray(dr.topics) && dr.topics.includes(topicKey)) {
+        out.push({ pattern: p, drill: dr });
+      }
+    }
+  }
+  return out;
+}
+
+// Distinct patterns that have at least one drill tagged to the topic.
+// Kept for callers that need patterns rather than drills (e.g. future stages).
 function getTopicPatterns(topicKey) {
-  return PATTERNS.filter(p => p.drill && Array.isArray(p.drill.topics)
-    && p.drill.topics.includes(topicKey));
+  return [...new Set(getTopicDrills(topicKey).map(x => x.pattern))];
 }
 
 // Start a pattern drill session.
-//  - No argument  → drills every pattern that has a drill object (legacy / library).
-//  - topicKey     → drills only that topic's patterns (the Learn-tab drill).
+//  - No argument  → drills every drillable pattern, one drill each (legacy / library).
+//  - topicKey     → drills only that topic's drills (the Learn-tab drill).
 // state.patternDrill.topicKey records the scope (null = all) so the drill view
 // can show "← <Topic>" and return there.
 function startPatternDrill(topicKey) {
   const drillable = topicKey
-    ? getTopicPatterns(topicKey)
-    : PATTERNS.filter(p => p.drill);
+    ? getTopicDrills(topicKey)
+    : PATTERNS.filter(p => Array.isArray(p.drills) && p.drills.length)
+        .map(p => ({ pattern: p, drill: p.drills[0] }));
   if (!drillable.length) { state.patternDrill = null; render(); return; }
   const queue = shuffle(drillable);
   state.patternDrill = {
@@ -674,7 +767,7 @@ function startPatternDrill(topicKey) {
     done: false,
     score: 0,
     topicKey: topicKey || null,
-    choices: buildDrillChoices(queue[0]),
+    choices: buildDrillChoices(queue[0].drill),
   };
   // A drill session is one "screen" for the back button — entering it pushes a
   // history entry, so phone BACK (and the on-screen exit) leaves the session.
@@ -694,7 +787,7 @@ function advancePatternDrill() {
   }
   pd.idx = next;
   pd.selected = null;
-  pd.choices = buildDrillChoices(pd.queue[next]);
+  pd.choices = buildDrillChoices(pd.queue[next].drill);
   render();
 }
 
