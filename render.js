@@ -125,9 +125,10 @@ function renderPatternBrowse() {
 }
 
 // The drill — landing screen, active question, or done summary.
+// Used by the Patterns page's Drill tab. The topic-scoped drill uses
+// renderTopicDrillView, which shares renderDrillBody for the question/done parts.
 function renderPatternDrill(drillCount) {
   const pd = state.patternDrill;
-  const color = '#8B3A4E';   // drill uses the brand cinnabar, like Word Review
 
   // --- Landing (no active session) ---
   if (!pd) {
@@ -142,6 +143,13 @@ function renderPatternDrill(drillCount) {
         <button class="review-start-btn" id="drill-start">Start drill</button>
       </div>`;
   }
+  return renderDrillBody(pd);
+}
+
+// Shared drill body — the done-summary or the active question. Caller-agnostic:
+// works for the Patterns-page drill and the topic-scoped drill alike.
+function renderDrillBody(pd) {
+  const color = '#8B3A4E';   // drill uses the brand cinnabar, like Word Review
 
   // --- Done summary ---
   if (pd.done) {
@@ -165,9 +173,6 @@ function renderPatternDrill(drillCount) {
   const d = pattern.drill;
   const answered = pd.selected !== null && pd.selected !== undefined;
 
-  // Shared quiz UI for the choices, progress bar, wrong panel. The prompt card
-  // is drill-specific (a sentence frame with a blank), so we pass direction
-  // 'en-zh'-style choices but build our own prompt below.
   const core = renderQuizCore({
     word:       d.answer,
     choices:    pd.choices,
@@ -177,16 +182,13 @@ function renderPatternDrill(drillCount) {
     idx:        pd.idx,
     total:      pd.queue.length,
     ariaLabel:  'Pattern drill',
-    dirAttr:    'data-drill-dir-unused',   // drill has no direction toggle (see below)
+    dirAttr:    'data-drill-dir-unused',   // drill has no direction toggle
     choiceAttr: 'data-drill-choice',
     listenId:   'drill-listen',
     replayId:   'drill-replay',
     nextId:     'drill-next',
   });
 
-  // Drill-specific prompt card: the English target sentence (the anchor that
-  // makes exactly one answer correct), then the pattern frame with the slot.
-  // Before answering, the blank is empty; after, it's filled with the chosen word.
   const chosenWord = answered ? pd.choices[pd.selected] : null;
   const slotZh = answered
     ? `<span class="drill-slot ${chosenWord===d.answer?'correct':'wrong'}">${chosenWord.c}</span>`
@@ -214,6 +216,21 @@ function renderPatternDrill(drillCount) {
     ${promptCard}
     ${core.choiceGrid}
     ${core.answerPanel}`;
+}
+
+// The topic-scoped drill as its own full-screen view, with a "← <Topic>" header
+// that returns to the topic. Reuses renderDrillBody for the question/done parts.
+function renderTopicDrillView(topicColor) {
+  const pd = state.patternDrill;
+  if (!pd) return '';
+  const color = topicColor || '#8B3A4E';
+  const topicLabel = (lessonShape(pd.topicKey) || {}).label || 'Topic';
+  return `
+    <button class="back-home-btn" id="topic-drill-back">
+      <span class="icon-label">${icon('arrowLeft',15)} ${topicLabel}</span>
+    </button>
+    <div class="topic-drill-heading">🔨 Pattern drill</div>
+    ${renderDrillBody(pd)}`;
 }
 
 function renderTranslate() {
@@ -729,7 +746,12 @@ function render() {
   const color  = lesson ? lesson.color : null;
 
   let mainContent = '';
-  if (state.nav === 'topics') {
+  // A topic-scoped pattern drill takes over the screen regardless of nav — it's
+  // launched from a topic's Learn tab and is its own focused view. (The Patterns
+  // page's own Browse/Drill drill is handled inside renderPatterns as before.)
+  if (state.patternDrill && state.patternDrill.topicKey) {
+    mainContent = `<div class="content">${renderTopicDrillView(color)}</div>`;
+  } else if (state.nav === 'topics') {
     if (state.homeView) {
       mainContent = `
         ${renderVoiceBanner()}
@@ -1008,7 +1030,7 @@ function renderLessonHeader(lesson, color) {
     <div class="subtabs">
       <button class="subtab-btn${wordsActive?' active':''}" id="tab-words"
         style="${wordsActive?'background:'+color:''}">
-        <span class="icon-label">${icon('bookOpen',14)} Words</span>
+        <span class="icon-label">${icon('bookOpen',14)} Learn</span>
       </button>
       <button class="subtab-btn${convoActive?' active':''}" id="tab-convo"
         style="${convoActive?'background:'+color:''}">
@@ -1304,6 +1326,40 @@ function renderSentences(topic, color) {
     </div>`;
 }
 
+// The "Patterns with these words" section shown in the Learn tab, below the
+// vocabulary. Only renders if the topic has associated patterns — a topic with
+// none simply shows nothing here (correct: not every topic is pattern-shaped).
+function renderTopicPatterns(topicKey, color) {
+  const pats = getTopicPatterns(topicKey);
+  if (!pats.length) return '';
+
+  const cards = pats.map(p => {
+    const d = p.drill;
+    // One example: the assembled correct sentence, English hidden until tapped.
+    const exC = d.frameC.replace('▢', d.answer.c);
+    return `
+      <div class="topic-pattern-card" style="border-left-color:${color}">
+        <div class="tp-struct" style="color:${color}">${colorJyutping(p.structure)}</div>
+        <div class="tp-label">${p.label}</div>
+        <div class="tp-example">${exC}</div>
+      </div>`;
+  }).join('');
+
+  // The drill button is shown when the topic has patterns (all topic patterns
+  // here are drillable — they each carry a drill object by definition of getTopicPatterns).
+  const drillBtn = `
+    <button class="topic-drill-btn" id="topic-drill-start" style="background:${color}">
+      <span class="icon-label">${icon('quiz',15)} Drill ${pats.length} pattern${pats.length===1?'':'s'}</span>
+    </button>`;
+
+  return `
+    <div class="topic-patterns">
+      <h3>🔨 Patterns with these words</h3>
+      ${cards}
+      ${drillBtn}
+    </div>`;
+}
+
 function renderStudy(lesson, color) {
   const words = getRoundWords(state.topic, state.currentRound);
   const cards = words.map((w, i) => {
@@ -1354,7 +1410,7 @@ function renderStudy(lesson, color) {
         : '';
     })()}
     <div class="word-grid">${cards}</div>
-    ${renderSentences(state.topic, color)}
+    ${renderTopicPatterns(state.topic, color)}
     <div class="tone-guide">
       <h3>📖 Jyutping Tone Guide</h3>
       <div class="tone-grid">${toneRows}</div>
@@ -1630,13 +1686,29 @@ function attachEvents(lesson, color) {
   const ptDrill = document.getElementById('patterns-tab-drill');
   if (ptDrill) ptDrill.addEventListener('click', () => { state.patternsTab = 'drill'; render(); });
 
-  // Landing: start a drill
+  // Landing: start a drill (Patterns-page drill — all drillable patterns)
   const drillStart = document.getElementById('drill-start');
   if (drillStart) drillStart.addEventListener('click', () => startPatternDrill());
 
-  // Done screen: drill again, or exit
+  // Topic Learn-tab: "Drill N patterns" — scoped to the current topic
+  const topicDrillStart = document.getElementById('topic-drill-start');
+  if (topicDrillStart) topicDrillStart.addEventListener('click', () => startPatternDrill(state.topic));
+
+  // Topic drill view: back to the topic (routed through history, like other backs)
+  const topicDrillBack = document.getElementById('topic-drill-back');
+  if (topicDrillBack) topicDrillBack.addEventListener('click', () => {
+    if (_navReady) { history.back(); return; }
+    state.patternDrill = null;
+    render();
+  });
+
+  // Done screen: drill again (re-run the SAME scope), or exit
   const drillAgain = document.getElementById('drill-again');
-  if (drillAgain) drillAgain.addEventListener('click', () => startPatternDrill());
+  if (drillAgain) drillAgain.addEventListener('click', () => {
+    // Preserve topic scope: a topic drill re-drills that topic, not all patterns.
+    const scope = state.patternDrill && state.patternDrill.topicKey;
+    startPatternDrill(scope || undefined);
+  });
   const drillExit = document.getElementById('drill-exit');
   if (drillExit) drillExit.addEventListener('click', () => {
     // history.back() pops the drill-session entry; popstate clears state.patternDrill.

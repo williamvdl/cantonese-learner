@@ -647,10 +647,23 @@ function buildDrillChoices(pattern) {
   return shuffle([d.answer, ...d.distractors]);
 }
 
-// Start a pattern drill session. Queues every pattern that has a drill object,
-// in shuffled order, one question each.
-function startPatternDrill() {
-  const drillable = PATTERNS.filter(p => p.drill);
+// Patterns relevant to a topic = those whose drill.topics array includes the
+// topic key. Single source of truth for "which patterns belong to this topic" —
+// used by the Learn-tab patterns section and the topic-scoped drill.
+function getTopicPatterns(topicKey) {
+  return PATTERNS.filter(p => p.drill && Array.isArray(p.drill.topics)
+    && p.drill.topics.includes(topicKey));
+}
+
+// Start a pattern drill session.
+//  - No argument  → drills every pattern that has a drill object (legacy / library).
+//  - topicKey     → drills only that topic's patterns (the Learn-tab drill).
+// state.patternDrill.topicKey records the scope (null = all) so the drill view
+// can show "← <Topic>" and return there.
+function startPatternDrill(topicKey) {
+  const drillable = topicKey
+    ? getTopicPatterns(topicKey)
+    : PATTERNS.filter(p => p.drill);
   if (!drillable.length) { state.patternDrill = null; render(); return; }
   const queue = shuffle(drillable);
   state.patternDrill = {
@@ -659,6 +672,7 @@ function startPatternDrill() {
     selected: null,
     done: false,
     score: 0,
+    topicKey: topicKey || null,
     choices: buildDrillChoices(queue[0]),
   };
   // A drill session is one "screen" for the back button — entering it pushes a
