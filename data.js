@@ -56,6 +56,9 @@ const store = {
   categoryList:    null,   // [ {key, label, icon} ]
   topicCategories: null,   // { greetings: 'everyday', ... }
   paths:           null,   // [ {key, label, ..., lessons} ]
+  patterns:        [],     // [ {label, structure, note, examples, drills?} ] — see patterns.json.
+                           // Defaults to [] (not null) so any render before loadPatterns()
+                           // resolves yields an empty list rather than throwing.
   topicCache:      {},     // { greetings: {meta, rounds}, ... }
 
   // Index lookups — synchronous after init
@@ -104,6 +107,10 @@ const store = {
   async loadPaths() {
     const r = await fetch('./data/learning_paths.json');
     this.paths = (await r.json()).paths;
+  },
+  async loadPatterns() {
+    const r = await fetch('./data/patterns.json');
+    this.patterns = (await r.json()).patterns;
   },
 
   // Topic loader (cached) — returns the cached topic object

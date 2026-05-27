@@ -59,7 +59,7 @@ function renderDrawer() {
 
 function renderPatterns() {
   const tab = state.patternsTab || 'browse';
-  const drillCount = PATTERNS.filter(p => Array.isArray(p.drills) && p.drills.length).length;
+  const drillCount = store.patterns.filter(p => Array.isArray(p.drills) && p.drills.length).length;
 
   // Browse / Drill segmented control (same component family as topic subtabs).
   const tabs = `
@@ -80,7 +80,7 @@ function renderPatterns() {
 
   return `
     <div class="patterns-wrap">
-      ${renderPageHeader('🔨', 'Sentence Patterns', `${PATTERNS.length} building blocks`)}
+      ${renderPageHeader('🔨', 'Sentence Patterns', `${store.patterns.length} building blocks`)}
       ${tabs}
       ${body}
     </div>`;
@@ -88,7 +88,7 @@ function renderPatterns() {
 
 // The reference list — browse all patterns and their example sentences.
 function renderPatternBrowse() {
-  const cards = PATTERNS.map((p, pi) => {
+  const cards = store.patterns.map((p, pi) => {
     const examples = p.examples.map((ex, ei) => {
       const key = `p${pi}-e${ei}`;
       const speaking = state.speaking === key;
@@ -111,7 +111,7 @@ function renderPatternBrowse() {
     return `
       <div class="pattern-card">
         <div class="pattern-head">
-          <div class="pattern-number">Pattern ${pi+1} of ${PATTERNS.length}</div>
+          <div class="pattern-number">Pattern ${pi+1} of ${store.patterns.length}</div>
           <div class="pattern-label">${p.label}</div>
           <span class="pattern-structure">${colorJyutping(p.structure)}</span>
         </div>
@@ -2484,6 +2484,7 @@ function attachEvents(lesson, color) {
       store.loadIndex(),
       store.loadCategories(),
       store.loadPaths(),
+      store.loadPatterns(),
     ]);
   } catch (err) {
     console.error('[init] reference data load failed', err);
@@ -2491,7 +2492,7 @@ function attachEvents(lesson, color) {
     return;
   }
 
-  render(); // first paint with index/categories/paths available
+  render(); // first paint with index/categories/paths/patterns available
 
   await refreshReviewBadge();   // populate the Word Review menu count
   render();                     // re-render so the badge shows
