@@ -309,10 +309,10 @@
   .topic-patterns { margin-top: 22px; }
   .topic-patterns h3 { font-size: 15px; margin-bottom: 10px; }
   .topic-pattern-card { background: var(--parchment); border-radius: 12px; border: 1px solid #EFE7D2;
-    border-left: 4px solid var(--brand); padding: 11px 14px; margin-bottom: 8px; }
-  .tp-struct { font-family: monospace; font-size: 11px; font-weight: 700; }
-  .tp-label { font-size: 14px; font-weight: 700; margin: 3px 0 4px; }
-  .tp-example { font-family: 'Noto Serif TC', serif; font-size: 17px; color: var(--ink-soft); }
+    border-left: 4px solid var(--brand); padding: 12px 14px; margin-bottom: 10px; }
+  .tp-struct { font-family: monospace; font-size: 11px; font-weight: 700; margin-bottom: 8px; }
+  .tp-worked { display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; }
+  .tp-card-main { flex: 1; cursor: pointer; }
   .topic-drill-btn { display: block; width: 100%; text-align: center; padding: 12px;
     border-radius: 12px; color: #fff; font-size: 13px; font-weight: 700; border: none;
     margin-top: 6px; cursor: pointer; }

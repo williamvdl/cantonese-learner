@@ -1333,20 +1333,61 @@ function renderTopicPatterns(topicKey, color) {
   const pats = getTopicPatterns(topicKey);
   if (!pats.length) return '';
 
-  const cards = pats.map(p => {
+  const cards = pats.map((p, pi) => {
     const d = p.drill;
-    // One example: the assembled correct sentence, English hidden until tapped.
+    // Worked example: the assembled correct sentence (frame + answer).
     const exC = d.frameC.replace('▢', d.answer.c);
+    const exJ = d.frameJ.replace('▢', d.answer.j);
+    const key = 'tp-' + topicKey + '-' + pi;          // unique per topic+pattern
+    const speaking = state.speaking === key;
+    const revealed = state.patternRevealed[key];
+    const bdOpen   = state.patternBreakdownOpen[key];
+
+    // Two-part breakdown — the pattern frame, then the slotted answer word.
+    // Honest to the data: no per-word authoring needed.
+    const frameOnlyC = d.frameC.replace('▢', '').replace(/\s+/g, ' ').trim();
+    const frameOnlyJ = d.frameJ.replace('▢', '').replace(/\s+/g, ' ').trim();
+    const bdPanel = bdOpen ? `
+      <div class="breakdown-panel" style="margin:8px 0 4px">
+        <div class="breakdown-row">
+          <span class="breakdown-zh">${frameOnlyC}</span>
+          <span class="breakdown-jp">${colorJyutping(frameOnlyJ)}</span>
+          <span class="breakdown-en">${d.frameE}</span>
+        </div>
+        <div class="breakdown-row">
+          <span class="breakdown-zh">${d.answer.c}</span>
+          <span class="breakdown-jp">${colorJyutping(d.answer.j)}</span>
+          <span class="breakdown-en">${d.answer.e}</span>
+        </div>
+      </div>` : '';
+
+    const englishEl = revealed
+      ? `<div class="sentence-english">${d.english}</div>`
+      : `<div class="sentence-eng-hint" style="font-size:11px;color:#aaa;font-style:italic;margin-top:2px;pointer-events:none">tap card to see English</div>`;
+
     return `
       <div class="topic-pattern-card" style="border-left-color:${color}">
-        <div class="tp-struct" style="color:${color}">${colorJyutping(p.structure)}</div>
-        <div class="tp-label">${p.label}</div>
-        <div class="tp-example">${exC}</div>
+        <div class="tp-struct" style="color:${color}">${p.label} · ${colorJyutping(p.structure)}</div>
+        <div class="tp-worked">
+          <div class="tp-card-main" data-pat-card-reveal="${key}">
+            <div class="sentence-chinese">${exC}</div>
+            <div class="sentence-jyutping">${colorJyutping(exJ)}</div>
+            ${englishEl}
+          </div>
+          <button class="sentence-play${speaking ? ' speaking' : ''}" data-pat-card-play="${key}" data-pat-card-c="${exC}"
+            style="border-color:${color};color:${speaking ? THEME.cardInverseText : color};background:${speaking ? color : 'transparent'}"
+            title="Listen to example">
+            ${speaking ? icon('volume',20) : iconPlay(18)}
+          </button>
+        </div>
+        <button class="breakdown-btn" data-pat-card-bd="${key}" style="color:${color};margin-top:6px">
+          ${bdOpen ? '▲ hide breakdown' : '🔍 word breakdown'}
+        </button>
+        ${bdPanel}
       </div>`;
   }).join('');
 
-  // The drill button is shown when the topic has patterns (all topic patterns
-  // here are drillable — they each carry a drill object by definition of getTopicPatterns).
+  // The drill button — all topic patterns here are drillable by definition.
   const drillBtn = `
     <button class="topic-drill-btn" id="topic-drill-start" style="background:${color}">
       <span class="icon-label">${icon('quiz',15)} Drill ${pats.length} pattern${pats.length===1?'':'s'}</span>
@@ -1693,6 +1734,32 @@ function attachEvents(lesson, color) {
   // Topic Learn-tab: "Drill N patterns" — scoped to the current topic
   const topicDrillStart = document.getElementById('topic-drill-start');
   if (topicDrillStart) topicDrillStart.addEventListener('click', () => startPatternDrill(state.topic));
+
+  // Learn-tab pattern cards: reveal English, play example, toggle breakdown
+  document.querySelectorAll('[data-pat-card-reveal]').forEach(el => {
+    el.addEventListener('click', () => {
+      const key = el.dataset.patCardReveal;
+      state.patternRevealed[key] = !state.patternRevealed[key];
+      render();
+    });
+  });
+  document.querySelectorAll('[data-pat-card-play]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const key = btn.dataset.patCardPlay;
+      const chinese = btn.dataset.patCardC;
+      state.speaking = key;
+      render();
+      speak(chinese, () => { state.speaking = null; render(); });
+      setTimeout(() => { if (state.speaking === key) { state.speaking = null; render(); } }, 5000);
+    });
+  });
+  document.querySelectorAll('[data-pat-card-bd]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const key = btn.dataset.patCardBd;
+      state.patternBreakdownOpen[key] = !state.patternBreakdownOpen[key];
+      render();
+    });
+  });
 
   // Topic drill view: back to the topic (routed through history, like other backs)
   const topicDrillBack = document.getElementById('topic-drill-back');
