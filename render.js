@@ -1342,20 +1342,24 @@ function renderTopicPatterns(topicKey, color) {
     const bdOpen   = state.patternBreakdownOpen[key];
 
     // Two-part breakdown — the pattern frame, then the slotted answer word.
-    // Honest to the data: no per-word authoring needed.
+    // Stacked vertically (was 3-column) with small labels so each piece's role
+    // is unambiguous on narrow phone widths. Uses tp-bd-* classes (NOT the
+    // shared .breakdown-* set, which is reused by Quiz/Sentences breakdowns).
     const frameOnlyC = d.frameC.replace('▢', '').replace(/\s+/g, ' ').trim();
     const frameOnlyJ = d.frameJ.replace('▢', '').replace(/\s+/g, ' ').trim();
     const bdPanel = bdOpen ? `
-      <div class="breakdown-panel" style="margin:8px 0 4px">
-        <div class="breakdown-row">
-          <span class="breakdown-zh">${frameOnlyC}</span>
-          <span class="breakdown-jp">${colorJyutping(frameOnlyJ)}</span>
-          <span class="breakdown-en">${d.frameE}</span>
+      <div class="tp-bd-panel">
+        <div class="tp-bd-piece">
+          <div class="tp-bd-label">Frame</div>
+          <div class="tp-bd-zh">${frameOnlyC}</div>
+          <div class="tp-bd-jp">${colorJyutping(frameOnlyJ)}</div>
+          <div class="tp-bd-en">${d.frameE}</div>
         </div>
-        <div class="breakdown-row">
-          <span class="breakdown-zh">${d.answer.c}</span>
-          <span class="breakdown-jp">${colorJyutping(d.answer.j)}</span>
-          <span class="breakdown-en">${d.answer.e}</span>
+        <div class="tp-bd-piece">
+          <div class="tp-bd-label">Fills the blank</div>
+          <div class="tp-bd-zh">${d.answer.c}</div>
+          <div class="tp-bd-jp">${colorJyutping(d.answer.j)}</div>
+          <div class="tp-bd-en">${d.answer.e}</div>
         </div>
       </div>` : '';
 
@@ -1365,23 +1369,29 @@ function renderTopicPatterns(topicKey, color) {
 
     return `
       <div class="topic-pattern-card" style="border-left-color:${color}">
-        <div class="tp-struct" style="color:${color}">${p.label} · ${colorJyutping(p.structure)}</div>
-        <div class="tp-worked">
-          <div class="tp-card-main" data-pat-card-reveal="${key}">
-            <div class="sentence-chinese">${exC}</div>
-            <div class="sentence-jyutping">${colorJyutping(exJ)}</div>
-            ${englishEl}
-          </div>
-          <button class="sentence-play${speaking ? ' speaking' : ''}" data-pat-card-play="${key}" data-pat-card-c="${exC}"
-            style="border-color:${color};color:${speaking ? THEME.cardInverseText : color};background:${speaking ? color : 'transparent'}"
-            title="Listen to example">
-            ${speaking ? icon('volume',20) : iconPlay(18)}
-          </button>
+        <div class="tp-head-band">
+          <div class="tp-head-label" style="color:${color}">${p.label}</div>
+          <div class="tp-head-struct">${colorJyutping(p.structure)}</div>
         </div>
-        <button class="breakdown-btn" data-pat-card-bd="${key}" style="color:${color};margin-top:6px">
-          ${bdOpen ? '▲ hide breakdown' : '🔍 word breakdown'}
-        </button>
-        ${bdPanel}
+        <div class="tp-body">
+          <div class="tp-note">${p.note}</div>
+          <div class="tp-worked">
+            <div class="tp-card-main" data-pat-card-reveal="${key}">
+              <div class="sentence-chinese">${exC}</div>
+              <div class="sentence-jyutping">${colorJyutping(exJ)}</div>
+              ${englishEl}
+            </div>
+            <button class="sentence-play${speaking ? ' speaking' : ''}" data-pat-card-play="${key}" data-pat-card-c="${exC}"
+              style="border-color:${color};color:${speaking ? THEME.cardInverseText : color};background:${speaking ? color : 'transparent'}"
+              title="Listen to example">
+              ${speaking ? icon('volume',20) : iconPlay(18)}
+            </button>
+          </div>
+          <button class="breakdown-btn" data-pat-card-bd="${key}" style="color:${color};margin-top:6px">
+            ${bdOpen ? '▲ hide breakdown' : '🔍 word breakdown'}
+          </button>
+          ${bdPanel}
+        </div>
       </div>`;
   }).join('');
 
