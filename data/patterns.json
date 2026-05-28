@@ -2685,6 +2685,6276 @@
           ]
         }
       ]
+    },
+    {
+      "label": "Today / tomorrow / yesterday",
+      "structure": "gam1 jat6 / ting1 jat6 / kam4 jat6 + …",
+      "note": "The three everyday time anchors: 今日 (gam1 jat6, today), 聽日 (ting1 jat6, tomorrow), 琴日 (kam4 jat6, yesterday). Put one at the start of a sentence to set when.",
+      "examples": [
+        {
+          "c": "今日好熱。",
+          "j": "gam1 jat6 hou2 jit6.",
+          "e": "Today is very hot."
+        },
+        {
+          "c": "聽日見。",
+          "j": "ting1 jat6 gin3.",
+          "e": "See you tomorrow."
+        },
+        {
+          "c": "琴日我返工。",
+          "j": "kam4 jat6 ngo5 faan1 gung1.",
+          "e": "Yesterday I went to work."
+        }
+      ],
+      "drills": [
+        {
+          "frameC": "▢見！",
+          "frameJ": "▢ gin3!",
+          "english": "See you tomorrow!",
+          "frameE": "See you …!",
+          "answer": {
+            "c": "聽日",
+            "j": "ting1 jat6",
+            "e": "tomorrow"
+          },
+          "distractors": [
+            {
+              "c": "今日",
+              "j": "gam1 jat6",
+              "e": "today"
+            },
+            {
+              "c": "琴日",
+              "j": "kam4 jat6",
+              "e": "yesterday"
+            },
+            {
+              "c": "朝早",
+              "j": "ziu1 zou2",
+              "e": "morning"
+            }
+          ],
+          "topics": [
+            "time"
+          ]
+        }
+      ]
+    },
+    {
+      "label": "Days of the week",
+      "structure": "sing1 kei4 + [number]",
+      "note": "Days are built from 星期 (sing1 kei4, week) + a number: 星期一 (sing1 kei4 jat1, Monday) through 星期六 (sing1 kei4 luk6, Saturday). Sunday breaks the pattern — 星期日 (sing1 kei4 jat6).",
+      "examples": [
+        {
+          "c": "星期一返工。",
+          "j": "sing1 kei4 jat1 faan1 gung1.",
+          "e": "Work on Monday."
+        },
+        {
+          "c": "星期六休息。",
+          "j": "sing1 kei4 luk6 jau1 sik1.",
+          "e": "Rest on Saturday."
+        },
+        {
+          "c": "今日星期三。",
+          "j": "gam1 jat6 sing1 kei4 saam1.",
+          "e": "Today is Wednesday."
+        }
+      ],
+      "drills": [
+        {
+          "frameC": "我哋▢去飲茶。",
+          "frameJ": "ngo5 dei6 ▢ heoi3 jam2 caa4.",
+          "english": "We go for dim sum on Sunday.",
+          "frameE": "We go for dim sum on …",
+          "answer": {
+            "c": "星期日",
+            "j": "sing1 kei4 jat6",
+            "e": "Sunday"
+          },
+          "distractors": [
+            {
+              "c": "星期一",
+              "j": "sing1 kei4 jat1",
+              "e": "Monday"
+            },
+            {
+              "c": "星期三",
+              "j": "sing1 kei4 saam1",
+              "e": "Wednesday"
+            },
+            {
+              "c": "星期五",
+              "j": "sing1 kei4 ng5",
+              "e": "Friday"
+            }
+          ],
+          "topics": [
+            "time"
+          ]
+        }
+      ]
+    },
+    {
+      "label": "Morning / night",
+      "structure": "ziu1 zou2 / je6 maan5 + …",
+      "note": "朝早 (ziu1 zou2) is the morning, 夜晚 (je6 maan5) is the night. Use them to say when in the day something happens.",
+      "examples": [
+        {
+          "c": "朝早食早餐。",
+          "j": "ziu1 zou2 sik6 zou2 caan1.",
+          "e": "Eat breakfast in the morning."
+        },
+        {
+          "c": "夜晚瞓覺。",
+          "j": "je6 maan5 fan3 gaau3.",
+          "e": "Sleep at night."
+        },
+        {
+          "c": "朝早好凍。",
+          "j": "ziu1 zou2 hou2 dung3.",
+          "e": "It's cold in the morning."
+        }
+      ],
+      "drills": [
+        {
+          "frameC": "▢食早餐。",
+          "frameJ": "▢ sik6 zou2 caan1.",
+          "english": "Eat breakfast in the morning.",
+          "frameE": "… eat breakfast.",
+          "answer": {
+            "c": "朝早",
+            "j": "ziu1 zou2",
+            "e": "morning"
+          },
+          "distractors": [
+            {
+              "c": "夜晚",
+              "j": "je6 maan5",
+              "e": "night"
+            },
+            {
+              "c": "今日",
+              "j": "gam1 jat6",
+              "e": "today"
+            },
+            {
+              "c": "聽日",
+              "j": "ting1 jat6",
+              "e": "tomorrow"
+            }
+          ],
+          "topics": [
+            "time"
+          ]
+        }
+      ]
+    },
+    {
+      "label": "This / next time reference",
+      "structure": "[time word] + [event]",
+      "note": "Stack a time word in front of an activity to schedule it: 聽日 (ting1 jat6, tomorrow) + the plan. Cantonese keeps the time word first, like 'tomorrow I go'.",
+      "examples": [
+        {
+          "c": "今日去街。",
+          "j": "gam1 jat6 heoi3 gaai1.",
+          "e": "Go out today."
+        },
+        {
+          "c": "聽日考試。",
+          "j": "ting1 jat6 haau2 si5.",
+          "e": "Exam tomorrow."
+        },
+        {
+          "c": "琴日落雨。",
+          "j": "kam4 jat6 lok6 jyu5.",
+          "e": "It rained yesterday."
+        }
+      ],
+      "drills": [
+        {
+          "frameC": "▢落雨。",
+          "frameJ": "▢ lok6 jyu5.",
+          "english": "It rained yesterday.",
+          "frameE": "… it rained.",
+          "answer": {
+            "c": "琴日",
+            "j": "kam4 jat6",
+            "e": "yesterday"
+          },
+          "distractors": [
+            {
+              "c": "今日",
+              "j": "gam1 jat6",
+              "e": "today"
+            },
+            {
+              "c": "聽日",
+              "j": "ting1 jat6",
+              "e": "tomorrow"
+            },
+            {
+              "c": "夜晚",
+              "j": "je6 maan5",
+              "e": "night"
+            }
+          ],
+          "topics": [
+            "time"
+          ]
+        }
+      ]
+    },
+    {
+      "label": "Naming a weekday",
+      "structure": "gam1 jat6 + sing1 kei4 + [number]",
+      "note": "To state today's day: 今日星期… (gam1 jat6 sing1 kei4 …). 今日 (gam1 jat6) sets 'today', then the weekday follows.",
+      "examples": [
+        {
+          "c": "今日星期一。",
+          "j": "gam1 jat6 sing1 kei4 jat1.",
+          "e": "Today is Monday."
+        },
+        {
+          "c": "今日星期五。",
+          "j": "gam1 jat6 sing1 kei4 ng5.",
+          "e": "Today is Friday."
+        },
+        {
+          "c": "聽日星期六。",
+          "j": "ting1 jat6 sing1 kei4 luk6.",
+          "e": "Tomorrow is Saturday."
+        }
+      ],
+      "drills": [
+        {
+          "frameC": "今日▢，要返工。",
+          "frameJ": "gam1 jat6 ▢, jiu3 faan1 gung1.",
+          "english": "Today is Monday, have to work.",
+          "frameE": "Today is …, have to work.",
+          "answer": {
+            "c": "星期一",
+            "j": "sing1 kei4 jat1",
+            "e": "Monday"
+          },
+          "distractors": [
+            {
+              "c": "星期六",
+              "j": "sing1 kei4 luk6",
+              "e": "Saturday"
+            },
+            {
+              "c": "星期日",
+              "j": "sing1 kei4 jat6",
+              "e": "Sunday"
+            },
+            {
+              "c": "星期四",
+              "j": "sing1 kei4 sei3",
+              "e": "Thursday"
+            }
+          ],
+          "topics": [
+            "time"
+          ]
+        }
+      ]
+    },
+    {
+      "label": "Completed action (咗 zo2)",
+      "structure": "[verb] + zo2",
+      "note": "咗 (zo2) after a verb marks it as done — like English '-ed'. 食咗 (sik6 zo2) = ate, 去咗 (heoi3 zo2) = went. The single most useful tense marker.",
+      "examples": [
+        {
+          "c": "我食咗飯。",
+          "j": "ngo5 sik6 zo2 faan6.",
+          "e": "I have eaten."
+        },
+        {
+          "c": "佢走咗。",
+          "j": "keoi5 zau2 zo2.",
+          "e": "He has left."
+        },
+        {
+          "c": "我買咗嘢。",
+          "j": "ngo5 maai5 zo2 je5.",
+          "e": "I bought something."
+        }
+      ],
+      "drills": [
+        {
+          "frameC": "我食▢飯。",
+          "frameJ": "ngo5 sik6 ▢ faan6.",
+          "english": "I have eaten.",
+          "frameE": "I have … eaten (marked done).",
+          "answer": {
+            "c": "咗",
+            "j": "zo2",
+            "e": "(completed action)"
+          },
+          "distractors": [
+            {
+              "c": "緊",
+              "j": "gan2",
+              "e": "(currently happening)"
+            },
+            {
+              "c": "過",
+              "j": "gwo3",
+              "e": "(experienced before)"
+            },
+            {
+              "c": "未",
+              "j": "mei6",
+              "e": "not yet"
+            }
+          ],
+          "topics": [
+            "tense"
+          ]
+        }
+      ]
+    },
+    {
+      "label": "In progress (緊 gan2)",
+      "structure": "[verb] + gan2",
+      "note": "緊 (gan2) after a verb means the action is happening right now — like English '-ing'. 食緊 (sik6 gan2) = eating, 做緊 (zou6 gan2) = doing.",
+      "examples": [
+        {
+          "c": "我食緊飯。",
+          "j": "ngo5 sik6 gan2 faan6.",
+          "e": "I'm eating."
+        },
+        {
+          "c": "佢做緊嘢。",
+          "j": "keoi5 zou6 gan2 je5.",
+          "e": "He's working."
+        },
+        {
+          "c": "我睇緊書。",
+          "j": "ngo5 tai2 gan2 syu1.",
+          "e": "I'm reading."
+        }
+      ],
+      "drills": [
+        {
+          "frameC": "我食▢飯，等陣先。",
+          "frameJ": "ngo5 sik6 ▢ faan6, dang2 zan6 sin1.",
+          "english": "I'm eating right now, wait a bit.",
+          "frameE": "I'm … eating, wait a bit.",
+          "answer": {
+            "c": "緊",
+            "j": "gan2",
+            "e": "(currently happening)"
+          },
+          "distractors": [
+            {
+              "c": "咗",
+              "j": "zo2",
+              "e": "(completed action)"
+            },
+            {
+              "c": "過",
+              "j": "gwo3",
+              "e": "(experienced before)"
+            },
+            {
+              "c": "會",
+              "j": "wui5",
+              "e": "will"
+            }
+          ],
+          "topics": [
+            "tense"
+          ]
+        }
+      ]
+    },
+    {
+      "label": "Have you ever… (過 gwo3)",
+      "structure": "[verb] + gwo3",
+      "note": "過 (gwo3) after a verb marks past experience — 'have you ever…'. 食過 (sik6 gwo3) = have eaten (before), 去過 (heoi3 gwo3) = have been to.",
+      "examples": [
+        {
+          "c": "我去過香港。",
+          "j": "ngo5 heoi3 gwo3 hoeng1 gong2.",
+          "e": "I've been to Hong Kong."
+        },
+        {
+          "c": "你食過未？",
+          "j": "nei5 sik6 gwo3 mei6?",
+          "e": "Have you tried it?"
+        },
+        {
+          "c": "我見過佢。",
+          "j": "ngo5 gin3 gwo3 keoi5.",
+          "e": "I've met him before."
+        }
+      ],
+      "drills": [
+        {
+          "frameC": "我去▢香港。",
+          "frameJ": "ngo5 heoi3 ▢ hoeng1 gong2.",
+          "english": "I've been to Hong Kong before.",
+          "frameE": "I've been to Hong Kong …",
+          "answer": {
+            "c": "過",
+            "j": "gwo3",
+            "e": "(experienced before)"
+          },
+          "distractors": [
+            {
+              "c": "緊",
+              "j": "gan2",
+              "e": "(currently happening)"
+            },
+            {
+              "c": "住",
+              "j": "zyu6",
+              "e": "(ongoing state)"
+            },
+            {
+              "c": "剛剛",
+              "j": "gong1 gong1",
+              "e": "just now"
+            }
+          ],
+          "topics": [
+            "tense"
+          ]
+        }
+      ]
+    },
+    {
+      "label": "Will / going to (會 wui5)",
+      "structure": "wui5 + [verb]",
+      "note": "會 (wui5) before a verb marks the future — 'will / would'. 我會去 (ngo5 wui5 heoi3) = I will go. For obligation use 要 (jiu3, need to) instead.",
+      "examples": [
+        {
+          "c": "我會去。",
+          "j": "ngo5 wui5 heoi3.",
+          "e": "I will go."
+        },
+        {
+          "c": "聽日會落雨。",
+          "j": "ting1 jat6 wui5 lok6 jyu5.",
+          "e": "It will rain tomorrow."
+        },
+        {
+          "c": "佢會嚟。",
+          "j": "keoi5 wui5 lai4.",
+          "e": "He will come."
+        }
+      ],
+      "drills": [
+        {
+          "frameC": "聽日▢落雨。",
+          "frameJ": "ting1 jat6 ▢ lok6 jyu5.",
+          "english": "It will rain tomorrow.",
+          "frameE": "Tomorrow it … rain.",
+          "answer": {
+            "c": "會",
+            "j": "wui5",
+            "e": "will"
+          },
+          "distractors": [
+            {
+              "c": "咗",
+              "j": "zo2",
+              "e": "(completed action)"
+            },
+            {
+              "c": "已經",
+              "j": "ji5 ging1",
+              "e": "already"
+            },
+            {
+              "c": "剛剛",
+              "j": "gong1 gong1",
+              "e": "just now"
+            }
+          ],
+          "topics": [
+            "tense"
+          ]
+        }
+      ]
+    },
+    {
+      "label": "Already / not yet (已經 ji5 ging1 / 未 mei6)",
+      "structure": "ji5 ging1 / mei6 + [verb]",
+      "note": "已經 (ji5 ging1, already) and 未 (mei6, not yet) are a natural pair for answering 'done or not?'. 已經食咗 (ji5 ging1 sik6 zo2) = already eaten; 未食 (mei6 sik6) = haven't eaten yet.",
+      "examples": [
+        {
+          "c": "我已經食咗。",
+          "j": "ngo5 ji5 ging1 sik6 zo2.",
+          "e": "I've already eaten."
+        },
+        {
+          "c": "我未食。",
+          "j": "ngo5 mei6 sik6.",
+          "e": "I haven't eaten yet."
+        },
+        {
+          "c": "佢已經走咗。",
+          "j": "keoi5 ji5 ging1 zau2 zo2.",
+          "e": "He has already left."
+        }
+      ],
+      "drills": [
+        {
+          "frameC": "我▢食咗喇。",
+          "frameJ": "ngo5 ▢ sik6 zo2 laa3.",
+          "english": "I've already eaten.",
+          "frameE": "I've … eaten.",
+          "answer": {
+            "c": "已經",
+            "j": "ji5 ging1",
+            "e": "already"
+          },
+          "distractors": [
+            {
+              "c": "未",
+              "j": "mei6",
+              "e": "not yet"
+            },
+            {
+              "c": "剛剛",
+              "j": "gong1 gong1",
+              "e": "just now"
+            },
+            {
+              "c": "快啲",
+              "j": "faai3 di1",
+              "e": "soon / quickly"
+            }
+          ],
+          "topics": [
+            "tense"
+          ]
+        }
+      ]
+    },
+    {
+      "label": "Yes/no question (嗎 maa3)",
+      "structure": "[statement] + maa3",
+      "note": "嗎 (maa3) at the end of a statement turns it into a yes/no question — the simplest way to ask. 你好 (nei5 hou2, you're well) + 嗎 (maa3) = 你好嗎 (nei5 hou2 maa3, are you well?).",
+      "examples": [
+        {
+          "c": "你食咗飯嗎？",
+          "j": "nei5 sik6 zo2 faan6 maa3?",
+          "e": "Have you eaten?"
+        },
+        {
+          "c": "佢係學生嗎？",
+          "j": "keoi5 hai6 hok6 saang1 maa3?",
+          "e": "Is he a student?"
+        },
+        {
+          "c": "得嗎？",
+          "j": "dak1 maa3?",
+          "e": "Is that OK?"
+        }
+      ],
+      "drills": [
+        {
+          "frameC": "你食咗飯▢？",
+          "frameJ": "nei5 sik6 zo2 faan6 ▢?",
+          "english": "Have you eaten?",
+          "frameE": "Have you eaten …?",
+          "answer": {
+            "c": "嗎",
+            "j": "maa3",
+            "e": "(yes/no question)"
+          },
+          "distractors": [
+            {
+              "c": "喇",
+              "j": "laa3",
+              "e": "(now / completion)"
+            },
+            {
+              "c": "啦",
+              "j": "laa1",
+              "e": "(softening / suggestion)"
+            },
+            {
+              "c": "㗎",
+              "j": "gaa3",
+              "e": "(matter-of-fact)"
+            }
+          ],
+          "topics": [
+            "particles"
+          ]
+        }
+      ]
+    },
+    {
+      "label": "Softening a suggestion (啦 laa1)",
+      "structure": "[suggestion] + laa1",
+      "note": "啦 (laa1) softens a suggestion or request into something friendly — 'come on, let's…'. 走啦 (zau2 laa1) = let's go (gently urging).",
+      "examples": [
+        {
+          "c": "走啦！",
+          "j": "zau2 laa1!",
+          "e": "Let's go!"
+        },
+        {
+          "c": "食啦！",
+          "j": "sik6 laa1!",
+          "e": "Go on, eat!"
+        },
+        {
+          "c": "快啲啦！",
+          "j": "faai3 di1 laa1!",
+          "e": "Come on, hurry!"
+        }
+      ],
+      "drills": [
+        {
+          "frameC": "我哋走▢！",
+          "frameJ": "ngo5 dei6 zau2 ▢!",
+          "english": "Let's get going!",
+          "frameE": "Let's get going …!",
+          "answer": {
+            "c": "啦",
+            "j": "laa1",
+            "e": "(softening / suggestion)"
+          },
+          "distractors": [
+            {
+              "c": "嗎",
+              "j": "maa3",
+              "e": "(yes/no question)"
+            },
+            {
+              "c": "咩",
+              "j": "me1",
+              "e": "(surprised question)"
+            },
+            {
+              "c": "咋",
+              "j": "zaa3",
+              "e": "(only / limitation)"
+            }
+          ],
+          "topics": [
+            "particles"
+          ]
+        }
+      ]
+    },
+    {
+      "label": "Completion / change (喇 laa3)",
+      "structure": "[statement] + laa3",
+      "note": "喇 (laa3) signals something has changed or is now the case — 'now' or completion. 好喇 (hou2 laa3) = OK now / that's enough.",
+      "examples": [
+        {
+          "c": "我食飽喇。",
+          "j": "ngo5 sik6 baau2 laa3.",
+          "e": "I'm full now."
+        },
+        {
+          "c": "夠喇！",
+          "j": "gau3 laa3!",
+          "e": "That's enough!"
+        },
+        {
+          "c": "佢走咗喇。",
+          "j": "keoi5 zau2 zo2 laa3.",
+          "e": "He's left now."
+        }
+      ],
+      "drills": [
+        {
+          "frameC": "我食飽▢。",
+          "frameJ": "ngo5 sik6 baau2 ▢.",
+          "english": "I'm full now.",
+          "frameE": "I'm full …",
+          "answer": {
+            "c": "喇",
+            "j": "laa3",
+            "e": "(now / completion)"
+          },
+          "distractors": [
+            {
+              "c": "嗎",
+              "j": "maa3",
+              "e": "(yes/no question)"
+            },
+            {
+              "c": "咩",
+              "j": "me1",
+              "e": "(surprised question)"
+            },
+            {
+              "c": "吖",
+              "j": "aa1",
+              "e": "(gentle prompt)"
+            }
+          ],
+          "topics": [
+            "particles"
+          ]
+        }
+      ]
+    },
+    {
+      "label": "Surprised question (咩 me1)",
+      "structure": "[statement] + me1",
+      "note": "咩 (me1) at the end expresses surprise or doubt — 'really? / is that so?'. 真係咩 (zan1 hai6 me1) = is that really true?",
+      "examples": [
+        {
+          "c": "真係咩？",
+          "j": "zan1 hai6 me1?",
+          "e": "Is that really so?"
+        },
+        {
+          "c": "佢走咗咩？",
+          "j": "keoi5 zau2 zo2 me1?",
+          "e": "He's left, really?"
+        },
+        {
+          "c": "係咩？",
+          "j": "hai6 me1?",
+          "e": "Is that right?"
+        }
+      ],
+      "drills": [
+        {
+          "frameC": "佢走咗▢？真係估唔到。",
+          "frameJ": "keoi5 zau2 zo2 ▢? zan1 hai6 gu2 m4 dou2.",
+          "english": "He's left, really? I'm surprised.",
+          "frameE": "He's left …? I'm surprised.",
+          "answer": {
+            "c": "咩",
+            "j": "me1",
+            "e": "(surprised question)"
+          },
+          "distractors": [
+            {
+              "c": "喇",
+              "j": "laa3",
+              "e": "(now / completion)"
+            },
+            {
+              "c": "啦",
+              "j": "laa1",
+              "e": "(softening / suggestion)"
+            },
+            {
+              "c": "囉",
+              "j": "lo3",
+              "e": "(obviously / exasperation)"
+            }
+          ],
+          "topics": [
+            "particles"
+          ]
+        }
+      ]
+    },
+    {
+      "label": "Matter-of-fact (㗎 gaa3)",
+      "structure": "[statement] + gaa3",
+      "note": "㗎 (gaa3) states something as plain fact — 'that's just how it is'. 係㗎 (hai6 gaa3) = yes, that's right (firmly).",
+      "examples": [
+        {
+          "c": "佢係老師㗎。",
+          "j": "keoi5 hai6 lou5 si1 gaa3.",
+          "e": "He's a teacher, you know."
+        },
+        {
+          "c": "呢度好貴㗎。",
+          "j": "ni1 dou6 hou2 gwai3 gaa3.",
+          "e": "It's expensive here, for sure."
+        },
+        {
+          "c": "係㗎！",
+          "j": "hai6 gaa3!",
+          "e": "Yes, that's right!"
+        }
+      ],
+      "drills": [
+        {
+          "frameC": "佢係老師▢，唔好懷疑。",
+          "frameJ": "keoi5 hai6 lou5 si1 ▢, m4 hou2 waai4 ji4.",
+          "english": "He's a teacher, that's a fact — don't doubt it.",
+          "frameE": "He's a teacher … — don't doubt it.",
+          "answer": {
+            "c": "㗎",
+            "j": "gaa3",
+            "e": "(matter-of-fact)"
+          },
+          "distractors": [
+            {
+              "c": "嗎",
+              "j": "maa3",
+              "e": "(yes/no question)"
+            },
+            {
+              "c": "咩",
+              "j": "me1",
+              "e": "(surprised question)"
+            },
+            {
+              "c": "吖",
+              "j": "aa1",
+              "e": "(gentle prompt)"
+            }
+          ],
+          "topics": [
+            "particles"
+          ]
+        }
+      ]
+    },
+    {
+      "label": "Naming a colour",
+      "structure": "[thing] + hai6 + [colour]",
+      "note": "Colour words all end in 色 (sik1, colour): 紅色 (hung4 sik1, red), 藍色 (laam4 sik1, blue). Say 呢個係… (ni1 go3 hai6 …, this is …) to name one.",
+      "examples": [
+        {
+          "c": "呢個係紅色。",
+          "j": "ni1 go3 hai6 hung4 sik1.",
+          "e": "This is red."
+        },
+        {
+          "c": "佢件衫係藍色。",
+          "j": "keoi5 gin6 saam1 hai6 laam4 sik1.",
+          "e": "His shirt is blue."
+        },
+        {
+          "c": "我鍾意綠色。",
+          "j": "ngo5 zung1 ji3 luk6 sik1.",
+          "e": "I like green."
+        }
+      ],
+      "drills": [
+        {
+          "frameC": "消防車係▢。",
+          "frameJ": "siu1 fong4 ce1 hai6 ▢.",
+          "english": "The fire truck is red.",
+          "frameE": "The fire truck is …",
+          "answer": {
+            "c": "紅色",
+            "j": "hung4 sik1",
+            "e": "red"
+          },
+          "distractors": [
+            {
+              "c": "藍色",
+              "j": "laam4 sik1",
+              "e": "blue"
+            },
+            {
+              "c": "綠色",
+              "j": "luk6 sik1",
+              "e": "green"
+            },
+            {
+              "c": "黃色",
+              "j": "wong4 sik1",
+              "e": "yellow"
+            }
+          ],
+          "topics": [
+            "colors"
+          ]
+        }
+      ]
+    },
+    {
+      "label": "Colour of nature",
+      "structure": "[natural thing] + hai6 + [colour]",
+      "note": "Useful for describing the world: 天空 (tin1 hung1, sky) is 藍色 (laam4 sik1, blue), grass is 綠色 (luk6 sik1, green).",
+      "examples": [
+        {
+          "c": "天空係藍色。",
+          "j": "tin1 hung1 hai6 laam4 sik1.",
+          "e": "The sky is blue."
+        },
+        {
+          "c": "草係綠色。",
+          "j": "cou2 hai6 luk6 sik1.",
+          "e": "Grass is green."
+        },
+        {
+          "c": "太陽係黃色。",
+          "j": "taai3 joeng4 hai6 wong4 sik1.",
+          "e": "The sun is yellow."
+        }
+      ],
+      "drills": [
+        {
+          "frameC": "天空係▢。",
+          "frameJ": "tin1 hung1 hai6 ▢.",
+          "english": "The sky is blue.",
+          "frameE": "The sky is …",
+          "answer": {
+            "c": "藍色",
+            "j": "laam4 sik1",
+            "e": "blue"
+          },
+          "distractors": [
+            {
+              "c": "紫色",
+              "j": "zi2 sik1",
+              "e": "purple"
+            },
+            {
+              "c": "橙色",
+              "j": "caang2 sik1",
+              "e": "orange"
+            },
+            {
+              "c": "棕色",
+              "j": "zung1 sik1",
+              "e": "brown"
+            }
+          ],
+          "topics": [
+            "colors"
+          ]
+        }
+      ]
+    },
+    {
+      "label": "Light and dark colours",
+      "structure": "baak6 sik1 / hak1 sik1 + …",
+      "note": "白色 (baak6 sik1, white) and 黑色 (hak1 sik1, black) are the two extremes — handy for clothes and basic description.",
+      "examples": [
+        {
+          "c": "我著白色衫。",
+          "j": "ngo5 zoek3 baak6 sik1 saam1.",
+          "e": "I'm wearing a white shirt."
+        },
+        {
+          "c": "佢著黑色褲。",
+          "j": "keoi5 zoek3 hak1 sik1 fu3.",
+          "e": "He's wearing black trousers."
+        },
+        {
+          "c": "白色好乾淨。",
+          "j": "baak6 sik1 hou2 gon1 zeng6.",
+          "e": "White looks clean."
+        }
+      ],
+      "drills": [
+        {
+          "frameC": "夜晚天好黑，係▢。",
+          "frameJ": "je6 maan5 tin1 hou2 hak1, hai6 ▢.",
+          "english": "The night sky is dark — it's black.",
+          "frameE": "The night sky is dark — it's …",
+          "answer": {
+            "c": "黑色",
+            "j": "hak1 sik1",
+            "e": "black"
+          },
+          "distractors": [
+            {
+              "c": "白色",
+              "j": "baak6 sik1",
+              "e": "white"
+            },
+            {
+              "c": "黃色",
+              "j": "wong4 sik1",
+              "e": "yellow"
+            },
+            {
+              "c": "粉紅色",
+              "j": "fan2 hung4 sik1",
+              "e": "pink"
+            }
+          ],
+          "topics": [
+            "colors"
+          ]
+        }
+      ]
+    },
+    {
+      "label": "Stating a favourite colour",
+      "structure": "ngo5 zung1 ji3 + [colour]",
+      "note": "我鍾意 (ngo5 zung1 ji3, I like) + a colour states a preference. Swap the colour to talk about what you or others like.",
+      "examples": [
+        {
+          "c": "我鍾意紫色。",
+          "j": "ngo5 zung1 ji3 zi2 sik1.",
+          "e": "I like purple."
+        },
+        {
+          "c": "佢鍾意粉紅色。",
+          "j": "keoi5 zung1 ji3 fan2 hung4 sik1.",
+          "e": "She likes pink."
+        },
+        {
+          "c": "我唔鍾意橙色。",
+          "j": "ngo5 m4 zung1 ji3 caang2 sik1.",
+          "e": "I don't like orange."
+        }
+      ],
+      "drills": [
+        {
+          "frameC": "我鍾意▢，好似葡萄。",
+          "frameJ": "ngo5 zung1 ji3 ▢, hou2 ci5 pou4 tou4.",
+          "english": "I like purple, like grapes.",
+          "frameE": "I like …, like grapes.",
+          "answer": {
+            "c": "紫色",
+            "j": "zi2 sik1",
+            "e": "purple"
+          },
+          "distractors": [
+            {
+              "c": "綠色",
+              "j": "luk6 sik1",
+              "e": "green"
+            },
+            {
+              "c": "藍色",
+              "j": "laam4 sik1",
+              "e": "blue"
+            },
+            {
+              "c": "白色",
+              "j": "baak6 sik1",
+              "e": "white"
+            }
+          ],
+          "topics": [
+            "colors"
+          ]
+        }
+      ]
+    },
+    {
+      "label": "Warm colours",
+      "structure": "hung4 / caang2 / wong4 sik1 + …",
+      "note": "The warm end of the spectrum: 紅色 (hung4 sik1, red), 橙色 (caang2 sik1, orange), 黃色 (wong4 sik1, yellow). Note 橙 (caang2) also means 'orange' the fruit.",
+      "examples": [
+        {
+          "c": "橙色好暖。",
+          "j": "caang2 sik1 hou2 nyun5.",
+          "e": "Orange feels warm."
+        },
+        {
+          "c": "黃色好光。",
+          "j": "wong4 sik1 hou2 gwong1.",
+          "e": "Yellow is bright."
+        },
+        {
+          "c": "秋天有好多橙色。",
+          "j": "cau1 tin1 jau5 hou2 do1 caang2 sik1.",
+          "e": "Autumn has lots of orange."
+        }
+      ],
+      "drills": [
+        {
+          "frameC": "香蕉係▢。",
+          "frameJ": "hoeng1 ziu1 hai6 ▢.",
+          "english": "A banana is yellow.",
+          "frameE": "A banana is …",
+          "answer": {
+            "c": "黃色",
+            "j": "wong4 sik1",
+            "e": "yellow"
+          },
+          "distractors": [
+            {
+              "c": "紫色",
+              "j": "zi2 sik1",
+              "e": "purple"
+            },
+            {
+              "c": "藍色",
+              "j": "laam4 sik1",
+              "e": "blue"
+            },
+            {
+              "c": "黑色",
+              "j": "hak1 sik1",
+              "e": "black"
+            }
+          ],
+          "topics": [
+            "colors"
+          ]
+        }
+      ]
+    },
+    {
+      "label": "Ordering a drink your way",
+      "structure": "[drink] + gaa1 bing1 / siu2 bing1 / zau2 tim4",
+      "note": "Cha chaan teng customisation: 加冰 (gaa1 bing1, add ice), 少冰 (siu2 bing1, less ice), 走甜 (zau2 tim4, no sugar). Tack one onto your drink order.",
+      "examples": [
+        {
+          "c": "凍檸茶走甜。",
+          "j": "dung3 ning4 caa4 zau2 tim4.",
+          "e": "Iced lemon tea, no sugar."
+        },
+        {
+          "c": "咖啡少冰。",
+          "j": "gaa3 fe1 siu2 bing1.",
+          "e": "Coffee, less ice."
+        },
+        {
+          "c": "可樂加冰。",
+          "j": "ho2 lok6 gaa1 bing1.",
+          "e": "Cola with ice."
+        }
+      ],
+      "drills": [
+        {
+          "frameC": "凍咖啡▢，唔好太甜。",
+          "frameJ": "dung3 gaa3 fe1 ▢, m4 hou2 taai3 tim4.",
+          "english": "Iced coffee, no sugar — not too sweet.",
+          "frameE": "Iced coffee, … — not too sweet.",
+          "answer": {
+            "c": "走甜",
+            "j": "zau2 tim4",
+            "e": "no sugar / less sweet"
+          },
+          "distractors": [
+            {
+              "c": "加冰",
+              "j": "gaa1 bing1",
+              "e": "add ice"
+            },
+            {
+              "c": "少冰",
+              "j": "siu2 bing1",
+              "e": "less ice"
+            },
+            {
+              "c": "熱飲",
+              "j": "jit6 jam2",
+              "e": "hot drink"
+            }
+          ],
+          "topics": [
+            "food"
+          ]
+        }
+      ]
+    },
+    {
+      "label": "Hot or cold drink",
+      "structure": "jit6 jam2 / dung3 jam2",
+      "note": "熱飲 (jit6 jam2) is a hot drink, 凍飲 (dung3 jam2) is a cold one — the first choice a server asks about. 熱 (jit6) = hot, 凍 (dung3) = cold.",
+      "examples": [
+        {
+          "c": "要熱飲定凍飲？",
+          "j": "jiu3 jit6 jam2 ding6 dung3 jam2?",
+          "e": "Hot drink or cold drink?"
+        },
+        {
+          "c": "我要凍飲。",
+          "j": "ngo5 jiu3 dung3 jam2.",
+          "e": "I'll have a cold drink."
+        },
+        {
+          "c": "凍天飲熱飲好。",
+          "j": "dung3 tin1 jam2 jit6 jam2 hou2.",
+          "e": "A hot drink is good in cold weather."
+        }
+      ],
+      "drills": [
+        {
+          "frameC": "好凍呀，我要▢。",
+          "frameJ": "hou2 dung3 aa3, ngo5 jiu3 ▢.",
+          "english": "It's cold — I'll have a hot drink.",
+          "frameE": "It's cold — I'll have a …",
+          "answer": {
+            "c": "熱飲",
+            "j": "jit6 jam2",
+            "e": "hot drink"
+          },
+          "distractors": [
+            {
+              "c": "凍飲",
+              "j": "dung3 jam2",
+              "e": "cold drink"
+            },
+            {
+              "c": "加冰",
+              "j": "gaa1 bing1",
+              "e": "add ice"
+            },
+            {
+              "c": "咖啡",
+              "j": "gaa3 fe1",
+              "e": "coffee"
+            }
+          ],
+          "topics": [
+            "food"
+          ]
+        }
+      ]
+    },
+    {
+      "label": "Full or hungry",
+      "structure": "ngo5 hou2 + ngo6 / baau2",
+      "note": "Two states around eating: 餓 (ngo6, hungry) before, 飽 (baau2, full) after. 我好餓 (ngo5 hou2 ngo6) = I'm very hungry; 我食飽喇 (ngo5 sik6 baau2 laa3) = I'm full now.",
+      "examples": [
+        {
+          "c": "我好餓。",
+          "j": "ngo5 hou2 ngo6.",
+          "e": "I'm very hungry."
+        },
+        {
+          "c": "我食飽喇。",
+          "j": "ngo5 sik6 baau2 laa3.",
+          "e": "I'm full now."
+        },
+        {
+          "c": "你餓唔餓？",
+          "j": "nei5 ngo6 m4 ngo6?",
+          "e": "Are you hungry?"
+        }
+      ],
+      "drills": [
+        {
+          "frameC": "我成日未食飯，好▢。",
+          "frameJ": "ngo5 sing4 jat6 mei6 sik6 faan6, hou2 ▢.",
+          "english": "I haven't eaten all day, I'm very hungry.",
+          "frameE": "I haven't eaten all day, I'm very …",
+          "answer": {
+            "c": "餓",
+            "j": "ngo6",
+            "e": "hungry"
+          },
+          "distractors": [
+            {
+              "c": "飽",
+              "j": "baau2",
+              "e": "full"
+            },
+            {
+              "c": "好味",
+              "j": "hou2 mei6",
+              "e": "delicious"
+            },
+            {
+              "c": "嘥嘢",
+              "j": "saai1 je5",
+              "e": "wasteful"
+            }
+          ],
+          "topics": [
+            "food"
+          ]
+        }
+      ]
+    },
+    {
+      "label": "Describing someone's character",
+      "structure": "keoi5 hou2 + [trait]",
+      "note": "佢好 (keoi5 hou2, he/she is very) + a character word describes a person: 善良 (sin6 loeng4, kind), 聰明 (cung1 ming4, smart), 搞笑 (gaau2 siu3, funny).",
+      "examples": [
+        {
+          "c": "佢好善良。",
+          "j": "keoi5 hou2 sin6 loeng4.",
+          "e": "She's very kind."
+        },
+        {
+          "c": "佢好聰明。",
+          "j": "keoi5 hou2 cung1 ming4.",
+          "e": "He's very smart."
+        },
+        {
+          "c": "佢好搞笑。",
+          "j": "keoi5 hou2 gaau2 siu3.",
+          "e": "He's really funny."
+        }
+      ],
+      "drills": [
+        {
+          "frameC": "佢成日幫人，好▢。",
+          "frameJ": "keoi5 sing4 jat6 bong1 jan4, hou2 ▢.",
+          "english": "She always helps people, she's very kind.",
+          "frameE": "She always helps people, she's very …",
+          "answer": {
+            "c": "善良",
+            "j": "sin6 loeng4",
+            "e": "kind"
+          },
+          "distractors": [
+            {
+              "c": "聰明",
+              "j": "cung1 ming4",
+              "e": "smart"
+            },
+            {
+              "c": "懶",
+              "j": "laan5",
+              "e": "lazy"
+            },
+            {
+              "c": "嚴肅",
+              "j": "jim4 suk1",
+              "e": "serious"
+            }
+          ],
+          "topics": [
+            "feelings"
+          ]
+        }
+      ]
+    },
+    {
+      "label": "Worried or nervous",
+      "structure": "ngo5 hou2 + daam1 sam1 / gan2 zoeng1",
+      "note": "Two anxious feelings: 擔心 (daam1 sam1, worried — about something) and 緊張 (gan2 zoeng1, nervous — keyed up). 我好擔心 (ngo5 hou2 daam1 sam1) = I'm very worried.",
+      "examples": [
+        {
+          "c": "我好擔心。",
+          "j": "ngo5 hou2 daam1 sam1.",
+          "e": "I'm very worried."
+        },
+        {
+          "c": "考試好緊張。",
+          "j": "haau2 si5 hou2 gan2 zoeng1.",
+          "e": "Exams make me nervous."
+        },
+        {
+          "c": "唔使擔心。",
+          "j": "m4 sai2 daam1 sam1.",
+          "e": "No need to worry."
+        }
+      ],
+      "drills": [
+        {
+          "frameC": "聽日考試，我好▢。",
+          "frameJ": "ting1 jat6 haau2 si5, ngo5 hou2 ▢.",
+          "english": "Exam tomorrow — I'm very nervous.",
+          "frameE": "Exam tomorrow — I'm very …",
+          "answer": {
+            "c": "緊張",
+            "j": "gan2 zoeng1",
+            "e": "nervous"
+          },
+          "distractors": [
+            {
+              "c": "擔心",
+              "j": "daam1 sam1",
+              "e": "worried"
+            },
+            {
+              "c": "無聊",
+              "j": "mou4 liu4",
+              "e": "bored"
+            },
+            {
+              "c": "激動",
+              "j": "gik1 dung6",
+              "e": "excited"
+            }
+          ],
+          "topics": [
+            "feelings"
+          ]
+        }
+      ]
+    },
+    {
+      "label": "Hardworking or lazy",
+      "structure": "keoi5 hou2 + kan4 lik6 / laan5",
+      "note": "A common contrast for describing work ethic: 勤力 (kan4 lik6, hardworking) vs 懶 (laan5, lazy). 佢好勤力 (keoi5 hou2 kan4 lik6) = he's very hardworking.",
+      "examples": [
+        {
+          "c": "佢好勤力。",
+          "j": "keoi5 hou2 kan4 lik6.",
+          "e": "He's very hardworking."
+        },
+        {
+          "c": "我今日好懶。",
+          "j": "ngo5 gam1 jat6 hou2 laan5.",
+          "e": "I'm feeling lazy today."
+        },
+        {
+          "c": "勤力讀書。",
+          "j": "kan4 lik6 duk6 syu1.",
+          "e": "Study hard."
+        }
+      ],
+      "drills": [
+        {
+          "frameC": "佢日日努力做嘢，好▢。",
+          "frameJ": "keoi5 jat6 jat6 nou5 lik6 zou6 je5, hou2 ▢.",
+          "english": "He works hard every day — very hardworking.",
+          "frameE": "He works hard every day — very …",
+          "answer": {
+            "c": "勤力",
+            "j": "kan4 lik6",
+            "e": "hardworking"
+          },
+          "distractors": [
+            {
+              "c": "懶",
+              "j": "laan5",
+              "e": "lazy"
+            },
+            {
+              "c": "怕醜",
+              "j": "paa3 cau2",
+              "e": "shy"
+            },
+            {
+              "c": "友善",
+              "j": "jau5 sin6",
+              "e": "friendly"
+            }
+          ],
+          "topics": [
+            "feelings"
+          ]
+        }
+      ]
+    },
+    {
+      "label": "Saying what hurts",
+      "structure": "ngo5 + [body part] + tung3",
+      "note": "To say something hurts, name the part + 痛 (tung3, pain): 頭痛 (tau4 tung3, headache), 肚痛 (tou5 tung3, stomachache). 我 (ngo5, I) + part + 痛 (tung3) = 'my … hurts'.",
+      "examples": [
+        {
+          "c": "我頭痛。",
+          "j": "ngo5 tau4 tung3.",
+          "e": "I have a headache."
+        },
+        {
+          "c": "我肚痛。",
+          "j": "ngo5 tou5 tung3.",
+          "e": "I have a stomachache."
+        },
+        {
+          "c": "我隻手好痛。",
+          "j": "ngo5 zek3 sau2 hou2 tung3.",
+          "e": "My hand really hurts."
+        }
+      ],
+      "drills": [
+        {
+          "frameC": "我▢，想瞓覺。",
+          "frameJ": "ngo5 ▢, soeng2 fan3 gaau3.",
+          "english": "I have a headache, I want to sleep.",
+          "frameE": "I have a …, I want to sleep.",
+          "answer": {
+            "c": "頭痛",
+            "j": "tau4 tung3",
+            "e": "headache"
+          },
+          "distractors": [
+            {
+              "c": "肚痛",
+              "j": "tou5 tung3",
+              "e": "stomachache"
+            },
+            {
+              "c": "發燒",
+              "j": "faat3 siu1",
+              "e": "fever"
+            },
+            {
+              "c": "咳",
+              "j": "kat1",
+              "e": "cough"
+            }
+          ],
+          "topics": [
+            "body"
+          ]
+        }
+      ]
+    },
+    {
+      "label": "Naming a body part",
+      "structure": "[possessor] + ge3 + [body part]",
+      "note": "The basic body parts: 頭 (tau4, head), 眼 (ngaan5, eyes), 手 (sau2, hand), 腳 (goek3, foot). Point and name them to build the core set.",
+      "examples": [
+        {
+          "c": "呢個係我隻手。",
+          "j": "ni1 go3 hai6 ngo5 zek3 sau2.",
+          "e": "This is my hand."
+        },
+        {
+          "c": "佢隻眼好大。",
+          "j": "keoi5 zek3 ngaan5 hou2 daai6.",
+          "e": "His eyes are big."
+        },
+        {
+          "c": "用腳行路。",
+          "j": "jung6 goek3 haang4 lou6.",
+          "e": "Walk with your feet."
+        }
+      ],
+      "drills": [
+        {
+          "frameC": "我用▢攞嘢。",
+          "frameJ": "ngo5 jung6 ▢ lo2 je5.",
+          "english": "I use my hand to pick things up.",
+          "frameE": "I use my … to pick things up.",
+          "answer": {
+            "c": "手",
+            "j": "sau2",
+            "e": "hand"
+          },
+          "distractors": [
+            {
+              "c": "腳",
+              "j": "goek3",
+              "e": "foot"
+            },
+            {
+              "c": "眼",
+              "j": "ngaan5",
+              "e": "eyes"
+            },
+            {
+              "c": "鼻",
+              "j": "bei6",
+              "e": "nose"
+            }
+          ],
+          "topics": [
+            "body"
+          ]
+        }
+      ]
+    },
+    {
+      "label": "Telling the doctor you're sick",
+      "structure": "ngo5 + beng6 / faat3 siu1 / kat1",
+      "note": "Describing illness: 病 (beng6, sick), 發燒 (faat3 siu1, fever), 咳 (kat1, cough). String them together for the doctor — 我病咗，發燒 (ngo5 beng6 zo2, faat3 siu1).",
+      "examples": [
+        {
+          "c": "我病咗。",
+          "j": "ngo5 beng6 zo2.",
+          "e": "I'm sick."
+        },
+        {
+          "c": "我發燒。",
+          "j": "ngo5 faat3 siu1.",
+          "e": "I have a fever."
+        },
+        {
+          "c": "我咳得好犀利。",
+          "j": "ngo5 kat1 dak1 hou2 sai1 lei6.",
+          "e": "I'm coughing badly."
+        }
+      ],
+      "drills": [
+        {
+          "frameC": "我好熱，可能▢。",
+          "frameJ": "ngo5 hou2 jit6, ho2 nang4 ▢.",
+          "english": "I feel hot — maybe I have a fever.",
+          "frameE": "I feel hot — maybe I have a …",
+          "answer": {
+            "c": "發燒",
+            "j": "faat3 siu1",
+            "e": "fever"
+          },
+          "distractors": [
+            {
+              "c": "咳",
+              "j": "kat1",
+              "e": "cough"
+            },
+            {
+              "c": "頭痛",
+              "j": "tau4 tung3",
+              "e": "headache"
+            },
+            {
+              "c": "肚痛",
+              "j": "tou5 tung3",
+              "e": "stomachache"
+            }
+          ],
+          "topics": [
+            "body"
+          ]
+        }
+      ]
+    },
+    {
+      "label": "Where to get help when ill",
+      "structure": "heoi3 + ji1 sang1 / ji1 jyun2 / joek6 fong2",
+      "note": "Places and people for illness: 醫生 (ji1 sang1, doctor), 醫院 (ji1 jyun2, hospital), 藥房 (joek6 fong2, pharmacy). 去睇醫生 (heoi3 tai2 ji1 sang1) = go see a doctor.",
+      "examples": [
+        {
+          "c": "我去睇醫生。",
+          "j": "ngo5 heoi3 tai2 ji1 sang1.",
+          "e": "I'm going to see a doctor."
+        },
+        {
+          "c": "佢入咗醫院。",
+          "j": "keoi5 jap6 zo2 ji1 jyun2.",
+          "e": "He's been admitted to hospital."
+        },
+        {
+          "c": "藥房買藥。",
+          "j": "joek6 fong2 maai5 joek6.",
+          "e": "Buy medicine at the pharmacy."
+        }
+      ],
+      "drills": [
+        {
+          "frameC": "病得好嚴重，要去▢。",
+          "frameJ": "beng6 dak1 hou2 jim4 zung6, jiu3 heoi3 ▢.",
+          "english": "Seriously ill — need to go to the hospital.",
+          "frameE": "Seriously ill — need to go to the …",
+          "answer": {
+            "c": "醫院",
+            "j": "ji1 jyun2",
+            "e": "hospital"
+          },
+          "distractors": [
+            {
+              "c": "醫生",
+              "j": "ji1 sang1",
+              "e": "doctor"
+            },
+            {
+              "c": "藥房",
+              "j": "joek6 fong2",
+              "e": "pharmacy"
+            },
+            {
+              "c": "藥",
+              "j": "joek6",
+              "e": "medicine"
+            }
+          ],
+          "topics": [
+            "body"
+          ]
+        }
+      ]
+    },
+    {
+      "label": "Asking for medicine",
+      "structure": "ngo5 jiu3 + joek6",
+      "note": "藥 (joek6) is medicine; 藥房 (joek6 fong2) is the pharmacy (literally 'medicine room'). 我要買藥 (ngo5 jiu3 maai5 joek6) = I need to buy medicine.",
+      "examples": [
+        {
+          "c": "我要買藥。",
+          "j": "ngo5 jiu3 maai5 joek6.",
+          "e": "I need to buy medicine."
+        },
+        {
+          "c": "食咗藥未？",
+          "j": "sik6 zo2 joek6 mei6?",
+          "e": "Have you taken your medicine?"
+        },
+        {
+          "c": "呢隻藥好苦。",
+          "j": "ni1 zek3 joek6 hou2 fu2.",
+          "e": "This medicine is bitter."
+        }
+      ],
+      "drills": [
+        {
+          "frameC": "頭痛，去藥房買啲▢。",
+          "frameJ": "tau4 tung3, heoi3 joek6 fong2 maai5 di1 ▢.",
+          "english": "Headache — go to the pharmacy for some medicine.",
+          "frameE": "Headache — go to the pharmacy for some …",
+          "answer": {
+            "c": "藥",
+            "j": "joek6",
+            "e": "medicine"
+          },
+          "distractors": [
+            {
+              "c": "醫生",
+              "j": "ji1 sang1",
+              "e": "doctor"
+            },
+            {
+              "c": "發燒",
+              "j": "faat3 siu1",
+              "e": "fever"
+            },
+            {
+              "c": "咳",
+              "j": "kat1",
+              "e": "cough"
+            }
+          ],
+          "topics": [
+            "body"
+          ]
+        }
+      ]
+    },
+    {
+      "label": "Left or right",
+      "structure": "[thing] + hai2 + zo2 bin1 / jau6 bin1",
+      "note": "左邊 (zo2 bin1, left side) and 右邊 (jau6 bin1, right side). 喺左邊 (hai2 zo2 bin1) = on the left. The everyday pair for giving directions.",
+      "examples": [
+        {
+          "c": "喺左邊。",
+          "j": "hai2 zo2 bin1.",
+          "e": "It's on the left."
+        },
+        {
+          "c": "超市喺右邊。",
+          "j": "ciu1 si5 hai2 jau6 bin1.",
+          "e": "The supermarket is on the right."
+        },
+        {
+          "c": "轉左邊。",
+          "j": "zyun3 zo2 bin1.",
+          "e": "Turn left."
+        }
+      ],
+      "drills": [
+        {
+          "frameC": "銀行喺▢，唔係右邊。",
+          "frameJ": "ngan4 hong4 hai2 ▢, m4 hai6 jau6 bin1.",
+          "english": "The bank is on the left, not the right.",
+          "frameE": "The bank is on the …, not the right.",
+          "answer": {
+            "c": "左邊",
+            "j": "zo2 bin1",
+            "e": "left side"
+          },
+          "distractors": [
+            {
+              "c": "右邊",
+              "j": "jau6 bin1",
+              "e": "right side"
+            },
+            {
+              "c": "前面",
+              "j": "cin4 min6",
+              "e": "in front"
+            },
+            {
+              "c": "後面",
+              "j": "hau6 min6",
+              "e": "behind"
+            }
+          ],
+          "topics": [
+            "directions"
+          ]
+        }
+      ]
+    },
+    {
+      "label": "In front or behind",
+      "structure": "[thing] + hai2 + cin4 min6 / hau6 min6",
+      "note": "前面 (cin4 min6, in front / ahead) and 後面 (hau6 min6, behind). Useful for 'it's just ahead' or 'right behind you'.",
+      "examples": [
+        {
+          "c": "喺前面。",
+          "j": "hai2 cin4 min6.",
+          "e": "It's ahead."
+        },
+        {
+          "c": "車站喺後面。",
+          "j": "ce1 zaam6 hai2 hau6 min6.",
+          "e": "The station is behind."
+        },
+        {
+          "c": "行前面少少。",
+          "j": "haang4 cin4 min6 siu2 siu2.",
+          "e": "Walk a little ahead."
+        }
+      ],
+      "drills": [
+        {
+          "frameC": "車站喺▢，行多幾步就到。",
+          "frameJ": "ce1 zaam6 hai2 ▢, haang4 do1 gei2 bou6 zau6 dou3.",
+          "english": "The station is ahead — a few more steps and you're there.",
+          "frameE": "The station is … — a few more steps and you're there.",
+          "answer": {
+            "c": "前面",
+            "j": "cin4 min6",
+            "e": "in front / ahead"
+          },
+          "distractors": [
+            {
+              "c": "後面",
+              "j": "hau6 min6",
+              "e": "behind"
+            },
+            {
+              "c": "對面",
+              "j": "deoi3 min6",
+              "e": "opposite"
+            },
+            {
+              "c": "左邊",
+              "j": "zo2 bin1",
+              "e": "left side"
+            }
+          ],
+          "topics": [
+            "directions"
+          ]
+        }
+      ]
+    },
+    {
+      "label": "Go straight or turn",
+      "structure": "zik6 haang4 / zyun3 + …",
+      "note": "直行 (zik6 haang4, go straight) and 轉 (zyun3, turn) are the two core movement verbs for directions. 直行轉左 (zik6 haang4 zyun3 zo2) = go straight then turn left.",
+      "examples": [
+        {
+          "c": "直行。",
+          "j": "zik6 haang4.",
+          "e": "Go straight."
+        },
+        {
+          "c": "喺前面轉。",
+          "j": "hai2 cin4 min6 zyun3.",
+          "e": "Turn up ahead."
+        },
+        {
+          "c": "直行就到。",
+          "j": "zik6 haang4 zau6 dou3.",
+          "e": "Straight ahead and you're there."
+        }
+      ],
+      "drills": [
+        {
+          "frameC": "唔使轉,一直▢就得。",
+          "frameJ": "m4 sai2 zyun3, jat1 zik6 ▢ zau6 dak1.",
+          "english": "No need to turn — just go straight.",
+          "frameE": "No need to turn — just … and you're fine.",
+          "answer": {
+            "c": "直行",
+            "j": "zik6 haang4",
+            "e": "straight ahead"
+          },
+          "distractors": [
+            {
+              "c": "轉",
+              "j": "zyun3",
+              "e": "turn"
+            },
+            {
+              "c": "對面",
+              "j": "deoi3 min6",
+              "e": "opposite"
+            },
+            {
+              "c": "附近",
+              "j": "fu6 gan6",
+              "e": "nearby"
+            }
+          ],
+          "topics": [
+            "directions"
+          ]
+        }
+      ]
+    },
+    {
+      "label": "Near or far",
+      "structure": "[place] + hou2 + kan5 / jyun5",
+      "note": "近 (kan5, close) and 遠 (jyun5, far) — the distance pair. 好近 (hou2 kan5) = very close; 好遠 (hou2 jyun5) = very far.",
+      "examples": [
+        {
+          "c": "好近。",
+          "j": "hou2 kan5.",
+          "e": "It's very close."
+        },
+        {
+          "c": "地鐵站好遠。",
+          "j": "dei6 tit3 zaam6 hou2 jyun5.",
+          "e": "The MTR station is far."
+        },
+        {
+          "c": "近唔近？",
+          "j": "kan5 m4 kan5?",
+          "e": "Is it near?"
+        }
+      ],
+      "drills": [
+        {
+          "frameC": "行路就到,好▢。",
+          "frameJ": "haang4 lou6 zau6 dou3, hou2 ▢.",
+          "english": "You can walk there — it's very close.",
+          "frameE": "You can walk there — it's very …",
+          "answer": {
+            "c": "近",
+            "j": "kan5",
+            "e": "close / near"
+          },
+          "distractors": [
+            {
+              "c": "遠",
+              "j": "jyun5",
+              "e": "far"
+            },
+            {
+              "c": "附近",
+              "j": "fu6 gan6",
+              "e": "nearby"
+            },
+            {
+              "c": "對面",
+              "j": "deoi3 min6",
+              "e": "opposite"
+            }
+          ],
+          "topics": [
+            "directions"
+          ]
+        }
+      ]
+    },
+    {
+      "label": "Opposite or nearby",
+      "structure": "[place] + hai2 + deoi3 min6 / fu6 gan6",
+      "note": "對面 (deoi3 min6, opposite / across from) and 附近 (fu6 gan6, nearby / in the area). 喺對面 (hai2 deoi3 min6) = right across the way.",
+      "examples": [
+        {
+          "c": "喺對面。",
+          "j": "hai2 deoi3 min6.",
+          "e": "It's across the way."
+        },
+        {
+          "c": "附近有超市。",
+          "j": "fu6 gan6 jau5 ciu1 si5.",
+          "e": "There's a supermarket nearby."
+        },
+        {
+          "c": "銀行喺對面。",
+          "j": "ngan4 hong4 hai2 deoi3 min6.",
+          "e": "The bank is opposite."
+        }
+      ],
+      "drills": [
+        {
+          "frameC": "超市就喺▢,過條馬路就到。",
+          "frameJ": "ciu1 si5 zau6 hai2 ▢, gwo3 tiu4 maa5 lou6 zau6 dou3.",
+          "english": "The supermarket is right opposite — cross the road and you're there.",
+          "frameE": "The supermarket is right … — cross the road and you're there.",
+          "answer": {
+            "c": "對面",
+            "j": "deoi3 min6",
+            "e": "opposite"
+          },
+          "distractors": [
+            {
+              "c": "附近",
+              "j": "fu6 gan6",
+              "e": "nearby"
+            },
+            {
+              "c": "後面",
+              "j": "hau6 min6",
+              "e": "behind"
+            },
+            {
+              "c": "右邊",
+              "j": "jau6 bin1",
+              "e": "right side"
+            }
+          ],
+          "topics": [
+            "directions"
+          ]
+        }
+      ]
+    },
+    {
+      "label": "Asking for a discount",
+      "structure": "jau5 mou5 zit3?",
+      "note": "有冇折 (jau5 mou5 zit3)? — 'any discount?' — is the standard bargaining opener at a market. 折 (zit3) means a price reduction.",
+      "examples": [
+        {
+          "c": "有冇折？",
+          "j": "jau5 mou5 zit3?",
+          "e": "Any discount?"
+        },
+        {
+          "c": "有冇折呀？",
+          "j": "jau5 mou5 zit3 aa3?",
+          "e": "Is there a discount? (softer)"
+        },
+        {
+          "c": "買兩件有冇折？",
+          "j": "maai5 loeng5 gin6 jau5 mou5 zit3?",
+          "e": "Discount if I buy two?"
+        }
+      ],
+      "drills": [
+        {
+          "frameC": "老闆,▢我要買三件。",
+          "frameJ": "lou5 baan2, ▢ ngo5 jiu3 maai5 saam1 gin6.",
+          "english": "Boss, any discount? I want three.",
+          "frameE": "Boss, …? I want three.",
+          "answer": {
+            "c": "有冇折？",
+            "j": "jau5 mou5 zit3",
+            "e": "Any discount?"
+          },
+          "distractors": [
+            {
+              "c": "唔要",
+              "j": "m4 jiu3",
+              "e": "don't want it"
+            },
+            {
+              "c": "收據",
+              "j": "sau1 geoi3",
+              "e": "receipt"
+            },
+            {
+              "c": "找換",
+              "j": "zaau2 wun6",
+              "e": "change money"
+            }
+          ],
+          "topics": [
+            "shopping"
+          ]
+        }
+      ]
+    },
+    {
+      "label": "Buy or sell",
+      "structure": "maai5 / maai6 + [thing]",
+      "note": "A tricky near-pair: 買 (maai5, buy) and 賣 (maai6, sell) — same characters' cousins, different tone. 買 (maai5) is the rising tone, 賣 (maai6) the low falling. 我想買 (ngo5 soeng2 maai5) = I want to buy.",
+      "examples": [
+        {
+          "c": "我想買。",
+          "j": "ngo5 soeng2 maai5.",
+          "e": "I want to buy it."
+        },
+        {
+          "c": "佢哋賣生果。",
+          "j": "keoi5 dei6 maai6 saang1 gwo2.",
+          "e": "They sell fruit."
+        },
+        {
+          "c": "呢度賣唔賣？",
+          "j": "ni1 dou6 maai6 m4 maai6?",
+          "e": "Do they sell it here?"
+        }
+      ],
+      "drills": [
+        {
+          "frameC": "我想▢呢件恤衫。",
+          "frameJ": "ngo5 soeng2 ▢ ni1 gin6 seot1 saam1.",
+          "english": "I want to buy this shirt.",
+          "frameE": "I want to … this shirt.",
+          "answer": {
+            "c": "買",
+            "j": "maai5",
+            "e": "buy"
+          },
+          "distractors": [
+            {
+              "c": "賣",
+              "j": "maai6",
+              "e": "sell"
+            },
+            {
+              "c": "試吓",
+              "j": "si3 haa5",
+              "e": "try on"
+            },
+            {
+              "c": "唔要",
+              "j": "m4 jiu3",
+              "e": "don't want it"
+            }
+          ],
+          "topics": [
+            "shopping"
+          ]
+        }
+      ]
+    },
+    {
+      "label": "Trying clothes for fit",
+      "structure": "[garment] + gan2 / sung1",
+      "note": "For fit: 緊 (gan2, tight) and 鬆 (sung1, loose). 試吓 (si3 haa5) = try on. 太緊 (taai3 gan2) = too tight.",
+      "examples": [
+        {
+          "c": "我試吓。",
+          "j": "ngo5 si3 haa5.",
+          "e": "Let me try it on."
+        },
+        {
+          "c": "太緊喇。",
+          "j": "taai3 gan2 laa3.",
+          "e": "It's too tight."
+        },
+        {
+          "c": "有啲鬆。",
+          "j": "jau5 di1 sung1.",
+          "e": "It's a bit loose."
+        }
+      ],
+      "drills": [
+        {
+          "frameC": "呢條褲太▢,著唔落。",
+          "frameJ": "ni1 tiu4 fu3 taai3 ▢, zoek3 m4 lok6.",
+          "english": "These trousers are too tight — can't get them on.",
+          "frameE": "These trousers are too … — can't get them on.",
+          "answer": {
+            "c": "緊",
+            "j": "gan2",
+            "e": "tight"
+          },
+          "distractors": [
+            {
+              "c": "鬆",
+              "j": "sung1",
+              "e": "loose"
+            },
+            {
+              "c": "貴",
+              "j": "gwai3",
+              "e": "expensive"
+            },
+            {
+              "c": "平",
+              "j": "peng4",
+              "e": "cheap"
+            }
+          ],
+          "topics": [
+            "shopping"
+          ]
+        }
+      ]
+    },
+    {
+      "label": "Asking for a size",
+      "structure": "jau5 mou5 + daai6 maa5 / sai3 maa5?",
+      "note": "尺碼 (cek3 maa5) = size. 大碼 (daai6 maa5, large) and 細碼 (sai3 maa5, small). 有冇大碼 (jau5 mou5 daai6 maa5)? = got a large?",
+      "examples": [
+        {
+          "c": "有冇大碼？",
+          "j": "jau5 mou5 daai6 maa5?",
+          "e": "Do you have a large?"
+        },
+        {
+          "c": "我要細碼。",
+          "j": "ngo5 jiu3 sai3 maa5.",
+          "e": "I want a small."
+        },
+        {
+          "c": "乜嘢尺碼？",
+          "j": "mat1 je5 cek3 maa5?",
+          "e": "What size?"
+        }
+      ],
+      "drills": [
+        {
+          "frameC": "呢件太細,有冇▢？",
+          "frameJ": "ni1 gin6 taai3 sai3, jau5 mou5 ▢?",
+          "english": "This one's too small — got a large?",
+          "frameE": "This one's too small — got a …?",
+          "answer": {
+            "c": "大碼",
+            "j": "daai6 maa5",
+            "e": "large size"
+          },
+          "distractors": [
+            {
+              "c": "細碼",
+              "j": "sai3 maa5",
+              "e": "small size"
+            },
+            {
+              "c": "尺碼",
+              "j": "cek3 maa5",
+              "e": "size"
+            },
+            {
+              "c": "收據",
+              "j": "sau1 geoi3",
+              "e": "receipt"
+            }
+          ],
+          "topics": [
+            "shopping"
+          ]
+        }
+      ]
+    },
+    {
+      "label": "Which transport to take",
+      "structure": "daap3 + [vehicle]",
+      "note": "搭 (daap3) is the verb for taking public transport: 搭巴士 (daap3 baa1 si2, take the bus), 搭的士 (daap3 dik1 si2, take a taxi).",
+      "examples": [
+        {
+          "c": "搭巴士。",
+          "j": "daap3 baa1 si2.",
+          "e": "Take the bus."
+        },
+        {
+          "c": "搭的士快啲。",
+          "j": "daap3 dik1 si2 faai3 di1.",
+          "e": "A taxi is faster."
+        },
+        {
+          "c": "我哋搭船。",
+          "j": "ngo5 dei6 daap3 syun4.",
+          "e": "Let's take the ferry."
+        }
+      ],
+      "drills": [
+        {
+          "frameC": "塞車,我哋搭▢啦。",
+          "frameJ": "sak1 ce1, ngo5 dei6 daap3 ▢ laa1.",
+          "english": "Traffic jam — let's take the bus.",
+          "frameE": "Traffic jam — let's take the …",
+          "answer": {
+            "c": "巴士",
+            "j": "baa1 si2",
+            "e": "bus"
+          },
+          "distractors": [
+            {
+              "c": "的士",
+              "j": "dik1 si2",
+              "e": "taxi"
+            },
+            {
+              "c": "火車",
+              "j": "fo2 ce1",
+              "e": "train"
+            },
+            {
+              "c": "單車",
+              "j": "daan1 ce1",
+              "e": "bicycle"
+            }
+          ],
+          "topics": [
+            "transport"
+          ]
+        }
+      ]
+    },
+    {
+      "label": "Telling the taxi where to go",
+      "structure": "heoi3 bin1 dou6?",
+      "note": "去邊度 (heoi3 bin1 dou6)? — 'where to?' — is what a taxi driver asks. Answer with your destination.",
+      "examples": [
+        {
+          "c": "去邊度？",
+          "j": "heoi3 bin1 dou6?",
+          "e": "Where to?"
+        },
+        {
+          "c": "去機場。",
+          "j": "heoi3 gei1 coeng4.",
+          "e": "To the airport."
+        },
+        {
+          "c": "你去邊度？",
+          "j": "nei5 heoi3 bin1 dou6?",
+          "e": "Where are you going?"
+        }
+      ],
+      "drills": [
+        {
+          "frameC": "司機問:▢",
+          "frameJ": "si1 gei1 man6: ▢",
+          "english": "The driver asks: Where to?",
+          "frameE": "The driver asks: …",
+          "answer": {
+            "c": "去邊度？",
+            "j": "heoi3 bin1 dou6",
+            "e": "Where to?"
+          },
+          "distractors": [
+            {
+              "c": "幾遠？",
+              "j": "gei2 jyun5",
+              "e": "How far?"
+            },
+            {
+              "c": "停",
+              "j": "ting4",
+              "e": "stop"
+            },
+            {
+              "c": "地鐵",
+              "j": "dei6 tit3",
+              "e": "MTR"
+            }
+          ],
+          "topics": [
+            "transport"
+          ]
+        }
+      ]
+    },
+    {
+      "label": "Asking how far",
+      "structure": "gei2 jyun5?",
+      "note": "幾遠 (gei2 jyun5)? — 'how far?'. Pair it with a destination to gauge the trip. 仲有幾遠 (zung6 jau5 gei2 jyun5)? = how much further?",
+      "examples": [
+        {
+          "c": "幾遠？",
+          "j": "gei2 jyun5?",
+          "e": "How far is it?"
+        },
+        {
+          "c": "重有幾遠？",
+          "j": "zung6 jau5 gei2 jyun5?",
+          "e": "How much further?"
+        },
+        {
+          "c": "去機場幾遠？",
+          "j": "heoi3 gei1 coeng4 gei2 jyun5?",
+          "e": "How far to the airport?"
+        }
+      ],
+      "drills": [
+        {
+          "frameC": "司機,去機場▢",
+          "frameJ": "si1 gei1, heoi3 gei1 coeng4 ▢",
+          "english": "Driver, how far is it to the airport?",
+          "frameE": "Driver, to the airport — …",
+          "answer": {
+            "c": "幾遠？",
+            "j": "gei2 jyun5",
+            "e": "How far?"
+          },
+          "distractors": [
+            {
+              "c": "去邊度？",
+              "j": "heoi3 bin1 dou6",
+              "e": "Where to?"
+            },
+            {
+              "c": "停",
+              "j": "ting4",
+              "e": "stop"
+            },
+            {
+              "c": "飛機",
+              "j": "fei1 gei1",
+              "e": "airplane"
+            }
+          ],
+          "topics": [
+            "transport"
+          ]
+        }
+      ]
+    },
+    {
+      "label": "Telling the driver to stop",
+      "structure": "… + ting4",
+      "note": "停 (ting4) means 'stop'. On a minibus you call out 有落 or 呢度停 (ni1 dou6 ting4, stop here) to get off.",
+      "examples": [
+        {
+          "c": "呢度停。",
+          "j": "ni1 dou6 ting4.",
+          "e": "Stop here."
+        },
+        {
+          "c": "前面停。",
+          "j": "cin4 min6 ting4.",
+          "e": "Stop ahead."
+        },
+        {
+          "c": "唔該,停。",
+          "j": "m4 goi1, ting4.",
+          "e": "Excuse me, stop."
+        }
+      ],
+      "drills": [
+        {
+          "frameC": "到喇,呢度▢。",
+          "frameJ": "dou3 laa3, ni1 dou6 ▢.",
+          "english": "We're here — stop here.",
+          "frameE": "We're here — … here.",
+          "answer": {
+            "c": "停",
+            "j": "ting4",
+            "e": "stop"
+          },
+          "distractors": [
+            {
+              "c": "幾遠？",
+              "j": "gei2 jyun5",
+              "e": "How far?"
+            },
+            {
+              "c": "船",
+              "j": "syun4",
+              "e": "boat / ferry"
+            },
+            {
+              "c": "火車",
+              "j": "fo2 ce1",
+              "e": "train"
+            }
+          ],
+          "topics": [
+            "transport"
+          ]
+        }
+      ]
+    },
+    {
+      "label": "My hobby is…",
+      "structure": "ngo5 ge3 hing3 ceoi3 hai6 + [activity]",
+      "note": "興趣 (hing3 ceoi3) means hobby / interest. 我嘅興趣係… (ngo5 ge3 hing3 ceoi3 hai6 …) = my hobby is …, then name the activity.",
+      "examples": [
+        {
+          "c": "我嘅興趣係行山。",
+          "j": "ngo5 ge3 hing3 ceoi3 hai6 haang4 saan1.",
+          "e": "My hobby is hiking."
+        },
+        {
+          "c": "你有乜嘢興趣？",
+          "j": "nei5 jau5 mat1 je5 hing3 ceoi3?",
+          "e": "What hobbies do you have?"
+        },
+        {
+          "c": "睇書係我興趣。",
+          "j": "tai2 syu1 hai6 ngo5 hing3 ceoi3.",
+          "e": "Reading is my hobby."
+        }
+      ],
+      "drills": [
+        {
+          "frameC": "我嘅興趣係▢,週末成日去。",
+          "frameJ": "ngo5 ge3 hing3 ceoi3 hai6 ▢, zau1 mut6 sing4 jat6 heoi3.",
+          "english": "My hobby is hiking — I go every weekend.",
+          "frameE": "My hobby is … — I go every weekend.",
+          "answer": {
+            "c": "行山",
+            "j": "haang4 saan1",
+            "e": "hiking"
+          },
+          "distractors": [
+            {
+              "c": "打機",
+              "j": "daa2 gei1",
+              "e": "play video games"
+            },
+            {
+              "c": "畫畫",
+              "j": "waak6 waa2",
+              "e": "drawing"
+            },
+            {
+              "c": "跳舞",
+              "j": "tiu3 mou5",
+              "e": "dance"
+            }
+          ],
+          "topics": [
+            "hobbies"
+          ]
+        }
+      ]
+    },
+    {
+      "label": "Listening and singing",
+      "structure": "ngo5 zung1 ji3 + ting1 go1 / coeng3 go1",
+      "note": "Two music hobbies that share 歌 (go1, song): 聽歌 (ting1 go1, listen to music) and 唱歌 (coeng3 go1, sing). 聽 (ting1) = listen, 唱 (coeng3) = sing.",
+      "examples": [
+        {
+          "c": "我鍾意聽歌。",
+          "j": "ngo5 zung1 ji3 ting1 go1.",
+          "e": "I like listening to music."
+        },
+        {
+          "c": "佢好鍾意唱歌。",
+          "j": "keoi5 hou2 zung1 ji3 coeng3 go1.",
+          "e": "She loves singing."
+        },
+        {
+          "c": "一齊唱歌。",
+          "j": "jat1 cai4 coeng3 go1.",
+          "e": "Let's sing together."
+        }
+      ],
+      "drills": [
+        {
+          "frameC": "我去KTV▢。",
+          "frameJ": "ngo5 heoi3 KTV ▢.",
+          "english": "I go to KTV to sing.",
+          "frameE": "I go to KTV to …",
+          "answer": {
+            "c": "唱歌",
+            "j": "coeng3 go1",
+            "e": "sing"
+          },
+          "distractors": [
+            {
+              "c": "聽歌",
+              "j": "ting1 go1",
+              "e": "listen to music"
+            },
+            {
+              "c": "睇書",
+              "j": "tai2 syu1",
+              "e": "read a book"
+            },
+            {
+              "c": "影相",
+              "j": "jing2 soeng2",
+              "e": "take photos"
+            }
+          ],
+          "topics": [
+            "hobbies"
+          ]
+        }
+      ]
+    },
+    {
+      "label": "Creative hobbies",
+      "structure": "ngo5 zung1 ji3 + waak6 waa2 / jing2 soeng2",
+      "note": "Hands-on hobbies: 畫畫 (waak6 waa2, drawing / painting) and 影相 (jing2 soeng2, taking photos). Both make something to keep.",
+      "examples": [
+        {
+          "c": "我鍾意畫畫。",
+          "j": "ngo5 zung1 ji3 waak6 waa2.",
+          "e": "I like drawing."
+        },
+        {
+          "c": "佢影相好叻。",
+          "j": "keoi5 jing2 soeng2 hou2 lek1.",
+          "e": "She's great at photography."
+        },
+        {
+          "c": "出去影相。",
+          "j": "ceot1 heoi3 jing2 soeng2.",
+          "e": "Go out to take photos."
+        }
+      ],
+      "drills": [
+        {
+          "frameC": "風景好靚,我想▢。",
+          "frameJ": "fung1 ging2 hou2 leng3, ngo5 soeng2 ▢.",
+          "english": "The scenery is beautiful — I want to take photos.",
+          "frameE": "The scenery is beautiful — I want to …",
+          "answer": {
+            "c": "影相",
+            "j": "jing2 soeng2",
+            "e": "take photos"
+          },
+          "distractors": [
+            {
+              "c": "畫畫",
+              "j": "waak6 waa2",
+              "e": "drawing"
+            },
+            {
+              "c": "行山",
+              "j": "haang4 saan1",
+              "e": "hiking"
+            },
+            {
+              "c": "打機",
+              "j": "daa2 gei1",
+              "e": "play video games"
+            }
+          ],
+          "topics": [
+            "hobbies"
+          ]
+        }
+      ]
+    },
+    {
+      "label": "Active hobbies",
+      "structure": "ngo5 zung1 ji3 + tiu3 mou5 / haang4 saan1",
+      "note": "Get-up-and-move hobbies: 跳舞 (tiu3 mou5, dance) and 行山 (haang4 saan1, hiking). 跳 (tiu3) = jump, 行 (haang4) = walk.",
+      "examples": [
+        {
+          "c": "我鍾意跳舞。",
+          "j": "ngo5 zung1 ji3 tiu3 mou5.",
+          "e": "I like dancing."
+        },
+        {
+          "c": "週末去行山。",
+          "j": "zau1 mut6 heoi3 haang4 saan1.",
+          "e": "Go hiking on the weekend."
+        },
+        {
+          "c": "佢跳舞好叻。",
+          "j": "keoi5 tiu3 mou5 hou2 lek1.",
+          "e": "She dances well."
+        }
+      ],
+      "drills": [
+        {
+          "frameC": "音樂一響,佢就開始▢。",
+          "frameJ": "jam1 ngok6 jat1 hoeng2, keoi5 zau6 hoi1 ci2 ▢.",
+          "english": "As soon as the music plays, she starts to dance.",
+          "frameE": "As soon as the music plays, she starts to …",
+          "answer": {
+            "c": "跳舞",
+            "j": "tiu3 mou5",
+            "e": "dance"
+          },
+          "distractors": [
+            {
+              "c": "行山",
+              "j": "haang4 saan1",
+              "e": "hiking"
+            },
+            {
+              "c": "唱歌",
+              "j": "coeng3 go1",
+              "e": "sing"
+            },
+            {
+              "c": "睇戲",
+              "j": "tai2 hei3",
+              "e": "watch a movie"
+            }
+          ],
+          "topics": [
+            "hobbies"
+          ]
+        }
+      ]
+    },
+    {
+      "label": "Asking for the menu",
+      "structure": "m4 goi1 + caan1 paai4",
+      "note": "餐牌 (caan1 paai4) is the menu. 唔該餐牌 (m4 goi1 caan1 paai4) = menu, please. 侍應 (si6 jing3) is the waiter who brings it.",
+      "examples": [
+        {
+          "c": "唔該餐牌。",
+          "j": "m4 goi1 caan1 paai4.",
+          "e": "Menu, please."
+        },
+        {
+          "c": "侍應,餐牌呀。",
+          "j": "si6 jing3, caan1 paai4 aa3.",
+          "e": "Waiter, the menu please."
+        },
+        {
+          "c": "餐牌喺度。",
+          "j": "caan1 paai4 hai2 dou6.",
+          "e": "The menu is here."
+        }
+      ],
+      "drills": [
+        {
+          "frameC": "侍應,唔該俾個▢我哋。",
+          "frameJ": "si6 jing3, m4 goi1 bei2 go3 ▢ ngo5 dei6.",
+          "english": "Waiter, please give us a menu.",
+          "frameE": "Waiter, please give us a …",
+          "answer": {
+            "c": "餐牌",
+            "j": "caan1 paai4",
+            "e": "menu"
+          },
+          "distractors": [
+            {
+              "c": "侍應",
+              "j": "si6 jing3",
+              "e": "waiter"
+            },
+            {
+              "c": "埋單",
+              "j": "maai4 daan1",
+              "e": "the bill"
+            },
+            {
+              "c": "落單",
+              "j": "lok6 daan1",
+              "e": "place an order"
+            }
+          ],
+          "topics": [
+            "restaurant"
+          ]
+        }
+      ]
+    },
+    {
+      "label": "Placing your order",
+      "structure": "ngo5 jiu3 + lok6 daan1",
+      "note": "落單 (lok6 daan1) = to place an order; 埋單 (maai4 daan1) = ask for the bill. They bookend the meal — order at the start, settle up at the end.",
+      "examples": [
+        {
+          "c": "我哋落單。",
+          "j": "ngo5 dei6 lok6 daan1.",
+          "e": "We'd like to order."
+        },
+        {
+          "c": "落單未？",
+          "j": "lok6 daan1 mei6?",
+          "e": "Have you ordered?"
+        },
+        {
+          "c": "幫我落單。",
+          "j": "bong1 ngo5 lok6 daan1.",
+          "e": "Take my order, please."
+        }
+      ],
+      "drills": [
+        {
+          "frameC": "睇好餐牌喇,可以▢。",
+          "frameJ": "tai2 hou2 caan1 paai4 laa3, ho2 ji5 ▢.",
+          "english": "We've looked at the menu — ready to order.",
+          "frameE": "We've looked at the menu — ready to …",
+          "answer": {
+            "c": "落單",
+            "j": "lok6 daan1",
+            "e": "place an order"
+          },
+          "distractors": [
+            {
+              "c": "埋單",
+              "j": "maai4 daan1",
+              "e": "ask for the bill"
+            },
+            {
+              "c": "餐牌",
+              "j": "caan1 paai4",
+              "e": "menu"
+            },
+            {
+              "c": "侍應",
+              "j": "si6 jing3",
+              "e": "waiter"
+            }
+          ],
+          "topics": [
+            "restaurant"
+          ]
+        }
+      ]
+    },
+    {
+      "label": "Asking for the bill",
+      "structure": "m4 goi1 + maai4 daan1",
+      "note": "埋單 (maai4 daan1) is how you ask for the bill — literally 'close the tab'. 唔該埋單 (m4 goi1 maai4 daan1) is the all-purpose phrase at the end of a meal.",
+      "examples": [
+        {
+          "c": "唔該埋單。",
+          "j": "m4 goi1 maai4 daan1.",
+          "e": "Bill, please."
+        },
+        {
+          "c": "埋單幾錢？",
+          "j": "maai4 daan1 gei2 cin2?",
+          "e": "How much is the bill?"
+        },
+        {
+          "c": "我嚟埋單。",
+          "j": "ngo5 lai4 maai4 daan1.",
+          "e": "I'll get the bill."
+        }
+      ],
+      "drills": [
+        {
+          "frameC": "食飽喇,唔該▢。",
+          "frameJ": "sik6 baau2 laa3, m4 goi1 ▢.",
+          "english": "We're full — bill, please.",
+          "frameE": "We're full — …, please.",
+          "answer": {
+            "c": "埋單",
+            "j": "maai4 daan1",
+            "e": "ask for the bill"
+          },
+          "distractors": [
+            {
+              "c": "落單",
+              "j": "lok6 daan1",
+              "e": "place an order"
+            },
+            {
+              "c": "餐牌",
+              "j": "caan1 paai4",
+              "e": "menu"
+            },
+            {
+              "c": "好食",
+              "j": "hou2 sik6",
+              "e": "delicious"
+            }
+          ],
+          "topics": [
+            "restaurant"
+          ]
+        }
+      ]
+    },
+    {
+      "label": "Saying the food is good",
+      "structure": "[dish] + hou2 sik6",
+      "note": "好食 (hou2 sik6) = delicious (literally 'good to eat'). The natural compliment after a meal: 啲嘢好食 (di1 je5 hou2 sik6) = the food is great.",
+      "examples": [
+        {
+          "c": "好食！",
+          "j": "hou2 sik6!",
+          "e": "Delicious!"
+        },
+        {
+          "c": "啲點心好食。",
+          "j": "di1 dim2 sam1 hou2 sik6.",
+          "e": "The dim sum is great."
+        },
+        {
+          "c": "好唔好食？",
+          "j": "hou2 m4 hou2 sik6?",
+          "e": "Is it tasty?"
+        }
+      ],
+      "drills": [
+        {
+          "frameC": "啲點心真係好▢,我要再叫。",
+          "frameJ": "di1 dim2 sam1 zan1 hai6 hou2 ▢, ngo5 jiu3 zoi3 giu3.",
+          "english": "The dim sum is really delicious — I'll order more.",
+          "frameE": "The dim sum is really … — I'll order more.",
+          "answer": {
+            "c": "好食",
+            "j": "hou2 sik6",
+            "e": "delicious"
+          },
+          "distractors": [
+            {
+              "c": "飽",
+              "j": "baau2",
+              "e": "full"
+            },
+            {
+              "c": "凍",
+              "j": "dung3",
+              "e": "cold"
+            },
+            {
+              "c": "熱",
+              "j": "jit6",
+              "e": "hot"
+            }
+          ],
+          "topics": [
+            "restaurant"
+          ]
+        }
+      ]
+    },
+    {
+      "label": "Cash or card",
+      "structure": "jung6 + jin6 gam1 / seon3 jung6 kaat1",
+      "note": "At the till: 現金 (jin6 gam1, cash) or 信用卡 (seon3 jung6 kaat1, credit card). 用現金 (jung6 jin6 gam1) = pay with cash.",
+      "examples": [
+        {
+          "c": "用現金。",
+          "j": "jung6 jin6 gam1.",
+          "e": "Pay with cash."
+        },
+        {
+          "c": "可唔可以用信用卡？",
+          "j": "ho2 m4 ho2 ji5 jung6 seon3 jung6 kaat1?",
+          "e": "Can I use a credit card?"
+        },
+        {
+          "c": "我冇現金。",
+          "j": "ngo5 mou5 jin6 gam1.",
+          "e": "I have no cash."
+        }
+      ],
+      "drills": [
+        {
+          "frameC": "我冇散紙,用▢得唔得？",
+          "frameJ": "ngo5 mou5 saan3 zi2, jung6 ▢ dak1 m4 dak1?",
+          "english": "I have no coins — can I use a credit card?",
+          "frameE": "I have no coins — can I use a …?",
+          "answer": {
+            "c": "信用卡",
+            "j": "seon3 jung6 kaat1",
+            "e": "credit card"
+          },
+          "distractors": [
+            {
+              "c": "現金",
+              "j": "jin6 gam1",
+              "e": "cash"
+            },
+            {
+              "c": "散紙",
+              "j": "saan3 zi2",
+              "e": "coins / small change"
+            },
+            {
+              "c": "戶口",
+              "j": "wu6 hau2",
+              "e": "account"
+            }
+          ],
+          "topics": [
+            "money"
+          ]
+        }
+      ]
+    },
+    {
+      "label": "At the bank",
+      "structure": "heoi3 + ngan4 hong4 + …",
+      "note": "銀行 (ngan4 hong4) is the bank; 提款機 (tai4 fun2 gei1) is the ATM. 去銀行 (heoi3 ngan4 hong4) = go to the bank.",
+      "examples": [
+        {
+          "c": "去銀行。",
+          "j": "heoi3 ngan4 hong4.",
+          "e": "Go to the bank."
+        },
+        {
+          "c": "提款機喺邊度？",
+          "j": "tai4 fun2 gei1 hai2 bin1 dou6?",
+          "e": "Where's the ATM?"
+        },
+        {
+          "c": "銀行開門未？",
+          "j": "ngan4 hong4 hoi1 mun4 mei6?",
+          "e": "Is the bank open yet?"
+        }
+      ],
+      "drills": [
+        {
+          "frameC": "我要攞現金,去▢。",
+          "frameJ": "ngo5 jiu3 lo2 jin6 gam1, heoi3 ▢.",
+          "english": "I need cash — go to the bank.",
+          "frameE": "I need cash — go to the …",
+          "answer": {
+            "c": "銀行",
+            "j": "ngan4 hong4",
+            "e": "bank"
+          },
+          "distractors": [
+            {
+              "c": "提款機",
+              "j": "tai4 fun2 gei1",
+              "e": "ATM"
+            },
+            {
+              "c": "戶口",
+              "j": "wu6 hau2",
+              "e": "account"
+            },
+            {
+              "c": "現金",
+              "j": "jin6 gam1",
+              "e": "cash"
+            }
+          ],
+          "topics": [
+            "money"
+          ]
+        }
+      ]
+    },
+    {
+      "label": "Getting change back",
+      "structure": "zaau2 cin2 / saan3 zi2",
+      "note": "找錢 (zaau2 cin2) is the change you get back; 散紙 (saan3 zi2) is coins / small notes. 唔使找 (m4 sai2 zaau2) = keep the change.",
+      "examples": [
+        {
+          "c": "唔使找。",
+          "j": "m4 sai2 zaau2.",
+          "e": "Keep the change."
+        },
+        {
+          "c": "找返十蚊。",
+          "j": "zaau2 faan1 sap6 man1.",
+          "e": "Ten dollars change."
+        },
+        {
+          "c": "有冇散紙？",
+          "j": "jau5 mou5 saan3 zi2?",
+          "e": "Got any small change?"
+        }
+      ],
+      "drills": [
+        {
+          "frameC": "俾咗一百蚊,佢▢返二十。",
+          "frameJ": "bei2 zo2 jat1 baak3 man1, keoi5 ▢ faan1 ji6 sap6.",
+          "english": "Gave a hundred — he gives twenty in change.",
+          "frameE": "Gave a hundred — he gives twenty in …",
+          "answer": {
+            "c": "找錢",
+            "j": "zaau2 cin2",
+            "e": "change (returned)"
+          },
+          "distractors": [
+            {
+              "c": "散紙",
+              "j": "saan3 zi2",
+              "e": "coins"
+            },
+            {
+              "c": "現金",
+              "j": "jin6 gam1",
+              "e": "cash"
+            },
+            {
+              "c": "匯錢",
+              "j": "wui6 cin2",
+              "e": "transfer money"
+            }
+          ],
+          "topics": [
+            "money"
+          ]
+        }
+      ]
+    },
+    {
+      "label": "Moving money around",
+      "structure": "wui6 cin2 / coeng3 cin2",
+      "note": "匯錢 (wui6 cin2) is to transfer money; 唱錢 (coeng3 cin2) is to change currency. Two different 'money moves' — one between accounts, one between currencies.",
+      "examples": [
+        {
+          "c": "我要匯錢。",
+          "j": "ngo5 jiu3 wui6 cin2.",
+          "e": "I need to transfer money."
+        },
+        {
+          "c": "去邊度唱錢？",
+          "j": "heoi3 bin1 dou6 coeng3 cin2?",
+          "e": "Where can I change money?"
+        },
+        {
+          "c": "匯錢去屋企。",
+          "j": "wui6 cin2 heoi3 uk1 kei2.",
+          "e": "Transfer money home."
+        }
+      ],
+      "drills": [
+        {
+          "frameC": "去旅行之前,要▢做港幣。",
+          "frameJ": "heoi3 leoi5 hang4 zi1 cin4, jiu3 ▢ zou6 gong2 bai6.",
+          "english": "Before travelling, change money into HK dollars.",
+          "frameE": "Before travelling, … into HK dollars.",
+          "answer": {
+            "c": "唱錢",
+            "j": "coeng3 cin2",
+            "e": "change money"
+          },
+          "distractors": [
+            {
+              "c": "匯錢",
+              "j": "wui6 cin2",
+              "e": "transfer money"
+            },
+            {
+              "c": "找錢",
+              "j": "zaau2 cin2",
+              "e": "change (returned)"
+            },
+            {
+              "c": "戶口",
+              "j": "wu6 hau2",
+              "e": "account"
+            }
+          ],
+          "topics": [
+            "money"
+          ]
+        }
+      ]
+    },
+    {
+      "label": "Opening an account",
+      "structure": "hoi1 + wu6 hau2",
+      "note": "戶口 (wu6 hau2) is a bank account. 開戶口 (hoi1 wu6 hau2) = open an account. 錢 (cin2) is the all-purpose word for money.",
+      "examples": [
+        {
+          "c": "我想開戶口。",
+          "j": "ngo5 soeng2 hoi1 wu6 hau2.",
+          "e": "I'd like to open an account."
+        },
+        {
+          "c": "我冇錢喇。",
+          "j": "ngo5 mou5 cin2 laa3.",
+          "e": "I'm out of money."
+        },
+        {
+          "c": "戶口有幾多錢？",
+          "j": "wu6 hau2 jau5 gei2 do1 cin2?",
+          "e": "How much is in the account?"
+        }
+      ],
+      "drills": [
+        {
+          "frameC": "我想喺銀行開個▢。",
+          "frameJ": "ngo5 soeng2 hai2 ngan4 hong4 hoi1 go3 ▢.",
+          "english": "I'd like to open an account at the bank.",
+          "frameE": "I'd like to open an … at the bank.",
+          "answer": {
+            "c": "戶口",
+            "j": "wu6 hau2",
+            "e": "account"
+          },
+          "distractors": [
+            {
+              "c": "現金",
+              "j": "jin6 gam1",
+              "e": "cash"
+            },
+            {
+              "c": "信用卡",
+              "j": "seon3 jung6 kaat1",
+              "e": "credit card"
+            },
+            {
+              "c": "提款機",
+              "j": "tai4 fun2 gei1",
+              "e": "ATM"
+            }
+          ],
+          "topics": [
+            "money"
+          ]
+        }
+      ]
+    },
+    {
+      "label": "People at school",
+      "structure": "lou5 si1 / hok6 saang1 / tung4 hok6",
+      "note": "The cast at school: 老師 (lou5 si1, teacher), 學生 (hok6 saang1, student), 同學 (tung4 hok6, classmate). 我係學生 (ngo5 hai6 hok6 saang1) = I'm a student.",
+      "examples": [
+        {
+          "c": "佢係我老師。",
+          "j": "keoi5 hai6 ngo5 lou5 si1.",
+          "e": "He's my teacher."
+        },
+        {
+          "c": "我係學生。",
+          "j": "ngo5 hai6 hok6 saang1.",
+          "e": "I'm a student."
+        },
+        {
+          "c": "佢係我同學。",
+          "j": "keoi5 hai6 ngo5 tung4 hok6.",
+          "e": "She's my classmate."
+        }
+      ],
+      "drills": [
+        {
+          "frameC": "佢教我哋讀書,係我哋嘅▢。",
+          "frameJ": "keoi5 gaau3 ngo5 dei6 duk6 syu1, hai6 ngo5 dei6 ge3 ▢.",
+          "english": "She teaches us — she's our teacher.",
+          "frameE": "She teaches us — she's our …",
+          "answer": {
+            "c": "老師",
+            "j": "lou5 si1",
+            "e": "teacher"
+          },
+          "distractors": [
+            {
+              "c": "學生",
+              "j": "hok6 saang1",
+              "e": "student"
+            },
+            {
+              "c": "同學",
+              "j": "tung4 hok6",
+              "e": "classmate"
+            },
+            {
+              "c": "學校",
+              "j": "hok6 haau6",
+              "e": "school"
+            }
+          ],
+          "topics": [
+            "school"
+          ]
+        }
+      ]
+    },
+    {
+      "label": "Doing schoolwork",
+      "structure": "zou6 + gung1 fo3",
+      "note": "功課 (gung1 fo3) is homework; 讀書 (duk6 syu1) is to study. 做功課 (zou6 gung1 fo3) = do homework.",
+      "examples": [
+        {
+          "c": "做功課。",
+          "j": "zou6 gung1 fo3.",
+          "e": "Do homework."
+        },
+        {
+          "c": "我要讀書。",
+          "j": "ngo5 jiu3 duk6 syu1.",
+          "e": "I need to study."
+        },
+        {
+          "c": "功課好多。",
+          "j": "gung1 fo3 hou2 do1.",
+          "e": "Lots of homework."
+        }
+      ],
+      "drills": [
+        {
+          "frameC": "放學之後要做▢。",
+          "frameJ": "fong3 hok6 zi1 hau6 jiu3 zou6 ▢.",
+          "english": "After school you have to do homework.",
+          "frameE": "After school you have to do …",
+          "answer": {
+            "c": "功課",
+            "j": "gung1 fo3",
+            "e": "homework"
+          },
+          "distractors": [
+            {
+              "c": "考試",
+              "j": "haau2 si3",
+              "e": "exam"
+            },
+            {
+              "c": "上堂",
+              "j": "soeng5 tong4",
+              "e": "go to class"
+            },
+            {
+              "c": "讀書",
+              "j": "duk6 syu1",
+              "e": "study"
+            }
+          ],
+          "topics": [
+            "school"
+          ]
+        }
+      ]
+    },
+    {
+      "label": "Going to class",
+      "structure": "soeng5 tong4 / haau2 si3",
+      "note": "上堂 (soeng5 tong4) is to attend class; 考試 (haau2 si3) is an exam. 上堂 (soeng5 tong4) literally 'go up to the hall'.",
+      "examples": [
+        {
+          "c": "返學上堂。",
+          "j": "faan1 hok6 soeng5 tong4.",
+          "e": "Go to school for class."
+        },
+        {
+          "c": "聽日考試。",
+          "j": "ting1 jat6 haau2 si3.",
+          "e": "Exam tomorrow."
+        },
+        {
+          "c": "上堂唔好瞓覺。",
+          "j": "soeng5 tong4 m4 hou2 fan3 gaau3.",
+          "e": "Don't sleep in class."
+        }
+      ],
+      "drills": [
+        {
+          "frameC": "鐘聲響喇,要去▢。",
+          "frameJ": "zung1 seng1 hoeng2 laa3, jiu3 heoi3 ▢.",
+          "english": "The bell rang — time to go to class.",
+          "frameE": "The bell rang — time to go to …",
+          "answer": {
+            "c": "上堂",
+            "j": "soeng5 tong4",
+            "e": "go to class"
+          },
+          "distractors": [
+            {
+              "c": "考試",
+              "j": "haau2 si3",
+              "e": "exam"
+            },
+            {
+              "c": "功課",
+              "j": "gung1 fo3",
+              "e": "homework"
+            },
+            {
+              "c": "讀書",
+              "j": "duk6 syu1",
+              "e": "study"
+            }
+          ],
+          "topics": [
+            "school"
+          ]
+        }
+      ]
+    },
+    {
+      "label": "Knowing how / answering",
+      "structure": "sik1 / daap3 + …",
+      "note": "識 (sik1) means 'know how to'; 答 (daap3) means 'answer'. 我識答 (ngo5 sik1 daap3) = I know how to answer it.",
+      "examples": [
+        {
+          "c": "我識。",
+          "j": "ngo5 sik1.",
+          "e": "I know how."
+        },
+        {
+          "c": "我識答呢題。",
+          "j": "ngo5 sik1 daap3 ni1 tai4.",
+          "e": "I can answer this question."
+        },
+        {
+          "c": "我唔識答。",
+          "j": "ngo5 m4 sik1 daap3.",
+          "e": "I don't know the answer."
+        }
+      ],
+      "drills": [
+        {
+          "frameC": "老師問問題,我舉手▢。",
+          "frameJ": "lou5 si1 man6 man6 tai4, ngo5 geoi2 sau2 ▢.",
+          "english": "The teacher asks a question — I raise my hand to answer.",
+          "frameE": "The teacher asks a question — I raise my hand to …",
+          "answer": {
+            "c": "答",
+            "j": "daap3",
+            "e": "answer"
+          },
+          "distractors": [
+            {
+              "c": "識",
+              "j": "sik1",
+              "e": "know how to"
+            },
+            {
+              "c": "讀書",
+              "j": "duk6 syu1",
+              "e": "study"
+            },
+            {
+              "c": "上堂",
+              "j": "soeng5 tong4",
+              "e": "go to class"
+            }
+          ],
+          "topics": [
+            "school"
+          ]
+        }
+      ]
+    },
+    {
+      "label": "Talking about your school",
+      "structure": "ngo5 ge3 hok6 haau6 + …",
+      "note": "學校 (hok6 haau6) is school. Notice 學 (hok6, learn) appears in 學校 (hok6 haau6, school), 學生 (hok6 saang1, student) and 同學 (tung4 hok6, classmate) — the shared root for 'learning'.",
+      "examples": [
+        {
+          "c": "我嘅學校好大。",
+          "j": "ngo5 ge3 hok6 haau6 hou2 daai6.",
+          "e": "My school is big."
+        },
+        {
+          "c": "學校喺附近。",
+          "j": "hok6 haau6 hai2 fu6 gan6.",
+          "e": "The school is nearby."
+        },
+        {
+          "c": "返學校。",
+          "j": "faan1 hok6 haau6.",
+          "e": "Go to school."
+        }
+      ],
+      "drills": [
+        {
+          "frameC": "我每日返▢讀書。",
+          "frameJ": "ngo5 mui5 jat6 faan1 ▢ duk6 syu1.",
+          "english": "I go to school every day to study.",
+          "frameE": "I go to … every day to study.",
+          "answer": {
+            "c": "學校",
+            "j": "hok6 haau6",
+            "e": "school"
+          },
+          "distractors": [
+            {
+              "c": "老師",
+              "j": "lou5 si1",
+              "e": "teacher"
+            },
+            {
+              "c": "同學",
+              "j": "tung4 hok6",
+              "e": "classmate"
+            },
+            {
+              "c": "功課",
+              "j": "gung1 fo3",
+              "e": "homework"
+            }
+          ],
+          "topics": [
+            "school"
+          ]
+        }
+      ]
+    },
+    {
+      "label": "Start and finish work",
+      "structure": "faan1 gung1 / fong3 gung1",
+      "note": "返工 (faan1 gung1) is to start/go to work; 放工 (fong3 gung1) is to finish work. The bookends of the working day.",
+      "examples": [
+        {
+          "c": "返工喇。",
+          "j": "faan1 gung1 laa3.",
+          "e": "Off to work."
+        },
+        {
+          "c": "幾點放工？",
+          "j": "gei2 dim2 fong3 gung1?",
+          "e": "What time do you finish?"
+        },
+        {
+          "c": "放工食飯。",
+          "j": "fong3 gung1 sik6 faan6.",
+          "e": "Eat after work."
+        }
+      ],
+      "drills": [
+        {
+          "frameC": "夜喇,終於可以▢返屋企。",
+          "frameJ": "je6 laa3, zung1 jyu1 ho2 ji5 ▢ faan1 uk1 kei2.",
+          "english": "It's late — finally can finish work and go home.",
+          "frameE": "It's late — finally can … and go home.",
+          "answer": {
+            "c": "放工",
+            "j": "fong3 gung1",
+            "e": "finish work"
+          },
+          "distractors": [
+            {
+              "c": "返工",
+              "j": "faan1 gung1",
+              "e": "go to work"
+            },
+            {
+              "c": "開會",
+              "j": "hoi1 wui2",
+              "e": "meeting"
+            },
+            {
+              "c": "加班",
+              "j": "gaa1 baan1",
+              "e": "overtime"
+            }
+          ],
+          "topics": [
+            "work"
+          ]
+        }
+      ]
+    },
+    {
+      "label": "People at the office",
+      "structure": "lou5 baan2 / tung4 si6",
+      "note": "老闆 (lou5 baan2) is the boss; 同事 (tung4 si6) is a colleague. Note 同事 (tung4 si6, colleague) mirrors 同學 (tung4 hok6, classmate) — 同 (tung4) means 'same / fellow'.",
+      "examples": [
+        {
+          "c": "佢係我老闆。",
+          "j": "keoi5 hai6 ngo5 lou5 baan2.",
+          "e": "He's my boss."
+        },
+        {
+          "c": "佢哋係我同事。",
+          "j": "keoi5 dei6 hai6 ngo5 tung4 si6.",
+          "e": "They're my colleagues."
+        },
+        {
+          "c": "老闆好惡。",
+          "j": "lou5 baan2 hou2 ok3.",
+          "e": "The boss is fierce."
+        }
+      ],
+      "drills": [
+        {
+          "frameC": "佢同我一齊做嘢,係我▢。",
+          "frameJ": "keoi5 tung4 ngo5 jat1 cai4 zou6 je5, hai6 ngo5 ▢.",
+          "english": "He works with me — he's my colleague.",
+          "frameE": "He works with me — he's my …",
+          "answer": {
+            "c": "同事",
+            "j": "tung4 si6",
+            "e": "colleague"
+          },
+          "distractors": [
+            {
+              "c": "老闆",
+              "j": "lou5 baan2",
+              "e": "boss"
+            },
+            {
+              "c": "公司",
+              "j": "gung1 si1",
+              "e": "company"
+            },
+            {
+              "c": "工作",
+              "j": "gung1 zok3",
+              "e": "work / job"
+            }
+          ],
+          "topics": [
+            "work"
+          ]
+        }
+      ]
+    },
+    {
+      "label": "Meetings and overtime",
+      "structure": "hoi1 wui2 / gaa1 baan1",
+      "note": "開會 (hoi1 wui2) is to have a meeting; 加班 (gaa1 baan1) is to work overtime. The two things that eat up the workday.",
+      "examples": [
+        {
+          "c": "而家開會。",
+          "j": "ji4 gaa1 hoi1 wui2.",
+          "e": "Having a meeting now."
+        },
+        {
+          "c": "今晚要加班。",
+          "j": "gam1 maan5 jiu3 gaa1 baan1.",
+          "e": "Have to work overtime tonight."
+        },
+        {
+          "c": "開完會放工。",
+          "j": "hoi1 jyun4 wui2 fong3 gung1.",
+          "e": "Finish work after the meeting."
+        }
+      ],
+      "drills": [
+        {
+          "frameC": "做唔晒啲嘢,今晚要▢。",
+          "frameJ": "zou6 m4 saai3 di1 je5, gam1 maan5 jiu3 ▢.",
+          "english": "Can't finish the work — have to work overtime tonight.",
+          "frameE": "Can't finish the work — have to … tonight.",
+          "answer": {
+            "c": "加班",
+            "j": "gaa1 baan1",
+            "e": "overtime"
+          },
+          "distractors": [
+            {
+              "c": "開會",
+              "j": "hoi1 wui2",
+              "e": "meeting"
+            },
+            {
+              "c": "返工",
+              "j": "faan1 gung1",
+              "e": "go to work"
+            },
+            {
+              "c": "放工",
+              "j": "fong3 gung1",
+              "e": "finish work"
+            }
+          ],
+          "topics": [
+            "work"
+          ]
+        }
+      ]
+    },
+    {
+      "label": "Payday and deadlines",
+      "structure": "ceot1 loeng4 / zit6 zi2 jat6 kei4",
+      "note": "出糧 (ceot1 loeng4) is payday — 'the salary comes out'; 截止日期 (zit6 zi2 jat6 kei4) is the deadline. The carrot and the stick of work.",
+      "examples": [
+        {
+          "c": "今日出糧。",
+          "j": "gam1 jat6 ceot1 loeng4.",
+          "e": "Payday today."
+        },
+        {
+          "c": "截止日期係聽日。",
+          "j": "zit6 zi2 jat6 kei4 hai6 ting1 jat6.",
+          "e": "The deadline is tomorrow."
+        },
+        {
+          "c": "出咗糧未？",
+          "j": "ceot1 zo2 loeng4 mei6?",
+          "e": "Have you been paid yet?"
+        }
+      ],
+      "drills": [
+        {
+          "frameC": "今日係月尾,終於▢。",
+          "frameJ": "gam1 jat6 hai6 jyut6 mei5, zung1 jyu1 ▢.",
+          "english": "It's the end of the month — finally payday.",
+          "frameE": "It's the end of the month — finally …",
+          "answer": {
+            "c": "出糧",
+            "j": "ceot1 loeng4",
+            "e": "get paid"
+          },
+          "distractors": [
+            {
+              "c": "加班",
+              "j": "gaa1 baan1",
+              "e": "overtime"
+            },
+            {
+              "c": "開會",
+              "j": "hoi1 wui2",
+              "e": "meeting"
+            },
+            {
+              "c": "截止日期",
+              "j": "zit6 zi2 jat6 kei4",
+              "e": "deadline"
+            }
+          ],
+          "topics": [
+            "work"
+          ]
+        }
+      ]
+    },
+    {
+      "label": "Where you work",
+      "structure": "ngo5 hai2 + gung1 si1 + zou6 gung1 zok3",
+      "note": "公司 (gung1 si1) is a company; 工作 (gung1 zok3) is work / a job. 我喺…公司做嘢 (ngo5 hai2 … gung1 si1 zou6 je5) = I work at … company.",
+      "examples": [
+        {
+          "c": "我喺大公司做嘢。",
+          "j": "ngo5 hai2 daai6 gung1 si1 zou6 je5.",
+          "e": "I work at a big company."
+        },
+        {
+          "c": "我鍾意我嘅工作。",
+          "j": "ngo5 zung1 ji3 ngo5 ge3 gung1 zok3.",
+          "e": "I like my job."
+        },
+        {
+          "c": "佢搵咗新工作。",
+          "j": "keoi5 wan2 zo2 san1 gung1 zok3.",
+          "e": "He found a new job."
+        }
+      ],
+      "drills": [
+        {
+          "frameC": "我喺一間大▢返工。",
+          "frameJ": "ngo5 hai2 jat1 gaan1 daai6 ▢ faan1 gung1.",
+          "english": "I work at a big company.",
+          "frameE": "I work at a big …",
+          "answer": {
+            "c": "公司",
+            "j": "gung1 si1",
+            "e": "company"
+          },
+          "distractors": [
+            {
+              "c": "老闆",
+              "j": "lou5 baan2",
+              "e": "boss"
+            },
+            {
+              "c": "同事",
+              "j": "tung4 si6",
+              "e": "colleague"
+            },
+            {
+              "c": "工作",
+              "j": "gung1 zok3",
+              "e": "work / job"
+            }
+          ],
+          "topics": [
+            "work"
+          ]
+        }
+      ]
+    },
+    {
+      "label": "Devices",
+      "structure": "din6 nou5 / din6 waa2",
+      "note": "電腦 (din6 nou5) is a computer — literally 'electric brain'; 電話 (din6 waa2) is a phone — 'electric speech'. Both share 電 (din6, electric).",
+      "examples": [
+        {
+          "c": "我用電腦做嘢。",
+          "j": "ngo5 jung6 din6 nou5 zou6 je5.",
+          "e": "I work on a computer."
+        },
+        {
+          "c": "我部電話冇電。",
+          "j": "ngo5 bou6 din6 waa2 mou5 din6.",
+          "e": "My phone is out of battery."
+        },
+        {
+          "c": "電腦壞咗。",
+          "j": "din6 nou5 waai6 zo2.",
+          "e": "The computer is broken."
+        }
+      ],
+      "drills": [
+        {
+          "frameC": "我用▢打字同上網。",
+          "frameJ": "ngo5 jung6 ▢ daa2 zi6 tung4 soeng5 mong5.",
+          "english": "I use a computer to type and go online.",
+          "frameE": "I use a … to type and go online.",
+          "answer": {
+            "c": "電腦",
+            "j": "din6 nou5",
+            "e": "computer"
+          },
+          "distractors": [
+            {
+              "c": "電話",
+              "j": "din6 waa2",
+              "e": "phone"
+            },
+            {
+              "c": "屏幕",
+              "j": "ping4 mok6",
+              "e": "screen"
+            },
+            {
+              "c": "程式",
+              "j": "cing4 sik1",
+              "e": "app / program"
+            }
+          ],
+          "topics": [
+            "tech"
+          ]
+        }
+      ]
+    },
+    {
+      "label": "Getting online",
+      "structure": "soeng5 mong5 + …",
+      "note": "上網 (soeng5 mong5) is to go online — 'get on the net'. You'll need 訊號 (seon3 hou6, signal) or WiFi to do it.",
+      "examples": [
+        {
+          "c": "我想上網。",
+          "j": "ngo5 soeng2 soeng5 mong5.",
+          "e": "I want to go online."
+        },
+        {
+          "c": "呢度有冇WiFi？",
+          "j": "ni1 dou6 jau5 mou5 WiFi?",
+          "e": "Is there WiFi here?"
+        },
+        {
+          "c": "上網睇片。",
+          "j": "soeng5 mong5 tai2 pin2.",
+          "e": "Go online to watch videos."
+        }
+      ],
+      "drills": [
+        {
+          "frameC": "我想▢睇片,但係冇訊號。",
+          "frameJ": "ngo5 soeng2 ▢ tai2 pin2, daan6 hai6 mou5 seon3 hou6.",
+          "english": "I want to go online to watch videos, but there's no signal.",
+          "frameE": "I want to … to watch videos, but there's no signal.",
+          "answer": {
+            "c": "上網",
+            "j": "soeng5 mong5",
+            "e": "go online"
+          },
+          "distractors": [
+            {
+              "c": "充電",
+              "j": "cung1 din6",
+              "e": "charge battery"
+            },
+            {
+              "c": "訊號",
+              "j": "seon3 hou6",
+              "e": "signal"
+            },
+            {
+              "c": "密碼",
+              "j": "mat6 maa5",
+              "e": "password"
+            }
+          ],
+          "topics": [
+            "tech"
+          ]
+        }
+      ]
+    },
+    {
+      "label": "Logging in",
+      "structure": "jap6 + mat6 maa5",
+      "note": "密碼 (mat6 maa5) is the password; many apps need one to get in. 程式 (cing4 sik1) is an app or program.",
+      "examples": [
+        {
+          "c": "輸入密碼。",
+          "j": "syu1 jap6 mat6 maa5.",
+          "e": "Enter the password."
+        },
+        {
+          "c": "我唔記得密碼。",
+          "j": "ngo5 m4 gei3 dak1 mat6 maa5.",
+          "e": "I forgot the password."
+        },
+        {
+          "c": "WiFi密碼係乜嘢？",
+          "j": "WiFi mat6 maa5 hai6 mat1 je5?",
+          "e": "What's the WiFi password?"
+        }
+      ],
+      "drills": [
+        {
+          "frameC": "用呢個程式要先輸入▢。",
+          "frameJ": "jung6 ni1 go3 cing4 sik1 jiu3 sin1 syu1 jap6 ▢.",
+          "english": "To use this app you first enter the password.",
+          "frameE": "To use this app you first enter the …",
+          "answer": {
+            "c": "密碼",
+            "j": "mat6 maa5",
+            "e": "password"
+          },
+          "distractors": [
+            {
+              "c": "程式",
+              "j": "cing4 sik1",
+              "e": "app / program"
+            },
+            {
+              "c": "訊號",
+              "j": "seon3 hou6",
+              "e": "signal"
+            },
+            {
+              "c": "屏幕",
+              "j": "ping4 mok6",
+              "e": "screen"
+            }
+          ],
+          "topics": [
+            "tech"
+          ]
+        }
+      ]
+    },
+    {
+      "label": "Battery and signal",
+      "structure": "cung1 din6 / seon3 hou6",
+      "note": "充電 (cung1 din6) is to charge the battery; 訊號 (seon3 hou6) is the phone signal. The two things you check when your phone struggles.",
+      "examples": [
+        {
+          "c": "要充電。",
+          "j": "jiu3 cung1 din6.",
+          "e": "Need to charge it."
+        },
+        {
+          "c": "冇訊號。",
+          "j": "mou5 seon3 hou6.",
+          "e": "No signal."
+        },
+        {
+          "c": "充緊電。",
+          "j": "cung1 gan2 din6.",
+          "e": "It's charging."
+        }
+      ],
+      "drills": [
+        {
+          "frameC": "得返少少電,要快啲▢。",
+          "frameJ": "dak1 faan1 siu2 siu2 din6, jiu3 faai3 di1 ▢.",
+          "english": "Battery's low — need to charge it soon.",
+          "frameE": "Battery's low — need to … soon.",
+          "answer": {
+            "c": "充電",
+            "j": "cung1 din6",
+            "e": "charge battery"
+          },
+          "distractors": [
+            {
+              "c": "訊號",
+              "j": "seon3 hou6",
+              "e": "signal"
+            },
+            {
+              "c": "上網",
+              "j": "soeng5 mong5",
+              "e": "go online"
+            },
+            {
+              "c": "密碼",
+              "j": "mat6 maa5",
+              "e": "password"
+            }
+          ],
+          "topics": [
+            "tech"
+          ]
+        }
+      ]
+    },
+    {
+      "label": "When it's broken",
+      "structure": "[device] + waai6 zo2",
+      "note": "壞 (waai6) means broken / not working; 屏幕 (ping4 mok6) is the screen. 壞咗 (waai6 zo2) = it's broken (with the completed-action 咗 zo2).",
+      "examples": [
+        {
+          "c": "電話壞咗。",
+          "j": "din6 waa2 waai6 zo2.",
+          "e": "The phone is broken."
+        },
+        {
+          "c": "屏幕壞咗。",
+          "j": "ping4 mok6 waai6 zo2.",
+          "e": "The screen is broken."
+        },
+        {
+          "c": "部電腦壞咗。",
+          "j": "bou6 din6 nou5 waai6 zo2.",
+          "e": "The computer's broken."
+        }
+      ],
+      "drills": [
+        {
+          "frameC": "部電話跌咗落地,▢咗。",
+          "frameJ": "bou6 din6 waa2 dit3 zo2 lok6 dei6, ▢ zo2.",
+          "english": "The phone fell on the floor — it's broken.",
+          "frameE": "The phone fell on the floor — it's … now.",
+          "answer": {
+            "c": "壞",
+            "j": "waai6",
+            "e": "broken / not working"
+          },
+          "distractors": [
+            {
+              "c": "充電",
+              "j": "cung1 din6",
+              "e": "charge battery"
+            },
+            {
+              "c": "上網",
+              "j": "soeng5 mong5",
+              "e": "go online"
+            },
+            {
+              "c": "屏幕",
+              "j": "ping4 mok6",
+              "e": "screen"
+            }
+          ],
+          "topics": [
+            "tech"
+          ]
+        }
+      ]
+    },
+    {
+      "label": "Hot or cold day",
+      "structure": "gam1 jat6 hou2 + jit6 / dung3",
+      "note": "熱 (jit6, hot) and 凍 (dung3, cold) — the basic temperature pair. 今日好凍 (gam1 jat6 hou2 dung3) = it's cold today.",
+      "examples": [
+        {
+          "c": "今日好凍。",
+          "j": "gam1 jat6 hou2 dung3.",
+          "e": "It's cold today."
+        },
+        {
+          "c": "夏天好熱。",
+          "j": "haa6 tin1 hou2 jit6.",
+          "e": "Summer is hot."
+        },
+        {
+          "c": "凍到震。",
+          "j": "dung3 dou3 zan3.",
+          "e": "So cold I'm shivering."
+        }
+      ],
+      "drills": [
+        {
+          "frameC": "冬天嚟喇,今日好▢。",
+          "frameJ": "dung1 tin1 lai4 laa3, gam1 jat6 hou2 ▢.",
+          "english": "Winter's here — it's cold today.",
+          "frameE": "Winter's here — it's … today.",
+          "answer": {
+            "c": "凍",
+            "j": "dung3",
+            "e": "cold"
+          },
+          "distractors": [
+            {
+              "c": "潮濕",
+              "j": "ciu4 sap1",
+              "e": "humid"
+            },
+            {
+              "c": "風",
+              "j": "fung1",
+              "e": "wind"
+            },
+            {
+              "c": "雲",
+              "j": "wan4",
+              "e": "cloud"
+            }
+          ],
+          "topics": [
+            "weather"
+          ]
+        }
+      ]
+    },
+    {
+      "label": "Rain and sun",
+      "structure": "lok6 jyu5 / taai3 joeng4",
+      "note": "落雨 (lok6 jyu5) is raining — 'rain falls'; 太陽 (taai3 joeng4) is the sun. 落雨 (lok6 jyu5) needs an umbrella; 太陽 (taai3 joeng4) needs sunscreen.",
+      "examples": [
+        {
+          "c": "落雨喇。",
+          "j": "lok6 jyu5 laa3.",
+          "e": "It's raining."
+        },
+        {
+          "c": "太陽好猛。",
+          "j": "taai3 joeng4 hou2 maang5.",
+          "e": "The sun is strong."
+        },
+        {
+          "c": "落雨帶遮。",
+          "j": "lok6 jyu5 daai3 ze1.",
+          "e": "Bring an umbrella when it rains."
+        }
+      ],
+      "drills": [
+        {
+          "frameC": "記得帶遮,出面▢。",
+          "frameJ": "gei3 dak1 daai3 ze1, ceot1 min6 ▢.",
+          "english": "Remember an umbrella — it's raining outside.",
+          "frameE": "Remember an umbrella — outside it's …",
+          "answer": {
+            "c": "落雨",
+            "j": "lok6 jyu5",
+            "e": "raining"
+          },
+          "distractors": [
+            {
+              "c": "太陽",
+              "j": "taai3 joeng4",
+              "e": "sun"
+            },
+            {
+              "c": "雪",
+              "j": "syut3",
+              "e": "snow"
+            },
+            {
+              "c": "雲",
+              "j": "wan4",
+              "e": "cloud"
+            }
+          ],
+          "topics": [
+            "weather"
+          ]
+        }
+      ]
+    },
+    {
+      "label": "Wind and typhoon",
+      "structure": "fung1 / toi4 fung1",
+      "note": "風 (fung1) is wind; 颱風 (toi4 fung1) is a typhoon — a defining feature of Hong Kong summers. 颱風 contains 風 (fung1).",
+      "examples": [
+        {
+          "c": "好大風。",
+          "j": "hou2 daai6 fung1.",
+          "e": "It's very windy."
+        },
+        {
+          "c": "打颱風。",
+          "j": "daa2 toi4 fung1.",
+          "e": "A typhoon is hitting."
+        },
+        {
+          "c": "颱風唔使返工。",
+          "j": "toi4 fung1 m4 sai2 faan1 gung1.",
+          "e": "No work during a typhoon."
+        }
+      ],
+      "drills": [
+        {
+          "frameC": "天文台話有▢,要留喺屋企。",
+          "frameJ": "tin1 man4 toi4 waa6 jau5 ▢, jiu3 lau4 hai2 uk1 kei2.",
+          "english": "The observatory says there's a typhoon — stay home.",
+          "frameE": "The observatory says there's a … — stay home.",
+          "answer": {
+            "c": "颱風",
+            "j": "toi4 fung1",
+            "e": "typhoon"
+          },
+          "distractors": [
+            {
+              "c": "風",
+              "j": "fung1",
+              "e": "wind"
+            },
+            {
+              "c": "雲",
+              "j": "wan4",
+              "e": "cloud"
+            },
+            {
+              "c": "雪",
+              "j": "syut3",
+              "e": "snow"
+            }
+          ],
+          "topics": [
+            "weather"
+          ]
+        }
+      ]
+    },
+    {
+      "label": "Humid or cloudy",
+      "structure": "ciu4 sap1 / wan4",
+      "note": "潮濕 (ciu4 sap1) is humid — Hong Kong's spring weather; 雲 (wan4) is cloud. 好潮濕 (hou2 ciu4 sap1) = very humid / muggy.",
+      "examples": [
+        {
+          "c": "今日好潮濕。",
+          "j": "gam1 jat6 hou2 ciu4 sap1.",
+          "e": "It's very humid today."
+        },
+        {
+          "c": "好多雲。",
+          "j": "hou2 do1 wan4.",
+          "e": "It's cloudy."
+        },
+        {
+          "c": "潮濕到出水。",
+          "j": "ciu4 sap1 dou3 ceot1 seoi2.",
+          "e": "So humid it's dripping."
+        }
+      ],
+      "drills": [
+        {
+          "frameC": "返潮喇,間屋好▢。",
+          "frameJ": "faan1 ciu4 laa3, gaan1 uk1 hou2 ▢.",
+          "english": "It's the wet season — the flat is very humid.",
+          "frameE": "It's the wet season — the flat is very …",
+          "answer": {
+            "c": "潮濕",
+            "j": "ciu4 sap1",
+            "e": "humid"
+          },
+          "distractors": [
+            {
+              "c": "凍",
+              "j": "dung3",
+              "e": "cold"
+            },
+            {
+              "c": "風",
+              "j": "fung1",
+              "e": "wind"
+            },
+            {
+              "c": "太陽",
+              "j": "taai3 joeng4",
+              "e": "sun"
+            }
+          ],
+          "topics": [
+            "weather"
+          ]
+        }
+      ]
+    },
+    {
+      "label": "Checking in and out",
+      "structure": "jap6 zyu6 / teoi3 fong2",
+      "note": "入住 (jap6 zyu6) is to check in; 退房 (teoi3 fong2) is to check out. 訂房 (deng6 fong2) is to book a room beforehand.",
+      "examples": [
+        {
+          "c": "我想入住。",
+          "j": "ngo5 soeng2 jap6 zyu6.",
+          "e": "I'd like to check in."
+        },
+        {
+          "c": "幾點退房？",
+          "j": "gei2 dim2 teoi3 fong2?",
+          "e": "What time is check-out?"
+        },
+        {
+          "c": "我訂咗房。",
+          "j": "ngo5 deng6 zo2 fong2.",
+          "e": "I've booked a room."
+        }
+      ],
+      "drills": [
+        {
+          "frameC": "我到酒店喇,想▢。",
+          "frameJ": "ngo5 dou3 zau2 dim3 laa3, soeng2 ▢.",
+          "english": "I've arrived at the hotel — I'd like to check in.",
+          "frameE": "I've arrived at the hotel — I'd like to …",
+          "answer": {
+            "c": "入住",
+            "j": "jap6 zyu6",
+            "e": "check in"
+          },
+          "distractors": [
+            {
+              "c": "退房",
+              "j": "teoi3 fong2",
+              "e": "check out"
+            },
+            {
+              "c": "訂房",
+              "j": "deng6 fong2",
+              "e": "book a room"
+            },
+            {
+              "c": "行李",
+              "j": "hang4 lei5",
+              "e": "luggage"
+            }
+          ],
+          "topics": [
+            "hotels"
+          ]
+        }
+      ]
+    },
+    {
+      "label": "Your room and key",
+      "structure": "fong4 gaan1 / so2 si4",
+      "note": "房間 (fong4 gaan1) is the room; 鎖匙 (so2 si4) is the key. 幾樓 (gei2 lau2) asks what floor.",
+      "examples": [
+        {
+          "c": "我嘅房間喺三樓。",
+          "j": "ngo5 ge3 fong4 gaan1 hai2 saam1 lau2.",
+          "e": "My room is on the third floor."
+        },
+        {
+          "c": "鎖匙唔見咗。",
+          "j": "so2 si4 m4 gin3 zo2.",
+          "e": "The key is lost."
+        },
+        {
+          "c": "房間好乾淨。",
+          "j": "fong4 gaan1 hou2 gon1 zeng6.",
+          "e": "The room is clean."
+        }
+      ],
+      "drills": [
+        {
+          "frameC": "開唔到門,我唔見咗▢。",
+          "frameJ": "hoi1 m4 dou2 mun4, ngo5 m4 gin3 zo2 ▢.",
+          "english": "Can't open the door — I lost the key.",
+          "frameE": "Can't open the door — I lost the …",
+          "answer": {
+            "c": "鎖匙",
+            "j": "so2 si4",
+            "e": "key"
+          },
+          "distractors": [
+            {
+              "c": "房間",
+              "j": "fong4 gaan1",
+              "e": "room"
+            },
+            {
+              "c": "行李",
+              "j": "hang4 lei5",
+              "e": "luggage"
+            },
+            {
+              "c": "早餐",
+              "j": "zou2 caan1",
+              "e": "breakfast"
+            }
+          ],
+          "topics": [
+            "hotels"
+          ]
+        }
+      ]
+    },
+    {
+      "label": "Luggage and breakfast",
+      "structure": "hang4 lei5 / zou2 caan1",
+      "note": "行李 (hang4 lei5) is luggage; 早餐 (zou2 caan1) is breakfast — often included at hotels. 服務員 (fuk6 mou6 jyun4) is the staff who help with both.",
+      "examples": [
+        {
+          "c": "幫我攞行李。",
+          "j": "bong1 ngo5 lo2 hang4 lei5.",
+          "e": "Help me with my luggage."
+        },
+        {
+          "c": "有冇早餐？",
+          "j": "jau5 mou5 zou2 caan1?",
+          "e": "Is breakfast included?"
+        },
+        {
+          "c": "行李好重。",
+          "j": "hang4 lei5 hou2 cung5.",
+          "e": "The luggage is heavy."
+        }
+      ],
+      "drills": [
+        {
+          "frameC": "服務員,唔該幫我攞▢上房。",
+          "frameJ": "fuk6 mou6 jyun4, m4 goi1 bong1 ngo5 lo2 ▢ soeng5 fong2.",
+          "english": "Staff, please help carry my luggage up to the room.",
+          "frameE": "Staff, please help carry my … up to the room.",
+          "answer": {
+            "c": "行李",
+            "j": "hang4 lei5",
+            "e": "luggage"
+          },
+          "distractors": [
+            {
+              "c": "早餐",
+              "j": "zou2 caan1",
+              "e": "breakfast"
+            },
+            {
+              "c": "鎖匙",
+              "j": "so2 si4",
+              "e": "key"
+            },
+            {
+              "c": "房間",
+              "j": "fong4 gaan1",
+              "e": "room"
+            }
+          ],
+          "topics": [
+            "hotels"
+          ]
+        }
+      ]
+    },
+    {
+      "label": "Asking the staff",
+      "structure": "fuk6 mou6 jyun4 + …",
+      "note": "服務員 (fuk6 mou6 jyun4) is the service staff; 幾樓 (gei2 lau2) asks 'what floor'. 樓 (lau2) means floor / storey.",
+      "examples": [
+        {
+          "c": "服務員,早餐喺幾樓？",
+          "j": "fuk6 mou6 jyun4, zou2 caan1 hai2 gei2 lau2?",
+          "e": "Staff, what floor is breakfast on?"
+        },
+        {
+          "c": "叫服務員嚟。",
+          "j": "giu3 fuk6 mou6 jyun4 lai4.",
+          "e": "Call the staff over."
+        },
+        {
+          "c": "健身室喺幾樓？",
+          "j": "gin6 san1 sat1 hai2 gei2 lau2?",
+          "e": "What floor is the gym on?"
+        }
+      ],
+      "drills": [
+        {
+          "frameC": "我問服務員:早餐喺▢？",
+          "frameJ": "ngo5 man6 fuk6 mou6 jyun4: zou2 caan1 hai2 ▢?",
+          "english": "I ask the staff: what floor is breakfast on?",
+          "frameE": "I ask the staff: breakfast is on … floor?",
+          "answer": {
+            "c": "幾樓",
+            "j": "gei2 lau2",
+            "e": "what floor"
+          },
+          "distractors": [
+            {
+              "c": "服務員",
+              "j": "fuk6 mou6 jyun4",
+              "e": "service staff"
+            },
+            {
+              "c": "房間",
+              "j": "fong4 gaan1",
+              "e": "room"
+            },
+            {
+              "c": "訂房",
+              "j": "deng6 fong2",
+              "e": "book a room"
+            }
+          ],
+          "topics": [
+            "hotels"
+          ]
+        }
+      ]
+    },
+    {
+      "label": "Cats and other pets",
+      "structure": "ngo5 jau5 jat1 zek3 + [animal]",
+      "note": "寵物 (cung2 mat6) is a pet; 養 (joeng5) is to keep/raise one. Common pets: 貓 (maau1, cat), 鳥 (niu5, bird), 兔仔 (tou3 zai2, rabbit).",
+      "examples": [
+        {
+          "c": "我養咗一隻貓。",
+          "j": "ngo5 joeng5 zo2 jat1 zek3 maau1.",
+          "e": "I keep a cat."
+        },
+        {
+          "c": "佢有隻兔仔。",
+          "j": "keoi5 jau5 zek3 tou3 zai2.",
+          "e": "She has a rabbit."
+        },
+        {
+          "c": "隻鳥識唱歌。",
+          "j": "zek3 niu5 sik1 coeng3 go1.",
+          "e": "The bird can sing."
+        }
+      ],
+      "drills": [
+        {
+          "frameC": "我屋企養咗一隻▢,成日捉老鼠。",
+          "frameJ": "ngo5 uk1 kei2 joeng5 zo2 jat1 zek3 ▢, sing4 jat6 zuk1 lou5 syu2.",
+          "english": "I keep a cat at home — it always catches mice.",
+          "frameE": "I keep a … at home — it always catches mice.",
+          "answer": {
+            "c": "貓",
+            "j": "maau1",
+            "e": "cat"
+          },
+          "distractors": [
+            {
+              "c": "鳥",
+              "j": "niu5",
+              "e": "bird"
+            },
+            {
+              "c": "兔仔",
+              "j": "tou3 zai2",
+              "e": "rabbit"
+            },
+            {
+              "c": "馬",
+              "j": "maa5",
+              "e": "horse"
+            }
+          ],
+          "topics": [
+            "animals"
+          ]
+        }
+      ]
+    },
+    {
+      "label": "Farm animals",
+      "structure": "[farm animal] + …",
+      "note": "Farm animals: 馬 (maa5, horse), 牛 (ngau4, cow), 豬 (zyu1, pig). 牛 (ngau4) also gives 牛肉 (ngau4 juk6, beef) and 豬 (zyu1) gives 豬肉 (zyu1 juk6, pork).",
+      "examples": [
+        {
+          "c": "農場有馬同牛。",
+          "j": "nung4 coeng4 jau5 maa5 tung4 ngau4.",
+          "e": "The farm has horses and cows."
+        },
+        {
+          "c": "豬好鍾意瞓。",
+          "j": "zyu1 hou2 zung1 ji3 fan3.",
+          "e": "Pigs love to sleep."
+        },
+        {
+          "c": "騎馬好好玩。",
+          "j": "ke4 maa5 hou2 hou2 waan2.",
+          "e": "Horse riding is fun."
+        }
+      ],
+      "drills": [
+        {
+          "frameC": "農場有一隻▢,可以畀人騎。",
+          "frameJ": "nung4 coeng4 jau5 jat1 zek3 ▢, ho2 ji5 bei2 jan4 ke4.",
+          "english": "The farm has a horse you can ride.",
+          "frameE": "The farm has a … you can ride.",
+          "answer": {
+            "c": "馬",
+            "j": "maa5",
+            "e": "horse"
+          },
+          "distractors": [
+            {
+              "c": "牛",
+              "j": "ngau4",
+              "e": "cow"
+            },
+            {
+              "c": "豬",
+              "j": "zyu1",
+              "e": "pig"
+            },
+            {
+              "c": "狗",
+              "j": "gau2",
+              "e": "dog"
+            }
+          ],
+          "topics": [
+            "animals"
+          ]
+        }
+      ]
+    },
+    {
+      "label": "Keeping a pet",
+      "structure": "joeng5 + cung2 mat6",
+      "note": "養 (joeng5) means to keep or raise an animal; 寵物 (cung2 mat6) is a pet. 養寵物 (joeng5 cung2 mat6) = keep a pet.",
+      "examples": [
+        {
+          "c": "我想養寵物。",
+          "j": "ngo5 soeng2 joeng5 cung2 mat6.",
+          "e": "I want to keep a pet."
+        },
+        {
+          "c": "養狗要好有耐性。",
+          "j": "joeng5 gau2 jiu3 hou2 jau5 noi6 sing3.",
+          "e": "Keeping a dog takes patience."
+        },
+        {
+          "c": "你養乜嘢寵物？",
+          "j": "nei5 joeng5 mat1 je5 cung2 mat6?",
+          "e": "What pet do you keep?"
+        }
+      ],
+      "drills": [
+        {
+          "frameC": "細路想▢一隻小動物。",
+          "frameJ": "sai3 lou6 soeng2 ▢ jat1 zek3 siu2 dung6 mat6.",
+          "english": "The child wants to keep a small animal.",
+          "frameE": "The child wants to … a small animal.",
+          "answer": {
+            "c": "養",
+            "j": "joeng5",
+            "e": "raise / keep (a pet)"
+          },
+          "distractors": [
+            {
+              "c": "寵物",
+              "j": "cung2 mat6",
+              "e": "pet"
+            },
+            {
+              "c": "可愛",
+              "j": "ho2 oi3",
+              "e": "cute"
+            },
+            {
+              "c": "貓",
+              "j": "maau1",
+              "e": "cat"
+            }
+          ],
+          "topics": [
+            "animals"
+          ]
+        }
+      ]
+    },
+    {
+      "label": "That's so cute",
+      "structure": "[animal] + hou2 + ho2 oi3",
+      "note": "可愛 (ho2 oi3) means cute / adorable — the natural reaction to a 寵物 (cung2 mat6, pet). 好可愛 (hou2 ho2 oi3) = so cute.",
+      "examples": [
+        {
+          "c": "隻貓好可愛。",
+          "j": "zek3 maau1 hou2 ho2 oi3.",
+          "e": "The cat is so cute."
+        },
+        {
+          "c": "BB好可愛。",
+          "j": "BB hou2 ho2 oi3.",
+          "e": "The baby is adorable."
+        },
+        {
+          "c": "兔仔好可愛。",
+          "j": "tou3 zai2 hou2 ho2 oi3.",
+          "e": "Rabbits are cute."
+        }
+      ],
+      "drills": [
+        {
+          "frameC": "隻兔仔毛茸茸,真係好▢。",
+          "frameJ": "zek3 tou3 zai2 mou4 jung4 jung4, zan1 hai6 hou2 ▢.",
+          "english": "The rabbit is fluffy — really so cute.",
+          "frameE": "The rabbit is fluffy — really so …",
+          "answer": {
+            "c": "可愛",
+            "j": "ho2 oi3",
+            "e": "cute"
+          },
+          "distractors": [
+            {
+              "c": "寵物",
+              "j": "cung2 mat6",
+              "e": "pet"
+            },
+            {
+              "c": "養",
+              "j": "joeng5",
+              "e": "raise / keep"
+            },
+            {
+              "c": "鳥",
+              "j": "niu5",
+              "e": "bird"
+            }
+          ],
+          "topics": [
+            "animals"
+          ]
+        }
+      ]
+    },
+    {
+      "label": "Buying a ticket",
+      "structure": "maai5 + mun4 piu3",
+      "note": "門票 (mun4 piu3) is the entry ticket; 入場 (jap6 coeng4) is entry/admission. 買門票 (maai5 mun4 piu3) = buy a ticket.",
+      "examples": [
+        {
+          "c": "買兩張門票。",
+          "j": "maai5 loeng5 zoeng1 mun4 piu3.",
+          "e": "Buy two tickets."
+        },
+        {
+          "c": "門票幾錢？",
+          "j": "mun4 piu3 gei2 cin2?",
+          "e": "How much is a ticket?"
+        },
+        {
+          "c": "入場要門票。",
+          "j": "jap6 coeng4 jiu3 mun4 piu3.",
+          "e": "Entry needs a ticket."
+        }
+      ],
+      "drills": [
+        {
+          "frameC": "入去之前要買▢。",
+          "frameJ": "jap6 heoi3 zi1 cin4 jiu3 maai5 ▢.",
+          "english": "Before going in you need to buy a ticket.",
+          "frameE": "Before going in you need to buy a …",
+          "answer": {
+            "c": "門票",
+            "j": "mun4 piu3",
+            "e": "entry ticket"
+          },
+          "distractors": [
+            {
+              "c": "地圖",
+              "j": "dei6 tou4",
+              "e": "map"
+            },
+            {
+              "c": "紀念品",
+              "j": "gei2 nim6 ban2",
+              "e": "souvenir"
+            },
+            {
+              "c": "導遊",
+              "j": "dou6 jau4",
+              "e": "tour guide"
+            }
+          ],
+          "topics": [
+            "attractions"
+          ]
+        }
+      ]
+    },
+    {
+      "label": "Asking opening hours",
+      "structure": "hoi1 gei2 dim2?",
+      "note": "開幾點 (hoi1 gei2 dim2)? asks 'what time does it open?'. 開放 (hoi1 fong3) means open to visitors. Both share 開 (hoi1, open).",
+      "examples": [
+        {
+          "c": "景點開幾點？",
+          "j": "ging2 dim2 hoi1 gei2 dim2?",
+          "e": "What time does the attraction open?"
+        },
+        {
+          "c": "今日開放。",
+          "j": "gam1 jat6 hoi1 fong3.",
+          "e": "It's open today."
+        },
+        {
+          "c": "幾點開放？",
+          "j": "gei2 dim2 hoi1 fong3?",
+          "e": "What time does it open?"
+        }
+      ],
+      "drills": [
+        {
+          "frameC": "想去博物館,先問▢",
+          "frameJ": "soeng2 heoi3 bok3 mat6 gun2, sin1 man6 ▢",
+          "english": "Want to go to the museum — first ask what time it opens.",
+          "frameE": "Want to go to the museum — first ask …",
+          "answer": {
+            "c": "開幾點",
+            "j": "hoi1 gei2 dim2",
+            "e": "what time does it open"
+          },
+          "distractors": [
+            {
+              "c": "開放",
+              "j": "hoi1 fong3",
+              "e": "open (for visitors)"
+            },
+            {
+              "c": "排隊",
+              "j": "paai4 deoi2",
+              "e": "queue"
+            },
+            {
+              "c": "入場",
+              "j": "jap6 coeng4",
+              "e": "entry"
+            }
+          ],
+          "topics": [
+            "attractions"
+          ]
+        }
+      ]
+    },
+    {
+      "label": "Queue and entry",
+      "structure": "paai4 deoi2 / jap6 coeng4",
+      "note": "排隊 (paai4 deoi2) is to queue / line up; 入場 (jap6 coeng4) is entry. At a busy attraction you 排隊 (paai4 deoi2) before 入場 (jap6 coeng4).",
+      "examples": [
+        {
+          "c": "要排隊。",
+          "j": "jiu3 paai4 deoi2.",
+          "e": "You have to queue."
+        },
+        {
+          "c": "入場喇。",
+          "j": "jap6 coeng4 laa3.",
+          "e": "Entry is starting."
+        },
+        {
+          "c": "排咗好耐隊。",
+          "j": "paai4 zo2 hou2 noi6 deoi2.",
+          "e": "Queued for ages."
+        }
+      ],
+      "drills": [
+        {
+          "frameC": "人好多,我哋要▢先入到場。",
+          "frameJ": "jan4 hou2 do1, ngo5 dei6 jiu3 ▢ sin1 jap6 dou2 coeng4.",
+          "english": "Lots of people — we have to queue before we can get in.",
+          "frameE": "Lots of people — we have to … before we can get in.",
+          "answer": {
+            "c": "排隊",
+            "j": "paai4 deoi2",
+            "e": "queue / line up"
+          },
+          "distractors": [
+            {
+              "c": "入場",
+              "j": "jap6 coeng4",
+              "e": "entry"
+            },
+            {
+              "c": "拍照",
+              "j": "paak3 ziu3",
+              "e": "take photos"
+            },
+            {
+              "c": "門票",
+              "j": "mun4 piu3",
+              "e": "entry ticket"
+            }
+          ],
+          "topics": [
+            "attractions"
+          ]
+        }
+      ]
+    },
+    {
+      "label": "Photos and souvenirs",
+      "structure": "paak3 ziu3 / maai5 gei2 nim6 ban2",
+      "note": "拍照 (paak3 ziu3) is to take photos (at a sight); 紀念品 (gei2 nim6 ban2) is a souvenir. The two things tourists collect.",
+      "examples": [
+        {
+          "c": "喺度拍照。",
+          "j": "hai2 dou6 paak3 ziu3.",
+          "e": "Take photos here."
+        },
+        {
+          "c": "買個紀念品。",
+          "j": "maai5 go3 gei2 nim6 ban2.",
+          "e": "Buy a souvenir."
+        },
+        {
+          "c": "可唔可以拍照？",
+          "j": "ho2 m4 ho2 ji5 paak3 ziu3?",
+          "e": "Can I take photos?"
+        }
+      ],
+      "drills": [
+        {
+          "frameC": "風景咁靚,梗係要▢。",
+          "frameJ": "fung1 ging2 gam3 leng3, gang2 hai6 jiu3 ▢.",
+          "english": "The view is so beautiful — of course I'll take photos.",
+          "frameE": "The view is so beautiful — of course I'll …",
+          "answer": {
+            "c": "拍照",
+            "j": "paak3 ziu3",
+            "e": "take photos"
+          },
+          "distractors": [
+            {
+              "c": "紀念品",
+              "j": "gei2 nim6 ban2",
+              "e": "souvenir"
+            },
+            {
+              "c": "排隊",
+              "j": "paai4 deoi2",
+              "e": "queue"
+            },
+            {
+              "c": "地圖",
+              "j": "dei6 tou4",
+              "e": "map"
+            }
+          ],
+          "topics": [
+            "attractions"
+          ]
+        }
+      ]
+    },
+    {
+      "label": "Map or guide",
+      "structure": "dei6 tou4 / dou6 jau4",
+      "note": "地圖 (dei6 tou4) is a map; 導遊 (dou6 jau4) is a tour guide. 景點 (ging2 dim2) is the attraction itself.",
+      "examples": [
+        {
+          "c": "睇地圖。",
+          "j": "tai2 dei6 tou4.",
+          "e": "Look at the map."
+        },
+        {
+          "c": "跟住導遊。",
+          "j": "gan1 zyu6 dou6 jau4.",
+          "e": "Follow the tour guide."
+        },
+        {
+          "c": "呢個景點好出名。",
+          "j": "ni1 go3 ging2 dim2 hou2 ceot1 meng2.",
+          "e": "This attraction is famous."
+        }
+      ],
+      "drills": [
+        {
+          "frameC": "唔識路,可以睇下▢。",
+          "frameJ": "m4 sik1 lou6, ho2 ji5 tai2 haa5 ▢.",
+          "english": "Don't know the way — can look at the map.",
+          "frameE": "Don't know the way — can look at the …",
+          "answer": {
+            "c": "地圖",
+            "j": "dei6 tou4",
+            "e": "map"
+          },
+          "distractors": [
+            {
+              "c": "導遊",
+              "j": "dou6 jau4",
+              "e": "tour guide"
+            },
+            {
+              "c": "景點",
+              "j": "ging2 dim2",
+              "e": "attraction"
+            },
+            {
+              "c": "門票",
+              "j": "mun4 piu3",
+              "e": "entry ticket"
+            }
+          ],
+          "topics": [
+            "attractions"
+          ]
+        }
+      ]
+    },
+    {
+      "label": "Cooking methods",
+      "structure": "zyu2 / caau2 / zing1 + [food]",
+      "note": "Three core methods: 煮 (zyu2, cook/boil), 炒 (caau2, stir-fry), 蒸 (zing1, steam). 炒菜 (caau2 coi3) = stir-fry vegetables.",
+      "examples": [
+        {
+          "c": "煮飯。",
+          "j": "zyu2 faan6.",
+          "e": "Cook rice."
+        },
+        {
+          "c": "炒蔬菜。",
+          "j": "caau2 so1 coi3.",
+          "e": "Stir-fry vegetables."
+        },
+        {
+          "c": "蒸魚。",
+          "j": "zing1 jyu2.",
+          "e": "Steam fish."
+        }
+      ],
+      "drills": [
+        {
+          "frameC": "廣東人鍾意▢魚,保持鮮味。",
+          "frameJ": "gwong2 dung1 jan4 zung1 ji3 ▢ jyu2, bou2 ci4 sin1 mei6.",
+          "english": "Cantonese people like to steam fish to keep it fresh.",
+          "frameE": "Cantonese people like to … fish to keep it fresh.",
+          "answer": {
+            "c": "蒸",
+            "j": "zing1",
+            "e": "steam"
+          },
+          "distractors": [
+            {
+              "c": "炒",
+              "j": "caau2",
+              "e": "stir-fry"
+            },
+            {
+              "c": "煮",
+              "j": "zyu2",
+              "e": "cook"
+            },
+            {
+              "c": "切",
+              "j": "cit3",
+              "e": "cut"
+            }
+          ],
+          "topics": [
+            "cooking"
+          ]
+        }
+      ]
+    },
+    {
+      "label": "Seasoning",
+      "structure": "加 + jim4 / tong4",
+      "note": "鹽 (jim4) is salt; 糖 (tong4) is sugar. 加鹽 (gaa1 jim4) = add salt. The two basic seasonings to balance a dish.",
+      "examples": [
+        {
+          "c": "加少少鹽。",
+          "j": "gaa1 siu2 siu2 jim4.",
+          "e": "Add a little salt."
+        },
+        {
+          "c": "唔好太多糖。",
+          "j": "m4 hou2 taai3 do1 tong4.",
+          "e": "Not too much sugar."
+        },
+        {
+          "c": "加鹽同糖。",
+          "j": "gaa1 jim4 tung4 tong4.",
+          "e": "Add salt and sugar."
+        }
+      ],
+      "drills": [
+        {
+          "frameC": "個湯淡咗,加多少少▢。",
+          "frameJ": "go3 tong1 taam5 zo2, gaa1 do1 siu2 siu2 ▢.",
+          "english": "The soup is bland — add a bit more salt.",
+          "frameE": "The soup is bland — add a bit more …",
+          "answer": {
+            "c": "鹽",
+            "j": "jim4",
+            "e": "salt"
+          },
+          "distractors": [
+            {
+              "c": "糖",
+              "j": "tong4",
+              "e": "sugar"
+            },
+            {
+              "c": "油",
+              "j": "jau4",
+              "e": "oil"
+            },
+            {
+              "c": "醬油",
+              "j": "zoeng3 jau4",
+              "e": "soy sauce"
+            }
+          ],
+          "topics": [
+            "cooking"
+          ]
+        }
+      ]
+    },
+    {
+      "label": "Oil and sauce",
+      "structure": "jau4 / zoeng3 jau4",
+      "note": "油 (jau4) is oil; 醬油 (zoeng3 jau4) is soy sauce — note 醬油 contains 油 (jau4). Both go in the 鑊 (wok6, wok).",
+      "examples": [
+        {
+          "c": "落油。",
+          "j": "lok6 jau4.",
+          "e": "Add oil."
+        },
+        {
+          "c": "加啲醬油。",
+          "j": "gaa1 di1 zoeng3 jau4.",
+          "e": "Add some soy sauce."
+        },
+        {
+          "c": "醬油好鹹。",
+          "j": "zoeng3 jau4 hou2 haam4.",
+          "e": "Soy sauce is salty."
+        }
+      ],
+      "drills": [
+        {
+          "frameC": "炒之前,先喺鑊度落啲▢。",
+          "frameJ": "caau2 zi1 cin4, sin1 hai2 wok6 dou6 lok6 di1 ▢.",
+          "english": "Before stir-frying, put some oil in the wok first.",
+          "frameE": "Before stir-frying, put some … in the wok first.",
+          "answer": {
+            "c": "油",
+            "j": "jau4",
+            "e": "oil"
+          },
+          "distractors": [
+            {
+              "c": "醬油",
+              "j": "zoeng3 jau4",
+              "e": "soy sauce"
+            },
+            {
+              "c": "鹽",
+              "j": "jim4",
+              "e": "salt"
+            },
+            {
+              "c": "糖",
+              "j": "tong4",
+              "e": "sugar"
+            }
+          ],
+          "topics": [
+            "cooking"
+          ]
+        }
+      ]
+    },
+    {
+      "label": "Prep work",
+      "structure": "cit3 + sik6 coi4",
+      "note": "切 (cit3) is to cut; 食材 (sik6 coi4) are the ingredients. 切食材 (cit3 sik6 coi4) = cut the ingredients — the prep before cooking.",
+      "examples": [
+        {
+          "c": "切蔬菜。",
+          "j": "cit3 so1 coi3.",
+          "e": "Cut the vegetables."
+        },
+        {
+          "c": "準備食材。",
+          "j": "zeon2 bei6 sik6 coi4.",
+          "e": "Prepare the ingredients."
+        },
+        {
+          "c": "切細啲。",
+          "j": "cit3 sai3 di1.",
+          "e": "Cut it smaller."
+        }
+      ],
+      "drills": [
+        {
+          "frameC": "煮飯之前,要▢好啲蔬菜。",
+          "frameJ": "zyu2 faan6 zi1 cin4, jiu3 ▢ hou2 di1 so1 coi3.",
+          "english": "Before cooking, cut the vegetables.",
+          "frameE": "Before cooking, … the vegetables.",
+          "answer": {
+            "c": "切",
+            "j": "cit3",
+            "e": "cut"
+          },
+          "distractors": [
+            {
+              "c": "蒸",
+              "j": "zing1",
+              "e": "steam"
+            },
+            {
+              "c": "炒",
+              "j": "caau2",
+              "e": "stir-fry"
+            },
+            {
+              "c": "煮",
+              "j": "zyu2",
+              "e": "cook"
+            }
+          ],
+          "topics": [
+            "cooking"
+          ]
+        }
+      ]
+    },
+    {
+      "label": "Using the wok",
+      "structure": "jung6 + wok6 + zyu2 je5",
+      "note": "鑊 (wok6) is the wok — the heart of a Cantonese kitchen. 食材 (sik6 coi4, ingredients) go into the 鑊 to be 炒 (caau2, stir-fried).",
+      "examples": [
+        {
+          "c": "用鑊炒嘢。",
+          "j": "jung6 wok6 caau2 je5.",
+          "e": "Use the wok to stir-fry."
+        },
+        {
+          "c": "個鑊好熱。",
+          "j": "go3 wok6 hou2 jit6.",
+          "e": "The wok is very hot."
+        },
+        {
+          "c": "洗個鑊。",
+          "j": "sai2 go3 wok6.",
+          "e": "Wash the wok."
+        }
+      ],
+      "drills": [
+        {
+          "frameC": "炒菜要用個大▢,夠熱先好食。",
+          "frameJ": "caau2 coi3 jiu3 jung6 go3 daai6 ▢, gau3 jit6 sin1 hou2 sik6.",
+          "english": "Stir-frying needs a big wok — hot enough to taste good.",
+          "frameE": "Stir-frying needs a big … — hot enough to taste good.",
+          "answer": {
+            "c": "鑊",
+            "j": "wok6",
+            "e": "wok"
+          },
+          "distractors": [
+            {
+              "c": "食材",
+              "j": "sik6 coi4",
+              "e": "ingredients"
+            },
+            {
+              "c": "醬油",
+              "j": "zoeng3 jau4",
+              "e": "soy sauce"
+            },
+            {
+              "c": "油",
+              "j": "jau4",
+              "e": "oil"
+            }
+          ],
+          "topics": [
+            "cooking"
+          ]
+        }
+      ]
+    },
+    {
+      "label": "Calling for help",
+      "structure": "gau3 meng6!",
+      "note": "救命 (gau3 meng6)! literally 'save (my) life' — the cry for help in danger. 救 (gau3) means save/rescue, also in 救護車 (gau3 wu6 ce1, ambulance).",
+      "examples": [
+        {
+          "c": "救命呀！",
+          "j": "gau3 meng6 aa3!",
+          "e": "Help!"
+        },
+        {
+          "c": "快啲救命！",
+          "j": "faai3 di1 gau3 meng6!",
+          "e": "Help, quick!"
+        },
+        {
+          "c": "有人嗌救命。",
+          "j": "jau5 jan4 aai3 gau3 meng6.",
+          "e": "Someone's shouting for help."
+        }
+      ],
+      "drills": [
+        {
+          "frameC": "跌咗落水,大嗌▢！",
+          "frameJ": "dit3 zo2 lok6 seoi2, daai6 aai3 ▢!",
+          "english": "Fell in the water — shout for help!",
+          "frameE": "Fell in the water — shout …!",
+          "answer": {
+            "c": "救命",
+            "j": "gau3 meng6",
+            "e": "Help! / Save me!"
+          },
+          "distractors": [
+            {
+              "c": "報警",
+              "j": "bou3 ging2",
+              "e": "call the police"
+            },
+            {
+              "c": "危險",
+              "j": "ngai4 him2",
+              "e": "dangerous"
+            },
+            {
+              "c": "受傷",
+              "j": "sau6 soeng1",
+              "e": "injured"
+            }
+          ],
+          "topics": [
+            "emergencies"
+          ]
+        }
+      ]
+    },
+    {
+      "label": "Calling the police",
+      "structure": "bou3 ging2 / ging2 caat3",
+      "note": "報警 (bou3 ging2) is to call the police; 警察 (ging2 caat3) are the police themselves. Both share 警 (ging2). The HK emergency number is 999 (gau2 gau2 gau2).",
+      "examples": [
+        {
+          "c": "快啲報警。",
+          "j": "faai3 di1 bou3 ging2.",
+          "e": "Call the police, quick."
+        },
+        {
+          "c": "警察嚟咗。",
+          "j": "ging2 caat3 lai4 zo2.",
+          "e": "The police have arrived."
+        },
+        {
+          "c": "打999。",
+          "j": "daa2 gau2 gau2 gau2.",
+          "e": "Dial 999."
+        }
+      ],
+      "drills": [
+        {
+          "frameC": "屋企俾人爆竊,即刻▢。",
+          "frameJ": "uk1 kei2 bei2 jan4 baau3 sit3, zik1 hak1 ▢.",
+          "english": "The house was burgled — call the police right away.",
+          "frameE": "The house was burgled — … right away.",
+          "answer": {
+            "c": "報警",
+            "j": "bou3 ging2",
+            "e": "call the police"
+          },
+          "distractors": [
+            {
+              "c": "警察",
+              "j": "ging2 caat3",
+              "e": "police"
+            },
+            {
+              "c": "救命",
+              "j": "gau3 meng6",
+              "e": "Help!"
+            },
+            {
+              "c": "走",
+              "j": "zau2",
+              "e": "flee / escape"
+            }
+          ],
+          "topics": [
+            "emergencies"
+          ]
+        }
+      ]
+    },
+    {
+      "label": "Fire and danger",
+      "structure": "fo2 / ngai4 him2",
+      "note": "火 (fo2) is fire; 危險 (ngai4 him2) means dangerous. 火 (fo2) also appears in 火車 (fo2 ce1, train) — but here it's the emergency.",
+      "examples": [
+        {
+          "c": "火燭呀！",
+          "j": "fo2 zuk1 aa3!",
+          "e": "Fire!"
+        },
+        {
+          "c": "好危險。",
+          "j": "hou2 ngai4 him2.",
+          "e": "It's very dangerous."
+        },
+        {
+          "c": "有火,快啲走。",
+          "j": "jau5 fo2, faai3 di1 zau2.",
+          "e": "There's a fire — get out quick."
+        }
+      ],
+      "drills": [
+        {
+          "frameC": "廚房着▢喇,好危險！",
+          "frameJ": "cyu4 fong2 zoek6 ▢ laa3, hou2 ngai4 him2!",
+          "english": "The kitchen's caught fire — very dangerous!",
+          "frameE": "The kitchen's caught … — very dangerous!",
+          "answer": {
+            "c": "火",
+            "j": "fo2",
+            "e": "fire"
+          },
+          "distractors": [
+            {
+              "c": "危險",
+              "j": "ngai4 him2",
+              "e": "dangerous"
+            },
+            {
+              "c": "受傷",
+              "j": "sau6 soeng1",
+              "e": "injured"
+            },
+            {
+              "c": "走",
+              "j": "zau2",
+              "e": "flee / escape"
+            }
+          ],
+          "topics": [
+            "emergencies"
+          ]
+        }
+      ]
+    },
+    {
+      "label": "Getting medical help",
+      "structure": "giu3 + gau3 wu6 ce1 / heoi3 gap1 zing3 sat1",
+      "note": "救護車 (gau3 wu6 ce1) is an ambulance; 急症室 (gap1 zing3 sat1) is A&E / the ER. 受傷 (sau6 soeng1) means injured — when you need them.",
+      "examples": [
+        {
+          "c": "叫救護車！",
+          "j": "giu3 gau3 wu6 ce1!",
+          "e": "Call an ambulance!"
+        },
+        {
+          "c": "去急症室。",
+          "j": "heoi3 gap1 zing3 sat1.",
+          "e": "Go to A&E."
+        },
+        {
+          "c": "佢受咗傷。",
+          "j": "keoi5 sau6 zo2 soeng1.",
+          "e": "He's injured."
+        }
+      ],
+      "drills": [
+        {
+          "frameC": "佢受咗傷,快啲叫▢。",
+          "frameJ": "keoi5 sau6 zo2 soeng1, faai3 di1 giu3 ▢.",
+          "english": "He's injured — call an ambulance quick.",
+          "frameE": "He's injured — quick, call an …",
+          "answer": {
+            "c": "救護車",
+            "j": "gau3 wu6 ce1",
+            "e": "ambulance"
+          },
+          "distractors": [
+            {
+              "c": "急症室",
+              "j": "gap1 zing3 sat1",
+              "e": "A&E / ER"
+            },
+            {
+              "c": "警察",
+              "j": "ging2 caat3",
+              "e": "police"
+            },
+            {
+              "c": "危險",
+              "j": "ngai4 him2",
+              "e": "dangerous"
+            }
+          ],
+          "topics": [
+            "emergencies"
+          ]
+        }
+      ]
+    },
+    {
+      "label": "Get away",
+      "structure": "faai3 di1 + zau2",
+      "note": "走 (zau2) means flee / escape (also 'leave' in everyday use). 受傷 (sau6 soeng1) is to be injured — what you avoid by 走 (zau2)-ing from danger.",
+      "examples": [
+        {
+          "c": "快啲走！",
+          "j": "faai3 di1 zau2!",
+          "e": "Get out, quick!"
+        },
+        {
+          "c": "危險,走呀！",
+          "j": "ngai4 him2, zau2 aa3!",
+          "e": "Danger — run!"
+        },
+        {
+          "c": "唔好受傷。",
+          "j": "m4 hou2 sau6 soeng1.",
+          "e": "Don't get hurt."
+        }
+      ],
+      "drills": [
+        {
+          "frameC": "有火燭,大家快啲▢！",
+          "frameJ": "jau5 fo2 zuk1, daai6 gaa1 faai3 di1 ▢!",
+          "english": "There's a fire — everyone get out quick!",
+          "frameE": "There's a fire — everyone quick, …!",
+          "answer": {
+            "c": "走",
+            "j": "zau2",
+            "e": "flee / escape"
+          },
+          "distractors": [
+            {
+              "c": "受傷",
+              "j": "sau6 soeng1",
+              "e": "injured"
+            },
+            {
+              "c": "報警",
+              "j": "bou3 ging2",
+              "e": "call the police"
+            },
+            {
+              "c": "火",
+              "j": "fo2",
+              "e": "fire"
+            }
+          ],
+          "topics": [
+            "emergencies"
+          ]
+        }
+      ]
+    },
+    {
+      "label": "Making plans",
+      "structure": "joek3 + pang4 jau5",
+      "note": "朋友 (pang4 jau5) is a friend; 約 (joek3) is to make plans / arrange to meet. 約朋友 (joek3 pang4 jau5) = make plans with a friend.",
+      "examples": [
+        {
+          "c": "約朋友食飯。",
+          "j": "joek3 pang4 jau5 sik6 faan6.",
+          "e": "Make plans to eat with a friend."
+        },
+        {
+          "c": "我約咗佢。",
+          "j": "ngo5 joek3 zo2 keoi5.",
+          "e": "I've arranged to meet him."
+        },
+        {
+          "c": "幾時約？",
+          "j": "gei2 si4 joek3?",
+          "e": "When shall we meet?"
+        }
+      ],
+      "drills": [
+        {
+          "frameC": "週末得閒,我想▢幾個朋友出嚟。",
+          "frameJ": "zau1 mut6 dak1 haan4, ngo5 soeng2 ▢ gei2 go3 pang4 jau5 ceot1 lai4.",
+          "english": "Free at the weekend — I want to make plans with a few friends.",
+          "frameE": "Free at the weekend — I want to … a few friends out.",
+          "answer": {
+            "c": "約",
+            "j": "joek3",
+            "e": "make plans / appointment"
+          },
+          "distractors": [
+            {
+              "c": "邀請",
+              "j": "jiu1 cing2",
+              "e": "invite"
+            },
+            {
+              "c": "玩",
+              "j": "waan2",
+              "e": "hang out"
+            },
+            {
+              "c": "慶祝",
+              "j": "hing3 zuk1",
+              "e": "celebrate"
+            }
+          ],
+          "topics": [
+            "friends"
+          ]
+        }
+      ]
+    },
+    {
+      "label": "Are you free?",
+      "structure": "nei5 dak1 m4 dak1 haan4?",
+      "note": "得閒 (dak1 haan4) means free / having spare time. 你得唔得閒 (nei5 dak1 m4 dak1 haan4)? = are you free? The opener before making plans.",
+      "examples": [
+        {
+          "c": "你得唔得閒？",
+          "j": "nei5 dak1 m4 dak1 haan4?",
+          "e": "Are you free?"
+        },
+        {
+          "c": "我聽日得閒。",
+          "j": "ngo5 ting1 jat6 dak1 haan4.",
+          "e": "I'm free tomorrow."
+        },
+        {
+          "c": "得閒一齊食飯。",
+          "j": "dak1 haan4 jat1 cai4 sik6 faan6.",
+          "e": "Let's eat together when free."
+        }
+      ],
+      "drills": [
+        {
+          "frameC": "聽日你▢嗎？一齊去睇戲。",
+          "frameJ": "ting1 jat6 nei5 ▢ maa3? jat1 cai4 heoi3 tai2 hei3.",
+          "english": "Are you free tomorrow? Let's go see a movie.",
+          "frameE": "Tomorrow are you …? Let's go see a movie.",
+          "answer": {
+            "c": "得閒",
+            "j": "dak1 haan4",
+            "e": "free / have time"
+          },
+          "distractors": [
+            {
+              "c": "一齊",
+              "j": "jat1 cai4",
+              "e": "together"
+            },
+            {
+              "c": "出街",
+              "j": "ceot1 gaai1",
+              "e": "go out"
+            },
+            {
+              "c": "改日",
+              "j": "goi2 jat6",
+              "e": "another day"
+            }
+          ],
+          "topics": [
+            "friends"
+          ]
+        }
+      ]
+    },
+    {
+      "label": "Going out together",
+      "structure": "jat1 cai4 + ceot1 gaai1",
+      "note": "一齊 (jat1 cai4) means together; 出街 (ceot1 gaai1) is to go out (literally 'out to the street'). 一齊出街 (jat1 cai4 ceot1 gaai1) = go out together.",
+      "examples": [
+        {
+          "c": "一齊出街。",
+          "j": "jat1 cai4 ceot1 gaai1.",
+          "e": "Go out together."
+        },
+        {
+          "c": "我哋一齊去。",
+          "j": "ngo5 dei6 jat1 cai4 heoi3.",
+          "e": "Let's go together."
+        },
+        {
+          "c": "出街行吓。",
+          "j": "ceot1 gaai1 haang4 haa5.",
+          "e": "Go out for a wander."
+        }
+      ],
+      "drills": [
+        {
+          "frameC": "唔好留喺屋企,我哋▢出街啦。",
+          "frameJ": "m4 hou2 lau4 hai2 uk1 kei2, ngo5 dei6 ▢ ceot1 gaai1 laa1.",
+          "english": "Don't stay home — let's go out together.",
+          "frameE": "Don't stay home — let's go out … .",
+          "answer": {
+            "c": "一齊",
+            "j": "jat1 cai4",
+            "e": "together"
+          },
+          "distractors": [
+            {
+              "c": "得閒",
+              "j": "dak1 haan4",
+              "e": "free"
+            },
+            {
+              "c": "約",
+              "j": "joek3",
+              "e": "make plans"
+            },
+            {
+              "c": "玩",
+              "j": "waan2",
+              "e": "hang out"
+            }
+          ],
+          "topics": [
+            "friends"
+          ]
+        }
+      ]
+    },
+    {
+      "label": "Inviting to a party",
+      "structure": "jiu1 cing2 + … + paai3 deoi3",
+      "note": "邀請 (jiu1 cing2) is to invite (more formal than 約); 派對 (paai3 deoi3) is a party — a loan from English 'party'. 慶祝 (hing3 zuk1) = celebrate.",
+      "examples": [
+        {
+          "c": "邀請你嚟派對。",
+          "j": "jiu1 cing2 nei5 lai4 paai3 deoi3.",
+          "e": "Inviting you to the party."
+        },
+        {
+          "c": "開生日派對。",
+          "j": "hoi1 saang1 jat6 paai3 deoi3.",
+          "e": "Throw a birthday party."
+        },
+        {
+          "c": "一齊慶祝。",
+          "j": "jat1 cai4 hing3 zuk1.",
+          "e": "Celebrate together."
+        }
+      ],
+      "drills": [
+        {
+          "frameC": "我生日,想▢你哋嚟我屋企。",
+          "frameJ": "ngo5 saang1 jat6, soeng2 ▢ nei5 dei6 lai4 ngo5 uk1 kei2.",
+          "english": "It's my birthday — I want to invite you all to my place.",
+          "frameE": "It's my birthday — I want to … you all to my place.",
+          "answer": {
+            "c": "邀請",
+            "j": "jiu1 cing2",
+            "e": "invite"
+          },
+          "distractors": [
+            {
+              "c": "派對",
+              "j": "paai3 deoi3",
+              "e": "party"
+            },
+            {
+              "c": "慶祝",
+              "j": "hing3 zuk1",
+              "e": "celebrate"
+            },
+            {
+              "c": "約",
+              "j": "joek3",
+              "e": "make plans"
+            }
+          ],
+          "topics": [
+            "friends"
+          ]
+        }
+      ]
+    },
+    {
+      "label": "Rain check",
+      "structure": "goi2 jat6 + …",
+      "note": "改日 (goi2 jat6) means 'another day' — a polite rain check when you can't make it. 改 (goi2) = change, 日 (jat6) = day.",
+      "examples": [
+        {
+          "c": "改日先。",
+          "j": "goi2 jat6 sin1.",
+          "e": "Another day then."
+        },
+        {
+          "c": "今日唔得,改日啦。",
+          "j": "gam1 jat6 m4 dak1, goi2 jat6 laa1.",
+          "e": "Can't today — another day."
+        },
+        {
+          "c": "改日再玩。",
+          "j": "goi2 jat6 zoi3 waan2.",
+          "e": "Hang out another day."
+        }
+      ],
+      "drills": [
+        {
+          "frameC": "今日唔得閒,不如▢先啦。",
+          "frameJ": "gam1 jat6 m4 dak1 haan4, bat1 jyu4 ▢ sin1 laa1.",
+          "english": "Not free today — let's do it another day.",
+          "frameE": "Not free today — let's do it … instead.",
+          "answer": {
+            "c": "改日",
+            "j": "goi2 jat6",
+            "e": "another day"
+          },
+          "distractors": [
+            {
+              "c": "得閒",
+              "j": "dak1 haan4",
+              "e": "free"
+            },
+            {
+              "c": "一齊",
+              "j": "jat1 cai4",
+              "e": "together"
+            },
+            {
+              "c": "派對",
+              "j": "paai3 deoi3",
+              "e": "party"
+            }
+          ],
+          "topics": [
+            "friends"
+          ]
+        }
+      ]
+    },
+    {
+      "label": "Rooms of the home",
+      "structure": "cyu4 fong2 / haak3 teng1 / ci3 so2",
+      "note": "屋企 (uk1 kei2) is home. Inside: 廚房 (cyu4 fong2, kitchen), 客廳 (haak3 teng1, living room), 廁所 (ci3 so2, toilet).",
+      "examples": [
+        {
+          "c": "廚房煮飯。",
+          "j": "cyu4 fong2 zyu2 faan6.",
+          "e": "Cook in the kitchen."
+        },
+        {
+          "c": "客廳睇電視。",
+          "j": "haak3 teng1 tai2 din6 si6.",
+          "e": "Watch TV in the living room."
+        },
+        {
+          "c": "廁所喺邊度？",
+          "j": "ci3 so2 hai2 bin1 dou6?",
+          "e": "Where's the toilet?"
+        }
+      ],
+      "drills": [
+        {
+          "frameC": "肚痾,想去▢。",
+          "frameJ": "tou5 o1, soeng2 heoi3 ▢.",
+          "english": "Upset stomach — need the toilet.",
+          "frameE": "Upset stomach — need the …",
+          "answer": {
+            "c": "廁所",
+            "j": "ci3 so2",
+            "e": "toilet"
+          },
+          "distractors": [
+            {
+              "c": "廚房",
+              "j": "cyu4 fong2",
+              "e": "kitchen"
+            },
+            {
+              "c": "客廳",
+              "j": "haak3 teng1",
+              "e": "living room"
+            },
+            {
+              "c": "房",
+              "j": "fong2",
+              "e": "room / bedroom"
+            }
+          ],
+          "topics": [
+            "home"
+          ]
+        }
+      ]
+    },
+    {
+      "label": "Furniture",
+      "structure": "cong4 / toi2 / ji2",
+      "note": "床 (cong4) is a bed, 枱 (toi2) a table, 椅 (ji2) a chair — the basics in a 房 (fong2, room).",
+      "examples": [
+        {
+          "c": "張床好舒服。",
+          "j": "zoeng1 cong4 hou2 syu1 fuk6.",
+          "e": "The bed is comfortable."
+        },
+        {
+          "c": "喺枱度食飯。",
+          "j": "hai2 toi2 dou6 sik6 faan6.",
+          "e": "Eat at the table."
+        },
+        {
+          "c": "坐張椅。",
+          "j": "co5 zoeng1 ji2.",
+          "e": "Sit on the chair."
+        }
+      ],
+      "drills": [
+        {
+          "frameC": "瞓覺嘅時候,瞓喺張▢度。",
+          "frameJ": "fan3 gaau3 ge3 si4 hau6, fan3 hai2 zoeng1 ▢ dou6.",
+          "english": "When sleeping, you sleep on the bed.",
+          "frameE": "When sleeping, you sleep on the …",
+          "answer": {
+            "c": "床",
+            "j": "cong4",
+            "e": "bed"
+          },
+          "distractors": [
+            {
+              "c": "枱",
+              "j": "toi2",
+              "e": "table"
+            },
+            {
+              "c": "椅",
+              "j": "ji2",
+              "e": "chair"
+            },
+            {
+              "c": "窗",
+              "j": "coeng1",
+              "e": "window"
+            }
+          ],
+          "topics": [
+            "home"
+          ]
+        }
+      ]
+    },
+    {
+      "label": "Doors and windows",
+      "structure": "mun4 / coeng1",
+      "note": "門 (mun4) is a door; 窗 (coeng1) is a window. 開門 (hoi1 mun4) = open the door; 開窗 (hoi1 coeng1) = open the window.",
+      "examples": [
+        {
+          "c": "開門。",
+          "j": "hoi1 mun4.",
+          "e": "Open the door."
+        },
+        {
+          "c": "開窗透氣。",
+          "j": "hoi1 coeng1 tau3 hei3.",
+          "e": "Open the window for air."
+        },
+        {
+          "c": "關埋度門。",
+          "j": "gwaan1 maai4 dou6 mun4.",
+          "e": "Close the door."
+        }
+      ],
+      "drills": [
+        {
+          "frameC": "間房好焗,開個▢透下氣。",
+          "frameJ": "gaan1 fong2 hou2 guk6, hoi1 go3 ▢ tau3 haa5 hei3.",
+          "english": "The room is stuffy — open the window for some air.",
+          "frameE": "The room is stuffy — open the … for some air.",
+          "answer": {
+            "c": "窗",
+            "j": "coeng1",
+            "e": "window"
+          },
+          "distractors": [
+            {
+              "c": "門",
+              "j": "mun4",
+              "e": "door"
+            },
+            {
+              "c": "床",
+              "j": "cong4",
+              "e": "bed"
+            },
+            {
+              "c": "枱",
+              "j": "toi2",
+              "e": "table"
+            }
+          ],
+          "topics": [
+            "home"
+          ]
+        }
+      ]
+    },
+    {
+      "label": "Talking about your home",
+      "structure": "ngo5 uk1 kei2 + …",
+      "note": "屋企 (uk1 kei2) means home / one's place. 我屋企 (ngo5 uk1 kei2) = my home — no possessive particle needed, like family words.",
+      "examples": [
+        {
+          "c": "我屋企好細。",
+          "j": "ngo5 uk1 kei2 hou2 sai3.",
+          "e": "My home is small."
+        },
+        {
+          "c": "返屋企。",
+          "j": "faan1 uk1 kei2.",
+          "e": "Go home."
+        },
+        {
+          "c": "嚟我屋企玩。",
+          "j": "lai4 ngo5 uk1 kei2 waan2.",
+          "e": "Come over to my place."
+        }
+      ],
+      "drills": [
+        {
+          "frameC": "夜喇,我要返▢瞓覺。",
+          "frameJ": "je6 laa3, ngo5 jiu3 faan1 ▢ fan3 gaau3.",
+          "english": "It's late — I need to go home to sleep.",
+          "frameE": "It's late — I need to go … to sleep.",
+          "answer": {
+            "c": "屋企",
+            "j": "uk1 kei2",
+            "e": "home"
+          },
+          "distractors": [
+            {
+              "c": "客廳",
+              "j": "haak3 teng1",
+              "e": "living room"
+            },
+            {
+              "c": "廚房",
+              "j": "cyu4 fong2",
+              "e": "kitchen"
+            },
+            {
+              "c": "房",
+              "j": "fong2",
+              "e": "room"
+            }
+          ],
+          "topics": [
+            "home"
+          ]
+        }
+      ]
+    },
+    {
+      "label": "The kitchen and living room",
+      "structure": "cyu4 fong2 / haak3 teng1",
+      "note": "廚房 (cyu4 fong2) is where you cook; 客廳 (haak3 teng1) is where guests sit — 客 (haak3) means guest. The two main shared rooms.",
+      "examples": [
+        {
+          "c": "廚房好多嘢。",
+          "j": "cyu4 fong2 hou2 do1 je5.",
+          "e": "The kitchen has lots of stuff."
+        },
+        {
+          "c": "客廳有梳化。",
+          "j": "haak3 teng1 jau5 so1 faa2.",
+          "e": "The living room has a sofa."
+        },
+        {
+          "c": "喺客廳傾偈。",
+          "j": "hai2 haak3 teng1 king1 gai2.",
+          "e": "Chat in the living room."
+        }
+      ],
+      "drills": [
+        {
+          "frameC": "煮飯整嘢食,梗係喺▢。",
+          "frameJ": "zyu2 faan6 zing2 je5 sik6, gang2 hai6 hai2 ▢.",
+          "english": "Cooking food, of course, happens in the kitchen.",
+          "frameE": "Cooking food, of course, happens in the …",
+          "answer": {
+            "c": "廚房",
+            "j": "cyu4 fong2",
+            "e": "kitchen"
+          },
+          "distractors": [
+            {
+              "c": "客廳",
+              "j": "haak3 teng1",
+              "e": "living room"
+            },
+            {
+              "c": "廁所",
+              "j": "ci3 so2",
+              "e": "toilet"
+            },
+            {
+              "c": "房",
+              "j": "fong2",
+              "e": "room"
+            }
+          ],
+          "topics": [
+            "home"
+          ]
+        }
+      ]
+    },
+    {
+      "label": "Doing exercise",
+      "structure": "zou6 + wan6 dung6",
+      "note": "運動 (wan6 dung6) is sport / exercise (the general word); 健身 (gin6 san1) is working out / the gym. 做運動 (zou6 wan6 dung6) = do exercise.",
+      "examples": [
+        {
+          "c": "做運動好健康。",
+          "j": "zou6 wan6 dung6 hou2 gin6 hong1.",
+          "e": "Exercise is healthy."
+        },
+        {
+          "c": "我去健身。",
+          "j": "ngo5 heoi3 gin6 san1.",
+          "e": "I'm going to the gym."
+        },
+        {
+          "c": "鍾意做運動。",
+          "j": "zung1 ji3 zou6 wan6 dung6.",
+          "e": "I like doing sport."
+        }
+      ],
+      "drills": [
+        {
+          "frameC": "想身體好,要多啲做▢。",
+          "frameJ": "soeng2 san1 tai2 hou2, jiu3 do1 di1 zou6 ▢.",
+          "english": "To be healthy, do more exercise.",
+          "frameE": "To be healthy, do more …",
+          "answer": {
+            "c": "運動",
+            "j": "wan6 dung6",
+            "e": "sports / exercise"
+          },
+          "distractors": [
+            {
+              "c": "健身",
+              "j": "gin6 san1",
+              "e": "work out / gym"
+            },
+            {
+              "c": "跑步",
+              "j": "paau2 bou6",
+              "e": "run / jog"
+            },
+            {
+              "c": "游水",
+              "j": "jau4 seoi2",
+              "e": "swim"
+            }
+          ],
+          "topics": [
+            "sports"
+          ]
+        }
+      ]
+    },
+    {
+      "label": "Running and swimming",
+      "structure": "paau2 bou6 / jau4 seoi2",
+      "note": "跑步 (paau2 bou6) is running / jogging; 游水 (jau4 seoi2) is swimming. Two solo activities — 跑 (paau2) = run, 游 (jau4) = swim.",
+      "examples": [
+        {
+          "c": "朝早跑步。",
+          "j": "ziu1 zou2 paau2 bou6.",
+          "e": "Run in the morning."
+        },
+        {
+          "c": "夏天去游水。",
+          "j": "haa6 tin1 heoi3 jau4 seoi2.",
+          "e": "Swim in summer."
+        },
+        {
+          "c": "跑步好攰。",
+          "j": "paau2 bou6 hou2 gui6.",
+          "e": "Running is tiring."
+        }
+      ],
+      "drills": [
+        {
+          "frameC": "天氣熱,我鍾意去▢消暑。",
+          "frameJ": "tin1 hei3 jit6, ngo5 zung1 ji3 heoi3 ▢ siu1 syu2.",
+          "english": "Hot weather — I like to swim to cool off.",
+          "frameE": "Hot weather — I like to … to cool off.",
+          "answer": {
+            "c": "游水",
+            "j": "jau4 seoi2",
+            "e": "swim"
+          },
+          "distractors": [
+            {
+              "c": "跑步",
+              "j": "paau2 bou6",
+              "e": "run / jog"
+            },
+            {
+              "c": "健身",
+              "j": "gin6 san1",
+              "e": "work out"
+            },
+            {
+              "c": "打波",
+              "j": "daa2 bo1",
+              "e": "play ball"
+            }
+          ],
+          "topics": [
+            "sports"
+          ]
+        }
+      ]
+    },
+    {
+      "label": "Ball games",
+      "structure": "daa2 bo1 / zuk1 kau4 / laam4 kau4",
+      "note": "打波 (daa2 bo1) is to play ball games generally; specific ones: 足球 (zuk1 kau4, football), 籃球 (laam4 kau4, basketball). 波 (bo1) is a colloquial word for ball.",
+      "examples": [
+        {
+          "c": "放學打波。",
+          "j": "fong3 hok6 daa2 bo1.",
+          "e": "Play ball after school."
+        },
+        {
+          "c": "我鍾意踢足球。",
+          "j": "ngo5 zung1 ji3 tek3 zuk1 kau4.",
+          "e": "I like playing football."
+        },
+        {
+          "c": "打籃球好攰。",
+          "j": "daa2 laam4 kau4 hou2 gui6.",
+          "e": "Basketball is tiring."
+        }
+      ],
+      "drills": [
+        {
+          "frameC": "我哋一隊十一個人,踢▢。",
+          "frameJ": "ngo5 dei6 jat1 deoi6 sap6 jat1 go3 jan4, tek3 ▢.",
+          "english": "Our team has eleven players — we play football.",
+          "frameE": "Our team has eleven players — we play …",
+          "answer": {
+            "c": "足球",
+            "j": "zuk1 kau4",
+            "e": "football / soccer"
+          },
+          "distractors": [
+            {
+              "c": "籃球",
+              "j": "laam4 kau4",
+              "e": "basketball"
+            },
+            {
+              "c": "打波",
+              "j": "daa2 bo1",
+              "e": "play ball"
+            },
+            {
+              "c": "運動",
+              "j": "wan6 dung6",
+              "e": "sports"
+            }
+          ],
+          "topics": [
+            "sports"
+          ]
+        }
+      ]
+    },
+    {
+      "label": "On the court",
+      "structure": "hai2 + kau4 coeng4 + …",
+      "note": "球場 (kau4 coeng4) is the court / field; 隊 (deoi6) is a team. 場 (coeng4) means a ground/venue — same character as in 商場 (soeng1 coeng4, mall).",
+      "examples": [
+        {
+          "c": "去球場打波。",
+          "j": "heoi3 kau4 coeng4 daa2 bo1.",
+          "e": "Go to the court to play."
+        },
+        {
+          "c": "我哋隊好勁。",
+          "j": "ngo5 dei6 deoi6 hou2 ging6.",
+          "e": "Our team is strong."
+        },
+        {
+          "c": "球場好大。",
+          "j": "kau4 coeng4 hou2 daai6.",
+          "e": "The court is big."
+        }
+      ],
+      "drills": [
+        {
+          "frameC": "夠人喇,去▢踢波啦。",
+          "frameJ": "gau3 jan4 laa3, heoi3 ▢ tek3 bo1 laa1.",
+          "english": "We have enough people — let's go to the field to play.",
+          "frameE": "We have enough people — let's go to the … to play.",
+          "answer": {
+            "c": "球場",
+            "j": "kau4 coeng4",
+            "e": "court / field"
+          },
+          "distractors": [
+            {
+              "c": "隊",
+              "j": "deoi6",
+              "e": "team"
+            },
+            {
+              "c": "足球",
+              "j": "zuk1 kau4",
+              "e": "football"
+            },
+            {
+              "c": "運動",
+              "j": "wan6 dung6",
+              "e": "sports"
+            }
+          ],
+          "topics": [
+            "sports"
+          ]
+        }
+      ]
+    },
+    {
+      "label": "Winning the game",
+      "structure": "ngo5 dei6 deoi6 + jeng4",
+      "note": "贏 (jeng4) is to win; 隊 (deoi6) is the team. 我哋贏咗 (ngo5 dei6 jeng4 zo2) = we won. The opposite is 輸 (syu1, lose).",
+      "examples": [
+        {
+          "c": "我哋贏咗！",
+          "j": "ngo5 dei6 jeng4 zo2!",
+          "e": "We won!"
+        },
+        {
+          "c": "邊隊贏？",
+          "j": "bin1 deoi6 jeng4?",
+          "e": "Which team won?"
+        },
+        {
+          "c": "贏咗場波。",
+          "j": "jeng4 zo2 coeng4 bo1.",
+          "e": "Won the match."
+        }
+      ],
+      "drills": [
+        {
+          "frameC": "最後一分鐘入波,我哋▢咗！",
+          "frameJ": "zeoi3 hau6 jat1 fan1 zung1 jap6 bo1, ngo5 dei6 ▢ zo2!",
+          "english": "Scored in the last minute — we won!",
+          "frameE": "Scored in the last minute — we … !",
+          "answer": {
+            "c": "贏",
+            "j": "jeng4",
+            "e": "win"
+          },
+          "distractors": [
+            {
+              "c": "隊",
+              "j": "deoi6",
+              "e": "team"
+            },
+            {
+              "c": "球場",
+              "j": "kau4 coeng4",
+              "e": "court"
+            },
+            {
+              "c": "打波",
+              "j": "daa2 bo1",
+              "e": "play ball"
+            }
+          ],
+          "topics": [
+            "sports"
+          ]
+        }
+      ]
     }
   ]
 }
