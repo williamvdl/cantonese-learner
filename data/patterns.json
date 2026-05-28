@@ -1094,7 +1094,7 @@
     {
       "label": "Match the time of day",
       "structure": "zou2 san4 / maan5 soeng6 hou2 + …",
-      "note": "Cantonese greetings change with the time of day — 早晨 in the morning, 晚上好 in the evening. Pick the one that fits.",
+      "note": "Cantonese greetings change with the time of day — 早晨 (zou2 san4) in the morning, 晚上好 (maan5 soeng6 hou2) in the evening. Pick the one that fits.",
       "examples": [
         {
           "c": "早晨！瞓得好嗎？",
@@ -1149,7 +1149,7 @@
     {
       "label": "Apologise",
       "structure": "deoi3 m4 zyu6 + [reason]",
-      "note": "對唔住 means 'sorry'. Lead with it, then explain — just like in English.",
+      "note": "對唔住 (deoi3 m4 zyu6) means 'sorry'. Lead with it, then explain — just like in English.",
       "examples": [
         {
           "c": "對唔住，我遲到。",
@@ -1204,7 +1204,7 @@
     {
       "label": "Respond to thanks",
       "structure": "m4 gan2 jiu3 (reply when thanked)",
-      "note": "When someone says 多謝, the natural reply is 唔緊要 — 'it's nothing / you're welcome'.",
+      "note": "When someone says 多謝 (do1 ze6), the natural reply is 唔緊要 (m4 gan2 jiu3) — 'it's nothing / you're welcome'.",
       "examples": [
         {
           "c": "唔緊要，小事啦。",
@@ -1259,7 +1259,7 @@
     {
       "label": "Close a conversation",
       "structure": "… + zoi3 gin3",
-      "note": "再見 ends a conversation. It often follows a thank-you — 多謝，再見!",
+      "note": "再見 (zoi3 gin3) ends a conversation. It often follows a thank-you — 多謝，再見 (do1 ze6, zoi3 gin3)!",
       "examples": [
         {
           "c": "多謝，再見！",
@@ -1314,7 +1314,7 @@
     {
       "label": "Answer yes or no",
       "structure": "hai6 / m4 hai6",
-      "note": "Cantonese has no single word for 'yes'. Reply with 係 (it is) or 唔係 (it isn't) to a 係-question.",
+      "note": "Cantonese has no single word for 'yes'. Reply with 係 (hai6, 'it is') or 唔係 (m4 hai6, 'it isn't') to a 係 (hai6) question.",
       "examples": [
         {
           "c": "係，我係學生。",
@@ -1369,7 +1369,7 @@
     {
       "label": "Say if it's OK",
       "structure": "dak1 / m4 dak1",
-      "note": "得 means 'OK / can do', 唔得 means 'no / can't'. A single word answers a 得唔得 question.",
+      "note": "得 (dak1) means 'OK / can do', 唔得 (m4 dak1) means 'no / can't'. A single word answers a 得唔得 (dak1 m4 dak1) question.",
       "examples": [
         {
           "c": "得，冇問題。",
@@ -1424,7 +1424,7 @@
     {
       "label": "Get attention politely",
       "structure": "m4 goi1 + [request]",
-      "note": "唔該 is the everyday 'excuse me / please' — use it to get attention or ask for service. (多謝 is for thanking someone for a gift.)",
+      "note": "唔該 (m4 goi1) is the everyday 'excuse me / please' — use it to get attention or ask for service. (多謝 (do1 ze6) is for thanking someone for a gift.)",
       "examples": [
         {
           "c": "唔該，借過。",
@@ -1479,7 +1479,7 @@
     {
       "label": "Welcome someone",
       "structure": "fun1 jing4 + …",
-      "note": "歡迎 means 'welcome'. Shops greet customers with the set phrase 歡迎光臨 — 'welcome to our shop'.",
+      "note": "歡迎 (fun1 jing4) means 'welcome'. Shops greet customers with the set phrase 歡迎光臨 (fun1 jing4 gwong1 lam4) — 'welcome to our shop'.",
       "examples": [
         {
           "c": "歡迎光臨！",
@@ -1534,7 +1534,7 @@
     {
       "label": "Invite politely",
       "structure": "cing2 + [verb]",
-      "note": "請 is the formal 'please', placed before a verb — 請坐 (please sit), 請講 (please speak). More formal than 唔該.",
+      "note": "請 (cing2) is the formal 'please', placed before a verb — 請坐 (cing2 co5, please sit), 請講 (cing2 gong2, please speak). More formal than 唔該 (m4 goi1).",
       "examples": [
         {
           "c": "請坐。",
@@ -1589,7 +1589,7 @@
     {
       "label": "Counting up",
       "structure": "jat1, ji6, saam1, sei3 …",
-      "note": "Cantonese counts the same way you'd recite numbers in English: 一二三四五. The first ten numbers are the foundation for every larger number.",
+      "note": "Cantonese counts the same way you'd recite numbers in English: 一二三四五 (jat1 ji6 saam1 sei3 ng5). The first ten numbers are the foundation for every larger number.",
       "examples": [
         {
           "c": "一、二、三",
@@ -1642,7 +1642,7 @@
       ]
     },
     {
-      "label": "How many? (幾多)",
+      "label": "How many? (幾多 gei2 do1)",
       "structure": "gei2 do1 + [classifier/noun]",
       "note": "幾多 (gei2 do1) is the all-purpose 'how many / how much' question word. Use it before a classifier or noun to ask about quantity.",
       "examples": [
@@ -1699,7 +1699,7 @@
     {
       "label": "Saying a dollar amount",
       "structure": "[number] + man1",
-      "note": "蚊 (man1) is the colloquial word for Hong Kong dollars. Just put a number in front: 十蚊 (ten dollars), 一百蚊 (a hundred dollars).",
+      "note": "蚊 (man1) is the colloquial word for Hong Kong dollars. Just put a number in front: 十蚊 (sap6 man1, ten dollars), 一百蚊 (jat1 baak3 man1, a hundred dollars).",
       "examples": [
         {
           "c": "十蚊",
@@ -1752,9 +1752,9 @@
       ]
     },
     {
-      "label": "Half (一半)",
+      "label": "Half (一半 jat1 bun3)",
       "structure": "jat1 bun3 + [classifier/noun]",
-      "note": "一半 means 'half'. Use it before a measure word + noun to say half of something — 一半個西瓜 = half a watermelon.",
+      "note": "一半 (jat1 bun3) means 'half'. Use it before a measure word + noun to say half of something — 一半個西瓜 (jat1 bun3 go3 sai1 gwaa1) = half a watermelon.",
       "examples": [
         {
           "c": "一半",
@@ -1809,7 +1809,7 @@
     {
       "label": "Multiples of ten",
       "structure": "[1–9] + sap6",
-      "note": "For 20, 30, 50 — just put the digit in front of 十: 二十 (twenty), 三十 (thirty), 五十 (fifty). Same pattern as English 'twen-ty', 'thir-ty'.",
+      "note": "For 20, 30, 50 — just put the digit in front of 十 (sap6): 二十 (ji6 sap6, twenty), 三十 (saam1 sap6, thirty), 五十 (ng5 sap6, fifty). Same pattern as English 'twen-ty', 'thir-ty'.",
       "examples": [
         {
           "c": "二十",
@@ -1919,7 +1919,7 @@
     {
       "label": "Introducing yourself",
       "structure": "ngo5 giu3 + [name]",
-      "note": "我叫… is the natural way to introduce yourself — literally 'I'm called…'. Just add your name.",
+      "note": "我叫 (ngo5 giu3) … is the natural way to introduce yourself — literally 'I'm called…'. Just add your name.",
       "examples": [
         {
           "c": "我叫William。",
@@ -1974,7 +1974,7 @@
     {
       "label": "How are you?",
       "structure": "nei5 hou2 maa3?",
-      "note": "The standard 'How are you?' greeting after the initial 你好. Add 嗎 to turn 'you good' into a yes/no question.",
+      "note": "The standard 'How are you?' greeting after the initial 你好 (nei5 hou2). Add 嗎 (maa3) to turn 'you good' into a yes/no question.",
       "examples": [
         {
           "c": "你好嗎？",
@@ -2029,7 +2029,7 @@
     {
       "label": "When you don't understand",
       "structure": "ngo5 m4 ming4",
-      "note": "我唔明 is a polite, useful phrase to flag that you didn't catch what was said. Often paired with 請講慢啲 — 'please speak slowly'.",
+      "note": "我唔明 (ngo5 m4 ming4) is a polite, useful phrase to flag that you didn't catch what was said. Often paired with 請講慢啲 (cing2 gong2 maan6 di1) — 'please speak slowly'.",
       "examples": [
         {
           "c": "我唔明。",
@@ -2084,7 +2084,7 @@
     {
       "label": "Asking the price",
       "structure": "gei2 cin2?",
-      "note": "幾錢？ literally 'how much money?' — the universal way to ask the price of anything at a shop or restaurant.",
+      "note": "幾錢 (gei2 cin2)？ literally 'how much money?' — the universal way to ask the price of anything at a shop or restaurant.",
       "examples": [
         {
           "c": "幾錢？",
@@ -2137,9 +2137,9 @@
       ]
     },
     {
-      "label": "Who? (邊個)",
+      "label": "Who? (邊個 bin1 go3)",
       "structure": "bin1 go3 + …",
-      "note": "邊個 means 'who / which one'. Place it where the unknown person goes in the sentence.",
+      "note": "邊個 (bin1 go3) means 'who / which one'. Place it where the unknown person goes in the sentence.",
       "examples": [
         {
           "c": "邊個係你嘅老師？",
@@ -2192,9 +2192,9 @@
       ]
     },
     {
-      "label": "What? (乜嘢)",
+      "label": "What? (乜嘢 mat1 je5)",
       "structure": "… + mat1 je5",
-      "note": "乜嘢 means 'what'. In Cantonese it usually goes at the END of the question — not the beginning like English. 你食乜嘢? = 'You eat what?'",
+      "note": "乜嘢 (mat1 je5) means 'what'. In Cantonese it usually goes at the END of the question — not the beginning like English. 你食乜嘢 (nei5 sik6 mat1 je5)? = 'You eat what?'",
       "examples": [
         {
           "c": "你食乜嘢？",
@@ -2247,9 +2247,9 @@
       ]
     },
     {
-      "label": "Where? (邊度)",
+      "label": "Where? (邊度 bin1 dou6)",
       "structure": "… + bin1 dou6",
-      "note": "邊度 means 'where'. Like 乜嘢, it usually goes at the end of the question in Cantonese.",
+      "note": "邊度 (bin1 dou6) means 'where'. Like 乜嘢 (mat1 je5), it usually goes at the end of the question in Cantonese.",
       "examples": [
         {
           "c": "你住喺邊度？",
@@ -2302,9 +2302,9 @@
       ]
     },
     {
-      "label": "When? (幾時)",
+      "label": "When? (幾時 gei2 si4)",
       "structure": "gei2 si4 + [verb phrase]",
-      "note": "幾時 means 'when'. Often appears at the start: 幾時去食飯? = 'When are we going to eat?'",
+      "note": "幾時 (gei2 si4) means 'when'. Often appears at the start: 幾時去食飯 (gei2 si4 heoi3 sik6 faan6)? = 'When are we going to eat?'",
       "examples": [
         {
           "c": "幾時去食飯？",
@@ -2357,9 +2357,9 @@
       ]
     },
     {
-      "label": "Why? (點解)",
+      "label": "Why? (點解 dim2 gaai2)",
       "structure": "… + dim2 gaai2 + …",
-      "note": "點解 means 'why' — literally 'how to explain'. Use it to ask the reason for something.",
+      "note": "點解 (dim2 gaai2) means 'why' — literally 'how to explain'. Use it to ask the reason for something.",
       "examples": [
         {
           "c": "你點解唔嚟？",
@@ -2414,7 +2414,7 @@
     {
       "label": "Introducing a family member",
       "structure": "ni1 go3 hai6 ngo5 + [family word]",
-      "note": "呢個係我… is the everyday way to introduce someone — literally 'this one is my…'. Add the family word at the end.",
+      "note": "呢個係我 (ni1 go3 hai6 ngo5) … is the everyday way to introduce someone — literally 'this one is my…'. Add the family word at the end.",
       "examples": [
         {
           "c": "呢個係我爸爸。",
@@ -2469,7 +2469,7 @@
     {
       "label": "Talking about parents",
       "structure": "ngo5 + [parent] + …",
-      "note": "To talk about your mum or dad, just say 我媽媽 / 我爸爸 — no possessive particle needed. The relationship is built in.",
+      "note": "To talk about your mum or dad, just say 我媽媽 (ngo5 maa4 maa1) / 我爸爸 (ngo5 baa4 baa1) — no possessive particle needed. The relationship is built in.",
       "examples": [
         {
           "c": "我媽媽好錫我。",
@@ -2524,7 +2524,7 @@
     {
       "label": "Talking about siblings",
       "structure": "ngo5 + [sibling] + …",
-      "note": "Cantonese distinguishes elder and younger siblings with separate words — 哥哥 (older brother), 弟弟 (younger brother), 姐姐 (older sister), 妹妹 (younger sister). No ambiguity, but you have to know which.",
+      "note": "Cantonese distinguishes elder and younger siblings with separate words — 哥哥 (go4 go1, older brother), 弟弟 (dai6 dai2, younger brother), 姐姐 (ze4 ze1, older sister), 妹妹 (mui4 mui2, younger sister). No ambiguity, but you have to know which.",
       "examples": [
         {
           "c": "我哥哥讀大學。",
@@ -2579,7 +2579,7 @@
     {
       "label": "Grandparents (paternal vs maternal)",
       "structure": "je4 je2 / maa4 maa2 / ngoi6 gung1 / ngoi6 po4",
-      "note": "Cantonese has different words for paternal and maternal grandparents. 爺爺 / 嫲嫲 are your father's parents; 外公 / 外婆 (with 外 meaning 'outside') are your mother's. The distinction matters in conversation.",
+      "note": "Cantonese has different words for paternal and maternal grandparents. 爺爺 (je4 je2) / 嫲嫲 (maa4 maa2) are your father's parents; 外公 (ngoi6 gung1) / 外婆 (ngoi6 po4) — where 外 (ngoi6) means 'outside' — are your mother's. The distinction matters in conversation.",
       "examples": [
         {
           "c": "我爺爺住喺鄉下。",
@@ -2634,7 +2634,7 @@
     {
       "label": "Talking about your children",
       "structure": "ngo5 jau5 + [number] + go3 + [child word]",
-      "note": "To say how many children you have, use 我有 + [number] + 個 + 兒子 (son) / 女兒 (daughter). 個 is the all-purpose classifier for people.",
+      "note": "To say how many children you have, use 我有 (ngo5 jau5) + [number] + 個 (go3) + 兒子 (ji4 zi2, son) / 女兒 (neoi5 ji4, daughter). 個 (go3) is the all-purpose classifier for people.",
       "examples": [
         {
           "c": "我有一個兒子。",
