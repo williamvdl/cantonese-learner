@@ -59,7 +59,8 @@ function renderDrawer() {
 
 function renderPatterns() {
   const tab = state.patternsTab || 'browse';
-  const drillCount = store.patterns.filter(p => Array.isArray(p.drills) && p.drills.length).length;
+  const libFrames = store.patterns.filter(p => p.tier === 1);
+  const drillCount = libFrames.filter(p => Array.isArray(p.drills) && p.drills.length).length;
 
   // Browse / Drill segmented control (same component family as topic subtabs).
   const tabs = `
@@ -80,15 +81,18 @@ function renderPatterns() {
 
   return `
     <div class="patterns-wrap">
-      ${renderPageHeader('🔨', 'Sentence Patterns', `${store.patterns.length} building blocks`)}
+      ${renderPageHeader('🔨', 'Sentence Patterns', `${libFrames.length} building blocks`)}
       ${tabs}
       ${body}
     </div>`;
 }
 
-// The reference list — browse all patterns and their example sentences.
+// The reference list — browse the Tier-1 library frames and their examples.
+// Tier-2 patterns are topic-local (they live only in a topic's Learn tab), so
+// the standalone library shows Tier-1 frames only.
 function renderPatternBrowse() {
-  const cards = store.patterns.map((p, pi) => {
+  const lib = store.patterns.filter(p => p.tier === 1);
+  const cards = lib.map((p, pi) => {
     const examples = p.examples.map((ex, ei) => {
       const key = `p${pi}-e${ei}`;
       const speaking = state.speaking === key;
@@ -111,7 +115,7 @@ function renderPatternBrowse() {
     return `
       <div class="pattern-card">
         <div class="pattern-head">
-          <div class="pattern-number">Pattern ${pi+1} of ${store.patterns.length}</div>
+          <div class="pattern-number">Pattern ${pi+1} of ${lib.length}</div>
           <div class="pattern-label">${p.label}</div>
           <span class="pattern-structure">${colorJyutping(p.structure)}</span>
         </div>
@@ -1332,49 +1336,55 @@ function renderTopicPatterns(topicKey, color) {
   const items = getTopicDrills(topicKey);
   if (!items.length) return '';
 
-  const cards = items.map(({ pattern: p, drill: d }, pi) => {
-    // Worked example: the assembled correct sentence (frame + answer).
-    const exC = d.frameC.replace('▢', d.answer.c);
-    const exJ = d.frameJ.replace('▢', d.answer.j);
-    const key = 'tp-' + topicKey + '-' + pi;          // unique per topic+pattern
-    const speaking = state.speaking === key;
-    const revealed = state.patternRevealed[key];
-    const bdOpen   = state.patternBreakdownOpen[key];
+  // Group the topic's drills by their parent pattern, preserving first-seen order.
+  // After consolidation a pattern (esp. a Tier-2 cluster) can own several of a
+  // topic's drills, so one card shows the pattern's note once + each drill as a
+  // stacked worked-example. A cross-topic frame usually contributes one.
+  const groups = [];
+  const seen = new Map();
+  items.forEach(({ pattern, drill }) => {
+    let g = seen.get(pattern);
+    if (!g) { g = { pattern, drills: [] }; seen.set(pattern, g); groups.push(g); }
+    g.drills.push(drill);
+  });
 
-    // Two-part breakdown — the pattern frame, then the slotted answer word.
-    // Stacked vertically (was 3-column) with small labels so each piece's role
-    // is unambiguous on narrow phone widths. Uses tp-bd-* classes (NOT the
-    // shared .breakdown-* set, which is reused by Quiz/Sentences breakdowns).
-    const frameOnlyC = d.frameC.replace('▢', '').replace(/\s+/g, ' ').trim();
-    const frameOnlyJ = d.frameJ.replace('▢', '').replace(/\s+/g, ' ').trim();
-    const bdPanel = bdOpen ? `
-      <div class="tp-bd-panel">
-        <div class="tp-bd-piece">
-          <div class="tp-bd-label">Frame</div>
-          <div class="tp-bd-zh">${frameOnlyC}</div>
-          <div class="tp-bd-jp">${colorJyutping(frameOnlyJ)}</div>
-          <div class="tp-bd-en">${d.frameE}</div>
-        </div>
-        <div class="tp-bd-piece">
-          <div class="tp-bd-label">Fills the blank</div>
-          <div class="tp-bd-zh">${d.answer.c}</div>
-          <div class="tp-bd-jp">${colorJyutping(d.answer.j)}</div>
-          <div class="tp-bd-en">${d.answer.e}</div>
-        </div>
-      </div>` : '';
+  const cards = groups.map((g, gi) => {
+    const p = g.pattern;
 
-    const englishEl = revealed
-      ? `<div class="sentence-english">${d.english}</div>`
-      : `<div class="sentence-eng-hint" style="font-size:11px;color:#aaa;font-style:italic;margin-top:2px;pointer-events:none">tap card to see English</div>`;
+    // Each drill within the card gets its own stable key so reveal/play/breakdown
+    // state is independent per worked-example.
+    const worked = g.drills.map((d, di) => {
+      const exC = d.frameC.replace('▢', d.answer.c);
+      const exJ = d.frameJ.replace('▢', d.answer.j);
+      const key = 'tp-' + topicKey + '-' + gi + '-' + di;
+      const speaking = state.speaking === key;
+      const revealed = state.patternRevealed[key];
+      const bdOpen   = state.patternBreakdownOpen[key];
 
-    return `
-      <div class="topic-pattern-card" style="border-left-color:${color}">
-        <div class="tp-head-band">
-          <div class="tp-head-label" style="color:${color}">${p.label}</div>
-          <div class="tp-head-struct">${colorJyutping(p.structure)}</div>
-        </div>
-        <div class="tp-body">
-          <div class="tp-note">${p.note}</div>
+      const frameOnlyC = d.frameC.replace('▢', '').replace(/\s+/g, ' ').trim();
+      const frameOnlyJ = d.frameJ.replace('▢', '').replace(/\s+/g, ' ').trim();
+      const bdPanel = bdOpen ? `
+        <div class="tp-bd-panel">
+          <div class="tp-bd-piece">
+            <div class="tp-bd-label">Frame</div>
+            <div class="tp-bd-zh">${frameOnlyC}</div>
+            <div class="tp-bd-jp">${colorJyutping(frameOnlyJ)}</div>
+            <div class="tp-bd-en">${d.frameE}</div>
+          </div>
+          <div class="tp-bd-piece">
+            <div class="tp-bd-label">Fills the blank</div>
+            <div class="tp-bd-zh">${d.answer.c}</div>
+            <div class="tp-bd-jp">${colorJyutping(d.answer.j)}</div>
+            <div class="tp-bd-en">${d.answer.e}</div>
+          </div>
+        </div>` : '';
+
+      const englishEl = revealed
+        ? `<div class="sentence-english">${d.english}</div>`
+        : `<div class="sentence-eng-hint" style="font-size:11px;color:#aaa;font-style:italic;margin-top:2px;pointer-events:none">tap to see English</div>`;
+
+      return `
+        <div class="tp-ex${di > 0 ? ' tp-ex-sep' : ''}">
           <div class="tp-worked">
             <div class="tp-card-main" data-pat-card-reveal="${key}">
               <div class="sentence-chinese">${exC}</div>
@@ -1391,6 +1401,18 @@ function renderTopicPatterns(topicKey, color) {
             ${bdOpen ? '▲ hide breakdown' : '🔍 word breakdown'}
           </button>
           ${bdPanel}
+        </div>`;
+    }).join('');
+
+    return `
+      <div class="topic-pattern-card" style="border-left-color:${color}">
+        <div class="tp-head-band">
+          <div class="tp-head-label" style="color:${color}">${p.label}</div>
+          <div class="tp-head-struct">${colorJyutping(p.structure)}</div>
+        </div>
+        <div class="tp-body">
+          <div class="tp-note">${p.note}</div>
+          ${worked}
         </div>
       </div>`;
   }).join('');

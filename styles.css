@@ -322,6 +322,7 @@
     line-height: var(--lh-body); padding: 8px 10px; margin-bottom: 12px;
     background: #FAF3DC; border-left: 2px solid var(--gold); border-radius: 6px; }
   .tp-worked { display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; }
+  .tp-ex-sep { margin-top: 14px; padding-top: 14px; border-top: 1px solid #ECE3CE; }
   .tp-card-main { flex: 1; cursor: pointer; }
   /* Stacked breakdown — Frame piece, then Fills-the-blank piece */
   .tp-bd-panel { margin-top: 8px; background: var(--parchment-warm);

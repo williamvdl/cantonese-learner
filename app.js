@@ -555,7 +555,7 @@ function getTopicPatterns(topicKey) {
 function startPatternDrill(topicKey) {
   const drillable = topicKey
     ? getTopicDrills(topicKey)
-    : store.patterns.filter(p => Array.isArray(p.drills) && p.drills.length)
+    : store.patterns.filter(p => p.tier === 1 && Array.isArray(p.drills) && p.drills.length)
         .map(p => ({ pattern: p, drill: p.drills[0] }));
   if (!drillable.length) { state.patternDrill = null; render(); return; }
   const queue = shuffle(drillable);
