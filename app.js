@@ -182,11 +182,26 @@ function pickVoicePair(voices) {
   return { a, b };
 }
 
+// Some pattern frames are written as two-speaker dialogues, e.g.
+//   "A：你叫乜名？B：我叫William。"
+// The on-screen text keeps the A:/B: labels (they make the exchange clear to
+// read), but those letters must NOT be voiced — TTS would literally say "A… B…".
+// Strip the speaker labels (both half-width "A:" and full-width "Ａ：") before
+// speaking, leaving a brief pause where the label was so the two lines don't run
+// together. Purely cosmetic for audio; the displayed text is untouched.
+function sanitizeForSpeech(text) {
+  if (!text) return text;
+  return String(text)
+    .replace(/[ABＡＢ]\s*[：:]\s*/g, ' ')   // drop "A:" / "B:" / full-width variants
+    .replace(/\s{2,}/g, ' ')
+    .trim();
+}
+
 async function speak(text, onEnd, voiceOverride, pitchOverride, langOverride) {
   if (!window.speechSynthesis) return;
   window.speechSynthesis.cancel();
   const voices = _voices || await loadVoices();
-  const utt = new SpeechSynthesisUtterance(text);
+  const utt = new SpeechSynthesisUtterance(sanitizeForSpeech(text));
   utt.lang = langOverride || 'zh-HK';
   const rates = { slow: 0.6, normal: 0.8, fast: 1.1 };
   utt.rate  = rates[state.speed] || 0.8;
