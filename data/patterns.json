@@ -4,7 +4,7 @@
       "label": "Want to do something",
       "structure": "我想 (ngo5 soeng2) + [verb]",
       "note": "我想 (ngo5 soeng2) means 'I want to' — attach any verb to say what you'd like to do. The most useful starter for expressing intention.",
-      "group": "Wants & requests",
+      "group": "Wants, needs & requests",
       "tier": 1,
       "examples": [
         {
@@ -61,7 +61,7 @@
       "label": "Want or need something",
       "structure": "我要 (ngo5 jiu3) + [noun]",
       "note": "我要 (ngo5 jiu3) means 'I want / I need' followed by a thing — ordering, shopping, asking for what you need. Stronger and more direct than 我想 (ngo5 soeng2).",
-      "group": "Wants & requests",
+      "group": "Wants, needs & requests",
       "tier": 1,
       "examples": [
         {
@@ -180,7 +180,7 @@
       "label": "Do you have…?",
       "structure": "有冇 (jau5 mou5) + [noun]?",
       "note": "有冇 (jau5 mou5) literally 'have-not-have' — the everyday way to ask whether something is available. Put the thing you're after right after it.",
-      "group": "Wants & requests",
+      "group": "Wants, needs & requests",
       "tier": 1,
       "examples": [
         {
@@ -299,7 +299,7 @@
       "label": "There's also…",
       "structure": "重有 (zung6 jau5) + [noun]",
       "note": "重有 (zung6 jau5) means 'there's also / and also' — adding one more item to a list or order.",
-      "group": "Wants & requests",
+      "group": "Wants, needs & requests",
       "tier": 1,
       "examples": [
         {
@@ -356,7 +356,7 @@
       "label": "Please give me…",
       "structure": "唔該畀 (m4 goi1 bei2) + [noun]",
       "note": "唔該畀 (m4 goi1 bei2) — 'please give me' — a polite request to be handed something. 唔該 (m4 goi1) is the everyday 'please'.",
-      "group": "Wants & requests",
+      "group": "Wants, needs & requests",
       "tier": 1,
       "examples": [
         {
@@ -413,7 +413,7 @@
       "label": "Can I / May I?",
       "structure": "可以 (ho2 ji5) + [verb] + 得唔得 (dak1 m4 dak1)?",
       "note": "可以…得唔得 (ho2 ji5…dak1 m4 dak1) asks permission — 'can I…?'. Wrap the verb you want to do between them.",
-      "group": "Wants & requests",
+      "group": "Wants, needs & requests",
       "tier": 1,
       "examples": [
         {
@@ -437,7 +437,7 @@
       "label": "Have to / need to",
       "structure": "要 (jiu3) + [verb]",
       "note": "要 (jiu3) before a verb means 'have to / need to' — an obligation rather than a wish. (Before a noun, 要 means 'want', as in 我要水 ngo5 jiu3 seoi2.)",
-      "group": "Wants & requests",
+      "group": "Wants, needs & requests",
       "tier": 1,
       "examples": [
         {
@@ -461,7 +461,7 @@
       "label": "I like…",
       "structure": "鍾意 (zung1 ji3) + [noun / verb-phrase]",
       "note": "鍾意 (zung1 ji3) is the everyday 'like'. Place anything you favour after it — a thing, an activity, a person. No tense marker needed for stable preferences.",
-      "group": "Likes & feelings",
+      "group": "Likes, feelings & describing",
       "tier": 1,
       "examples": [
         {
@@ -673,7 +673,7 @@
       "label": "I feel…",
       "structure": "覺得 (gok3 dak1) + 好 (hou2) + [adjective]",
       "note": "覺得 (gok3 dak1) means 'feel / think' — use it to report an emotion or opinion, usually with 好 (hou2, very) plus an adjective.",
-      "group": "Likes & feelings",
+      "group": "Likes, feelings & describing",
       "tier": 1,
       "examples": [
         {
@@ -730,7 +730,7 @@
       "label": "Very / too + adjective",
       "structure": "好 (hou2) / 太 (taai3) + [adjective]",
       "note": "好 (hou2, very) and 太 (taai3, too) go directly before an adjective to describe something — 好熱 (hou2 jit6, very hot), 太貴 (taai3 gwai3, too expensive). 太 (taai3) carries a sense of 'excessively'.",
-      "group": "Describing",
+      "group": "Likes, feelings & describing",
       "tier": 1,
       "examples": [
         {
@@ -1159,7 +1159,7 @@
       "label": "A bit more / less",
       "structure": "[adjective] + 啲 (di1)",
       "note": "啲 (di1) after an adjective softens it to 'a bit / -er' — 平啲 (peng4 di1, a bit cheaper), 快啲 (faai3 di1, a bit faster). Handy for polite requests and comparisons.",
-      "group": "Describing",
+      "group": "Likes, feelings & describing",
       "tier": 1,
       "examples": [
         {
@@ -1183,7 +1183,7 @@
       "label": "This is…",
       "structure": "呢個係 (ni1 go3 hai6) + [noun]",
       "note": "呢個係 (ni1 go3 hai6) — 'this is' — introduces or identifies something or someone. 係 (hai6) is the verb 'to be'. Swap 呢個 (ni1 go3, this) for 嗰個 (go2 go3, that) at a distance.",
-      "group": "Identifying & having",
+      "group": "Identifying, having & giving",
       "tier": 1,
       "examples": [
         {
@@ -1426,7 +1426,7 @@
       "label": "I have…",
       "structure": "我有 (ngo5 jau5) + [noun]",
       "note": "我有 (ngo5 jau5) means 'I have'. Also used for conditions and symptoms — 我有頭痛 (ngo5 jau5 tau4 tung3, I have a headache). The negative is 我冇 (ngo5 mou5, I don't have).",
-      "group": "Identifying & having",
+      "group": "Identifying, having & giving",
       "tier": 1,
       "examples": [
         {
@@ -1607,7 +1607,7 @@
       "label": "Not / don't",
       "structure": "唔 (m4) + [verb] · 冇 (mou5) + [noun]",
       "note": "Two negatives: 唔 (m4) negates a verb or adjective — 唔要 (m4 jiu3, don't want), 唔貴 (m4 gwai3, not expensive); 冇 (mou5) means 'have not / there isn't' — 冇水 (mou5 seoi2, no water).",
-      "group": "Identifying & having",
+      "group": "Identifying, having & giving",
       "tier": 1,
       "examples": [
         {
@@ -1631,7 +1631,7 @@
       "label": "X is at / located",
       "structure": "[X] 喺 (hai2) + [place / direction]",
       "note": "喺 (hai2) means 'at / in / on' — it links a thing to where it is. 喺邊度 (hai2 bin1 dou6) asks 'where is it?'.",
-      "group": "Place & direction",
+      "group": "Place, direction & time",
       "tier": 1,
       "examples": [
         {
@@ -1905,7 +1905,7 @@
       "label": "Go to a place",
       "structure": "去 (heoi3) + [place]",
       "note": "去 (heoi3) means 'go to'. Follow it with a destination — 去酒店 (heoi3 zau2 dim3, go to the hotel). Add a verb after the place for purpose — 去公司返工 (heoi3 gung1 si1 faan1 gung1).",
-      "group": "Place & direction",
+      "group": "Place, direction & time",
       "tier": 1,
       "examples": [
         {
@@ -2024,7 +2024,7 @@
       "label": "Time word first",
       "structure": "[time word] + [rest of sentence]",
       "note": "Cantonese puts the time at the START of the sentence, before the action — 今日 (gam1 jat6, today), 聽日 (ting1 jat6, tomorrow), 琴日 (kam4 jat6, yesterday), 朝早 (ziu1 zou2, morning).",
-      "group": "Time",
+      "group": "Place, direction & time",
       "tier": 1,
       "examples": [
         {
@@ -2143,7 +2143,7 @@
       "label": "See you at / on…",
       "structure": "[time] + 見 (gin3)",
       "note": "見 (gin3) means 'see / meet'. Tack it after a time to make a casual farewell — 聽日見 (ting1 jat6 gin3, see you tomorrow), 星期一見 (sing1 kei4 jat1 gin3, see you Monday).",
-      "group": "Time",
+      "group": "Place, direction & time",
       "tier": 1,
       "examples": [
         {
@@ -2659,7 +2659,7 @@
       "label": "Completed action (咗 zo2)",
       "structure": "[verb] + 咗 (zo2)",
       "note": "咗 (zo2) after a verb marks it as done — like English '-ed'. 食咗 (sik6 zo2, ate), 去咗 (heoi3 zo2, went). The single most useful tense marker.",
-      "group": "Grammar — tense",
+      "group": "Grammar: tense & particles",
       "tier": 1,
       "examples": [
         {
@@ -2716,7 +2716,7 @@
       "label": "In progress (緊 gan2)",
       "structure": "[verb] + 緊 (gan2)",
       "note": "緊 (gan2) after a verb means the action is happening right now — like English '-ing'. 食緊 (sik6 gan2, eating), 做緊 (zou6 gan2, doing).",
-      "group": "Grammar — tense",
+      "group": "Grammar: tense & particles",
       "tier": 1,
       "examples": [
         {
@@ -2773,7 +2773,7 @@
       "label": "Experienced before (過 gwo3)",
       "structure": "[verb] + 過 (gwo3)",
       "note": "過 (gwo3) after a verb marks past experience — 'have you ever…'. 食過 (sik6 gwo3, have eaten before), 去過 (heoi3 gwo3, have been to).",
-      "group": "Grammar — tense",
+      "group": "Grammar: tense & particles",
       "tier": 1,
       "examples": [
         {
@@ -2830,7 +2830,7 @@
       "label": "Will / going to (會 wui5)",
       "structure": "會 (wui5) + [verb]",
       "note": "會 (wui5) before a verb marks the future — 'will'. 我會去 (ngo5 wui5 heoi3, I will go). For obligation use 要 (jiu3, need to) instead.",
-      "group": "Grammar — tense",
+      "group": "Grammar: tense & particles",
       "tier": 1,
       "examples": [
         {
@@ -2887,7 +2887,7 @@
       "label": "Already / not yet (已經 ji5 ging1 / 未 mei6)",
       "structure": "已經 (ji5 ging1) / 未 (mei6) + [verb]",
       "note": "已經 (ji5 ging1, already) and 未 (mei6, not yet) are a natural pair for 'done or not?'. 已經食咗 (ji5 ging1 sik6 zo2, already eaten); 未食 (mei6 sik6, haven't eaten yet).",
-      "group": "Grammar — tense",
+      "group": "Grammar: tense & particles",
       "tier": 1,
       "examples": [
         {
@@ -2944,7 +2944,7 @@
       "label": "Yes/no question (嗎 maa3)",
       "structure": "[statement] + 嗎 (maa3)",
       "note": "嗎 (maa3) at the end of a statement turns it into a yes/no question — the simplest way to ask.",
-      "group": "Grammar — particles",
+      "group": "Grammar: tense & particles",
       "tier": 1,
       "examples": [
         {
@@ -3001,7 +3001,7 @@
       "label": "Suggestion (啦 laa1)",
       "structure": "[suggestion] + 啦 (laa1)",
       "note": "啦 (laa1) softens a suggestion or request into something friendly — 'come on, let's…'. 走啦 (zau2 laa1, let's go).",
-      "group": "Grammar — particles",
+      "group": "Grammar: tense & particles",
       "tier": 1,
       "examples": [
         {
@@ -3058,7 +3058,7 @@
       "label": "Change of state (喇 laa3)",
       "structure": "[statement] + 喇 (laa3)",
       "note": "喇 (laa3) signals something has changed or is now the case — 'now'. 好喇 (hou2 laa3, OK now / that's enough).",
-      "group": "Grammar — particles",
+      "group": "Grammar: tense & particles",
       "tier": 1,
       "examples": [
         {
@@ -3115,7 +3115,7 @@
       "label": "Surprise (咩 me1)",
       "structure": "[statement] + 咩 (me1)",
       "note": "咩 (me1) at the end expresses surprise or doubt — 'really? / is that so?'. 真係咩 (zan1 hai6 me1, is that really true?).",
-      "group": "Grammar — particles",
+      "group": "Grammar: tense & particles",
       "tier": 1,
       "examples": [
         {
@@ -3172,7 +3172,7 @@
       "label": "Matter-of-fact (㗎 gaa3)",
       "structure": "[statement] + 㗎 (gaa3)",
       "note": "㗎 (gaa3) states something as plain fact — 'that's just how it is'. 係㗎 (hai6 gaa3, yes, that's right).",
-      "group": "Grammar — particles",
+      "group": "Grammar: tense & particles",
       "tier": 1,
       "examples": [
         {
@@ -3229,7 +3229,7 @@
       "label": "Counting up",
       "structure": "一 (jat1), 二 (ji6), 三 (saam1) …",
       "note": "Cantonese counts like reciting numbers in English: 一二三四五 (jat1 ji6 saam1 sei3 ng5). The first ten are the foundation for every larger number.",
-      "group": "Numbers & quantity",
+      "group": "Numbers & sequencing",
       "tier": 1,
       "examples": [
         {
@@ -3286,7 +3286,7 @@
       "label": "Tens & hundreds",
       "structure": "[1–9] + 十 (sap6) / 百 (baak3)",
       "note": "Build bigger numbers by putting a digit in front: 二十 (ji6 sap6, twenty), 三十 (saam1 sap6, thirty), 一百 (jat1 baak3, a hundred), 五百 (ng5 baak3, five hundred).",
-      "group": "Numbers & quantity",
+      "group": "Numbers & sequencing",
       "tier": 1,
       "examples": [
         {
@@ -3374,7 +3374,7 @@
       "label": "Half (一半 jat1 bun3)",
       "structure": "一半 (jat1 bun3) + [classifier/noun]",
       "note": "一半 (jat1 bun3) means 'half'. Use it before a measure word + noun — 一半個西瓜 (jat1 bun3 go3 sai1 gwaa1, half a watermelon).",
-      "group": "Numbers & quantity",
+      "group": "Numbers & sequencing",
       "tier": 1,
       "examples": [
         {
@@ -3431,7 +3431,7 @@
       "label": "How long does it take?",
       "structure": "要 (jiu3) + 幾耐 (gei2 noi6)?",
       "note": "幾耐 (gei2 noi6) asks about duration — 'how long'. 要幾耐 (jiu3 gei2 noi6, how long does it take). 耐 (noi6) means a length of time.",
-      "group": "Numbers & quantity",
+      "group": "Numbers & sequencing",
       "tier": 1,
       "examples": [
         {
@@ -3455,7 +3455,7 @@
       "label": "Together / let's",
       "structure": "一齊 (jat1 cai4) + [verb]",
       "note": "一齊 (jat1 cai4) means 'together'. Put it before a verb to suggest doing something jointly — 一齊去 (jat1 cai4 heoi3, let's go together).",
-      "group": "Actions & sequencing",
+      "group": "Numbers & sequencing",
       "tier": 1,
       "examples": [
         {
@@ -3512,7 +3512,7 @@
       "label": "First… then…",
       "structure": "先 (sin1) … 再 (zoi3) …",
       "note": "先…再… (sin1…zoi3…) sequences two actions — 'first… then…'. 先食飯再走 (sin1 sik6 faan6 zoi3 zau2, eat first, then go).",
-      "group": "Actions & sequencing",
+      "group": "Numbers & sequencing",
       "tier": 1,
       "examples": [
         {
@@ -3536,7 +3536,7 @@
       "label": "Give someone something",
       "structure": "畀 (bei2) + [thing] + [person]",
       "note": "畀 (bei2) means 'give'. The order is 畀 + thing + person — 畀錢佢 (bei2 cin2 keoi5, give him the money). Also means 'let / allow'.",
-      "group": "Actions & sequencing",
+      "group": "Identifying, having & giving",
       "tier": 1,
       "examples": [
         {
