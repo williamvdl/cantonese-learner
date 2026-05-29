@@ -57,75 +57,94 @@ function renderDrawer() {
     </div>`;
 }
 
+// Stage 4: the Patterns page is a grouped reference library (no Drill sub-tab —
+// drilling now lives in each topic's Learn tab). Tier-1 frames only; Tier-2 are
+// topic-local. Two-level accordion: tap a group to open, tap a frame to reveal
+// its note + examples. All collapsed by default.
+const PATTERN_GROUP_ORDER = [
+  ['Wants, needs & requests',    'asking for things, ordering, permission'],
+  ['Likes, feelings & describing','preferences, emotions, adjectives'],
+  ['Identifying, having & giving','naming, possessing, giving'],
+  ['Place, direction & time',    'where and when'],
+  ['Asking questions',           'the question words'],
+  ['Grammar: tense & particles', 'time markers and sentence-final particles'],
+  ['Numbers & sequencing',       'counting, quantity, doing things in order'],
+  ['Everyday expressions',       'set social phrases'],
+];
+
 function renderPatterns() {
-  const tab = state.patternsTab || 'browse';
   const libFrames = store.patterns.filter(p => p.tier === 1);
-  const drillCount = libFrames.filter(p => Array.isArray(p.drills) && p.drills.length).length;
-
-  // Browse / Drill segmented control (same component family as topic subtabs).
-  const tabs = `
-    <div class="subtabs patterns-subtabs">
-      <button class="subtab-btn${tab==='browse'?' active':''}" id="patterns-tab-browse"
-        style="${tab==='browse'?'background:#8B3A4E':''}">
-        <span class="icon-label">${icon('bookOpen',14)} Browse</span>
-      </button>
-      <button class="subtab-btn${tab==='drill'?' active':''}" id="patterns-tab-drill"
-        style="${tab==='drill'?'background:#8B3A4E':''}">
-        <span class="icon-label">${icon('quiz',14)} Drill</span>
-      </button>
-    </div>`;
-
-  const body = tab === 'drill'
-    ? renderPatternDrill(drillCount)
-    : renderPatternBrowse();
-
   return `
     <div class="patterns-wrap">
       ${renderPageHeader('🔨', 'Sentence Patterns', `${libFrames.length} building blocks`)}
-      ${tabs}
-      ${body}
+      ${renderPatternBrowse()}
     </div>`;
 }
 
-// The reference list — browse the Tier-1 library frames and their examples.
-// Tier-2 patterns are topic-local (they live only in a topic's Learn tab), so
-// the standalone library shows Tier-1 frames only.
+// Grouped, collapsible reference library.
 function renderPatternBrowse() {
   const lib = store.patterns.filter(p => p.tier === 1);
-  const cards = lib.map((p, pi) => {
-    const examples = p.examples.map((ex, ei) => {
-      const key = `p${pi}-e${ei}`;
-      const speaking = state.speaking === key;
-      const revealed = state.patternRevealed[key];
-      const englishEl = revealed
-        ? `<div class="pattern-ex-en">${ex.e}</div>`
-        : `<div class="pattern-ex-en pattern-ex-eng-hint" data-pat-reveal="${key}" style="font-style:italic;color:#bbb;cursor:pointer">tap to see English</div>`;
+  // Bucket frames by their group, preserving each frame's index within the group.
+  const byGroup = {};
+  lib.forEach(p => { (byGroup[p.group] = byGroup[p.group] || []).push(p); });
+
+  const groups = PATTERN_GROUP_ORDER.map(([name, desc], gi) => {
+    const frames = byGroup[name] || [];
+    const groupOpen = !!state.patternGroupsOpen[name];
+
+    const frameCards = frames.map((p, fi) => {
+      const fKey = `${gi}-${fi}`;
+      const frameOpen = !!state.patternFramesOpen[fKey];
+
+      const examples = p.examples.map((ex, ei) => {
+        const key = `p${gi}-${fi}-e${ei}`;          // unique reveal/play key
+        const speaking = state.speaking === key;
+        const revealed = state.patternRevealed[key];
+        const englishEl = revealed
+          ? `<div class="pattern-ex-en">${ex.e}</div>`
+          : `<div class="pattern-ex-en pattern-ex-eng-hint" data-pat-reveal="${key}" style="font-style:italic;color:#bbb;cursor:pointer">tap to see English</div>`;
+        return `
+          <div class="pattern-example">
+            <div class="pattern-ex-text">
+              <div class="pattern-ex-zh">${ex.c}</div>
+              <div class="pattern-ex-jp">${colorJyutping(ex.j)}</div>
+              ${englishEl}
+            </div>
+            <button class="pattern-ex-play${speaking?' speaking':''}" data-pex="${key}" data-pex-chinese="${ex.c}">
+              ${speaking ? icon('volume',20) : iconPlay(18)}
+            </button>
+          </div>`;
+      }).join('');
+
       return `
-        <div class="pattern-example">
-          <div class="pattern-ex-text">
-            <div class="pattern-ex-zh">${ex.c}</div>
-            <div class="pattern-ex-jp">${colorJyutping(ex.j)}</div>
-            ${englishEl}
+        <div class="lib-frame${frameOpen ? ' open' : ''}">
+          <div class="lib-frame-head" data-frame-toggle="${fKey}">
+            <span class="lib-chev">▶</span>
+            <div class="lib-frame-titles">
+              <div class="lib-frame-label">${p.label}</div>
+              <div class="lib-frame-struct">${colorJyutping(p.structure)}</div>
+            </div>
           </div>
-          <button class="pattern-ex-play${speaking?' speaking':''}" data-pex="${key}" data-pex-chinese="${ex.c}">
-            ${speaking ? icon('volume',20) : iconPlay(18)}
-          </button>
+          ${frameOpen ? `
+            <div class="lib-frame-body">
+              <div class="pattern-note">${p.note}</div>
+              <div class="pattern-examples">${examples}</div>
+            </div>` : ''}
         </div>`;
     }).join('');
+
     return `
-      <div class="pattern-card">
-        <div class="pattern-head">
-          <div class="pattern-number">Pattern ${pi+1} of ${lib.length}</div>
-          <div class="pattern-label">${p.label}</div>
-          <span class="pattern-structure">${colorJyutping(p.structure)}</span>
+      <div class="lib-group${groupOpen ? ' open' : ''}">
+        <div class="lib-group-head" data-group-toggle="${name}">
+          <span class="lib-chev">▶</span>
+          <div class="lib-group-title">${name}<span class="lib-group-desc">${desc}</span></div>
+          <span class="lib-group-count">${frames.length}</span>
         </div>
-        <div class="pattern-body">
-          <div class="pattern-note">${p.note}</div>
-          <div class="pattern-examples">${examples}</div>
-        </div>
+        ${groupOpen ? `<div class="lib-group-body">${frameCards}</div>` : ''}
       </div>`;
   }).join('');
-  return cards;
+
+  return `<div class="pattern-library">${groups}</div>`;
 }
 
 // The drill — landing screen, active question, or done summary.
@@ -1599,10 +1618,10 @@ function attachEvents(lesson, color) {
         state.wordReview = null;
         refreshReviewBadge().then(render);
       }
-      // Entering Patterns always starts on Browse with no stale drill session
+      // Entering Patterns always starts with the library all-collapsed
       if (target === 'patterns') {
-        state.patternsTab = 'browse';
-        state.patternDrill = null;
+        state.patternGroupsOpen = {};
+        state.patternFramesOpen = {};
       }
       state.nav = target;
       state.fromPath = false;          // any drawer navigation clears the path-return flag
@@ -1750,12 +1769,21 @@ function attachEvents(lesson, color) {
     });
   });
 
-  // ── Pattern drill events ──
-  // Browse / Drill tab switch (in-screen control — not history-tracked)
-  const ptBrowse = document.getElementById('patterns-tab-browse');
-  if (ptBrowse) ptBrowse.addEventListener('click', () => { state.patternsTab = 'browse'; render(); });
-  const ptDrill = document.getElementById('patterns-tab-drill');
-  if (ptDrill) ptDrill.addEventListener('click', () => { state.patternsTab = 'drill'; render(); });
+  // ── Patterns library (Stage 4): grouped accordion toggles ──
+  document.querySelectorAll('[data-group-toggle]').forEach(el => {
+    el.addEventListener('click', () => {
+      const name = el.dataset.groupToggle;
+      state.patternGroupsOpen[name] = !state.patternGroupsOpen[name];
+      render();
+    });
+  });
+  document.querySelectorAll('[data-frame-toggle]').forEach(el => {
+    el.addEventListener('click', () => {
+      const k = el.dataset.frameToggle;
+      state.patternFramesOpen[k] = !state.patternFramesOpen[k];
+      render();
+    });
+  });
 
   // Landing: start a drill (Patterns-page drill — all drillable patterns)
   const drillStart = document.getElementById('drill-start');

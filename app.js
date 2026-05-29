@@ -264,8 +264,11 @@ let state = {
   wordReview: null,
   // Pattern Drill session — null when not in a session. Shape set by startPatternDrill().
   patternDrill: null,
-  // Which tab the Patterns page shows: 'browse' (reference) or 'drill'.
-  patternsTab: 'browse',
+  // Patterns page is a grouped reference library (Stage 4). These track which
+  // groups / frames are expanded (all collapsed by default). Keyed by group name
+  // and by `${groupIdx}-${frameIdx}`.
+  patternGroupsOpen: {},
+  patternFramesOpen: {},
   // Cached {liveCount, everUsed} for the menu badge — refreshed by refreshReviewBadge().
   reviewBadge: { liveCount: 0, everUsed: false },
   convo: {

@@ -291,6 +291,28 @@
   .pattern-ex-play { width: 36px; height: 36px; border-radius: 50%; border: 1.5px solid var(--brand); background: transparent; color: var(--brand); cursor: pointer; font-size: 14px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: all 0.15s; }
   .pattern-ex-play.speaking { background: var(--brand); color: var(--parchment); animation: pulse 0.6s infinite alternate; }
 
+  /* Stage 4 — grouped reference library (two-level accordion) */
+  .pattern-library { margin-top: 4px; }
+  .lib-group { margin-bottom: 10px; border-radius: 12px; overflow: hidden; border: 1px solid #e9e0cb; background: var(--parchment); }
+  .lib-group-head { display: flex; align-items: center; gap: 10px; padding: 14px; cursor: pointer; background: var(--parchment-deep); user-select: none; }
+  .lib-group-head:active { background: #efe3c8; }
+  .lib-chev { color: var(--brand); font-size: 12px; flex-shrink: 0; transition: transform 0.18s; display: inline-block; }
+  .lib-group.open > .lib-group-head .lib-chev,
+  .lib-frame.open > .lib-frame-head .lib-chev { transform: rotate(90deg); }
+  .lib-group-title { font-size: 15.5px; font-weight: 700; color: var(--brand); flex: 1; line-height: 1.2; }
+  .lib-group-desc { display: block; font-size: 11px; font-weight: 400; color: var(--muted); margin-top: 2px; }
+  .lib-group-count { font-size: 11px; color: var(--muted); background: var(--parchment); border: 1px solid #e3d9c0; border-radius: 20px; padding: 3px 9px; flex-shrink: 0; }
+  .lib-group-body { padding: 8px 10px 12px; }
+  .lib-frame { background: var(--parchment-warm); border: 1px solid #ece3ce; border-radius: 10px; margin: 8px 0; overflow: hidden; }
+  .lib-frame-head { padding: 10px 12px; cursor: pointer; display: flex; align-items: flex-start; gap: 8px; user-select: none; }
+  .lib-frame-head:active { background: #f3ecda; }
+  .lib-frame .lib-chev { font-size: 11px; margin-top: 3px; }
+  .lib-frame-titles { flex: 1; min-width: 0; }
+  .lib-frame-label { font-size: 14.5px; font-weight: 700; color: var(--ink); line-height: 1.25; }
+  .lib-frame-struct { font-family: monospace; font-size: 11.5px; color: var(--muted); margin-top: 2px; }
+  .lib-frame-body { padding: 0 12px 12px; }
+  .lib-frame-body .pattern-note { font-style: normal; background: #FAF3DC; border-left: 2px solid var(--gold); border-radius: 6px; padding: 8px 10px; color: var(--ink); opacity: 0.82; }
+
   /* Pattern drill */
   .patterns-subtabs { margin-bottom: 16px; }
   .drill-card { text-align: center; }
