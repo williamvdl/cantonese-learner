@@ -1191,3 +1191,78 @@
   }
   button:focus:not(:focus-visible) { outline: none; }
 
+
+  /* ══════════════════════════════════════════════════════════════════════════
+     CHECKPOINTS (Stage 3) — stage bands, checkpoint nodes, hub, activities
+     ══════════════════════════════════════════════════════════════════════════ */
+
+  /* Stage header band in the path timeline */
+  .path-stage-band { display: flex; align-items: center; gap: 9px; margin: 22px 0 12px; }
+  .path-stage-band:first-child { margin-top: 4px; }
+  .path-stage-num { flex: 0 0 auto; width: 24px; height: 24px; border-radius: 6px; background: var(--brand); color: #fff; font-size: 12px; font-weight: 700; display: flex; align-items: center; justify-content: center; }
+  .path-stage-name { font-family: var(--font-serif, Georgia), serif; font-weight: 700; color: var(--ink); font-size: 15px; }
+  .path-stage-rule { flex: 1; height: 1px; background: #dccaa3; }
+  .path-stage-meta { font-size: 11px; color: var(--muted); }
+
+  /* Checkpoint node + card in the timeline (gold diamond, distinct from steps) */
+  .path-step-cp .cp-node { background: var(--gold); border-color: var(--gold); color: var(--ink); border-radius: 8px; transform: rotate(45deg); }
+  .path-step-cp .cp-node span { transform: rotate(-45deg); display: block; font-size: 12px; }
+  .path-step-cp.cp-done .cp-node { background: var(--jade); border-color: var(--jade); color: #fff; }
+  .cp-card { background: linear-gradient(180deg, #FBF4E0, #F6EACB); border: 1.5px solid var(--gold) !important; cursor: pointer; }
+  .cp-card .path-step-title { color: #7a5a14; }
+  .path-step-cp-prog { font-size: 11px; color: #9a7a2a; font-weight: 600; margin-top: 2px; }
+  .path-cp-badge { margin-left: auto; background: var(--gold); color: var(--ink); font-size: 9.5px; font-weight: 700; padding: 3px 8px; border-radius: 999px; letter-spacing: .5px; align-self: center; }
+  .cp-done .cp-card .path-step-title { color: var(--jade); }
+
+  /* Checkpoint hub */
+  .cp-hub { padding-bottom: 30px; }
+  .cp-hero { text-align: center; padding: 10px 0 2px; }
+  .cp-diamond { width: 56px; height: 56px; margin: 0 auto 12px; background: linear-gradient(135deg, #D9A93A, var(--gold)); border-radius: 13px; transform: rotate(45deg); display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 8px rgba(58,42,30,.18); }
+  .cp-diamond span { transform: rotate(-45deg); font-size: 25px; }
+  .cp-hero-h { font-family: var(--font-serif, Georgia), serif; font-size: 22px; color: var(--ink); font-weight: 700; }
+  .cp-hero-stage { font-size: 13px; color: var(--brand); font-weight: 600; margin: 3px 0 2px; }
+  .cp-hero-prog { font-size: 12px; color: var(--muted); margin-bottom: 4px; }
+  .cp-optional { display: inline-flex; align-items: center; gap: 6px; background: #EEF3EC; border: 1px solid #cfe0c9; color: var(--jade); border-radius: 999px; padding: 5px 12px; font-size: 11.5px; margin: 6px 0 16px; }
+  .cp-flow-hint { font-size: 11px; color: var(--muted); text-align: center; margin-bottom: 14px; font-style: italic; }
+
+  .cp-act-card { width: 100%; display: flex; align-items: center; gap: 13px; background: var(--parchment); border: 1px solid #ece1c6; border-radius: 12px; padding: 14px 15px; box-shadow: 0 1px 3px rgba(58,42,30,.06); margin-bottom: 11px; text-align: left; transition: transform .12s; }
+  .cp-act-card:active { transform: scale(.99); }
+  .cp-act-icon { flex: 0 0 auto; width: 42px; height: 42px; border-radius: 11px; display: flex; align-items: center; justify-content: center; font-size: 21px; background: #F1E7D0; }
+  .cp-act-body { flex: 1; display: flex; flex-direction: column; }
+  .cp-act-name { font-weight: 700; color: var(--ink); font-size: 15px; display: flex; align-items: center; gap: 7px; }
+  .cp-act-tag { font-size: 9.5px; font-weight: 700; letter-spacing: .5px; color: var(--muted); background: #efe6d2; padding: 2px 6px; border-radius: 999px; }
+  .cp-act-desc { font-size: 11.5px; color: var(--muted); margin-top: 2px; }
+  .cp-act-right { flex: 0 0 auto; }
+  .cp-act-go { color: var(--brand); font-size: 20px; font-weight: 700; }
+  .cp-act-done { background: var(--jade); color: #fff; font-size: 10px; font-weight: 700; padding: 4px 9px; border-radius: 999px; }
+
+  .cp-finish { width: 100%; background: var(--brand); color: #fff; border: none; border-radius: 12px; padding: 14px; font-size: 14.5px; font-weight: 700; margin-top: 8px; box-shadow: 0 2px 6px rgba(58,42,30,.12); }
+  .cp-finish.dim { background: #cdbfa6; box-shadow: none; }
+  .cp-finish:active { transform: translateY(1px); }
+
+  /* Checkpoint done screen + diagnostic */
+  .cp-done-wrap { text-align: center; padding: 8px 0; }
+  .cp-done-ring { width: 112px; height: 112px; border-radius: 50%; margin: 6px auto 14px; display: flex; align-items: center; justify-content: center; }
+  .cp-done-inner { width: 90px; height: 90px; border-radius: 50%; background: var(--parchment-warm); display: flex; flex-direction: column; align-items: center; justify-content: center; }
+  .cp-done-pct { font-family: var(--font-serif, Georgia), serif; font-size: 26px; font-weight: 700; color: var(--gold); }
+  .cp-done-cap { font-size: 9.5px; color: var(--muted); letter-spacing: 1px; }
+  .cp-done-h { font-family: var(--font-serif, Georgia), serif; font-size: 21px; color: var(--ink); font-weight: 700; }
+  .cp-done-sub { font-size: 13px; color: var(--muted); margin: 4px 0 16px; }
+  .cp-diag { background: #FBF1EF; border: 1px solid #eccbc6; border-radius: 12px; padding: 14px; box-shadow: 0 1px 3px rgba(58,42,30,.06); margin-bottom: 12px; text-align: left; }
+  .cp-diag-lbl { font-size: 11px; font-weight: 700; letter-spacing: .5px; color: var(--brand); margin-bottom: 6px; }
+  .cp-diag-text { font-size: 13px; color: var(--ink-soft); margin-bottom: 11px; }
+  .cp-diag-text b { color: var(--brand); }
+  .cp-diag-revisit { width: 100%; background: #fff; border: 1.5px solid var(--brand); color: var(--brand); border-radius: 8px; padding: 11px; font-size: 13px; font-weight: 700; }
+  .cp-missed { background: var(--parchment); border: 1px solid #ece1c6; border-radius: 12px; padding: 13px 14px; box-shadow: 0 1px 3px rgba(58,42,30,.06); margin-bottom: 14px; }
+  .cp-missed-lbl { font-size: 11px; font-weight: 700; letter-spacing: .5px; color: var(--muted); margin-bottom: 8px; }
+  .cp-missed-item { display: flex; align-items: center; gap: 10px; padding: 7px 0; border-top: 1px solid #f0e7d4; }
+  .cp-missed-item:first-of-type { border-top: none; }
+  .cp-missed-c { font-family: var(--font-cjk, serif); font-size: 16px; color: var(--ink); }
+  .cp-missed-j { font-size: 11px; color: var(--brand); }
+  .cp-missed-e { font-size: 11px; color: var(--muted); margin-left: auto; }
+  .play-mini { flex: 0 0 auto; width: 28px; height: 28px; border-radius: 999px; border: 1.5px solid var(--brand); background: #fff; color: var(--brand); display: inline-flex; align-items: center; justify-content: center; }
+
+  /* Checkpoint convo header */
+  .cp-convo-head { background: linear-gradient(180deg, #FBF4E0, #F6EACB); border: 1.5px solid var(--gold); border-radius: 12px; padding: 13px 15px; margin-bottom: 12px; }
+  .cp-convo-kick { font-size: 10px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: #7a5a14; }
+  .cp-convo-title { font-family: var(--font-serif, Georgia), serif; font-size: 18px; color: var(--ink); font-weight: 700; margin-top: 2px; }

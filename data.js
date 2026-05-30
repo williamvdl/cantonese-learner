@@ -55,7 +55,9 @@ const store = {
   index:           null,   // [ {key, label, icon, color, rounds} ]
   categoryList:    null,   // [ {key, label, icon} ]
   topicCategories: null,   // { greetings: 'everyday', ... }
-  paths:           null,   // [ {key, label, ..., lessons} ]
+  paths:           null,   // [ {key, label, ..., lessons, stages?} ]
+  pathConvos:      {},      // { 'beginner-s1': {title, speakers, lines} } — checkpoint consolidation convos.
+                            // Defaults to {} so a checkpoint with no authored convo simply finds nothing.
   patterns:        [],     // [ {label, structure, note, examples, drills?} ] — see patterns.json.
                            // Defaults to [] (not null) so any render before loadPatterns()
                            // resolves yields an empty list rather than throwing.
@@ -108,6 +110,15 @@ const store = {
     const r = await fetch('./data/learning_paths.json');
     this.paths = (await r.json()).paths;
   },
+  async loadPathConvos() {
+    // Checkpoint consolidation conversations. Optional file — if it's absent or
+    // fails to load, checkpoints simply render without a conversation activity.
+    try {
+      const r = await fetch('./data/path_convos.json');
+      if (r.ok) this.pathConvos = (await r.json()).convos || {};
+    } catch (e) { this.pathConvos = {}; }
+  },
+  pathConvo(key) { return this.pathConvos[key] || null; },
   async loadPatterns() {
     const r = await fetch('./data/patterns.json');
     this.patterns = (await r.json()).patterns;

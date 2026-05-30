@@ -176,6 +176,27 @@ function renderDrillBody(pd) {
 
   // --- Done summary ---
   if (pd.done) {
+    // Checkpoint-scoped drills get the richer done screen (diagnostic + missed list).
+    if (pd.scopeKind === 'checkpoint' && pd.checkpointStage) {
+      const stage = pd.checkpointStage;
+      const missedTopicKeys = [];
+      pd.missed.forEach(pair => {
+        // Attribute each missed drill to the stage topic(s) it's tagged to.
+        (pair.drill.topics || []).forEach(tk => {
+          if ((stage.topics || []).includes(tk)) missedTopicKeys.push(tk);
+        });
+      });
+      return renderCheckpointDone({
+        activityLabel: 'Patterns',
+        emoji: '🔨',
+        score: pd.score,
+        total: pd.queue.length,
+        stage,
+        missedTopicKeys,
+        missedItems: pd.missed.map(pair => ({ c: pair.drill.answer.c, j: pair.drill.answer.j, e: pair.drill.answer.e })),
+        activity: 'patterns',
+      });
+    }
     const total = pd.queue.length;
     return `
       <div class="result">
@@ -643,6 +664,68 @@ function renderPathList() {
     </div>`;
 }
 
+// One topic step in the timeline. Extracted so both the flat and stage-grouped
+// layouts render identical step markup.
+function renderPathStep(pathKey, l, displayNum, nextLesson) {
+  const lesson = lessonShape(l.topic);
+  if (!lesson) return ''; // Defensive — skip if topic doesn't exist
+  const tier = l.round;
+  const complete = isLessonComplete(pathKey, l.topic, tier);
+  const isNext = !complete && nextLesson && l.topic === nextLesson.topic && tier === nextLesson.tier;
+  const stepCls = 'path-step' + (complete ? ' done' : '') + (isNext ? ' next' : '');
+  const nextBadge = isNext ? `<span class="path-next-badge">Next up</span>` : '';
+  const wordCount = (getRoundWords(l.topic, tier) || []).length;
+  const tierLabel = tier > 1 ? `Tier ${tier} · ` : '';
+  return `
+    <div class="${stepCls}">
+      <div class="path-step-rail">
+        <div class="path-step-node">${complete ? '✓' : displayNum}</div>
+        <div class="path-step-line"></div>
+      </div>
+      <div class="path-step-body">
+        <div class="path-step-card" data-path-lesson="${l.topic}" data-path-tier="${tier}">
+          ${nextBadge}
+          <div class="path-step-row">
+            <span class="path-step-icon">${lesson.icon}</span>
+            <div class="path-step-text">
+              <div class="path-step-title">${lesson.label}</div>
+              <div class="path-step-meta">${tierLabel}${wordCount} word${wordCount !== 1 ? 's' : ''}</div>
+            </div>
+            <button class="path-complete-btn" data-path-toggle="${l.topic}" data-path-tier="${tier}" aria-label="${complete ? 'Mark incomplete' : 'Mark complete'}">${complete ? '✓' : '✓'}</button>
+          </div>
+        </div>
+      </div>
+    </div>`;
+}
+
+// The checkpoint node + card for a stage (gold diamond, distinct from topic steps).
+function renderCheckpointNode(pathKey, stage) {
+  const prog = checkpointProgress(pathKey, stage.id);
+  if (!prog.total) return '';  // no offerable activities → no node
+  const progText = prog.complete
+    ? 'Complete'
+    : `${prog.done} of ${prog.total} reviewed · tap to open`;
+  return `
+    <div class="path-step path-step-cp${prog.complete ? ' cp-done' : ''}">
+      <div class="path-step-rail">
+        <div class="path-step-node cp-node"><span>◆</span></div>
+        <div class="path-step-line"></div>
+      </div>
+      <div class="path-step-body">
+        <div class="path-step-card cp-card" data-cp-open="${stage.id}">
+          <div class="path-step-row">
+            <span class="path-step-icon">◆</span>
+            <div class="path-step-text">
+              <div class="path-step-title">Checkpoint · ${stage.name}</div>
+              <div class="path-step-cp-prog">${progText}</div>
+            </div>
+            <span class="path-cp-badge">${prog.complete ? '✓' : 'CHECKPOINT'}</span>
+          </div>
+        </div>
+      </div>
+    </div>`;
+}
+
 function renderPathTimeline(pathKey) {
   const path = store.paths.find(p => p.key === pathKey);
   if (!path) return `<div class="path-empty-msg">Path not found.</div>`;
@@ -657,39 +740,38 @@ function renderPathTimeline(pathKey) {
   const done = pathCompleteCount(pathKey);
   const pct = Math.round((done / total) * 100);
   const nextLesson = nextIncompleteLesson(pathKey);
+  const stages = getPathStages(pathKey);
 
-  const steps = path.lessons.map((l, i) => {
-    const lesson = lessonShape(l.topic);
-    if (!lesson) return ''; // Defensive — skip if topic doesn't exist
-    const tier = l.round;
-    const complete = isLessonComplete(pathKey, l.topic, tier);
-    const isNext = !complete && nextLesson && l.topic === nextLesson.topic && tier === nextLesson.tier;
-    const stepCls = 'path-step' + (complete ? ' done' : '') + (isNext ? ' next' : '');
-    const nextBadge = isNext ? `<span class="path-next-badge">Next up</span>` : '';
-    const wordCount = (getRoundWords(l.topic, tier) || []).length;
-    // Show tier in meta only when above 1, to keep Tier 1 displays clean
-    const tierLabel = tier > 1 ? `Tier ${tier} · ` : '';
-    return `
-      <div class="${stepCls}">
-        <div class="path-step-rail">
-          <div class="path-step-node">${complete ? '✓' : (i + 1)}</div>
-          <div class="path-step-line"></div>
+  let body;
+  if (stages.length) {
+    // ── Stage-grouped layout ──
+    // Each stage gets a header band, its topic steps, then (if present) its
+    // checkpoint node. Step numbers stay continuous across the whole path so
+    // they match the underlying lesson order.
+    let stepNum = 0;
+    body = stages.map((stage, si) => {
+      const stageSteps = (stage.topics || []).map(topicKey => {
+        // Find this topic's lesson entry (keeps tier/round correct).
+        const l = path.lessons.find(x => x.topic === topicKey);
+        if (!l) return '';
+        stepNum += 1;
+        return renderPathStep(pathKey, l, stepNum, nextLesson);
+      }).join('');
+      const cpNode = stage.checkpoint ? renderCheckpointNode(pathKey, stage) : '';
+      return `
+        <div class="path-stage-band">
+          <span class="path-stage-num">${si + 1}</span>
+          <span class="path-stage-name">${stage.name}</span>
+          <span class="path-stage-rule"></span>
+          <span class="path-stage-meta">${(stage.topics || []).length} topics</span>
         </div>
-        <div class="path-step-body">
-          <div class="path-step-card" data-path-lesson="${l.topic}" data-path-tier="${tier}">
-            ${nextBadge}
-            <div class="path-step-row">
-              <span class="path-step-icon">${lesson.icon}</span>
-              <div class="path-step-text">
-                <div class="path-step-title">${lesson.label}</div>
-                <div class="path-step-meta">${tierLabel}${wordCount} word${wordCount !== 1 ? 's' : ''}</div>
-              </div>
-              <button class="path-complete-btn" data-path-toggle="${l.topic}" data-path-tier="${tier}" aria-label="${complete ? 'Mark incomplete' : 'Mark complete'}">${complete ? '✓' : '✓'}</button>
-            </div>
-          </div>
-        </div>
-      </div>`;
-  }).join('');
+        ${stageSteps}
+        ${cpNode}`;
+    }).join('');
+  } else {
+    // ── Flat layout (unchanged behaviour for paths without stages) ──
+    body = path.lessons.map((l, i) => renderPathStep(pathKey, l, i + 1, nextLesson)).join('');
+  }
 
   return `
     <div class="path-timeline-wrap">
@@ -702,7 +784,193 @@ function renderPathTimeline(pathKey) {
           <span class="path-progress-count">${done} / ${total} complete</span>
         </div>
       </div>
-      <div class="path-timeline">${steps}</div>
+      <div class="path-timeline">${body}</div>
+    </div>`;
+}
+
+// ── Checkpoint screens (Stage 3) ──────────────────────────────────────────────
+const CP_GOLD = '#B7861E';
+
+// The hub: three independent activities. Reuses no learning engine itself — it
+// routes into the Words / Patterns / Conversation activities.
+function renderCheckpointHub() {
+  const cpState = state.checkpoint;
+  if (!cpState) return '';
+  const { pathKey, stageId, cpId } = cpState;
+  const stage = getStage(pathKey, stageId);
+  if (!stage) return '';
+  const prog = checkpointProgress(pathKey, stageId);
+
+  const meta = {
+    words:    { icon:'📖', name:'Words',        tag:'RECALL',  desc:'Vocabulary from all topics in this stage' },
+    patterns: { icon:'🔨', name:'Patterns',     tag:'APPLY',   desc:'Sentence-pattern drills, reshuffled each time' },
+    convo:    { icon:'💬', name:'Conversation', tag:'PRODUCE', desc:'A longer scene — read & speak' },
+  };
+  const cards = prog.available.map(act => {
+    const m = meta[act];
+    const done = checkpointActivityDone(pathKey, cpId, act);
+    const right = done
+      ? `<span class="cp-act-done">✓ Done</span>`
+      : `<span class="cp-act-go">›</span>`;
+    return `
+      <button class="cp-act-card" data-cp-act="${act}">
+        <span class="cp-act-icon">${m.icon}</span>
+        <span class="cp-act-body">
+          <span class="cp-act-name">${m.name} <span class="cp-act-tag">${m.tag}</span></span>
+          <span class="cp-act-desc">${m.desc}</span>
+        </span>
+        <span class="cp-act-right">${right}</span>
+      </button>`;
+  }).join('');
+
+  const finishCls = prog.complete ? 'cp-finish' : 'cp-finish dim';
+  const finishLabel = prog.complete
+    ? '✓ Checkpoint complete — back to path'
+    : (prog.total - prog.done === 1 ? 'Finish 1 more to complete' : `Finish ${prog.total - prog.done} more to complete`);
+
+  return `
+    <div class="content cp-hub">
+      <button class="back-home-btn" data-cp-back><span class="icon-label">${icon('arrowLeft',15)} ${stage.name}</span></button>
+      <div class="cp-hero">
+        <div class="cp-diamond"><span>◆</span></div>
+        <div class="cp-hero-h">Checkpoint</div>
+        <div class="cp-hero-stage">${stage.name}</div>
+        <div class="cp-hero-prog">${prog.done} of ${prog.total} reviewed</div>
+        <div class="cp-optional">🔓 Optional — do any, in any order</div>
+      </div>
+      <div class="cp-flow-hint">Suggested flow: recall → apply → produce</div>
+      ${cards}
+      <button class="${finishCls}" data-cp-back>${finishLabel}</button>
+    </div>`;
+}
+
+// Words activity — reuses renderQuizCore for the question, with checkpoint chrome.
+function renderCheckpointWords() {
+  const q = state.checkpointQuiz;
+  const cpState = state.checkpoint;
+  if (!q || !cpState) return '';
+  const stage = getStage(cpState.pathKey, cpState.stageId);
+
+  // Done summary + diagnostic
+  if (q.done) {
+    const total = q.pool.length;
+    return renderCheckpointDone({
+      activityLabel: 'Words',
+      emoji: '📖',
+      score: q.score,
+      total,
+      stage,
+      missedTopicKeys: q.missed.map(w => wordTopicInStage(stage, w)).filter(Boolean),
+      missedItems: q.missed.map(w => ({ c:w.c, j:w.j, e:w.e })),
+      activity: 'words',
+    });
+  }
+
+  const cw = q.pool[q.idx];
+  const core = renderQuizCore({
+    word:       cw,
+    choices:    q.choices,
+    selected:   q.selected,
+    direction:  q.direction,
+    color:      CP_GOLD,
+    idx:        q.idx,
+    total:      q.pool.length,
+    ariaLabel:  'Checkpoint words',
+    dirAttr:    'data-cpw-dir',
+    choiceAttr: 'data-cpw-choice',
+    listenId:   'cpw-listen',
+    replayId:   'cpw-replay',
+    nextId:     'cpw-next',
+  });
+  return `
+    <div class="content">
+      <button class="back-home-btn" data-cp-act-back><span class="icon-label">${icon('arrowLeft',15)} Checkpoint</span></button>
+      <div class="topic-drill-heading">📖 Words review</div>
+      <div class="quiz-meta">
+        <span style="color:#888">Word ${q.idx+1} / ${q.pool.length}</span>
+        <span style="color:${CP_GOLD};font-weight:700">Score: ${q.score}</span>
+      </div>
+      ${core.progressBar}
+      ${core.dirToggle}
+      ${core.promptCard}
+      ${core.choiceGrid}
+      ${core.answerPanel}
+    </div>`;
+}
+
+// Shared done screen for checkpoint activities: score ring + session-based
+// diagnostic ("Most misses were from <Topic> — revisit?") + missed list.
+function renderCheckpointDone(opts) {
+  const { activityLabel, emoji, score, total, stage, missedTopicKeys, missedItems, activity } = opts;
+  const pct = total > 0 ? Math.round(score / total * 100) : 0;
+  const diag = checkpointDiagnostic(stage, missedTopicKeys);
+
+  const diagBlock = diag ? `
+    <div class="cp-diag">
+      <div class="cp-diag-lbl">💡 One thing to look at</div>
+      <div class="cp-diag-text">Most of your misses were from <b>${diag.label}</b>. A quick revisit might help.</div>
+      <button class="cp-diag-revisit" data-cp-revisit="${diag.topicKey}">↩ Revisit ${diag.label}</button>
+    </div>` : '';
+
+  const missedBlock = missedItems.length ? `
+    <div class="cp-missed">
+      <div class="cp-missed-lbl">Worth another look</div>
+      ${missedItems.map(m => `
+        <div class="cp-missed-item">
+          <button class="play-mini" data-cp-say="${m.c}">${iconPlay(12)}</button>
+          <div><div class="cp-missed-c">${m.c}</div><div class="cp-missed-j">${colorJyutping(m.j)}</div></div>
+          <span class="cp-missed-e">${m.e}</span>
+        </div>`).join('')}
+    </div>` : '';
+
+  return `
+    <div class="content cp-done">
+      <button class="back-home-btn" data-cp-act-back><span class="icon-label">${icon('arrowLeft',15)} Checkpoint</span></button>
+      <div class="cp-done-wrap">
+        <div class="cp-done-ring" style="background:conic-gradient(${CP_GOLD} ${pct}%, #e4d4ad 0)">
+          <div class="cp-done-inner"><div class="cp-done-pct">${pct}%</div><div class="cp-done-cap">${activityLabel.toUpperCase()}</div></div>
+        </div>
+        <div class="cp-done-h">${activityLabel} done ${emoji}</div>
+        <div class="cp-done-sub">${score} of ${total} correct</div>
+      </div>
+      ${diagBlock}
+      ${missedBlock}
+      <button class="cp-finish" data-cp-act-done="${activity}">✓ Back to checkpoint</button>
+    </div>`;
+}
+
+// Patterns activity wrapper — the drill engine with a "← Checkpoint" header.
+function renderCheckpointPatterns() {
+  const pd = state.patternDrill;
+  if (!pd) return '';
+  return `
+    <div class="content">
+      <button class="back-home-btn" data-cp-act-back><span class="icon-label">${icon('arrowLeft',15)} Checkpoint</span></button>
+      <div class="topic-drill-heading">🔨 Pattern drill</div>
+      ${renderDrillBody(pd)}
+    </div>`;
+}
+
+// Conversation activity wrapper — the existing chat engine over the checkpoint
+// consolidation convo (sourced via activeConvoSource), read + speak only.
+function renderCheckpointConvo() {
+  const cpState = state.checkpoint;
+  if (!cpState) return '';
+  const stage = getStage(cpState.pathKey, cpState.stageId);
+  const convo = activeConvoSource();
+  const body = convo
+    ? renderConversation(CP_GOLD)
+    : '<p style="color:#aaa;padding:20px 0">No conversation authored for this stage yet.</p>';
+  const doneFlag = checkpointActivityDone(cpState.pathKey, cpState.cpId, 'convo');
+  return `
+    <div class="content cp-convo">
+      <button class="back-home-btn" data-cp-act-back><span class="icon-label">${icon('arrowLeft',15)} Checkpoint</span></button>
+      <div class="cp-convo-head">
+        <div class="cp-convo-kick">◆ Consolidation · ${stage ? stage.name : ''}</div>
+        <div class="cp-convo-title">${convo ? convo.title : ''}</div>
+      </div>
+      ${body}
+      <button class="cp-finish" data-cp-act-done="convo">${doneFlag ? '✓ Reviewed — back to checkpoint' : '✓ Mark conversation reviewed'}</button>
     </div>`;
 }
 
@@ -764,14 +1032,42 @@ function render() {
     }
   }
 
+  // If a checkpoint is open, ensure its stage's topics are loaded (word pools and
+  // drills depend on cached topic data). Normally the timeline pre-warm above has
+  // already cached them, but this guards direct/restored entry into a checkpoint.
+  if (state.checkpoint) {
+    const stage = getStage(state.checkpoint.pathKey, state.checkpoint.stageId);
+    if (stage) {
+      const missing = (stage.topics || []).filter(k => !store.isTopicLoaded(k));
+      if (missing.length) {
+        app.innerHTML = `
+          ${renderHeader(null)}
+          ${renderVoiceBanner()}
+          <div class="content"><div style="padding:40px 20px;text-align:center;color:#888;font-size:14px;">Loading checkpoint…</div></div>
+          ${renderDrawer()}
+        `;
+        attachEvents(null, null);
+        store.loadTopics(missing).then(render).catch(err => console.error('[checkpoint load]', err));
+        return;
+      }
+    }
+  }
+
   const lesson = needsTopic ? lessonShape(state.topic) : null;
   const color  = lesson ? lesson.color : null;
 
   let mainContent = '';
-  // A topic-scoped pattern drill takes over the screen regardless of nav — it's
-  // launched from a topic's Learn tab and is its own focused view. (The Patterns
-  // page's own Browse/Drill drill is handled inside renderPatterns as before.)
-  if (state.patternDrill && state.patternDrill.topicKey) {
+  // A checkpoint hub or activity takes over the screen (launched from the path
+  // timeline). Checked before other nav so it's a focused full-screen view.
+  if (state.checkpoint && state.checkpointAct === 'words') {
+    mainContent = renderCheckpointWords();
+  } else if (state.checkpoint && state.checkpointAct === 'patterns') {
+    mainContent = renderCheckpointPatterns();
+  } else if (state.checkpoint && state.checkpointAct === 'convo') {
+    mainContent = renderCheckpointConvo();
+  } else if (state.checkpoint) {
+    mainContent = renderCheckpointHub();
+  } else if (state.patternDrill && state.patternDrill.topicKey) {
     mainContent = `<div class="content">${renderTopicDrillView(color)}</div>`;
   } else if (state.nav === 'topics') {
     if (state.homeView) {
@@ -1072,7 +1368,7 @@ function renderLessonHeader(lesson, color) {
 }
 
 function renderConversation(color) {
-  const convo = getRoundConvo(state.topic, state.currentRound);
+  const convo = activeConvoSource();
   if (!convo) return '<p style="color:#aaa;padding:20px 0">No conversation for this topic yet.</p>';
   const cv = state.convo;
   const lines = convo.lines;
@@ -1083,16 +1379,22 @@ function renderConversation(color) {
     : '';
   const gapOn    = cv.convMode === 'gap';
   const speakOn  = cv.convMode === 'speak';
+  // Checkpoint consolidation convo is read + speak only (no Fill-the-Gap), to
+  // keep the three checkpoint activities on a deliberate recall→apply→produce
+  // gradient rather than overlapping the pattern drill's MCQ feel.
+  const inCheckpointConvo = !!(state.checkpoint && state.checkpointAct === 'convo');
+  const gapBtnHtml = inCheckpointConvo ? '' : `
+      <button class="convo-ctrl-btn${gapOn?' on':''}" id="gap-mode-btn"
+        style="${gapOn?'background:'+color+';color:#fff;border-color:'+color:''}">
+        🧩 Fill-the-Gap
+      </button>`;
   const controls = `
     <div class="convo-controls">
       <button class="convo-ctrl-btn${cv.playingLine!==null?' on':''}" id="play-all-btn"
         style="${cv.playingLine!==null?'background:'+color+';color:#fff;border-color:'+color:'border-color:'+color+';color:'+color}">
         <span class="icon-label">${cv.playingLine!==null ? icon('stop',15) : iconPlay(14)} ${cv.playingLine!==null ? 'Stop' : 'Play All'}</span>
       </button>
-      <button class="convo-ctrl-btn${gapOn?' on':''}" id="gap-mode-btn"
-        style="${gapOn?'background:'+color+';color:#fff;border-color:'+color:''}">
-        🧩 Fill-the-Gap
-      </button>
+      ${gapBtnHtml}
       <button class="convo-ctrl-btn${speakOn?' on':''}" id="speak-mode-btn"
         style="${speakOn?'background:'+color+';color:#fff;border-color:'+color:''}">
         🎙 Speak
@@ -1862,6 +2164,7 @@ function attachEvents(lesson, color) {
         const correct = chosenOpt === d.answer;     // object identity
         pd.selected = idx;
         if (correct) pd.score++;
+        else if (pd.scopeKind === 'checkpoint') pd.missed.push(pd.queue[pd.idx]);  // for diagnostic
         // Play the full assembled sentence so the learner hears the result.
         speak(fullSentence);
         render();
@@ -1992,7 +2295,7 @@ function attachEvents(lesson, color) {
       state.convo.playingLine = null;
       render();
     } else {
-      const lines = getRoundConvo(state.topic, state.currentRound).lines;
+      const lines = activeConvoSource().lines;
       playAllConvo(lines, 0);
     }
   });
@@ -2038,7 +2341,7 @@ function attachEvents(lesson, color) {
   // Speak: listen button (other speaker's turn)
   const speakListenBtn = document.getElementById('speak-listen-btn');
   if (speakListenBtn) speakListenBtn.addEventListener('click', () => {
-    const line = getRoundConvo(state.topic, state.currentRound).lines[state.convo.speakStep];
+    const line = activeConvoSource().lines[state.convo.speakStep];
     state.convo.playingLine = state.convo.speakStep;
     render();
     speakAs(line.c, line.u, () => { state.convo.playingLine = null; render(); });
@@ -2047,7 +2350,7 @@ function attachEvents(lesson, color) {
   // Speak: next button
   const speakNext = document.getElementById('speak-next');
   if (speakNext) speakNext.addEventListener('click', () => {
-    const lines = getRoundConvo(state.topic, state.currentRound).lines;
+    const lines = activeConvoSource().lines;
     stopListening();
     window.speechSynthesis.cancel();
     state.convo.playingLine = null;
@@ -2072,7 +2375,7 @@ function attachEvents(lesson, color) {
   // Speak: skip button
   const speakSkip = document.getElementById('speak-skip');
   if (speakSkip) speakSkip.addEventListener('click', () => {
-    const lines = getRoundConvo(state.topic, state.currentRound).lines;
+    const lines = activeConvoSource().lines;
     state.convo.speakStatus = 'idle';
     state.convo.speakHeard  = '';
     if (state.convo.speakStep >= lines.length - 1) {
@@ -2107,7 +2410,7 @@ function attachEvents(lesson, color) {
   document.querySelectorAll('[data-bubble]').forEach(btn => {
     btn.addEventListener('click', () => {
       const i = parseInt(btn.dataset.bubble);
-      const line = getRoundConvo(state.topic, state.currentRound).lines[i];
+      const line = activeConvoSource().lines[i];
       state.convo.playingLine = i;
       render();
       speakAs(line.c, line.u, () => { state.convo.playingLine = null; render(); });
@@ -2121,7 +2424,7 @@ function attachEvents(lesson, color) {
       const lineIdx = parseInt(btn.dataset.gapLine);
       const chosen  = btn.dataset.gapAns;
       state.convo.gapAnswers[lineIdx] = chosen;
-      const correct = chosen === getRoundConvo(state.topic, state.currentRound).lines[lineIdx].c;
+      const correct = chosen === activeConvoSource().lines[lineIdx].c;
       if (correct) speak(chosen);
       render();
     });
@@ -2526,6 +2829,127 @@ function attachEvents(lesson, color) {
       render();
     });
   });
+
+  // ── Checkpoint handlers (Stage 3) ──
+  // Open a checkpoint hub from its timeline node.
+  document.querySelectorAll('[data-cp-open]').forEach(card => {
+    card.addEventListener('click', () => {
+      openCheckpoint(state.activePath, card.dataset.cpOpen);
+      window.scrollTo(0, 0);
+    });
+  });
+
+  // Back from hub → timeline (and from finish button). history.back() pops the
+  // entry openCheckpoint pushed; popstate clears the checkpoint state.
+  document.querySelectorAll('[data-cp-back]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      if (_navReady) { history.back(); return; }
+      state.checkpoint = null; state.checkpointAct = null;
+      window.scrollTo(0, 0);
+      render();
+    });
+  });
+
+  // Launch an activity from a hub card.
+  document.querySelectorAll('[data-cp-act]').forEach(card => {
+    card.addEventListener('click', () => {
+      const act = card.dataset.cpAct;
+      const cpState = state.checkpoint;
+      if (!cpState) return;
+      const stage = getStage(cpState.pathKey, cpState.stageId);
+      if (act === 'words') {
+        startCheckpointWords();
+      } else if (act === 'patterns') {
+        state.checkpointAct = 'patterns';
+        startPatternDrill({ kind: 'checkpoint', stage });
+      } else if (act === 'convo') {
+        state.checkpointAct = 'convo';
+        state.convo = { convMode:'read', playingLine:null, gapAnswers:{}, bubbleRevealed:{}, breakdownOpen:{}, speakStep:0, speakStatus:'idle', speakHeard:'', speakAutoPlayed:false, speakRevealed:{} };
+        pushNav();
+        render();
+      }
+      window.scrollTo(0, 0);
+    });
+  });
+
+  // Back from an activity → hub. Routed through history so it matches phone BACK.
+  document.querySelectorAll('[data-cp-act-back]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      if (_navReady) { history.back(); return; }
+      state.checkpointAct = null; state.patternDrill = null; state.checkpointQuiz = null;
+      window.scrollTo(0, 0);
+      render();
+    });
+  });
+
+  // Mark an activity done + return to hub (the done-screen / convo finish button).
+  document.querySelectorAll('[data-cp-act-done]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const act = btn.dataset.cpActDone;
+      const cpState = state.checkpoint;
+      if (cpState) setCheckpointActivityDone(cpState.pathKey, cpState.cpId, act, true);
+      // Clear the session and return to the hub via history (pops the activity entry).
+      if (_navReady) { history.back(); return; }
+      state.checkpointAct = null; state.patternDrill = null; state.checkpointQuiz = null;
+      window.scrollTo(0, 0);
+      render();
+    });
+  });
+
+  // Diagnostic "revisit topic" → open that topic's Learn tab.
+  document.querySelectorAll('[data-cp-revisit]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const topicKey = btn.dataset.cpRevisit;
+      state.checkpoint = null; state.checkpointAct = null;
+      state.patternDrill = null; state.checkpointQuiz = null;
+      state.topic = topicKey;
+      state.currentRound = 1;
+      state.nav = 'topics';
+      state.homeView = false;
+      state.fromPath = false; state.fromPathTier = null;
+      state.mode = 'study'; state.tab = 'words';
+      state.flipped = {}; state.sentenceRevealed = {}; state.patternRevealed = {};
+      pushNav();
+      window.scrollTo(0, 0);
+      render();
+    });
+  });
+
+  // Play a missed item's audio on the done screen.
+  document.querySelectorAll('[data-cp-say]').forEach(btn => {
+    btn.addEventListener('click', () => speak(btn.dataset.cpSay));
+  });
+
+  // Checkpoint Words quiz — choices, direction toggle, next, listen/replay.
+  const cpq = state.checkpointQuiz;
+  if (cpq && state.checkpointAct === 'words' && !cpq.done) {
+    const cw = cpq.pool[cpq.idx];
+    document.querySelectorAll('[data-cpw-choice]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        if (cpq.selected !== null && cpq.selected !== undefined) return;
+        const idx = parseInt(btn.dataset.cpwChoice, 10);
+        const chosen = cpq.choices[idx];
+        cpq.selected = idx;
+        if (chosen === cw) cpq.score++;
+        else cpq.missed.push(cw);
+        speak(cw.c);
+        render();
+      });
+    });
+    document.querySelectorAll('[data-cpw-dir]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        cpq.direction = btn.dataset.cpwDir;
+        storage.setQuizDirection(cpq.direction);
+        render();
+      });
+    });
+    const cpwListen = document.getElementById('cpw-listen');
+    if (cpwListen) cpwListen.addEventListener('click', () => speak(cw.c));
+    const cpwReplay = document.getElementById('cpw-replay');
+    if (cpwReplay) cpwReplay.addEventListener('click', () => speak(cw.c));
+    const cpwNext = document.getElementById('cpw-next');
+    if (cpwNext) cpwNext.addEventListener('click', () => advanceCheckpointWords());
+  }
 }
 
 // ── Init ──────────────────────────────────────────────────────────────────────
@@ -2544,6 +2968,7 @@ function attachEvents(lesson, color) {
       store.loadIndex(),
       store.loadCategories(),
       store.loadPaths(),
+      store.loadPathConvos(),
       store.loadPatterns(),
     ]);
   } catch (err) {
@@ -2608,6 +3033,14 @@ function attachEvents(lesson, color) {
     // page (Drill tab landing). Clear the session so it's not stale.
     if (state.patternDrill) {
       state.patternDrill = null;
+    }
+
+    // Checkpoint sessions aren't part of the nav snapshot's session data. The
+    // snapshot restores `checkpoint`/`checkpointAct` (they're in NAV_FIELDS), so
+    // after applying it we just clear any live session objects that no longer
+    // match the restored screen — back should show the hub/activity fresh.
+    if (!state.checkpointAct) {
+      state.checkpointQuiz = null;
     }
 
     // A quiz in progress is likewise not a nav screen. If back has moved us out

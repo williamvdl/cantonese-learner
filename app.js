@@ -112,6 +112,18 @@ function getRoundSentences(topic, round) {
 function getRoundConvo(topic, round) {
   return store.roundData(topic, round)?.convo || null;
 }
+// The conversation the chat UI should render: the checkpoint consolidation convo
+// when the checkpoint Conversation activity is open, otherwise the current
+// topic/round convo. Lets the existing chat renderer + handlers serve both
+// unchanged — they call this instead of getRoundConvo directly.
+function activeConvoSource() {
+  if (state.checkpoint && state.checkpointAct === 'convo') {
+    const cp = getStageCheckpoint(state.checkpoint.pathKey, state.checkpoint.stageId);
+    if (cp && cp.convo) return store.pathConvo(cp.convo);
+    return null;
+  }
+  return getRoundConvo(state.topic, state.currentRound);
+}
 function getRoundNote(topic, round) {
   return store.roundData(topic, round)?.note || null;
 }
@@ -279,6 +291,13 @@ let state = {
   wordReview: null,
   // Pattern Drill session — null when not in a session. Shape set by startPatternDrill().
   patternDrill: null,
+  // Checkpoint (Stage 3) — null when no checkpoint hub is open.
+  //   checkpoint:     { pathKey, stageId, cpId } | null  — which hub is open
+  //   checkpointAct:  'words' | 'patterns' | 'convo' | null — which activity within it
+  //   checkpointQuiz: the Words-activity quiz session (own shape) | null
+  checkpoint: null,
+  checkpointAct: null,
+  checkpointQuiz: null,
   // Patterns page is a grouped reference library (Stage 4). These track which
   // groups / frames are expanded (all collapsed by default). Keyed by group name
   // and by `${groupIdx}-${frameIdx}`.
@@ -320,6 +339,7 @@ const NAV_FIELDS = [
   'nav', 'drawerOpen', 'homeView', 'pathView', 'activePath',
   'topic', 'currentRound', 'fromPath', 'fromPathTier',
   'mode', 'tab', 'selectedCategory',
+  'checkpoint', 'checkpointAct',
 ];
 
 // Capture the current navigation-relevant state into a plain snapshot object.
@@ -566,24 +586,45 @@ function getTopicPatterns(topicKey) {
 }
 
 // Start a pattern drill session.
-//  - No argument  → drills every drillable pattern, one drill each (legacy / library).
-//  - topicKey     → drills only that topic's drills (the Learn-tab drill).
-// state.patternDrill.topicKey records the scope (null = all) so the drill view
-// can show "← <Topic>" and return there.
-function startPatternDrill(topicKey) {
-  const drillable = topicKey
-    ? getTopicDrills(topicKey)
-    : store.patterns.filter(p => p.tier === 1 && Array.isArray(p.drills) && p.drills.length)
+//  - No argument        → drills every drillable pattern, one drill each (legacy / library).
+//  - topicKey (string)  → drills only that topic's drills (the Learn-tab drill).
+//  - { kind:'checkpoint', stage } → drills the stage's pooled drills, capped (Stage 3).
+// The session records its scope so the drill view knows where "back" returns and
+// the done screen knows what to offer.
+function startPatternDrill(scope) {
+  let drillable, scopeKind, topicKey = null, checkpointStage = null;
+
+  if (scope && typeof scope === 'object' && scope.kind === 'checkpoint') {
+    // Checkpoint scope: pooled drills across the stage's topics, capped.
+    scopeKind = 'checkpoint';
+    checkpointStage = scope.stage;
+    const cp = checkpointStage.checkpoint || {};
+    const cap = cp.drillCap || CHECKPOINT_DRILL_CAP_DEFAULT;
+    drillable = shuffle(getCheckpointDrills(checkpointStage)).slice(0, cap);
+  } else if (scope) {
+    // Topic scope (string topicKey) — existing Learn-tab behaviour.
+    scopeKind = 'topic';
+    topicKey = scope;
+    drillable = getTopicDrills(topicKey);
+  } else {
+    // Legacy / library scope — one drill per tier-1 drillable pattern.
+    scopeKind = 'all';
+    drillable = store.patterns.filter(p => p.tier === 1 && Array.isArray(p.drills) && p.drills.length)
         .map(p => ({ pattern: p, drill: p.drills[0] }));
+  }
+
   if (!drillable.length) { state.patternDrill = null; render(); return; }
-  const queue = shuffle(drillable);
+  const queue = scopeKind === 'checkpoint' ? drillable : shuffle(drillable);
   state.patternDrill = {
     queue,
     idx: 0,
     selected: null,
     done: false,
     score: 0,
-    topicKey: topicKey || null,
+    topicKey: topicKey,                 // null unless topic scope (keeps existing callers working)
+    scopeKind: scopeKind,               // 'topic' | 'all' | 'checkpoint'
+    checkpointStage: checkpointStage,   // the stage object when checkpoint-scoped
+    missed: [],                         // {pattern,drill} pairs answered wrong — feeds diagnostic
     choices: buildDrillChoices(queue[0].drill),
   };
   // A drill session is one "screen" for the back button — entering it pushes a
@@ -718,6 +759,203 @@ function getPathContext() {
     nextTopicIcon:  nextTopicMeta ? nextTopicMeta.icon  : null,
     isComplete: isLessonComplete(state.activePath, state.topic, tier),
   };
+}
+
+// ── Checkpoint module (Stage 3) ───────────────────────────────────────────────
+// A "checkpoint" is the capstone of a stage (a named cluster of ~4 topics in a
+// path). It opens a small hub of three independent activities — Words (recall),
+// Patterns (apply), Conversation (produce) — none required.
+//
+// SCALABILITY: stages + checkpoints live entirely in learning_paths.json. Adding
+// a checkpoint to another stage is a DATA edit — no code change. This module is
+// the only code that knows the checkpoint storage shape, so a future upgrade from
+// done-flags to a richer score/history store touches only here + a migration.
+//
+// STORAGE: completion is stored as done-flags under the existing pathProgress
+// bucket, namespaced 'cp:<checkpointId>:<activity>' so they never collide with
+// lessonKey() entries. The accessors below return/accept booleans today; the
+// storage VALUE could later become an object ({done,score,missedIds,ts}) by
+// bumping STORAGE_SCHEMA.pathProgress and adding a _migrate case — no call-site
+// changes, because callers only ever ask "is this activity done?".
+
+const CHECKPOINT_DRILL_CAP_DEFAULT = 15;
+const CHECKPOINT_WORD_CAP_DEFAULT  = 25;
+const CHECKPOINT_ACTIVITIES = ['words', 'patterns', 'convo'];
+
+// All stages for a path (empty array if the path has none — renders as a flat list).
+function getPathStages(pathKey) {
+  const path = (store.paths || []).find(p => p.key === pathKey);
+  return (path && Array.isArray(path.stages)) ? path.stages : [];
+}
+// Find a stage object by id within a path.
+function getStage(pathKey, stageId) {
+  return getPathStages(pathKey).find(s => s.id === stageId) || null;
+}
+// The checkpoint object for a stage, or null if the stage has none.
+function getStageCheckpoint(pathKey, stageId) {
+  const s = getStage(pathKey, stageId);
+  return (s && s.checkpoint) ? s.checkpoint : null;
+}
+
+// Storage key for one checkpoint activity flag.
+function checkpointFlagKey(cpId, activity) {
+  return 'cp:' + cpId + ':' + activity;
+}
+function checkpointActivityDone(pathKey, cpId, activity) {
+  const bucket = state.pathProgress[pathKey];
+  return !!(bucket && bucket[checkpointFlagKey(cpId, activity)]);
+}
+function setCheckpointActivityDone(pathKey, cpId, activity, val) {
+  if (!state.pathProgress[pathKey]) state.pathProgress[pathKey] = {};
+  const k = checkpointFlagKey(cpId, activity);
+  if (val) state.pathProgress[pathKey][k] = true;
+  else delete state.pathProgress[pathKey][k];
+  savePathProgress();
+}
+// Derived progress for a checkpoint: { done, total, complete, available }.
+// `available` is the list of activities this checkpoint actually offers (a stage
+// with no authored convo offers only words + patterns).
+function checkpointProgress(pathKey, stageId) {
+  const cp = getStageCheckpoint(pathKey, stageId);
+  const stage = getStage(pathKey, stageId);
+  if (!cp || !stage) return { done: 0, total: 0, complete: false, available: [] };
+  const available = CHECKPOINT_ACTIVITIES.filter(a => {
+    if (a === 'convo') return !!(cp.convo && store.pathConvo(cp.convo));
+    if (a === 'words') return getCheckpointWords(stage).length > 0;
+    if (a === 'patterns') return getCheckpointDrills(stage).length > 0;
+    return false;
+  });
+  const done = available.filter(a => checkpointActivityDone(pathKey, cp.id, a)).length;
+  return { done, total: available.length, complete: available.length > 0 && done === available.length, available };
+}
+
+// Build the checkpoint's drill queue: all drills across the stage's topics,
+// deduped by drill identity, shuffled, capped. Reuses getTopicDrills so these are
+// the exact same validated {pattern, drill} pairs the topic drill uses.
+function getCheckpointDrills(stage) {
+  const seen = new Set();
+  const out = [];
+  for (const topicKey of (stage.topics || [])) {
+    for (const pair of getTopicDrills(topicKey)) {
+      // Dedupe by parent label + frame + english — a drill tagged to two topics
+      // in the same stage must not appear twice.
+      const id = pair.pattern.label + '|' + pair.drill.frameC + '|' + pair.drill.english;
+      if (seen.has(id)) continue;
+      seen.add(id);
+      out.push(pair);
+    }
+  }
+  return out;
+}
+function getCheckpointWords(stage) {
+  // Words pool: vocab across ALL rounds of the stage's topics, deduped by Chinese
+  // surface form. (All rounds, not just round 1 — the pattern drills draw on the
+  // topic's full vocabulary, so the Words review should cover the same universe.)
+  const seen = new Set();
+  const out = [];
+  for (const topicKey of (stage.topics || [])) {
+    const t = store.topicCache[topicKey];
+    const rounds = t ? Object.keys(t.rounds) : ['1'];
+    for (const r of rounds) {
+      const words = getRoundWords(topicKey, r) || [];
+      for (const w of words) {
+        if (seen.has(w.c)) continue;
+        seen.add(w.c);
+        out.push(w);
+      }
+    }
+  }
+  return out;
+}
+
+// ── Checkpoint navigation ─────────────────────────────────────────────────────
+// Open a checkpoint hub. Records which checkpoint, clears any activity.
+function openCheckpoint(pathKey, stageId) {
+  const cp = getStageCheckpoint(pathKey, stageId);
+  if (!cp) return;
+  state.checkpoint = { pathKey, stageId, cpId: cp.id };
+  state.checkpointAct = null;
+  pushNav();
+  render();
+}
+function closeCheckpoint() {
+  // Route through history so the back stack stays consistent.
+  history.back();
+}
+
+// ── Checkpoint Words activity (reuses the quiz session shape) ─────────────────
+// Builds a quiz session over the capped, shuffled word pool. Mirrors the existing
+// word quiz session shape so renderQuizCore can render it unchanged.
+function startCheckpointWords() {
+  const cpState = state.checkpoint;
+  if (!cpState) return;
+  const stage = getStage(cpState.pathKey, cpState.stageId);
+  const cp = getStageCheckpoint(cpState.pathKey, cpState.stageId);
+  const cap = (cp && cp.wordCap) || CHECKPOINT_WORD_CAP_DEFAULT;
+  const pool = shuffle(getCheckpointWords(stage)).slice(0, cap);
+  if (!pool.length) return;
+  state.checkpointAct = 'words';
+  state.checkpointQuiz = {
+    pool,
+    idx: 0,
+    selected: null,
+    done: false,
+    score: 0,
+    direction: storage.getQuizDirection() || 'zh-en',
+    choices: buildCheckpointWordChoices(pool, 0),
+    missed: [],   // word objects answered wrong — feeds the diagnostic
+  };
+  pushNav();
+  render();
+}
+// 4 choices for a word quiz question: the answer + 3 distractors drawn from the pool.
+function buildCheckpointWordChoices(pool, idx) {
+  const answer = pool[idx];
+  const others = shuffle(pool.filter((_, i) => i !== idx)).slice(0, 3);
+  return shuffle([answer, ...others]);
+}
+function advanceCheckpointWords() {
+  const q = state.checkpointQuiz;
+  if (!q) return;
+  const next = q.idx + 1;
+  if (next >= q.pool.length) { q.done = true; render(); return; }
+  q.idx = next;
+  q.selected = null;
+  q.choices = buildCheckpointWordChoices(q.pool, next);
+  render();
+}
+
+// ── Checkpoint Patterns activity ──────────────────────────────────────────────
+// Reuses the pattern-drill engine via a checkpoint scope. startPatternDrill (below,
+// extended) builds the queue from getCheckpointDrills with the cap applied.
+
+// ── Diagnostic (session-only, no persistence) ─────────────────────────────────
+// Given a list of missed items (word objects or {pattern,drill} pairs) and the
+// stage, find the topic that accounts for the most misses. Returns { topicKey,
+// label, count } only when a topic has 2+ misses (a genuine signal), else null.
+function checkpointDiagnostic(stage, missedTopicKeys) {
+  if (!missedTopicKeys || !missedTopicKeys.length) return null;
+  const counts = {};
+  for (const tk of missedTopicKeys) counts[tk] = (counts[tk] || 0) + 1;
+  let best = null;
+  for (const tk of Object.keys(counts)) {
+    if (!best || counts[tk] > counts[best]) best = tk;
+  }
+  if (!best || counts[best] < 2) return null;
+  return { topicKey: best, label: (lessonShape(best) || {}).label || best, count: counts[best] };
+}
+// Which stage topic does a word belong to? (first stage topic whose round-1 vocab
+// contains this Chinese surface form). Used to attribute word-quiz misses.
+function wordTopicInStage(stage, word) {
+  for (const tk of (stage.topics || [])) {
+    const t = store.topicCache[tk];
+    const rounds = t ? Object.keys(t.rounds) : ['1'];
+    for (const r of rounds) {
+      const words = getRoundWords(tk, r) || [];
+      if (words.some(w => w.c === word.c)) return tk;
+    }
+  }
+  return null;
 }
 
 function buildPrompt(text, direction) {
