@@ -97,7 +97,13 @@
             "family",
             "time",
             "tense"
-          ]
+          ],
+          "checkpoint": {
+            "id": "beginner-s2-cp",
+            "drillCap": 15,
+            "wordCap": 25,
+            "convo": "beginner-s2"
+          }
         },
         {
           "id": "beginner-s3",

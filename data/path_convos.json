@@ -2,7 +2,10 @@
   "convos": {
     "beginner-s1": {
       "title": "Meeting Mei for tea",
-      "speakers": ["Mei (Friend)", "You"],
+      "speakers": [
+        "Mei (Friend)",
+        "You"
+      ],
       "lines": [
         {
           "u": false,
@@ -10,8 +13,16 @@
           "j": "zou2 san4! nei5 hou2 maa3?",
           "e": "Good morning! How are you?",
           "bd": [
-            { "c": "早晨", "j": "zou2 san4", "e": "good morning" },
-            { "c": "你好嗎", "j": "nei5 hou2 maa3", "e": "how are you" }
+            {
+              "c": "早晨",
+              "j": "zou2 san4",
+              "e": "good morning"
+            },
+            {
+              "c": "你好嗎",
+              "j": "nei5 hou2 maa3",
+              "e": "how are you"
+            }
           ]
         },
         {
@@ -19,12 +30,32 @@
           "c": "早晨！我好好，多謝。",
           "j": "zou2 san4! ngo5 hou2 hou2, do1 ze6.",
           "e": "Good morning! I'm very well, thank you.",
-          "opts": ["早晨！我好好，多謝。", "再見！", "對唔住。"],
-          "optsJ": ["zou2 san4! ngo5 hou2 hou2, do1 ze6.", "zoi3 gin3!", "deoi3 m4 zyu6."],
+          "opts": [
+            "早晨！我好好，多謝。",
+            "再見！",
+            "對唔住。"
+          ],
+          "optsJ": [
+            "zou2 san4! ngo5 hou2 hou2, do1 ze6.",
+            "zoi3 gin3!",
+            "deoi3 m4 zyu6."
+          ],
           "bd": [
-            { "c": "早晨", "j": "zou2 san4", "e": "good morning" },
-            { "c": "我好好", "j": "ngo5 hou2 hou2", "e": "I'm very well" },
-            { "c": "多謝", "j": "do1 ze6", "e": "thank you" }
+            {
+              "c": "早晨",
+              "j": "zou2 san4",
+              "e": "good morning"
+            },
+            {
+              "c": "我好好",
+              "j": "ngo5 hou2 hou2",
+              "e": "I'm very well"
+            },
+            {
+              "c": "多謝",
+              "j": "do1 ze6",
+              "e": "thank you"
+            }
           ]
         },
         {
@@ -33,7 +64,11 @@
           "j": "nei5 giu3 mat1 meng2?",
           "e": "What is your name?",
           "bd": [
-            { "c": "你叫乜名", "j": "nei5 giu3 mat1 meng2", "e": "what is your name" }
+            {
+              "c": "你叫乜名",
+              "j": "nei5 giu3 mat1 meng2",
+              "e": "what is your name"
+            }
           ]
         },
         {
@@ -41,11 +76,27 @@
           "c": "我叫 William。",
           "j": "ngo5 giu3 William.",
           "e": "My name is William.",
-          "opts": ["我叫 William。", "唔係。", "幾錢？"],
-          "optsJ": ["ngo5 giu3 William.", "m4 hai6.", "gei2 cin2?"],
+          "opts": [
+            "我叫 William。",
+            "唔係。",
+            "幾錢？"
+          ],
+          "optsJ": [
+            "ngo5 giu3 William.",
+            "m4 hai6.",
+            "gei2 cin2?"
+          ],
           "bd": [
-            { "c": "我叫", "j": "ngo5 giu3", "e": "my name is" },
-            { "c": "William", "j": "William", "e": "William (name)" }
+            {
+              "c": "我叫",
+              "j": "ngo5 giu3",
+              "e": "my name is"
+            },
+            {
+              "c": "William",
+              "j": "William",
+              "e": "William (name)"
+            }
           ]
         },
         {
@@ -54,12 +105,36 @@
           "j": "fun1 jing4! jat1 bui1 caa4, saam1 man1. dak1 m4 dak1?",
           "e": "Welcome! One cup of tea, three dollars. Is that OK?",
           "bd": [
-            { "c": "歡迎", "j": "fun1 jing4", "e": "welcome" },
-            { "c": "一", "j": "jat1", "e": "one" },
-            { "c": "杯茶", "j": "bui1 caa4", "e": "cup of tea" },
-            { "c": "三", "j": "saam1", "e": "three" },
-            { "c": "蚊", "j": "man1", "e": "dollars" },
-            { "c": "得唔得", "j": "dak1 m4 dak1", "e": "is it OK" }
+            {
+              "c": "歡迎",
+              "j": "fun1 jing4",
+              "e": "welcome"
+            },
+            {
+              "c": "一",
+              "j": "jat1",
+              "e": "one"
+            },
+            {
+              "c": "杯茶",
+              "j": "bui1 caa4",
+              "e": "cup of tea"
+            },
+            {
+              "c": "三",
+              "j": "saam1",
+              "e": "three"
+            },
+            {
+              "c": "蚊",
+              "j": "man1",
+              "e": "dollars"
+            },
+            {
+              "c": "得唔得",
+              "j": "dak1 m4 dak1",
+              "e": "is it OK"
+            }
           ]
         },
         {
@@ -67,11 +142,27 @@
           "c": "得！唔該。",
           "j": "dak1! m4 goi1.",
           "e": "OK! Thank you.",
-          "opts": ["得！唔該。", "唔得。", "我唔明。"],
-          "optsJ": ["dak1! m4 goi1.", "m4 dak1.", "ngo5 m4 ming4."],
+          "opts": [
+            "得！唔該。",
+            "唔得。",
+            "我唔明。"
+          ],
+          "optsJ": [
+            "dak1! m4 goi1.",
+            "m4 dak1.",
+            "ngo5 m4 ming4."
+          ],
           "bd": [
-            { "c": "得", "j": "dak1", "e": "OK / can do" },
-            { "c": "唔該", "j": "m4 goi1", "e": "thank you / please" }
+            {
+              "c": "得",
+              "j": "dak1",
+              "e": "OK / can do"
+            },
+            {
+              "c": "唔該",
+              "j": "m4 goi1",
+              "e": "thank you / please"
+            }
           ]
         },
         {
@@ -80,8 +171,16 @@
           "j": "sai2 sau2 gaan1 hai2 bin1?",
           "e": "Where is the bathroom?",
           "bd": [
-            { "c": "洗手間", "j": "sai2 sau2 gaan1", "e": "bathroom" },
-            { "c": "喺邊", "j": "hai2 bin1", "e": "where is it" }
+            {
+              "c": "洗手間",
+              "j": "sai2 sau2 gaan1",
+              "e": "bathroom"
+            },
+            {
+              "c": "喺邊",
+              "j": "hai2 bin1",
+              "e": "where is it"
+            }
           ]
         },
         {
@@ -89,13 +188,37 @@
           "c": "對唔住，我唔明。請講慢啲。",
           "j": "deoi3 m4 zyu6, ngo5 m4 ming4. cing2 gong2 maan6 di1.",
           "e": "Sorry, I don't understand. Please speak slowly.",
-          "opts": ["對唔住，我唔明。請講慢啲。", "係。", "晚上好。"],
-          "optsJ": ["deoi3 m4 zyu6, ngo5 m4 ming4. cing2 gong2 maan6 di1.", "hai6.", "maan5 soeng6 hou2."],
+          "opts": [
+            "對唔住，我唔明。請講慢啲。",
+            "係。",
+            "晚上好。"
+          ],
+          "optsJ": [
+            "deoi3 m4 zyu6, ngo5 m4 ming4. cing2 gong2 maan6 di1.",
+            "hai6.",
+            "maan5 soeng6 hou2."
+          ],
           "bd": [
-            { "c": "對唔住", "j": "deoi3 m4 zyu6", "e": "sorry" },
-            { "c": "我唔明", "j": "ngo5 m4 ming4", "e": "I don't understand" },
-            { "c": "請", "j": "cing2", "e": "please (formal)" },
-            { "c": "講慢啲", "j": "gong2 maan6 di1", "e": "speak slowly" }
+            {
+              "c": "對唔住",
+              "j": "deoi3 m4 zyu6",
+              "e": "sorry"
+            },
+            {
+              "c": "我唔明",
+              "j": "ngo5 m4 ming4",
+              "e": "I don't understand"
+            },
+            {
+              "c": "請",
+              "j": "cing2",
+              "e": "please (formal)"
+            },
+            {
+              "c": "講慢啲",
+              "j": "gong2 maan6 di1",
+              "e": "speak slowly"
+            }
           ]
         },
         {
@@ -104,8 +227,16 @@
           "j": "m4 gan2 jiu3! zoi3 gin3.",
           "e": "You're welcome! Goodbye.",
           "bd": [
-            { "c": "唔緊要", "j": "m4 gan2 jiu3", "e": "you're welcome / no worries" },
-            { "c": "再見", "j": "zoi3 gin3", "e": "goodbye" }
+            {
+              "c": "唔緊要",
+              "j": "m4 gan2 jiu3",
+              "e": "you're welcome / no worries"
+            },
+            {
+              "c": "再見",
+              "j": "zoi3 gin3",
+              "e": "goodbye"
+            }
           ]
         },
         {
@@ -113,10 +244,320 @@
           "c": "再見！",
           "j": "zoi3 gin3!",
           "e": "Goodbye!",
-          "opts": ["再見！", "你好。", "唔該。"],
-          "optsJ": ["zoi3 gin3!", "nei5 hou2.", "m4 goi1."],
+          "opts": [
+            "再見！",
+            "你好。",
+            "唔該。"
+          ],
+          "optsJ": [
+            "zoi3 gin3!",
+            "nei5 hou2.",
+            "m4 goi1."
+          ],
           "bd": [
-            { "c": "再見", "j": "zoi3 gin3", "e": "goodbye" }
+            {
+              "c": "再見",
+              "j": "zoi3 gin3",
+              "e": "goodbye"
+            }
+          ]
+        }
+      ]
+    },
+    "beginner-s2": {
+      "title": "Catching up with Anna",
+      "speakers": [
+        "Anna (Friend)",
+        "You"
+      ],
+      "lines": [
+        {
+          "u": false,
+          "c": "你今日做緊乜嘢？",
+          "j": "nei5 gam1 jat6 zou6 gan2 mat1 je5?",
+          "e": "What are you doing today?",
+          "bd": [
+            {
+              "c": "你",
+              "j": "nei5",
+              "e": "you"
+            },
+            {
+              "c": "今日",
+              "j": "gam1 jat6",
+              "e": "today"
+            },
+            {
+              "c": "做緊",
+              "j": "zou6 gan2",
+              "e": "doing (in progress)"
+            },
+            {
+              "c": "乜嘢",
+              "j": "mat1 je5",
+              "e": "what"
+            }
+          ]
+        },
+        {
+          "u": true,
+          "c": "我而家去見爸爸媽媽。",
+          "j": "ngo5 ji4 gaa1 heoi3 gin3 baa4 baa1 maa4 maa1.",
+          "e": "I'm going to see my mum and dad now.",
+          "opts": [
+            "我而家去見爸爸媽媽。",
+            "我未食。",
+            "點解？"
+          ],
+          "optsJ": [
+            "ngo5 ji4 gaa1 heoi3 gin3 baa4 baa1 maa4 maa1.",
+            "ngo5 mei6 sik6.",
+            "dim2 gaai2?"
+          ],
+          "bd": [
+            {
+              "c": "我",
+              "j": "ngo5",
+              "e": "I"
+            },
+            {
+              "c": "而家",
+              "j": "ji4 gaa1",
+              "e": "now"
+            },
+            {
+              "c": "去見",
+              "j": "heoi3 gin3",
+              "e": "go to see"
+            },
+            {
+              "c": "爸爸媽媽",
+              "j": "baa4 baa1 maa4 maa1",
+              "e": "mum and dad"
+            }
+          ]
+        },
+        {
+          "u": false,
+          "c": "好呀！你哋幾時去？",
+          "j": "hou2 aa3! nei5 dei6 gei2 si4 heoi3?",
+          "e": "Nice! When are you going?",
+          "bd": [
+            {
+              "c": "好呀",
+              "j": "hou2 aa3",
+              "e": "nice / great"
+            },
+            {
+              "c": "你哋",
+              "j": "nei5 dei6",
+              "e": "you (plural)"
+            },
+            {
+              "c": "幾時",
+              "j": "gei2 si4",
+              "e": "when"
+            },
+            {
+              "c": "去",
+              "j": "heoi3",
+              "e": "go"
+            }
+          ]
+        },
+        {
+          "u": true,
+          "c": "聽日朝早。哥哥同妹妹都會去。",
+          "j": "ting1 jat6 ziu1 zou2. go4 go1 tung4 mui4 mui2 dou1 wui5 heoi3.",
+          "e": "Tomorrow morning. My older brother and younger sister will both go too.",
+          "opts": [
+            "聽日朝早。哥哥同妹妹都會去。",
+            "琴日夜晚。",
+            "我去過。"
+          ],
+          "optsJ": [
+            "ting1 jat6 ziu1 zou2. go4 go1 tung4 mui4 mui2 dou1 wui5 heoi3.",
+            "kam4 jat6 je6 maan5.",
+            "ngo5 heoi3 gwo3."
+          ],
+          "bd": [
+            {
+              "c": "聽日",
+              "j": "ting1 jat6",
+              "e": "tomorrow"
+            },
+            {
+              "c": "朝早",
+              "j": "ziu1 zou2",
+              "e": "morning"
+            },
+            {
+              "c": "哥哥",
+              "j": "go4 go1",
+              "e": "older brother"
+            },
+            {
+              "c": "同",
+              "j": "tung4",
+              "e": "and / with"
+            },
+            {
+              "c": "妹妹",
+              "j": "mui4 mui2",
+              "e": "younger sister"
+            },
+            {
+              "c": "都",
+              "j": "dou1",
+              "e": "also / both"
+            },
+            {
+              "c": "會去",
+              "j": "wui5 heoi3",
+              "e": "will go"
+            }
+          ]
+        },
+        {
+          "u": false,
+          "c": "你爸爸做緊乜嘢工作？",
+          "j": "nei5 baa4 baa1 zou6 gan2 mat1 je5 gung1 zok3?",
+          "e": "What work does your dad do?",
+          "bd": [
+            {
+              "c": "你",
+              "j": "nei5",
+              "e": "your"
+            },
+            {
+              "c": "爸爸",
+              "j": "baa4 baa1",
+              "e": "father"
+            },
+            {
+              "c": "做緊",
+              "j": "zou6 gan2",
+              "e": "doing"
+            },
+            {
+              "c": "乜嘢",
+              "j": "mat1 je5",
+              "e": "what"
+            },
+            {
+              "c": "工作",
+              "j": "gung1 zok3",
+              "e": "work / job"
+            }
+          ]
+        },
+        {
+          "u": true,
+          "c": "佢已經唔做嘢喇。",
+          "j": "keoi5 ji5 ging1 m4 zou6 je5 laa3.",
+          "e": "He's already retired (doesn't work anymore).",
+          "opts": [
+            "佢已經唔做嘢喇。",
+            "佢未走。",
+            "邊個？"
+          ],
+          "optsJ": [
+            "keoi5 ji5 ging1 m4 zou6 je5 laa3.",
+            "keoi5 mei6 zau2.",
+            "bin1 go3?"
+          ],
+          "bd": [
+            {
+              "c": "佢",
+              "j": "keoi5",
+              "e": "he"
+            },
+            {
+              "c": "已經",
+              "j": "ji5 ging1",
+              "e": "already"
+            },
+            {
+              "c": "唔做嘢",
+              "j": "m4 zou6 je5",
+              "e": "doesn't work"
+            },
+            {
+              "c": "喇",
+              "j": "laa3",
+              "e": "(change of state)"
+            }
+          ]
+        },
+        {
+          "u": false,
+          "c": "咁你食咗飯未？",
+          "j": "gam2 nei5 sik6 zo2 faan6 mei6?",
+          "e": "So have you eaten yet?",
+          "bd": [
+            {
+              "c": "咁",
+              "j": "gam2",
+              "e": "so / then"
+            },
+            {
+              "c": "你",
+              "j": "nei5",
+              "e": "you"
+            },
+            {
+              "c": "食咗飯",
+              "j": "sik6 zo2 faan6",
+              "e": "have eaten"
+            },
+            {
+              "c": "未",
+              "j": "mei6",
+              "e": "yet (not yet)"
+            }
+          ]
+        },
+        {
+          "u": true,
+          "c": "未呀，我快啲去食。聽日見！",
+          "j": "mei6 aa3, ngo5 faai3 di1 heoi3 sik6. ting1 jat6 gin3!",
+          "e": "Not yet — I'll go eat soon. See you tomorrow!",
+          "opts": [
+            "未呀，我快啲去食。聽日見！",
+            "已經食咗。點解？",
+            "邊度？"
+          ],
+          "optsJ": [
+            "mei6 aa3, ngo5 faai3 di1 heoi3 sik6. ting1 jat6 gin3!",
+            "ji5 ging1 sik6 zo2. dim2 gaai2?",
+            "bin1 dou6?"
+          ],
+          "bd": [
+            {
+              "c": "未呀",
+              "j": "mei6 aa3",
+              "e": "not yet"
+            },
+            {
+              "c": "我",
+              "j": "ngo5",
+              "e": "I"
+            },
+            {
+              "c": "快啲",
+              "j": "faai3 di1",
+              "e": "soon / quickly"
+            },
+            {
+              "c": "去食",
+              "j": "heoi3 sik6",
+              "e": "go eat"
+            },
+            {
+              "c": "聽日見",
+              "j": "ting1 jat6 gin3",
+              "e": "see you tomorrow"
+            }
           ]
         }
       ]
