@@ -71,6 +71,54 @@
           "topic": "transport",
           "round": 1
         }
+      ],
+      "stages": [
+        {
+          "id": "beginner-s1",
+          "name": "Getting Started",
+          "topics": [
+            "greetings",
+            "yesno",
+            "numbers",
+            "phrases"
+          ],
+          "checkpoint": {
+            "id": "beginner-s1-cp",
+            "drillCap": 15,
+            "wordCap": 25,
+            "convo": "beginner-s1"
+          }
+        },
+        {
+          "id": "beginner-s2",
+          "name": "Everyday Talk",
+          "topics": [
+            "questions",
+            "family",
+            "time",
+            "tense"
+          ]
+        },
+        {
+          "id": "beginner-s3",
+          "name": "Describing Things",
+          "topics": [
+            "food",
+            "feelings",
+            "particles",
+            "colors"
+          ]
+        },
+        {
+          "id": "beginner-s4",
+          "name": "Out & About",
+          "topics": [
+            "body",
+            "shopping",
+            "directions",
+            "transport"
+          ]
+        }
       ]
     },
     {
