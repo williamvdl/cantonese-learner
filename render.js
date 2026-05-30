@@ -8,8 +8,8 @@
 function renderDrawer() {
   const rc = state.reviewBadge.liveCount;
   const items = [
-    { key:'topics',    icon:'📖', label:'Topics',         desc:'Vocabulary, sentences & conversations' },
     { key:'path',      icon:'🛤️', label:'Learning Path',  desc:'Curated curriculum, ordered & tracked'  },
+    { key:'topics',    icon:'📖', label:'Topics',         desc:'Vocabulary, sentences & conversations' },
     { key:'patterns',  icon:'🔨', label:'Patterns',        desc:'Sentence building blocks'              },
     { key:'review',    icon:'🗂️', label:'Word Review',     desc:'Practise words you\'ve missed',        badge: rc },
     { key:'translate', icon:'🌐', label:'Translate',       desc:'AI-powered translation & breakdown'    },
@@ -3015,8 +3015,10 @@ function attachEvents(lesson, color) {
     if (snap) {
       applyNavSnapshot(snap);
     } else {
-      // No snapshot (we're at the very first entry) — treat as the home screen.
-      state.nav = 'topics';
+      // No snapshot (we're at the very first entry) — treat as the homepage,
+      // which is now the Learning Path list.
+      state.nav = 'path';
+      state.pathView = 'list';
       state.homeView = true;
       state.drawerOpen = false;
     }

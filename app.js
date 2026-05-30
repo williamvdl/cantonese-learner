@@ -254,7 +254,7 @@ function colorJyutping(text) {
 // ── State ─────────────────────────────────────────────────────────────────────
 let state = {
   speed: 'normal',
-  nav: 'topics',
+  nav: 'path',                    // app opens on the Learning Path list (the homepage)
   drawerOpen: false,
   homeView: true,                 // true = show home screen, false = inside a topic
   selectedCategory: 'all',        // 'all' or a category key
@@ -848,21 +848,21 @@ function getCheckpointDrills(stage) {
   return out;
 }
 function getCheckpointWords(stage) {
-  // Words pool: vocab across ALL rounds of the stage's topics, deduped by Chinese
-  // surface form. (All rounds, not just round 1 — the pattern drills draw on the
-  // topic's full vocabulary, so the Words review should cover the same universe.)
+  // Words pool: round-1 vocab across the stage's topics, deduped by Chinese surface
+  // form. Round 1 is the core taught vocab for each topic; later rounds can be
+  // thematically different extensions (e.g. greetings round 2 includes commute/work
+  // words), so pulling all rounds would surface vocab the stage never "taught".
+  // NOTE: this is intentionally distinct from DRILL validation, which checks answer
+  // words against a topic's full (all-rounds) vocab — a drill may legitimately use a
+  // round-2 word (e.g. number drills use 一百). Word review covers core vocab only.
   const seen = new Set();
   const out = [];
   for (const topicKey of (stage.topics || [])) {
-    const t = store.topicCache[topicKey];
-    const rounds = t ? Object.keys(t.rounds) : ['1'];
-    for (const r of rounds) {
-      const words = getRoundWords(topicKey, r) || [];
-      for (const w of words) {
-        if (seen.has(w.c)) continue;
-        seen.add(w.c);
-        out.push(w);
-      }
+    const words = getRoundWords(topicKey, 1) || [];
+    for (const w of words) {
+      if (seen.has(w.c)) continue;
+      seen.add(w.c);
+      out.push(w);
     }
   }
   return out;
@@ -947,13 +947,10 @@ function checkpointDiagnostic(stage, missedTopicKeys) {
 // Which stage topic does a word belong to? (first stage topic whose round-1 vocab
 // contains this Chinese surface form). Used to attribute word-quiz misses.
 function wordTopicInStage(stage, word) {
+  // Matches the round-1-only word pool (see getCheckpointWords).
   for (const tk of (stage.topics || [])) {
-    const t = store.topicCache[tk];
-    const rounds = t ? Object.keys(t.rounds) : ['1'];
-    for (const r of rounds) {
-      const words = getRoundWords(tk, r) || [];
-      if (words.some(w => w.c === word.c)) return tk;
-    }
+    const words = getRoundWords(tk, 1) || [];
+    if (words.some(w => w.c === word.c)) return tk;
   }
   return null;
 }
