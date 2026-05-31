@@ -664,7 +664,7 @@
       ]
     },
     "beginner-s3": {
-      "title": "At the café with Ka-yan",
+      "title": "How was your day?",
       "speakers": [
         "Ka-yan (Friend)",
         "You"
@@ -672,29 +672,19 @@
       "lines": [
         {
           "u": false,
-          "c": "你今日想食啲咩呀？",
-          "j": "nei5 gam1 jat6 soeng2 sik6 di1 me1 aa3?",
-          "e": "What would you like to eat today?",
+          "c": "今日好攰呀！",
+          "j": "gam1 jat6 hou2 gui6 aa3!",
+          "e": "Today was so tiring!",
           "bd": [
-            {
-              "c": "你",
-              "j": "nei5",
-              "e": "you"
-            },
             {
               "c": "今日",
               "j": "gam1 jat6",
               "e": "today"
             },
             {
-              "c": "想食",
-              "j": "soeng2 sik6",
-              "e": "want to eat"
-            },
-            {
-              "c": "啲咩",
-              "j": "di1 me1",
-              "e": "what (some of what)"
+              "c": "好攰",
+              "j": "hou2 gui6",
+              "e": "very tired"
             },
             {
               "c": "呀",
@@ -705,20 +695,58 @@
         },
         {
           "u": true,
-          "c": "我好餓呀！想食雞同飯。",
-          "j": "ngo5 hou2 ngo6 aa3! soeng2 sik6 gai1 tung4 faan6.",
-          "e": "I'm so hungry! I'd like chicken and rice.",
+          "c": "係囉，我都係。你食咗飯未？",
+          "j": "hai6 lo3, ngo5 dou1 hai6. nei5 sik6 zo2 faan6 mei6?",
+          "e": "Yeah, me too. Have you eaten yet?",
           "opts": [
-            "我好餓呀！想食雞同飯。",
-            "我唔開心。",
-            "藍色囉。"
+            "係囉，我都係。你食咗飯未？",
+            "我好開心。",
+            "邊度？"
           ],
           "optsJ": [
-            "ngo5 hou2 ngo6 aa3! soeng2 sik6 gai1 tung4 faan6.",
-            "ngo5 m4 hoi1 sam1.",
-            "laam4 sik1 lo3."
+            "hai6 lo3, ngo5 dou1 hai6. nei5 sik6 zo2 faan6 mei6?",
+            "ngo5 hou2 hoi1 sam1.",
+            "bin1 dou6?"
           ],
           "bd": [
+            {
+              "c": "係囉",
+              "j": "hai6 lo3",
+              "e": "yeah (agreeing)"
+            },
+            {
+              "c": "我都係",
+              "j": "ngo5 dou1 hai6",
+              "e": "me too"
+            },
+            {
+              "c": "你",
+              "j": "nei5",
+              "e": "you"
+            },
+            {
+              "c": "食咗飯",
+              "j": "sik6 zo2 faan6",
+              "e": "eaten (a meal)"
+            },
+            {
+              "c": "未",
+              "j": "mei6",
+              "e": "yet (not yet)"
+            }
+          ]
+        },
+        {
+          "u": false,
+          "c": "未呀。我好餓呀！",
+          "j": "mei6 aa3. ngo5 hou2 ngo6 aa3!",
+          "e": "Not yet. I'm starving!",
+          "bd": [
+            {
+              "c": "未呀",
+              "j": "mei6 aa3",
+              "e": "not yet"
+            },
             {
               "c": "我",
               "j": "ngo5",
@@ -733,11 +761,34 @@
               "c": "呀",
               "j": "aa3",
               "e": "(soft tone)"
+            }
+          ]
+        },
+        {
+          "u": true,
+          "c": "一齊去食雞同飯啦。",
+          "j": "jat1 cai4 heoi3 sik6 gai1 tung4 faan6 laa1.",
+          "e": "Let's go eat chicken and rice.",
+          "opts": [
+            "一齊去食雞同飯啦。",
+            "我好嬲。",
+            "幾錢？"
+          ],
+          "optsJ": [
+            "jat1 cai4 heoi3 sik6 gai1 tung4 faan6 laa1.",
+            "ngo5 hou2 nau1.",
+            "gei2 cin2?"
+          ],
+          "bd": [
+            {
+              "c": "一齊",
+              "j": "jat1 cai4",
+              "e": "together"
             },
             {
-              "c": "想食",
-              "j": "soeng2 sik6",
-              "e": "want to eat"
+              "c": "去食",
+              "j": "heoi3 sik6",
+              "e": "go eat"
             },
             {
               "c": "雞",
@@ -753,138 +804,24 @@
               "c": "飯",
               "j": "faan6",
               "e": "rice"
-            }
-          ]
-        },
-        {
-          "u": false,
-          "c": "飲啲咩好呢？",
-          "j": "jam2 di1 me1 hou2 ne1?",
-          "e": "What would be good to drink?",
-          "bd": [
-            {
-              "c": "飲",
-              "j": "jam2",
-              "e": "drink"
-            },
-            {
-              "c": "啲咩",
-              "j": "di1 me1",
-              "e": "what"
-            },
-            {
-              "c": "好",
-              "j": "hou2",
-              "e": "good"
-            },
-            {
-              "c": "呢",
-              "j": "ne1",
-              "e": "(softening question)"
-            }
-          ]
-        },
-        {
-          "u": true,
-          "c": "俾杯咖啡我啦，唔該。",
-          "j": "bei2 bui1 gaa3 fe1 ngo5 laa1, m4 goi1.",
-          "e": "Get me a coffee please.",
-          "opts": [
-            "俾杯咖啡我啦，唔該。",
-            "我好嬲㗎。",
-            "綠色咩？"
-          ],
-          "optsJ": [
-            "bei2 bui1 gaa3 fe1 ngo5 laa1, m4 goi1.",
-            "ngo5 hou2 nau1 gaa3.",
-            "luk6 sik1 me1?"
-          ],
-          "bd": [
-            {
-              "c": "俾",
-              "j": "bei2",
-              "e": "give"
-            },
-            {
-              "c": "杯",
-              "j": "bui1",
-              "e": "cup of"
-            },
-            {
-              "c": "咖啡",
-              "j": "gaa3 fe1",
-              "e": "coffee"
-            },
-            {
-              "c": "我",
-              "j": "ngo5",
-              "e": "me"
             },
             {
               "c": "啦",
               "j": "laa1",
-              "e": "(suggestion / softening)"
-            },
-            {
-              "c": "唔該",
-              "j": "m4 goi1",
-              "e": "please"
+              "e": "(suggestion)"
             }
           ]
         },
         {
           "u": false,
-          "c": "啲嘢食嚟喇！你覺得點呀？",
-          "j": "di1 je5 sik6 lai4 laa3! nei5 gok3 dak1 dim2 aa3?",
-          "e": "The food's here! What do you think?",
+          "c": "好呀！我而家開心啲喇。",
+          "j": "hou2 aa3! ngo5 ji4 gaa1 hoi1 sam1 di1 laa3.",
+          "e": "Great! I feel happier already.",
           "bd": [
             {
-              "c": "啲嘢食",
-              "j": "di1 je5 sik6",
-              "e": "the food"
-            },
-            {
-              "c": "嚟喇",
-              "j": "lai4 laa3",
-              "e": "has come (now)"
-            },
-            {
-              "c": "你覺得點",
-              "j": "nei5 gok3 dak1 dim2",
-              "e": "what do you think"
-            },
-            {
-              "c": "呀",
-              "j": "aa3",
-              "e": "(soft tone)"
-            }
-          ]
-        },
-        {
-          "u": true,
-          "c": "好味呀！我而家好開心。",
-          "j": "hou2 mei6 aa3! ngo5 ji4 gaa1 hou2 hoi1 sam1.",
-          "e": "Delicious! I'm so happy now.",
-          "opts": [
-            "好味呀！我而家好開心。",
-            "我好傷心囉。",
-            "黑色㗎。"
-          ],
-          "optsJ": [
-            "hou2 mei6 aa3! ngo5 ji4 gaa1 hou2 hoi1 sam1.",
-            "ngo5 hou2 soeng1 sam1 lo3.",
-            "hak1 sik1 gaa3."
-          ],
-          "bd": [
-            {
-              "c": "好味",
-              "j": "hou2 mei6",
-              "e": "delicious"
-            },
-            {
-              "c": "呀",
-              "j": "aa3",
-              "e": "(soft tone)"
+              "c": "好呀",
+              "j": "hou2 aa3",
+              "e": "great"
             },
             {
               "c": "我",
@@ -897,65 +834,70 @@
               "e": "now"
             },
             {
-              "c": "好開心",
-              "j": "hou2 hoi1 sam1",
-              "e": "very happy"
-            }
-          ]
-        },
-        {
-          "u": false,
-          "c": "睇吓杯飲品，係粉紅色嘅喎！",
-          "j": "tai2 haa5 bui1 jam2 ban2, hai6 fan2 hung4 sik1 ge3 wo3!",
-          "e": "Look at the drink — it's pink!",
-          "bd": [
-            {
-              "c": "睇吓",
-              "j": "tai2 haa5",
-              "e": "have a look"
+              "c": "開心啲",
+              "j": "hoi1 sam1 di1",
+              "e": "happier"
             },
             {
-              "c": "杯飲品",
-              "j": "bui1 jam2 ban2",
-              "e": "the drink"
-            },
-            {
-              "c": "係",
-              "j": "hai6",
-              "e": "is"
-            },
-            {
-              "c": "粉紅色",
-              "j": "fan2 hung4 sik1",
-              "e": "pink"
-            },
-            {
-              "c": "嘅",
-              "j": "ge3",
-              "e": "(descriptive)"
-            },
-            {
-              "c": "喎",
-              "j": "wo3",
-              "e": "(surprise / emphasis)"
+              "c": "喇",
+              "j": "laa3",
+              "e": "(now / change of state)"
             }
           ]
         },
         {
           "u": true,
-          "c": "係咩？好得意呀！我鍾意紫色多啲。",
-          "j": "hai6 me1? hou2 dak1 ji3 aa3! ngo5 zung1 ji3 zi2 sik1 do1 di1.",
-          "e": "Really? How cute! I prefer purple though.",
+          "c": "吖，我今日買咗件新衫。",
+          "j": "aa1, ngo5 gam1 jat6 maai5 zo2 gin6 san1 saam1.",
+          "e": "Oh, I bought a new shirt today.",
           "opts": [
-            "係咩？好得意呀！我鍾意紫色多啲。",
+            "吖，我今日買咗件新衫。",
             "我好驚呀。",
-            "唔要飯喇。"
+            "唔該。"
           ],
           "optsJ": [
-            "hai6 me1? hou2 dak1 ji3 aa3! ngo5 zung1 ji3 zi2 sik1 do1 di1.",
+            "aa1, ngo5 gam1 jat6 maai5 zo2 gin6 san1 saam1.",
             "ngo5 hou2 geng1 aa3.",
-            "m4 jiu3 faan6 laa3."
+            "m4 goi1."
           ],
+          "bd": [
+            {
+              "c": "吖",
+              "j": "aa1",
+              "e": "(gentle prompt)"
+            },
+            {
+              "c": "我",
+              "j": "ngo5",
+              "e": "I"
+            },
+            {
+              "c": "今日",
+              "j": "gam1 jat6",
+              "e": "today"
+            },
+            {
+              "c": "買咗",
+              "j": "maai5 zo2",
+              "e": "bought"
+            },
+            {
+              "c": "件",
+              "j": "gin6",
+              "e": "(measure word, clothing)"
+            },
+            {
+              "c": "新衫",
+              "j": "san1 saam1",
+              "e": "new shirt"
+            }
+          ]
+        },
+        {
+          "u": false,
+          "c": "係咩？咩顏色呀？",
+          "j": "hai6 me1? me1 ngaan4 sik1 aa3?",
+          "e": "Really? What colour?",
           "bd": [
             {
               "c": "係咩",
@@ -963,9 +905,60 @@
               "e": "really? (surprised)"
             },
             {
-              "c": "好得意",
-              "j": "hou2 dak1 ji3",
-              "e": "very cute"
+              "c": "咩顏色",
+              "j": "me1 ngaan4 sik1",
+              "e": "what colour"
+            },
+            {
+              "c": "呀",
+              "j": "aa3",
+              "e": "(soft tone)"
+            }
+          ]
+        },
+        {
+          "u": true,
+          "c": "藍色。你覺得靚唔靚？",
+          "j": "laam4 sik1. nei5 gok3 dak1 leng3 m4 leng3?",
+          "e": "Blue. Do you think it's nice?",
+          "opts": [
+            "藍色。你覺得靚唔靚？",
+            "黑色㗎。",
+            "點解？"
+          ],
+          "optsJ": [
+            "laam4 sik1. nei5 gok3 dak1 leng3 m4 leng3?",
+            "hak1 sik1 gaa3.",
+            "dim2 gaai2?"
+          ],
+          "bd": [
+            {
+              "c": "藍色",
+              "j": "laam4 sik1",
+              "e": "blue"
+            },
+            {
+              "c": "你覺得",
+              "j": "nei5 gok3 dak1",
+              "e": "do you think"
+            },
+            {
+              "c": "靚唔靚",
+              "j": "leng3 m4 leng3",
+              "e": "nice or not"
+            }
+          ]
+        },
+        {
+          "u": false,
+          "c": "好靚呀！藍色好襯你。",
+          "j": "hou2 leng3 aa3! laam4 sik1 hou2 caan3 nei5.",
+          "e": "Very nice! Blue suits you.",
+          "bd": [
+            {
+              "c": "好靚",
+              "j": "hou2 leng3",
+              "e": "very nice / pretty"
             },
             {
               "c": "呀",
@@ -973,19 +966,391 @@
               "e": "(soft tone)"
             },
             {
-              "c": "我鍾意",
-              "j": "ngo5 zung1 ji3",
-              "e": "I like"
+              "c": "藍色",
+              "j": "laam4 sik1",
+              "e": "blue"
             },
             {
-              "c": "紫色",
-              "j": "zi2 sik1",
-              "e": "purple"
+              "c": "好襯你",
+              "j": "hou2 caan3 nei5",
+              "e": "suits you well"
+            }
+          ]
+        },
+        {
+          "u": true,
+          "c": "多謝！咁去食飯啦。",
+          "j": "do1 ze6! gam2 heoi3 sik6 faan6 laa1.",
+          "e": "Thanks! Let's go eat then.",
+          "opts": [
+            "多謝！咁去食飯啦。",
+            "我唔餓。",
+            "邊個？"
+          ],
+          "optsJ": [
+            "do1 ze6! gam2 heoi3 sik6 faan6 laa1.",
+            "ngo5 m4 ngo6.",
+            "bin1 go3?"
+          ],
+          "bd": [
+            {
+              "c": "多謝",
+              "j": "do1 ze6",
+              "e": "thanks"
             },
             {
-              "c": "多啲",
-              "j": "do1 di1",
-              "e": "more"
+              "c": "咁",
+              "j": "gam2",
+              "e": "then / so"
+            },
+            {
+              "c": "去食飯",
+              "j": "heoi3 sik6 faan6",
+              "e": "go eat"
+            },
+            {
+              "c": "啦",
+              "j": "laa1",
+              "e": "(suggestion)"
+            }
+          ]
+        }
+      ]
+    },
+    "beginner-s4": {
+      "title": "Getting to the pharmacy",
+      "speakers": [
+        "Friend / Driver / Pharmacist",
+        "You"
+      ],
+      "lines": [
+        {
+          "u": false,
+          "c": "你好似唔舒服。你點呀？",
+          "j": "nei5 hou2 ci5 m4 syu1 fuk6. nei5 dim2 aa3?",
+          "e": "You don't look well. What's wrong?",
+          "bd": [
+            {
+              "c": "你",
+              "j": "nei5",
+              "e": "you"
+            },
+            {
+              "c": "好似",
+              "j": "hou2 ci5",
+              "e": "seem / look like"
+            },
+            {
+              "c": "唔舒服",
+              "j": "m4 syu1 fuk6",
+              "e": "unwell"
+            },
+            {
+              "c": "你點呀",
+              "j": "nei5 dim2 aa3",
+              "e": "what's wrong / how are you"
+            }
+          ]
+        },
+        {
+          "u": true,
+          "c": "我頭痛，有啲發燒。",
+          "j": "ngo5 tau4 tung3, jau5 di1 faat3 siu1.",
+          "e": "I have a headache and a bit of a fever.",
+          "opts": [
+            "我頭痛，有啲發燒。",
+            "我好開心。",
+            "幾錢？"
+          ],
+          "optsJ": [
+            "ngo5 tau4 tung3, jau5 di1 faat3 siu1.",
+            "ngo5 hou2 hoi1 sam1.",
+            "gei2 cin2?"
+          ],
+          "bd": [
+            {
+              "c": "我",
+              "j": "ngo5",
+              "e": "I"
+            },
+            {
+              "c": "頭痛",
+              "j": "tau4 tung3",
+              "e": "headache"
+            },
+            {
+              "c": "有啲",
+              "j": "jau5 di1",
+              "e": "a bit"
+            },
+            {
+              "c": "發燒",
+              "j": "faat3 siu1",
+              "e": "fever"
+            }
+          ]
+        },
+        {
+          "u": false,
+          "c": "你要去睇醫生。藥房遠唔遠？",
+          "j": "nei5 jiu3 heoi3 tai2 ji1 sang1. joek6 fong2 jyun5 m4 jyun5?",
+          "e": "You should see a doctor. Is the pharmacy far?",
+          "bd": [
+            {
+              "c": "你要",
+              "j": "nei5 jiu3",
+              "e": "you should / need to"
+            },
+            {
+              "c": "去睇醫生",
+              "j": "heoi3 tai2 ji1 sang1",
+              "e": "go see a doctor"
+            },
+            {
+              "c": "藥房",
+              "j": "joek6 fong2",
+              "e": "pharmacy"
+            },
+            {
+              "c": "遠唔遠",
+              "j": "jyun5 m4 jyun5",
+              "e": "far or not"
+            }
+          ]
+        },
+        {
+          "u": true,
+          "c": "有啲遠。我哋坐的士啦。",
+          "j": "jau5 di1 jyun5. ngo5 dei6 co5 dik1 si2 laa1.",
+          "e": "A bit far. Let's take a taxi.",
+          "opts": [
+            "有啲遠。我哋坐的士啦。",
+            "唔遠，喺對面。",
+            "我唔明。"
+          ],
+          "optsJ": [
+            "jau5 di1 jyun5. ngo5 dei6 co5 dik1 si2 laa1.",
+            "m4 jyun5, hai2 deoi3 min6.",
+            "ngo5 m4 ming4."
+          ],
+          "bd": [
+            {
+              "c": "有啲遠",
+              "j": "jau5 di1 jyun5",
+              "e": "a bit far"
+            },
+            {
+              "c": "我哋",
+              "j": "ngo5 dei6",
+              "e": "we"
+            },
+            {
+              "c": "坐",
+              "j": "co5",
+              "e": "take / ride"
+            },
+            {
+              "c": "的士",
+              "j": "dik1 si2",
+              "e": "taxi"
+            },
+            {
+              "c": "啦",
+              "j": "laa1",
+              "e": "(suggestion)"
+            }
+          ]
+        },
+        {
+          "u": false,
+          "c": "你好！去邊度？",
+          "j": "nei5 hou2! heoi3 bin1 dou6?",
+          "e": "(in the taxi) Hello! Where to?",
+          "bd": [
+            {
+              "c": "你好",
+              "j": "nei5 hou2",
+              "e": "hello"
+            },
+            {
+              "c": "去邊度",
+              "j": "heoi3 bin1 dou6",
+              "e": "where to"
+            }
+          ]
+        },
+        {
+          "u": true,
+          "c": "去附近嘅藥房，唔該。",
+          "j": "heoi3 fu6 gan6 ge3 joek6 fong2, m4 goi1.",
+          "e": "To the pharmacy nearby, please.",
+          "opts": [
+            "去附近嘅藥房，唔該。",
+            "去超市。",
+            "再見。"
+          ],
+          "optsJ": [
+            "heoi3 fu6 gan6 ge3 joek6 fong2, m4 goi1.",
+            "heoi3 ciu1 si5.",
+            "zoi3 gin3."
+          ],
+          "bd": [
+            {
+              "c": "去",
+              "j": "heoi3",
+              "e": "go to"
+            },
+            {
+              "c": "附近",
+              "j": "fu6 gan6",
+              "e": "nearby"
+            },
+            {
+              "c": "嘅",
+              "j": "ge3",
+              "e": "(possessive / descriptive)"
+            },
+            {
+              "c": "藥房",
+              "j": "joek6 fong2",
+              "e": "pharmacy"
+            },
+            {
+              "c": "唔該",
+              "j": "m4 goi1",
+              "e": "please"
+            }
+          ]
+        },
+        {
+          "u": false,
+          "c": "好。直行，然後轉左就到。",
+          "j": "hou2. zik6 haang4, jin4 hau6 zyun3 zo2 zau6 dou3.",
+          "e": "OK. Go straight, then turn left and we're there.",
+          "bd": [
+            {
+              "c": "好",
+              "j": "hou2",
+              "e": "OK"
+            },
+            {
+              "c": "直行",
+              "j": "zik6 haang4",
+              "e": "go straight"
+            },
+            {
+              "c": "然後",
+              "j": "jin4 hau6",
+              "e": "then"
+            },
+            {
+              "c": "轉左",
+              "j": "zyun3 zo2",
+              "e": "turn left"
+            },
+            {
+              "c": "就到",
+              "j": "zau6 dou3",
+              "e": "and we arrive"
+            }
+          ]
+        },
+        {
+          "u": false,
+          "c": "(到咗藥房) 係咩問題？",
+          "j": "(dou3 zo2 joek6 fong2) hai6 me1 man6 tai4?",
+          "e": "(at the pharmacy) What's the problem?",
+          "bd": [
+            {
+              "c": "到咗",
+              "j": "dou3 zo2",
+              "e": "arrived"
+            },
+            {
+              "c": "藥房",
+              "j": "joek6 fong2",
+              "e": "pharmacy"
+            },
+            {
+              "c": "係咩問題",
+              "j": "hai6 me1 man6 tai4",
+              "e": "what's the problem"
+            }
+          ]
+        },
+        {
+          "u": true,
+          "c": "頭痛同發燒。我想買啲藥。",
+          "j": "tau4 tung3 tung4 faat3 siu1. ngo5 soeng2 maai5 di1 joek6.",
+          "e": "Headache and fever. I'd like to buy some medicine.",
+          "opts": [
+            "頭痛同發燒。我想買啲藥。",
+            "我想買鞋。",
+            "幾遠？"
+          ],
+          "optsJ": [
+            "tau4 tung3 tung4 faat3 siu1. ngo5 soeng2 maai5 di1 joek6.",
+            "ngo5 soeng2 maai5 haai4.",
+            "gei2 jyun5?"
+          ],
+          "bd": [
+            {
+              "c": "頭痛",
+              "j": "tau4 tung3",
+              "e": "headache"
+            },
+            {
+              "c": "同",
+              "j": "tung4",
+              "e": "and"
+            },
+            {
+              "c": "發燒",
+              "j": "faat3 siu1",
+              "e": "fever"
+            },
+            {
+              "c": "我想買",
+              "j": "ngo5 soeng2 maai5",
+              "e": "I'd like to buy"
+            },
+            {
+              "c": "啲藥",
+              "j": "di1 joek6",
+              "e": "some medicine"
+            }
+          ]
+        },
+        {
+          "u": false,
+          "c": "食呢隻藥啦，一日三次。",
+          "j": "sik6 ni1 zek3 joek6 laa1, jat1 jat6 saam1 ci3.",
+          "e": "Take this medicine, three times a day.",
+          "bd": [
+            {
+              "c": "食",
+              "j": "sik6",
+              "e": "take / eat"
+            },
+            {
+              "c": "呢隻藥",
+              "j": "ni1 zek3 joek6",
+              "e": "this medicine"
+            },
+            {
+              "c": "啦",
+              "j": "laa1",
+              "e": "(suggestion)"
+            },
+            {
+              "c": "一日",
+              "j": "jat1 jat6",
+              "e": "a day"
+            },
+            {
+              "c": "三次",
+              "j": "saam1 ci3",
+              "e": "three times"
             }
           ]
         }
