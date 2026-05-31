@@ -113,7 +113,13 @@
             "feelings",
             "particles",
             "colors"
-          ]
+          ],
+          "checkpoint": {
+            "id": "beginner-s3-cp",
+            "drillCap": 15,
+            "wordCap": 25,
+            "convo": "beginner-s3"
+          }
         },
         {
           "id": "beginner-s4",

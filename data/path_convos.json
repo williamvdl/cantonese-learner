@@ -561,6 +561,334 @@
           ]
         }
       ]
+    },
+    "beginner-s3": {
+      "title": "At the café with Ka-yan",
+      "speakers": [
+        "Ka-yan (Friend)",
+        "You"
+      ],
+      "lines": [
+        {
+          "u": false,
+          "c": "你今日想食啲咩呀？",
+          "j": "nei5 gam1 jat6 soeng2 sik6 di1 me1 aa3?",
+          "e": "What would you like to eat today?",
+          "bd": [
+            {
+              "c": "你",
+              "j": "nei5",
+              "e": "you"
+            },
+            {
+              "c": "今日",
+              "j": "gam1 jat6",
+              "e": "today"
+            },
+            {
+              "c": "想食",
+              "j": "soeng2 sik6",
+              "e": "want to eat"
+            },
+            {
+              "c": "啲咩",
+              "j": "di1 me1",
+              "e": "what (some of what)"
+            },
+            {
+              "c": "呀",
+              "j": "aa3",
+              "e": "(soft tone)"
+            }
+          ]
+        },
+        {
+          "u": true,
+          "c": "我好餓呀！想食雞同飯。",
+          "j": "ngo5 hou2 ngo6 aa3! soeng2 sik6 gai1 tung4 faan6.",
+          "e": "I'm so hungry! I'd like chicken and rice.",
+          "opts": [
+            "我好餓呀！想食雞同飯。",
+            "我唔開心。",
+            "藍色囉。"
+          ],
+          "optsJ": [
+            "ngo5 hou2 ngo6 aa3! soeng2 sik6 gai1 tung4 faan6.",
+            "ngo5 m4 hoi1 sam1.",
+            "laam4 sik1 lo3."
+          ],
+          "bd": [
+            {
+              "c": "我",
+              "j": "ngo5",
+              "e": "I"
+            },
+            {
+              "c": "好餓",
+              "j": "hou2 ngo6",
+              "e": "very hungry"
+            },
+            {
+              "c": "呀",
+              "j": "aa3",
+              "e": "(soft tone)"
+            },
+            {
+              "c": "想食",
+              "j": "soeng2 sik6",
+              "e": "want to eat"
+            },
+            {
+              "c": "雞",
+              "j": "gai1",
+              "e": "chicken"
+            },
+            {
+              "c": "同",
+              "j": "tung4",
+              "e": "and"
+            },
+            {
+              "c": "飯",
+              "j": "faan6",
+              "e": "rice"
+            }
+          ]
+        },
+        {
+          "u": false,
+          "c": "飲啲咩好呢？",
+          "j": "jam2 di1 me1 hou2 ne1?",
+          "e": "What would be good to drink?",
+          "bd": [
+            {
+              "c": "飲",
+              "j": "jam2",
+              "e": "drink"
+            },
+            {
+              "c": "啲咩",
+              "j": "di1 me1",
+              "e": "what"
+            },
+            {
+              "c": "好",
+              "j": "hou2",
+              "e": "good"
+            },
+            {
+              "c": "呢",
+              "j": "ne1",
+              "e": "(softening question)"
+            }
+          ]
+        },
+        {
+          "u": true,
+          "c": "俾杯咖啡我啦，唔該。",
+          "j": "bei2 bui1 gaa3 fe1 ngo5 laa1, m4 goi1.",
+          "e": "Get me a coffee please.",
+          "opts": [
+            "俾杯咖啡我啦，唔該。",
+            "我好嬲㗎。",
+            "綠色咩？"
+          ],
+          "optsJ": [
+            "bei2 bui1 gaa3 fe1 ngo5 laa1, m4 goi1.",
+            "ngo5 hou2 nau1 gaa3.",
+            "luk6 sik1 me1?"
+          ],
+          "bd": [
+            {
+              "c": "俾",
+              "j": "bei2",
+              "e": "give"
+            },
+            {
+              "c": "杯",
+              "j": "bui1",
+              "e": "cup of"
+            },
+            {
+              "c": "咖啡",
+              "j": "gaa3 fe1",
+              "e": "coffee"
+            },
+            {
+              "c": "我",
+              "j": "ngo5",
+              "e": "me"
+            },
+            {
+              "c": "啦",
+              "j": "laa1",
+              "e": "(suggestion / softening)"
+            },
+            {
+              "c": "唔該",
+              "j": "m4 goi1",
+              "e": "please"
+            }
+          ]
+        },
+        {
+          "u": false,
+          "c": "啲嘢食嚟喇！你覺得點呀？",
+          "j": "di1 je5 sik6 lai4 laa3! nei5 gok3 dak1 dim2 aa3?",
+          "e": "The food's here! What do you think?",
+          "bd": [
+            {
+              "c": "啲嘢食",
+              "j": "di1 je5 sik6",
+              "e": "the food"
+            },
+            {
+              "c": "嚟喇",
+              "j": "lai4 laa3",
+              "e": "has come (now)"
+            },
+            {
+              "c": "你覺得點",
+              "j": "nei5 gok3 dak1 dim2",
+              "e": "what do you think"
+            },
+            {
+              "c": "呀",
+              "j": "aa3",
+              "e": "(soft tone)"
+            }
+          ]
+        },
+        {
+          "u": true,
+          "c": "好味呀！我而家好開心。",
+          "j": "hou2 mei6 aa3! ngo5 ji4 gaa1 hou2 hoi1 sam1.",
+          "e": "Delicious! I'm so happy now.",
+          "opts": [
+            "好味呀！我而家好開心。",
+            "我好傷心囉。",
+            "黑色㗎。"
+          ],
+          "optsJ": [
+            "hou2 mei6 aa3! ngo5 ji4 gaa1 hou2 hoi1 sam1.",
+            "ngo5 hou2 soeng1 sam1 lo3.",
+            "hak1 sik1 gaa3."
+          ],
+          "bd": [
+            {
+              "c": "好味",
+              "j": "hou2 mei6",
+              "e": "delicious"
+            },
+            {
+              "c": "呀",
+              "j": "aa3",
+              "e": "(soft tone)"
+            },
+            {
+              "c": "我",
+              "j": "ngo5",
+              "e": "I"
+            },
+            {
+              "c": "而家",
+              "j": "ji4 gaa1",
+              "e": "now"
+            },
+            {
+              "c": "好開心",
+              "j": "hou2 hoi1 sam1",
+              "e": "very happy"
+            }
+          ]
+        },
+        {
+          "u": false,
+          "c": "睇吓杯飲品，係粉紅色嘅喎！",
+          "j": "tai2 haa5 bui1 jam2 ban2, hai6 fan2 hung4 sik1 ge3 wo3!",
+          "e": "Look at the drink — it's pink!",
+          "bd": [
+            {
+              "c": "睇吓",
+              "j": "tai2 haa5",
+              "e": "have a look"
+            },
+            {
+              "c": "杯飲品",
+              "j": "bui1 jam2 ban2",
+              "e": "the drink"
+            },
+            {
+              "c": "係",
+              "j": "hai6",
+              "e": "is"
+            },
+            {
+              "c": "粉紅色",
+              "j": "fan2 hung4 sik1",
+              "e": "pink"
+            },
+            {
+              "c": "嘅",
+              "j": "ge3",
+              "e": "(descriptive)"
+            },
+            {
+              "c": "喎",
+              "j": "wo3",
+              "e": "(surprise / emphasis)"
+            }
+          ]
+        },
+        {
+          "u": true,
+          "c": "係咩？好得意呀！我鍾意紫色多啲。",
+          "j": "hai6 me1? hou2 dak1 ji3 aa3! ngo5 zung1 ji3 zi2 sik1 do1 di1.",
+          "e": "Really? How cute! I prefer purple though.",
+          "opts": [
+            "係咩？好得意呀！我鍾意紫色多啲。",
+            "我好驚呀。",
+            "唔要飯喇。"
+          ],
+          "optsJ": [
+            "hai6 me1? hou2 dak1 ji3 aa3! ngo5 zung1 ji3 zi2 sik1 do1 di1.",
+            "ngo5 hou2 geng1 aa3.",
+            "m4 jiu3 faan6 laa3."
+          ],
+          "bd": [
+            {
+              "c": "係咩",
+              "j": "hai6 me1",
+              "e": "really? (surprised)"
+            },
+            {
+              "c": "好得意",
+              "j": "hou2 dak1 ji3",
+              "e": "very cute"
+            },
+            {
+              "c": "呀",
+              "j": "aa3",
+              "e": "(soft tone)"
+            },
+            {
+              "c": "我鍾意",
+              "j": "ngo5 zung1 ji3",
+              "e": "I like"
+            },
+            {
+              "c": "紫色",
+              "j": "zi2 sik1",
+              "e": "purple"
+            },
+            {
+              "c": "多啲",
+              "j": "do1 di1",
+              "e": "more"
+            }
+          ]
+        }
+      ]
     }
   }
 }
