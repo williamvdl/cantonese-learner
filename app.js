@@ -695,6 +695,11 @@ function migratePathProgressIfNeeded() {
     const bucket = state.pathProgress[pathKey];
     if (!bucket || typeof bucket !== 'object') return;
     Object.keys(bucket).forEach(key => {
+      // Checkpoint flags ('cp:<id>:<activity>') are NOT lesson keys — leave them
+      // alone. Without this guard the legacy-key rule below mistakes them for
+      // pre-refactor lessons, renames them to 'cp:...:<activity>-t1' and deletes
+      // the original, silently wiping checkpoint completion on every refresh.
+      if (key.startsWith('cp:')) return;
       // Composite keys end with -t<number>. Anything else is legacy.
       if (!/-t\d+$/.test(key)) {
         bucket[lessonKey(key, 1)] = bucket[key];
@@ -727,13 +732,49 @@ function pathCompleteCount(pathKey) {
   if (!path) return 0;
   return path.lessons.filter(l => p[lessonKey(l.topic, l.round)]).length;
 }
-// Returns the first incomplete lesson as { topic, tier }, or null if all done.
-function nextIncompleteLesson(pathKey) {
-  const path = store.paths.find(x => x.key === pathKey);
-  if (!path) return null;
-  const p = state.pathProgress[pathKey] || {};
-  const next = path.lessons.find(l => !p[lessonKey(l.topic, l.round)]);
-  return next ? { topic: next.topic, tier: next.round } : null;
+// The ordered path sequence: lessons interleaved with the checkpoints that sit
+// at the end of each stage, in the order the learner walks them. Each item is
+// tagged so callers can tell lessons and checkpoints apart:
+//   { kind:'lesson', topic, tier }
+//   { kind:'checkpoint', stageId, cpId, stageName }
+// A stage's checkpoint is only included if it actually offers activities
+// (checkpointProgress(...).total > 0) — a zero-activity checkpoint renders no
+// node, so it must not appear in the sequence either. Paths without stages fall
+// back to a lessons-only sequence (unchanged behaviour). This is the single
+// source of "what comes next" — both the path map highlight and the in-lesson
+// "Next step" CTA derive from it, so they can never disagree about the checkpoint.
+function buildPathSequence(pathKey) {
+  const path = (store.paths || []).find(x => x.key === pathKey);
+  if (!path) return [];
+  const stages = getPathStages(pathKey);
+  if (!stages.length) {
+    return path.lessons.map(l => ({ kind: 'lesson', topic: l.topic, tier: l.round }));
+  }
+  const seq = [];
+  stages.forEach(stage => {
+    (stage.topics || []).forEach(topicKey => {
+      const l = path.lessons.find(x => x.topic === topicKey);
+      if (l) seq.push({ kind: 'lesson', topic: l.topic, tier: l.round });
+    });
+    if (stage.checkpoint && checkpointProgress(pathKey, stage.id).total > 0) {
+      seq.push({ kind: 'checkpoint', stageId: stage.id, cpId: stage.checkpoint.id, stageName: stage.name });
+    }
+  });
+  return seq;
+}
+
+// Is a sequence item already complete?
+function isSeqItemComplete(pathKey, item) {
+  return item.kind === 'checkpoint'
+    ? checkpointProgress(pathKey, item.stageId).complete
+    : isLessonComplete(pathKey, item.topic, item.tier);
+}
+
+// The earliest incomplete item in the path — the global "do this next" marker
+// the path map highlights. Returns a tagged item (lesson or checkpoint) or null
+// when everything is done.
+function nextPathPosition(pathKey) {
+  return buildPathSequence(pathKey).find(it => !isSeqItemComplete(pathKey, it)) || null;
 }
 
 // Return { path, step, total, isLast, nextStep, nextTopic } for the current path-mode state,
@@ -745,18 +786,35 @@ function getPathContext() {
   const tier = state.fromPathTier || state.currentRound;
   const stepIdx = path.lessons.findIndex(l => l.topic === state.topic && l.round === tier);
   if (stepIdx < 0) return null;
-  const total = path.lessons.length;
-  const isLast = stepIdx === total - 1;
-  const nextLesson = isLast ? null : path.lessons[stepIdx + 1];
-  const nextTopicMeta = nextLesson ? store.topicMeta(nextLesson.topic) : null;
+  const total = path.lessons.length;                 // step counter stays lessons-only (Step N / 16)
+
+  // What follows THIS lesson in path order — the next sequence item, which may be
+  // this stage's checkpoint rather than another lesson. Derived from the shared
+  // sequence so the CTA can never skip the checkpoint the map shows.
+  const seq = buildPathSequence(state.activePath);
+  const seqIdx = seq.findIndex(it => it.kind === 'lesson' && it.topic === state.topic && it.tier === tier);
+  const nextItem = (seqIdx >= 0 && seqIdx < seq.length - 1) ? seq[seqIdx + 1] : null;
+  const isLast = !nextItem;                           // true path-end: nothing (lesson or checkpoint) left
+
+  // Label/icon for the CTA. A checkpoint reuses the map's exact label
+  // ("Checkpoint · <stage>") and the ◆ diamond; a lesson uses its topic meta.
+  let nextTopicLabel = null, nextTopicIcon = null;
+  if (nextItem && nextItem.kind === 'checkpoint') {
+    nextTopicLabel = 'Checkpoint · ' + nextItem.stageName;
+    nextTopicIcon  = '◆';
+  } else if (nextItem) {
+    const m = store.topicMeta(nextItem.topic);
+    nextTopicLabel = m ? m.label : null;
+    nextTopicIcon  = m ? m.icon  : null;
+  }
   return {
     path,
     step: stepIdx + 1,
     total,
     isLast,
-    nextStep: nextLesson,                          // { topic, round } | null
-    nextTopicLabel: nextTopicMeta ? nextTopicMeta.label : null,
-    nextTopicIcon:  nextTopicMeta ? nextTopicMeta.icon  : null,
+    nextStep: nextItem,                            // { kind:'lesson', topic, tier } | { kind:'checkpoint', stageId, cpId, stageName } | null
+    nextTopicLabel,
+    nextTopicIcon,
     isComplete: isLessonComplete(state.activePath, state.topic, tier),
   };
 }

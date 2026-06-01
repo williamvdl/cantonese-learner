@@ -666,12 +666,12 @@ function renderPathList() {
 
 // One topic step in the timeline. Extracted so both the flat and stage-grouped
 // layouts render identical step markup.
-function renderPathStep(pathKey, l, displayNum, nextLesson) {
+function renderPathStep(pathKey, l, displayNum, nextPos) {
   const lesson = lessonShape(l.topic);
   if (!lesson) return ''; // Defensive — skip if topic doesn't exist
   const tier = l.round;
   const complete = isLessonComplete(pathKey, l.topic, tier);
-  const isNext = !complete && nextLesson && l.topic === nextLesson.topic && tier === nextLesson.tier;
+  const isNext = !complete && nextPos && nextPos.kind === 'lesson' && l.topic === nextPos.topic && tier === nextPos.tier;
   const stepCls = 'path-step' + (complete ? ' done' : '') + (isNext ? ' next' : '');
   const nextBadge = isNext ? `<span class="path-next-badge">Next up</span>` : '';
   const wordCount = (getRoundWords(l.topic, tier) || []).length;
@@ -699,20 +699,23 @@ function renderPathStep(pathKey, l, displayNum, nextLesson) {
 }
 
 // The checkpoint node + card for a stage (gold diamond, distinct from topic steps).
-function renderCheckpointNode(pathKey, stage) {
+function renderCheckpointNode(pathKey, stage, nextPos) {
   const prog = checkpointProgress(pathKey, stage.id);
   if (!prog.total) return '';  // no offerable activities → no node
+  const isNext = !prog.complete && nextPos && nextPos.kind === 'checkpoint' && nextPos.stageId === stage.id;
   const progText = prog.complete
     ? 'Complete'
     : `${prog.done} of ${prog.total} reviewed · tap to open`;
+  const nextBadge = isNext ? `<span class="path-next-badge">Next up</span>` : '';
   return `
-    <div class="path-step path-step-cp${prog.complete ? ' cp-done' : ''}">
+    <div class="path-step path-step-cp${prog.complete ? ' cp-done' : ''}${isNext ? ' next' : ''}">
       <div class="path-step-rail">
         <div class="path-step-node cp-node"><span>◆</span></div>
         <div class="path-step-line"></div>
       </div>
       <div class="path-step-body">
         <div class="path-step-card cp-card" data-cp-open="${stage.id}">
+          ${nextBadge}
           <div class="path-step-row">
             <span class="path-step-icon">◆</span>
             <div class="path-step-text">
@@ -739,7 +742,7 @@ function renderPathTimeline(pathKey) {
   const total = path.lessons.length;
   const done = pathCompleteCount(pathKey);
   const pct = Math.round((done / total) * 100);
-  const nextLesson = nextIncompleteLesson(pathKey);
+  const nextPos = nextPathPosition(pathKey);
   const stages = getPathStages(pathKey);
 
   let body;
@@ -755,9 +758,9 @@ function renderPathTimeline(pathKey) {
         const l = path.lessons.find(x => x.topic === topicKey);
         if (!l) return '';
         stepNum += 1;
-        return renderPathStep(pathKey, l, stepNum, nextLesson);
+        return renderPathStep(pathKey, l, stepNum, nextPos);
       }).join('');
-      const cpNode = stage.checkpoint ? renderCheckpointNode(pathKey, stage) : '';
+      const cpNode = stage.checkpoint ? renderCheckpointNode(pathKey, stage, nextPos) : '';
       return `
         <div class="path-stage-band">
           <span class="path-stage-num">${si + 1}</span>
@@ -770,7 +773,7 @@ function renderPathTimeline(pathKey) {
     }).join('');
   } else {
     // ── Flat layout (unchanged behaviour for paths without stages) ──
-    body = path.lessons.map((l, i) => renderPathStep(pathKey, l, i + 1, nextLesson)).join('');
+    body = path.lessons.map((l, i) => renderPathStep(pathKey, l, i + 1, nextPos)).join('');
   }
 
   return `
@@ -2753,9 +2756,15 @@ function attachEvents(lesson, color) {
       const ctx = getPathContext();
       if (!ctx || !ctx.nextStep) return;
       window.speechSynthesis.cancel();
+      // Checkpoint comes next → open its hub (openCheckpoint self-pushes nav).
+      if (ctx.nextStep.kind === 'checkpoint') {
+        openCheckpoint(state.activePath, ctx.nextStep.stageId);
+        window.scrollTo(0, 0);
+        return;
+      }
       state.topic        = ctx.nextStep.topic;
-      state.currentRound = ctx.nextStep.round;
-      state.fromPathTier = ctx.nextStep.round;
+      state.currentRound = ctx.nextStep.tier;
+      state.fromPathTier = ctx.nextStep.tier;
       state.mode         = 'study';
       state.tab          = 'words';
       state.flipped      = {};
