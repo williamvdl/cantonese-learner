@@ -9,51 +9,61 @@
       "note": null,
       "words": [
         {
+          "id": "feelings-001",
           "c": "開心",
           "j": "hoi1 sam1",
           "e": "Happy"
         },
         {
+          "id": "feelings-002",
           "c": "唔開心",
           "j": "m4 hoi1 sam1",
           "e": "Unhappy"
         },
         {
+          "id": "feelings-003",
           "c": "嬲",
           "j": "nau1",
           "e": "Angry"
         },
         {
+          "id": "feelings-004",
           "c": "攰",
           "j": "gui6",
           "e": "Tired"
         },
         {
+          "id": "feelings-005",
           "c": "驚",
           "j": "geng1",
           "e": "Scared"
         },
         {
+          "id": "feelings-006",
           "c": "擔心",
           "j": "daam1 sam1",
           "e": "Worried"
         },
         {
+          "id": "feelings-007",
           "c": "激動",
           "j": "gik1 dung6",
           "e": "Excited"
         },
         {
+          "id": "feelings-008",
           "c": "緊張",
           "j": "gan2 zoeng1",
           "e": "Nervous"
         },
         {
+          "id": "feelings-009",
           "c": "無聊",
           "j": "mou4 liu4",
           "e": "Bored"
         },
         {
+          "id": "feelings-010",
           "c": "傷心",
           "j": "soeng1 sam1",
           "e": "Sad / heartbroken"
@@ -408,51 +418,61 @@
       "note": "Tier 1 was about emotional states ('I'm happy/sad'). Tier 2 shifts to character — describing what someone is like as a person. The structure stays simple: subject + <em>hou2</em> + adjective ('X is very [trait]'). To negate, use <strong>m4</strong> before the adjective: <em>m4 sin6 loeng4</em> means 'not kind'. Most traits are two-character compounds learned as units rather than syllables.",
       "words": [
         {
+          "id": "feelings-011",
           "c": "善良",
           "j": "sin6 loeng4",
           "e": "Kind"
         },
         {
+          "id": "feelings-012",
           "c": "聰明",
           "j": "cung1 ming4",
           "e": "Smart / clever"
         },
         {
+          "id": "feelings-013",
           "c": "搞笑",
           "j": "gaau2 siu3",
           "e": "Funny"
         },
         {
+          "id": "feelings-014",
           "c": "怕醜",
           "j": "paa3 cau2",
           "e": "Shy"
         },
         {
+          "id": "feelings-015",
           "c": "嚴肅",
           "j": "jim4 suk1",
           "e": "Serious"
         },
         {
+          "id": "feelings-016",
           "c": "懶",
           "j": "laan5",
           "e": "Lazy"
         },
         {
+          "id": "feelings-017",
           "c": "勤力",
           "j": "kan4 lik6",
           "e": "Hardworking"
         },
         {
+          "id": "feelings-018",
           "c": "友善",
           "j": "jau5 sin6",
           "e": "Friendly"
         },
         {
+          "id": "feelings-019",
           "c": "細心",
           "j": "sai3 sam1",
           "e": "Careful / attentive"
         },
         {
+          "id": "feelings-020",
           "c": "大方",
           "j": "daai6 fong1",
           "e": "Generous"
@@ -798,5 +818,6 @@
         ]
       }
     }
-  }
+  },
+  "_idSeq": 20
 }

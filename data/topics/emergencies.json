@@ -9,51 +9,61 @@
       "note": "<strong>gau3 meng6</strong> (救命, literally 'save life') is the universal cry for help. Hong Kong's emergency number is <strong>999</strong>, which connects to police, fire, and ambulance. <em>gap1 zing3 sat1</em> (急症室) is the A&E department; <em>gau3 wu6 ce1</em> (救護車) is the ambulance, literally 'save-protect car'. Note <strong>zau2</strong> (走) — context matters: in everyday speech it means 'leave/go', but in emergencies it means 'flee/run away'.",
       "words": [
         {
+          "id": "emergencies-001",
           "c": "救命",
           "j": "gau3 meng6",
           "e": "Help! / Save me!"
         },
         {
+          "id": "emergencies-002",
           "c": "報警",
           "j": "bou3 ging2",
           "e": "Call the police"
         },
         {
+          "id": "emergencies-003",
           "c": "火",
           "j": "fo2",
           "e": "Fire"
         },
         {
+          "id": "emergencies-004",
           "c": "急症室",
           "j": "gap1 zing3 sat1",
           "e": "A&E / ER"
         },
         {
+          "id": "emergencies-005",
           "c": "救護車",
           "j": "gau3 wu6 ce1",
           "e": "Ambulance"
         },
         {
+          "id": "emergencies-006",
           "c": "危險",
           "j": "ngai4 him2",
           "e": "Dangerous"
         },
         {
+          "id": "emergencies-007",
           "c": "走",
           "j": "zau2",
           "e": "Flee / escape"
         },
         {
+          "id": "emergencies-008",
           "c": "警察",
           "j": "ging2 caat3",
           "e": "Police"
         },
         {
+          "id": "emergencies-009",
           "c": "受傷",
           "j": "sau6 soeng1",
           "e": "Injured"
         },
         {
+          "id": "emergencies-010",
           "c": "999",
           "j": "gau2 gau2 gau2",
           "e": "999 (HK emergency)"
@@ -344,5 +354,6 @@
         ]
       }
     }
-  }
+  },
+  "_idSeq": 10
 }

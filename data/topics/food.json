@@ -9,61 +9,73 @@
       "note": null,
       "words": [
         {
+          "id": "food-001",
           "c": "飯",
           "j": "faan6",
           "e": "Rice / Meal"
         },
         {
+          "id": "food-002",
           "c": "麵",
           "j": "min6",
           "e": "Noodles"
         },
         {
+          "id": "food-003",
           "c": "水",
           "j": "seoi2",
           "e": "Water"
         },
         {
+          "id": "food-004",
           "c": "茶",
           "j": "caa4",
           "e": "Tea"
         },
         {
+          "id": "food-005",
           "c": "咖啡",
           "j": "gaa3 fe1",
           "e": "Coffee"
         },
         {
+          "id": "food-006",
           "c": "雞",
           "j": "gai1",
           "e": "Chicken"
         },
         {
+          "id": "food-007",
           "c": "魚",
           "j": "jyu2",
           "e": "Fish"
         },
         {
+          "id": "food-008",
           "c": "豬肉",
           "j": "zyu1 juk6",
           "e": "Pork"
         },
         {
+          "id": "food-009",
           "c": "蔬菜",
           "j": "so1 coi3",
           "e": "Vegetables"
         },
         {
+          "id": "food-010",
           "c": "生果",
           "j": "saang1 gwo2",
           "e": "Fruit"
         },
         {
+          "id": "food-011",
           "c": "好味",
           "j": "hou2 mei6",
           "e": "Delicious"
         },
         {
+          "id": "food-012",
           "c": "餓",
           "j": "ngo6",
           "e": "Hungry"
@@ -428,51 +440,61 @@
       "note": null,
       "words": [
         {
+          "id": "food-013",
           "c": "早餐",
           "j": "zou2 caan1",
           "e": "Breakfast"
         },
         {
+          "id": "food-014",
           "c": "午餐",
           "j": "ng5 caan1",
           "e": "Lunch"
         },
         {
+          "id": "food-015",
           "c": "晚餐",
           "j": "maan5 caan1",
           "e": "Dinner"
         },
         {
+          "id": "food-016",
           "c": "凍飲",
           "j": "dung3 jam2",
           "e": "Cold drink"
         },
         {
+          "id": "food-017",
           "c": "熱飲",
           "j": "jit6 jam2",
           "e": "Hot drink"
         },
         {
+          "id": "food-018",
           "c": "加冰",
           "j": "gaa1 bing1",
           "e": "Add ice"
         },
         {
+          "id": "food-019",
           "c": "走甜",
           "j": "zau2 tim4",
           "e": "No sugar / less sweet"
         },
         {
+          "id": "food-020",
           "c": "少冰",
           "j": "siu2 bing1",
           "e": "Less ice"
         },
         {
+          "id": "food-021",
           "c": "飽",
           "j": "baau2",
           "e": "Full"
         },
         {
+          "id": "food-022",
           "c": "嘥嘢",
           "j": "saai1 je5",
           "e": "Wasteful"
@@ -816,5 +838,6 @@
         ]
       }
     }
-  }
+  },
+  "_idSeq": 22
 }

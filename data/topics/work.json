@@ -9,51 +9,61 @@
       "note": "Cantonese work vocabulary is built around <em>gung1</em> (工, work). <strong>faan1 gung1</strong> (返工) literally 'return work' = go to work. <strong>fong3 gung1</strong> (放工) literally 'release work' = finish work. <strong>gaa1 baan1</strong> (加班) = overtime. The HK workplace runs on these compounds — you'll hear them daily. <em>tung4 si6</em> (同事, colleague) shares the root <em>tung4</em> (same) you've seen in 'with/and'.",
       "words": [
         {
+          "id": "work-001",
           "c": "公司",
           "j": "gung1 si1",
           "e": "Company"
         },
         {
+          "id": "work-002",
           "c": "老闆",
           "j": "lou5 baan2",
           "e": "Boss"
         },
         {
+          "id": "work-003",
           "c": "同事",
           "j": "tung4 si6",
           "e": "Colleague"
         },
         {
+          "id": "work-004",
           "c": "工作",
           "j": "gung1 zok3",
           "e": "Work / job"
         },
         {
+          "id": "work-005",
           "c": "開會",
           "j": "hoi1 wui2",
           "e": "Meeting"
         },
         {
+          "id": "work-006",
           "c": "返工",
           "j": "faan1 gung1",
           "e": "Go to work"
         },
         {
+          "id": "work-007",
           "c": "放工",
           "j": "fong3 gung1",
           "e": "Finish work"
         },
         {
+          "id": "work-008",
           "c": "加班",
           "j": "gaa1 baan1",
           "e": "Overtime"
         },
         {
+          "id": "work-009",
           "c": "出糧",
           "j": "ceot1 loeng4",
           "e": "Get paid"
         },
         {
+          "id": "work-010",
           "c": "截止日期",
           "j": "zit6 zi2 jat6 kei4",
           "e": "Deadline"
@@ -339,5 +349,6 @@
         ]
       }
     }
-  }
+  },
+  "_idSeq": 10
 }

@@ -9,51 +9,61 @@
       "note": "Cantonese cooking has three signature methods. <strong>zyu2</strong> (煮) is general cooking — boiling, simmering. <strong>caau2</strong> (炒) is stir-frying in a wok — high heat, quick motion. <strong>zing1</strong> (蒸) is steaming — used heavily for fish, dim sum, and Chinese desserts. The wok (<em>wok6</em>, 鑊) is the iconic Cantonese kitchen tool. Verb-object pattern: <em>caau2 coi3</em> (炒菜, stir-fried vegetables), <em>zing1 jyu2</em> (蒸魚, steamed fish).",
       "words": [
         {
+          "id": "cooking-001",
           "c": "煮",
           "j": "zyu2",
           "e": "Cook"
         },
         {
+          "id": "cooking-002",
           "c": "炒",
           "j": "caau2",
           "e": "Stir-fry"
         },
         {
+          "id": "cooking-003",
           "c": "蒸",
           "j": "zing1",
           "e": "Steam"
         },
         {
+          "id": "cooking-004",
           "c": "鑊",
           "j": "wok6",
           "e": "Wok"
         },
         {
+          "id": "cooking-005",
           "c": "鹽",
           "j": "jim4",
           "e": "Salt"
         },
         {
+          "id": "cooking-006",
           "c": "糖",
           "j": "tong4",
           "e": "Sugar"
         },
         {
+          "id": "cooking-007",
           "c": "油",
           "j": "jau4",
           "e": "Oil"
         },
         {
+          "id": "cooking-008",
           "c": "切",
           "j": "cit3",
           "e": "Cut"
         },
         {
+          "id": "cooking-009",
           "c": "食材",
           "j": "sik6 coi4",
           "e": "Ingredients"
         },
         {
+          "id": "cooking-010",
           "c": "醬油",
           "j": "zoeng3 jau4",
           "e": "Soy sauce"
@@ -379,5 +389,6 @@
         ]
       }
     }
-  }
+  },
+  "_idSeq": 10
 }

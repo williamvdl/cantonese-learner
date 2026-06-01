@@ -9,51 +9,61 @@
       "note": "Question words in Cantonese usually sit where the answer would go: 'who is going?' becomes <em>bin1 go3 heoi3?</em> — literally 'who go?'. To form a yes/no question, add <strong>maa3</strong> to the end of any statement. To ask 'why', put <strong>dim2 gaai2</strong> at the start. The particle <strong>ne1</strong> attaches to a noun or pronoun to mean 'and you?' / 'what about X?' — a tiny but very useful word for keeping conversation flowing.",
       "words": [
         {
+          "id": "questions-001",
           "c": "邊個",
           "j": "bin1 go3",
           "e": "Who"
         },
         {
+          "id": "questions-002",
           "c": "乜嘢",
           "j": "mat1 je5",
           "e": "What"
         },
         {
+          "id": "questions-003",
           "c": "邊度",
           "j": "bin1 dou6",
           "e": "Where"
         },
         {
+          "id": "questions-004",
           "c": "幾時",
           "j": "gei2 si4",
           "e": "When"
         },
         {
+          "id": "questions-005",
           "c": "點解",
           "j": "dim2 gaai2",
           "e": "Why"
         },
         {
+          "id": "questions-006",
           "c": "點樣",
           "j": "dim2 joeng2",
           "e": "How"
         },
         {
+          "id": "questions-007",
           "c": "幾多",
           "j": "gei2 do1",
           "e": "How many / much"
         },
         {
+          "id": "questions-008",
           "c": "邊",
           "j": "bin1",
           "e": "Which"
         },
         {
+          "id": "questions-009",
           "c": "嗎",
           "j": "maa3",
           "e": "(yes/no question)"
         },
         {
+          "id": "questions-010",
           "c": "呢",
           "j": "ne1",
           "e": "(and you? / what about?)"
@@ -409,5 +419,6 @@
         ]
       }
     }
-  }
+  },
+  "_idSeq": 10
 }

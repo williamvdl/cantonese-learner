@@ -9,51 +9,61 @@
       "note": null,
       "words": [
         {
+          "id": "phrases-001",
           "c": "你叫乜名？",
           "j": "nei5 giu3 mat1 meng2",
           "e": "What is your name?"
         },
         {
+          "id": "phrases-002",
           "c": "我叫…",
           "j": "ngo5 giu3",
           "e": "My name is…"
         },
         {
+          "id": "phrases-003",
           "c": "你好嗎？",
           "j": "nei5 hou2 maa3",
           "e": "How are you?"
         },
         {
+          "id": "phrases-004",
           "c": "我好好",
           "j": "ngo5 hou2 hou2",
           "e": "I am very well"
         },
         {
+          "id": "phrases-005",
           "c": "幾錢？",
           "j": "gei2 cin2",
           "e": "How much?"
         },
         {
+          "id": "phrases-006",
           "c": "喺邊度？",
           "j": "hai2 bin1 dou6",
           "e": "Where is it?"
         },
         {
+          "id": "phrases-007",
           "c": "我唔明",
           "j": "ngo5 m4 ming4",
           "e": "I don't understand"
         },
         {
+          "id": "phrases-008",
           "c": "請講慢啲",
           "j": "cing2 gong2 maan6 di1",
           "e": "Please speak slowly"
         },
         {
+          "id": "phrases-009",
           "c": "洗手間喺邊？",
           "j": "sai2 sau2 gaan1 hai2 bin1",
           "e": "Where is the bathroom?"
         },
         {
+          "id": "phrases-010",
           "c": "我要呢個",
           "j": "ngo5 jiu3 ni1 go3",
           "e": "I want this one"
@@ -389,5 +399,6 @@
         ]
       }
     }
-  }
+  },
+  "_idSeq": 10
 }

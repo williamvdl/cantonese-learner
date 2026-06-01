@@ -9,51 +9,61 @@
       "note": "Cantonese verbs don't change form for past, present, or future — instead, small particles and time words do the work. <strong>zo2</strong>, <strong>gan2</strong>, <strong>gwo3</strong>, and <strong>zyu6</strong> attach <strong>after</strong> the verb (e.g. <em>sik6 zo2</em> = ate, <em>sik6 gan2</em> = eating). Modals like <strong>wui5</strong> (will) and <strong>jiu3</strong> (need to) come <strong>before</strong> the verb. Time words like <em>ji5 ging1</em> (already) and <em>mei6</em> (not yet) sit at the start or before the verb to anchor when something happens.",
       "words": [
         {
+          "id": "tense-001",
           "c": "咗",
           "j": "zo2",
           "e": "(completed action)"
         },
         {
+          "id": "tense-002",
           "c": "緊",
           "j": "gan2",
           "e": "(currently happening)"
         },
         {
+          "id": "tense-003",
           "c": "過",
           "j": "gwo3",
           "e": "(experienced before)"
         },
         {
+          "id": "tense-004",
           "c": "住",
           "j": "zyu6",
           "e": "(ongoing state)"
         },
         {
+          "id": "tense-005",
           "c": "會",
           "j": "wui5",
           "e": "will / would"
         },
         {
+          "id": "tense-006",
           "c": "要",
           "j": "jiu3",
           "e": "need to / will"
         },
         {
+          "id": "tense-007",
           "c": "未",
           "j": "mei6",
           "e": "not yet"
         },
         {
+          "id": "tense-008",
           "c": "已經",
           "j": "ji5 ging1",
           "e": "already"
         },
         {
+          "id": "tense-009",
           "c": "剛剛",
           "j": "gong1 gong1",
           "e": "just now"
         },
         {
+          "id": "tense-010",
           "c": "快啲",
           "j": "faai3 di1",
           "e": "soon / quickly"
@@ -424,5 +434,6 @@
         ]
       }
     }
-  }
+  },
+  "_idSeq": 10
 }

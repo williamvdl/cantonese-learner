@@ -9,51 +9,61 @@
       "note": "Sentence-final particles sit at the very end of a sentence and add emotional or grammatical flavour without changing the literal meaning. They're what makes Cantonese sound natural — speech without them feels flat and robotic. <strong>Tone matters a lot</strong>: <em>laa1</em> (softening) and <em>laa3</em> (now / completion) are different particles, not variants. Don't try to translate each one literally — instead, learn the feeling each adds: certainty, surprise, gentleness, limitation, or inviting agreement.",
       "words": [
         {
+          "id": "particles-001",
           "c": "喇",
           "j": "laa3",
           "e": "(now / completion)"
         },
         {
+          "id": "particles-002",
           "c": "啦",
           "j": "laa1",
           "e": "(softening / suggestion)"
         },
         {
+          "id": "particles-003",
           "c": "呀",
           "j": "aa3",
           "e": "(soft confirmation)"
         },
         {
+          "id": "particles-004",
           "c": "嗎",
           "j": "maa3",
           "e": "(yes/no question)"
         },
         {
+          "id": "particles-005",
           "c": "喎",
           "j": "wo3",
           "e": "(emphasis / surprise)"
         },
         {
+          "id": "particles-006",
           "c": "囉",
           "j": "lo3",
           "e": "(obviously / exasperation)"
         },
         {
+          "id": "particles-007",
           "c": "㗎",
           "j": "gaa3",
           "e": "(matter-of-fact)"
         },
         {
+          "id": "particles-008",
           "c": "咋",
           "j": "zaa3",
           "e": "(only / limitation)"
         },
         {
+          "id": "particles-009",
           "c": "咩",
           "j": "me1",
           "e": "(surprised question)"
         },
         {
+          "id": "particles-010",
           "c": "吖",
           "j": "aa1",
           "e": "(gentle prompt)"
@@ -389,5 +399,6 @@
         ]
       }
     }
-  }
+  },
+  "_idSeq": 10
 }

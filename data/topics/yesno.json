@@ -9,51 +9,61 @@
       "note": null,
       "words": [
         {
+          "id": "yesno-001",
           "c": "係",
           "j": "hai6",
           "e": "Yes / It is"
         },
         {
+          "id": "yesno-002",
           "c": "唔係",
           "j": "m4 hai6",
           "e": "No / It isn't"
         },
         {
+          "id": "yesno-003",
           "c": "好",
           "j": "hou2",
           "e": "OK / Good"
         },
         {
+          "id": "yesno-004",
           "c": "唔好",
           "j": "m4 hou2",
           "e": "No / Not good"
         },
         {
+          "id": "yesno-005",
           "c": "得",
           "j": "dak1",
           "e": "OK / Can do"
         },
         {
+          "id": "yesno-006",
           "c": "唔得",
           "j": "m4 dak1",
           "e": "Not OK / Can't"
         },
         {
+          "id": "yesno-007",
           "c": "唔該",
           "j": "m4 goi1",
           "e": "Please / Excuse me"
         },
         {
+          "id": "yesno-008",
           "c": "多謝",
           "j": "do1 ze6",
           "e": "Thank you (gift)"
         },
         {
+          "id": "yesno-009",
           "c": "請",
           "j": "cing2",
           "e": "Please (formal)"
         },
         {
+          "id": "yesno-010",
           "c": "歡迎",
           "j": "fun1 jing4",
           "e": "Welcome"
@@ -369,5 +379,6 @@
         ]
       }
     }
-  }
+  },
+  "_idSeq": 10
 }

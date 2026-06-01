@@ -9,51 +9,61 @@
       "note": null,
       "words": [
         {
+          "id": "weather-001",
           "c": "天氣",
           "j": "tin1 hei3",
           "e": "Weather"
         },
         {
+          "id": "weather-002",
           "c": "熱",
           "j": "jit6",
           "e": "Hot"
         },
         {
+          "id": "weather-003",
           "c": "凍",
           "j": "dung3",
           "e": "Cold"
         },
         {
+          "id": "weather-004",
           "c": "落雨",
           "j": "lok6 jyu5",
           "e": "Raining"
         },
         {
+          "id": "weather-005",
           "c": "太陽",
           "j": "taai3 joeng4",
           "e": "Sun"
         },
         {
+          "id": "weather-006",
           "c": "颱風",
           "j": "toi4 fung1",
           "e": "Typhoon"
         },
         {
+          "id": "weather-007",
           "c": "雲",
           "j": "wan4",
           "e": "Cloud"
         },
         {
+          "id": "weather-008",
           "c": "風",
           "j": "fung1",
           "e": "Wind"
         },
         {
+          "id": "weather-009",
           "c": "雪",
           "j": "syut3",
           "e": "Snow"
         },
         {
+          "id": "weather-010",
           "c": "潮濕",
           "j": "ciu4 sap1",
           "e": "Humid"
@@ -404,5 +414,6 @@
         ]
       }
     }
-  }
+  },
+  "_idSeq": 10
 }

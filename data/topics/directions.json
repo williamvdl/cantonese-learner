@@ -9,51 +9,61 @@
       "note": null,
       "words": [
         {
+          "id": "directions-001",
           "c": "左邊",
           "j": "zo2 bin1",
           "e": "Left side"
         },
         {
+          "id": "directions-002",
           "c": "右邊",
           "j": "jau6 bin1",
           "e": "Right side"
         },
         {
+          "id": "directions-003",
           "c": "前面",
           "j": "cin4 min6",
           "e": "In front / ahead"
         },
         {
+          "id": "directions-004",
           "c": "後面",
           "j": "hau6 min6",
           "e": "Behind"
         },
         {
+          "id": "directions-005",
           "c": "直行",
           "j": "zik6 haang4",
           "e": "Straight ahead"
         },
         {
+          "id": "directions-006",
           "c": "轉",
           "j": "zyun3",
           "e": "Turn"
         },
         {
+          "id": "directions-007",
           "c": "對面",
           "j": "deoi3 min6",
           "e": "Opposite"
         },
         {
+          "id": "directions-008",
           "c": "附近",
           "j": "fu6 gan6",
           "e": "Nearby"
         },
         {
+          "id": "directions-009",
           "c": "遠",
           "j": "jyun5",
           "e": "Far"
         },
         {
+          "id": "directions-010",
           "c": "近",
           "j": "kan5",
           "e": "Close / near"
@@ -382,5 +392,6 @@
         ]
       }
     }
-  }
+  },
+  "_idSeq": 10
 }

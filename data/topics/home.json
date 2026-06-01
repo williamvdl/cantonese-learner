@@ -9,51 +9,61 @@
       "note": "<em>uk1 kei2</em> (屋企) is the natural Cantonese for 'home' — much more colloquial than the formal 家. To talk about going home, <strong>faan1 uk1 kei2</strong> (返屋企, literally 'return home'). Room names are distinct compounds rather than English-style: <em>cyu4 fong2</em> (廚房, kitchen), <em>ci3 so2</em> (廁所, toilet), <em>haak3 teng1</em> (客廳, living room). For 'bedroom', most people just say <em>fong2</em> (房) — the formal <em>fong4 gaan1</em> (房間) sits in writing or service contexts.",
       "words": [
         {
+          "id": "home-001",
           "c": "屋企",
           "j": "uk1 kei2",
           "e": "Home"
         },
         {
+          "id": "home-002",
           "c": "廚房",
           "j": "cyu4 fong2",
           "e": "Kitchen"
         },
         {
+          "id": "home-003",
           "c": "廁所",
           "j": "ci3 so2",
           "e": "Toilet"
         },
         {
+          "id": "home-004",
           "c": "客廳",
           "j": "haak3 teng1",
           "e": "Living room"
         },
         {
+          "id": "home-005",
           "c": "房",
           "j": "fong2",
           "e": "Room / bedroom"
         },
         {
+          "id": "home-006",
           "c": "床",
           "j": "cong4",
           "e": "Bed"
         },
         {
+          "id": "home-007",
           "c": "枱",
           "j": "toi2",
           "e": "Table"
         },
         {
+          "id": "home-008",
           "c": "椅",
           "j": "ji2",
           "e": "Chair"
         },
         {
+          "id": "home-009",
           "c": "窗",
           "j": "coeng1",
           "e": "Window"
         },
         {
+          "id": "home-010",
           "c": "門",
           "j": "mun4",
           "e": "Door"
@@ -379,5 +389,6 @@
         ]
       }
     }
-  }
+  },
+  "_idSeq": 10
 }

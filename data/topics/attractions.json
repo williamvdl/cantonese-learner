@@ -9,51 +9,61 @@
       "note": "Sightseeing relies on a few useful patterns. <strong>hoi1 gei2 dim2</strong> (開幾點) = 'opens at what time' — works for shops, restaurants, anywhere with hours. <em>mun4 piu3</em> (門票) is your entry ticket; <em>jap6 coeng4</em> (入場) is the act of entering. Watch for <em>m4 ho2 ji5 paak3 ziu3</em> ('photos not allowed') signs at many HK museums and temples.",
       "words": [
         {
+          "id": "attractions-001",
           "c": "景點",
           "j": "ging2 dim2",
           "e": "Attraction"
         },
         {
+          "id": "attractions-002",
           "c": "門票",
           "j": "mun4 piu3",
           "e": "Entry ticket"
         },
         {
+          "id": "attractions-003",
           "c": "拍照",
           "j": "paak3 ziu3",
           "e": "Take photos"
         },
         {
+          "id": "attractions-004",
           "c": "開放",
           "j": "hoi1 fong3",
           "e": "Open (for visitors)"
         },
         {
+          "id": "attractions-005",
           "c": "排隊",
           "j": "paai4 deoi2",
           "e": "Queue / line up"
         },
         {
+          "id": "attractions-006",
           "c": "入場",
           "j": "jap6 coeng4",
           "e": "Entry"
         },
         {
+          "id": "attractions-007",
           "c": "紀念品",
           "j": "gei2 nim6 ban2",
           "e": "Souvenir"
         },
         {
+          "id": "attractions-008",
           "c": "地圖",
           "j": "dei6 tou4",
           "e": "Map"
         },
         {
+          "id": "attractions-009",
           "c": "開幾點",
           "j": "hoi1 gei2 dim2",
           "e": "What time does it open"
         },
         {
+          "id": "attractions-010",
           "c": "導遊",
           "j": "dou6 jau4",
           "e": "Tour guide"
@@ -374,5 +384,6 @@
         ]
       }
     }
-  }
+  },
+  "_idSeq": 10
 }

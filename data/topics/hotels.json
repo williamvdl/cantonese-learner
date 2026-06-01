@@ -9,51 +9,61 @@
       "note": "Hotel vocabulary leans toward the formal end of Cantonese — it lives in service contexts. <em>zau2 dim3</em> (酒店) is the standard word for hotel. Expect the receptionist to ask <em>nei5 deng6 zo2 fong2 mei6 aa3?</em> ('have you booked?'). The verbs <strong>jap6 zyu6</strong> (入住, check in, literally 'enter and stay') and <strong>teoi3 fong2</strong> (退房, check out, 'return room') are compound expressions worth learning whole.",
       "words": [
         {
+          "id": "hotels-001",
           "c": "酒店",
           "j": "zau2 dim3",
           "e": "Hotel"
         },
         {
+          "id": "hotels-002",
           "c": "房間",
           "j": "fong4 gaan1",
           "e": "Room"
         },
         {
+          "id": "hotels-003",
           "c": "鎖匙",
           "j": "so2 si4",
           "e": "Key"
         },
         {
+          "id": "hotels-004",
           "c": "早餐",
           "j": "zou2 caan1",
           "e": "Breakfast"
         },
         {
+          "id": "hotels-005",
           "c": "行李",
           "j": "hang4 lei5",
           "e": "Luggage"
         },
         {
+          "id": "hotels-006",
           "c": "訂房",
           "j": "deng6 fong2",
           "e": "Book a room"
         },
         {
+          "id": "hotels-007",
           "c": "入住",
           "j": "jap6 zyu6",
           "e": "Check in"
         },
         {
+          "id": "hotels-008",
           "c": "退房",
           "j": "teoi3 fong2",
           "e": "Check out"
         },
         {
+          "id": "hotels-009",
           "c": "服務員",
           "j": "fuk6 mou6 jyun4",
           "e": "Service staff"
         },
         {
+          "id": "hotels-010",
           "c": "幾樓",
           "j": "gei2 lau2",
           "e": "What floor"
@@ -379,5 +389,6 @@
         ]
       }
     }
-  }
+  },
+  "_idSeq": 10
 }

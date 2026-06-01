@@ -9,56 +9,67 @@
       "note": null,
       "words": [
         {
+          "id": "numbers-001",
           "c": "零",
           "j": "ling4",
           "e": "Zero"
         },
         {
+          "id": "numbers-002",
           "c": "一",
           "j": "jat1",
           "e": "One"
         },
         {
+          "id": "numbers-003",
           "c": "二",
           "j": "ji6",
           "e": "Two"
         },
         {
+          "id": "numbers-004",
           "c": "三",
           "j": "saam1",
           "e": "Three"
         },
         {
+          "id": "numbers-005",
           "c": "四",
           "j": "sei3",
           "e": "Four"
         },
         {
+          "id": "numbers-006",
           "c": "五",
           "j": "ng5",
           "e": "Five"
         },
         {
+          "id": "numbers-007",
           "c": "六",
           "j": "luk6",
           "e": "Six"
         },
         {
+          "id": "numbers-008",
           "c": "七",
           "j": "cat1",
           "e": "Seven"
         },
         {
+          "id": "numbers-009",
           "c": "八",
           "j": "baat3",
           "e": "Eight"
         },
         {
+          "id": "numbers-010",
           "c": "九",
           "j": "gau2",
           "e": "Nine"
         },
         {
+          "id": "numbers-011",
           "c": "十",
           "j": "sap6",
           "e": "Ten"
@@ -403,51 +414,61 @@
       "note": "Bigger numbers in Cantonese are built like Lego: <em>ji6 sap6</em> (二十) is literally \"two-ten\" = 20, <em>saam1 sap6 ng5</em> (三十五) is \"three-ten-five\" = 35. Hundreds use <strong>baak3</strong> (百) and thousands use <strong>cin1</strong> (千). For Hong Kong money, <strong>man1</strong> (蚊) is the colloquial word for dollar (HKD) — you'll hear it everywhere from markets to taxis. <em>gei2 do1</em> (幾多) means \"how many\" or \"how much\" — pair it with <em>cin2</em> (錢, money) to ask prices.",
       "words": [
         {
+          "id": "numbers-012",
           "c": "二十",
           "j": "ji6 sap6",
           "e": "Twenty"
         },
         {
+          "id": "numbers-013",
           "c": "三十",
           "j": "saam1 sap6",
           "e": "Thirty"
         },
         {
+          "id": "numbers-014",
           "c": "五十",
           "j": "ng5 sap6",
           "e": "Fifty"
         },
         {
+          "id": "numbers-015",
           "c": "一百",
           "j": "jat1 baak3",
           "e": "One hundred"
         },
         {
+          "id": "numbers-016",
           "c": "五百",
           "j": "ng5 baak3",
           "e": "Five hundred"
         },
         {
+          "id": "numbers-017",
           "c": "一千",
           "j": "jat1 cin1",
           "e": "One thousand"
         },
         {
+          "id": "numbers-018",
           "c": "蚊",
           "j": "man1",
           "e": "Dollar (HKD)"
         },
         {
+          "id": "numbers-019",
           "c": "毫子",
           "j": "hou4 zi2",
           "e": "Cents (10c coins)"
         },
         {
+          "id": "numbers-020",
           "c": "一半",
           "j": "jat1 bun3",
           "e": "Half"
         },
         {
+          "id": "numbers-021",
           "c": "幾多",
           "j": "gei2 do1",
           "e": "How many / much"
@@ -793,5 +814,6 @@
         ]
       }
     }
-  }
+  },
+  "_idSeq": 21
 }

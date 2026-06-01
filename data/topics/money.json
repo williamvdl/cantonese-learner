@@ -9,51 +9,61 @@
       "note": "<em>cin2</em> (錢, money) is the base; specific contexts build on it. <strong>zaau2 cin2</strong> (找錢) is the change you get back at a shop. <strong>saan3 zi2</strong> (散紙) means coins or small notes — you'll be asked <em>jau5 mou5 saan3 zi2?</em> when paying. <strong>tai4 fun2 gei1</strong> (提款機) is an ATM, literally 'withdraw money machine'. <strong>ngan4 hong4</strong> (銀行) is bank, literally 'silver firm' — silver being the historical currency.",
       "words": [
         {
+          "id": "money-001",
           "c": "錢",
           "j": "cin2",
           "e": "Money"
         },
         {
+          "id": "money-002",
           "c": "銀行",
           "j": "ngan4 hong4",
           "e": "Bank"
         },
         {
+          "id": "money-003",
           "c": "提款機",
           "j": "tai4 fun2 gei1",
           "e": "ATM"
         },
         {
+          "id": "money-004",
           "c": "現金",
           "j": "jin6 gam1",
           "e": "Cash"
         },
         {
+          "id": "money-005",
           "c": "信用卡",
           "j": "seon3 jung6 kaat1",
           "e": "Credit card"
         },
         {
+          "id": "money-006",
           "c": "找錢",
           "j": "zaau2 cin2",
           "e": "Change (returned)"
         },
         {
+          "id": "money-007",
           "c": "散紙",
           "j": "saan3 zi2",
           "e": "Coins / small change"
         },
         {
+          "id": "money-008",
           "c": "戶口",
           "j": "wu6 hau2",
           "e": "Account"
         },
         {
+          "id": "money-009",
           "c": "匯錢",
           "j": "wui6 cin2",
           "e": "Transfer money"
         },
         {
+          "id": "money-010",
           "c": "唱錢",
           "j": "coeng3 cin2",
           "e": "Change / exchange money"
@@ -354,5 +364,6 @@
         ]
       }
     }
-  }
+  },
+  "_idSeq": 10
 }

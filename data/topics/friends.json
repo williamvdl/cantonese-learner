@@ -9,51 +9,61 @@
       "note": "Making plans uses <strong>joek3</strong> (約) as its core verb — it covers everything from arranging a meet-up to making a date. To accept, <em>hou2</em> (好). To decline politely, the cultural move is <em>goi2 jat6 laa1</em> ('another day') rather than a flat no. The compound <em>dak1 haan4</em> (得閒, free/available) is paired with most invitation questions: <em>nei5 gei2 si4 dak1 haan4?</em> = 'when are you free?'",
       "words": [
         {
+          "id": "friends-001",
           "c": "朋友",
           "j": "pang4 jau5",
           "e": "Friend"
         },
         {
+          "id": "friends-002",
           "c": "約",
           "j": "joek3",
           "e": "Make plans / appointment"
         },
         {
+          "id": "friends-003",
           "c": "一齊",
           "j": "jat1 cai4",
           "e": "Together"
         },
         {
+          "id": "friends-004",
           "c": "得閒",
           "j": "dak1 haan4",
           "e": "Free / have time"
         },
         {
+          "id": "friends-005",
           "c": "派對",
           "j": "paai3 deoi3",
           "e": "Party"
         },
         {
+          "id": "friends-006",
           "c": "出街",
           "j": "ceot1 gaai1",
           "e": "Go out"
         },
         {
+          "id": "friends-007",
           "c": "改日",
           "j": "goi2 jat6",
           "e": "Another day (rain check)"
         },
         {
+          "id": "friends-008",
           "c": "邀請",
           "j": "jiu1 cing2",
           "e": "Invite"
         },
         {
+          "id": "friends-009",
           "c": "玩",
           "j": "waan2",
           "e": "Hang out / play"
         },
         {
+          "id": "friends-010",
           "c": "慶祝",
           "j": "hing3 zuk1",
           "e": "Celebrate"
@@ -369,5 +379,6 @@
         ]
       }
     }
-  }
+  },
+  "_idSeq": 10
 }

@@ -9,51 +9,61 @@
       "note": null,
       "words": [
         {
+          "id": "greetings-001",
           "c": "你好",
           "j": "nei5 hou2",
           "e": "Hello"
         },
         {
+          "id": "greetings-002",
           "c": "早晨",
           "j": "zou2 san4",
           "e": "Good morning"
         },
         {
+          "id": "greetings-003",
           "c": "晚上好",
           "j": "maan5 soeng6 hou2",
           "e": "Good evening"
         },
         {
+          "id": "greetings-004",
           "c": "再見",
           "j": "zoi3 gin3",
           "e": "Goodbye"
         },
         {
+          "id": "greetings-005",
           "c": "唔該",
           "j": "m4 goi1",
           "e": "Thank you / Excuse me"
         },
         {
+          "id": "greetings-006",
           "c": "多謝",
           "j": "do1 ze6",
           "e": "Thank you (for a gift)"
         },
         {
+          "id": "greetings-007",
           "c": "唔緊要",
           "j": "m4 gan2 jiu3",
           "e": "You're welcome"
         },
         {
+          "id": "greetings-008",
           "c": "對唔住",
           "j": "deoi3 m4 zyu6",
           "e": "Sorry"
         },
         {
+          "id": "greetings-009",
           "c": "係",
           "j": "hai6",
           "e": "Yes"
         },
         {
+          "id": "greetings-010",
           "c": "唔係",
           "j": "m4 hai6",
           "e": "No"
@@ -393,51 +403,61 @@
       "note": null,
       "words": [
         {
+          "id": "greetings-011",
           "c": "幸會",
           "j": "hang6 wui6",
           "e": "Pleased to meet you (formal)"
         },
         {
+          "id": "greetings-012",
           "c": "久仰",
           "j": "gau2 joeng5",
           "e": "Long admired (formal)"
         },
         {
+          "id": "greetings-013",
           "c": "請多關照",
           "j": "cing2 do1 gwaan1 ziu3",
           "e": "Please take care of me"
         },
         {
+          "id": "greetings-014",
           "c": "麻煩你",
           "j": "maa4 faan4 nei5",
           "e": "Sorry to trouble you"
         },
         {
+          "id": "greetings-015",
           "c": "失禮",
           "j": "sat1 lai5",
           "e": "Excuse my rudeness"
         },
         {
+          "id": "greetings-016",
           "c": "歡迎",
           "j": "fun1 jing4",
           "e": "Welcome"
         },
         {
+          "id": "greetings-017",
           "c": "返工",
           "j": "faan1 gung1",
           "e": "Going to work"
         },
         {
+          "id": "greetings-018",
           "c": "放工",
           "j": "fong3 gung1",
           "e": "Off work"
         },
         {
+          "id": "greetings-019",
           "c": "好耐冇見",
           "j": "hou2 noi6 mou5 gin3",
           "e": "Long time no see"
         },
         {
+          "id": "greetings-020",
           "c": "近排點呀",
           "j": "gan6 paai2 dim2 aa3",
           "e": "How have you been lately?"
@@ -826,5 +846,6 @@
         ]
       }
     }
-  }
+  },
+  "_idSeq": 20
 }

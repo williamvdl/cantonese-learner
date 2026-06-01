@@ -9,61 +9,73 @@
       "note": null,
       "words": [
         {
+          "id": "family-001",
           "c": "爸爸",
           "j": "baa4 baa1",
           "e": "Father"
         },
         {
+          "id": "family-002",
           "c": "媽媽",
           "j": "maa4 maa1",
           "e": "Mother"
         },
         {
+          "id": "family-003",
           "c": "哥哥",
           "j": "go4 go1",
           "e": "Older brother"
         },
         {
+          "id": "family-004",
           "c": "姐姐",
           "j": "ze4 ze1",
           "e": "Older sister"
         },
         {
+          "id": "family-005",
           "c": "弟弟",
           "j": "dai6 dai2",
           "e": "Younger brother"
         },
         {
+          "id": "family-006",
           "c": "妹妹",
           "j": "mui4 mui2",
           "e": "Younger sister"
         },
         {
+          "id": "family-007",
           "c": "爺爺",
           "j": "je4 je2",
           "e": "Paternal grandfather"
         },
         {
+          "id": "family-008",
           "c": "嫲嫲",
           "j": "maa4 maa2",
           "e": "Paternal grandmother"
         },
         {
+          "id": "family-009",
           "c": "外公",
           "j": "ngoi6 gung1",
           "e": "Maternal grandfather"
         },
         {
+          "id": "family-010",
           "c": "外婆",
           "j": "ngoi6 po4",
           "e": "Maternal grandmother"
         },
         {
+          "id": "family-011",
           "c": "兒子",
           "j": "ji4 zi2",
           "e": "Son"
         },
         {
+          "id": "family-012",
           "c": "女兒",
           "j": "neoi5 ji4",
           "e": "Daughter"
@@ -439,5 +451,6 @@
         ]
       }
     }
-  }
+  },
+  "_idSeq": 12
 }

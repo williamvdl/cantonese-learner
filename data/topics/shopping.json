@@ -9,51 +9,61 @@
       "note": null,
       "words": [
         {
+          "id": "shopping-001",
           "c": "超市",
           "j": "ciu1 si5",
           "e": "Supermarket"
         },
         {
+          "id": "shopping-002",
           "c": "商場",
           "j": "soeng1 coeng4",
           "e": "Shopping mall"
         },
         {
+          "id": "shopping-003",
           "c": "貴",
           "j": "gwai3",
           "e": "Expensive"
         },
         {
+          "id": "shopping-004",
           "c": "平",
           "j": "peng4",
           "e": "Cheap"
         },
         {
+          "id": "shopping-005",
           "c": "買",
           "j": "maai5",
           "e": "Buy"
         },
         {
+          "id": "shopping-006",
           "c": "賣",
           "j": "maai6",
           "e": "Sell"
         },
         {
+          "id": "shopping-007",
           "c": "找換",
           "j": "zaau2 wun6",
           "e": "Change money"
         },
         {
+          "id": "shopping-008",
           "c": "收據",
           "j": "sau1 geoi3",
           "e": "Receipt"
         },
         {
+          "id": "shopping-009",
           "c": "有冇折？",
           "j": "jau5 mou5 zit3",
           "e": "Any discount?"
         },
         {
+          "id": "shopping-010",
           "c": "唔要",
           "j": "m4 jiu3",
           "e": "Don't want it"
@@ -373,51 +383,61 @@
       "note": "Tier 2 zooms in on shopping for clothes. Sizes use a <em>maa5</em> (碼) suffix: <em>daai6 maa5</em> (大碼, large), <em>zung1 maa5</em> (中碼, medium), <em>sai3 maa5</em> (細碼, small). The most useful verb is <strong>si3</strong> (試, to try on) — almost always paired with <em>haa5</em> as <em>si3 haa5</em> ('try a bit'). Note <em>gan2</em> (緊, tight) and <em>sung1</em> (鬆, loose) — these describe how clothes fit and also work in general 'tight/loose' contexts.",
       "words": [
         {
+          "id": "shopping-011",
           "c": "恤衫",
           "j": "seot1 saam1",
           "e": "Shirt"
         },
         {
+          "id": "shopping-012",
           "c": "褲",
           "j": "fu3",
           "e": "Pants / trousers"
         },
         {
+          "id": "shopping-013",
           "c": "裙",
           "j": "kwan4",
           "e": "Skirt / dress"
         },
         {
+          "id": "shopping-014",
           "c": "鞋",
           "j": "haai4",
           "e": "Shoes"
         },
         {
+          "id": "shopping-015",
           "c": "尺碼",
           "j": "cek3 maa5",
           "e": "Size"
         },
         {
+          "id": "shopping-016",
           "c": "試吓",
           "j": "si3 haa5",
           "e": "Try on"
         },
         {
+          "id": "shopping-017",
           "c": "緊",
           "j": "gan2",
           "e": "Tight"
         },
         {
+          "id": "shopping-018",
           "c": "鬆",
           "j": "sung1",
           "e": "Loose"
         },
         {
+          "id": "shopping-019",
           "c": "大碼",
           "j": "daai6 maa5",
           "e": "Large size"
         },
         {
+          "id": "shopping-020",
           "c": "細碼",
           "j": "sai3 maa5",
           "e": "Small size"
@@ -743,5 +763,6 @@
         ]
       }
     }
-  }
+  },
+  "_idSeq": 20
 }

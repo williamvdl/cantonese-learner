@@ -9,51 +9,61 @@
       "note": "Sports use the all-purpose verb <strong>daa2</strong> (打, hit) for almost any ball sport: <em>daa2 bo1</em> (打波, play ball), <em>daa2 zuk1 kau4</em> (打足球, play football), <em>daa2 laam4 kau4</em> (打籃球, play basketball). For running and swimming, different verbs: <em>paau2 bou6</em> (跑步, run a step) and <em>jau4 seoi2</em> (游水, swim in water). <strong>gin6 san1</strong> (健身) literally 'strengthen body' = work out at the gym.",
       "words": [
         {
+          "id": "sports-001",
           "c": "運動",
           "j": "wan6 dung6",
           "e": "Sports / exercise"
         },
         {
+          "id": "sports-002",
           "c": "健身",
           "j": "gin6 san1",
           "e": "Work out / gym"
         },
         {
+          "id": "sports-003",
           "c": "跑步",
           "j": "paau2 bou6",
           "e": "Run / jog"
         },
         {
+          "id": "sports-004",
           "c": "游水",
           "j": "jau4 seoi2",
           "e": "Swim"
         },
         {
+          "id": "sports-005",
           "c": "打波",
           "j": "daa2 bo1",
           "e": "Play ball"
         },
         {
+          "id": "sports-006",
           "c": "足球",
           "j": "zuk1 kau4",
           "e": "Football / soccer"
         },
         {
+          "id": "sports-007",
           "c": "籃球",
           "j": "laam4 kau4",
           "e": "Basketball"
         },
         {
+          "id": "sports-008",
           "c": "球場",
           "j": "kau4 coeng4",
           "e": "Court / field"
         },
         {
+          "id": "sports-009",
           "c": "隊",
           "j": "deoi6",
           "e": "Team"
         },
         {
+          "id": "sports-010",
           "c": "贏",
           "j": "jeng4",
           "e": "Win"
@@ -349,5 +359,6 @@
         ]
       }
     }
-  }
+  },
+  "_idSeq": 10
 }

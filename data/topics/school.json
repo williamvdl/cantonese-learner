@@ -9,51 +9,61 @@
       "note": "Cantonese school life uses verb-object compounds. <strong>duk6 syu1</strong> (讀書) literally 'read book' = study generally. <strong>soeng5 tong4</strong> (上堂) literally 'ascend class' = attend a lesson. <strong>haau2 si3</strong> (考試) = take an exam. Two words for 'knowing': <em>sik1</em> (識) = know how to / be able to (skills), versus <em>zi1</em> (知, knowing a fact). 'I can speak Cantonese' uses <em>sik1</em>; 'I know that' uses <em>zi1</em>.",
       "words": [
         {
+          "id": "school-001",
           "c": "學校",
           "j": "hok6 haau6",
           "e": "School"
         },
         {
+          "id": "school-002",
           "c": "老師",
           "j": "lou5 si1",
           "e": "Teacher"
         },
         {
+          "id": "school-003",
           "c": "學生",
           "j": "hok6 saang1",
           "e": "Student"
         },
         {
+          "id": "school-004",
           "c": "功課",
           "j": "gung1 fo3",
           "e": "Homework"
         },
         {
+          "id": "school-005",
           "c": "考試",
           "j": "haau2 si3",
           "e": "Exam"
         },
         {
+          "id": "school-006",
           "c": "讀書",
           "j": "duk6 syu1",
           "e": "Study / read"
         },
         {
+          "id": "school-007",
           "c": "上堂",
           "j": "soeng5 tong4",
           "e": "Go to class"
         },
         {
+          "id": "school-008",
           "c": "同學",
           "j": "tung4 hok6",
           "e": "Classmate"
         },
         {
+          "id": "school-009",
           "c": "識",
           "j": "sik1",
           "e": "Know how to"
         },
         {
+          "id": "school-010",
           "c": "答",
           "j": "daap3",
           "e": "Answer"
@@ -364,5 +374,6 @@
         ]
       }
     }
-  }
+  },
+  "_idSeq": 10
 }

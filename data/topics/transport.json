@@ -9,51 +9,61 @@
       "note": null,
       "words": [
         {
+          "id": "transport-001",
           "c": "地鐵",
           "j": "dei6 tit3",
           "e": "MTR / Subway"
         },
         {
+          "id": "transport-002",
           "c": "巴士",
           "j": "baa1 si2",
           "e": "Bus"
         },
         {
+          "id": "transport-003",
           "c": "的士",
           "j": "dik1 si2",
           "e": "Taxi"
         },
         {
+          "id": "transport-004",
           "c": "飛機",
           "j": "fei1 gei1",
           "e": "Airplane"
         },
         {
+          "id": "transport-005",
           "c": "船",
           "j": "syun4",
           "e": "Boat / Ferry"
         },
         {
+          "id": "transport-006",
           "c": "火車",
           "j": "fo2 ce1",
           "e": "Train"
         },
         {
+          "id": "transport-007",
           "c": "單車",
           "j": "daan1 ce1",
           "e": "Bicycle"
         },
         {
+          "id": "transport-008",
           "c": "去邊度？",
           "j": "heoi3 bin1 dou6",
           "e": "Where to?"
         },
         {
+          "id": "transport-009",
           "c": "幾遠？",
           "j": "gei2 jyun5",
           "e": "How far?"
         },
         {
+          "id": "transport-010",
           "c": "停",
           "j": "ting4",
           "e": "Stop"
@@ -364,5 +374,6 @@
         ]
       }
     }
-  }
+  },
+  "_idSeq": 10
 }

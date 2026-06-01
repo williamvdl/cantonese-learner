@@ -9,51 +9,61 @@
       "note": "Hobbies use lots of verb-noun pairs. <strong>tai2</strong> (睇, watch/read/look) prefixes many media activities: <em>tai2 hei3</em> (睇戲, watch a movie), <em>tai2 syu1</em> (睇書, read a book), <em>tai2 din6 si6</em> (睇電視, watch TV). <strong>haang4 saan1</strong> (行山) literally 'walk mountain' = hiking, a hugely popular weekend activity in HK. <strong>daa2 gei1</strong> (打機) literally 'hit machine' = play video games.",
       "words": [
         {
+          "id": "hobbies-001",
           "c": "興趣",
           "j": "hing3 ceoi3",
           "e": "Hobby / interest"
         },
         {
+          "id": "hobbies-002",
           "c": "睇戲",
           "j": "tai2 hei3",
           "e": "Watch a movie"
         },
         {
+          "id": "hobbies-003",
           "c": "聽歌",
           "j": "ting1 go1",
           "e": "Listen to music"
         },
         {
+          "id": "hobbies-004",
           "c": "睇書",
           "j": "tai2 syu1",
           "e": "Read a book"
         },
         {
+          "id": "hobbies-005",
           "c": "行山",
           "j": "haang4 saan1",
           "e": "Hiking"
         },
         {
+          "id": "hobbies-006",
           "c": "畫畫",
           "j": "waak6 waa2",
           "e": "Drawing / painting"
         },
         {
+          "id": "hobbies-007",
           "c": "唱歌",
           "j": "coeng3 go1",
           "e": "Sing"
         },
         {
+          "id": "hobbies-008",
           "c": "跳舞",
           "j": "tiu3 mou5",
           "e": "Dance"
         },
         {
+          "id": "hobbies-009",
           "c": "打機",
           "j": "daa2 gei1",
           "e": "Play video games"
         },
         {
+          "id": "hobbies-010",
           "c": "影相",
           "j": "jing2 soeng2",
           "e": "Take photos (hobby)"
@@ -404,5 +414,6 @@
         ]
       }
     }
-  }
+  },
+  "_idSeq": 10
 }

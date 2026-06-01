@@ -9,51 +9,61 @@
       "note": null,
       "words": [
         {
+          "id": "colors-001",
           "c": "紅色",
           "j": "hung4 sik1",
           "e": "Red"
         },
         {
+          "id": "colors-002",
           "c": "橙色",
           "j": "caang2 sik1",
           "e": "Orange"
         },
         {
+          "id": "colors-003",
           "c": "黃色",
           "j": "wong4 sik1",
           "e": "Yellow"
         },
         {
+          "id": "colors-004",
           "c": "綠色",
           "j": "luk6 sik1",
           "e": "Green"
         },
         {
+          "id": "colors-005",
           "c": "藍色",
           "j": "laam4 sik1",
           "e": "Blue"
         },
         {
+          "id": "colors-006",
           "c": "紫色",
           "j": "zi2 sik1",
           "e": "Purple"
         },
         {
+          "id": "colors-007",
           "c": "白色",
           "j": "baak6 sik1",
           "e": "White"
         },
         {
+          "id": "colors-008",
           "c": "黑色",
           "j": "hak1 sik1",
           "e": "Black"
         },
         {
+          "id": "colors-009",
           "c": "粉紅色",
           "j": "fan2 hung4 sik1",
           "e": "Pink"
         },
         {
+          "id": "colors-010",
           "c": "棕色",
           "j": "zung1 sik1",
           "e": "Brown"
@@ -409,5 +419,6 @@
         ]
       }
     }
-  }
+  },
+  "_idSeq": 10
 }

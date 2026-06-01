@@ -9,51 +9,61 @@
       "note": "<em>cung2 mat6</em> (寵物) means pet, and the verb <strong>joeng5</strong> (養) covers raising or keeping any animal. The diminutive suffix <em>zai2</em> (仔) attaches to many small animals: <em>gau2 zai2</em> (狗仔, puppy), <em>maau1 zai2</em> (貓仔, kitten), <em>tou3 zai2</em> (兔仔, rabbit — the standard form). Note <strong>ngau4 juk6</strong> (牛肉, beef) and <strong>zyu1 juk6</strong> (豬肉, pork) — same animal words plus <em>juk6</em> (肉, meat).",
       "words": [
         {
+          "id": "animals-001",
           "c": "狗",
           "j": "gau2",
           "e": "Dog"
         },
         {
+          "id": "animals-002",
           "c": "貓",
           "j": "maau1",
           "e": "Cat"
         },
         {
+          "id": "animals-003",
           "c": "鳥",
           "j": "niu5",
           "e": "Bird"
         },
         {
+          "id": "animals-004",
           "c": "兔仔",
           "j": "tou3 zai2",
           "e": "Rabbit"
         },
         {
+          "id": "animals-005",
           "c": "馬",
           "j": "maa5",
           "e": "Horse"
         },
         {
+          "id": "animals-006",
           "c": "牛",
           "j": "ngau4",
           "e": "Cow / cattle"
         },
         {
+          "id": "animals-007",
           "c": "豬",
           "j": "zyu1",
           "e": "Pig"
         },
         {
+          "id": "animals-008",
           "c": "寵物",
           "j": "cung2 mat6",
           "e": "Pet"
         },
         {
+          "id": "animals-009",
           "c": "養",
           "j": "joeng5",
           "e": "Raise / keep (a pet)"
         },
         {
+          "id": "animals-010",
           "c": "可愛",
           "j": "ho2 oi3",
           "e": "Cute"
@@ -394,5 +404,6 @@
         ]
       }
     }
-  }
+  },
+  "_idSeq": 10
 }

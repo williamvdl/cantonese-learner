@@ -9,61 +9,73 @@
       "note": null,
       "words": [
         {
+          "id": "time-001",
           "c": "今日",
           "j": "gam1 jat6",
           "e": "Today"
         },
         {
+          "id": "time-002",
           "c": "聽日",
           "j": "ting1 jat6",
           "e": "Tomorrow"
         },
         {
+          "id": "time-003",
           "c": "琴日",
           "j": "kam4 jat6",
           "e": "Yesterday"
         },
         {
+          "id": "time-004",
           "c": "星期一",
           "j": "sing1 kei4 jat1",
           "e": "Monday"
         },
         {
+          "id": "time-005",
           "c": "星期二",
           "j": "sing1 kei4 ji6",
           "e": "Tuesday"
         },
         {
+          "id": "time-006",
           "c": "星期三",
           "j": "sing1 kei4 saam1",
           "e": "Wednesday"
         },
         {
+          "id": "time-007",
           "c": "星期四",
           "j": "sing1 kei4 sei3",
           "e": "Thursday"
         },
         {
+          "id": "time-008",
           "c": "星期五",
           "j": "sing1 kei4 ng5",
           "e": "Friday"
         },
         {
+          "id": "time-009",
           "c": "星期六",
           "j": "sing1 kei4 luk6",
           "e": "Saturday"
         },
         {
+          "id": "time-010",
           "c": "星期日",
           "j": "sing1 kei4 jat6",
           "e": "Sunday"
         },
         {
+          "id": "time-011",
           "c": "朝早",
           "j": "ziu1 zou2",
           "e": "Morning"
         },
         {
+          "id": "time-012",
           "c": "夜晚",
           "j": "je6 maan5",
           "e": "Night"
@@ -379,5 +391,6 @@
         ]
       }
     }
-  }
+  },
+  "_idSeq": 12
 }

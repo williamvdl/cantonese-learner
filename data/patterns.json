@@ -30,22 +30,26 @@
           "english": "I want to watch a movie.",
           "frameE": "I want to …",
           "answer": {
+            "wid": "hobbies-002",
             "c": "睇戲",
             "j": "tai2 hei3",
             "e": "watch a movie"
           },
           "distractors": [
             {
+              "wid": "hobbies-003",
               "c": "聽歌",
               "j": "ting1 go1",
               "e": "listen to music"
             },
             {
+              "wid": "hobbies-007",
               "c": "唱歌",
               "j": "coeng3 go1",
               "e": "sing"
             },
             {
+              "wid": "hobbies-009",
               "c": "打機",
               "j": "daa2 gei1",
               "e": "play video games"
@@ -87,22 +91,26 @@
           "english": "I'll have water",
           "frameE": "I'll have / I need…",
           "answer": {
+            "wid": "food-003",
             "c": "水",
             "j": "seoi2",
             "e": "water"
           },
           "distractors": [
             {
+              "wid": "food-004",
               "c": "茶",
               "j": "caa4",
               "e": "tea"
             },
             {
+              "wid": "food-001",
               "c": "飯",
               "j": "faan6",
               "e": "rice"
             },
             {
+              "wid": "food-005",
               "c": "咖啡",
               "j": "gaa3 fe1",
               "e": "coffee"
@@ -118,22 +126,26 @@
           "english": "Headache — go to the pharmacy for some medicine.",
           "frameE": "Headache — go to the pharmacy for some …",
           "answer": {
+            "wid": "body-019",
             "c": "藥",
             "j": "joek6",
             "e": "medicine"
           },
           "distractors": [
             {
+              "wid": "body-017",
               "c": "醫生",
               "j": "ji1 sang1",
               "e": "doctor"
             },
             {
+              "wid": "body-013",
               "c": "發燒",
               "j": "faat3 siu1",
               "e": "fever"
             },
             {
+              "wid": "body-014",
               "c": "咳",
               "j": "kat1",
               "e": "cough"
@@ -149,22 +161,26 @@
           "english": "Before going in you need to buy a ticket.",
           "frameE": "Before going in you need to buy a …",
           "answer": {
+            "wid": "attractions-002",
             "c": "門票",
             "j": "mun4 piu3",
             "e": "entry ticket"
           },
           "distractors": [
             {
+              "wid": "attractions-008",
               "c": "地圖",
               "j": "dei6 tou4",
               "e": "map"
             },
             {
+              "wid": "attractions-007",
               "c": "紀念品",
               "j": "gei2 nim6 ban2",
               "e": "souvenir"
             },
             {
+              "wid": "attractions-010",
               "c": "導遊",
               "j": "dou6 jau4",
               "e": "tour guide"
@@ -206,22 +222,26 @@
           "english": "Do you have dim sum?",
           "frameE": "Do you have …?",
           "answer": {
+            "wid": "restaurant-003",
             "c": "點心",
             "j": "dim2 sam1",
             "e": "dim sum"
           },
           "distractors": [
             {
+              "wid": "restaurant-001",
               "c": "餐牌",
               "j": "caan1 paai4",
               "e": "menu"
             },
             {
+              "wid": "restaurant-002",
               "c": "侍應",
               "j": "si6 jing3",
               "e": "a waiter"
             },
             {
+              "wid": "restaurant-005",
               "c": "埋單",
               "j": "maai4 daan1",
               "e": "the bill"
@@ -237,22 +257,26 @@
           "english": "Boss, any discount? I want three.",
           "frameE": "Boss, …? I want three.",
           "answer": {
+            "wid": "shopping-009",
             "c": "有冇折？",
             "j": "jau5 mou5 zit3",
             "e": "Any discount?"
           },
           "distractors": [
             {
+              "wid": "shopping-010",
               "c": "唔要",
               "j": "m4 jiu3",
               "e": "don't want it"
             },
             {
+              "wid": "shopping-008",
               "c": "收據",
               "j": "sau1 geoi3",
               "e": "receipt"
             },
             {
+              "wid": "shopping-007",
               "c": "找換",
               "j": "zaau2 wun6",
               "e": "change money"
@@ -268,22 +292,26 @@
           "english": "This one's too small — got a large?",
           "frameE": "This one's too small — got a …?",
           "answer": {
+            "wid": "shopping-019",
             "c": "大碼",
             "j": "daai6 maa5",
             "e": "large size"
           },
           "distractors": [
             {
+              "wid": "shopping-020",
               "c": "細碼",
               "j": "sai3 maa5",
               "e": "small size"
             },
             {
+              "wid": "shopping-015",
               "c": "尺碼",
               "j": "cek3 maa5",
               "e": "size"
             },
             {
+              "wid": "shopping-008",
               "c": "收據",
               "j": "sau1 geoi3",
               "e": "receipt"
@@ -325,22 +353,26 @@
           "english": "There's also noodles.",
           "frameE": "There's also …",
           "answer": {
+            "wid": "food-002",
             "c": "麵",
             "j": "min6",
             "e": "noodles"
           },
           "distractors": [
             {
+              "wid": "food-001",
               "c": "飯",
               "j": "faan6",
               "e": "rice"
             },
             {
+              "wid": "food-006",
               "c": "雞",
               "j": "gai1",
               "e": "chicken"
             },
             {
+              "wid": "food-007",
               "c": "魚",
               "j": "jyu2",
               "e": "fish"
@@ -382,22 +414,26 @@
           "english": "Waiter, please give us a menu.",
           "frameE": "Waiter, please give us a …",
           "answer": {
+            "wid": "restaurant-001",
             "c": "餐牌",
             "j": "caan1 paai4",
             "e": "menu"
           },
           "distractors": [
             {
+              "wid": "restaurant-002",
               "c": "侍應",
               "j": "si6 jing3",
               "e": "waiter"
             },
             {
+              "wid": "restaurant-005",
               "c": "埋單",
               "j": "maai4 daan1",
               "e": "the bill"
             },
             {
+              "wid": "restaurant-004",
               "c": "落單",
               "j": "lok6 daan1",
               "e": "place an order"
@@ -487,22 +523,26 @@
           "english": "I like dogs.",
           "frameE": "I like …",
           "answer": {
+            "wid": "animals-001",
             "c": "狗",
             "j": "gau2",
             "e": "dogs"
           },
           "distractors": [
             {
+              "wid": "animals-002",
               "c": "貓",
               "j": "maau1",
               "e": "cats"
             },
             {
+              "wid": "animals-003",
               "c": "鳥",
               "j": "niu5",
               "e": "birds"
             },
             {
+              "wid": "animals-004",
               "c": "兔仔",
               "j": "tou3 zai2",
               "e": "rabbits"
@@ -518,22 +558,26 @@
           "english": "I like purple, like grapes.",
           "frameE": "I like …, like grapes.",
           "answer": {
+            "wid": "colors-006",
             "c": "紫色",
             "j": "zi2 sik1",
             "e": "purple"
           },
           "distractors": [
             {
+              "wid": "colors-004",
               "c": "綠色",
               "j": "luk6 sik1",
               "e": "green"
             },
             {
+              "wid": "colors-005",
               "c": "藍色",
               "j": "laam4 sik1",
               "e": "blue"
             },
             {
+              "wid": "colors-007",
               "c": "白色",
               "j": "baak6 sik1",
               "e": "white"
@@ -549,22 +593,26 @@
           "english": "My hobby is hiking — I go every weekend.",
           "frameE": "My hobby is … — I go every weekend.",
           "answer": {
+            "wid": "hobbies-005",
             "c": "行山",
             "j": "haang4 saan1",
             "e": "hiking"
           },
           "distractors": [
             {
+              "wid": "hobbies-009",
               "c": "打機",
               "j": "daa2 gei1",
               "e": "play video games"
             },
             {
+              "wid": "hobbies-006",
               "c": "畫畫",
               "j": "waak6 waa2",
               "e": "drawing"
             },
             {
+              "wid": "hobbies-008",
               "c": "跳舞",
               "j": "tiu3 mou5",
               "e": "dance"
@@ -580,22 +628,26 @@
           "english": "I go to KTV to sing.",
           "frameE": "I go to KTV to …",
           "answer": {
+            "wid": "hobbies-007",
             "c": "唱歌",
             "j": "coeng3 go1",
             "e": "sing"
           },
           "distractors": [
             {
+              "wid": "hobbies-003",
               "c": "聽歌",
               "j": "ting1 go1",
               "e": "listen to music"
             },
             {
+              "wid": "hobbies-004",
               "c": "睇書",
               "j": "tai2 syu1",
               "e": "read a book"
             },
             {
+              "wid": "hobbies-010",
               "c": "影相",
               "j": "jing2 soeng2",
               "e": "take photos"
@@ -611,22 +663,26 @@
           "english": "The scenery is beautiful — I want to take photos.",
           "frameE": "The scenery is beautiful — I want to …",
           "answer": {
+            "wid": "hobbies-010",
             "c": "影相",
             "j": "jing2 soeng2",
             "e": "take photos"
           },
           "distractors": [
             {
+              "wid": "hobbies-006",
               "c": "畫畫",
               "j": "waak6 waa2",
               "e": "drawing"
             },
             {
+              "wid": "hobbies-005",
               "c": "行山",
               "j": "haang4 saan1",
               "e": "hiking"
             },
             {
+              "wid": "hobbies-009",
               "c": "打機",
               "j": "daa2 gei1",
               "e": "play video games"
@@ -642,22 +698,26 @@
           "english": "As soon as the music plays, she starts to dance.",
           "frameE": "As soon as the music plays, she starts to …",
           "answer": {
+            "wid": "hobbies-008",
             "c": "跳舞",
             "j": "tiu3 mou5",
             "e": "dance"
           },
           "distractors": [
             {
+              "wid": "hobbies-005",
               "c": "行山",
               "j": "haang4 saan1",
               "e": "hiking"
             },
             {
+              "wid": "hobbies-007",
               "c": "唱歌",
               "j": "coeng3 go1",
               "e": "sing"
             },
             {
+              "wid": "hobbies-002",
               "c": "睇戲",
               "j": "tai2 hei3",
               "e": "watch a movie"
@@ -699,22 +759,26 @@
           "english": "I feel really happy.",
           "frameE": "I feel really …",
           "answer": {
+            "wid": "feelings-001",
             "c": "開心",
             "j": "hoi1 sam1",
             "e": "happy"
           },
           "distractors": [
             {
+              "wid": "feelings-003",
               "c": "嬲",
               "j": "nau1",
               "e": "angry"
             },
             {
+              "wid": "feelings-005",
               "c": "驚",
               "j": "geng1",
               "e": "scared"
             },
             {
+              "wid": "feelings-010",
               "c": "傷心",
               "j": "soeng1 sam1",
               "e": "sad"
@@ -756,22 +820,26 @@
           "english": "I'm very tired.",
           "frameE": "I'm very …",
           "answer": {
+            "wid": "feelings-004",
             "c": "攰",
             "j": "gui6",
             "e": "tired"
           },
           "distractors": [
             {
+              "wid": "feelings-001",
               "c": "開心",
               "j": "hoi1 sam1",
               "e": "happy"
             },
             {
+              "wid": "feelings-003",
               "c": "嬲",
               "j": "nau1",
               "e": "angry"
             },
             {
+              "wid": "feelings-005",
               "c": "驚",
               "j": "geng1",
               "e": "scared"
@@ -787,22 +855,26 @@
           "english": "It's very hot today.",
           "frameE": "It's very … today.",
           "answer": {
+            "wid": "weather-002",
             "c": "熱",
             "j": "jit6",
             "e": "hot"
           },
           "distractors": [
             {
+              "wid": "weather-003",
               "c": "凍",
               "j": "dung3",
               "e": "cold"
             },
             {
+              "wid": "weather-010",
               "c": "潮濕",
               "j": "ciu4 sap1",
               "e": "humid"
             },
             {
+              "wid": "weather-008",
               "c": "風",
               "j": "fung1",
               "e": "wind"
@@ -818,22 +890,26 @@
           "english": "Too expensive!",
           "frameE": "Too …!",
           "answer": {
+            "wid": "shopping-003",
             "c": "貴",
             "j": "gwai3",
             "e": "expensive"
           },
           "distractors": [
             {
+              "wid": "shopping-004",
               "c": "平",
               "j": "peng4",
               "e": "cheap"
             },
             {
+              "wid": "shopping-017",
               "c": "緊",
               "j": "gan2",
               "e": "tight"
             },
             {
+              "wid": "shopping-018",
               "c": "鬆",
               "j": "sung1",
               "e": "loose"
@@ -849,22 +925,26 @@
           "english": "She always helps people, she's very kind.",
           "frameE": "She always helps people, she's very …",
           "answer": {
+            "wid": "feelings-011",
             "c": "善良",
             "j": "sin6 loeng4",
             "e": "kind"
           },
           "distractors": [
             {
+              "wid": "feelings-012",
               "c": "聰明",
               "j": "cung1 ming4",
               "e": "smart"
             },
             {
+              "wid": "feelings-016",
               "c": "懶",
               "j": "laan5",
               "e": "lazy"
             },
             {
+              "wid": "feelings-015",
               "c": "嚴肅",
               "j": "jim4 suk1",
               "e": "serious"
@@ -880,22 +960,26 @@
           "english": "Exam tomorrow — I'm very nervous.",
           "frameE": "Exam tomorrow — I'm very …",
           "answer": {
+            "wid": "feelings-008",
             "c": "緊張",
             "j": "gan2 zoeng1",
             "e": "nervous"
           },
           "distractors": [
             {
+              "wid": "feelings-006",
               "c": "擔心",
               "j": "daam1 sam1",
               "e": "worried"
             },
             {
+              "wid": "feelings-009",
               "c": "無聊",
               "j": "mou4 liu4",
               "e": "bored"
             },
             {
+              "wid": "feelings-007",
               "c": "激動",
               "j": "gik1 dung6",
               "e": "excited"
@@ -911,22 +995,26 @@
           "english": "He works hard every day — very hardworking.",
           "frameE": "He works hard every day — very …",
           "answer": {
+            "wid": "feelings-017",
             "c": "勤力",
             "j": "kan4 lik6",
             "e": "hardworking"
           },
           "distractors": [
             {
+              "wid": "feelings-016",
               "c": "懶",
               "j": "laan5",
               "e": "lazy"
             },
             {
+              "wid": "feelings-014",
               "c": "怕醜",
               "j": "paa3 cau2",
               "e": "shy"
             },
             {
+              "wid": "feelings-018",
               "c": "友善",
               "j": "jau5 sin6",
               "e": "friendly"
@@ -942,22 +1030,26 @@
           "english": "Winter's here — it's cold today.",
           "frameE": "Winter's here — it's … today.",
           "answer": {
+            "wid": "weather-003",
             "c": "凍",
             "j": "dung3",
             "e": "cold"
           },
           "distractors": [
             {
+              "wid": "weather-010",
               "c": "潮濕",
               "j": "ciu4 sap1",
               "e": "humid"
             },
             {
+              "wid": "weather-008",
               "c": "風",
               "j": "fung1",
               "e": "wind"
             },
             {
+              "wid": "weather-007",
               "c": "雲",
               "j": "wan4",
               "e": "cloud"
@@ -973,22 +1065,26 @@
           "english": "It's the wet season — the flat is very humid.",
           "frameE": "It's the wet season — the flat is very …",
           "answer": {
+            "wid": "weather-010",
             "c": "潮濕",
             "j": "ciu4 sap1",
             "e": "humid"
           },
           "distractors": [
             {
+              "wid": "weather-003",
               "c": "凍",
               "j": "dung3",
               "e": "cold"
             },
             {
+              "wid": "weather-008",
               "c": "風",
               "j": "fung1",
               "e": "wind"
             },
             {
+              "wid": "weather-005",
               "c": "太陽",
               "j": "taai3 joeng4",
               "e": "sun"
@@ -1004,22 +1100,26 @@
           "english": "You can walk there — it's very close.",
           "frameE": "You can walk there — it's very …",
           "answer": {
+            "wid": "directions-010",
             "c": "近",
             "j": "kan5",
             "e": "close / near"
           },
           "distractors": [
             {
+              "wid": "directions-009",
               "c": "遠",
               "j": "jyun5",
               "e": "far"
             },
             {
+              "wid": "directions-008",
               "c": "附近",
               "j": "fu6 gan6",
               "e": "nearby"
             },
             {
+              "wid": "directions-007",
               "c": "對面",
               "j": "deoi3 min6",
               "e": "opposite"
@@ -1035,22 +1135,26 @@
           "english": "These trousers are too tight — can't get them on.",
           "frameE": "These trousers are too … — can't get them on.",
           "answer": {
+            "wid": "shopping-017",
             "c": "緊",
             "j": "gan2",
             "e": "tight"
           },
           "distractors": [
             {
+              "wid": "shopping-018",
               "c": "鬆",
               "j": "sung1",
               "e": "loose"
             },
             {
+              "wid": "shopping-003",
               "c": "貴",
               "j": "gwai3",
               "e": "expensive"
             },
             {
+              "wid": "shopping-004",
               "c": "平",
               "j": "peng4",
               "e": "cheap"
@@ -1066,22 +1170,26 @@
           "english": "The dim sum is really delicious — I'll order more.",
           "frameE": "The dim sum is really … — I'll order more.",
           "answer": {
+            "wid": "restaurant-010",
             "c": "好食",
             "j": "hou2 sik6",
             "e": "delicious"
           },
           "distractors": [
             {
+              "wid": "restaurant-009",
               "c": "飽",
               "j": "baau2",
               "e": "full"
             },
             {
+              "wid": "restaurant-006",
               "c": "凍",
               "j": "dung3",
               "e": "cold"
             },
             {
+              "wid": "restaurant-007",
               "c": "熱",
               "j": "jit6",
               "e": "hot"
@@ -1097,22 +1205,26 @@
           "english": "I haven't eaten all day, I'm very hungry.",
           "frameE": "I haven't eaten all day, I'm very …",
           "answer": {
+            "wid": "food-012",
             "c": "餓",
             "j": "ngo6",
             "e": "hungry"
           },
           "distractors": [
             {
+              "wid": "food-021",
               "c": "飽",
               "j": "baau2",
               "e": "full"
             },
             {
+              "wid": "food-011",
               "c": "好味",
               "j": "hou2 mei6",
               "e": "delicious"
             },
             {
+              "wid": "food-022",
               "c": "嘥嘢",
               "j": "saai1 je5",
               "e": "wasteful"
@@ -1128,22 +1240,26 @@
           "english": "The rabbit is fluffy — really so cute.",
           "frameE": "The rabbit is fluffy — really so …",
           "answer": {
+            "wid": "animals-010",
             "c": "可愛",
             "j": "ho2 oi3",
             "e": "cute"
           },
           "distractors": [
             {
+              "wid": "animals-008",
               "c": "寵物",
               "j": "cung2 mat6",
               "e": "pet"
             },
             {
+              "wid": "animals-009",
               "c": "養",
               "j": "joeng5",
               "e": "raise / keep"
             },
             {
+              "wid": "animals-003",
               "c": "鳥",
               "j": "niu5",
               "e": "bird"
@@ -1209,22 +1325,26 @@
           "english": "This is my father.",
           "frameE": "This is my …",
           "answer": {
+            "wid": "family-001",
             "c": "爸爸",
             "j": "baa4 baa1",
             "e": "father"
           },
           "distractors": [
             {
+              "wid": "family-002",
               "c": "媽媽",
               "j": "maa4 maa1",
               "e": "mother"
             },
             {
+              "wid": "family-003",
               "c": "哥哥",
               "j": "go4 go1",
               "e": "older brother"
             },
             {
+              "wid": "family-004",
               "c": "姐姐",
               "j": "ze4 ze1",
               "e": "older sister"
@@ -1240,22 +1360,26 @@
           "english": "My mother loves me very much.",
           "frameE": "My … loves me very much.",
           "answer": {
+            "wid": "family-002",
             "c": "媽媽",
             "j": "maa4 maa1",
             "e": "mother"
           },
           "distractors": [
             {
+              "wid": "family-001",
               "c": "爸爸",
               "j": "baa4 baa1",
               "e": "father"
             },
             {
+              "wid": "family-007",
               "c": "爺爺",
               "j": "je4 je2",
               "e": "grandfather (paternal)"
             },
             {
+              "wid": "family-008",
               "c": "嫲嫲",
               "j": "maa4 maa2",
               "e": "grandmother (paternal)"
@@ -1271,22 +1395,26 @@
           "english": "She teaches us — she's our teacher.",
           "frameE": "She teaches us — she's our …",
           "answer": {
+            "wid": "school-002",
             "c": "老師",
             "j": "lou5 si1",
             "e": "teacher"
           },
           "distractors": [
             {
+              "wid": "school-003",
               "c": "學生",
               "j": "hok6 saang1",
               "e": "student"
             },
             {
+              "wid": "school-008",
               "c": "同學",
               "j": "tung4 hok6",
               "e": "classmate"
             },
             {
+              "wid": "school-001",
               "c": "學校",
               "j": "hok6 haau6",
               "e": "school"
@@ -1302,22 +1430,26 @@
           "english": "He works with me — he's my colleague.",
           "frameE": "He works with me — he's my …",
           "answer": {
+            "wid": "work-003",
             "c": "同事",
             "j": "tung4 si6",
             "e": "colleague"
           },
           "distractors": [
             {
+              "wid": "work-002",
               "c": "老闆",
               "j": "lou5 baan2",
               "e": "boss"
             },
             {
+              "wid": "work-001",
               "c": "公司",
               "j": "gung1 si1",
               "e": "company"
             },
             {
+              "wid": "work-004",
               "c": "工作",
               "j": "gung1 zok3",
               "e": "work / job"
@@ -1333,22 +1465,26 @@
           "english": "I use a computer to type and go online.",
           "frameE": "I use a … to type and go online.",
           "answer": {
+            "wid": "tech-001",
             "c": "電腦",
             "j": "din6 nou5",
             "e": "computer"
           },
           "distractors": [
             {
+              "wid": "tech-002",
               "c": "電話",
               "j": "din6 waa2",
               "e": "phone"
             },
             {
+              "wid": "tech-008",
               "c": "屏幕",
               "j": "ping4 mok6",
               "e": "screen"
             },
             {
+              "wid": "tech-004",
               "c": "程式",
               "j": "cing4 sik1",
               "e": "app / program"
@@ -1364,22 +1500,26 @@
           "english": "I use my hand to pick things up.",
           "frameE": "I use my … to pick things up.",
           "answer": {
+            "wid": "body-006",
             "c": "手",
             "j": "sau2",
             "e": "hand"
           },
           "distractors": [
             {
+              "wid": "body-007",
               "c": "腳",
               "j": "goek3",
               "e": "foot"
             },
             {
+              "wid": "body-002",
               "c": "眼",
               "j": "ngaan5",
               "e": "eyes"
             },
             {
+              "wid": "body-004",
               "c": "鼻",
               "j": "bei6",
               "e": "nose"
@@ -1395,22 +1535,26 @@
           "english": "Don't know the way — can look at the map.",
           "frameE": "Don't know the way — can look at the …",
           "answer": {
+            "wid": "attractions-008",
             "c": "地圖",
             "j": "dei6 tou4",
             "e": "map"
           },
           "distractors": [
             {
+              "wid": "attractions-010",
               "c": "導遊",
               "j": "dou6 jau4",
               "e": "tour guide"
             },
             {
+              "wid": "attractions-001",
               "c": "景點",
               "j": "ging2 dim2",
               "e": "attraction"
             },
             {
+              "wid": "attractions-002",
               "c": "門票",
               "j": "mun4 piu3",
               "e": "entry ticket"
@@ -1452,22 +1596,26 @@
           "english": "I have two daughters.",
           "frameE": "I have two …",
           "answer": {
+            "wid": "family-012",
             "c": "女兒",
             "j": "neoi5 ji4",
             "e": "daughters"
           },
           "distractors": [
             {
+              "wid": "family-011",
               "c": "兒子",
               "j": "ji4 zi2",
               "e": "sons"
             },
             {
+              "wid": "family-005",
               "c": "弟弟",
               "j": "dai6 dai2",
               "e": "younger brothers"
             },
             {
+              "wid": "family-006",
               "c": "妹妹",
               "j": "mui4 mui2",
               "e": "younger sisters"
@@ -1483,22 +1631,26 @@
           "english": "I have a headache, I want to sleep.",
           "frameE": "I have a …, I want to sleep.",
           "answer": {
+            "wid": "body-015",
             "c": "頭痛",
             "j": "tau4 tung3",
             "e": "headache"
           },
           "distractors": [
             {
+              "wid": "body-016",
               "c": "肚痛",
               "j": "tou5 tung3",
               "e": "stomachache"
             },
             {
+              "wid": "body-013",
               "c": "發燒",
               "j": "faat3 siu1",
               "e": "fever"
             },
             {
+              "wid": "body-014",
               "c": "咳",
               "j": "kat1",
               "e": "cough"
@@ -1514,22 +1666,26 @@
           "english": "I feel hot — maybe I have a fever.",
           "frameE": "I feel hot — maybe I have a …",
           "answer": {
+            "wid": "body-013",
             "c": "發燒",
             "j": "faat3 siu1",
             "e": "fever"
           },
           "distractors": [
             {
+              "wid": "body-014",
               "c": "咳",
               "j": "kat1",
               "e": "cough"
             },
             {
+              "wid": "body-015",
               "c": "頭痛",
               "j": "tau4 tung3",
               "e": "headache"
             },
             {
+              "wid": "body-016",
               "c": "肚痛",
               "j": "tou5 tung3",
               "e": "stomachache"
@@ -1545,22 +1701,26 @@
           "english": "I keep a cat at home — it always catches mice.",
           "frameE": "I keep a … at home — it always catches mice.",
           "answer": {
+            "wid": "animals-002",
             "c": "貓",
             "j": "maau1",
             "e": "cat"
           },
           "distractors": [
             {
+              "wid": "animals-003",
               "c": "鳥",
               "j": "niu5",
               "e": "bird"
             },
             {
+              "wid": "animals-004",
               "c": "兔仔",
               "j": "tou3 zai2",
               "e": "rabbit"
             },
             {
+              "wid": "animals-005",
               "c": "馬",
               "j": "maa5",
               "e": "horse"
@@ -1576,22 +1736,26 @@
           "english": "The farm has a horse you can ride.",
           "frameE": "The farm has a … you can ride.",
           "answer": {
+            "wid": "animals-005",
             "c": "馬",
             "j": "maa5",
             "e": "horse"
           },
           "distractors": [
             {
+              "wid": "animals-006",
               "c": "牛",
               "j": "ngau4",
               "e": "cow"
             },
             {
+              "wid": "animals-007",
               "c": "豬",
               "j": "zyu1",
               "e": "pig"
             },
             {
+              "wid": "animals-001",
               "c": "狗",
               "j": "gau2",
               "e": "dog"
@@ -1657,22 +1821,26 @@
           "english": "Where is the MTR?",
           "frameE": "Where is the …?",
           "answer": {
+            "wid": "transport-001",
             "c": "地鐵",
             "j": "dei6 tit3",
             "e": "MTR"
           },
           "distractors": [
             {
+              "wid": "transport-002",
               "c": "巴士",
               "j": "baa1 si2",
               "e": "bus"
             },
             {
+              "wid": "transport-003",
               "c": "的士",
               "j": "dik1 si2",
               "e": "taxi"
             },
             {
+              "wid": "transport-006",
               "c": "火車",
               "j": "fo2 ce1",
               "e": "train"
@@ -1688,22 +1856,26 @@
           "english": "The bank is on the left, not the right.",
           "frameE": "The bank is on the …, not the right.",
           "answer": {
+            "wid": "directions-001",
             "c": "左邊",
             "j": "zo2 bin1",
             "e": "left side"
           },
           "distractors": [
             {
+              "wid": "directions-002",
               "c": "右邊",
               "j": "jau6 bin1",
               "e": "right side"
             },
             {
+              "wid": "directions-003",
               "c": "前面",
               "j": "cin4 min6",
               "e": "in front"
             },
             {
+              "wid": "directions-004",
               "c": "後面",
               "j": "hau6 min6",
               "e": "behind"
@@ -1719,22 +1891,26 @@
           "english": "The station is ahead — a few more steps and you're there.",
           "frameE": "The station is … — a few more steps and you're there.",
           "answer": {
+            "wid": "directions-003",
             "c": "前面",
             "j": "cin4 min6",
             "e": "in front / ahead"
           },
           "distractors": [
             {
+              "wid": "directions-004",
               "c": "後面",
               "j": "hau6 min6",
               "e": "behind"
             },
             {
+              "wid": "directions-007",
               "c": "對面",
               "j": "deoi3 min6",
               "e": "opposite"
             },
             {
+              "wid": "directions-001",
               "c": "左邊",
               "j": "zo2 bin1",
               "e": "left side"
@@ -1750,22 +1926,26 @@
           "english": "The supermarket is right opposite — cross the road and you're there.",
           "frameE": "The supermarket is right … — cross the road and you're there.",
           "answer": {
+            "wid": "directions-007",
             "c": "對面",
             "j": "deoi3 min6",
             "e": "opposite"
           },
           "distractors": [
             {
+              "wid": "directions-008",
               "c": "附近",
               "j": "fu6 gan6",
               "e": "nearby"
             },
             {
+              "wid": "directions-004",
               "c": "後面",
               "j": "hau6 min6",
               "e": "behind"
             },
             {
+              "wid": "directions-002",
               "c": "右邊",
               "j": "jau6 bin1",
               "e": "right side"
@@ -1781,22 +1961,26 @@
           "english": "We have enough people — let's go to the field to play.",
           "frameE": "We have enough people — let's go to the … to play.",
           "answer": {
+            "wid": "sports-008",
             "c": "球場",
             "j": "kau4 coeng4",
             "e": "court / field"
           },
           "distractors": [
             {
+              "wid": "sports-009",
               "c": "隊",
               "j": "deoi6",
               "e": "team"
             },
             {
+              "wid": "sports-006",
               "c": "足球",
               "j": "zuk1 kau4",
               "e": "football"
             },
             {
+              "wid": "sports-001",
               "c": "運動",
               "j": "wan6 dung6",
               "e": "sports"
@@ -1812,22 +1996,26 @@
           "english": "I need cash — go to the bank.",
           "frameE": "I need cash — go to the …",
           "answer": {
+            "wid": "money-002",
             "c": "銀行",
             "j": "ngan4 hong4",
             "e": "bank"
           },
           "distractors": [
             {
+              "wid": "money-003",
               "c": "提款機",
               "j": "tai4 fun2 gei1",
               "e": "ATM"
             },
             {
+              "wid": "money-008",
               "c": "戶口",
               "j": "wu6 hau2",
               "e": "account"
             },
             {
+              "wid": "money-004",
               "c": "現金",
               "j": "jin6 gam1",
               "e": "cash"
@@ -1843,22 +2031,26 @@
           "english": "Upset stomach — need the toilet.",
           "frameE": "Upset stomach — need the …",
           "answer": {
+            "wid": "home-003",
             "c": "廁所",
             "j": "ci3 so2",
             "e": "toilet"
           },
           "distractors": [
             {
+              "wid": "home-002",
               "c": "廚房",
               "j": "cyu4 fong2",
               "e": "kitchen"
             },
             {
+              "wid": "home-004",
               "c": "客廳",
               "j": "haak3 teng1",
               "e": "living room"
             },
             {
+              "wid": "home-005",
               "c": "房",
               "j": "fong2",
               "e": "room / bedroom"
@@ -1874,22 +2066,26 @@
           "english": "It's late — I need to go home to sleep.",
           "frameE": "It's late — I need to go … to sleep.",
           "answer": {
+            "wid": "home-001",
             "c": "屋企",
             "j": "uk1 kei2",
             "e": "home"
           },
           "distractors": [
             {
+              "wid": "home-004",
               "c": "客廳",
               "j": "haak3 teng1",
               "e": "living room"
             },
             {
+              "wid": "home-002",
               "c": "廚房",
               "j": "cyu4 fong2",
               "e": "kitchen"
             },
             {
+              "wid": "home-005",
               "c": "房",
               "j": "fong2",
               "e": "room"
@@ -1931,22 +2127,26 @@
           "english": "I'm going to the hotel.",
           "frameE": "I'm going to the …",
           "answer": {
+            "wid": "hotels-001",
             "c": "酒店",
             "j": "zau2 dim3",
             "e": "hotel"
           },
           "distractors": [
             {
+              "wid": "hotels-002",
               "c": "房間",
               "j": "fong4 gaan1",
               "e": "room"
             },
             {
+              "wid": "hotels-004",
               "c": "早餐",
               "j": "zou2 caan1",
               "e": "breakfast"
             },
             {
+              "wid": "hotels-009",
               "c": "服務員",
               "j": "fuk6 mou6 jyun4",
               "e": "service staff"
@@ -1962,22 +2162,26 @@
           "english": "Seriously ill — need to go to the hospital.",
           "frameE": "Seriously ill — need to go to the …",
           "answer": {
+            "wid": "body-018",
             "c": "醫院",
             "j": "ji1 jyun2",
             "e": "hospital"
           },
           "distractors": [
             {
+              "wid": "body-017",
               "c": "醫生",
               "j": "ji1 sang1",
               "e": "doctor"
             },
             {
+              "wid": "body-020",
               "c": "藥房",
               "j": "joek6 fong2",
               "e": "pharmacy"
             },
             {
+              "wid": "body-019",
               "c": "藥",
               "j": "joek6",
               "e": "medicine"
@@ -1993,22 +2197,26 @@
           "english": "No need to turn — just go straight.",
           "frameE": "No need to turn — just … and you're fine.",
           "answer": {
+            "wid": "directions-005",
             "c": "直行",
             "j": "zik6 haang4",
             "e": "straight ahead"
           },
           "distractors": [
             {
+              "wid": "directions-006",
               "c": "轉",
               "j": "zyun3",
               "e": "turn"
             },
             {
+              "wid": "directions-007",
               "c": "對面",
               "j": "deoi3 min6",
               "e": "opposite"
             },
             {
+              "wid": "directions-008",
               "c": "附近",
               "j": "fu6 gan6",
               "e": "nearby"
@@ -2050,22 +2258,26 @@
           "english": "See you tomorrow!",
           "frameE": "See you …!",
           "answer": {
+            "wid": "time-002",
             "c": "聽日",
             "j": "ting1 jat6",
             "e": "tomorrow"
           },
           "distractors": [
             {
+              "wid": "time-001",
               "c": "今日",
               "j": "gam1 jat6",
               "e": "today"
             },
             {
+              "wid": "time-003",
               "c": "琴日",
               "j": "kam4 jat6",
               "e": "yesterday"
             },
             {
+              "wid": "time-011",
               "c": "朝早",
               "j": "ziu1 zou2",
               "e": "morning"
@@ -2081,22 +2293,26 @@
           "english": "Eat breakfast in the morning.",
           "frameE": "… eat breakfast.",
           "answer": {
+            "wid": "time-011",
             "c": "朝早",
             "j": "ziu1 zou2",
             "e": "morning"
           },
           "distractors": [
             {
+              "wid": "time-012",
               "c": "夜晚",
               "j": "je6 maan5",
               "e": "night"
             },
             {
+              "wid": "time-001",
               "c": "今日",
               "j": "gam1 jat6",
               "e": "today"
             },
             {
+              "wid": "time-002",
               "c": "聽日",
               "j": "ting1 jat6",
               "e": "tomorrow"
@@ -2112,22 +2328,26 @@
           "english": "It rained yesterday.",
           "frameE": "… it rained.",
           "answer": {
+            "wid": "time-003",
             "c": "琴日",
             "j": "kam4 jat6",
             "e": "yesterday"
           },
           "distractors": [
             {
+              "wid": "time-001",
               "c": "今日",
               "j": "gam1 jat6",
               "e": "today"
             },
             {
+              "wid": "time-002",
               "c": "聽日",
               "j": "ting1 jat6",
               "e": "tomorrow"
             },
             {
+              "wid": "time-012",
               "c": "夜晚",
               "j": "je6 maan5",
               "e": "night"
@@ -2193,22 +2413,26 @@
           "english": "Who is your teacher?",
           "frameE": "… is your teacher?",
           "answer": {
+            "wid": "questions-001",
             "c": "邊個",
             "j": "bin1 go3",
             "e": "who"
           },
           "distractors": [
             {
+              "wid": "questions-002",
               "c": "乜嘢",
               "j": "mat1 je5",
               "e": "what"
             },
             {
+              "wid": "questions-003",
               "c": "邊度",
               "j": "bin1 dou6",
               "e": "where"
             },
             {
+              "wid": "questions-004",
               "c": "幾時",
               "j": "gei2 si4",
               "e": "when"
@@ -2250,22 +2474,26 @@
           "english": "What is this?",
           "frameE": "This is …?",
           "answer": {
+            "wid": "questions-002",
             "c": "乜嘢",
             "j": "mat1 je5",
             "e": "what"
           },
           "distractors": [
             {
+              "wid": "questions-001",
               "c": "邊個",
               "j": "bin1 go3",
               "e": "who"
             },
             {
+              "wid": "questions-003",
               "c": "邊度",
               "j": "bin1 dou6",
               "e": "where"
             },
             {
+              "wid": "questions-004",
               "c": "幾時",
               "j": "gei2 si4",
               "e": "when"
@@ -2307,22 +2535,26 @@
           "english": "Where do you live?",
           "frameE": "You live at …?",
           "answer": {
+            "wid": "questions-003",
             "c": "邊度",
             "j": "bin1 dou6",
             "e": "where"
           },
           "distractors": [
             {
+              "wid": "questions-004",
               "c": "幾時",
               "j": "gei2 si4",
               "e": "when"
             },
             {
+              "wid": "questions-001",
               "c": "邊個",
               "j": "bin1 go3",
               "e": "who"
             },
             {
+              "wid": "questions-005",
               "c": "點解",
               "j": "dim2 gaai2",
               "e": "why"
@@ -2338,22 +2570,26 @@
           "english": "The driver asks: Where to?",
           "frameE": "The driver asks: …",
           "answer": {
+            "wid": "transport-008",
             "c": "去邊度？",
             "j": "heoi3 bin1 dou6",
             "e": "Where to?"
           },
           "distractors": [
             {
+              "wid": "transport-009",
               "c": "幾遠？",
               "j": "gei2 jyun5",
               "e": "How far?"
             },
             {
+              "wid": "transport-010",
               "c": "停",
               "j": "ting4",
               "e": "stop"
             },
             {
+              "wid": "transport-001",
               "c": "地鐵",
               "j": "dei6 tit3",
               "e": "MTR"
@@ -2395,22 +2631,26 @@
           "english": "When are we going to eat?",
           "frameE": "… are we going to eat?",
           "answer": {
+            "wid": "questions-004",
             "c": "幾時",
             "j": "gei2 si4",
             "e": "when"
           },
           "distractors": [
             {
+              "wid": "questions-001",
               "c": "邊個",
               "j": "bin1 go3",
               "e": "who"
             },
             {
+              "wid": "questions-005",
               "c": "點解",
               "j": "dim2 gaai2",
               "e": "why"
             },
             {
+              "wid": "questions-006",
               "c": "點樣",
               "j": "dim2 joeng2",
               "e": "how"
@@ -2452,22 +2692,26 @@
           "english": "Why aren't you coming?",
           "frameE": "You … aren't coming?",
           "answer": {
+            "wid": "questions-005",
             "c": "點解",
             "j": "dim2 gaai2",
             "e": "why"
           },
           "distractors": [
             {
+              "wid": "questions-006",
               "c": "點樣",
               "j": "dim2 joeng2",
               "e": "how"
             },
             {
+              "wid": "questions-004",
               "c": "幾時",
               "j": "gei2 si4",
               "e": "when"
             },
             {
+              "wid": "questions-002",
               "c": "乜嘢",
               "j": "mat1 je5",
               "e": "what"
@@ -2509,22 +2753,26 @@
           "english": "How many books do you have?",
           "frameE": "You have … books?",
           "answer": {
+            "wid": "numbers-021",
             "c": "幾多",
             "j": "gei2 do1",
             "e": "how many"
           },
           "distractors": [
             {
+              "wid": "numbers-015",
               "c": "一百",
               "j": "jat1 baak3",
               "e": "one hundred"
             },
             {
+              "wid": "numbers-014",
               "c": "五十",
               "j": "ng5 sap6",
               "e": "fifty"
             },
             {
+              "wid": "numbers-020",
               "c": "一半",
               "j": "jat1 bun3",
               "e": "half"
@@ -2540,22 +2788,26 @@
           "english": "How much? — Fifty dollars.",
           "frameE": "… — Fifty dollars.",
           "answer": {
+            "wid": "phrases-005",
             "c": "幾錢？",
             "j": "gei2 cin2",
             "e": "How much?"
           },
           "distractors": [
             {
+              "wid": "phrases-006",
               "c": "喺邊度？",
               "j": "hai2 bin1 dou6",
               "e": "Where is it?"
             },
             {
+              "wid": "phrases-003",
               "c": "你好嗎？",
               "j": "nei5 hou2 maa3",
               "e": "How are you?"
             },
             {
+              "wid": "phrases-001",
               "c": "你叫乜名？",
               "j": "nei5 giu3 mat1 meng2",
               "e": "What's your name?"
@@ -2597,22 +2849,26 @@
           "english": "Driver, how far is it to the airport?",
           "frameE": "Driver, to the airport — …",
           "answer": {
+            "wid": "transport-009",
             "c": "幾遠？",
             "j": "gei2 jyun5",
             "e": "How far?"
           },
           "distractors": [
             {
+              "wid": "transport-008",
               "c": "去邊度？",
               "j": "heoi3 bin1 dou6",
               "e": "Where to?"
             },
             {
+              "wid": "transport-010",
               "c": "停",
               "j": "ting4",
               "e": "stop"
             },
             {
+              "wid": "transport-004",
               "c": "飛機",
               "j": "fei1 gei1",
               "e": "airplane"
@@ -2628,22 +2884,26 @@
           "english": "Want to go to the museum — first ask what time it opens.",
           "frameE": "Want to go to the museum — first ask …",
           "answer": {
+            "wid": "attractions-009",
             "c": "開幾點",
             "j": "hoi1 gei2 dim2",
             "e": "what time does it open"
           },
           "distractors": [
             {
+              "wid": "attractions-004",
               "c": "開放",
               "j": "hoi1 fong3",
               "e": "open (for visitors)"
             },
             {
+              "wid": "attractions-005",
               "c": "排隊",
               "j": "paai4 deoi2",
               "e": "queue"
             },
             {
+              "wid": "attractions-006",
               "c": "入場",
               "j": "jap6 coeng4",
               "e": "entry"
@@ -2685,22 +2945,26 @@
           "english": "I have eaten.",
           "frameE": "I have … eaten (marked done).",
           "answer": {
+            "wid": "tense-001",
             "c": "咗",
             "j": "zo2",
             "e": "(completed action)"
           },
           "distractors": [
             {
+              "wid": "tense-002",
               "c": "緊",
               "j": "gan2",
               "e": "(currently happening)"
             },
             {
+              "wid": "tense-003",
               "c": "過",
               "j": "gwo3",
               "e": "(experienced before)"
             },
             {
+              "wid": "tense-007",
               "c": "未",
               "j": "mei6",
               "e": "not yet"
@@ -2742,22 +3006,26 @@
           "english": "I'm eating right now, wait a bit.",
           "frameE": "I'm … eating, wait a bit.",
           "answer": {
+            "wid": "tense-002",
             "c": "緊",
             "j": "gan2",
             "e": "(currently happening)"
           },
           "distractors": [
             {
+              "wid": "tense-001",
               "c": "咗",
               "j": "zo2",
               "e": "(completed action)"
             },
             {
+              "wid": "tense-003",
               "c": "過",
               "j": "gwo3",
               "e": "(experienced before)"
             },
             {
+              "wid": "tense-005",
               "c": "會",
               "j": "wui5",
               "e": "will"
@@ -2799,22 +3067,26 @@
           "english": "I've been to Hong Kong before.",
           "frameE": "I've been to Hong Kong …",
           "answer": {
+            "wid": "tense-003",
             "c": "過",
             "j": "gwo3",
             "e": "(experienced before)"
           },
           "distractors": [
             {
+              "wid": "tense-002",
               "c": "緊",
               "j": "gan2",
               "e": "(currently happening)"
             },
             {
+              "wid": "tense-004",
               "c": "住",
               "j": "zyu6",
               "e": "(ongoing state)"
             },
             {
+              "wid": "tense-009",
               "c": "剛剛",
               "j": "gong1 gong1",
               "e": "just now"
@@ -2856,22 +3128,26 @@
           "english": "It will rain tomorrow.",
           "frameE": "Tomorrow it … rain.",
           "answer": {
+            "wid": "tense-005",
             "c": "會",
             "j": "wui5",
             "e": "will"
           },
           "distractors": [
             {
+              "wid": "tense-001",
               "c": "咗",
               "j": "zo2",
               "e": "(completed action)"
             },
             {
+              "wid": "tense-008",
               "c": "已經",
               "j": "ji5 ging1",
               "e": "already"
             },
             {
+              "wid": "tense-009",
               "c": "剛剛",
               "j": "gong1 gong1",
               "e": "just now"
@@ -2913,22 +3189,26 @@
           "english": "I've already eaten.",
           "frameE": "I've … eaten.",
           "answer": {
+            "wid": "tense-008",
             "c": "已經",
             "j": "ji5 ging1",
             "e": "already"
           },
           "distractors": [
             {
+              "wid": "tense-007",
               "c": "未",
               "j": "mei6",
               "e": "not yet"
             },
             {
+              "wid": "tense-009",
               "c": "剛剛",
               "j": "gong1 gong1",
               "e": "just now"
             },
             {
+              "wid": "tense-010",
               "c": "快啲",
               "j": "faai3 di1",
               "e": "soon / quickly"
@@ -2970,22 +3250,26 @@
           "english": "Have you eaten?",
           "frameE": "Have you eaten …?",
           "answer": {
+            "wid": "particles-004",
             "c": "嗎",
             "j": "maa3",
             "e": "(yes/no question)"
           },
           "distractors": [
             {
+              "wid": "particles-001",
               "c": "喇",
               "j": "laa3",
               "e": "(now / completion)"
             },
             {
+              "wid": "particles-002",
               "c": "啦",
               "j": "laa1",
               "e": "(softening / suggestion)"
             },
             {
+              "wid": "particles-007",
               "c": "㗎",
               "j": "gaa3",
               "e": "(matter-of-fact)"
@@ -3027,22 +3311,26 @@
           "english": "Let's get going!",
           "frameE": "Let's get going …!",
           "answer": {
+            "wid": "particles-002",
             "c": "啦",
             "j": "laa1",
             "e": "(softening / suggestion)"
           },
           "distractors": [
             {
+              "wid": "particles-004",
               "c": "嗎",
               "j": "maa3",
               "e": "(yes/no question)"
             },
             {
+              "wid": "particles-009",
               "c": "咩",
               "j": "me1",
               "e": "(surprised question)"
             },
             {
+              "wid": "particles-008",
               "c": "咋",
               "j": "zaa3",
               "e": "(only / limitation)"
@@ -3084,22 +3372,26 @@
           "english": "I'm full now.",
           "frameE": "I'm full …",
           "answer": {
+            "wid": "particles-001",
             "c": "喇",
             "j": "laa3",
             "e": "(now / completion)"
           },
           "distractors": [
             {
+              "wid": "particles-004",
               "c": "嗎",
               "j": "maa3",
               "e": "(yes/no question)"
             },
             {
+              "wid": "particles-009",
               "c": "咩",
               "j": "me1",
               "e": "(surprised question)"
             },
             {
+              "wid": "particles-010",
               "c": "吖",
               "j": "aa1",
               "e": "(gentle prompt)"
@@ -3141,22 +3433,26 @@
           "english": "He's left, really? I'm surprised.",
           "frameE": "He's left …? I'm surprised.",
           "answer": {
+            "wid": "particles-009",
             "c": "咩",
             "j": "me1",
             "e": "(surprised question)"
           },
           "distractors": [
             {
+              "wid": "particles-001",
               "c": "喇",
               "j": "laa3",
               "e": "(now / completion)"
             },
             {
+              "wid": "particles-002",
               "c": "啦",
               "j": "laa1",
               "e": "(softening / suggestion)"
             },
             {
+              "wid": "particles-006",
               "c": "囉",
               "j": "lo3",
               "e": "(obviously / exasperation)"
@@ -3198,22 +3494,26 @@
           "english": "He's a teacher, that's a fact — don't doubt it.",
           "frameE": "He's a teacher … — don't doubt it.",
           "answer": {
+            "wid": "particles-007",
             "c": "㗎",
             "j": "gaa3",
             "e": "(matter-of-fact)"
           },
           "distractors": [
             {
+              "wid": "particles-004",
               "c": "嗎",
               "j": "maa3",
               "e": "(yes/no question)"
             },
             {
+              "wid": "particles-009",
               "c": "咩",
               "j": "me1",
               "e": "(surprised question)"
             },
             {
+              "wid": "particles-010",
               "c": "吖",
               "j": "aa1",
               "e": "(gentle prompt)"
@@ -3255,22 +3555,26 @@
           "english": "One, two, three, four, five.",
           "frameE": "One, two, …, four, five.",
           "answer": {
+            "wid": "numbers-004",
             "c": "三",
             "j": "saam1",
             "e": "three"
           },
           "distractors": [
             {
+              "wid": "numbers-007",
               "c": "六",
               "j": "luk6",
               "e": "six"
             },
             {
+              "wid": "numbers-003",
               "c": "二",
               "j": "ji6",
               "e": "two"
             },
             {
+              "wid": "numbers-008",
               "c": "七",
               "j": "cat1",
               "e": "seven"
@@ -3312,22 +3616,26 @@
           "english": "This is one hundred dollars.",
           "frameE": "This is … dollars.",
           "answer": {
+            "wid": "numbers-015",
             "c": "一百",
             "j": "jat1 baak3",
             "e": "one hundred"
           },
           "distractors": [
             {
+              "wid": "numbers-016",
               "c": "五百",
               "j": "ng5 baak3",
               "e": "five hundred"
             },
             {
+              "wid": "numbers-017",
               "c": "一千",
               "j": "jat1 cin1",
               "e": "one thousand"
             },
             {
+              "wid": "numbers-011",
               "c": "十",
               "j": "sap6",
               "e": "ten"
@@ -3343,22 +3651,26 @@
           "english": "I have fifty dollars.",
           "frameE": "I have … dollars.",
           "answer": {
+            "wid": "numbers-014",
             "c": "五十",
             "j": "ng5 sap6",
             "e": "fifty"
           },
           "distractors": [
             {
+              "wid": "numbers-012",
               "c": "二十",
               "j": "ji6 sap6",
               "e": "twenty"
             },
             {
+              "wid": "numbers-013",
               "c": "三十",
               "j": "saam1 sap6",
               "e": "thirty"
             },
             {
+              "wid": "numbers-015",
               "c": "一百",
               "j": "jat1 baak3",
               "e": "one hundred"
@@ -3400,22 +3712,26 @@
           "english": "I ate half of the watermelon.",
           "frameE": "I ate … of the watermelon.",
           "answer": {
+            "wid": "numbers-020",
             "c": "一半",
             "j": "jat1 bun3",
             "e": "half"
           },
           "distractors": [
             {
+              "wid": "numbers-002",
               "c": "一",
               "j": "jat1",
               "e": "one"
             },
             {
+              "wid": "numbers-003",
               "c": "二",
               "j": "ji6",
               "e": "two"
             },
             {
+              "wid": "numbers-004",
               "c": "三",
               "j": "saam1",
               "e": "three"
@@ -3481,22 +3797,26 @@
           "english": "Don't stay home — let's go out together.",
           "frameE": "Don't stay home — let's go out … .",
           "answer": {
+            "wid": "friends-003",
             "c": "一齊",
             "j": "jat1 cai4",
             "e": "together"
           },
           "distractors": [
             {
+              "wid": "friends-004",
               "c": "得閒",
               "j": "dak1 haan4",
               "e": "free"
             },
             {
+              "wid": "friends-002",
               "c": "約",
               "j": "joek3",
               "e": "make plans"
             },
             {
+              "wid": "friends-009",
               "c": "玩",
               "j": "waan2",
               "e": "hang out"
@@ -3586,22 +3906,26 @@
           "english": "Hello! My name is William.",
           "frameE": "…! My name is William.",
           "answer": {
+            "wid": "greetings-001",
             "c": "你好",
             "j": "nei5 hou2",
             "e": "Hello"
           },
           "distractors": [
             {
+              "wid": "greetings-004",
               "c": "再見",
               "j": "zoi3 gin3",
               "e": "Goodbye"
             },
             {
+              "wid": "greetings-008",
               "c": "對唔住",
               "j": "deoi3 m4 zyu6",
               "e": "Sorry"
             },
             {
+              "wid": "greetings-006",
               "c": "多謝",
               "j": "do1 ze6",
               "e": "Thank you"
@@ -3617,22 +3941,26 @@
           "english": "Good morning! Did you sleep well?",
           "frameE": "…! Did you sleep well?",
           "answer": {
+            "wid": "greetings-002",
             "c": "早晨",
             "j": "zou2 san4",
             "e": "Good morning"
           },
           "distractors": [
             {
+              "wid": "greetings-003",
               "c": "晚上好",
               "j": "maan5 soeng6 hou2",
               "e": "Good evening"
             },
             {
+              "wid": "greetings-004",
               "c": "再見",
               "j": "zoi3 gin3",
               "e": "Goodbye"
             },
             {
+              "wid": "greetings-006",
               "c": "多謝",
               "j": "do1 ze6",
               "e": "Thank you"
@@ -3648,22 +3976,26 @@
           "english": "Thank you, goodbye!",
           "frameE": "Thank you, …!",
           "answer": {
+            "wid": "greetings-004",
             "c": "再見",
             "j": "zoi3 gin3",
             "e": "Goodbye"
           },
           "distractors": [
             {
+              "wid": "greetings-001",
               "c": "你好",
               "j": "nei5 hou2",
               "e": "Hello"
             },
             {
+              "wid": "greetings-002",
               "c": "早晨",
               "j": "zou2 san4",
               "e": "Good morning"
             },
             {
+              "wid": "greetings-009",
               "c": "係",
               "j": "hai6",
               "e": "Yes"
@@ -3705,22 +4037,26 @@
           "english": "Sorry, I'm late.",
           "frameE": "…, I'm late.",
           "answer": {
+            "wid": "greetings-008",
             "c": "對唔住",
             "j": "deoi3 m4 zyu6",
             "e": "Sorry"
           },
           "distractors": [
             {
+              "wid": "greetings-006",
               "c": "多謝",
               "j": "do1 ze6",
               "e": "Thank you"
             },
             {
+              "wid": "greetings-001",
               "c": "你好",
               "j": "nei5 hou2",
               "e": "Hello"
             },
             {
+              "wid": "greetings-002",
               "c": "早晨",
               "j": "zou2 san4",
               "e": "Good morning"
@@ -3736,22 +4072,26 @@
           "english": "Thank you! — You're welcome.",
           "frameE": "Thank you! — …",
           "answer": {
+            "wid": "greetings-007",
             "c": "唔緊要",
             "j": "m4 gan2 jiu3",
             "e": "You're welcome"
           },
           "distractors": [
             {
+              "wid": "greetings-008",
               "c": "對唔住",
               "j": "deoi3 m4 zyu6",
               "e": "Sorry"
             },
             {
+              "wid": "greetings-002",
               "c": "早晨",
               "j": "zou2 san4",
               "e": "Good morning"
             },
             {
+              "wid": "greetings-004",
               "c": "再見",
               "j": "zoi3 gin3",
               "e": "Goodbye"
@@ -3793,22 +4133,26 @@
           "english": "Excuse me, let me through.",
           "frameE": "…, let me through.",
           "answer": {
+            "wid": "yesno-007",
             "c": "唔該",
             "j": "m4 goi1",
             "e": "Excuse me / please"
           },
           "distractors": [
             {
+              "wid": "yesno-008",
               "c": "多謝",
               "j": "do1 ze6",
               "e": "Thank you"
             },
             {
+              "wid": "yesno-009",
               "c": "請",
               "j": "cing2",
               "e": "Please (formal)"
             },
             {
+              "wid": "yesno-010",
               "c": "歡迎",
               "j": "fun1 jing4",
               "e": "Welcome"
@@ -3824,22 +4168,26 @@
           "english": "Welcome (to our shop)!",
           "frameE": "… (to our shop)!",
           "answer": {
+            "wid": "yesno-010",
             "c": "歡迎",
             "j": "fun1 jing4",
             "e": "Welcome"
           },
           "distractors": [
             {
+              "wid": "yesno-008",
               "c": "多謝",
               "j": "do1 ze6",
               "e": "Thank you"
             },
             {
+              "wid": "yesno-009",
               "c": "請",
               "j": "cing2",
               "e": "Please (formal)"
             },
             {
+              "wid": "yesno-001",
               "c": "係",
               "j": "hai6",
               "e": "Yes"
@@ -3855,22 +4203,26 @@
           "english": "Please sit down.",
           "frameE": "… sit down.",
           "answer": {
+            "wid": "yesno-009",
             "c": "請",
             "j": "cing2",
             "e": "Please (formal)"
           },
           "distractors": [
             {
+              "wid": "yesno-010",
               "c": "歡迎",
               "j": "fun1 jing4",
               "e": "Welcome"
             },
             {
+              "wid": "yesno-001",
               "c": "係",
               "j": "hai6",
               "e": "Yes"
             },
             {
+              "wid": "yesno-005",
               "c": "得",
               "j": "dak1",
               "e": "OK"
@@ -3912,22 +4264,26 @@
           "english": "Is he a student? — Yes.",
           "frameE": "Is he a student? — …",
           "answer": {
+            "wid": "yesno-001",
             "c": "係",
             "j": "hai6",
             "e": "Yes"
           },
           "distractors": [
             {
+              "wid": "yesno-007",
               "c": "唔該",
               "j": "m4 goi1",
               "e": "Please"
             },
             {
+              "wid": "yesno-009",
               "c": "請",
               "j": "cing2",
               "e": "Please (formal)"
             },
             {
+              "wid": "yesno-010",
               "c": "歡迎",
               "j": "fun1 jing4",
               "e": "Welcome"
@@ -3943,22 +4299,26 @@
           "english": "Can we go now? — Sure.",
           "frameE": "Can we go now? — …",
           "answer": {
+            "wid": "yesno-005",
             "c": "得",
             "j": "dak1",
             "e": "OK / can do"
           },
           "distractors": [
             {
+              "wid": "yesno-006",
               "c": "唔得",
               "j": "m4 dak1",
               "e": "Can't"
             },
             {
+              "wid": "yesno-007",
               "c": "唔該",
               "j": "m4 goi1",
               "e": "Please"
             },
             {
+              "wid": "yesno-010",
               "c": "歡迎",
               "j": "fun1 jing4",
               "e": "Welcome"
@@ -4000,22 +4360,26 @@
           "english": "What is your name? — My name is William.",
           "frameE": "… — My name is William.",
           "answer": {
+            "wid": "phrases-001",
             "c": "你叫乜名？",
             "j": "nei5 giu3 mat1 meng2",
             "e": "What's your name?"
           },
           "distractors": [
             {
+              "wid": "phrases-003",
               "c": "你好嗎？",
               "j": "nei5 hou2 maa3",
               "e": "How are you?"
             },
             {
+              "wid": "phrases-005",
               "c": "幾錢？",
               "j": "gei2 cin2",
               "e": "How much?"
             },
             {
+              "wid": "phrases-006",
               "c": "喺邊度？",
               "j": "hai2 bin1 dou6",
               "e": "Where is it?"
@@ -4031,22 +4395,26 @@
           "english": "What's your name? — My name is William.",
           "frameE": "What's your name? — … William.",
           "answer": {
+            "wid": "phrases-002",
             "c": "我叫…",
             "j": "ngo5 giu3",
             "e": "My name is…"
           },
           "distractors": [
             {
+              "wid": "phrases-007",
               "c": "我唔明",
               "j": "ngo5 m4 ming4",
               "e": "I don't understand"
             },
             {
+              "wid": "phrases-010",
               "c": "我要呢個",
               "j": "ngo5 jiu3 ni1 go3",
               "e": "I want this one"
             },
             {
+              "wid": "phrases-004",
               "c": "我好好",
               "j": "ngo5 hou2 hou2",
               "e": "I'm fine"
@@ -4062,22 +4430,26 @@
           "english": "How are you? — I'm well, thanks!",
           "frameE": "… — I'm well, thanks!",
           "answer": {
+            "wid": "phrases-003",
             "c": "你好嗎？",
             "j": "nei5 hou2 maa3",
             "e": "How are you?"
           },
           "distractors": [
             {
+              "wid": "phrases-005",
               "c": "幾錢？",
               "j": "gei2 cin2",
               "e": "How much?"
             },
             {
+              "wid": "phrases-006",
               "c": "喺邊度？",
               "j": "hai2 bin1 dou6",
               "e": "Where is it?"
             },
             {
+              "wid": "phrases-001",
               "c": "你叫乜名？",
               "j": "nei5 giu3 mat1 meng2",
               "e": "What's your name?"
@@ -4093,22 +4465,26 @@
           "english": "I don't understand — please speak slowly.",
           "frameE": "… — please speak slowly.",
           "answer": {
+            "wid": "phrases-007",
             "c": "我唔明",
             "j": "ngo5 m4 ming4",
             "e": "I don't understand"
           },
           "distractors": [
             {
+              "wid": "phrases-004",
               "c": "我好好",
               "j": "ngo5 hou2 hou2",
               "e": "I'm fine"
             },
             {
+              "wid": "phrases-010",
               "c": "我要呢個",
               "j": "ngo5 jiu3 ni1 go3",
               "e": "I want this one"
             },
             {
+              "wid": "phrases-006",
               "c": "喺邊度？",
               "j": "hai2 bin1 dou6",
               "e": "Where is it?"
@@ -4150,22 +4526,26 @@
           "english": "Free at the weekend — I want to make plans with a few friends.",
           "frameE": "Free at the weekend — I want to … a few friends out.",
           "answer": {
+            "wid": "friends-002",
             "c": "約",
             "j": "joek3",
             "e": "make plans / appointment"
           },
           "distractors": [
             {
+              "wid": "friends-008",
               "c": "邀請",
               "j": "jiu1 cing2",
               "e": "invite"
             },
             {
+              "wid": "friends-009",
               "c": "玩",
               "j": "waan2",
               "e": "hang out"
             },
             {
+              "wid": "friends-010",
               "c": "慶祝",
               "j": "hing3 zuk1",
               "e": "celebrate"
@@ -4181,22 +4561,26 @@
           "english": "Are you free tomorrow? Let's go see a movie.",
           "frameE": "Tomorrow are you …? Let's go see a movie.",
           "answer": {
+            "wid": "friends-004",
             "c": "得閒",
             "j": "dak1 haan4",
             "e": "free / have time"
           },
           "distractors": [
             {
+              "wid": "friends-003",
               "c": "一齊",
               "j": "jat1 cai4",
               "e": "together"
             },
             {
+              "wid": "friends-006",
               "c": "出街",
               "j": "ceot1 gaai1",
               "e": "go out"
             },
             {
+              "wid": "friends-007",
               "c": "改日",
               "j": "goi2 jat6",
               "e": "another day"
@@ -4212,22 +4596,26 @@
           "english": "It's my birthday — I want to invite you all to my place.",
           "frameE": "It's my birthday — I want to … you all to my place.",
           "answer": {
+            "wid": "friends-008",
             "c": "邀請",
             "j": "jiu1 cing2",
             "e": "invite"
           },
           "distractors": [
             {
+              "wid": "friends-005",
               "c": "派對",
               "j": "paai3 deoi3",
               "e": "party"
             },
             {
+              "wid": "friends-010",
               "c": "慶祝",
               "j": "hing3 zuk1",
               "e": "celebrate"
             },
             {
+              "wid": "friends-002",
               "c": "約",
               "j": "joek3",
               "e": "make plans"
@@ -4243,22 +4631,26 @@
           "english": "Not free today — let's do it another day.",
           "frameE": "Not free today — let's do it … instead.",
           "answer": {
+            "wid": "friends-007",
             "c": "改日",
             "j": "goi2 jat6",
             "e": "another day"
           },
           "distractors": [
             {
+              "wid": "friends-004",
               "c": "得閒",
               "j": "dak1 haan4",
               "e": "free"
             },
             {
+              "wid": "friends-003",
               "c": "一齊",
               "j": "jat1 cai4",
               "e": "together"
             },
             {
+              "wid": "friends-005",
               "c": "派對",
               "j": "paai3 deoi3",
               "e": "party"
@@ -4300,22 +4692,26 @@
           "english": "My older brother is two years older than me.",
           "frameE": "My … is two years older than me.",
           "answer": {
+            "wid": "family-003",
             "c": "哥哥",
             "j": "go4 go1",
             "e": "older brother"
           },
           "distractors": [
             {
+              "wid": "family-005",
               "c": "弟弟",
               "j": "dai6 dai2",
               "e": "younger brother"
             },
             {
+              "wid": "family-004",
               "c": "姐姐",
               "j": "ze4 ze1",
               "e": "older sister"
             },
             {
+              "wid": "family-006",
               "c": "妹妹",
               "j": "mui4 mui2",
               "e": "younger sister"
@@ -4331,22 +4727,26 @@
           "english": "My paternal grandfather lives in the village.",
           "frameE": "My … lives in the village.",
           "answer": {
+            "wid": "family-007",
             "c": "爺爺",
             "j": "je4 je2",
             "e": "grandfather (paternal)"
           },
           "distractors": [
             {
+              "wid": "family-009",
               "c": "外公",
               "j": "ngoi6 gung1",
               "e": "grandfather (maternal)"
             },
             {
+              "wid": "family-008",
               "c": "嫲嫲",
               "j": "maa4 maa2",
               "e": "grandmother (paternal)"
             },
             {
+              "wid": "family-010",
               "c": "外婆",
               "j": "ngoi6 po4",
               "e": "grandmother (maternal)"
@@ -4388,22 +4788,26 @@
           "english": "We go for dim sum on Sunday.",
           "frameE": "We go for dim sum on …",
           "answer": {
+            "wid": "time-010",
             "c": "星期日",
             "j": "sing1 kei4 jat6",
             "e": "Sunday"
           },
           "distractors": [
             {
+              "wid": "time-004",
               "c": "星期一",
               "j": "sing1 kei4 jat1",
               "e": "Monday"
             },
             {
+              "wid": "time-006",
               "c": "星期三",
               "j": "sing1 kei4 saam1",
               "e": "Wednesday"
             },
             {
+              "wid": "time-008",
               "c": "星期五",
               "j": "sing1 kei4 ng5",
               "e": "Friday"
@@ -4419,22 +4823,26 @@
           "english": "Today is Monday, have to work.",
           "frameE": "Today is …, have to work.",
           "answer": {
+            "wid": "time-004",
             "c": "星期一",
             "j": "sing1 kei4 jat1",
             "e": "Monday"
           },
           "distractors": [
             {
+              "wid": "time-009",
               "c": "星期六",
               "j": "sing1 kei4 luk6",
               "e": "Saturday"
             },
             {
+              "wid": "time-010",
               "c": "星期日",
               "j": "sing1 kei4 jat6",
               "e": "Sunday"
             },
             {
+              "wid": "time-007",
               "c": "星期四",
               "j": "sing1 kei4 sei3",
               "e": "Thursday"
@@ -4476,22 +4884,26 @@
           "english": "The fire truck is red.",
           "frameE": "The fire truck is …",
           "answer": {
+            "wid": "colors-001",
             "c": "紅色",
             "j": "hung4 sik1",
             "e": "red"
           },
           "distractors": [
             {
+              "wid": "colors-005",
               "c": "藍色",
               "j": "laam4 sik1",
               "e": "blue"
             },
             {
+              "wid": "colors-004",
               "c": "綠色",
               "j": "luk6 sik1",
               "e": "green"
             },
             {
+              "wid": "colors-003",
               "c": "黃色",
               "j": "wong4 sik1",
               "e": "yellow"
@@ -4507,22 +4919,26 @@
           "english": "The sky is blue.",
           "frameE": "The sky is …",
           "answer": {
+            "wid": "colors-005",
             "c": "藍色",
             "j": "laam4 sik1",
             "e": "blue"
           },
           "distractors": [
             {
+              "wid": "colors-006",
               "c": "紫色",
               "j": "zi2 sik1",
               "e": "purple"
             },
             {
+              "wid": "colors-002",
               "c": "橙色",
               "j": "caang2 sik1",
               "e": "orange"
             },
             {
+              "wid": "colors-010",
               "c": "棕色",
               "j": "zung1 sik1",
               "e": "brown"
@@ -4538,22 +4954,26 @@
           "english": "The night sky is dark — it's black.",
           "frameE": "The night sky is dark — it's …",
           "answer": {
+            "wid": "colors-008",
             "c": "黑色",
             "j": "hak1 sik1",
             "e": "black"
           },
           "distractors": [
             {
+              "wid": "colors-007",
               "c": "白色",
               "j": "baak6 sik1",
               "e": "white"
             },
             {
+              "wid": "colors-003",
               "c": "黃色",
               "j": "wong4 sik1",
               "e": "yellow"
             },
             {
+              "wid": "colors-009",
               "c": "粉紅色",
               "j": "fan2 hung4 sik1",
               "e": "pink"
@@ -4569,22 +4989,26 @@
           "english": "A banana is yellow.",
           "frameE": "A banana is …",
           "answer": {
+            "wid": "colors-003",
             "c": "黃色",
             "j": "wong4 sik1",
             "e": "yellow"
           },
           "distractors": [
             {
+              "wid": "colors-006",
               "c": "紫色",
               "j": "zi2 sik1",
               "e": "purple"
             },
             {
+              "wid": "colors-005",
               "c": "藍色",
               "j": "laam4 sik1",
               "e": "blue"
             },
             {
+              "wid": "colors-008",
               "c": "黑色",
               "j": "hak1 sik1",
               "e": "black"
@@ -4626,22 +5050,26 @@
           "english": "Iced coffee, no sugar — not too sweet.",
           "frameE": "Iced coffee, … — not too sweet.",
           "answer": {
+            "wid": "food-019",
             "c": "走甜",
             "j": "zau2 tim4",
             "e": "no sugar / less sweet"
           },
           "distractors": [
             {
+              "wid": "food-018",
               "c": "加冰",
               "j": "gaa1 bing1",
               "e": "add ice"
             },
             {
+              "wid": "food-020",
               "c": "少冰",
               "j": "siu2 bing1",
               "e": "less ice"
             },
             {
+              "wid": "food-017",
               "c": "熱飲",
               "j": "jit6 jam2",
               "e": "hot drink"
@@ -4657,22 +5085,26 @@
           "english": "It's cold — I'll have a hot drink.",
           "frameE": "It's cold — I'll have a …",
           "answer": {
+            "wid": "food-017",
             "c": "熱飲",
             "j": "jit6 jam2",
             "e": "hot drink"
           },
           "distractors": [
             {
+              "wid": "food-016",
               "c": "凍飲",
               "j": "dung3 jam2",
               "e": "cold drink"
             },
             {
+              "wid": "food-018",
               "c": "加冰",
               "j": "gaa1 bing1",
               "e": "add ice"
             },
             {
+              "wid": "food-005",
               "c": "咖啡",
               "j": "gaa3 fe1",
               "e": "coffee"
@@ -4714,22 +5146,26 @@
           "english": "Cantonese people like to steam fish to keep it fresh.",
           "frameE": "Cantonese people like to … fish to keep it fresh.",
           "answer": {
+            "wid": "cooking-003",
             "c": "蒸",
             "j": "zing1",
             "e": "steam"
           },
           "distractors": [
             {
+              "wid": "cooking-002",
               "c": "炒",
               "j": "caau2",
               "e": "stir-fry"
             },
             {
+              "wid": "cooking-001",
               "c": "煮",
               "j": "zyu2",
               "e": "cook"
             },
             {
+              "wid": "cooking-008",
               "c": "切",
               "j": "cit3",
               "e": "cut"
@@ -4745,22 +5181,26 @@
           "english": "The soup is bland — add a bit more salt.",
           "frameE": "The soup is bland — add a bit more …",
           "answer": {
+            "wid": "cooking-005",
             "c": "鹽",
             "j": "jim4",
             "e": "salt"
           },
           "distractors": [
             {
+              "wid": "cooking-006",
               "c": "糖",
               "j": "tong4",
               "e": "sugar"
             },
             {
+              "wid": "cooking-007",
               "c": "油",
               "j": "jau4",
               "e": "oil"
             },
             {
+              "wid": "cooking-010",
               "c": "醬油",
               "j": "zoeng3 jau4",
               "e": "soy sauce"
@@ -4776,22 +5216,26 @@
           "english": "Before stir-frying, put some oil in the wok first.",
           "frameE": "Before stir-frying, put some … in the wok first.",
           "answer": {
+            "wid": "cooking-007",
             "c": "油",
             "j": "jau4",
             "e": "oil"
           },
           "distractors": [
             {
+              "wid": "cooking-010",
               "c": "醬油",
               "j": "zoeng3 jau4",
               "e": "soy sauce"
             },
             {
+              "wid": "cooking-005",
               "c": "鹽",
               "j": "jim4",
               "e": "salt"
             },
             {
+              "wid": "cooking-006",
               "c": "糖",
               "j": "tong4",
               "e": "sugar"
@@ -4807,22 +5251,26 @@
           "english": "Before cooking, cut the vegetables.",
           "frameE": "Before cooking, … the vegetables.",
           "answer": {
+            "wid": "cooking-008",
             "c": "切",
             "j": "cit3",
             "e": "cut"
           },
           "distractors": [
             {
+              "wid": "cooking-003",
               "c": "蒸",
               "j": "zing1",
               "e": "steam"
             },
             {
+              "wid": "cooking-002",
               "c": "炒",
               "j": "caau2",
               "e": "stir-fry"
             },
             {
+              "wid": "cooking-001",
               "c": "煮",
               "j": "zyu2",
               "e": "cook"
@@ -4838,22 +5286,26 @@
           "english": "Stir-frying needs a big wok — hot enough to taste good.",
           "frameE": "Stir-frying needs a big … — hot enough to taste good.",
           "answer": {
+            "wid": "cooking-004",
             "c": "鑊",
             "j": "wok6",
             "e": "wok"
           },
           "distractors": [
             {
+              "wid": "cooking-009",
               "c": "食材",
               "j": "sik6 coi4",
               "e": "ingredients"
             },
             {
+              "wid": "cooking-010",
               "c": "醬油",
               "j": "zoeng3 jau4",
               "e": "soy sauce"
             },
             {
+              "wid": "cooking-007",
               "c": "油",
               "j": "jau4",
               "e": "oil"
@@ -4895,22 +5347,26 @@
           "english": "Fell in the water — shout for help!",
           "frameE": "Fell in the water — shout …!",
           "answer": {
+            "wid": "emergencies-001",
             "c": "救命",
             "j": "gau3 meng6",
             "e": "Help! / Save me!"
           },
           "distractors": [
             {
+              "wid": "emergencies-002",
               "c": "報警",
               "j": "bou3 ging2",
               "e": "call the police"
             },
             {
+              "wid": "emergencies-006",
               "c": "危險",
               "j": "ngai4 him2",
               "e": "dangerous"
             },
             {
+              "wid": "emergencies-009",
               "c": "受傷",
               "j": "sau6 soeng1",
               "e": "injured"
@@ -4926,22 +5382,26 @@
           "english": "The house was burgled — call the police right away.",
           "frameE": "The house was burgled — … right away.",
           "answer": {
+            "wid": "emergencies-002",
             "c": "報警",
             "j": "bou3 ging2",
             "e": "call the police"
           },
           "distractors": [
             {
+              "wid": "emergencies-008",
               "c": "警察",
               "j": "ging2 caat3",
               "e": "police"
             },
             {
+              "wid": "emergencies-001",
               "c": "救命",
               "j": "gau3 meng6",
               "e": "Help!"
             },
             {
+              "wid": "emergencies-007",
               "c": "走",
               "j": "zau2",
               "e": "flee / escape"
@@ -4957,22 +5417,26 @@
           "english": "The kitchen's caught fire — very dangerous!",
           "frameE": "The kitchen's caught … — very dangerous!",
           "answer": {
+            "wid": "emergencies-003",
             "c": "火",
             "j": "fo2",
             "e": "fire"
           },
           "distractors": [
             {
+              "wid": "emergencies-006",
               "c": "危險",
               "j": "ngai4 him2",
               "e": "dangerous"
             },
             {
+              "wid": "emergencies-009",
               "c": "受傷",
               "j": "sau6 soeng1",
               "e": "injured"
             },
             {
+              "wid": "emergencies-007",
               "c": "走",
               "j": "zau2",
               "e": "flee / escape"
@@ -4988,22 +5452,26 @@
           "english": "He's injured — call an ambulance quick.",
           "frameE": "He's injured — quick, call an …",
           "answer": {
+            "wid": "emergencies-005",
             "c": "救護車",
             "j": "gau3 wu6 ce1",
             "e": "ambulance"
           },
           "distractors": [
             {
+              "wid": "emergencies-004",
               "c": "急症室",
               "j": "gap1 zing3 sat1",
               "e": "A&E / ER"
             },
             {
+              "wid": "emergencies-008",
               "c": "警察",
               "j": "ging2 caat3",
               "e": "police"
             },
             {
+              "wid": "emergencies-006",
               "c": "危險",
               "j": "ngai4 him2",
               "e": "dangerous"
@@ -5019,22 +5487,26 @@
           "english": "There's a fire — everyone get out quick!",
           "frameE": "There's a fire — everyone quick, …!",
           "answer": {
+            "wid": "emergencies-007",
             "c": "走",
             "j": "zau2",
             "e": "flee / escape"
           },
           "distractors": [
             {
+              "wid": "emergencies-009",
               "c": "受傷",
               "j": "sau6 soeng1",
               "e": "injured"
             },
             {
+              "wid": "emergencies-002",
               "c": "報警",
               "j": "bou3 ging2",
               "e": "call the police"
             },
             {
+              "wid": "emergencies-003",
               "c": "火",
               "j": "fo2",
               "e": "fire"
@@ -5076,22 +5548,26 @@
           "english": "I want to go online to watch videos, but there's no signal.",
           "frameE": "I want to … to watch videos, but there's no signal.",
           "answer": {
+            "wid": "tech-003",
             "c": "上網",
             "j": "soeng5 mong5",
             "e": "go online"
           },
           "distractors": [
             {
+              "wid": "tech-006",
               "c": "充電",
               "j": "cung1 din6",
               "e": "charge battery"
             },
             {
+              "wid": "tech-007",
               "c": "訊號",
               "j": "seon3 hou6",
               "e": "signal"
             },
             {
+              "wid": "tech-005",
               "c": "密碼",
               "j": "mat6 maa5",
               "e": "password"
@@ -5107,22 +5583,26 @@
           "english": "To use this app you first enter the password.",
           "frameE": "To use this app you first enter the …",
           "answer": {
+            "wid": "tech-005",
             "c": "密碼",
             "j": "mat6 maa5",
             "e": "password"
           },
           "distractors": [
             {
+              "wid": "tech-004",
               "c": "程式",
               "j": "cing4 sik1",
               "e": "app / program"
             },
             {
+              "wid": "tech-007",
               "c": "訊號",
               "j": "seon3 hou6",
               "e": "signal"
             },
             {
+              "wid": "tech-008",
               "c": "屏幕",
               "j": "ping4 mok6",
               "e": "screen"
@@ -5138,22 +5618,26 @@
           "english": "Battery's low — need to charge it soon.",
           "frameE": "Battery's low — need to … soon.",
           "answer": {
+            "wid": "tech-006",
             "c": "充電",
             "j": "cung1 din6",
             "e": "charge battery"
           },
           "distractors": [
             {
+              "wid": "tech-007",
               "c": "訊號",
               "j": "seon3 hou6",
               "e": "signal"
             },
             {
+              "wid": "tech-003",
               "c": "上網",
               "j": "soeng5 mong5",
               "e": "go online"
             },
             {
+              "wid": "tech-005",
               "c": "密碼",
               "j": "mat6 maa5",
               "e": "password"
@@ -5169,22 +5653,26 @@
           "english": "The phone fell on the floor — it's broken.",
           "frameE": "The phone fell on the floor — it's … now.",
           "answer": {
+            "wid": "tech-009",
             "c": "壞",
             "j": "waai6",
             "e": "broken / not working"
           },
           "distractors": [
             {
+              "wid": "tech-006",
               "c": "充電",
               "j": "cung1 din6",
               "e": "charge battery"
             },
             {
+              "wid": "tech-003",
               "c": "上網",
               "j": "soeng5 mong5",
               "e": "go online"
             },
             {
+              "wid": "tech-008",
               "c": "屏幕",
               "j": "ping4 mok6",
               "e": "screen"
@@ -5226,22 +5714,26 @@
           "english": "It's late — finally can finish work and go home.",
           "frameE": "It's late — finally can … and go home.",
           "answer": {
+            "wid": "work-007",
             "c": "放工",
             "j": "fong3 gung1",
             "e": "finish work"
           },
           "distractors": [
             {
+              "wid": "work-006",
               "c": "返工",
               "j": "faan1 gung1",
               "e": "go to work"
             },
             {
+              "wid": "work-005",
               "c": "開會",
               "j": "hoi1 wui2",
               "e": "meeting"
             },
             {
+              "wid": "work-008",
               "c": "加班",
               "j": "gaa1 baan1",
               "e": "overtime"
@@ -5257,22 +5749,26 @@
           "english": "Can't finish the work — have to work overtime tonight.",
           "frameE": "Can't finish the work — have to … tonight.",
           "answer": {
+            "wid": "work-008",
             "c": "加班",
             "j": "gaa1 baan1",
             "e": "overtime"
           },
           "distractors": [
             {
+              "wid": "work-005",
               "c": "開會",
               "j": "hoi1 wui2",
               "e": "meeting"
             },
             {
+              "wid": "work-006",
               "c": "返工",
               "j": "faan1 gung1",
               "e": "go to work"
             },
             {
+              "wid": "work-007",
               "c": "放工",
               "j": "fong3 gung1",
               "e": "finish work"
@@ -5288,22 +5784,26 @@
           "english": "It's the end of the month — finally payday.",
           "frameE": "It's the end of the month — finally …",
           "answer": {
+            "wid": "work-009",
             "c": "出糧",
             "j": "ceot1 loeng4",
             "e": "get paid"
           },
           "distractors": [
             {
+              "wid": "work-008",
               "c": "加班",
               "j": "gaa1 baan1",
               "e": "overtime"
             },
             {
+              "wid": "work-005",
               "c": "開會",
               "j": "hoi1 wui2",
               "e": "meeting"
             },
             {
+              "wid": "work-010",
               "c": "截止日期",
               "j": "zit6 zi2 jat6 kei4",
               "e": "deadline"
@@ -5319,22 +5819,26 @@
           "english": "I work at a big company.",
           "frameE": "I work at a big …",
           "answer": {
+            "wid": "work-001",
             "c": "公司",
             "j": "gung1 si1",
             "e": "company"
           },
           "distractors": [
             {
+              "wid": "work-002",
               "c": "老闆",
               "j": "lou5 baan2",
               "e": "boss"
             },
             {
+              "wid": "work-003",
               "c": "同事",
               "j": "tung4 si6",
               "e": "colleague"
             },
             {
+              "wid": "work-004",
               "c": "工作",
               "j": "gung1 zok3",
               "e": "work / job"
@@ -5376,22 +5880,26 @@
           "english": "After school you have to do homework.",
           "frameE": "After school you have to do …",
           "answer": {
+            "wid": "school-004",
             "c": "功課",
             "j": "gung1 fo3",
             "e": "homework"
           },
           "distractors": [
             {
+              "wid": "school-005",
               "c": "考試",
               "j": "haau2 si3",
               "e": "exam"
             },
             {
+              "wid": "school-007",
               "c": "上堂",
               "j": "soeng5 tong4",
               "e": "go to class"
             },
             {
+              "wid": "school-006",
               "c": "讀書",
               "j": "duk6 syu1",
               "e": "study"
@@ -5407,22 +5915,26 @@
           "english": "The bell rang — time to go to class.",
           "frameE": "The bell rang — time to go to …",
           "answer": {
+            "wid": "school-007",
             "c": "上堂",
             "j": "soeng5 tong4",
             "e": "go to class"
           },
           "distractors": [
             {
+              "wid": "school-005",
               "c": "考試",
               "j": "haau2 si3",
               "e": "exam"
             },
             {
+              "wid": "school-004",
               "c": "功課",
               "j": "gung1 fo3",
               "e": "homework"
             },
             {
+              "wid": "school-006",
               "c": "讀書",
               "j": "duk6 syu1",
               "e": "study"
@@ -5438,22 +5950,26 @@
           "english": "The teacher asks a question — I raise my hand to answer.",
           "frameE": "The teacher asks a question — I raise my hand to …",
           "answer": {
+            "wid": "school-010",
             "c": "答",
             "j": "daap3",
             "e": "answer"
           },
           "distractors": [
             {
+              "wid": "school-009",
               "c": "識",
               "j": "sik1",
               "e": "know how to"
             },
             {
+              "wid": "school-006",
               "c": "讀書",
               "j": "duk6 syu1",
               "e": "study"
             },
             {
+              "wid": "school-007",
               "c": "上堂",
               "j": "soeng5 tong4",
               "e": "go to class"
@@ -5469,22 +5985,26 @@
           "english": "I go to school every day to study.",
           "frameE": "I go to … every day to study.",
           "answer": {
+            "wid": "school-001",
             "c": "學校",
             "j": "hok6 haau6",
             "e": "school"
           },
           "distractors": [
             {
+              "wid": "school-002",
               "c": "老師",
               "j": "lou5 si1",
               "e": "teacher"
             },
             {
+              "wid": "school-008",
               "c": "同學",
               "j": "tung4 hok6",
               "e": "classmate"
             },
             {
+              "wid": "school-004",
               "c": "功課",
               "j": "gung1 fo3",
               "e": "homework"
@@ -5526,22 +6046,26 @@
           "english": "I've arrived at the hotel — I'd like to check in.",
           "frameE": "I've arrived at the hotel — I'd like to …",
           "answer": {
+            "wid": "hotels-007",
             "c": "入住",
             "j": "jap6 zyu6",
             "e": "check in"
           },
           "distractors": [
             {
+              "wid": "hotels-008",
               "c": "退房",
               "j": "teoi3 fong2",
               "e": "check out"
             },
             {
+              "wid": "hotels-006",
               "c": "訂房",
               "j": "deng6 fong2",
               "e": "book a room"
             },
             {
+              "wid": "hotels-005",
               "c": "行李",
               "j": "hang4 lei5",
               "e": "luggage"
@@ -5557,22 +6081,26 @@
           "english": "Can't open the door — I lost the key.",
           "frameE": "Can't open the door — I lost the …",
           "answer": {
+            "wid": "hotels-003",
             "c": "鎖匙",
             "j": "so2 si4",
             "e": "key"
           },
           "distractors": [
             {
+              "wid": "hotels-002",
               "c": "房間",
               "j": "fong4 gaan1",
               "e": "room"
             },
             {
+              "wid": "hotels-005",
               "c": "行李",
               "j": "hang4 lei5",
               "e": "luggage"
             },
             {
+              "wid": "hotels-004",
               "c": "早餐",
               "j": "zou2 caan1",
               "e": "breakfast"
@@ -5588,22 +6116,26 @@
           "english": "Staff, please help carry my luggage up to the room.",
           "frameE": "Staff, please help carry my … up to the room.",
           "answer": {
+            "wid": "hotels-005",
             "c": "行李",
             "j": "hang4 lei5",
             "e": "luggage"
           },
           "distractors": [
             {
+              "wid": "hotels-004",
               "c": "早餐",
               "j": "zou2 caan1",
               "e": "breakfast"
             },
             {
+              "wid": "hotels-003",
               "c": "鎖匙",
               "j": "so2 si4",
               "e": "key"
             },
             {
+              "wid": "hotels-002",
               "c": "房間",
               "j": "fong4 gaan1",
               "e": "room"
@@ -5619,22 +6151,26 @@
           "english": "I ask the staff: what floor is breakfast on?",
           "frameE": "I ask the staff: breakfast is on … floor?",
           "answer": {
+            "wid": "hotels-010",
             "c": "幾樓",
             "j": "gei2 lau2",
             "e": "what floor"
           },
           "distractors": [
             {
+              "wid": "hotels-009",
               "c": "服務員",
               "j": "fuk6 mou6 jyun4",
               "e": "service staff"
             },
             {
+              "wid": "hotels-002",
               "c": "房間",
               "j": "fong4 gaan1",
               "e": "room"
             },
             {
+              "wid": "hotels-006",
               "c": "訂房",
               "j": "deng6 fong2",
               "e": "book a room"
@@ -5676,22 +6212,26 @@
           "english": "When sleeping, you sleep on the bed.",
           "frameE": "When sleeping, you sleep on the …",
           "answer": {
+            "wid": "home-006",
             "c": "床",
             "j": "cong4",
             "e": "bed"
           },
           "distractors": [
             {
+              "wid": "home-007",
               "c": "枱",
               "j": "toi2",
               "e": "table"
             },
             {
+              "wid": "home-008",
               "c": "椅",
               "j": "ji2",
               "e": "chair"
             },
             {
+              "wid": "home-009",
               "c": "窗",
               "j": "coeng1",
               "e": "window"
@@ -5707,22 +6247,26 @@
           "english": "The room is stuffy — open the window for some air.",
           "frameE": "The room is stuffy — open the … for some air.",
           "answer": {
+            "wid": "home-009",
             "c": "窗",
             "j": "coeng1",
             "e": "window"
           },
           "distractors": [
             {
+              "wid": "home-010",
               "c": "門",
               "j": "mun4",
               "e": "door"
             },
             {
+              "wid": "home-006",
               "c": "床",
               "j": "cong4",
               "e": "bed"
             },
             {
+              "wid": "home-007",
               "c": "枱",
               "j": "toi2",
               "e": "table"
@@ -5738,22 +6282,26 @@
           "english": "Cooking food, of course, happens in the kitchen.",
           "frameE": "Cooking food, of course, happens in the …",
           "answer": {
+            "wid": "home-002",
             "c": "廚房",
             "j": "cyu4 fong2",
             "e": "kitchen"
           },
           "distractors": [
             {
+              "wid": "home-004",
               "c": "客廳",
               "j": "haak3 teng1",
               "e": "living room"
             },
             {
+              "wid": "home-003",
               "c": "廁所",
               "j": "ci3 so2",
               "e": "toilet"
             },
             {
+              "wid": "home-005",
               "c": "房",
               "j": "fong2",
               "e": "room"
@@ -5795,22 +6343,26 @@
           "english": "Remember an umbrella — it's raining outside.",
           "frameE": "Remember an umbrella — outside it's …",
           "answer": {
+            "wid": "weather-004",
             "c": "落雨",
             "j": "lok6 jyu5",
             "e": "raining"
           },
           "distractors": [
             {
+              "wid": "weather-005",
               "c": "太陽",
               "j": "taai3 joeng4",
               "e": "sun"
             },
             {
+              "wid": "weather-009",
               "c": "雪",
               "j": "syut3",
               "e": "snow"
             },
             {
+              "wid": "weather-007",
               "c": "雲",
               "j": "wan4",
               "e": "cloud"
@@ -5826,22 +6378,26 @@
           "english": "The observatory says there's a typhoon — stay home.",
           "frameE": "The observatory says there's a … — stay home.",
           "answer": {
+            "wid": "weather-006",
             "c": "颱風",
             "j": "toi4 fung1",
             "e": "typhoon"
           },
           "distractors": [
             {
+              "wid": "weather-008",
               "c": "風",
               "j": "fung1",
               "e": "wind"
             },
             {
+              "wid": "weather-007",
               "c": "雲",
               "j": "wan4",
               "e": "cloud"
             },
             {
+              "wid": "weather-009",
               "c": "雪",
               "j": "syut3",
               "e": "snow"
@@ -5883,22 +6439,26 @@
           "english": "To be healthy, do more exercise.",
           "frameE": "To be healthy, do more …",
           "answer": {
+            "wid": "sports-001",
             "c": "運動",
             "j": "wan6 dung6",
             "e": "sports / exercise"
           },
           "distractors": [
             {
+              "wid": "sports-002",
               "c": "健身",
               "j": "gin6 san1",
               "e": "work out / gym"
             },
             {
+              "wid": "sports-003",
               "c": "跑步",
               "j": "paau2 bou6",
               "e": "run / jog"
             },
             {
+              "wid": "sports-004",
               "c": "游水",
               "j": "jau4 seoi2",
               "e": "swim"
@@ -5914,22 +6474,26 @@
           "english": "Hot weather — I like to swim to cool off.",
           "frameE": "Hot weather — I like to … to cool off.",
           "answer": {
+            "wid": "sports-004",
             "c": "游水",
             "j": "jau4 seoi2",
             "e": "swim"
           },
           "distractors": [
             {
+              "wid": "sports-003",
               "c": "跑步",
               "j": "paau2 bou6",
               "e": "run / jog"
             },
             {
+              "wid": "sports-002",
               "c": "健身",
               "j": "gin6 san1",
               "e": "work out"
             },
             {
+              "wid": "sports-005",
               "c": "打波",
               "j": "daa2 bo1",
               "e": "play ball"
@@ -5945,22 +6509,26 @@
           "english": "Our team has eleven players — we play football.",
           "frameE": "Our team has eleven players — we play …",
           "answer": {
+            "wid": "sports-006",
             "c": "足球",
             "j": "zuk1 kau4",
             "e": "football / soccer"
           },
           "distractors": [
             {
+              "wid": "sports-007",
               "c": "籃球",
               "j": "laam4 kau4",
               "e": "basketball"
             },
             {
+              "wid": "sports-005",
               "c": "打波",
               "j": "daa2 bo1",
               "e": "play ball"
             },
             {
+              "wid": "sports-001",
               "c": "運動",
               "j": "wan6 dung6",
               "e": "sports"
@@ -5976,22 +6544,26 @@
           "english": "Scored in the last minute — we won!",
           "frameE": "Scored in the last minute — we … !",
           "answer": {
+            "wid": "sports-010",
             "c": "贏",
             "j": "jeng4",
             "e": "win"
           },
           "distractors": [
             {
+              "wid": "sports-009",
               "c": "隊",
               "j": "deoi6",
               "e": "team"
             },
             {
+              "wid": "sports-008",
               "c": "球場",
               "j": "kau4 coeng4",
               "e": "court"
             },
             {
+              "wid": "sports-005",
               "c": "打波",
               "j": "daa2 bo1",
               "e": "play ball"
@@ -6033,22 +6605,26 @@
           "english": "I have no coins — can I use a credit card?",
           "frameE": "I have no coins — can I use a …?",
           "answer": {
+            "wid": "money-005",
             "c": "信用卡",
             "j": "seon3 jung6 kaat1",
             "e": "credit card"
           },
           "distractors": [
             {
+              "wid": "money-004",
               "c": "現金",
               "j": "jin6 gam1",
               "e": "cash"
             },
             {
+              "wid": "money-007",
               "c": "散紙",
               "j": "saan3 zi2",
               "e": "coins / small change"
             },
             {
+              "wid": "money-008",
               "c": "戶口",
               "j": "wu6 hau2",
               "e": "account"
@@ -6064,22 +6640,26 @@
           "english": "Gave a hundred — he gives twenty in change.",
           "frameE": "Gave a hundred — he gives twenty in …",
           "answer": {
+            "wid": "money-006",
             "c": "找錢",
             "j": "zaau2 cin2",
             "e": "change (returned)"
           },
           "distractors": [
             {
+              "wid": "money-007",
               "c": "散紙",
               "j": "saan3 zi2",
               "e": "coins"
             },
             {
+              "wid": "money-004",
               "c": "現金",
               "j": "jin6 gam1",
               "e": "cash"
             },
             {
+              "wid": "money-009",
               "c": "匯錢",
               "j": "wui6 cin2",
               "e": "transfer money"
@@ -6095,22 +6675,26 @@
           "english": "Before travelling, change money into HK dollars.",
           "frameE": "Before travelling, … into HK dollars.",
           "answer": {
+            "wid": "money-010",
             "c": "唱錢",
             "j": "coeng3 cin2",
             "e": "change money"
           },
           "distractors": [
             {
+              "wid": "money-009",
               "c": "匯錢",
               "j": "wui6 cin2",
               "e": "transfer money"
             },
             {
+              "wid": "money-006",
               "c": "找錢",
               "j": "zaau2 cin2",
               "e": "change (returned)"
             },
             {
+              "wid": "money-008",
               "c": "戶口",
               "j": "wu6 hau2",
               "e": "account"
@@ -6126,22 +6710,26 @@
           "english": "I'd like to open an account at the bank.",
           "frameE": "I'd like to open an … at the bank.",
           "answer": {
+            "wid": "money-008",
             "c": "戶口",
             "j": "wu6 hau2",
             "e": "account"
           },
           "distractors": [
             {
+              "wid": "money-004",
               "c": "現金",
               "j": "jin6 gam1",
               "e": "cash"
             },
             {
+              "wid": "money-005",
               "c": "信用卡",
               "j": "seon3 jung6 kaat1",
               "e": "credit card"
             },
             {
+              "wid": "money-003",
               "c": "提款機",
               "j": "tai4 fun2 gei1",
               "e": "ATM"
@@ -6183,22 +6771,26 @@
           "english": "We've looked at the menu — ready to order.",
           "frameE": "We've looked at the menu — ready to …",
           "answer": {
+            "wid": "restaurant-004",
             "c": "落單",
             "j": "lok6 daan1",
             "e": "place an order"
           },
           "distractors": [
             {
+              "wid": "restaurant-005",
               "c": "埋單",
               "j": "maai4 daan1",
               "e": "ask for the bill"
             },
             {
+              "wid": "restaurant-001",
               "c": "餐牌",
               "j": "caan1 paai4",
               "e": "menu"
             },
             {
+              "wid": "restaurant-002",
               "c": "侍應",
               "j": "si6 jing3",
               "e": "waiter"
@@ -6214,22 +6806,26 @@
           "english": "We're full — bill, please.",
           "frameE": "We're full — …, please.",
           "answer": {
+            "wid": "restaurant-005",
             "c": "埋單",
             "j": "maai4 daan1",
             "e": "ask for the bill"
           },
           "distractors": [
             {
+              "wid": "restaurant-004",
               "c": "落單",
               "j": "lok6 daan1",
               "e": "place an order"
             },
             {
+              "wid": "restaurant-001",
               "c": "餐牌",
               "j": "caan1 paai4",
               "e": "menu"
             },
             {
+              "wid": "restaurant-010",
               "c": "好食",
               "j": "hou2 sik6",
               "e": "delicious"
@@ -6271,22 +6867,26 @@
           "english": "Traffic jam — let's take the bus.",
           "frameE": "Traffic jam — let's take the …",
           "answer": {
+            "wid": "transport-002",
             "c": "巴士",
             "j": "baa1 si2",
             "e": "bus"
           },
           "distractors": [
             {
+              "wid": "transport-003",
               "c": "的士",
               "j": "dik1 si2",
               "e": "taxi"
             },
             {
+              "wid": "transport-006",
               "c": "火車",
               "j": "fo2 ce1",
               "e": "train"
             },
             {
+              "wid": "transport-007",
               "c": "單車",
               "j": "daan1 ce1",
               "e": "bicycle"
@@ -6302,22 +6902,26 @@
           "english": "We're here — stop here.",
           "frameE": "We're here — … here.",
           "answer": {
+            "wid": "transport-010",
             "c": "停",
             "j": "ting4",
             "e": "stop"
           },
           "distractors": [
             {
+              "wid": "transport-009",
               "c": "幾遠？",
               "j": "gei2 jyun5",
               "e": "How far?"
             },
             {
+              "wid": "transport-005",
               "c": "船",
               "j": "syun4",
               "e": "boat / ferry"
             },
             {
+              "wid": "transport-006",
               "c": "火車",
               "j": "fo2 ce1",
               "e": "train"
@@ -6359,22 +6963,26 @@
           "english": "I want to buy this shirt.",
           "frameE": "I want to … this shirt.",
           "answer": {
+            "wid": "shopping-005",
             "c": "買",
             "j": "maai5",
             "e": "buy"
           },
           "distractors": [
             {
+              "wid": "shopping-006",
               "c": "賣",
               "j": "maai6",
               "e": "sell"
             },
             {
+              "wid": "shopping-016",
               "c": "試吓",
               "j": "si3 haa5",
               "e": "try on"
             },
             {
+              "wid": "shopping-010",
               "c": "唔要",
               "j": "m4 jiu3",
               "e": "don't want it"
@@ -6416,22 +7024,26 @@
           "english": "The child wants to keep a small animal.",
           "frameE": "The child wants to … a small animal.",
           "answer": {
+            "wid": "animals-009",
             "c": "養",
             "j": "joeng5",
             "e": "raise / keep (a pet)"
           },
           "distractors": [
             {
+              "wid": "animals-008",
               "c": "寵物",
               "j": "cung2 mat6",
               "e": "pet"
             },
             {
+              "wid": "animals-010",
               "c": "可愛",
               "j": "ho2 oi3",
               "e": "cute"
             },
             {
+              "wid": "animals-002",
               "c": "貓",
               "j": "maau1",
               "e": "cat"
@@ -6473,22 +7085,26 @@
           "english": "Lots of people — we have to queue before we can get in.",
           "frameE": "Lots of people — we have to … before we can get in.",
           "answer": {
+            "wid": "attractions-005",
             "c": "排隊",
             "j": "paai4 deoi2",
             "e": "queue / line up"
           },
           "distractors": [
             {
+              "wid": "attractions-006",
               "c": "入場",
               "j": "jap6 coeng4",
               "e": "entry"
             },
             {
+              "wid": "attractions-003",
               "c": "拍照",
               "j": "paak3 ziu3",
               "e": "take photos"
             },
             {
+              "wid": "attractions-002",
               "c": "門票",
               "j": "mun4 piu3",
               "e": "entry ticket"
@@ -6504,22 +7120,26 @@
           "english": "The view is so beautiful — of course I'll take photos.",
           "frameE": "The view is so beautiful — of course I'll …",
           "answer": {
+            "wid": "attractions-003",
             "c": "拍照",
             "j": "paak3 ziu3",
             "e": "take photos"
           },
           "distractors": [
             {
+              "wid": "attractions-007",
               "c": "紀念品",
               "j": "gei2 nim6 ban2",
               "e": "souvenir"
             },
             {
+              "wid": "attractions-005",
               "c": "排隊",
               "j": "paai4 deoi2",
               "e": "queue"
             },
             {
+              "wid": "attractions-008",
               "c": "地圖",
               "j": "dei6 tou4",
               "e": "map"

@@ -9,51 +9,61 @@
       "note": "Eating out in Hong Kong has its own ritual. You'll hear <em>dim2 sam1</em> (點心 — dim sum, literally 'touch the heart') at yum cha, and the waiter asking <em>jiu3 dim2 je5?</em> ('what would you like?'). Note <strong>lok6 daan1</strong> (落單) for placing an order, and <strong>maai4 daan1</strong> (埋單) for asking for the bill — both are fixed compound verbs worth learning as units. Most everyday eating happens at a <em>caa4 caan1 teng1</em> (茶餐廳 — HK-style cafe).",
       "words": [
         {
+          "id": "restaurant-001",
           "c": "餐牌",
           "j": "caan1 paai4",
           "e": "Menu"
         },
         {
+          "id": "restaurant-002",
           "c": "侍應",
           "j": "si6 jing3",
           "e": "Waiter / Waitress"
         },
         {
+          "id": "restaurant-003",
           "c": "點心",
           "j": "dim2 sam1",
           "e": "Dim sum"
         },
         {
+          "id": "restaurant-004",
           "c": "落單",
           "j": "lok6 daan1",
           "e": "To order (place an order)"
         },
         {
+          "id": "restaurant-005",
           "c": "埋單",
           "j": "maai4 daan1",
           "e": "Ask for the bill"
         },
         {
+          "id": "restaurant-006",
           "c": "凍",
           "j": "dung3",
           "e": "Cold (drink)"
         },
         {
+          "id": "restaurant-007",
           "c": "熱",
           "j": "jit6",
           "e": "Hot"
         },
         {
+          "id": "restaurant-008",
           "c": "少冰",
           "j": "siu2 bing1",
           "e": "Less ice"
         },
         {
+          "id": "restaurant-009",
           "c": "飽",
           "j": "baau2",
           "e": "Full (after eating)"
         },
         {
+          "id": "restaurant-010",
           "c": "好食",
           "j": "hou2 sik6",
           "e": "Delicious / tasty"
@@ -369,5 +379,6 @@
         ]
       }
     }
-  }
+  },
+  "_idSeq": 10
 }

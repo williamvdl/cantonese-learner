@@ -9,51 +9,61 @@
       "note": null,
       "words": [
         {
+          "id": "body-001",
           "c": "頭",
           "j": "tau4",
           "e": "Head"
         },
         {
+          "id": "body-002",
           "c": "眼",
           "j": "ngaan5",
           "e": "Eyes"
         },
         {
+          "id": "body-003",
           "c": "耳",
           "j": "ji5",
           "e": "Ears"
         },
         {
+          "id": "body-004",
           "c": "鼻",
           "j": "bei6",
           "e": "Nose"
         },
         {
+          "id": "body-005",
           "c": "嘴",
           "j": "zeoi2",
           "e": "Mouth"
         },
         {
+          "id": "body-006",
           "c": "手",
           "j": "sau2",
           "e": "Hand"
         },
         {
+          "id": "body-007",
           "c": "腳",
           "j": "goek3",
           "e": "Foot"
         },
         {
+          "id": "body-008",
           "c": "心",
           "j": "sam1",
           "e": "Heart"
         },
         {
+          "id": "body-009",
           "c": "肚",
           "j": "tou5",
           "e": "Stomach"
         },
         {
+          "id": "body-010",
           "c": "背",
           "j": "bui3",
           "e": "Back"
@@ -403,51 +413,61 @@
       "note": "Tier 1 covered anatomy; Tier 2 puts it to use when you're unwell. The structure is simple: <strong>body part + tung3</strong> (痛, pain) describes any ache — <em>tau4 tung3</em> (頭痛, headache), <em>tou5 tung3</em> (肚痛, stomachache). The verb <strong>beng6</strong> (病) covers being ill generally. At the pharmacy (<em>joek6 fong2</em>, 藥房) you'll buy <em>joek6</em> (藥, medicine) — same character, different role.",
       "words": [
         {
+          "id": "body-011",
           "c": "痛",
           "j": "tung3",
           "e": "Pain / sore / ache"
         },
         {
+          "id": "body-012",
           "c": "病",
           "j": "beng6",
           "e": "Sick / illness"
         },
         {
+          "id": "body-013",
           "c": "發燒",
           "j": "faat3 siu1",
           "e": "Fever"
         },
         {
+          "id": "body-014",
           "c": "咳",
           "j": "kat1",
           "e": "Cough"
         },
         {
+          "id": "body-015",
           "c": "頭痛",
           "j": "tau4 tung3",
           "e": "Headache"
         },
         {
+          "id": "body-016",
           "c": "肚痛",
           "j": "tou5 tung3",
           "e": "Stomachache"
         },
         {
+          "id": "body-017",
           "c": "醫生",
           "j": "ji1 sang1",
           "e": "Doctor"
         },
         {
+          "id": "body-018",
           "c": "醫院",
           "j": "ji1 jyun2",
           "e": "Hospital"
         },
         {
+          "id": "body-019",
           "c": "藥",
           "j": "joek6",
           "e": "Medicine"
         },
         {
+          "id": "body-020",
           "c": "藥房",
           "j": "joek6 fong2",
           "e": "Pharmacy"
@@ -753,5 +773,6 @@
         ]
       }
     }
-  }
+  },
+  "_idSeq": 20
 }

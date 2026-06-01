@@ -9,51 +9,61 @@
       "note": "Tech vocabulary mixes English loanwords (<em>WiFi</em>, <em>app</em>) with native compounds. <strong>din6</strong> (電, electric) prefixes most modern tech: <em>din6 nou5</em> (電腦, computer = electric brain), <em>din6 waa2</em> (電話, phone = electric speech). <strong>soeng5 mong5</strong> (上網) literally 'ascend the net' = go online. <strong>cung1 din6</strong> (充電) literally 'fill electricity' = charge a battery. The adjective <em>waai6</em> (壞, broken) covers anything not working.",
       "words": [
         {
+          "id": "tech-001",
           "c": "電腦",
           "j": "din6 nou5",
           "e": "Computer"
         },
         {
+          "id": "tech-002",
           "c": "電話",
           "j": "din6 waa2",
           "e": "Phone"
         },
         {
+          "id": "tech-003",
           "c": "上網",
           "j": "soeng5 mong5",
           "e": "Go online"
         },
         {
+          "id": "tech-004",
           "c": "程式",
           "j": "cing4 sik1",
           "e": "App / program"
         },
         {
+          "id": "tech-005",
           "c": "密碼",
           "j": "mat6 maa5",
           "e": "Password"
         },
         {
+          "id": "tech-006",
           "c": "充電",
           "j": "cung1 din6",
           "e": "Charge battery"
         },
         {
+          "id": "tech-007",
           "c": "訊號",
           "j": "seon3 hou6",
           "e": "Signal"
         },
         {
+          "id": "tech-008",
           "c": "屏幕",
           "j": "ping4 mok6",
           "e": "Screen"
         },
         {
+          "id": "tech-009",
           "c": "壞",
           "j": "waai6",
           "e": "Broken / not working"
         },
         {
+          "id": "tech-010",
           "c": "WiFi",
           "j": "WiFi",
           "e": "WiFi"
@@ -389,5 +399,6 @@
         ]
       }
     }
-  }
+  },
+  "_idSeq": 10
 }
