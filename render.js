@@ -15,6 +15,9 @@ function renderDrawer() {
     { key:'translate', icon:'🌐', label:'Translate',       desc:'AI-powered translation & breakdown'    },
   ];
   const open = state.drawerOpen ? 'open' : '';
+  // Active highlight: a topic opened via the path, or an open checkpoint, both
+  // belong to "Learning Path" — otherwise a path lesson wrongly lights "Topics".
+  const activeNav = (state.checkpoint || state.fromPath) ? 'path' : state.nav;
   const speeds = [
     { key:'slow',   label:'🐢 Slow'   },
     { key:'normal', label:'🚶 Normal' },
@@ -42,7 +45,7 @@ function renderDrawer() {
         </div>
         <div class="nav-panel-body">
           ${items.map(item => `
-            <button class="nav-item${state.nav===item.key?' active':''}" data-nav="${item.key}">
+            <button class="nav-item${activeNav===item.key?' active':''}" data-nav="${item.key}">
               <span class="ni-icon">${item.icon}</span>
               <span class="ni-text">
                 <span class="ni-label">${item.label}</span>
@@ -1914,6 +1917,13 @@ function attachEvents(lesson, color) {
   document.querySelectorAll('[data-nav]').forEach(btn => {
     btn.addEventListener('click', () => {
       const target = btn.dataset.nav;
+      // Leaving via the menu must exit any open checkpoint or drill session first.
+      // render() checks state.checkpoint/patternDrill BEFORE state.nav, so without
+      // this the chosen destination never shows — the checkpoint hub just redraws.
+      state.checkpoint = null;
+      state.checkpointAct = null;
+      state.checkpointQuiz = null;
+      state.patternDrill = null;
       // Tapping Topics from the drawer always returns to home view
       if (target === 'topics') state.homeView = true;
       // Tapping Learning Path from the drawer always returns to the path list

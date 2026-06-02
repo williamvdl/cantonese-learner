@@ -2808,8 +2808,8 @@
             },
             {
               "wid": "phrases-001",
-              "c": "你叫乜名？",
-              "j": "nei5 giu3 mat1 meng2",
+              "c": "你叫咩名？",
+              "j": "nei5 giu3 me1 meng2",
               "e": "What's your name?"
             }
           ],
@@ -4332,14 +4332,14 @@
     },
     {
       "label": "Meeting people",
-      "structure": "nei5 giu3 mat1 meng2 / nei5 hou2 maa3 / ngo5 m4 ming4",
-      "note": "First-meeting phrases: 你叫乜名 (nei5 giu3 mat1 meng2, what's your name?), 你好嗎 (nei5 hou2 maa3, how are you?), and the very useful 我唔明 (ngo5 m4 ming4, I don't understand).",
+      "structure": "nei5 giu3 me1 meng2 / nei5 hou2 maa3 / ngo5 m4 ming4",
+      "note": "First-meeting phrases: 你叫咩名 (nei5 giu3 me1 meng2, what's your name?), 你好嗎 (nei5 hou2 maa3, how are you?), and the very useful 我唔明 (ngo5 m4 ming4, I don't understand).",
       "group": "Everyday expressions",
       "tier": 1,
       "examples": [
         {
-          "c": "你叫乜名？",
-          "j": "nei5 giu3 mat1 meng2?",
+          "c": "你叫咩名？",
+          "j": "nei5 giu3 me1 meng2?",
           "e": "What's your name?"
         },
         {
@@ -4361,8 +4361,8 @@
           "frameE": "… — My name is William.",
           "answer": {
             "wid": "phrases-001",
-            "c": "你叫乜名？",
-            "j": "nei5 giu3 mat1 meng2",
+            "c": "你叫咩名？",
+            "j": "nei5 giu3 me1 meng2",
             "e": "What's your name?"
           },
           "distractors": [
@@ -4390,8 +4390,8 @@
           ]
         },
         {
-          "frameC": "A：你叫乜名？B：▢William。",
-          "frameJ": "A: nei5 giu3 mat1 meng2? B: ▢ William.",
+          "frameC": "A：你叫咩名？B：▢William。",
+          "frameJ": "A: nei5 giu3 me1 meng2? B: ▢ William.",
           "english": "What's your name? — My name is William.",
           "frameE": "What's your name? — … William.",
           "answer": {
@@ -4450,8 +4450,8 @@
             },
             {
               "wid": "phrases-001",
-              "c": "你叫乜名？",
-              "j": "nei5 giu3 mat1 meng2",
+              "c": "你叫咩名？",
+              "j": "nei5 giu3 me1 meng2",
               "e": "What's your name?"
             }
           ],

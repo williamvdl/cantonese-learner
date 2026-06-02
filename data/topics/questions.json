@@ -159,8 +159,8 @@
           ]
         },
         {
-          "c": "你叫乜嘢名？",
-          "j": "nei5 giu3 mat1 je5 meng2?",
+          "c": "你叫咩名？",
+          "j": "nei5 giu3 me1 meng2?",
           "e": "What's your name?",
           "bd": [
             {
@@ -174,8 +174,8 @@
               "e": "are called"
             },
             {
-              "c": "乜嘢",
-              "j": "mat1 je5",
+              "c": "咩",
+              "j": "me1",
               "e": "what"
             },
             {
@@ -195,8 +195,8 @@
         "lines": [
           {
             "u": false,
-            "c": "你好！你叫乜嘢名？",
-            "j": "nei5 hou2! nei5 giu3 mat1 je5 meng2?",
+            "c": "你好！你叫咩名？",
+            "j": "nei5 hou2! nei5 giu3 me1 meng2?",
             "e": "Hello! What's your name?",
             "bd": [
               {
@@ -215,8 +215,8 @@
                 "e": "are called"
               },
               {
-                "c": "乜嘢",
-                "j": "mat1 je5",
+                "c": "咩",
+                "j": "me1",
                 "e": "what"
               },
               {
