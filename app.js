@@ -10,13 +10,20 @@
 // rather than touching localStorage directly. Public functions below keep their
 // signatures unchanged, so no caller needed updating.
 //
-// Stored payload shape (under STORAGE_KEYS.wordReview, versioned envelope):
-//   { everUsed: bool, entries: [ {topicKey, round, wordC, missCount, correctCount, addedAt} ] }
-// Entry identity = topicKey | round | wordC  (same word in two topics = two entries).
+// Stored payload shape (under STORAGE_KEYS.wordReview, versioned envelope, v2):
+//   { everUsed: bool, entries: [ {wid, topicKey, round, wordC, missCount, correctCount, addedAt} ] }
+// Entry identity = `wid` (the stable word id), which survives text edits and the
+// eventual cloud move. topicKey/round are kept for display grouping; wordC is kept
+// as a display fallback and as the resolution hint used to heal pre-v2 entries that
+// don't yet carry a wid. A word missed in two topics = two entries (different wids).
 const REVIEW_GRADUATE_AT = 3;   // consecutive correct (in review) to clear a word
 
-function _reviewEntryKey(topicKey, round, wordC) {
-  return topicKey + '|' + round + '|' + wordC;
+// Does this stored entry refer to the same word as the given identity? Prefers the
+// stable wid on both sides; falls back to topicKey|round|wordC for legacy entries
+// that predate wid (or that haven't been healed yet).
+function _entryMatches(e, wid, topicKey, round, wordC) {
+  if (wid && e.wid) return e.wid === wid;
+  return e.topicKey === topicKey && e.round === round && e.wordC === wordC;
 }
 
 // Internal: read the bin payload. Sync under the hood (storage cache) but kept
@@ -39,18 +46,21 @@ async function getBin() {
   return (await _readReviewStore()).entries;
 }
 
-// Record a missed word. New word → new entry. Already-binned word → missCount++,
-// correctCount reset to 0 (a fresh miss undoes review progress).
-async function addMiss(topicKey, round, wordC) {
+// Record a missed word. New word → new entry (storing its stable wid). Already-binned
+// word → missCount++, correctCount reset to 0 (a fresh miss undoes review progress).
+// `wid` is the word's stable id (word.id), passed by the caller which already holds
+// the word object. A re-missed pre-v2 entry gets its wid healed here.
+async function addMiss(wid, topicKey, round, wordC) {
   const data = await _readReviewStore();
   data.everUsed = true;
-  const key = _reviewEntryKey(topicKey, round, wordC);
-  const existing = data.entries.find(e => _reviewEntryKey(e.topicKey, e.round, e.wordC) === key);
+  const existing = data.entries.find(e => _entryMatches(e, wid, topicKey, round, wordC));
   if (existing) {
+    if (wid && !existing.wid) existing.wid = wid;   // heal legacy entry on re-miss
     existing.missCount += 1;
     existing.correctCount = 0;
   } else {
     data.entries.push({
+      wid: wid || null,
       topicKey, round, wordC,
       missCount: 1,
       correctCount: 0,
@@ -63,10 +73,9 @@ async function addMiss(topicKey, round, wordC) {
 // Record a review-session result for one entry. Correct → correctCount++, and if
 // it reaches REVIEW_GRADUATE_AT the entry is removed (graduated). Wrong → reset to 0.
 // Returns { graduated: bool } so the caller can show feedback.
-async function recordReviewResult(topicKey, round, wordC, wasCorrect) {
+async function recordReviewResult(wid, topicKey, round, wordC, wasCorrect) {
   const data = await _readReviewStore();
-  const key = _reviewEntryKey(topicKey, round, wordC);
-  const entry = data.entries.find(e => _reviewEntryKey(e.topicKey, e.round, e.wordC) === key);
+  const entry = data.entries.find(e => _entryMatches(e, wid, topicKey, round, wordC));
   if (!entry) { return { graduated: false }; }
   let graduated = false;
   if (wasCorrect) {
@@ -83,11 +92,10 @@ async function recordReviewResult(topicKey, round, wordC, wasCorrect) {
 }
 
 // Remove an entry outright — used to silently drop words that can no longer be
-// resolved (their topic/round/word no longer exists in the topic JSON).
-async function dropBinEntry(topicKey, round, wordC) {
+// resolved (their word id / topic / round no longer exists in the topic JSON).
+async function dropBinEntry(wid, topicKey, round, wordC) {
   const data = await _readReviewStore();
-  const key = _reviewEntryKey(topicKey, round, wordC);
-  data.entries = data.entries.filter(e => _reviewEntryKey(e.topicKey, e.round, e.wordC) !== key);
+  data.entries = data.entries.filter(e => !_entryMatches(e, wid, topicKey, round, wordC));
   await _writeReviewStore(data);
 }
 
@@ -476,17 +484,24 @@ async function startWordReview() {
   }
 
   // Rehydrate: pair each bin entry with its live word object from the topic JSON.
-  // If the topic/round/word no longer exists, silently drop the entry from the bin.
+  // Resolve by the stable wid when present; fall back to wordC for pre-v2 entries
+  // and heal them (backfill wid) so the match is stable from then on. If the word
+  // can no longer be found at all, silently drop the entry from the bin.
   const items = [];
+  let healed = false;
   for (const entry of picked) {
     const words = getRoundWords(entry.topicKey, entry.round);
-    const word = words.find(w => w.c === entry.wordC);
+    let word = entry.wid ? words.find(w => w.id === entry.wid) : null;
+    if (!word) word = words.find(w => w.c === entry.wordC);   // legacy / fallback match
     if (!word) {
-      await dropBinEntry(entry.topicKey, entry.round, entry.wordC);
+      await dropBinEntry(entry.wid, entry.topicKey, entry.round, entry.wordC);
       continue;
     }
+    if (!entry.wid && word.id) { entry.wid = word.id; healed = true; }   // backfill stable id
     items.push({ entry, word, pool: words });
   }
+  // Persist any healed wids once (entry objects above are the live cached objects).
+  if (healed) await _writeReviewStore(await _readReviewStore());
 
   if (!items.length) {
     // Everything we picked was unresolvable (or the bin was empty) — show the

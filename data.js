@@ -168,7 +168,7 @@ const STORAGE_KEYS = {
 // Current schema version per area. Bump when the stored shape of an area changes,
 // and add a matching case in _migrate(). All start at 1.
 const STORAGE_SCHEMA = {
-  wordReview:    1,
+  wordReview:    2,
   quizDirection: 1,
   apiKey:        1,
   pathProgress:  1,
@@ -224,8 +224,17 @@ const storage = {
   // Today every area is at v1 with no prior shape, so every case is a pass-through.
   // When a shape changes: bump STORAGE_SCHEMA[area], add `if (fromV < N) { ... }`.
   _migrate(area, fromV, data) {
-    // Example for the future:
-    //   if (area === 'wordReview' && fromV < 2) { data = upgradeWordReviewV1toV2(data); }
+    // Word Review v1 → v2: entries gain a stable `wid` (word id) as their durable
+    // identity, replacing the fragile topicKey|round|wordC string match. This step
+    // is deliberately CONTENT-FREE — it only ensures the `wid` key exists (null),
+    // because topic JSON isn't loaded yet at hydrate time. The actual wordC → wid
+    // resolution is done lazily by the Word Review builder (which loads the topics
+    // it needs), so this layer stays server-swap-clean.
+    if (area === 'wordReview' && fromV < 2) {
+      if (data && Array.isArray(data.entries)) {
+        data = { ...data, entries: data.entries.map(e => ('wid' in e ? e : { wid: null, ...e })) };
+      }
+    }
     return data;
   },
 

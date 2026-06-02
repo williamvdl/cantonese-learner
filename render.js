@@ -2536,7 +2536,7 @@ function attachEvents(lesson, color) {
           // badge so its count is current even before the user opens Word Review.
           // refreshReviewBadge re-reads the true entry count from storage, so a
           // re-missed (already-binned) word correctly leaves the count unchanged.
-          addMiss(state.topic, state.currentRound, cw.c)
+          addMiss(cw.id, state.topic, state.currentRound, cw.c)
             .then(refreshReviewBadge)
             .then(render);
         }
@@ -2630,7 +2630,7 @@ function attachEvents(lesson, color) {
         if (correct) wr.correctThisSession++;
         // Persist the result to the bin. recordReviewResult resolves the graduation;
         // we capture whether this word graduated so the session tally is accurate.
-        recordReviewResult(item.entry.topicKey, item.entry.round, item.entry.wordC, correct)
+        recordReviewResult(item.entry.wid, item.entry.topicKey, item.entry.round, item.entry.wordC, correct)
           .then(res => {
             if (res.graduated) wr.graduatedThisSession++;
             // Keep the in-memory entry's correctCount in sync so the progress pips
