@@ -106,6 +106,68 @@ async function getReviewStats() {
   return { liveCount: data.entries.length, everUsed: data.everUsed };
 }
 
+// ── Pattern Review storage layer ──────────────────────────────────────────────
+// Mirror of the Word Review bin, but for pattern DRILLS rather than vocab words.
+// Identity is the stable `did` (drill id). A drill carries its own display text
+// (answer/distractors with cached c/j/e), so reviewing needs no topic load.
+// Payload (STORAGE_KEYS.patternReview, envelope v1):
+//   { everUsed, entries: [ {did, missCount, correctCount, addedAt} ] }
+async function _readPatternStore() {
+  const data = storage.getPatternReview() || { everUsed: false, entries: [] };
+  return { everUsed: !!data.everUsed, entries: Array.isArray(data.entries) ? data.entries : [] };
+}
+async function _writePatternStore(data) { await storage.setPatternReview(data); }
+
+async function getPatternBin() { return (await _readPatternStore()).entries; }
+
+// Record a missed drill. New → new entry; already-binned → missCount++, correct reset.
+async function addPatternMiss(did) {
+  if (!did) return;
+  const data = await _readPatternStore();
+  data.everUsed = true;
+  const existing = data.entries.find(e => e.did === did);
+  if (existing) {
+    existing.missCount += 1;
+    existing.correctCount = 0;
+  } else {
+    data.entries.push({ did, missCount: 1, correctCount: 0, addedAt: Date.now() });
+  }
+  await _writePatternStore(data);
+}
+
+// Record a review result. Correct → correctCount++, graduates (removed) at
+// REVIEW_GRADUATE_AT. Wrong → reset to 0. Returns { graduated }.
+async function recordPatternReviewResult(did, wasCorrect) {
+  const data = await _readPatternStore();
+  const entry = data.entries.find(e => e.did === did);
+  if (!entry) return { graduated: false };
+  let graduated = false;
+  if (wasCorrect) {
+    entry.correctCount += 1;
+    if (entry.correctCount >= REVIEW_GRADUATE_AT) {
+      data.entries = data.entries.filter(e => e !== entry);
+      graduated = true;
+    }
+  } else {
+    entry.correctCount = 0;
+  }
+  await _writePatternStore(data);
+  return { graduated };
+}
+
+// Drop an entry outright — used for a did that no longer resolves to a drill.
+async function dropPatternBinEntry(did) {
+  const data = await _readPatternStore();
+  data.entries = data.entries.filter(e => e.did !== did);
+  await _writePatternStore(data);
+}
+
+async function getPatternReviewStats() {
+  const data = await _readPatternStore();
+  return { liveCount: data.entries.length, everUsed: data.everUsed };
+}
+
+
 // ── Round accessors — single point of truth for "what content is in topic+round" ──
 // These assume the topic has been loaded; return safe defaults otherwise.
 function getAvailableRounds(topic) {
@@ -299,6 +361,10 @@ let state = {
   wordReview: null,
   // Pattern Drill session — null when not in a session. Shape set by startPatternDrill().
   patternDrill: null,
+  // Pattern Review session — null when not in a session. Shape set by startPatternReview().
+  patternReview: null,
+  // Which Review sub-screen is showing: 'hub' (cards), 'words', or 'patterns'.
+  reviewView: 'hub',
   // Checkpoint (Stage 3) — null when no checkpoint hub is open.
   //   checkpoint:     { pathKey, stageId, cpId } | null  — which hub is open
   //   checkpointAct:  'words' | 'patterns' | 'convo' | null — which activity within it
@@ -313,6 +379,7 @@ let state = {
   patternFramesOpen: {},
   // Cached {liveCount, everUsed} for the menu badge — refreshed by refreshReviewBadge().
   reviewBadge: { liveCount: 0, everUsed: false },
+  patternReviewBadge: { liveCount: 0, everUsed: false },
   convo: {
     convMode: 'read',
     playingLine: null,
@@ -347,7 +414,7 @@ const NAV_FIELDS = [
   'nav', 'drawerOpen', 'homeView', 'pathView', 'activePath',
   'topic', 'currentRound', 'fromPath', 'fromPathTier',
   'mode', 'tab', 'selectedCategory',
-  'checkpoint', 'checkpointAct',
+  'checkpoint', 'checkpointAct', 'reviewView',
 ];
 
 // Capture the current navigation-relevant state into a plain snapshot object.
@@ -464,6 +531,7 @@ const REVIEW_SESSION_CAP = 20;   // max words per review session; oldest-missed 
 // should see reflected (e.g. finishing a quiz, finishing a review session).
 async function refreshReviewBadge() {
   state.reviewBadge = await getReviewStats();
+  state.patternReviewBadge = await getPatternReviewStats();
 }
 
 // Build and start a Word Review session. Pulls the bin, takes the oldest-missed
@@ -518,6 +586,7 @@ async function startWordReview() {
     idx: 0,
     selected: null,
     done: false,
+    reviewedThisSession: 0,
     correctThisSession: 0,
     graduatedThisSession: 0,
     direction: loadQuizDirection(),               // shares the quiz's saved preference
@@ -661,6 +730,72 @@ function advancePatternDrill() {
   pd.idx = next;
   pd.selected = null;
   pd.choices = buildDrillChoices(pd.queue[next].drill);
+  render();
+}
+
+// ── Pattern Review session ────────────────────────────────────────────────────
+// Re-serves missed drills (resolved by stable `did`) using the SAME {pattern,drill}
+// session shape as the live drill, so renderDrillBody renders the active question
+// unchanged. Distinct from state.patternDrill (the live drilling session) — this is
+// the Review screen's session, the exact parallel of state.wordReview.
+
+// did → {pattern, drill} lookup over all loaded patterns (patterns load at init).
+function _drillById() {
+  const map = {};
+  for (const p of store.patterns) {
+    for (const dr of (p.drills || [])) if (dr.did) map[dr.did] = { pattern: p, drill: dr };
+  }
+  return map;
+}
+
+async function startPatternReview() {
+  const bin = await getPatternBin();
+  const picked = bin.slice().sort((a, b) => a.addedAt - b.addedAt).slice(0, REVIEW_SESSION_CAP);
+  const byId = _drillById();
+
+  const queue = [];
+  for (const entry of picked) {
+    const pair = byId[entry.did];
+    if (!pair) { await dropPatternBinEntry(entry.did); continue; }   // drill no longer exists → drop once
+    queue.push(pair);
+  }
+
+  if (!queue.length) {
+    state.patternReview = null;
+    await refreshReviewBadge();
+    render();
+    return;
+  }
+
+  const shuffled = shuffle(queue);
+  state.patternReview = {
+    queue: shuffled,
+    idx: 0,
+    selected: null,
+    done: false,
+    score: 0,
+    scopeKind: 'review',
+    reviewedThisSession: 0,
+    graduatedThisSession: 0,
+    missed: [],                                  // unused in review; keeps the pd shape safe
+    choices: buildDrillChoices(shuffled[0].drill),
+  };
+  pushNav();   // one screen for the back button — back exits to the Pattern Review landing
+  render();
+}
+
+function advancePatternReview() {
+  const pr = state.patternReview;
+  if (!pr) return;
+  const next = pr.idx + 1;
+  if (next >= pr.queue.length) {
+    pr.done = true;
+    refreshReviewBadge().then(render);
+    return;
+  }
+  pr.idx = next;
+  pr.selected = null;
+  pr.choices = buildDrillChoices(pr.queue[next].drill);
   render();
 }
 

@@ -25,6 +25,7 @@
       ],
       "drills": [
         {
+          "did": "drill-001",
           "frameC": "我想▢。",
           "frameJ": "ngo5 soeng2 ▢.",
           "english": "I want to watch a movie.",
@@ -86,6 +87,7 @@
       ],
       "drills": [
         {
+          "did": "drill-002",
           "frameC": "我要 ▢",
           "frameJ": "ngo5 jiu3 ▢",
           "english": "I'll have water",
@@ -121,6 +123,7 @@
           ]
         },
         {
+          "did": "drill-003",
           "frameC": "頭痛，去藥房買啲▢。",
           "frameJ": "tau4 tung3, heoi3 joek6 fong2 maai5 di1 ▢.",
           "english": "Headache — go to the pharmacy for some medicine.",
@@ -156,6 +159,7 @@
           ]
         },
         {
+          "did": "drill-004",
           "frameC": "入去之前要買▢。",
           "frameJ": "jap6 heoi3 zi1 cin4 jiu3 maai5 ▢.",
           "english": "Before going in you need to buy a ticket.",
@@ -217,6 +221,7 @@
       ],
       "drills": [
         {
+          "did": "drill-005",
           "frameC": "有冇▢？",
           "frameJ": "jau5 mou5 ▢?",
           "english": "Do you have dim sum?",
@@ -252,6 +257,7 @@
           ]
         },
         {
+          "did": "drill-006",
           "frameC": "老闆,▢我要買三件。",
           "frameJ": "lou5 baan2, ▢ ngo5 jiu3 maai5 saam1 gin6.",
           "english": "Boss, any discount? I want three.",
@@ -287,6 +293,7 @@
           ]
         },
         {
+          "did": "drill-007",
           "frameC": "呢件太細,有冇▢？",
           "frameJ": "ni1 gin6 taai3 sai3, jau5 mou5 ▢?",
           "english": "This one's too small — got a large?",
@@ -348,6 +355,7 @@
       ],
       "drills": [
         {
+          "did": "drill-008",
           "frameC": "重有▢。",
           "frameJ": "zung6 jau5 ▢.",
           "english": "There's also noodles.",
@@ -409,6 +417,7 @@
       ],
       "drills": [
         {
+          "did": "drill-009",
           "frameC": "侍應,唔該俾個▢我哋。",
           "frameJ": "si6 jing3, m4 goi1 bei2 go3 ▢ ngo5 dei6.",
           "english": "Waiter, please give us a menu.",
@@ -518,6 +527,7 @@
       ],
       "drills": [
         {
+          "did": "drill-010",
           "frameC": "我鍾意▢。",
           "frameJ": "ngo5 zung1 ji3 ▢.",
           "english": "I like dogs.",
@@ -553,6 +563,7 @@
           ]
         },
         {
+          "did": "drill-011",
           "frameC": "我鍾意▢，好似葡萄。",
           "frameJ": "ngo5 zung1 ji3 ▢, hou2 ci5 pou4 tou4.",
           "english": "I like purple, like grapes.",
@@ -588,6 +599,7 @@
           ]
         },
         {
+          "did": "drill-012",
           "frameC": "我嘅興趣係▢,週末成日去。",
           "frameJ": "ngo5 ge3 hing3 ceoi3 hai6 ▢, zau1 mut6 sing4 jat6 heoi3.",
           "english": "My hobby is hiking — I go every weekend.",
@@ -623,6 +635,7 @@
           ]
         },
         {
+          "did": "drill-013",
           "frameC": "我去KTV▢。",
           "frameJ": "ngo5 heoi3 KTV ▢.",
           "english": "I go to KTV to sing.",
@@ -658,6 +671,7 @@
           ]
         },
         {
+          "did": "drill-014",
           "frameC": "風景好靚,我想▢。",
           "frameJ": "fung1 ging2 hou2 leng3, ngo5 soeng2 ▢.",
           "english": "The scenery is beautiful — I want to take photos.",
@@ -693,6 +707,7 @@
           ]
         },
         {
+          "did": "drill-015",
           "frameC": "音樂一響,佢就開始▢。",
           "frameJ": "jam1 ngok6 jat1 hoeng2, keoi5 zau6 hoi1 ci2 ▢.",
           "english": "As soon as the music plays, she starts to dance.",
@@ -754,6 +769,7 @@
       ],
       "drills": [
         {
+          "did": "drill-016",
           "frameC": "我覺得好▢。",
           "frameJ": "ngo5 gok3 dak1 hou2 ▢.",
           "english": "I feel really happy.",
@@ -815,6 +831,7 @@
       ],
       "drills": [
         {
+          "did": "drill-017",
           "frameC": "我好▢。",
           "frameJ": "ngo5 hou2 ▢.",
           "english": "I'm very tired.",
@@ -850,6 +867,7 @@
           ]
         },
         {
+          "did": "drill-018",
           "frameC": "今日好▢。",
           "frameJ": "gam1 jat6 hou2 ▢.",
           "english": "It's very hot today.",
@@ -885,6 +903,7 @@
           ]
         },
         {
+          "did": "drill-019",
           "frameC": "太▢喇！",
           "frameJ": "taai3 ▢ laa3!",
           "english": "Too expensive!",
@@ -920,6 +939,7 @@
           ]
         },
         {
+          "did": "drill-020",
           "frameC": "佢成日幫人，好▢。",
           "frameJ": "keoi5 sing4 jat6 bong1 jan4, hou2 ▢.",
           "english": "She always helps people, she's very kind.",
@@ -955,6 +975,7 @@
           ]
         },
         {
+          "did": "drill-021",
           "frameC": "聽日考試，我好▢。",
           "frameJ": "ting1 jat6 haau2 si5, ngo5 hou2 ▢.",
           "english": "Exam tomorrow — I'm very nervous.",
@@ -990,6 +1011,7 @@
           ]
         },
         {
+          "did": "drill-022",
           "frameC": "佢日日努力做嘢，好▢。",
           "frameJ": "keoi5 jat6 jat6 nou5 lik6 zou6 je5, hou2 ▢.",
           "english": "He works hard every day — very hardworking.",
@@ -1025,6 +1047,7 @@
           ]
         },
         {
+          "did": "drill-023",
           "frameC": "冬天嚟喇,今日好▢。",
           "frameJ": "dung1 tin1 lai4 laa3, gam1 jat6 hou2 ▢.",
           "english": "Winter's here — it's cold today.",
@@ -1060,6 +1083,7 @@
           ]
         },
         {
+          "did": "drill-024",
           "frameC": "返潮喇,間屋好▢。",
           "frameJ": "faan1 ciu4 laa3, gaan1 uk1 hou2 ▢.",
           "english": "It's the wet season — the flat is very humid.",
@@ -1095,6 +1119,7 @@
           ]
         },
         {
+          "did": "drill-025",
           "frameC": "行路就到,好▢。",
           "frameJ": "haang4 lou6 zau6 dou3, hou2 ▢.",
           "english": "You can walk there — it's very close.",
@@ -1130,6 +1155,7 @@
           ]
         },
         {
+          "did": "drill-026",
           "frameC": "呢條褲太▢,著唔落。",
           "frameJ": "ni1 tiu4 fu3 taai3 ▢, zoek3 m4 lok6.",
           "english": "These trousers are too tight — can't get them on.",
@@ -1165,6 +1191,7 @@
           ]
         },
         {
+          "did": "drill-027",
           "frameC": "啲點心真係好▢,我要再叫。",
           "frameJ": "di1 dim2 sam1 zan1 hai6 hou2 ▢, ngo5 jiu3 zoi3 giu3.",
           "english": "The dim sum is really delicious — I'll order more.",
@@ -1200,6 +1227,7 @@
           ]
         },
         {
+          "did": "drill-028",
           "frameC": "我成日未食飯，好▢。",
           "frameJ": "ngo5 sing4 jat6 mei6 sik6 faan6, hou2 ▢.",
           "english": "I haven't eaten all day, I'm very hungry.",
@@ -1235,6 +1263,7 @@
           ]
         },
         {
+          "did": "drill-029",
           "frameC": "隻兔仔毛茸茸,真係好▢。",
           "frameJ": "zek3 tou3 zai2 mou4 jung4 jung4, zan1 hai6 hou2 ▢.",
           "english": "The rabbit is fluffy — really so cute.",
@@ -1320,6 +1349,7 @@
       ],
       "drills": [
         {
+          "did": "drill-030",
           "frameC": "呢個係我▢。",
           "frameJ": "ni1 go3 hai6 ngo5 ▢.",
           "english": "This is my father.",
@@ -1355,6 +1385,7 @@
           ]
         },
         {
+          "did": "drill-031",
           "frameC": "我▢好錫我。",
           "frameJ": "ngo5 ▢ hou2 sek3 ngo5.",
           "english": "My mother loves me very much.",
@@ -1390,6 +1421,7 @@
           ]
         },
         {
+          "did": "drill-032",
           "frameC": "佢教我哋讀書,係我哋嘅▢。",
           "frameJ": "keoi5 gaau3 ngo5 dei6 duk6 syu1, hai6 ngo5 dei6 ge3 ▢.",
           "english": "She teaches us — she's our teacher.",
@@ -1425,6 +1457,7 @@
           ]
         },
         {
+          "did": "drill-033",
           "frameC": "佢同我一齊做嘢,係我▢。",
           "frameJ": "keoi5 tung4 ngo5 jat1 cai4 zou6 je5, hai6 ngo5 ▢.",
           "english": "He works with me — he's my colleague.",
@@ -1460,6 +1493,7 @@
           ]
         },
         {
+          "did": "drill-034",
           "frameC": "我用▢打字同上網。",
           "frameJ": "ngo5 jung6 ▢ daa2 zi6 tung4 soeng5 mong5.",
           "english": "I use a computer to type and go online.",
@@ -1495,6 +1529,7 @@
           ]
         },
         {
+          "did": "drill-035",
           "frameC": "我用▢攞嘢。",
           "frameJ": "ngo5 jung6 ▢ lo2 je5.",
           "english": "I use my hand to pick things up.",
@@ -1530,6 +1565,7 @@
           ]
         },
         {
+          "did": "drill-036",
           "frameC": "唔識路,可以睇下▢。",
           "frameJ": "m4 sik1 lou6, ho2 ji5 tai2 haa5 ▢.",
           "english": "Don't know the way — can look at the map.",
@@ -1591,6 +1627,7 @@
       ],
       "drills": [
         {
+          "did": "drill-037",
           "frameC": "我有兩個▢。",
           "frameJ": "ngo5 jau5 loeng5 go3 ▢.",
           "english": "I have two daughters.",
@@ -1626,6 +1663,7 @@
           ]
         },
         {
+          "did": "drill-038",
           "frameC": "我▢，想瞓覺。",
           "frameJ": "ngo5 ▢, soeng2 fan3 gaau3.",
           "english": "I have a headache, I want to sleep.",
@@ -1661,6 +1699,7 @@
           ]
         },
         {
+          "did": "drill-039",
           "frameC": "我好熱，可能▢。",
           "frameJ": "ngo5 hou2 jit6, ho2 nang4 ▢.",
           "english": "I feel hot — maybe I have a fever.",
@@ -1696,6 +1735,7 @@
           ]
         },
         {
+          "did": "drill-040",
           "frameC": "我屋企養咗一隻▢,成日捉老鼠。",
           "frameJ": "ngo5 uk1 kei2 joeng5 zo2 jat1 zek3 ▢, sing4 jat6 zuk1 lou5 syu2.",
           "english": "I keep a cat at home — it always catches mice.",
@@ -1731,6 +1771,7 @@
           ]
         },
         {
+          "did": "drill-041",
           "frameC": "農場有一隻▢,可以畀人騎。",
           "frameJ": "nung4 coeng4 jau5 jat1 zek3 ▢, ho2 ji5 bei2 jan4 ke4.",
           "english": "The farm has a horse you can ride.",
@@ -1816,6 +1857,7 @@
       ],
       "drills": [
         {
+          "did": "drill-042",
           "frameC": "▢喺邊度？",
           "frameJ": "▢ hai2 bin1 dou6?",
           "english": "Where is the MTR?",
@@ -1851,6 +1893,7 @@
           ]
         },
         {
+          "did": "drill-043",
           "frameC": "銀行喺▢，唔係右邊。",
           "frameJ": "ngan4 hong4 hai2 ▢, m4 hai6 jau6 bin1.",
           "english": "The bank is on the left, not the right.",
@@ -1886,6 +1929,7 @@
           ]
         },
         {
+          "did": "drill-044",
           "frameC": "車站喺▢，行多幾步就到。",
           "frameJ": "ce1 zaam6 hai2 ▢, haang4 do1 gei2 bou6 zau6 dou3.",
           "english": "The station is ahead — a few more steps and you're there.",
@@ -1921,6 +1965,7 @@
           ]
         },
         {
+          "did": "drill-045",
           "frameC": "超市就喺▢,過條馬路就到。",
           "frameJ": "ciu1 si5 zau6 hai2 ▢, gwo3 tiu4 maa5 lou6 zau6 dou3.",
           "english": "The supermarket is right opposite — cross the road and you're there.",
@@ -1956,6 +2001,7 @@
           ]
         },
         {
+          "did": "drill-046",
           "frameC": "夠人喇,去▢踢波啦。",
           "frameJ": "gau3 jan4 laa3, heoi3 ▢ tek3 bo1 laa1.",
           "english": "We have enough people — let's go to the field to play.",
@@ -1991,6 +2037,7 @@
           ]
         },
         {
+          "did": "drill-047",
           "frameC": "我要攞現金,去▢。",
           "frameJ": "ngo5 jiu3 lo2 jin6 gam1, heoi3 ▢.",
           "english": "I need cash — go to the bank.",
@@ -2026,6 +2073,7 @@
           ]
         },
         {
+          "did": "drill-048",
           "frameC": "肚痾,想去▢。",
           "frameJ": "tou5 o1, soeng2 heoi3 ▢.",
           "english": "Upset stomach — need the toilet.",
@@ -2061,6 +2109,7 @@
           ]
         },
         {
+          "did": "drill-049",
           "frameC": "夜喇,我要返▢瞓覺。",
           "frameJ": "je6 laa3, ngo5 jiu3 faan1 ▢ fan3 gaau3.",
           "english": "It's late — I need to go home to sleep.",
@@ -2122,6 +2171,7 @@
       ],
       "drills": [
         {
+          "did": "drill-050",
           "frameC": "我去▢。",
           "frameJ": "ngo5 heoi3 ▢.",
           "english": "I'm going to the hotel.",
@@ -2157,6 +2207,7 @@
           ]
         },
         {
+          "did": "drill-051",
           "frameC": "病得好嚴重，要去▢。",
           "frameJ": "beng6 dak1 hou2 jim4 zung6, jiu3 heoi3 ▢.",
           "english": "Seriously ill — need to go to the hospital.",
@@ -2192,6 +2243,7 @@
           ]
         },
         {
+          "did": "drill-052",
           "frameC": "唔使轉,一直▢就得。",
           "frameJ": "m4 sai2 zyun3, jat1 zik6 ▢ zau6 dak1.",
           "english": "No need to turn — just go straight.",
@@ -2253,6 +2305,7 @@
       ],
       "drills": [
         {
+          "did": "drill-053",
           "frameC": "▢見！",
           "frameJ": "▢ gin3!",
           "english": "See you tomorrow!",
@@ -2288,6 +2341,7 @@
           ]
         },
         {
+          "did": "drill-054",
           "frameC": "▢食早餐。",
           "frameJ": "▢ sik6 zou2 caan1.",
           "english": "Eat breakfast in the morning.",
@@ -2323,6 +2377,7 @@
           ]
         },
         {
+          "did": "drill-055",
           "frameC": "▢落雨。",
           "frameJ": "▢ lok6 jyu5.",
           "english": "It rained yesterday.",
@@ -2408,6 +2463,7 @@
       ],
       "drills": [
         {
+          "did": "drill-056",
           "frameC": "▢係你嘅老師？",
           "frameJ": "▢ hai6 nei5 ge3 lou5 si1?",
           "english": "Who is your teacher?",
@@ -2469,6 +2525,7 @@
       ],
       "drills": [
         {
+          "did": "drill-057",
           "frameC": "呢個係▢？",
           "frameJ": "ni1 go3 hai6 ▢?",
           "english": "What is this?",
@@ -2530,6 +2587,7 @@
       ],
       "drills": [
         {
+          "did": "drill-058",
           "frameC": "你住喺▢？",
           "frameJ": "nei5 zyu6 hai2 ▢?",
           "english": "Where do you live?",
@@ -2565,6 +2623,7 @@
           ]
         },
         {
+          "did": "drill-059",
           "frameC": "司機問:▢",
           "frameJ": "si1 gei1 man6: ▢",
           "english": "The driver asks: Where to?",
@@ -2626,6 +2685,7 @@
       ],
       "drills": [
         {
+          "did": "drill-060",
           "frameC": "▢去食飯？",
           "frameJ": "▢ heoi3 sik6 faan6?",
           "english": "When are we going to eat?",
@@ -2687,6 +2747,7 @@
       ],
       "drills": [
         {
+          "did": "drill-061",
           "frameC": "你▢唔嚟？",
           "frameJ": "nei5 ▢ m4 lai4?",
           "english": "Why aren't you coming?",
@@ -2748,6 +2809,7 @@
       ],
       "drills": [
         {
+          "did": "drill-062",
           "frameC": "你有▢本書？",
           "frameJ": "nei5 jau5 ▢ bun2 syu1?",
           "english": "How many books do you have?",
@@ -2783,6 +2845,7 @@
           ]
         },
         {
+          "did": "drill-063",
           "frameC": "A：▢ B：五十蚊。",
           "frameJ": "A: ▢ B: ng5 sap6 man1.",
           "english": "How much? — Fifty dollars.",
@@ -2844,6 +2907,7 @@
       ],
       "drills": [
         {
+          "did": "drill-064",
           "frameC": "司機,去機場▢",
           "frameJ": "si1 gei1, heoi3 gei1 coeng4 ▢",
           "english": "Driver, how far is it to the airport?",
@@ -2879,6 +2943,7 @@
           ]
         },
         {
+          "did": "drill-065",
           "frameC": "想去博物館,先問▢",
           "frameJ": "soeng2 heoi3 bok3 mat6 gun2, sin1 man6 ▢",
           "english": "Want to go to the museum — first ask what time it opens.",
@@ -2940,6 +3005,7 @@
       ],
       "drills": [
         {
+          "did": "drill-066",
           "frameC": "我食▢飯。",
           "frameJ": "ngo5 sik6 ▢ faan6.",
           "english": "I have eaten.",
@@ -3001,6 +3067,7 @@
       ],
       "drills": [
         {
+          "did": "drill-067",
           "frameC": "我食▢飯，等陣先。",
           "frameJ": "ngo5 sik6 ▢ faan6, dang2 zan6 sin1.",
           "english": "I'm eating right now, wait a bit.",
@@ -3062,6 +3129,7 @@
       ],
       "drills": [
         {
+          "did": "drill-068",
           "frameC": "我去▢香港。",
           "frameJ": "ngo5 heoi3 ▢ hoeng1 gong2.",
           "english": "I've been to Hong Kong before.",
@@ -3123,6 +3191,7 @@
       ],
       "drills": [
         {
+          "did": "drill-069",
           "frameC": "聽日▢落雨。",
           "frameJ": "ting1 jat6 ▢ lok6 jyu5.",
           "english": "It will rain tomorrow.",
@@ -3184,6 +3253,7 @@
       ],
       "drills": [
         {
+          "did": "drill-070",
           "frameC": "我▢食咗喇。",
           "frameJ": "ngo5 ▢ sik6 zo2 laa3.",
           "english": "I've already eaten.",
@@ -3245,6 +3315,7 @@
       ],
       "drills": [
         {
+          "did": "drill-071",
           "frameC": "你食咗飯▢？",
           "frameJ": "nei5 sik6 zo2 faan6 ▢?",
           "english": "Have you eaten?",
@@ -3306,6 +3377,7 @@
       ],
       "drills": [
         {
+          "did": "drill-072",
           "frameC": "我哋走▢！",
           "frameJ": "ngo5 dei6 zau2 ▢!",
           "english": "Let's get going!",
@@ -3367,6 +3439,7 @@
       ],
       "drills": [
         {
+          "did": "drill-073",
           "frameC": "我食飽▢。",
           "frameJ": "ngo5 sik6 baau2 ▢.",
           "english": "I'm full now.",
@@ -3428,6 +3501,7 @@
       ],
       "drills": [
         {
+          "did": "drill-074",
           "frameC": "佢走咗▢？真係估唔到。",
           "frameJ": "keoi5 zau2 zo2 ▢? zan1 hai6 gu2 m4 dou2.",
           "english": "He's left, really? I'm surprised.",
@@ -3489,6 +3563,7 @@
       ],
       "drills": [
         {
+          "did": "drill-075",
           "frameC": "佢係老師▢，唔好懷疑。",
           "frameJ": "keoi5 hai6 lou5 si1 ▢, m4 hou2 waai4 ji4.",
           "english": "He's a teacher, that's a fact — don't doubt it.",
@@ -3550,6 +3625,7 @@
       ],
       "drills": [
         {
+          "did": "drill-076",
           "frameC": "一、二、▢、四、五。",
           "frameJ": "jat1, ji6, ▢, sei3, ng5.",
           "english": "One, two, three, four, five.",
@@ -3611,6 +3687,7 @@
       ],
       "drills": [
         {
+          "did": "drill-077",
           "frameC": "呢個▢蚊。",
           "frameJ": "ni1 go3 ▢ man1.",
           "english": "This is one hundred dollars.",
@@ -3646,6 +3723,7 @@
           ]
         },
         {
+          "did": "drill-078",
           "frameC": "我有▢蚊。",
           "frameJ": "ngo5 jau5 ▢ man1.",
           "english": "I have fifty dollars.",
@@ -3707,6 +3785,7 @@
       ],
       "drills": [
         {
+          "did": "drill-079",
           "frameC": "我食咗▢個西瓜。",
           "frameJ": "ngo5 sik6 zo2 ▢ go3 sai1 gwaa1.",
           "english": "I ate half of the watermelon.",
@@ -3792,6 +3871,7 @@
       ],
       "drills": [
         {
+          "did": "drill-080",
           "frameC": "唔好留喺屋企,我哋▢出街啦。",
           "frameJ": "m4 hou2 lau4 hai2 uk1 kei2, ngo5 dei6 ▢ ceot1 gaai1 laa1.",
           "english": "Don't stay home — let's go out together.",
@@ -3901,6 +3981,7 @@
       ],
       "drills": [
         {
+          "did": "drill-081",
           "frameC": "▢！我叫William。",
           "frameJ": "▢! ngo5 giu3 William.",
           "english": "Hello! My name is William.",
@@ -3936,6 +4017,7 @@
           ]
         },
         {
+          "did": "drill-082",
           "frameC": "▢！瞓得好嗎？",
           "frameJ": "▢! fan3 dak1 hou2 maa3?",
           "english": "Good morning! Did you sleep well?",
@@ -3971,6 +4053,7 @@
           ]
         },
         {
+          "did": "drill-083",
           "frameC": "多謝，▢！",
           "frameJ": "do1 ze6, ▢!",
           "english": "Thank you, goodbye!",
@@ -4032,6 +4115,7 @@
       ],
       "drills": [
         {
+          "did": "drill-084",
           "frameC": "▢，我遲到。",
           "frameJ": "▢, ngo5 ci4 dou3.",
           "english": "Sorry, I'm late.",
@@ -4067,6 +4151,7 @@
           ]
         },
         {
+          "did": "drill-085",
           "frameC": "多謝！— ▢。",
           "frameJ": "do1 ze6! — ▢.",
           "english": "Thank you! — You're welcome.",
@@ -4128,6 +4213,7 @@
       ],
       "drills": [
         {
+          "did": "drill-086",
           "frameC": "▢，借過。",
           "frameJ": "▢, ze3 gwo3.",
           "english": "Excuse me, let me through.",
@@ -4163,6 +4249,7 @@
           ]
         },
         {
+          "did": "drill-087",
           "frameC": "▢光臨！",
           "frameJ": "▢ gwong1 lam4!",
           "english": "Welcome (to our shop)!",
@@ -4198,6 +4285,7 @@
           ]
         },
         {
+          "did": "drill-088",
           "frameC": "▢坐。",
           "frameJ": "▢ co5.",
           "english": "Please sit down.",
@@ -4259,6 +4347,7 @@
       ],
       "drills": [
         {
+          "did": "drill-089",
           "frameC": "佢係唔係學生？— ▢。",
           "frameJ": "keoi5 hai6 m4 hai6 hok6 saang1? — ▢.",
           "english": "Is he a student? — Yes.",
@@ -4294,6 +4383,7 @@
           ]
         },
         {
+          "did": "drill-090",
           "frameC": "而家去得唔得？— ▢。",
           "frameJ": "ji4 gaa1 heoi3 dak1 m4 dak1? — ▢.",
           "english": "Can we go now? — Sure.",
@@ -4355,6 +4445,7 @@
       ],
       "drills": [
         {
+          "did": "drill-091",
           "frameC": "A：▢ B：我叫William。",
           "frameJ": "A: ▢ B: ngo5 giu3 William.",
           "english": "What is your name? — My name is William.",
@@ -4390,6 +4481,7 @@
           ]
         },
         {
+          "did": "drill-092",
           "frameC": "A：你叫咩名？B：▢William。",
           "frameJ": "A: nei5 giu3 me1 meng2? B: ▢ William.",
           "english": "What's your name? — My name is William.",
@@ -4425,6 +4517,7 @@
           ]
         },
         {
+          "did": "drill-093",
           "frameC": "A：▢ B：我好好，多謝！",
           "frameJ": "A: ▢ B: ngo5 hou2 hou2, do1 ze6!",
           "english": "How are you? — I'm well, thanks!",
@@ -4460,6 +4553,7 @@
           ]
         },
         {
+          "did": "drill-094",
           "frameC": "▢，請講慢啲。",
           "frameJ": "▢, cing2 gong2 maan6 di1.",
           "english": "I don't understand — please speak slowly.",
@@ -4521,6 +4615,7 @@
       ],
       "drills": [
         {
+          "did": "drill-095",
           "frameC": "週末得閒,我想▢幾個朋友出嚟。",
           "frameJ": "zau1 mut6 dak1 haan4, ngo5 soeng2 ▢ gei2 go3 pang4 jau5 ceot1 lai4.",
           "english": "Free at the weekend — I want to make plans with a few friends.",
@@ -4556,6 +4651,7 @@
           ]
         },
         {
+          "did": "drill-096",
           "frameC": "聽日你▢嗎？一齊去睇戲。",
           "frameJ": "ting1 jat6 nei5 ▢ maa3? jat1 cai4 heoi3 tai2 hei3.",
           "english": "Are you free tomorrow? Let's go see a movie.",
@@ -4591,6 +4687,7 @@
           ]
         },
         {
+          "did": "drill-097",
           "frameC": "我生日,想▢你哋嚟我屋企。",
           "frameJ": "ngo5 saang1 jat6, soeng2 ▢ nei5 dei6 lai4 ngo5 uk1 kei2.",
           "english": "It's my birthday — I want to invite you all to my place.",
@@ -4626,6 +4723,7 @@
           ]
         },
         {
+          "did": "drill-098",
           "frameC": "今日唔得閒,不如▢先啦。",
           "frameJ": "gam1 jat6 m4 dak1 haan4, bat1 jyu4 ▢ sin1 laa1.",
           "english": "Not free today — let's do it another day.",
@@ -4687,6 +4785,7 @@
       ],
       "drills": [
         {
+          "did": "drill-099",
           "frameC": "我▢比我大兩歲。",
           "frameJ": "ngo5 ▢ bei2 ngo5 daai6 loeng5 seoi3.",
           "english": "My older brother is two years older than me.",
@@ -4722,6 +4821,7 @@
           ]
         },
         {
+          "did": "drill-100",
           "frameC": "我▢住喺鄉下。",
           "frameJ": "ngo5 ▢ zyu6 hai2 hoeng1 haa5.",
           "english": "My paternal grandfather lives in the village.",
@@ -4783,6 +4883,7 @@
       ],
       "drills": [
         {
+          "did": "drill-101",
           "frameC": "我哋▢去飲茶。",
           "frameJ": "ngo5 dei6 ▢ heoi3 jam2 caa4.",
           "english": "We go for dim sum on Sunday.",
@@ -4818,6 +4919,7 @@
           ]
         },
         {
+          "did": "drill-102",
           "frameC": "今日▢，要返工。",
           "frameJ": "gam1 jat6 ▢, jiu3 faan1 gung1.",
           "english": "Today is Monday, have to work.",
@@ -4879,6 +4981,7 @@
       ],
       "drills": [
         {
+          "did": "drill-103",
           "frameC": "消防車係▢。",
           "frameJ": "siu1 fong4 ce1 hai6 ▢.",
           "english": "The fire truck is red.",
@@ -4914,6 +5017,7 @@
           ]
         },
         {
+          "did": "drill-104",
           "frameC": "天空係▢。",
           "frameJ": "tin1 hung1 hai6 ▢.",
           "english": "The sky is blue.",
@@ -4949,6 +5053,7 @@
           ]
         },
         {
+          "did": "drill-105",
           "frameC": "夜晚天好黑，係▢。",
           "frameJ": "je6 maan5 tin1 hou2 hak1, hai6 ▢.",
           "english": "The night sky is dark — it's black.",
@@ -4984,6 +5089,7 @@
           ]
         },
         {
+          "did": "drill-106",
           "frameC": "香蕉係▢。",
           "frameJ": "hoeng1 ziu1 hai6 ▢.",
           "english": "A banana is yellow.",
@@ -5045,6 +5151,7 @@
       ],
       "drills": [
         {
+          "did": "drill-107",
           "frameC": "凍咖啡▢，唔好太甜。",
           "frameJ": "dung3 gaa3 fe1 ▢, m4 hou2 taai3 tim4.",
           "english": "Iced coffee, no sugar — not too sweet.",
@@ -5080,6 +5187,7 @@
           ]
         },
         {
+          "did": "drill-108",
           "frameC": "好凍呀，我要▢。",
           "frameJ": "hou2 dung3 aa3, ngo5 jiu3 ▢.",
           "english": "It's cold — I'll have a hot drink.",
@@ -5141,6 +5249,7 @@
       ],
       "drills": [
         {
+          "did": "drill-109",
           "frameC": "廣東人鍾意▢魚,保持鮮味。",
           "frameJ": "gwong2 dung1 jan4 zung1 ji3 ▢ jyu2, bou2 ci4 sin1 mei6.",
           "english": "Cantonese people like to steam fish to keep it fresh.",
@@ -5176,6 +5285,7 @@
           ]
         },
         {
+          "did": "drill-110",
           "frameC": "個湯淡咗,加多少少▢。",
           "frameJ": "go3 tong1 taam5 zo2, gaa1 do1 siu2 siu2 ▢.",
           "english": "The soup is bland — add a bit more salt.",
@@ -5211,6 +5321,7 @@
           ]
         },
         {
+          "did": "drill-111",
           "frameC": "炒之前,先喺鑊度落啲▢。",
           "frameJ": "caau2 zi1 cin4, sin1 hai2 wok6 dou6 lok6 di1 ▢.",
           "english": "Before stir-frying, put some oil in the wok first.",
@@ -5246,6 +5357,7 @@
           ]
         },
         {
+          "did": "drill-112",
           "frameC": "煮飯之前,要▢好啲蔬菜。",
           "frameJ": "zyu2 faan6 zi1 cin4, jiu3 ▢ hou2 di1 so1 coi3.",
           "english": "Before cooking, cut the vegetables.",
@@ -5281,6 +5393,7 @@
           ]
         },
         {
+          "did": "drill-113",
           "frameC": "炒菜要用個大▢,夠熱先好食。",
           "frameJ": "caau2 coi3 jiu3 jung6 go3 daai6 ▢, gau3 jit6 sin1 hou2 sik6.",
           "english": "Stir-frying needs a big wok — hot enough to taste good.",
@@ -5342,6 +5455,7 @@
       ],
       "drills": [
         {
+          "did": "drill-114",
           "frameC": "跌咗落水,大嗌▢！",
           "frameJ": "dit3 zo2 lok6 seoi2, daai6 aai3 ▢!",
           "english": "Fell in the water — shout for help!",
@@ -5377,6 +5491,7 @@
           ]
         },
         {
+          "did": "drill-115",
           "frameC": "屋企俾人爆竊,即刻▢。",
           "frameJ": "uk1 kei2 bei2 jan4 baau3 sit3, zik1 hak1 ▢.",
           "english": "The house was burgled — call the police right away.",
@@ -5412,6 +5527,7 @@
           ]
         },
         {
+          "did": "drill-116",
           "frameC": "廚房着▢喇,好危險！",
           "frameJ": "cyu4 fong2 zoek6 ▢ laa3, hou2 ngai4 him2!",
           "english": "The kitchen's caught fire — very dangerous!",
@@ -5447,6 +5563,7 @@
           ]
         },
         {
+          "did": "drill-117",
           "frameC": "佢受咗傷,快啲叫▢。",
           "frameJ": "keoi5 sau6 zo2 soeng1, faai3 di1 giu3 ▢.",
           "english": "He's injured — call an ambulance quick.",
@@ -5482,6 +5599,7 @@
           ]
         },
         {
+          "did": "drill-118",
           "frameC": "有火燭,大家快啲▢！",
           "frameJ": "jau5 fo2 zuk1, daai6 gaa1 faai3 di1 ▢!",
           "english": "There's a fire — everyone get out quick!",
@@ -5543,6 +5661,7 @@
       ],
       "drills": [
         {
+          "did": "drill-119",
           "frameC": "我想▢睇片,但係冇訊號。",
           "frameJ": "ngo5 soeng2 ▢ tai2 pin2, daan6 hai6 mou5 seon3 hou6.",
           "english": "I want to go online to watch videos, but there's no signal.",
@@ -5578,6 +5697,7 @@
           ]
         },
         {
+          "did": "drill-120",
           "frameC": "用呢個程式要先輸入▢。",
           "frameJ": "jung6 ni1 go3 cing4 sik1 jiu3 sin1 syu1 jap6 ▢.",
           "english": "To use this app you first enter the password.",
@@ -5613,6 +5733,7 @@
           ]
         },
         {
+          "did": "drill-121",
           "frameC": "得返少少電,要快啲▢。",
           "frameJ": "dak1 faan1 siu2 siu2 din6, jiu3 faai3 di1 ▢.",
           "english": "Battery's low — need to charge it soon.",
@@ -5648,6 +5769,7 @@
           ]
         },
         {
+          "did": "drill-122",
           "frameC": "部電話跌咗落地,▢咗。",
           "frameJ": "bou6 din6 waa2 dit3 zo2 lok6 dei6, ▢ zo2.",
           "english": "The phone fell on the floor — it's broken.",
@@ -5709,6 +5831,7 @@
       ],
       "drills": [
         {
+          "did": "drill-123",
           "frameC": "夜喇,終於可以▢返屋企。",
           "frameJ": "je6 laa3, zung1 jyu1 ho2 ji5 ▢ faan1 uk1 kei2.",
           "english": "It's late — finally can finish work and go home.",
@@ -5744,6 +5867,7 @@
           ]
         },
         {
+          "did": "drill-124",
           "frameC": "做唔晒啲嘢,今晚要▢。",
           "frameJ": "zou6 m4 saai3 di1 je5, gam1 maan5 jiu3 ▢.",
           "english": "Can't finish the work — have to work overtime tonight.",
@@ -5779,6 +5903,7 @@
           ]
         },
         {
+          "did": "drill-125",
           "frameC": "今日係月尾,終於▢。",
           "frameJ": "gam1 jat6 hai6 jyut6 mei5, zung1 jyu1 ▢.",
           "english": "It's the end of the month — finally payday.",
@@ -5814,6 +5939,7 @@
           ]
         },
         {
+          "did": "drill-126",
           "frameC": "我喺一間大▢返工。",
           "frameJ": "ngo5 hai2 jat1 gaan1 daai6 ▢ faan1 gung1.",
           "english": "I work at a big company.",
@@ -5875,6 +6001,7 @@
       ],
       "drills": [
         {
+          "did": "drill-127",
           "frameC": "放學之後要做▢。",
           "frameJ": "fong3 hok6 zi1 hau6 jiu3 zou6 ▢.",
           "english": "After school you have to do homework.",
@@ -5910,6 +6037,7 @@
           ]
         },
         {
+          "did": "drill-128",
           "frameC": "鐘聲響喇,要去▢。",
           "frameJ": "zung1 seng1 hoeng2 laa3, jiu3 heoi3 ▢.",
           "english": "The bell rang — time to go to class.",
@@ -5945,6 +6073,7 @@
           ]
         },
         {
+          "did": "drill-129",
           "frameC": "老師問問題,我舉手▢。",
           "frameJ": "lou5 si1 man6 man6 tai4, ngo5 geoi2 sau2 ▢.",
           "english": "The teacher asks a question — I raise my hand to answer.",
@@ -5980,6 +6109,7 @@
           ]
         },
         {
+          "did": "drill-130",
           "frameC": "我每日返▢讀書。",
           "frameJ": "ngo5 mui5 jat6 faan1 ▢ duk6 syu1.",
           "english": "I go to school every day to study.",
@@ -6041,6 +6171,7 @@
       ],
       "drills": [
         {
+          "did": "drill-131",
           "frameC": "我到酒店喇,想▢。",
           "frameJ": "ngo5 dou3 zau2 dim3 laa3, soeng2 ▢.",
           "english": "I've arrived at the hotel — I'd like to check in.",
@@ -6076,6 +6207,7 @@
           ]
         },
         {
+          "did": "drill-132",
           "frameC": "開唔到門,我唔見咗▢。",
           "frameJ": "hoi1 m4 dou2 mun4, ngo5 m4 gin3 zo2 ▢.",
           "english": "Can't open the door — I lost the key.",
@@ -6111,6 +6243,7 @@
           ]
         },
         {
+          "did": "drill-133",
           "frameC": "服務員,唔該幫我攞▢上房。",
           "frameJ": "fuk6 mou6 jyun4, m4 goi1 bong1 ngo5 lo2 ▢ soeng5 fong2.",
           "english": "Staff, please help carry my luggage up to the room.",
@@ -6146,6 +6279,7 @@
           ]
         },
         {
+          "did": "drill-134",
           "frameC": "我問服務員:早餐喺▢？",
           "frameJ": "ngo5 man6 fuk6 mou6 jyun4: zou2 caan1 hai2 ▢?",
           "english": "I ask the staff: what floor is breakfast on?",
@@ -6207,6 +6341,7 @@
       ],
       "drills": [
         {
+          "did": "drill-135",
           "frameC": "瞓覺嘅時候,瞓喺張▢度。",
           "frameJ": "fan3 gaau3 ge3 si4 hau6, fan3 hai2 zoeng1 ▢ dou6.",
           "english": "When sleeping, you sleep on the bed.",
@@ -6242,6 +6377,7 @@
           ]
         },
         {
+          "did": "drill-136",
           "frameC": "間房好焗,開個▢透下氣。",
           "frameJ": "gaan1 fong2 hou2 guk6, hoi1 go3 ▢ tau3 haa5 hei3.",
           "english": "The room is stuffy — open the window for some air.",
@@ -6277,6 +6413,7 @@
           ]
         },
         {
+          "did": "drill-137",
           "frameC": "煮飯整嘢食,梗係喺▢。",
           "frameJ": "zyu2 faan6 zing2 je5 sik6, gang2 hai6 hai2 ▢.",
           "english": "Cooking food, of course, happens in the kitchen.",
@@ -6338,6 +6475,7 @@
       ],
       "drills": [
         {
+          "did": "drill-138",
           "frameC": "記得帶遮,出面▢。",
           "frameJ": "gei3 dak1 daai3 ze1, ceot1 min6 ▢.",
           "english": "Remember an umbrella — it's raining outside.",
@@ -6373,6 +6511,7 @@
           ]
         },
         {
+          "did": "drill-139",
           "frameC": "天文台話有▢,要留喺屋企。",
           "frameJ": "tin1 man4 toi4 waa6 jau5 ▢, jiu3 lau4 hai2 uk1 kei2.",
           "english": "The observatory says there's a typhoon — stay home.",
@@ -6434,6 +6573,7 @@
       ],
       "drills": [
         {
+          "did": "drill-140",
           "frameC": "想身體好,要多啲做▢。",
           "frameJ": "soeng2 san1 tai2 hou2, jiu3 do1 di1 zou6 ▢.",
           "english": "To be healthy, do more exercise.",
@@ -6469,6 +6609,7 @@
           ]
         },
         {
+          "did": "drill-141",
           "frameC": "天氣熱,我鍾意去▢消暑。",
           "frameJ": "tin1 hei3 jit6, ngo5 zung1 ji3 heoi3 ▢ siu1 syu2.",
           "english": "Hot weather — I like to swim to cool off.",
@@ -6504,6 +6645,7 @@
           ]
         },
         {
+          "did": "drill-142",
           "frameC": "我哋一隊十一個人,踢▢。",
           "frameJ": "ngo5 dei6 jat1 deoi6 sap6 jat1 go3 jan4, tek3 ▢.",
           "english": "Our team has eleven players — we play football.",
@@ -6539,6 +6681,7 @@
           ]
         },
         {
+          "did": "drill-143",
           "frameC": "最後一分鐘入波,我哋▢咗！",
           "frameJ": "zeoi3 hau6 jat1 fan1 zung1 jap6 bo1, ngo5 dei6 ▢ zo2!",
           "english": "Scored in the last minute — we won!",
@@ -6600,6 +6743,7 @@
       ],
       "drills": [
         {
+          "did": "drill-144",
           "frameC": "我冇散紙,用▢得唔得？",
           "frameJ": "ngo5 mou5 saan3 zi2, jung6 ▢ dak1 m4 dak1?",
           "english": "I have no coins — can I use a credit card?",
@@ -6635,6 +6779,7 @@
           ]
         },
         {
+          "did": "drill-145",
           "frameC": "俾咗一百蚊,佢▢返二十。",
           "frameJ": "bei2 zo2 jat1 baak3 man1, keoi5 ▢ faan1 ji6 sap6.",
           "english": "Gave a hundred — he gives twenty in change.",
@@ -6670,6 +6815,7 @@
           ]
         },
         {
+          "did": "drill-146",
           "frameC": "去旅行之前,要▢做港幣。",
           "frameJ": "heoi3 leoi5 hang4 zi1 cin4, jiu3 ▢ zou6 gong2 bai6.",
           "english": "Before travelling, change money into HK dollars.",
@@ -6705,6 +6851,7 @@
           ]
         },
         {
+          "did": "drill-147",
           "frameC": "我想喺銀行開個▢。",
           "frameJ": "ngo5 soeng2 hai2 ngan4 hong4 hoi1 go3 ▢.",
           "english": "I'd like to open an account at the bank.",
@@ -6766,6 +6913,7 @@
       ],
       "drills": [
         {
+          "did": "drill-148",
           "frameC": "睇好餐牌喇,可以▢。",
           "frameJ": "tai2 hou2 caan1 paai4 laa3, ho2 ji5 ▢.",
           "english": "We've looked at the menu — ready to order.",
@@ -6801,6 +6949,7 @@
           ]
         },
         {
+          "did": "drill-149",
           "frameC": "食飽喇,唔該▢。",
           "frameJ": "sik6 baau2 laa3, m4 goi1 ▢.",
           "english": "We're full — bill, please.",
@@ -6862,6 +7011,7 @@
       ],
       "drills": [
         {
+          "did": "drill-150",
           "frameC": "塞車,我哋搭▢啦。",
           "frameJ": "sak1 ce1, ngo5 dei6 daap3 ▢ laa1.",
           "english": "Traffic jam — let's take the bus.",
@@ -6897,6 +7047,7 @@
           ]
         },
         {
+          "did": "drill-151",
           "frameC": "到喇,呢度▢。",
           "frameJ": "dou3 laa3, ni1 dou6 ▢.",
           "english": "We're here — stop here.",
@@ -6958,6 +7109,7 @@
       ],
       "drills": [
         {
+          "did": "drill-152",
           "frameC": "我想▢呢件恤衫。",
           "frameJ": "ngo5 soeng2 ▢ ni1 gin6 seot1 saam1.",
           "english": "I want to buy this shirt.",
@@ -7019,6 +7171,7 @@
       ],
       "drills": [
         {
+          "did": "drill-153",
           "frameC": "細路想▢一隻小動物。",
           "frameJ": "sai3 lou6 soeng2 ▢ jat1 zek3 siu2 dung6 mat6.",
           "english": "The child wants to keep a small animal.",
@@ -7080,6 +7233,7 @@
       ],
       "drills": [
         {
+          "did": "drill-154",
           "frameC": "人好多,我哋要▢先入到場。",
           "frameJ": "jan4 hou2 do1, ngo5 dei6 jiu3 ▢ sin1 jap6 dou2 coeng4.",
           "english": "Lots of people — we have to queue before we can get in.",
@@ -7115,6 +7269,7 @@
           ]
         },
         {
+          "did": "drill-155",
           "frameC": "風景咁靚,梗係要▢。",
           "frameJ": "fung1 ging2 gam3 leng3, gang2 hai6 jiu3 ▢.",
           "english": "The view is so beautiful — of course I'll take photos.",
@@ -7151,5 +7306,6 @@
         }
       ]
     }
-  ]
+  ],
+  "_didSeq": 155
 }

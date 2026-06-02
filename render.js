@@ -7,11 +7,12 @@
 // ── Render ────────────────────────────────────────────────────────────────────
 function renderDrawer() {
   const rc = state.reviewBadge.liveCount;
+  const pc = state.patternReviewBadge.liveCount;
   const items = [
     { key:'path',      icon:'🛤️', label:'Learning Path',  desc:'Curated curriculum, ordered & tracked'  },
     { key:'topics',    icon:'📖', label:'Topics',         desc:'Vocabulary, sentences & conversations' },
     { key:'patterns',  icon:'🔨', label:'Patterns',        desc:'Sentence building blocks'              },
-    { key:'review',    icon:'🗂️', label:'Word Review',     desc:'Practise words you\'ve missed',        badge: rc },
+    { key:'review',    icon:'🗂️', label:'Review',          desc:'Words & patterns to practise',         badge: rc + pc },
     { key:'translate', icon:'🌐', label:'Translate',       desc:'AI-powered translation & breakdown'    },
   ];
   const open = state.drawerOpen ? 'open' : '';
@@ -53,7 +54,15 @@ function renderDrawer() {
               </span>
               ${item.badge > 0 ? `<span class="ni-badge">${item.badge}</span>` : ''}
               <span class="ni-tick">✓</span>
-            </button>`).join('')}
+            </button>${item.key === 'review' ? `
+            <div class="nav-sub">
+              <button class="nav-sub-item${state.nav==='review'&&state.reviewView==='words'?' active':''}" data-review-sub="words">
+                📖 Words ${rc > 0 ? `<span class="ns-badge">${rc}</span>` : ''}
+              </button>
+              <button class="nav-sub-item${state.nav==='review'&&state.reviewView==='patterns'?' active':''}" data-review-sub="patterns">
+                🔨 Patterns ${pc > 0 ? `<span class="ns-badge">${pc}</span>` : ''}
+              </button>
+            </div>` : ''}`).join('')}
           ${settingsSection}
         </div>
       </div>
@@ -499,6 +508,36 @@ function renderQuizCore(opts) {
   };
 }
 
+// Shared "session complete" screen for BOTH Word Review and Pattern Review.
+// Shows three stats — reviewed / graduated / still learning — plus a "review N
+// more" (or all-clear) and a Done button. `still learning = reviewed - graduated`.
+function renderReviewDone(o) {
+  const color = o.color || '#8B3A4E';
+  const stillLearning = Math.max(0, o.reviewed - o.graduated);
+  const moreOrClear = o.liveCount > 0
+    ? `<button class="review-start-btn" id="${o.againId}">Review ${Math.min(o.liveCount, REVIEW_SESSION_CAP)} more</button>`
+    : `<div class="review-allclear-note">${o.allClearNote}</div>`;
+  return `
+    <div class="content">
+      ${renderPageHeader(o.icon, o.title, '')}
+      <div class="result">
+        <div class="result-emoji">${o.graduated > 0 ? '🌟' : '✅'}</div>
+        <div class="review-done-stats">
+          <div class="rd-stat"><b style="color:${color}">${o.reviewed}</b><span>reviewed</span></div>
+          <div class="rd-stat"><b style="color:var(--jade-bright)">${o.graduated}</b><span>graduated</span></div>
+          <div class="rd-stat"><b style="color:var(--muted)">${stillLearning}</b><span>still learning</span></div>
+        </div>
+        <div class="result-msg">
+          ${o.graduated > 0
+            ? `${o.graduated} ${o.noun}${o.graduated === 1 ? '' : 's'} cleared from your review list.`
+            : `Keep going — get ${o.noun === 'word' ? 'a word' : 'a pattern'} right 3 times to clear it.`}
+        </div>
+        ${moreOrClear}
+        <button class="back-btn" id="${o.exitId}" style="background:${color}"><span class="icon-label">${icon('arrowLeft',15)} Done</span></button>
+      </div>
+    </div>`;
+}
+
 function renderWordReview() {
   const wr = state.wordReview;
 
@@ -544,26 +583,17 @@ function renderWordReview() {
 
   const color = '#8B3A4E';   // review uses the brand cinnabar as its accent
 
-  // --- Done state: session summary ---
+  // --- Done state: session summary (shared stat screen) ---
   if (wr.done) {
-    const total = wr.queue.length;
-    return `
-      <div class="content">
-        ${renderPageHeader('🗂️', 'Word Review', '')}
-        <div class="result">
-          <div class="result-emoji">${wr.graduatedThisSession > 0 ? '🌟' : '✅'}</div>
-          <div class="result-score" style="color:${color}">${wr.correctThisSession} / ${total} correct</div>
-          <div class="result-msg">
-            ${wr.graduatedThisSession > 0
-              ? `${wr.graduatedThisSession} word${wr.graduatedThisSession === 1 ? '' : 's'} cleared from your review list.`
-              : `Keep going — get a word right 3 times to clear it.`}
-          </div>
-          ${state.reviewBadge.liveCount > 0
-            ? `<button class="review-start-btn" id="review-again">Review ${Math.min(state.reviewBadge.liveCount, REVIEW_SESSION_CAP)} more</button>`
-            : `<div class="review-allclear-note">No words left to review — nicely done.</div>`}
-          <button class="back-btn" id="review-exit" style="background:${color}"><span class="icon-label">${icon('arrowLeft',15)} Done</span></button>
-        </div>
-      </div>`;
+    return renderReviewDone({
+      icon: '🗂️', title: 'Word Review', color,
+      reviewed: wr.reviewedThisSession,
+      graduated: wr.graduatedThisSession,
+      liveCount: state.reviewBadge.liveCount,
+      noun: 'word',
+      allClearNote: 'No words left to review — nicely done.',
+      againId: 'review-again', exitId: 'review-exit',
+    });
   }
 
   // --- Active question ---
@@ -611,6 +641,84 @@ function renderWordReview() {
       ${core.choiceGrid}
       ${core.answerPanel}
     </div>`;
+}
+
+// ── Review hub (Option B): one Review destination with two cards ──────────────
+function renderReviewHub() {
+  const wc = state.reviewBadge.liveCount;
+  const pc = state.patternReviewBadge.liveCount;
+  const card = (cls, view, icon, name, desc, count, noun) => `
+    <button class="review-hub-card ${cls}" data-review-go="${view}">
+      <span class="rh-ic">${icon}</span>
+      <span class="rh-body"><span class="rh-name">${name}</span><span class="rh-desc">${desc}</span></span>
+      <span class="rh-count ${count === 0 ? 'zero' : ''}"><b>${count}</b><span>${noun}</span></span>
+    </button>`;
+  return `
+    <div class="content">
+      ${renderPageHeader('🗂️', 'Review', 'Practise what you\'ve missed — words and patterns are tracked separately')}
+      ${card('words', 'words', '📖', 'Word Review', 'Vocabulary you got wrong in quizzes', wc, 'words')}
+      ${card('patterns', 'patterns', '🔨', 'Pattern Review', 'Sentence patterns you got wrong in drills', pc, 'patterns')}
+    </div>`;
+}
+
+// ── Pattern Review (parallel to Word Review; reuses the drill card) ───────────
+function renderPatternReview() {
+  const pr = state.patternReview;
+  const color = '#B7861E';   // pattern review uses gold as its accent
+
+  // Landing / empty when no active session.
+  if (!pr) {
+    const { liveCount, everUsed } = state.patternReviewBadge;
+    let body;
+    if (liveCount > 0) {
+      body = `
+        <div class="review-landing">
+          <div class="review-landing-count" style="color:${color}">${liveCount}</div>
+          <div class="review-landing-label">pattern${liveCount === 1 ? '' : 's'} ready to review</div>
+          <p class="review-landing-note">
+            ${liveCount > REVIEW_SESSION_CAP
+              ? `This session will cover the ${REVIEW_SESSION_CAP} oldest. Get a pattern right 3 times to clear it.`
+              : `Get a pattern right 3 times to clear it from your review list.`}
+          </p>
+          <button class="review-start-btn" id="pattern-review-start" style="background:${color}">Start review</button>
+        </div>`;
+    } else if (everUsed) {
+      body = `
+        <div class="review-empty">
+          <div class="review-empty-emoji">🎉</div>
+          <div class="review-empty-title">All caught up — great work!</div>
+          <p class="review-empty-text">You've reviewed every pattern. New ones appear here as you do more drills.</p>
+        </div>`;
+    } else {
+      body = `
+        <div class="review-empty">
+          <div class="review-empty-emoji">📥</div>
+          <div class="review-empty-title">No review patterns yet</div>
+          <p class="review-empty-text">Patterns you miss in drills will collect here to practise later.</p>
+        </div>`;
+    }
+    return `
+      <div class="content">
+        ${renderPageHeader('🔨', 'Pattern Review', 'Practise the sentence patterns you\'ve missed')}
+        ${body}
+      </div>`;
+  }
+
+  // Done — shared stat screen.
+  if (pr.done) {
+    return renderReviewDone({
+      icon: '🔨', title: 'Pattern Review', color,
+      reviewed: pr.reviewedThisSession,
+      graduated: pr.graduatedThisSession,
+      liveCount: state.patternReviewBadge.liveCount,
+      noun: 'pattern',
+      allClearNote: 'No patterns left to review — nicely done.',
+      againId: 'pattern-review-again', exitId: 'pattern-review-exit',
+    });
+  }
+
+  // Active question — reuse the live drill card body (pr has the {pattern,drill} shape).
+  return `<div class="content">${renderDrillBody(pr)}</div>`;
 }
 
 function renderLearningPath() {
@@ -1099,7 +1207,9 @@ function render() {
   } else if (state.nav === 'patterns') {
     mainContent = renderPatterns();
   } else if (state.nav === 'review') {
-    mainContent = renderWordReview();
+    if (state.reviewView === 'words')         mainContent = renderWordReview();
+    else if (state.reviewView === 'patterns') mainContent = renderPatternReview();
+    else                                      mainContent = renderReviewHub();
   } else if (state.nav === 'translate') {
     mainContent = renderTranslate();
   } else if (state.nav === 'path') {
@@ -1928,9 +2038,11 @@ function attachEvents(lesson, color) {
       if (target === 'topics') state.homeView = true;
       // Tapping Learning Path from the drawer always returns to the path list
       if (target === 'path') state.pathView = 'list';
-      // Entering Word Review always starts at the landing screen, not a stale session
+      // Entering Review opens the hub (landing), never a stale session
       if (target === 'review') {
+        state.reviewView = 'hub';
         state.wordReview = null;
+        state.patternReview = null;
         refreshReviewBadge().then(render);
       }
       // Entering Patterns always starts with the library all-collapsed
@@ -1949,7 +2061,35 @@ function attachEvents(lesson, color) {
     });
   });
 
-  // Category quick-jump (drawer sublinks)
+  // Review hub cards → open a sub-view (Words / Patterns). Pushes a history entry
+  // so BACK returns to the hub.
+  document.querySelectorAll('[data-review-go]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      state.reviewView = btn.dataset.reviewGo;
+      state.wordReview = null;
+      state.patternReview = null;
+      pushNav();
+      window.scrollTo(0, 0);
+      refreshReviewBadge().then(render);
+    });
+  });
+
+  // Menu sub-list (Words / Patterns under Review) → deep-link straight to a sub-view.
+  document.querySelectorAll('[data-review-sub]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      state.nav = 'review';
+      state.reviewView = btn.dataset.reviewSub;
+      state.wordReview = null;
+      state.patternReview = null;
+      state.checkpoint = null; state.checkpointAct = null;
+      state.checkpointQuiz = null; state.patternDrill = null;
+      state.fromPath = false; state.fromPathTier = null;
+      state.drawerOpen = false;
+      navReplace();
+      window.scrollTo(0, 0);
+      refreshReviewBadge().then(render);
+    });
+  });
   document.querySelectorAll('[data-cat-jump]').forEach(btn => {
     btn.addEventListener('click', () => {
       state.nav = 'topics';
@@ -2178,6 +2318,10 @@ function attachEvents(lesson, color) {
         pd.selected = idx;
         if (correct) pd.score++;
         else if (pd.scopeKind === 'checkpoint') pd.missed.push(pd.queue[pd.idx]);  // for diagnostic
+        else if (pd.scopeKind === 'topic') {
+          // A missed pattern in a topic drill goes to the Pattern Review bin.
+          addPatternMiss(pd.queue[pd.idx].drill.did).then(refreshReviewBadge);
+        }
         // Play the full assembled sentence so the learner hears the result.
         speak(fullSentence);
         render();
@@ -2605,8 +2749,6 @@ function attachEvents(lesson, color) {
   // Landing: start a session
   const reviewStart = document.getElementById('review-start');
   if (reviewStart) reviewStart.addEventListener('click', () => startWordReview());
-
-  // Done screen: start another session, or exit to landing
   const reviewAgain = document.getElementById('review-again');
   if (reviewAgain) reviewAgain.addEventListener('click', () => startWordReview());
   const reviewExit = document.getElementById('review-exit');
@@ -2617,6 +2759,49 @@ function attachEvents(lesson, color) {
     state.wordReview = null;
     refreshReviewBadge().then(render);
   });
+
+  // ── Pattern Review session handlers (mirror Word Review) ──
+  const prStart = document.getElementById('pattern-review-start');
+  if (prStart) prStart.addEventListener('click', () => startPatternReview());
+  const prAgain = document.getElementById('pattern-review-again');
+  if (prAgain) prAgain.addEventListener('click', () => startPatternReview());
+  const prExit = document.getElementById('pattern-review-exit');
+  if (prExit) prExit.addEventListener('click', () => {
+    if (_navReady) { history.back(); return; }
+    state.patternReview = null;
+    refreshReviewBadge().then(render);
+  });
+
+  // Active Pattern Review question — reuses the drill card DOM (data-drill-choice,
+  // drill-listen/replay/next). Only one of patternDrill/patternReview is ever active,
+  // so binding the same selectors here is safe.
+  if (state.patternReview && !state.patternReview.done) {
+    const pr = state.patternReview;
+    const d = pr.queue[pr.idx].drill;
+    const fullSentence = d.frameC.replace('▢', d.answer.c);
+    const pl = document.getElementById('drill-listen');
+    if (pl) pl.addEventListener('click', () => speak(fullSentence));
+    document.querySelectorAll('[data-drill-choice]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        if (pr.selected !== null && pr.selected !== undefined) return;
+        const idx = parseInt(btn.dataset.drillChoice, 10);
+        const correct = pr.choices[idx] === d.answer;     // object identity
+        pr.selected = idx;
+        pr.reviewedThisSession++;
+        if (correct) pr.score++;
+        recordPatternReviewResult(d.did, correct).then(res => {
+          if (res.graduated) pr.graduatedThisSession++;
+          refreshReviewBadge();
+        });
+        speak(fullSentence);
+        render();
+      });
+    });
+    const prReplay = document.getElementById('drill-replay');
+    if (prReplay) prReplay.addEventListener('click', () => speak(fullSentence));
+    const prNext = document.getElementById('drill-next');
+    if (prNext) prNext.addEventListener('click', () => advancePatternReview());
+  }
 
   // Active review question
   if (state.wordReview && !state.wordReview.done) {
@@ -2637,6 +2822,7 @@ function attachEvents(lesson, color) {
         const correct = chosenOpt === cw;          // object identity, not string
         speak(cw.c);
         wr.selected = idx;
+        wr.reviewedThisSession++;
         if (correct) wr.correctThisSession++;
         // Persist the result to the bin. recordReviewResult resolves the graduation;
         // we capture whether this word graduated so the session tally is accurate.
@@ -3054,6 +3240,13 @@ function attachEvents(lesson, color) {
     // page (Drill tab landing). Clear the session so it's not stale.
     if (state.patternDrill) {
       state.patternDrill = null;
+    }
+
+    // Pattern Review session: not part of the nav snapshot, so backing out lands
+    // on the Pattern Review screen — clear the session to show the landing fresh.
+    if (state.patternReview) {
+      state.patternReview = null;
+      refreshReviewBadge();
     }
 
     // Checkpoint sessions aren't part of the nav snapshot's session data. The

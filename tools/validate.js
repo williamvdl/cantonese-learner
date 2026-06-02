@@ -144,12 +144,34 @@ if (anyWid) {
   }
 }
 
+// ── DID checks (phase-aware): once any drill has a `did`, all must; well-formed,
+//    globally unique; _didSeq high-water mark covers the max in use. ───────────
+const allDrills = [];
+patterns.patterns.forEach((pat, pi) => (pat.drills || []).forEach((d, di) => allDrills.push({ pi, di, label: pat.label, d })));
+const anyDid = allDrills.some(x => 'did' in x.d);
+if (anyDid) {
+  const didSeen = {};
+  let maxN = 0;
+  for (const { pi, di, label, d } of allDrills) {
+    const where = `pattern[${pi}] "${label}" drill[${di}]`;
+    if (!('did' in d)) { err('did', `${where}: no did (dids are all-or-nothing once introduced)`); continue; }
+    if (!/^drill-\d{3,}$/.test(d.did)) err('did', `${where}: malformed did "${d.did}"`);
+    if (didSeen[d.did]) err('did', `duplicate did "${d.did}"`);
+    else didSeen[d.did] = true;
+    const n = parseInt(d.did.slice(d.did.lastIndexOf('-') + 1), 10);
+    if (n > maxN) maxN = n;
+  }
+  if (typeof patterns._didSeq !== 'number') err('did', `patterns.json: drills carry dids but file has no _didSeq high-water mark`);
+  else if (patterns._didSeq < maxN) err('did', `patterns.json: _didSeq (${patterns._didSeq}) is below the highest did in use (${maxN})`);
+}
+
 // ── Report ────────────────────────────────────────────────────────────────────
 const phase = anyWid ? 'Phase 2+ (ids + wids present)' : anyId ? 'Phase 1 (ids present, no wids)' : 'baseline (no ids)';
 console.log(`Cantonese data validator — ${phase}`);
 console.log(`  topics: ${Object.keys(topics).length}  words: ${allWords.length}  drills: ${patterns.patterns.reduce((n, p) => n + (p.drills || []).length, 0)}  drill-items: ${drillItems.length}`);
 if (anyId) console.log(`  ids assigned: ${allWords.filter(x => 'id' in x.w).length}/${allWords.length}`);
 if (anyWid) console.log(`  wids assigned: ${drillItems.filter(x => 'wid' in x.it).length}/${drillItems.length}`);
+if (anyDid) console.log(`  dids assigned: ${allDrills.filter(x => 'did' in x.d).length}/${allDrills.length}`);
 
 if (!errors.length) { console.log('\n✓ ALL CHECKS PASS'); process.exit(0); }
 const byCat = {};
