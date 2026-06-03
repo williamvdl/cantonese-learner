@@ -71,6 +71,7 @@
       ],
       "sentences": [
         {
+          "sid": "body-t1-s01",
           "c": "我頭好痛。",
           "j": "ngo5 tau4 hou2 tung3.",
           "e": "My head really hurts.",
@@ -93,6 +94,7 @@
           ]
         },
         {
+          "sid": "body-t1-s02",
           "c": "我眼好攰。",
           "j": "ngo5 ngaan5 hou2 gui6.",
           "e": "My eyes are very tired.",
@@ -115,6 +117,7 @@
           ]
         },
         {
+          "sid": "body-t1-s03",
           "c": "洗手要用水。",
           "j": "sai2 sau2 jiu3 jung6 seoi2.",
           "e": "Washing hands requires water.",
@@ -142,6 +145,7 @@
           ]
         },
         {
+          "sid": "body-t1-s04",
           "c": "我心好痛。",
           "j": "ngo5 sam1 hou2 tung3.",
           "e": "My heart hurts (sad).",
@@ -164,6 +168,7 @@
           ]
         },
         {
+          "sid": "body-t1-s05",
           "c": "佢腳受傷。",
           "j": "keoi5 goek3 sau6 soeng1.",
           "e": "His leg is injured.",
@@ -475,6 +480,7 @@
       ],
       "sentences": [
         {
+          "sid": "body-t2-s06",
           "c": "我頭痛。",
           "j": "ngo5 tau4 tung3.",
           "e": "I have a headache.",
@@ -492,6 +498,7 @@
           ]
         },
         {
+          "sid": "body-t2-s07",
           "c": "我發燒。",
           "j": "ngo5 faat3 siu1.",
           "e": "I have a fever.",
@@ -509,6 +516,7 @@
           ]
         },
         {
+          "sid": "body-t2-s08",
           "c": "我要去睇醫生。",
           "j": "ngo5 jiu3 heoi3 tai2 ji1 sang1.",
           "e": "I need to see a doctor.",
@@ -541,6 +549,7 @@
           ]
         },
         {
+          "sid": "body-t2-s09",
           "c": "藥房喺邊度？",
           "j": "joek6 fong2 hai2 bin1 dou6?",
           "e": "Where is the pharmacy?",
@@ -563,6 +572,7 @@
           ]
         },
         {
+          "sid": "body-t2-s10",
           "c": "食咗藥未呀？",
           "j": "sik6 zo2 joek6 mei6 aa3?",
           "e": "Have you taken your medicine?",
@@ -774,5 +784,6 @@
       }
     }
   },
-  "_idSeq": 20
+  "_idSeq": 20,
+  "_sidSeq": 10
 }

@@ -71,6 +71,7 @@
       ],
       "sentences": [
         {
+          "sid": "questions-t1-s01",
           "c": "你係邊個？",
           "j": "nei5 hai6 bin1 go3?",
           "e": "Who are you?",
@@ -93,6 +94,7 @@
           ]
         },
         {
+          "sid": "questions-t1-s02",
           "c": "幾時走？",
           "j": "gei2 si4 zau2?",
           "e": "When are we leaving?",
@@ -110,6 +112,7 @@
           ]
         },
         {
+          "sid": "questions-t1-s03",
           "c": "點解唔嚟？",
           "j": "dim2 gaai2 m4 lai4?",
           "e": "Why aren't you coming?",
@@ -132,6 +135,7 @@
           ]
         },
         {
+          "sid": "questions-t1-s04",
           "c": "你住喺邊度？",
           "j": "nei5 zyu6 hai2 bin1 dou6?",
           "e": "Where do you live?",
@@ -159,6 +163,7 @@
           ]
         },
         {
+          "sid": "questions-t1-s05",
           "c": "你叫咩名？",
           "j": "nei5 giu3 me1 meng2?",
           "e": "What's your name?",
@@ -420,5 +425,6 @@
       }
     }
   },
-  "_idSeq": 10
+  "_idSeq": 10,
+  "_sidSeq": 5
 }

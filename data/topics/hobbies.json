@@ -71,6 +71,7 @@
       ],
       "sentences": [
         {
+          "sid": "hobbies-t1-s01",
           "c": "我嘅興趣係影相。",
           "j": "ngo5 ge3 hing3 ceoi3 hai6 jing2 soeng2.",
           "e": "My hobby is photography.",
@@ -98,6 +99,7 @@
           ]
         },
         {
+          "sid": "hobbies-t1-s02",
           "c": "你鍾意睇咩戲？",
           "j": "nei5 zung1 ji3 tai2 me1 hei3?",
           "e": "What kind of movies do you like?",
@@ -125,6 +127,7 @@
           ]
         },
         {
+          "sid": "hobbies-t1-s03",
           "c": "週末一齊行山啦。",
           "j": "zau1 mut6 jat1 cai4 haang4 saan1 laa1.",
           "e": "Let's go hiking this weekend.",
@@ -152,6 +155,7 @@
           ]
         },
         {
+          "sid": "hobbies-t1-s04",
           "c": "我細個學跳舞。",
           "j": "ngo5 sai3 go3 hok6 tiu3 mou5.",
           "e": "I learned to dance as a child.",
@@ -179,6 +183,7 @@
           ]
         },
         {
+          "sid": "hobbies-t1-s05",
           "c": "佢成日打機。",
           "j": "keoi5 sing4 jat6 daa2 gei1.",
           "e": "He plays video games all the time.",
@@ -415,5 +420,6 @@
       }
     }
   },
-  "_idSeq": 10
+  "_idSeq": 10,
+  "_sidSeq": 5
 }

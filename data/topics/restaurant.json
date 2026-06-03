@@ -71,6 +71,7 @@
       ],
       "sentences": [
         {
+          "sid": "restaurant-t1-s01",
           "c": "唔該，俾我個餐牌。",
           "j": "m4 goi1, bei2 ngo5 go3 caan1 paai4.",
           "e": "Excuse me, please give me the menu.",
@@ -103,6 +104,7 @@
           ]
         },
         {
+          "sid": "restaurant-t1-s02",
           "c": "我想叫凍檸茶。",
           "j": "ngo5 soeng2 giu3 dung3 ning4 caa4.",
           "e": "I'd like to order iced lemon tea.",
@@ -135,6 +137,7 @@
           ]
         },
         {
+          "sid": "restaurant-t1-s03",
           "c": "我好餓呀！",
           "j": "ngo5 hou2 ngo6 aa3!",
           "e": "I'm so hungry!",
@@ -162,6 +165,7 @@
           ]
         },
         {
+          "sid": "restaurant-t1-s04",
           "c": "唔該，埋單。",
           "j": "m4 goi1, maai4 daan1.",
           "e": "Excuse me, the bill please.",
@@ -179,6 +183,7 @@
           ]
         },
         {
+          "sid": "restaurant-t1-s05",
           "c": "呢個好食！",
           "j": "ni1 go3 hou2 sik6!",
           "e": "This is delicious!",
@@ -380,5 +385,6 @@
       }
     }
   },
-  "_idSeq": 10
+  "_idSeq": 10,
+  "_sidSeq": 5
 }

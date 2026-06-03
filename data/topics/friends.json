@@ -71,6 +71,7 @@
       ],
       "sentences": [
         {
+          "sid": "friends-t1-s01",
           "c": "我哋約星期六食飯。",
           "j": "ngo5 dei6 joek3 sing1 kei4 luk6 sik6 faan6.",
           "e": "We're meeting for lunch on Saturday.",
@@ -98,6 +99,7 @@
           ]
         },
         {
+          "sid": "friends-t1-s02",
           "c": "你今晚得閒嗎？",
           "j": "nei5 gam1 maan5 dak1 haan4 maa3?",
           "e": "Are you free tonight?",
@@ -125,6 +127,7 @@
           ]
         },
         {
+          "sid": "friends-t1-s03",
           "c": "我哋一齊出街啦！",
           "j": "ngo5 dei6 jat1 cai4 ceot1 gaai1 laa1!",
           "e": "Let's go out together!",
@@ -152,6 +155,7 @@
           ]
         },
         {
+          "sid": "friends-t1-s04",
           "c": "對唔住，改日啦。",
           "j": "deoi3 m4 zyu6, goi2 jat6 laa1.",
           "e": "Sorry, another day.",
@@ -174,6 +178,7 @@
           ]
         },
         {
+          "sid": "friends-t1-s05",
           "c": "多謝你嘅邀請。",
           "j": "do1 ze6 nei5 ge3 jiu1 cing2.",
           "e": "Thank you for the invitation.",
@@ -380,5 +385,6 @@
       }
     }
   },
-  "_idSeq": 10
+  "_idSeq": 10,
+  "_sidSeq": 5
 }

@@ -71,6 +71,7 @@
       ],
       "sentences": [
         {
+          "sid": "shopping-t1-s01",
           "c": "呢個好貴喎。",
           "j": "ni1 go3 hou2 gwai3 wo3.",
           "e": "This is really expensive.",
@@ -93,6 +94,7 @@
           ]
         },
         {
+          "sid": "shopping-t1-s02",
           "c": "有冇平啲嘅？",
           "j": "jau5 mou5 peng4 di1 ge3?",
           "e": "Is there a cheaper one?",
@@ -115,6 +117,7 @@
           ]
         },
         {
+          "sid": "shopping-t1-s03",
           "c": "我想買呢件。",
           "j": "ngo5 soeng2 maai5 ni1 gin6.",
           "e": "I want to buy this one.",
@@ -137,6 +140,7 @@
           ]
         },
         {
+          "sid": "shopping-t1-s04",
           "c": "商場好多人。",
           "j": "soeng1 coeng4 hou2 do1 jan4.",
           "e": "The mall is very crowded.",
@@ -159,6 +163,7 @@
           ]
         },
         {
+          "sid": "shopping-t1-s05",
           "c": "唔該俾收據我。",
           "j": "m4 goi1 bei2 sau1 geoi3 ngo5.",
           "e": "Please give me the receipt.",
@@ -445,6 +450,7 @@
       ],
       "sentences": [
         {
+          "sid": "shopping-t2-s06",
           "c": "我想試呢件恤衫。",
           "j": "ngo5 soeng2 si3 ni1 gin6 seot1 saam1.",
           "e": "I'd like to try this shirt.",
@@ -477,6 +483,7 @@
           ]
         },
         {
+          "sid": "shopping-t2-s07",
           "c": "有冇大碼？",
           "j": "jau5 mou5 daai6 maa5?",
           "e": "Do you have a large size?",
@@ -494,6 +501,7 @@
           ]
         },
         {
+          "sid": "shopping-t2-s08",
           "c": "件褲太緊喇。",
           "j": "gin6 fu3 taai3 gan2 laa3.",
           "e": "These pants are too tight.",
@@ -526,6 +534,7 @@
           ]
         },
         {
+          "sid": "shopping-t2-s09",
           "c": "對鞋好靚。",
           "j": "deoi3 haai4 hou2 leng3.",
           "e": "These shoes are nice.",
@@ -553,6 +562,7 @@
           ]
         },
         {
+          "sid": "shopping-t2-s10",
           "c": "我可以試吓嗎？",
           "j": "ngo5 ho2 ji5 si3 haa5 maa3?",
           "e": "Can I try it on?",
@@ -764,5 +774,6 @@
       }
     }
   },
-  "_idSeq": 20
+  "_idSeq": 20,
+  "_sidSeq": 10
 }

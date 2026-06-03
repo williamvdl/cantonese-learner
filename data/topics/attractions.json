@@ -71,6 +71,7 @@
       ],
       "sentences": [
         {
+          "sid": "attractions-t1-s01",
           "c": "呢個景點幾時開？",
           "j": "ni1 go3 ging2 dim2 gei2 si4 hoi1?",
           "e": "When does this attraction open?",
@@ -98,6 +99,7 @@
           ]
         },
         {
+          "sid": "attractions-t1-s02",
           "c": "一張門票幾錢？",
           "j": "jat1 zoeng1 mun4 piu3 gei2 cin2?",
           "e": "How much is one ticket?",
@@ -120,6 +122,7 @@
           ]
         },
         {
+          "sid": "attractions-t1-s03",
           "c": "我哋去拍照啦！",
           "j": "ngo5 dei6 heoi3 paak3 ziu3 laa1!",
           "e": "Let's go take photos!",
@@ -147,6 +150,7 @@
           ]
         },
         {
+          "sid": "attractions-t1-s04",
           "c": "要排幾耐隊？",
           "j": "jiu3 paai4 gei2 noi6 deoi2?",
           "e": "How long is the queue?",
@@ -174,6 +178,7 @@
           ]
         },
         {
+          "sid": "attractions-t1-s05",
           "c": "你有冇地圖？",
           "j": "nei5 jau5 mou5 dei6 tou4?",
           "e": "Do you have a map?",
@@ -385,5 +390,6 @@
       }
     }
   },
-  "_idSeq": 10
+  "_idSeq": 10,
+  "_sidSeq": 5
 }

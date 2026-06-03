@@ -77,6 +77,7 @@
       ],
       "sentences": [
         {
+          "sid": "numbers-t1-s01",
           "c": "我有三個蘋果。",
           "j": "ngo5 jau5 saam1 go3 ping4 gwo2.",
           "e": "I have three apples.",
@@ -104,6 +105,7 @@
           ]
         },
         {
+          "sid": "numbers-t1-s02",
           "c": "呢度有十個人。",
           "j": "ni1 dou6 jau5 sap6 go3 jan4.",
           "e": "There are ten people here.",
@@ -131,6 +133,7 @@
           ]
         },
         {
+          "sid": "numbers-t1-s03",
           "c": "一加二係三。",
           "j": "jat1 gaa1 ji6 hai6 saam1.",
           "e": "One plus two is three.",
@@ -163,6 +166,7 @@
           ]
         },
         {
+          "sid": "numbers-t1-s04",
           "c": "我兩歲。",
           "j": "ngo5 loeng5 seoi3.",
           "e": "I'm two years old.",
@@ -185,6 +189,7 @@
           ]
         },
         {
+          "sid": "numbers-t1-s05",
           "c": "佢有五個朋友。",
           "j": "keoi5 jau5 ng5 go3 pang4 jau5.",
           "e": "He has five friends.",
@@ -476,6 +481,7 @@
       ],
       "sentences": [
         {
+          "sid": "numbers-t2-s06",
           "c": "呢個三十蚊。",
           "j": "ni1 go3 saam1 sap6 man1.",
           "e": "This is thirty dollars.",
@@ -498,6 +504,7 @@
           ]
         },
         {
+          "sid": "numbers-t2-s07",
           "c": "我有一百蚊。",
           "j": "ngo5 jau5 jat1 baak3 man1.",
           "e": "I have one hundred dollars.",
@@ -525,6 +532,7 @@
           ]
         },
         {
+          "sid": "numbers-t2-s08",
           "c": "幾多錢？",
           "j": "gei2 do1 cin2?",
           "e": "How much money?",
@@ -542,6 +550,7 @@
           ]
         },
         {
+          "sid": "numbers-t2-s09",
           "c": "一千蚊太貴喇。",
           "j": "jat1 cin1 man1 taai3 gwai3 laa3.",
           "e": "A thousand dollars is too expensive.",
@@ -574,6 +583,7 @@
           ]
         },
         {
+          "sid": "numbers-t2-s10",
           "c": "我食咗一半。",
           "j": "ngo5 sik6 zo2 jat1 bun3.",
           "e": "I ate half of it.",
@@ -815,5 +825,6 @@
       }
     }
   },
-  "_idSeq": 21
+  "_idSeq": 21,
+  "_sidSeq": 10
 }

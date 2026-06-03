@@ -83,6 +83,7 @@
       ],
       "sentences": [
         {
+          "sid": "time-t1-s01",
           "c": "今日係星期一。",
           "j": "gam1 jat6 hai6 sing1 kei4 jat1.",
           "e": "Today is Monday.",
@@ -105,6 +106,7 @@
           ]
         },
         {
+          "sid": "time-t1-s02",
           "c": "琴日係星期六。",
           "j": "kam4 jat6 hai6 sing1 kei4 luk6.",
           "e": "Yesterday was Saturday.",
@@ -127,6 +129,7 @@
           ]
         },
         {
+          "sid": "time-t1-s03",
           "c": "聽日朝早見。",
           "j": "ting1 jat6 ziu1 zou2 gin3.",
           "e": "See you tomorrow morning.",
@@ -149,6 +152,7 @@
           ]
         },
         {
+          "sid": "time-t1-s04",
           "c": "夜晚十點瞓覺。",
           "j": "je6 maan5 sap6 dim2 fan3 gaau3.",
           "e": "Sleep at 10pm.",
@@ -171,6 +175,7 @@
           ]
         },
         {
+          "sid": "time-t1-s05",
           "c": "星期日休息。",
           "j": "sing1 kei4 jat6 jau1 sik1.",
           "e": "Sunday is for resting.",
@@ -392,5 +397,6 @@
       }
     }
   },
-  "_idSeq": 12
+  "_idSeq": 12,
+  "_sidSeq": 5
 }

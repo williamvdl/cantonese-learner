@@ -71,6 +71,7 @@
       ],
       "sentences": [
         {
+          "sid": "tech-t1-s01",
           "c": "我嘅電話冇電。",
           "j": "ngo5 ge3 din6 waa2 mou5 din6.",
           "e": "My phone has no battery.",
@@ -93,6 +94,7 @@
           ]
         },
         {
+          "sid": "tech-t1-s02",
           "c": "WiFi密碼係咩？",
           "j": "WiFi mat6 maa5 hai6 me1?",
           "e": "What's the WiFi password?",
@@ -120,6 +122,7 @@
           ]
         },
         {
+          "sid": "tech-t1-s03",
           "c": "個程式壞咗。",
           "j": "go3 cing4 sik1 waai6 zo2.",
           "e": "The app is broken.",
@@ -142,6 +145,7 @@
           ]
         },
         {
+          "sid": "tech-t1-s04",
           "c": "我要充電。",
           "j": "ngo5 jiu3 cung1 din6.",
           "e": "I need to charge.",
@@ -164,6 +168,7 @@
           ]
         },
         {
+          "sid": "tech-t1-s05",
           "c": "屏幕太細。",
           "j": "ping4 mok6 taai3 sai3.",
           "e": "The screen is too small.",
@@ -400,5 +405,6 @@
       }
     }
   },
-  "_idSeq": 10
+  "_idSeq": 10,
+  "_sidSeq": 5
 }

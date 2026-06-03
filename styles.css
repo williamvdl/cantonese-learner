@@ -370,6 +370,26 @@
   .sentence-chinese { font-size: 17px; color: var(--ink); margin-bottom: 4px; line-height: 1.4; }
   .sentence-jyutping { font-size: 12px; margin-bottom: 4px; }
   .sentence-english { font-size: 12px; color: #888; }
+
+  /* Sentences-as-spine: reveal line, chips, optional note */
+  .sentence-reveal-line { margin-top: 7px; padding-top: 7px; border-top: 1px dashed var(--line, #E8DCC2); }
+  .sentence-eng-hint { font-size: 12px; color: var(--muted, #A89882); font-style: italic; }
+  .sentence-chips { display: flex; gap: 8px; margin-top: 10px; flex-wrap: wrap; }
+  .s-chip { display: flex; align-items: center; gap: 5px; background: var(--parchment, #FCFAF4);
+    border: 1.5px solid var(--line, #E8DCC2); border-radius: 999px; font-family: inherit;
+    font-size: 12px; font-weight: 600; cursor: pointer; padding: 6px 12px; }
+  .s-chip-bd { color: var(--brand, #8B3A4E); border-color: rgba(139,58,78,.35); }
+  .s-chip-bd.open { background: var(--brand, #8B3A4E); color: #fff; border-color: var(--brand, #8B3A4E); }
+  .s-chip-note { color: var(--gold, #B7861E); border-color: rgba(183,134,30,.45); background: rgba(183,134,30,.07); }
+  .s-chip-note.open { background: var(--gold, #B7861E); color: #1A1815; border-color: var(--gold, #B7861E); }
+  .s-chip-chev { font-size: 9px; transition: transform .15s; display: inline-block; }
+  .s-chip.open .s-chip-chev { transform: rotate(90deg); }
+  .sentence-note { margin-top: 8px; background: rgba(183,134,30,.09); border: 1px solid rgba(183,134,30,.25);
+    border-radius: 10px; padding: 10px 13px; font-size: 13px; color: #6A5436; line-height: 1.5; }
+
+  /* Patterns tab intro banner */
+  .patterns-tab-intro { background: var(--parchment-warm, #F7F1E3); border-left: 4px solid var(--gold, #B7861E);
+    border-radius: 0 10px 10px 0; padding: 11px 14px; font-size: 13px; color: #6A5F50; line-height: 1.5; margin-bottom: 16px; }
   .sentence-play { flex-shrink: 0; width: 44px; height: 44px; border-radius: 50%; cursor: pointer; font-size: 18px; display: flex; align-items: center; justify-content: center; transition: all 0.15s; border: 1.5px solid; background: transparent; margin-top: 2px; }
 
   .bubble-row.right .bubble .bubble-jyutping span { color: rgba(255,255,255,0.88) !important; }

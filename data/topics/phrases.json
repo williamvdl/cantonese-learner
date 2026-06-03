@@ -71,6 +71,7 @@
       ],
       "sentences": [
         {
+          "sid": "phrases-t1-s01",
           "c": "唔該，洗手間喺邊度？",
           "j": "m4 goi1, sai2 sau2 gaan1 hai2 bin1 dou6?",
           "e": "Excuse me, where is the bathroom?",
@@ -93,6 +94,7 @@
           ]
         },
         {
+          "sid": "phrases-t1-s02",
           "c": "我唔明，請講慢啲。",
           "j": "ngo5 m4 ming4, cing2 gong2 maan6 di1.",
           "e": "I don't understand, please speak slowly.",
@@ -125,6 +127,7 @@
           ]
         },
         {
+          "sid": "phrases-t1-s03",
           "c": "呢個幾錢？",
           "j": "ni1 go3 gei2 cin2?",
           "e": "How much is this?",
@@ -142,6 +145,7 @@
           ]
         },
         {
+          "sid": "phrases-t1-s04",
           "c": "我叫William，你呢？",
           "j": "ngo5 giu3 William, nei5 ne1?",
           "e": "I'm William, and you?",
@@ -169,6 +173,7 @@
           ]
         },
         {
+          "sid": "phrases-t1-s05",
           "c": "我要呢個，多謝。",
           "j": "ngo5 jiu3 ni1 go3, do1 ze6.",
           "e": "I want this one, thanks.",
@@ -400,5 +405,6 @@
       }
     }
   },
-  "_idSeq": 10
+  "_idSeq": 10,
+  "_sidSeq": 5
 }

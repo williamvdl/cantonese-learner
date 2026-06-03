@@ -71,6 +71,7 @@
       ],
       "sentences": [
         {
+          "sid": "tense-t1-s01",
           "c": "我食咗飯。",
           "j": "ngo5 sik6 zo2 faan6.",
           "e": "I have eaten.",
@@ -98,6 +99,7 @@
           ]
         },
         {
+          "sid": "tense-t1-s02",
           "c": "佢食緊飯。",
           "j": "keoi5 sik6 gan2 faan6.",
           "e": "He's eating now.",
@@ -125,6 +127,7 @@
           ]
         },
         {
+          "sid": "tense-t1-s03",
           "c": "我去過香港。",
           "j": "ngo5 heoi3 gwo3 hoeng1 gong2.",
           "e": "I have been to Hong Kong.",
@@ -152,6 +155,7 @@
           ]
         },
         {
+          "sid": "tense-t1-s04",
           "c": "我未食。",
           "j": "ngo5 mei6 sik6.",
           "e": "I haven't eaten yet.",
@@ -174,6 +178,7 @@
           ]
         },
         {
+          "sid": "tense-t1-s05",
           "c": "我會去。",
           "j": "ngo5 wui5 heoi3.",
           "e": "I will go.",
@@ -435,5 +440,6 @@
       }
     }
   },
-  "_idSeq": 10
+  "_idSeq": 10,
+  "_sidSeq": 5
 }

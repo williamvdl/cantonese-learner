@@ -71,6 +71,7 @@
       ],
       "sentences": [
         {
+          "sid": "directions-t1-s01",
           "c": "轉左。",
           "j": "zyun3 zo2.",
           "e": "Turn left.",
@@ -88,6 +89,7 @@
           ]
         },
         {
+          "sid": "directions-t1-s02",
           "c": "直行就到。",
           "j": "zik6 haang4 zau6 dou3.",
           "e": "Go straight, you'll arrive.",
@@ -110,6 +112,7 @@
           ]
         },
         {
+          "sid": "directions-t1-s03",
           "c": "喺前面。",
           "j": "hai2 cin4 min6.",
           "e": "It's ahead.",
@@ -127,6 +130,7 @@
           ]
         },
         {
+          "sid": "directions-t1-s04",
           "c": "好近，行幾分鐘。",
           "j": "hou2 kan5, haang4 gei2 fan1 zung1.",
           "e": "Very close, just a few minutes walk.",
@@ -149,6 +153,7 @@
           ]
         },
         {
+          "sid": "directions-t1-s05",
           "c": "喺對面。",
           "j": "hai2 deoi3 min6.",
           "e": "It's opposite.",
@@ -393,5 +398,6 @@
       }
     }
   },
-  "_idSeq": 10
+  "_idSeq": 10,
+  "_sidSeq": 5
 }

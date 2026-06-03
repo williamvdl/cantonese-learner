@@ -165,6 +165,32 @@ if (anyDid) {
   else if (patterns._didSeq < maxN) err('did', `patterns.json: _didSeq (${patterns._didSeq}) is below the highest did in use (${maxN})`);
 }
 
+// ── SID checks (phase-aware): once any sentence has a `sid`, all must; well-formed,
+//    globally unique; per-topic _sidSeq covers the max. ────────────────────────
+const allSentences = [];
+for (const [tk, t] of Object.entries(topics)) {
+  for (const [rk, rv] of Object.entries(t.rounds || {}))
+    for (const s of (rv.sentences || [])) allSentences.push({ tk, rk, s, t });
+}
+const anySid = allSentences.some(x => 'sid' in x.s);
+if (anySid) {
+  const sidSeen = {};
+  const maxByTopic = {};
+  for (const { tk, rk, s } of allSentences) {
+    if (!('sid' in s)) { err('sid', `${tk} r${rk}: sentence "${s.c}" has no sid (all-or-nothing)`); continue; }
+    if (!/^[a-z][a-z0-9]*-t\d+-s\d{2,}$/.test(s.sid)) err('sid', `${tk} r${rk}: malformed sid "${s.sid}"`);
+    if (sidSeen[s.sid]) err('sid', `duplicate sid "${s.sid}"`);
+    else sidSeen[s.sid] = true;
+    const n = parseInt(s.sid.slice(s.sid.lastIndexOf('-') + 1).replace(/\D/g, ''), 10);
+    maxByTopic[tk] = Math.max(maxByTopic[tk] || 0, n);
+  }
+  for (const [tk, maxN] of Object.entries(maxByTopic)) {
+    const t = topics[tk];
+    if (typeof t._sidSeq !== 'number') err('sid', `${tk}: sentences have sids but no _sidSeq high-water mark`);
+    else if (t._sidSeq < maxN) err('sid', `${tk}: _sidSeq (${t._sidSeq}) below highest sid number in use (${maxN})`);
+  }
+}
+
 // ── Report ────────────────────────────────────────────────────────────────────
 const phase = anyWid ? 'Phase 2+ (ids + wids present)' : anyId ? 'Phase 1 (ids present, no wids)' : 'baseline (no ids)';
 console.log(`Cantonese data validator — ${phase}`);
@@ -172,6 +198,7 @@ console.log(`  topics: ${Object.keys(topics).length}  words: ${allWords.length} 
 if (anyId) console.log(`  ids assigned: ${allWords.filter(x => 'id' in x.w).length}/${allWords.length}`);
 if (anyWid) console.log(`  wids assigned: ${drillItems.filter(x => 'wid' in x.it).length}/${drillItems.length}`);
 if (anyDid) console.log(`  dids assigned: ${allDrills.filter(x => 'did' in x.d).length}/${allDrills.length}`);
+if (anySid) console.log(`  sids assigned: ${allSentences.filter(x => 'sid' in x.s).length}/${allSentences.length}`);
 
 if (!errors.length) { console.log('\n✓ ALL CHECKS PASS'); process.exit(0); }
 const byCat = {};

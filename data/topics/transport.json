@@ -71,6 +71,7 @@
       ],
       "sentences": [
         {
+          "sid": "transport-t1-s01",
           "c": "我坐地鐵去。",
           "j": "ngo5 co5 dei6 tit3 heoi3.",
           "e": "I'm taking the MTR.",
@@ -98,6 +99,7 @@
           ]
         },
         {
+          "sid": "transport-t1-s02",
           "c": "的士幾錢？",
           "j": "dik1 si2 gei2 cin2?",
           "e": "How much is the taxi?",
@@ -115,6 +117,7 @@
           ]
         },
         {
+          "sid": "transport-t1-s03",
           "c": "巴士喺邊度停？",
           "j": "baa1 si2 hai2 bin1 dou6 ting4?",
           "e": "Where does the bus stop?",
@@ -137,6 +140,7 @@
           ]
         },
         {
+          "sid": "transport-t1-s04",
           "c": "飛機聽日去。",
           "j": "fei1 gei1 ting1 jat6 heoi3.",
           "e": "The plane goes tomorrow.",
@@ -159,6 +163,7 @@
           ]
         },
         {
+          "sid": "transport-t1-s05",
           "c": "我踩單車返工。",
           "j": "ngo5 caai2 daan1 ce1 faan1 gung1.",
           "e": "I cycle to work.",
@@ -375,5 +380,6 @@
       }
     }
   },
-  "_idSeq": 10
+  "_idSeq": 10,
+  "_sidSeq": 5
 }

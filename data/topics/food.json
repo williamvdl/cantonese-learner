@@ -83,6 +83,7 @@
       ],
       "sentences": [
         {
+          "sid": "food-t1-s01",
           "c": "我想飲茶。",
           "j": "ngo5 soeng2 jam2 caa4.",
           "e": "I want to drink tea.",
@@ -110,6 +111,7 @@
           ]
         },
         {
+          "sid": "food-t1-s02",
           "c": "呢個飯好味！",
           "j": "ni1 go3 faan6 hou2 mei6!",
           "e": "This rice is delicious!",
@@ -132,6 +134,7 @@
           ]
         },
         {
+          "sid": "food-t1-s03",
           "c": "我好餓，想食麵。",
           "j": "ngo5 hou2 ngo6, soeng2 sik6 min6.",
           "e": "I'm hungry, I want noodles.",
@@ -159,6 +162,7 @@
           ]
         },
         {
+          "sid": "food-t1-s04",
           "c": "佢鍾意食魚。",
           "j": "keoi5 zung1 ji3 sik6 jyu2.",
           "e": "He likes eating fish.",
@@ -186,6 +190,7 @@
           ]
         },
         {
+          "sid": "food-t1-s05",
           "c": "咖啡同水，唔該。",
           "j": "gaa3 fe1 tung4 seoi2, m4 goi1.",
           "e": "Coffee and water, please.",
@@ -502,6 +507,7 @@
       ],
       "sentences": [
         {
+          "sid": "food-t2-s06",
           "c": "我要凍奶茶，走甜。",
           "j": "ngo5 jiu3 dung3 naai5 caa4, zau2 tim4.",
           "e": "I want iced milk tea, no sugar.",
@@ -529,6 +535,7 @@
           ]
         },
         {
+          "sid": "food-t2-s07",
           "c": "早餐食咗未？",
           "j": "zou2 caan1 sik6 zo2 mei6?",
           "e": "Have you eaten breakfast yet?",
@@ -556,6 +563,7 @@
           ]
         },
         {
+          "sid": "food-t2-s08",
           "c": "我好飽，唔食得喇。",
           "j": "ngo5 hou2 baau2, m4 sik6 dak1 laa3.",
           "e": "I'm so full, can't eat anymore.",
@@ -583,6 +591,7 @@
           ]
         },
         {
+          "sid": "food-t2-s09",
           "c": "少冰多奶，唔該。",
           "j": "siu2 bing1 do1 naai5, m4 goi1.",
           "e": "Less ice, more milk, please.",
@@ -605,6 +614,7 @@
           ]
         },
         {
+          "sid": "food-t2-s10",
           "c": "剩咗咁多嘢，好嘥。",
           "j": "zing6 zo2 gam3 do1 je5, hou2 saai1.",
           "e": "So much left over, what a waste.",
@@ -839,5 +849,6 @@
       }
     }
   },
-  "_idSeq": 22
+  "_idSeq": 22,
+  "_sidSeq": 10
 }

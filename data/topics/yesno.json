@@ -71,6 +71,7 @@
       ],
       "sentences": [
         {
+          "sid": "yesno-t1-s01",
           "c": "係，我係。",
           "j": "hai6, ngo5 hai6.",
           "e": "Yes, I am.",
@@ -93,6 +94,7 @@
           ]
         },
         {
+          "sid": "yesno-t1-s02",
           "c": "唔係，唔該。",
           "j": "m4 hai6, m4 goi1.",
           "e": "No, thank you.",
@@ -110,6 +112,7 @@
           ]
         },
         {
+          "sid": "yesno-t1-s03",
           "c": "得，冇問題。",
           "j": "dak1, mou5 man6 tai4.",
           "e": "OK, no problem.",
@@ -132,6 +135,7 @@
           ]
         },
         {
+          "sid": "yesno-t1-s04",
           "c": "請坐。",
           "j": "cing2 co5.",
           "e": "Please sit down.",
@@ -149,6 +153,7 @@
           ]
         },
         {
+          "sid": "yesno-t1-s05",
           "c": "歡迎你嚟。",
           "j": "fun1 jing4 nei5 lai4.",
           "e": "Welcome / glad you came.",
@@ -380,5 +385,6 @@
       }
     }
   },
-  "_idSeq": 10
+  "_idSeq": 10,
+  "_sidSeq": 5
 }

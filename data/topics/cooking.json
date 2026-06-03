@@ -71,6 +71,7 @@
       ],
       "sentences": [
         {
+          "sid": "cooking-t1-s01",
           "c": "我喺度煮飯。",
           "j": "ngo5 hai2 dou6 zyu2 faan6.",
           "e": "I'm cooking.",
@@ -93,6 +94,7 @@
           ]
         },
         {
+          "sid": "cooking-t1-s02",
           "c": "加多啲鹽。",
           "j": "gaa1 do1 di1 jim4.",
           "e": "Add more salt.",
@@ -115,6 +117,7 @@
           ]
         },
         {
+          "sid": "cooking-t1-s03",
           "c": "我鍾意食蒸魚。",
           "j": "ngo5 zung1 ji3 sik6 zing1 jyu2.",
           "e": "I like steamed fish.",
@@ -142,6 +145,7 @@
           ]
         },
         {
+          "sid": "cooking-t1-s04",
           "c": "切啲蔬菜。",
           "j": "cit3 di1 so1 coi3.",
           "e": "Cut some vegetables.",
@@ -164,6 +168,7 @@
           ]
         },
         {
+          "sid": "cooking-t1-s05",
           "c": "你識唔識炒飯？",
           "j": "nei5 sik1 m4 sik1 caau2 faan6?",
           "e": "Can you make fried rice?",
@@ -390,5 +395,6 @@
       }
     }
   },
-  "_idSeq": 10
+  "_idSeq": 10,
+  "_sidSeq": 5
 }

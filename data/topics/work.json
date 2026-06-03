@@ -71,6 +71,7 @@
       ],
       "sentences": [
         {
+          "sid": "work-t1-s01",
           "c": "我返工。",
           "j": "ngo5 faan1 gung1.",
           "e": "I'm going to work.",
@@ -88,6 +89,7 @@
           ]
         },
         {
+          "sid": "work-t1-s02",
           "c": "我哋公司好大。",
           "j": "ngo5 dei6 gung1 si1 hou2 daai6.",
           "e": "Our company is big.",
@@ -110,6 +112,7 @@
           ]
         },
         {
+          "sid": "work-t1-s03",
           "c": "老闆叫我加班。",
           "j": "lou5 baan2 giu3 ngo5 gaa1 baan1.",
           "e": "The boss told me to do overtime.",
@@ -137,6 +140,7 @@
           ]
         },
         {
+          "sid": "work-t1-s04",
           "c": "幾時放工呀？",
           "j": "gei2 si4 fong3 gung1 aa3?",
           "e": "When do you finish work?",
@@ -159,6 +163,7 @@
           ]
         },
         {
+          "sid": "work-t1-s05",
           "c": "開會喺三點。",
           "j": "hoi1 wui2 hai2 saam1 dim2.",
           "e": "The meeting is at 3.",
@@ -350,5 +355,6 @@
       }
     }
   },
-  "_idSeq": 10
+  "_idSeq": 10,
+  "_sidSeq": 5
 }

@@ -71,6 +71,7 @@
       ],
       "sentences": [
         {
+          "sid": "hotels-t1-s01",
           "c": "我訂咗一間房。",
           "j": "ngo5 deng6 zo2 jat1 gaan1 fong2.",
           "e": "I booked a room.",
@@ -98,6 +99,7 @@
           ]
         },
         {
+          "sid": "hotels-t1-s02",
           "c": "我想入住。",
           "j": "ngo5 soeng2 jap6 zyu6.",
           "e": "I'd like to check in.",
@@ -120,6 +122,7 @@
           ]
         },
         {
+          "sid": "hotels-t1-s03",
           "c": "鎖匙俾我，唔該。",
           "j": "so2 si4 bei2 ngo5, m4 goi1.",
           "e": "The key please.",
@@ -147,6 +150,7 @@
           ]
         },
         {
+          "sid": "hotels-t1-s04",
           "c": "早餐喺幾樓？",
           "j": "zou2 caan1 hai2 gei2 lau2?",
           "e": "What floor is breakfast on?",
@@ -169,6 +173,7 @@
           ]
         },
         {
+          "sid": "hotels-t1-s05",
           "c": "我聽朝退房。",
           "j": "ngo5 ting1 ziu1 teoi3 fong2.",
           "e": "I'm checking out tomorrow morning.",
@@ -390,5 +395,6 @@
       }
     }
   },
-  "_idSeq": 10
+  "_idSeq": 10,
+  "_sidSeq": 5
 }

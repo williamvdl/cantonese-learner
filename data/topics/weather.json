@@ -71,6 +71,7 @@
       ],
       "sentences": [
         {
+          "sid": "weather-t1-s01",
           "c": "今日天氣好熱。",
           "j": "gam1 jat6 tin1 hei3 hou2 jit6.",
           "e": "The weather today is very hot.",
@@ -93,6 +94,7 @@
           ]
         },
         {
+          "sid": "weather-t1-s02",
           "c": "落雨喇，帶遮啦。",
           "j": "lok6 jyu5 laa3, daai3 ze1 laa1.",
           "e": "It's raining, bring an umbrella.",
@@ -125,6 +127,7 @@
           ]
         },
         {
+          "sid": "weather-t1-s03",
           "c": "颱風嚟喇！",
           "j": "toi4 fung1 lai4 laa3!",
           "e": "The typhoon is coming!",
@@ -147,6 +150,7 @@
           ]
         },
         {
+          "sid": "weather-t1-s04",
           "c": "今日好凍，著多件。",
           "j": "gam1 jat6 hou2 dung3, zoek3 do1 gin6.",
           "e": "It's cold today, wear extra layers.",
@@ -174,6 +178,7 @@
           ]
         },
         {
+          "sid": "weather-t1-s05",
           "c": "太陽好猛！",
           "j": "taai3 joeng4 hou2 maang5!",
           "e": "The sun is so strong!",
@@ -415,5 +420,6 @@
       }
     }
   },
-  "_idSeq": 10
+  "_idSeq": 10,
+  "_sidSeq": 5
 }

@@ -353,6 +353,7 @@ let state = {
   speaking: null,
   sentenceBreakdownOpen: {},
   sentenceRevealed: {},
+  sentenceNoteClosed: {},
   patternRevealed: {},
   patternBreakdownOpen: {},
   voiceInfo: null,

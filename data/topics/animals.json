@@ -71,6 +71,7 @@
       ],
       "sentences": [
         {
+          "sid": "animals-t1-s01",
           "c": "我屋企有一隻貓。",
           "j": "ngo5 uk1 kei2 jau5 jat1 zek3 maau1.",
           "e": "I have a cat at home.",
@@ -103,6 +104,7 @@
           ]
         },
         {
+          "sid": "animals-t1-s02",
           "c": "呢隻狗好可愛！",
           "j": "ni1 zek3 gau2 hou2 ho2 oi3!",
           "e": "This dog is so cute!",
@@ -130,6 +132,7 @@
           ]
         },
         {
+          "sid": "animals-t1-s03",
           "c": "你養唔養寵物？",
           "j": "nei5 joeng5 m4 joeng5 cung2 mat6?",
           "e": "Do you keep pets?",
@@ -152,6 +155,7 @@
           ]
         },
         {
+          "sid": "animals-t1-s04",
           "c": "我鍾意馬。",
           "j": "ngo5 zung1 ji3 maa5.",
           "e": "I like horses.",
@@ -174,6 +178,7 @@
           ]
         },
         {
+          "sid": "animals-t1-s05",
           "c": "兔仔食蔬菜。",
           "j": "tou3 zai2 sik6 so1 coi3.",
           "e": "Rabbits eat vegetables.",
@@ -405,5 +410,6 @@
       }
     }
   },
-  "_idSeq": 10
+  "_idSeq": 10,
+  "_sidSeq": 5
 }

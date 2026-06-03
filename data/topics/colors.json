@@ -71,6 +71,7 @@
       ],
       "sentences": [
         {
+          "sid": "colors-t1-s01",
           "c": "我鍾意紅色。",
           "j": "ngo5 zung1 ji3 hung4 sik1.",
           "e": "I like red.",
@@ -93,6 +94,7 @@
           ]
         },
         {
+          "sid": "colors-t1-s02",
           "c": "天空係藍色。",
           "j": "tin1 hung1 hai6 laam4 sik1.",
           "e": "The sky is blue.",
@@ -115,6 +117,7 @@
           ]
         },
         {
+          "sid": "colors-t1-s03",
           "c": "呢件衫係白色。",
           "j": "ni1 gin6 saam1 hai6 baak6 sik1.",
           "e": "This shirt is white.",
@@ -142,6 +145,7 @@
           ]
         },
         {
+          "sid": "colors-t1-s04",
           "c": "佢著綠色嘅褲。",
           "j": "keoi5 zoek3 luk6 sik1 ge3 fu3.",
           "e": "He's wearing green pants.",
@@ -174,6 +178,7 @@
           ]
         },
         {
+          "sid": "colors-t1-s05",
           "c": "我唔鍾意黃色。",
           "j": "ngo5 m4 zung1 ji3 wong4 sik1.",
           "e": "I don't like yellow.",
@@ -420,5 +425,6 @@
       }
     }
   },
-  "_idSeq": 10
+  "_idSeq": 10,
+  "_sidSeq": 5
 }

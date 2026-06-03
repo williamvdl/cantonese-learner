@@ -71,6 +71,7 @@
       ],
       "sentences": [
         {
+          "sid": "money-t1-s01",
           "c": "提款機喺邊度？",
           "j": "tai4 fun2 gei1 hai2 bin1 dou6?",
           "e": "Where is the ATM?",
@@ -93,6 +94,7 @@
           ]
         },
         {
+          "sid": "money-t1-s02",
           "c": "我要用現金。",
           "j": "ngo5 jiu3 jung6 jin6 gam1.",
           "e": "I'll use cash.",
@@ -120,6 +122,7 @@
           ]
         },
         {
+          "sid": "money-t1-s03",
           "c": "有冇散紙？",
           "j": "jau5 mou5 saan3 zi2?",
           "e": "Got any small change?",
@@ -137,6 +140,7 @@
           ]
         },
         {
+          "sid": "money-t1-s04",
           "c": "信用卡得唔得？",
           "j": "seon3 jung6 kaat1 dak1 m4 dak1?",
           "e": "Can I use credit card?",
@@ -154,6 +158,7 @@
           ]
         },
         {
+          "sid": "money-t1-s05",
           "c": "唔該找錢俾我。",
           "j": "m4 goi1 zaau2 cin2 bei2 ngo5.",
           "e": "Please give me my change.",
@@ -365,5 +370,6 @@
       }
     }
   },
-  "_idSeq": 10
+  "_idSeq": 10,
+  "_sidSeq": 5
 }

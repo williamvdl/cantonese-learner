@@ -71,6 +71,7 @@
       ],
       "sentences": [
         {
+          "sid": "emergencies-t1-s01",
           "c": "救命呀！",
           "j": "gau3 meng6 aa3!",
           "e": "Help!",
@@ -88,6 +89,7 @@
           ]
         },
         {
+          "sid": "emergencies-t1-s02",
           "c": "唔該叫救護車。",
           "j": "m4 goi1 giu3 gau3 wu6 ce1.",
           "e": "Please call an ambulance.",
@@ -110,6 +112,7 @@
           ]
         },
         {
+          "sid": "emergencies-t1-s03",
           "c": "有人受傷。",
           "j": "jau5 jan4 sau6 soeng1.",
           "e": "Someone is hurt.",
@@ -127,6 +130,7 @@
           ]
         },
         {
+          "sid": "emergencies-t1-s04",
           "c": "報警啦！",
           "j": "bou3 ging2 laa1!",
           "e": "Call the police!",
@@ -144,6 +148,7 @@
           ]
         },
         {
+          "sid": "emergencies-t1-s05",
           "c": "急症室喺邊度？",
           "j": "gap1 zing3 sat1 hai2 bin1 dou6?",
           "e": "Where is A&E?",
@@ -355,5 +360,6 @@
       }
     }
   },
-  "_idSeq": 10
+  "_idSeq": 10,
+  "_sidSeq": 5
 }

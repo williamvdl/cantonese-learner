@@ -71,6 +71,7 @@
       ],
       "sentences": [
         {
+          "sid": "school-t1-s01",
           "c": "我去學校。",
           "j": "ngo5 heoi3 hok6 haau6.",
           "e": "I go to school.",
@@ -93,6 +94,7 @@
           ]
         },
         {
+          "sid": "school-t1-s02",
           "c": "我做緊功課。",
           "j": "ngo5 zou6 gan2 gung1 fo3.",
           "e": "I'm doing homework.",
@@ -115,6 +117,7 @@
           ]
         },
         {
+          "sid": "school-t1-s03",
           "c": "聽日有考試。",
           "j": "ting1 jat6 jau5 haau2 si3.",
           "e": "There's an exam tomorrow.",
@@ -137,6 +140,7 @@
           ]
         },
         {
+          "sid": "school-t1-s04",
           "c": "我同學好聰明。",
           "j": "ngo5 tung4 hok6 hou2 cung1 ming4.",
           "e": "My classmate is very smart.",
@@ -164,6 +168,7 @@
           ]
         },
         {
+          "sid": "school-t1-s05",
           "c": "我唔識答呢題。",
           "j": "ngo5 m4 sik1 daap3 ni1 tai4.",
           "e": "I don't know the answer to this question.",
@@ -375,5 +380,6 @@
       }
     }
   },
-  "_idSeq": 10
+  "_idSeq": 10,
+  "_sidSeq": 5
 }

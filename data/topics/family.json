@@ -83,6 +83,7 @@
       ],
       "sentences": [
         {
+          "sid": "family-t1-s01",
           "c": "我爸爸好高。",
           "j": "ngo5 baa4 baa1 hou2 gou1.",
           "e": "My father is very tall.",
@@ -105,6 +106,7 @@
           ]
         },
         {
+          "sid": "family-t1-s02",
           "c": "我媽媽係老師。",
           "j": "ngo5 maa4 maa1 hai6 lou5 si1.",
           "e": "My mother is a teacher.",
@@ -132,6 +134,7 @@
           ]
         },
         {
+          "sid": "family-t1-s03",
           "c": "我有一個哥哥。",
           "j": "ngo5 jau5 jat1 go3 go4 go1.",
           "e": "I have one older brother.",
@@ -159,6 +162,7 @@
           ]
         },
         {
+          "sid": "family-t1-s04",
           "c": "妹妹好細個。",
           "j": "mui4 mui2 hou2 sai3 go3.",
           "e": "Younger sister is very young.",
@@ -181,6 +185,7 @@
           ]
         },
         {
+          "sid": "family-t1-s05",
           "c": "爺爺住喺香港。",
           "j": "je4 je2 zyu6 hai2 hoeng1 gong2.",
           "e": "Grandfather lives in Hong Kong.",
@@ -452,5 +457,6 @@
       }
     }
   },
-  "_idSeq": 12
+  "_idSeq": 12,
+  "_sidSeq": 5
 }

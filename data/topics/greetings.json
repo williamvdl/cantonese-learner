@@ -71,6 +71,7 @@
       ],
       "sentences": [
         {
+          "sid": "greetings-t1-s01",
           "c": "你好！我叫William。",
           "j": "nei5 hou2! ngo5 giu3 William.",
           "e": "Hello! My name is William.",
@@ -98,6 +99,7 @@
           ]
         },
         {
+          "sid": "greetings-t1-s02",
           "c": "早晨！你好嗎？",
           "j": "zou2 san4! nei5 hou2 maa3?",
           "e": "Good morning! How are you?",
@@ -120,6 +122,7 @@
           ]
         },
         {
+          "sid": "greetings-t1-s03",
           "c": "多謝，再見！",
           "j": "do1 ze6, zoi3 gin3!",
           "e": "Thank you, goodbye!",
@@ -137,6 +140,7 @@
           ]
         },
         {
+          "sid": "greetings-t1-s04",
           "c": "對唔住，我遲到。",
           "j": "deoi3 m4 zyu6, ngo5 ci4 dou3.",
           "e": "Sorry, I'm late.",
@@ -159,6 +163,7 @@
           ]
         },
         {
+          "sid": "greetings-t1-s05",
           "c": "好高興認識你！",
           "j": "hou2 gou1 hing3 jing6 sik1 nei5!",
           "e": "Nice to meet you!",
@@ -465,6 +470,7 @@
       ],
       "sentences": [
         {
+          "sid": "greetings-t2-s06",
           "c": "幸會幸會！",
           "j": "hang6 wui6 hang6 wui6!",
           "e": "A pleasure to meet you!",
@@ -477,6 +483,7 @@
           ]
         },
         {
+          "sid": "greetings-t2-s07",
           "c": "好耐冇見，你點呀？",
           "j": "hou2 noi6 mou5 gin3, nei5 dim2 aa3?",
           "e": "Long time no see, how are you?",
@@ -504,6 +511,7 @@
           ]
         },
         {
+          "sid": "greetings-t2-s08",
           "c": "麻煩你幫我。",
           "j": "maa4 faan4 nei5 bong1 ngo5.",
           "e": "Sorry to trouble you, please help me.",
@@ -531,6 +539,7 @@
           ]
         },
         {
+          "sid": "greetings-t2-s09",
           "c": "請多關照我。",
           "j": "cing2 do1 gwaan1 ziu3 ngo5.",
           "e": "Please take care of me / look out for me.",
@@ -558,6 +567,7 @@
           ]
         },
         {
+          "sid": "greetings-t2-s10",
           "c": "放工嘞，再見！",
           "j": "fong3 gung1 laak3, zoi3 gin3!",
           "e": "Off work now, goodbye!",
@@ -847,5 +857,6 @@
       }
     }
   },
-  "_idSeq": 20
+  "_idSeq": 20,
+  "_sidSeq": 10
 }

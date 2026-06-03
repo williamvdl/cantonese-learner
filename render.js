@@ -1200,7 +1200,7 @@ function render() {
           ${headerEl}
           ${renderRoundSelector(state.topic, color)}
           ${renderLessonHeader(lesson, color)}
-          ${state.mode === 'quiz' ? renderQuiz(lesson, color) : state.tab === 'convo' ? renderConversation(color) : renderStudy(lesson, color)}
+          ${state.mode === 'quiz' ? renderQuiz(lesson, color) : state.tab === 'convo' ? renderConversation(color) : state.tab === 'patterns' ? renderTopicPatternsTab(color) : renderStudy(lesson, color)}
         </div>
         ${toastEl}`;
     }
@@ -1460,6 +1460,8 @@ function renderLessonHeader(lesson, color) {
   // 'words' and 'convo' are state.tab values (with mode='study'); 'quiz' is mode='quiz'.
   const wordsActive = !isQuiz && state.tab === 'words';
   const convoActive = !isQuiz && state.tab === 'convo';
+  const patternsActive = !isQuiz && state.tab === 'patterns';
+  const hasPatterns = getTopicDrills(state.topic).length > 0;
   const segTabs = `
     <div class="subtabs">
       <button class="subtab-btn${wordsActive?' active':''}" id="tab-words"
@@ -1470,6 +1472,10 @@ function renderLessonHeader(lesson, color) {
         style="${convoActive?'background:'+color:''}">
         <span class="icon-label">${icon('messageCircle',14)} Chat</span>
       </button>
+      ${hasPatterns ? `<button class="subtab-btn${patternsActive?' active':''}" id="tab-patterns"
+        style="${patternsActive?'background:'+color:''}">
+        <span class="icon-label">🔨 Patterns</span>
+      </button>` : ''}
       <button class="subtab-btn${isQuiz?' active':''}" id="tab-quiz"
         style="${isQuiz?'background:'+color:''}">
         <span class="icon-label">${icon('quiz',14)} Quiz</span>
@@ -1725,6 +1731,10 @@ function renderSentences(topic, color) {
     const speaking = state.speaking === 'sent-' + i;
     const bdOpen = state.sentenceBreakdownOpen[i];
     const revealed = state.sentenceRevealed[i];
+    // Note is OPEN by default; state tracks only the explicit-close.
+    const noteClosed = state.sentenceNoteClosed[i];
+    const hasNote = !!s.note;
+
     const bdPanel = (bdOpen && s.bd) ? `
       <div class="breakdown-panel" style="margin:8px 0 4px">
         ${s.bd.map(w => `
@@ -1734,21 +1744,29 @@ function renderSentences(topic, color) {
             <span class="breakdown-en">${w.e}</span>
           </div>`).join('')}
       </div>` : '';
-    const bdBtn = s.bd ? `
-      <button class="breakdown-btn" data-sent-bd="${i}" style="color:${color};margin-top:6px">
-        ${bdOpen ? '▲ hide breakdown' : '🔍 word breakdown'}
-      </button>` : '';
+    const notePanel = (hasNote && !noteClosed) ? `
+      <div class="sentence-note">${s.note}</div>` : '';
+
     const englishEl = revealed
       ? `<div class="sentence-english">${s.e}</div>`
-      : `<div class="sentence-eng-hint" style="font-size:11px;color:#aaa;font-style:italic;margin-top:2px;pointer-events:none">tap card to see English</div>`;
+      : `<div class="sentence-eng-hint">👁 tap to reveal English</div>`;
+
+    const chips = `
+      <div class="sentence-chips">
+        ${s.bd ? `<button class="s-chip s-chip-bd${bdOpen?' open':''}" data-sent-bd="${i}">
+          <span class="s-chip-chev">▸</span>🔍 breakdown</button>` : ''}
+        ${hasNote ? `<button class="s-chip s-chip-note${!noteClosed?' open':''}" data-sent-note="${i}">
+          <span class="s-chip-chev">▸</span>💡 note</button>` : ''}
+      </div>`;
+
     return `
       <div class="sentence-wrap" style="margin-bottom:10px">
-        <div class="sentence-card" data-sent-reveal="${i}" style="margin-bottom:0;cursor:pointer">
+        <div class="sentence-card" style="margin-bottom:0">
           <div class="sentence-body">
             <div class="sentence-chinese">${s.c}</div>
             <div class="sentence-jyutping">${colorJyutping(s.j)}</div>
-            ${englishEl}
-            ${bdBtn}
+            <div class="sentence-reveal-line" data-sent-reveal="${i}" style="cursor:pointer">${englishEl}</div>
+            ${chips}
           </div>
           <button class="sentence-play${speaking ? ' speaking' : ''}" data-sent="${i}"
             style="border-color:${color};color:${speaking ? THEME.cardInverseText : color};background:${speaking ? color : 'transparent'}"
@@ -1756,19 +1774,35 @@ function renderSentences(topic, color) {
             ${speaking ? icon('volume',20) : iconPlay(18)}
           </button>
         </div>
+        ${notePanel}
         ${bdPanel}
       </div>`;
   }).join('');
   return `
     <div class="sentences">
-      <h3>💬 Simple Sentences</h3>
+      <h3>💬 Sentences</h3>
       ${items}
     </div>`;
 }
 
-// The "Patterns with these words" section shown in the Learn tab, below the
-// vocabulary. Only renders if the topic has associated patterns — a topic with
-// none simply shows nothing here (correct: not every topic is pattern-shaped).
+// The Patterns TAB (relocated from the Learn tab). Sentences are the reading
+// spine in Learn; patterns are retrieval practice, in their own tab, in context
+// with the topic's vocab. Frames the section, then reuses renderTopicPatterns.
+function renderTopicPatternsTab(color) {
+  const body = renderTopicPatterns(state.topic, color);
+  if (!body) {
+    return `<p style="color:#aaa;padding:20px 0">No patterns for this topic yet.</p>`;
+  }
+  return `
+    <div class="patterns-tab-intro">
+      Patterns are <b>practice</b> — reusable sentence frames built from this topic's words.
+      Read the example sentences in <b>Learn</b>, then drill the structure here.
+    </div>
+    ${body}`;
+}
+
+// The "Patterns with these words" section. Used by the Patterns tab. Only renders
+// if the topic has associated patterns — a topic with none shows nothing.
 function renderTopicPatterns(topicKey, color) {
   const items = getTopicDrills(topicKey);
   if (!items.length) return '';
@@ -1918,7 +1952,7 @@ function renderStudy(lesson, color) {
         : '';
     })()}
     <div class="word-grid">${cards}</div>
-    ${renderTopicPatterns(state.topic, color)}
+    ${renderSentences(state.topic, color)}
     <div class="tone-guide">
       <h3>📖 Jyutping Tone Guide</h3>
       <div class="tone-grid">${toneRows}</div>
@@ -2356,6 +2390,7 @@ function attachEvents(lesson, color) {
       state.speaking= null;
       state.sentenceBreakdownOpen = {};
       state.sentenceRevealed = {};
+      state.sentenceNoteClosed = {};
       state.patternRevealed = {};
       state.convo   = { convMode:'read', playingLine:null, gapAnswers:{}, bubbleRevealed:{}, breakdownOpen:{}, speakStep:0, speakStatus:'idle', speakHeard:'', speakAutoPlayed:false, speakRevealed:{} };
       render();
@@ -2374,6 +2409,7 @@ function attachEvents(lesson, color) {
       state.speaking     = null;
       state.sentenceBreakdownOpen = {};
       state.sentenceRevealed = {};
+      state.sentenceNoteClosed = {};
       state.patternRevealed = {};
       state.convo        = { convMode:'read', playingLine:null, gapAnswers:{}, bubbleRevealed:{}, breakdownOpen:{}, speakStep:0, speakStatus:'idle', speakHeard:'', speakAutoPlayed:false, speakRevealed:{} };
       pushNav();                 // home → topic: BACK returns to home
@@ -2419,6 +2455,7 @@ function attachEvents(lesson, color) {
       state.speaking = null;
       state.sentenceBreakdownOpen = {};
       state.sentenceRevealed = {};
+      state.sentenceNoteClosed = {};
       state.patternRevealed = {};
       state.convo = { convMode:'read', playingLine:null, gapAnswers:{}, bubbleRevealed:{}, breakdownOpen:{}, speakStep:0, speakStatus:'idle', speakHeard:'', speakAutoPlayed:false, speakRevealed:{} };
       window.scrollTo(0, 0);
@@ -2435,6 +2472,10 @@ function attachEvents(lesson, color) {
   });
   if (tabConvo) tabConvo.addEventListener('click', () => {
     state.mode = 'study'; state.tab = 'convo'; render();
+  });
+  const tabPatterns = document.getElementById('tab-patterns');
+  if (tabPatterns) tabPatterns.addEventListener('click', () => {
+    state.mode = 'study'; state.tab = 'patterns'; render();
   });
   if (tabQuiz) tabQuiz.addEventListener('click', () => {
     if (state.mode !== 'quiz') {
@@ -2635,10 +2676,20 @@ function attachEvents(lesson, color) {
     });
   });
 
+  // Per-sentence note toggle (open by default; this flips the explicit-close flag)
+  document.querySelectorAll('[data-sent-note]').forEach(btn => {
+    btn.addEventListener('click', e => {
+      e.stopPropagation();
+      const i = parseInt(btn.dataset.sentNote);
+      state.sentenceNoteClosed[i] = !state.sentenceNoteClosed[i];
+      render();
+    });
+  });
+
   // Sentence English reveal — whole card clickable, toggles, skips play & breakdown buttons
   document.querySelectorAll('[data-sent-reveal]').forEach(el => {
     el.addEventListener('click', e => {
-      if (e.target.closest('[data-sent]') || e.target.closest('[data-sent-bd]')) return;
+      if (e.target.closest('[data-sent]') || e.target.closest('[data-sent-bd]') || e.target.closest('[data-sent-note]')) return;
       const i = parseInt(el.dataset.sentReveal);
       state.sentenceRevealed[i] = !state.sentenceRevealed[i];
       render();
@@ -2967,6 +3018,7 @@ function attachEvents(lesson, color) {
       state.speaking     = null;
       state.sentenceBreakdownOpen = {};
       state.sentenceRevealed = {};
+      state.sentenceNoteClosed = {};
       state.patternRevealed = {};
       state.convo        = { convMode:'read', playingLine:null, gapAnswers:{}, bubbleRevealed:{}, breakdownOpen:{}, speakStep:0, speakStatus:'idle', speakHeard:'', speakAutoPlayed:false, speakRevealed:{} };
       pushNav();                 // path next-step → next lesson: BACK returns to previous lesson
@@ -3017,6 +3069,7 @@ function attachEvents(lesson, color) {
       state.speaking     = null;
       state.sentenceBreakdownOpen = {};
       state.sentenceRevealed = {};
+      state.sentenceNoteClosed = {};
       state.patternRevealed = {};
       state.convo        = { convMode:'read', playingLine:null, gapAnswers:{}, bubbleRevealed:{}, breakdownOpen:{}, speakStep:0, speakStatus:'idle', speakHeard:'', speakAutoPlayed:false, speakRevealed:{} };
       pushNav();                 // path timeline → lesson: BACK returns to timeline
@@ -3113,7 +3166,8 @@ function attachEvents(lesson, color) {
       state.homeView = false;
       state.fromPath = false; state.fromPathTier = null;
       state.mode = 'study'; state.tab = 'words';
-      state.flipped = {}; state.sentenceRevealed = {}; state.patternRevealed = {};
+      state.flipped = {}; state.sentenceRevealed = {};
+      state.sentenceNoteClosed = {}; state.patternRevealed = {};
       pushNav();
       window.scrollTo(0, 0);
       render();

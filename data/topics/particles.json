@@ -71,6 +71,7 @@
       ],
       "sentences": [
         {
+          "sid": "particles-t1-s01",
           "c": "食飯喇！",
           "j": "sik6 faan6 laa3!",
           "e": "Time to eat!",
@@ -93,6 +94,7 @@
           ]
         },
         {
+          "sid": "particles-t1-s02",
           "c": "一齊去啦。",
           "j": "jat1 cai4 heoi3 laa1.",
           "e": "Let's go together.",
@@ -115,6 +117,7 @@
           ]
         },
         {
+          "sid": "particles-t1-s03",
           "c": "係呀！",
           "j": "hai6 aa3!",
           "e": "That's right!",
@@ -132,6 +135,7 @@
           ]
         },
         {
+          "sid": "particles-t1-s04",
           "c": "咁貴喎！",
           "j": "gam3 gwai3 wo3!",
           "e": "That's so expensive!",
@@ -154,6 +158,7 @@
           ]
         },
         {
+          "sid": "particles-t1-s05",
           "c": "你係咩？",
           "j": "nei5 hai6 me1?",
           "e": "Are you really?",
@@ -400,5 +405,6 @@
       }
     }
   },
-  "_idSeq": 10
+  "_idSeq": 10,
+  "_sidSeq": 5
 }
