@@ -79,6 +79,42 @@
           "c": "夜晚",
           "j": "je6 maan5",
           "e": "Night"
+        },
+        {
+          "id": "time-013",
+          "c": "月",
+          "j": "jyut6",
+          "e": "Month"
+        },
+        {
+          "id": "time-014",
+          "c": "號",
+          "j": "hou6",
+          "e": "Date (day of month)"
+        },
+        {
+          "id": "time-015",
+          "c": "年",
+          "j": "nin4",
+          "e": "Year"
+        },
+        {
+          "id": "time-016",
+          "c": "上個月",
+          "j": "soeng6 go3 jyut6",
+          "e": "Last month"
+        },
+        {
+          "id": "time-017",
+          "c": "下個月",
+          "j": "haa6 go3 jyut6",
+          "e": "Next month"
+        },
+        {
+          "id": "time-018",
+          "c": "生日",
+          "j": "saang1 jat6",
+          "e": "Birthday"
         }
       ],
       "sentences": [
@@ -397,6 +433,6 @@
       }
     }
   },
-  "_idSeq": 12,
+  "_idSeq": 18,
   "_sidSeq": 5
 }

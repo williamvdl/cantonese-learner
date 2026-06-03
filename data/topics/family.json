@@ -79,6 +79,42 @@
           "c": "女兒",
           "j": "neoi5 ji4",
           "e": "Daughter"
+        },
+        {
+          "id": "family-013",
+          "c": "老公",
+          "j": "lou5 gung1",
+          "e": "Husband"
+        },
+        {
+          "id": "family-014",
+          "c": "老婆",
+          "j": "lou5 po4",
+          "e": "Wife"
+        },
+        {
+          "id": "family-015",
+          "c": "叔叔",
+          "j": "suk1 suk1",
+          "e": "Uncle"
+        },
+        {
+          "id": "family-016",
+          "c": "姨姨",
+          "j": "ji4 ji1",
+          "e": "Aunt"
+        },
+        {
+          "id": "family-017",
+          "c": "表哥",
+          "j": "biu2 go1",
+          "e": "Cousin (older male)"
+        },
+        {
+          "id": "family-018",
+          "c": "嬰兒",
+          "j": "jing1 ji4",
+          "e": "Baby"
         }
       ],
       "sentences": [
@@ -457,6 +493,6 @@
       }
     }
   },
-  "_idSeq": 12,
+  "_idSeq": 18,
   "_sidSeq": 5
 }

@@ -67,6 +67,54 @@
           "c": "可愛",
           "j": "ho2 oi3",
           "e": "Cute"
+        },
+        {
+          "id": "animals-011",
+          "c": "羊",
+          "j": "joeng4",
+          "e": "Sheep"
+        },
+        {
+          "id": "animals-012",
+          "c": "馬騮",
+          "j": "maa5 lau1",
+          "e": "Monkey"
+        },
+        {
+          "id": "animals-013",
+          "c": "大象",
+          "j": "daai6 zoeng6",
+          "e": "Elephant"
+        },
+        {
+          "id": "animals-014",
+          "c": "獅子",
+          "j": "si1 zi2",
+          "e": "Lion"
+        },
+        {
+          "id": "animals-015",
+          "c": "老鼠",
+          "j": "lou5 syu2",
+          "e": "Mouse / rat"
+        },
+        {
+          "id": "animals-016",
+          "c": "老虎",
+          "j": "lou5 fu2",
+          "e": "Tiger"
+        },
+        {
+          "id": "animals-017",
+          "c": "蛇",
+          "j": "se4",
+          "e": "Snake"
+        },
+        {
+          "id": "animals-018",
+          "c": "熊貓",
+          "j": "hung4 maau1",
+          "e": "Panda"
         }
       ],
       "sentences": [
@@ -410,6 +458,6 @@
       }
     }
   },
-  "_idSeq": 10,
+  "_idSeq": 18,
   "_sidSeq": 5
 }

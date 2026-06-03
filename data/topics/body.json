@@ -67,6 +67,54 @@
           "c": "背",
           "j": "bui3",
           "e": "Back"
+        },
+        {
+          "id": "body-021",
+          "c": "頭髮",
+          "j": "tau4 faat3",
+          "e": "Hair"
+        },
+        {
+          "id": "body-022",
+          "c": "牙",
+          "j": "ngaa4",
+          "e": "Teeth / tooth"
+        },
+        {
+          "id": "body-023",
+          "c": "頸",
+          "j": "geng2",
+          "e": "Neck"
+        },
+        {
+          "id": "body-024",
+          "c": "膊頭",
+          "j": "bok3 tau4",
+          "e": "Shoulder"
+        },
+        {
+          "id": "body-025",
+          "c": "膝頭",
+          "j": "sat1 tau4",
+          "e": "Knee"
+        },
+        {
+          "id": "body-026",
+          "c": "手指",
+          "j": "sau2 zi2",
+          "e": "Finger"
+        },
+        {
+          "id": "body-027",
+          "c": "手臂",
+          "j": "sau2 bei3",
+          "e": "Arm"
+        },
+        {
+          "id": "body-028",
+          "c": "腰",
+          "j": "jiu1",
+          "e": "Waist"
         }
       ],
       "sentences": [
@@ -784,6 +832,6 @@
       }
     }
   },
-  "_idSeq": 20,
+  "_idSeq": 28,
   "_sidSeq": 10
 }

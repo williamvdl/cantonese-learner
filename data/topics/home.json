@@ -67,6 +67,48 @@
           "c": "門",
           "j": "mun4",
           "e": "Door"
+        },
+        {
+          "id": "home-011",
+          "c": "梳化",
+          "j": "so1 faa2",
+          "e": "Sofa"
+        },
+        {
+          "id": "home-012",
+          "c": "雪櫃",
+          "j": "syut3 gwai6",
+          "e": "Fridge"
+        },
+        {
+          "id": "home-013",
+          "c": "燈",
+          "j": "dang1",
+          "e": "Lamp / light"
+        },
+        {
+          "id": "home-014",
+          "c": "牆",
+          "j": "coeng4",
+          "e": "Wall"
+        },
+        {
+          "id": "home-015",
+          "c": "地板",
+          "j": "dei6 baan2",
+          "e": "Floor"
+        },
+        {
+          "id": "home-016",
+          "c": "樓梯",
+          "j": "lau4 tai1",
+          "e": "Stairs"
+        },
+        {
+          "id": "home-017",
+          "c": "電視",
+          "j": "din6 si6",
+          "e": "TV"
         }
       ],
       "sentences": [
@@ -395,6 +437,6 @@
       }
     }
   },
-  "_idSeq": 10,
+  "_idSeq": 17,
   "_sidSeq": 5
 }
