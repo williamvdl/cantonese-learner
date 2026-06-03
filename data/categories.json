@@ -1,22 +1,82 @@
 {
   "list": [
-    { "key": "everyday",  "label": "Everyday Essentials",   "icon": "🌟", "color": "#9C2D2A" },
-    { "key": "people",    "label": "People & Relationships","icon": "👨‍👩‍👧", "color": "#2D5040" },
-    { "key": "food",      "label": "Food & Dining",         "icon": "🍜", "color": "#B7861E" },
-    { "key": "outabout",  "label": "Out & About",           "icon": "🛍️", "color": "#7A5D3A" },
-    { "key": "daily",     "label": "Daily Life",            "icon": "🌤️", "color": "#5B7C75" },
-    { "key": "work",      "label": "Work & Education",      "icon": "💼", "color": "#3D4659" },
-    { "key": "practical", "label": "Practical Situations",  "icon": "🆘", "color": "#8B3A4E" }
+    {
+      "key": "everyday",
+      "label": "Everyday Essentials",
+      "icon": "🌟",
+      "color": "#9C2D2A"
+    },
+    {
+      "key": "people",
+      "label": "People & Relationships",
+      "icon": "👨‍👩‍👧",
+      "color": "#2D5040"
+    },
+    {
+      "key": "food",
+      "label": "Food & Dining",
+      "icon": "🍜",
+      "color": "#B7861E"
+    },
+    {
+      "key": "outabout",
+      "label": "Out & About",
+      "icon": "🛍️",
+      "color": "#7A5D3A"
+    },
+    {
+      "key": "daily",
+      "label": "Daily Life",
+      "icon": "🌤️",
+      "color": "#5B7C75"
+    },
+    {
+      "key": "work",
+      "label": "Work & Education",
+      "icon": "💼",
+      "color": "#3D4659"
+    },
+    {
+      "key": "practical",
+      "label": "Practical Situations",
+      "icon": "🆘",
+      "color": "#8B3A4E"
+    }
   ],
   "topic_map": {
-    "greetings": "everyday", "numbers": "everyday", "time": "everyday", "phrases": "everyday",
-    "questions": "everyday", "yesno": "everyday", "tense": "everyday", "particles": "everyday",
-    "family": "people", "body": "people", "feelings": "people", "friends": "people",
-    "food": "food", "restaurant": "food", "cooking": "food",
-    "shopping": "outabout", "transport": "outabout", "directions": "outabout",
-    "hotels": "outabout", "attractions": "outabout",
-    "weather": "daily", "colors": "daily", "home": "daily", "animals": "daily",
-    "work": "work", "school": "work", "tech": "work", "money": "work",
-    "hobbies": "practical", "sports": "practical", "emergencies": "practical"
+    "greetings": "everyday",
+    "numbers": "everyday",
+    "time": "everyday",
+    "phrases": "everyday",
+    "questions": "everyday",
+    "yesno": "everyday",
+    "tense": "everyday",
+    "particles": "everyday",
+    "family": "people",
+    "body": "people",
+    "feelings": "people",
+    "friends": "people",
+    "food": "food",
+    "restaurant": "food",
+    "cooking": "food",
+    "shopping": "outabout",
+    "transport": "outabout",
+    "directions": "outabout",
+    "hotels": "outabout",
+    "attractions": "outabout",
+    "weather": "daily",
+    "colors": "daily",
+    "home": "daily",
+    "animals": "daily",
+    "work": "work",
+    "school": "work",
+    "tech": "work",
+    "money": "work",
+    "hobbies": "practical",
+    "sports": "practical",
+    "emergencies": "practical",
+    "drinks": "food",
+    "meatseafood": "food",
+    "fruitveg": "food"
   }
 }

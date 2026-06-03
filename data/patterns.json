@@ -119,6 +119,7 @@
             }
           ],
           "topics": [
+            "drinks",
             "food"
           ]
         },
@@ -387,7 +388,8 @@
             }
           ],
           "topics": [
-            "food"
+            "food",
+            "meatseafood"
           ]
         }
       ]
@@ -5219,6 +5221,7 @@
             }
           ],
           "topics": [
+            "drinks",
             "food"
           ]
         }

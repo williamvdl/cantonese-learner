@@ -1,0 +1,412 @@
+{
+  "meta": {
+    "label": "Fruit & Vegetables",
+    "icon": "🥬",
+    "color": "#5E7D3A"
+  },
+  "_idSeq": 10,
+  "rounds": {
+    "1": {
+      "note": "",
+      "words": [
+        {
+          "id": "food-009",
+          "c": "蔬菜",
+          "j": "so1 coi3",
+          "e": "Vegetables"
+        },
+        {
+          "id": "food-010",
+          "c": "生果",
+          "j": "saang1 gwo2",
+          "e": "Fruit"
+        },
+        {
+          "id": "fruitveg-001",
+          "c": "蘋果",
+          "j": "ping4 gwo2",
+          "e": "Apple"
+        },
+        {
+          "id": "fruitveg-002",
+          "c": "香蕉",
+          "j": "hoeng1 ziu1",
+          "e": "Banana"
+        },
+        {
+          "id": "fruitveg-003",
+          "c": "橙",
+          "j": "caang2",
+          "e": "Orange"
+        },
+        {
+          "id": "fruitveg-004",
+          "c": "西瓜",
+          "j": "sai1 gwaa1",
+          "e": "Watermelon"
+        },
+        {
+          "id": "fruitveg-005",
+          "c": "提子",
+          "j": "tai4 zi2",
+          "e": "Grapes"
+        },
+        {
+          "id": "fruitveg-006",
+          "c": "士多啤梨",
+          "j": "si6 do1 be1 lei2",
+          "e": "Strawberry"
+        },
+        {
+          "id": "fruitveg-007",
+          "c": "菜心",
+          "j": "coi3 sam1",
+          "e": "Choy sum"
+        },
+        {
+          "id": "fruitveg-008",
+          "c": "紅蘿蔔",
+          "j": "hung4 lo4 baak6",
+          "e": "Carrot"
+        },
+        {
+          "id": "fruitveg-009",
+          "c": "薯仔",
+          "j": "syu4 zai2",
+          "e": "Potato"
+        },
+        {
+          "id": "fruitveg-010",
+          "c": "番茄",
+          "j": "faan1 ke2",
+          "e": "Tomato"
+        }
+      ],
+      "sentences": [
+        {
+          "sid": "fruitveg-t1-s01",
+          "c": "我每日食一個蘋果。",
+          "j": "ngo5 mui5 jat6 sik6 jat1 go3 ping4 gwo2.",
+          "e": "I eat an apple every day.",
+          "bd": [
+            {
+              "c": "我",
+              "j": "ngo5",
+              "e": "I"
+            },
+            {
+              "c": "每日",
+              "j": "mui5 jat6",
+              "e": "every day"
+            },
+            {
+              "c": "食",
+              "j": "sik6",
+              "e": "eat"
+            },
+            {
+              "c": "一個",
+              "j": "jat1 go3",
+              "e": "one"
+            },
+            {
+              "c": "蘋果",
+              "j": "ping4 gwo2",
+              "e": "apple"
+            }
+          ]
+        },
+        {
+          "sid": "fruitveg-t1-s02",
+          "c": "呢啲生果好甜。",
+          "j": "ni1 di1 saang1 gwo2 hou2 tim4.",
+          "e": "These fruits are very sweet.",
+          "bd": [
+            {
+              "c": "呢啲",
+              "j": "ni1 di1",
+              "e": "these"
+            },
+            {
+              "c": "生果",
+              "j": "saang1 gwo2",
+              "e": "fruit"
+            },
+            {
+              "c": "好甜",
+              "j": "hou2 tim4",
+              "e": "very sweet"
+            }
+          ]
+        },
+        {
+          "sid": "fruitveg-t1-s03",
+          "c": "你鍾意食邊種菜？",
+          "j": "nei5 zung1 ji3 sik6 bin1 zung2 coi3?",
+          "e": "Which vegetables do you like?",
+          "bd": [
+            {
+              "c": "你",
+              "j": "nei5",
+              "e": "you"
+            },
+            {
+              "c": "鍾意食",
+              "j": "zung1 ji3 sik6",
+              "e": "like to eat"
+            },
+            {
+              "c": "邊種",
+              "j": "bin1 zung2",
+              "e": "which kind"
+            },
+            {
+              "c": "菜",
+              "j": "coi3",
+              "e": "vegetable"
+            }
+          ]
+        },
+        {
+          "sid": "fruitveg-t1-s04",
+          "c": "我想買啲薯仔同番茄。",
+          "j": "ngo5 soeng2 maai5 di1 syu4 zai2 tung4 faan1 ke2.",
+          "e": "I want to buy some potatoes and tomatoes.",
+          "bd": [
+            {
+              "c": "我想",
+              "j": "ngo5 soeng2",
+              "e": "I want to"
+            },
+            {
+              "c": "買",
+              "j": "maai5",
+              "e": "buy"
+            },
+            {
+              "c": "啲",
+              "j": "di1",
+              "e": "some"
+            },
+            {
+              "c": "薯仔",
+              "j": "syu4 zai2",
+              "e": "potatoes"
+            },
+            {
+              "c": "同",
+              "j": "tung4",
+              "e": "and"
+            },
+            {
+              "c": "番茄",
+              "j": "faan1 ke2",
+              "e": "tomatoes"
+            }
+          ]
+        },
+        {
+          "sid": "fruitveg-t1-s05",
+          "c": "西瓜喺夏天最好食。",
+          "j": "sai1 gwaa1 hai2 haa6 tin1 zeoi3 hou2 sik6.",
+          "e": "Watermelon is best in summer.",
+          "bd": [
+            {
+              "c": "西瓜",
+              "j": "sai1 gwaa1",
+              "e": "watermelon"
+            },
+            {
+              "c": "喺",
+              "j": "hai2",
+              "e": "in"
+            },
+            {
+              "c": "夏天",
+              "j": "haa6 tin1",
+              "e": "summer"
+            },
+            {
+              "c": "最好食",
+              "j": "zeoi3 hou2 sik6",
+              "e": "best to eat"
+            }
+          ]
+        }
+      ],
+      "convo": {
+        "title": "At the fruit stall",
+        "speakers": [
+          "Vendor",
+          "You"
+        ],
+        "lines": [
+          {
+            "u": false,
+            "c": "啲蘋果好甜，要唔要？",
+            "j": "di1 ping4 gwo2 hou2 tim4, jiu3 m4 jiu3?",
+            "e": "The apples are sweet — want some?",
+            "bd": [
+              {
+                "c": "啲",
+                "j": "di1",
+                "e": "the"
+              },
+              {
+                "c": "蘋果",
+                "j": "ping4 gwo2",
+                "e": "apples"
+              },
+              {
+                "c": "好甜",
+                "j": "hou2 tim4",
+                "e": "very sweet"
+              },
+              {
+                "c": "要唔要",
+                "j": "jiu3 m4 jiu3",
+                "e": "want or not"
+              }
+            ]
+          },
+          {
+            "u": true,
+            "c": "要，我想買幾個蘋果同香蕉。",
+            "j": "jiu3, ngo5 soeng2 maai5 gei2 go3 ping4 gwo2 tung4 hoeng1 ziu1.",
+            "e": "Yes, I'd like a few apples and bananas.",
+            "bd": [
+              {
+                "c": "要",
+                "j": "jiu3",
+                "e": "yes"
+              },
+              {
+                "c": "我想買",
+                "j": "ngo5 soeng2 maai5",
+                "e": "I want to buy"
+              },
+              {
+                "c": "幾個",
+                "j": "gei2 go3",
+                "e": "a few"
+              },
+              {
+                "c": "蘋果",
+                "j": "ping4 gwo2",
+                "e": "apples"
+              },
+              {
+                "c": "同",
+                "j": "tung4",
+                "e": "and"
+              },
+              {
+                "c": "香蕉",
+                "j": "hoeng1 ziu1",
+                "e": "bananas"
+              }
+            ]
+          },
+          {
+            "u": false,
+            "c": "有冇要啲菜？",
+            "j": "jau5 mou5 jiu3 di1 coi3?",
+            "e": "Need any vegetables?",
+            "bd": [
+              {
+                "c": "有冇",
+                "j": "jau5 mou5",
+                "e": "do you want"
+              },
+              {
+                "c": "要",
+                "j": "jiu3",
+                "e": "want"
+              },
+              {
+                "c": "啲菜",
+                "j": "di1 coi3",
+                "e": "some vegetables"
+              }
+            ]
+          },
+          {
+            "u": true,
+            "c": "要啲菜心同番茄。",
+            "j": "jiu3 di1 coi3 sam1 tung4 faan1 ke2.",
+            "e": "Some choy sum and tomatoes.",
+            "bd": [
+              {
+                "c": "要",
+                "j": "jiu3",
+                "e": "want"
+              },
+              {
+                "c": "啲",
+                "j": "di1",
+                "e": "some"
+              },
+              {
+                "c": "菜心",
+                "j": "coi3 sam1",
+                "e": "choy sum"
+              },
+              {
+                "c": "同",
+                "j": "tung4",
+                "e": "and"
+              },
+              {
+                "c": "番茄",
+                "j": "faan1 ke2",
+                "e": "tomatoes"
+              }
+            ]
+          },
+          {
+            "u": false,
+            "c": "好，啲嘢好新鮮㗎！",
+            "j": "hou2, di1 je5 hou2 san1 sin1 gaa3!",
+            "e": "Sure, everything's fresh!",
+            "bd": [
+              {
+                "c": "好",
+                "j": "hou2",
+                "e": "sure"
+              },
+              {
+                "c": "啲嘢",
+                "j": "di1 je5",
+                "e": "the things"
+              },
+              {
+                "c": "好新鮮",
+                "j": "hou2 san1 sin1",
+                "e": "very fresh"
+              },
+              {
+                "c": "㗎",
+                "j": "gaa3",
+                "e": "(particle)"
+              }
+            ]
+          },
+          {
+            "u": true,
+            "c": "唔該晒！",
+            "j": "m4 goi1 saai3!",
+            "e": "Thank you so much!",
+            "bd": [
+              {
+                "c": "唔該晒",
+                "j": "m4 goi1 saai3",
+                "e": "thanks a lot"
+              }
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "_sidSeq": 5
+}

@@ -30,7 +30,7 @@
     },
     {
       "key": "food",
-      "label": "Food & Drink",
+      "label": "Food & Dishes",
       "icon": "🍜",
       "color": "#7D6608",
       "rounds": [
@@ -382,6 +382,42 @@
       ],
       "wordCounts": {
         "1": 10
+      }
+    },
+    {
+      "key": "drinks",
+      "label": "Drinks",
+      "icon": "🥤",
+      "color": "#9C7A1A",
+      "rounds": [
+        1
+      ],
+      "wordCounts": {
+        "1": 12
+      }
+    },
+    {
+      "key": "meatseafood",
+      "label": "Meat & Seafood",
+      "icon": "🍗",
+      "color": "#8B5A2B",
+      "rounds": [
+        1
+      ],
+      "wordCounts": {
+        "1": 11
+      }
+    },
+    {
+      "key": "fruitveg",
+      "label": "Fruit & Vegetables",
+      "icon": "🥬",
+      "color": "#5E7D3A",
+      "rounds": [
+        1
+      ],
+      "wordCounts": {
+        "1": 12
       }
     }
   ]

@@ -1,0 +1,372 @@
+{
+  "meta": {
+    "label": "Drinks",
+    "icon": "🥤",
+    "color": "#9C7A1A"
+  },
+  "_idSeq": 9,
+  "rounds": {
+    "1": {
+      "note": "",
+      "words": [
+        {
+          "id": "food-003",
+          "c": "水",
+          "j": "seoi2",
+          "e": "Water"
+        },
+        {
+          "id": "food-004",
+          "c": "茶",
+          "j": "caa4",
+          "e": "Tea"
+        },
+        {
+          "id": "food-005",
+          "c": "咖啡",
+          "j": "gaa3 fe1",
+          "e": "Coffee"
+        },
+        {
+          "id": "drinks-001",
+          "c": "果汁",
+          "j": "gwo2 zap1",
+          "e": "Juice"
+        },
+        {
+          "id": "drinks-002",
+          "c": "奶",
+          "j": "naai5",
+          "e": "Milk"
+        },
+        {
+          "id": "drinks-003",
+          "c": "汽水",
+          "j": "hei3 seoi2",
+          "e": "Soft drink"
+        },
+        {
+          "id": "drinks-004",
+          "c": "啤酒",
+          "j": "be1 zau2",
+          "e": "Beer"
+        },
+        {
+          "id": "drinks-005",
+          "c": "凍檸茶",
+          "j": "dung3 ning4 caa4",
+          "e": "Iced lemon tea"
+        },
+        {
+          "id": "drinks-006",
+          "c": "奶茶",
+          "j": "naai5 caa4",
+          "e": "Milk tea"
+        },
+        {
+          "id": "drinks-007",
+          "c": "豆漿",
+          "j": "dau6 zoeng1",
+          "e": "Soy milk"
+        },
+        {
+          "id": "drinks-008",
+          "c": "紅酒",
+          "j": "hung4 zau2",
+          "e": "Red wine"
+        },
+        {
+          "id": "drinks-009",
+          "c": "熱朱古力",
+          "j": "jit6 zyu1 gu1 lik1",
+          "e": "Hot chocolate"
+        }
+      ],
+      "sentences": [
+        {
+          "sid": "drinks-t1-s01",
+          "c": "我想飲杯咖啡。",
+          "j": "ngo5 soeng2 jam2 bui1 gaa3 fe1.",
+          "e": "I want to drink a coffee.",
+          "bd": [
+            {
+              "c": "我",
+              "j": "ngo5",
+              "e": "I"
+            },
+            {
+              "c": "想",
+              "j": "soeng2",
+              "e": "want to"
+            },
+            {
+              "c": "飲",
+              "j": "jam2",
+              "e": "drink"
+            },
+            {
+              "c": "杯",
+              "j": "bui1",
+              "e": "a cup of"
+            },
+            {
+              "c": "咖啡",
+              "j": "gaa3 fe1",
+              "e": "coffee"
+            }
+          ]
+        },
+        {
+          "sid": "drinks-t1-s02",
+          "c": "凍檸茶唔該！",
+          "j": "dung3 ning4 caa4 m4 goi1!",
+          "e": "Iced lemon tea, please!",
+          "bd": [
+            {
+              "c": "凍檸茶",
+              "j": "dung3 ning4 caa4",
+              "e": "iced lemon tea"
+            },
+            {
+              "c": "唔該",
+              "j": "m4 goi1",
+              "e": "please"
+            }
+          ]
+        },
+        {
+          "sid": "drinks-t1-s03",
+          "c": "你想飲茶定咖啡？",
+          "j": "nei5 soeng2 jam2 caa4 ding6 gaa3 fe1?",
+          "e": "Do you want tea or coffee?",
+          "bd": [
+            {
+              "c": "你",
+              "j": "nei5",
+              "e": "you"
+            },
+            {
+              "c": "想飲",
+              "j": "soeng2 jam2",
+              "e": "want to drink"
+            },
+            {
+              "c": "茶",
+              "j": "caa4",
+              "e": "tea"
+            },
+            {
+              "c": "定",
+              "j": "ding6",
+              "e": "or"
+            },
+            {
+              "c": "咖啡",
+              "j": "gaa3 fe1",
+              "e": "coffee"
+            }
+          ]
+        },
+        {
+          "sid": "drinks-t1-s04",
+          "c": "細路唔可以飲啤酒。",
+          "j": "sai3 lou6 m4 ho2 ji5 jam2 be1 zau2.",
+          "e": "Children can't drink beer.",
+          "bd": [
+            {
+              "c": "細路",
+              "j": "sai3 lou6",
+              "e": "children"
+            },
+            {
+              "c": "唔可以",
+              "j": "m4 ho2 ji5",
+              "e": "cannot"
+            },
+            {
+              "c": "飲",
+              "j": "jam2",
+              "e": "drink"
+            },
+            {
+              "c": "啤酒",
+              "j": "be1 zau2",
+              "e": "beer"
+            }
+          ]
+        },
+        {
+          "sid": "drinks-t1-s05",
+          "c": "我杯奶茶走甜。",
+          "j": "ngo5 bui1 naai5 caa4 zau2 tim4.",
+          "e": "My milk tea, no sugar.",
+          "bd": [
+            {
+              "c": "我",
+              "j": "ngo5",
+              "e": "my"
+            },
+            {
+              "c": "杯",
+              "j": "bui1",
+              "e": "cup of"
+            },
+            {
+              "c": "奶茶",
+              "j": "naai5 caa4",
+              "e": "milk tea"
+            },
+            {
+              "c": "走甜",
+              "j": "zau2 tim4",
+              "e": "no sugar"
+            }
+          ]
+        }
+      ],
+      "convo": {
+        "title": "Ordering a drink",
+        "speakers": [
+          "Waiter",
+          "You"
+        ],
+        "lines": [
+          {
+            "u": false,
+            "c": "飲咩呀？",
+            "j": "jam2 me1 aa3?",
+            "e": "What would you like to drink?",
+            "bd": [
+              {
+                "c": "飲",
+                "j": "jam2",
+                "e": "drink"
+              },
+              {
+                "c": "咩",
+                "j": "me1",
+                "e": "what"
+              },
+              {
+                "c": "呀",
+                "j": "aa3",
+                "e": "(particle)"
+              }
+            ]
+          },
+          {
+            "u": true,
+            "c": "一杯凍檸茶，唔該。",
+            "j": "jat1 bui1 dung3 ning4 caa4, m4 goi1.",
+            "e": "An iced lemon tea, please.",
+            "bd": [
+              {
+                "c": "一杯",
+                "j": "jat1 bui1",
+                "e": "one cup"
+              },
+              {
+                "c": "凍檸茶",
+                "j": "dung3 ning4 caa4",
+                "e": "iced lemon tea"
+              },
+              {
+                "c": "唔該",
+                "j": "m4 goi1",
+                "e": "please"
+              }
+            ]
+          },
+          {
+            "u": false,
+            "c": "要唔要加冰呀？",
+            "j": "jiu3 m4 jiu3 gaa1 bing1 aa3?",
+            "e": "Want ice in it?",
+            "bd": [
+              {
+                "c": "要唔要",
+                "j": "jiu3 m4 jiu3",
+                "e": "want or not"
+              },
+              {
+                "c": "加冰",
+                "j": "gaa1 bing1",
+                "e": "add ice"
+              },
+              {
+                "c": "呀",
+                "j": "aa3",
+                "e": "(particle)"
+              }
+            ]
+          },
+          {
+            "u": true,
+            "c": "少冰，走甜。",
+            "j": "siu2 bing1, zau2 tim4.",
+            "e": "Less ice, no sugar.",
+            "bd": [
+              {
+                "c": "少冰",
+                "j": "siu2 bing1",
+                "e": "less ice"
+              },
+              {
+                "c": "走甜",
+                "j": "zau2 tim4",
+                "e": "no sugar"
+              }
+            ]
+          },
+          {
+            "u": false,
+            "c": "仲要唔要其他嘢？",
+            "j": "zung6 jiu3 m4 jiu3 kei4 taa1 je5?",
+            "e": "Anything else?",
+            "bd": [
+              {
+                "c": "仲",
+                "j": "zung6",
+                "e": "still / also"
+              },
+              {
+                "c": "要唔要",
+                "j": "jiu3 m4 jiu3",
+                "e": "want"
+              },
+              {
+                "c": "其他嘢",
+                "j": "kei4 taa1 je5",
+                "e": "other things"
+              }
+            ]
+          },
+          {
+            "u": true,
+            "c": "唔使喇，多謝！",
+            "j": "m4 sai2 laa3, do1 ze6!",
+            "e": "No need, thanks!",
+            "bd": [
+              {
+                "c": "唔使",
+                "j": "m4 sai2",
+                "e": "no need"
+              },
+              {
+                "c": "喇",
+                "j": "laa3",
+                "e": "(particle)"
+              },
+              {
+                "c": "多謝",
+                "j": "do1 ze6",
+                "e": "thanks"
+              }
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "_sidSeq": 5
+}

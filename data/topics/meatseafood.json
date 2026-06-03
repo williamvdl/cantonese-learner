@@ -1,0 +1,396 @@
+{
+  "meta": {
+    "label": "Meat & Seafood",
+    "icon": "🍗",
+    "color": "#8B5A2B"
+  },
+  "_idSeq": 8,
+  "rounds": {
+    "1": {
+      "note": "",
+      "words": [
+        {
+          "id": "food-006",
+          "c": "雞",
+          "j": "gai1",
+          "e": "Chicken"
+        },
+        {
+          "id": "food-007",
+          "c": "魚",
+          "j": "jyu2",
+          "e": "Fish"
+        },
+        {
+          "id": "food-008",
+          "c": "豬肉",
+          "j": "zyu1 juk6",
+          "e": "Pork"
+        },
+        {
+          "id": "meatseafood-001",
+          "c": "牛肉",
+          "j": "ngau4 juk6",
+          "e": "Beef"
+        },
+        {
+          "id": "meatseafood-002",
+          "c": "羊肉",
+          "j": "joeng4 juk6",
+          "e": "Lamb"
+        },
+        {
+          "id": "meatseafood-003",
+          "c": "鴨",
+          "j": "aap3",
+          "e": "Duck"
+        },
+        {
+          "id": "meatseafood-004",
+          "c": "蝦",
+          "j": "haa1",
+          "e": "Prawn"
+        },
+        {
+          "id": "meatseafood-005",
+          "c": "蟹",
+          "j": "haai5",
+          "e": "Crab"
+        },
+        {
+          "id": "meatseafood-006",
+          "c": "豆腐",
+          "j": "dau6 fu6",
+          "e": "Tofu"
+        },
+        {
+          "id": "meatseafood-007",
+          "c": "雞蛋",
+          "j": "gai1 daan2",
+          "e": "Egg"
+        },
+        {
+          "id": "meatseafood-008",
+          "c": "香腸",
+          "j": "hoeng1 coeng2",
+          "e": "Sausage"
+        }
+      ],
+      "sentences": [
+        {
+          "sid": "meatseafood-t1-s01",
+          "c": "我鍾意食雞。",
+          "j": "ngo5 zung1 ji3 sik6 gai1.",
+          "e": "I like eating chicken.",
+          "bd": [
+            {
+              "c": "我",
+              "j": "ngo5",
+              "e": "I"
+            },
+            {
+              "c": "鍾意",
+              "j": "zung1 ji3",
+              "e": "like"
+            },
+            {
+              "c": "食",
+              "j": "sik6",
+              "e": "eat"
+            },
+            {
+              "c": "雞",
+              "j": "gai1",
+              "e": "chicken"
+            }
+          ]
+        },
+        {
+          "sid": "meatseafood-t1-s02",
+          "c": "呢條魚好新鮮。",
+          "j": "ni1 tiu4 jyu2 hou2 san1 sin1.",
+          "e": "This fish is very fresh.",
+          "bd": [
+            {
+              "c": "呢條",
+              "j": "ni1 tiu4",
+              "e": "this (long thing)"
+            },
+            {
+              "c": "魚",
+              "j": "jyu2",
+              "e": "fish"
+            },
+            {
+              "c": "好新鮮",
+              "j": "hou2 san1 sin1",
+              "e": "very fresh"
+            }
+          ]
+        },
+        {
+          "sid": "meatseafood-t1-s03",
+          "c": "你想要牛肉定豬肉？",
+          "j": "nei5 soeng2 jiu3 ngau4 juk6 ding6 zyu1 juk6?",
+          "e": "Do you want beef or pork?",
+          "bd": [
+            {
+              "c": "你",
+              "j": "nei5",
+              "e": "you"
+            },
+            {
+              "c": "想要",
+              "j": "soeng2 jiu3",
+              "e": "want"
+            },
+            {
+              "c": "牛肉",
+              "j": "ngau4 juk6",
+              "e": "beef"
+            },
+            {
+              "c": "定",
+              "j": "ding6",
+              "e": "or"
+            },
+            {
+              "c": "豬肉",
+              "j": "zyu1 juk6",
+              "e": "pork"
+            }
+          ]
+        },
+        {
+          "sid": "meatseafood-t1-s04",
+          "c": "我唔食羊肉。",
+          "j": "ngo5 m4 sik6 joeng4 juk6.",
+          "e": "I don't eat lamb.",
+          "bd": [
+            {
+              "c": "我",
+              "j": "ngo5",
+              "e": "I"
+            },
+            {
+              "c": "唔食",
+              "j": "m4 sik6",
+              "e": "don't eat"
+            },
+            {
+              "c": "羊肉",
+              "j": "joeng4 juk6",
+              "e": "lamb"
+            }
+          ]
+        },
+        {
+          "sid": "meatseafood-t1-s05",
+          "c": "蝦同蟹都好貴。",
+          "j": "haa1 tung4 haai5 dou1 hou2 gwai3.",
+          "e": "Prawns and crab are both expensive.",
+          "bd": [
+            {
+              "c": "蝦",
+              "j": "haa1",
+              "e": "prawn"
+            },
+            {
+              "c": "同",
+              "j": "tung4",
+              "e": "and"
+            },
+            {
+              "c": "蟹",
+              "j": "haai5",
+              "e": "crab"
+            },
+            {
+              "c": "都",
+              "j": "dou1",
+              "e": "both"
+            },
+            {
+              "c": "好貴",
+              "j": "hou2 gwai3",
+              "e": "very expensive"
+            }
+          ]
+        }
+      ],
+      "convo": {
+        "title": "At the market",
+        "speakers": [
+          "Vendor",
+          "You"
+        ],
+        "lines": [
+          {
+            "u": false,
+            "c": "今日啲魚好新鮮！",
+            "j": "gam1 jat6 di1 jyu2 hou2 san1 sin1!",
+            "e": "Today's fish is very fresh!",
+            "bd": [
+              {
+                "c": "今日",
+                "j": "gam1 jat6",
+                "e": "today"
+              },
+              {
+                "c": "啲",
+                "j": "di1",
+                "e": "the"
+              },
+              {
+                "c": "魚",
+                "j": "jyu2",
+                "e": "fish"
+              },
+              {
+                "c": "好新鮮",
+                "j": "hou2 san1 sin1",
+                "e": "very fresh"
+              }
+            ]
+          },
+          {
+            "u": true,
+            "c": "好呀，我要一條魚。",
+            "j": "hou2 aa3, ngo5 jiu3 jat1 tiu4 jyu2.",
+            "e": "Great, I'll take a fish.",
+            "bd": [
+              {
+                "c": "好呀",
+                "j": "hou2 aa3",
+                "e": "great"
+              },
+              {
+                "c": "我要",
+                "j": "ngo5 jiu3",
+                "e": "I want"
+              },
+              {
+                "c": "一條",
+                "j": "jat1 tiu4",
+                "e": "one (long thing)"
+              },
+              {
+                "c": "魚",
+                "j": "jyu2",
+                "e": "fish"
+              }
+            ]
+          },
+          {
+            "u": false,
+            "c": "仲要唔要啲雞？",
+            "j": "zung6 jiu3 m4 jiu3 di1 gai1?",
+            "e": "Want some chicken too?",
+            "bd": [
+              {
+                "c": "仲",
+                "j": "zung6",
+                "e": "also"
+              },
+              {
+                "c": "要唔要",
+                "j": "jiu3 m4 jiu3",
+                "e": "want"
+              },
+              {
+                "c": "啲",
+                "j": "di1",
+                "e": "some"
+              },
+              {
+                "c": "雞",
+                "j": "gai1",
+                "e": "chicken"
+              }
+            ]
+          },
+          {
+            "u": true,
+            "c": "要少少，唔該。",
+            "j": "jiu3 siu2 siu2, m4 goi1.",
+            "e": "A little, please.",
+            "bd": [
+              {
+                "c": "要",
+                "j": "jiu3",
+                "e": "want"
+              },
+              {
+                "c": "少少",
+                "j": "siu2 siu2",
+                "e": "a little"
+              },
+              {
+                "c": "唔該",
+                "j": "m4 goi1",
+                "e": "please"
+              }
+            ]
+          },
+          {
+            "u": false,
+            "c": "好，一共五十蚊。",
+            "j": "hou2, jat1 gung6 ng5 sap6 man1.",
+            "e": "Okay, fifty dollars in total.",
+            "bd": [
+              {
+                "c": "好",
+                "j": "hou2",
+                "e": "okay"
+              },
+              {
+                "c": "一共",
+                "j": "jat1 gung6",
+                "e": "in total"
+              },
+              {
+                "c": "五十蚊",
+                "j": "ng5 sap6 man1",
+                "e": "50 dollars"
+              }
+            ]
+          },
+          {
+            "u": true,
+            "c": "畀埋啲蝦我啦！",
+            "j": "bei2 maai4 di1 haa1 ngo5 laa1!",
+            "e": "Give me some prawns as well!",
+            "bd": [
+              {
+                "c": "畀",
+                "j": "bei2",
+                "e": "give"
+              },
+              {
+                "c": "埋",
+                "j": "maai4",
+                "e": "also / as well"
+              },
+              {
+                "c": "啲蝦",
+                "j": "di1 haa1",
+                "e": "some prawns"
+              },
+              {
+                "c": "我",
+                "j": "ngo5",
+                "e": "me"
+              },
+              {
+                "c": "啦",
+                "j": "laa1",
+                "e": "(particle)"
+              }
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "_sidSeq": 5
+}

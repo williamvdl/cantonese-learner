@@ -1,6 +1,6 @@
 {
   "meta": {
-    "label": "Food & Drink",
+    "label": "Food & Dishes",
     "icon": "🍜",
     "color": "#7D6608"
   },
@@ -21,54 +21,6 @@
           "e": "Noodles"
         },
         {
-          "id": "food-003",
-          "c": "水",
-          "j": "seoi2",
-          "e": "Water"
-        },
-        {
-          "id": "food-004",
-          "c": "茶",
-          "j": "caa4",
-          "e": "Tea"
-        },
-        {
-          "id": "food-005",
-          "c": "咖啡",
-          "j": "gaa3 fe1",
-          "e": "Coffee"
-        },
-        {
-          "id": "food-006",
-          "c": "雞",
-          "j": "gai1",
-          "e": "Chicken"
-        },
-        {
-          "id": "food-007",
-          "c": "魚",
-          "j": "jyu2",
-          "e": "Fish"
-        },
-        {
-          "id": "food-008",
-          "c": "豬肉",
-          "j": "zyu1 juk6",
-          "e": "Pork"
-        },
-        {
-          "id": "food-009",
-          "c": "蔬菜",
-          "j": "so1 coi3",
-          "e": "Vegetables"
-        },
-        {
-          "id": "food-010",
-          "c": "生果",
-          "j": "saang1 gwo2",
-          "e": "Fruit"
-        },
-        {
           "id": "food-011",
           "c": "好味",
           "j": "hou2 mei6",
@@ -79,6 +31,54 @@
           "c": "餓",
           "j": "ngo6",
           "e": "Hungry"
+        },
+        {
+          "id": "food-023",
+          "c": "粥",
+          "j": "zuk1",
+          "e": "Congee"
+        },
+        {
+          "id": "food-024",
+          "c": "麵包",
+          "j": "min6 baau1",
+          "e": "Bread"
+        },
+        {
+          "id": "food-025",
+          "c": "餃子",
+          "j": "gaau2 zi2",
+          "e": "Dumpling"
+        },
+        {
+          "id": "food-026",
+          "c": "點心",
+          "j": "dim2 sam1",
+          "e": "Dim sum"
+        },
+        {
+          "id": "food-027",
+          "c": "蛋",
+          "j": "daan2",
+          "e": "Egg"
+        },
+        {
+          "id": "food-028",
+          "c": "湯",
+          "j": "tong1",
+          "e": "Soup"
+        },
+        {
+          "id": "food-029",
+          "c": "小食",
+          "j": "siu2 sik6",
+          "e": "Snack"
+        },
+        {
+          "id": "food-030",
+          "c": "甜品",
+          "j": "tim4 ban2",
+          "e": "Dessert"
         }
       ],
       "sentences": [
@@ -849,6 +849,6 @@
       }
     }
   },
-  "_idSeq": 22,
+  "_idSeq": 30,
   "_sidSeq": 10
 }
