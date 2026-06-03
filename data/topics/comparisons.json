@@ -1,0 +1,387 @@
+{
+  "meta": {
+    "label": "Comparisons",
+    "icon": "⚖️",
+    "color": "#A0712B"
+  },
+  "_idSeq": 12,
+  "rounds": {
+    "1": {
+      "note": "Two ways to compare. (1) A 比 (bei2) B + adjective: 我比你高 (ngo5 bei2 nei5 gou1) = “I’m taller than you”. (2) A + adjective + 過 (gwo3) B: 我高過你 (ngo5 gou1 gwo3 nei5) — same meaning, very common in speech. Add 啲 (di1) for “a bit more” (高啲 gou1 di1 = taller), 最 (zeoi3) for “the most” (最高 zeoi3 gou1 = tallest), and 同…一樣 (tung4…jat1 joeng6) for “the same as”.",
+      "words": [
+        {
+          "id": "comparisons-001",
+          "c": "比",
+          "j": "bei2",
+          "e": "Than (compared to)"
+        },
+        {
+          "id": "comparisons-002",
+          "c": "過",
+          "j": "gwo3",
+          "e": "Than (A adj 過 B)"
+        },
+        {
+          "id": "comparisons-003",
+          "c": "最",
+          "j": "zeoi3",
+          "e": "Most / -est"
+        },
+        {
+          "id": "comparisons-004",
+          "c": "啲",
+          "j": "di1",
+          "e": "A bit more / -er"
+        },
+        {
+          "id": "comparisons-005",
+          "c": "一樣",
+          "j": "jat1 joeng6",
+          "e": "The same"
+        },
+        {
+          "id": "comparisons-006",
+          "c": "同",
+          "j": "tung4",
+          "e": "As / with"
+        },
+        {
+          "id": "comparisons-007",
+          "c": "差唔多",
+          "j": "caa1 m4 do1",
+          "e": "About the same"
+        },
+        {
+          "id": "comparisons-008",
+          "c": "唔同",
+          "j": "m4 tung4",
+          "e": "Different"
+        },
+        {
+          "id": "comparisons-009",
+          "c": "貴",
+          "j": "gwai3",
+          "e": "Expensive"
+        },
+        {
+          "id": "comparisons-010",
+          "c": "平",
+          "j": "peng4",
+          "e": "Cheap"
+        },
+        {
+          "id": "comparisons-011",
+          "c": "靚",
+          "j": "leng3",
+          "e": "Pretty / nice"
+        },
+        {
+          "id": "comparisons-012",
+          "c": "叻",
+          "j": "lek1",
+          "e": "Clever / good at"
+        }
+      ],
+      "sentences": [
+        {
+          "sid": "comparisons-t1-s01",
+          "c": "我比你高。",
+          "j": "ngo5 bei2 nei5 gou1.",
+          "e": "I'm taller than you.",
+          "bd": [
+            {
+              "c": "我",
+              "j": "ngo5",
+              "e": "I"
+            },
+            {
+              "c": "比",
+              "j": "bei2",
+              "e": "compared to"
+            },
+            {
+              "c": "你",
+              "j": "nei5",
+              "e": "you"
+            },
+            {
+              "c": "高",
+              "j": "gou1",
+              "e": "tall"
+            }
+          ]
+        },
+        {
+          "sid": "comparisons-t1-s02",
+          "c": "今日凍過琴日。",
+          "j": "gam1 jat6 dung3 gwo3 kam4 jat6.",
+          "e": "Today is colder than yesterday.",
+          "bd": [
+            {
+              "c": "今日",
+              "j": "gam1 jat6",
+              "e": "today"
+            },
+            {
+              "c": "凍",
+              "j": "dung3",
+              "e": "cold"
+            },
+            {
+              "c": "過",
+              "j": "gwo3",
+              "e": "than"
+            },
+            {
+              "c": "琴日",
+              "j": "kam4 jat6",
+              "e": "yesterday"
+            }
+          ]
+        },
+        {
+          "sid": "comparisons-t1-s03",
+          "c": "呢個貴啲。",
+          "j": "ni1 go3 gwai3 di1.",
+          "e": "This one is a bit more expensive.",
+          "bd": [
+            {
+              "c": "呢個",
+              "j": "ni1 go3",
+              "e": "this one"
+            },
+            {
+              "c": "貴啲",
+              "j": "gwai3 di1",
+              "e": "a bit more expensive"
+            }
+          ]
+        },
+        {
+          "sid": "comparisons-t1-s04",
+          "c": "佢係最叻嗰個。",
+          "j": "keoi5 hai6 zeoi3 lek1 go2 go3.",
+          "e": "He's the cleverest one.",
+          "bd": [
+            {
+              "c": "佢",
+              "j": "keoi5",
+              "e": "he"
+            },
+            {
+              "c": "係",
+              "j": "hai6",
+              "e": "is"
+            },
+            {
+              "c": "最叻",
+              "j": "zeoi3 lek1",
+              "e": "cleverest"
+            },
+            {
+              "c": "嗰個",
+              "j": "go2 go3",
+              "e": "that one"
+            }
+          ]
+        },
+        {
+          "sid": "comparisons-t1-s05",
+          "c": "你同我一樣高。",
+          "j": "nei5 tung4 ngo5 jat1 joeng6 gou1.",
+          "e": "You're as tall as me.",
+          "bd": [
+            {
+              "c": "你",
+              "j": "nei5",
+              "e": "you"
+            },
+            {
+              "c": "同",
+              "j": "tung4",
+              "e": "as"
+            },
+            {
+              "c": "我",
+              "j": "ngo5",
+              "e": "me"
+            },
+            {
+              "c": "一樣高",
+              "j": "jat1 joeng6 gou1",
+              "e": "equally tall"
+            }
+          ]
+        }
+      ],
+      "convo": {
+        "title": "Comparing two phones",
+        "speakers": [
+          "Friend",
+          "You"
+        ],
+        "lines": [
+          {
+            "u": false,
+            "c": "你覺得邊部電話好啲？",
+            "j": "nei5 gok3 dak1 bin1 bou6 din6 waa2 hou2 di1?",
+            "e": "Which phone do you think is better?",
+            "bd": [
+              {
+                "c": "你覺得",
+                "j": "nei5 gok3 dak1",
+                "e": "do you think"
+              },
+              {
+                "c": "邊部",
+                "j": "bin1 bou6",
+                "e": "which [machine]"
+              },
+              {
+                "c": "電話",
+                "j": "din6 waa2",
+                "e": "phone"
+              },
+              {
+                "c": "好啲",
+                "j": "hou2 di1",
+                "e": "better"
+              }
+            ]
+          },
+          {
+            "u": true,
+            "c": "呢部平啲，不過嗰部快啲。",
+            "j": "ni1 bou6 peng4 di1, bat1 gwo3 go2 bou6 faai3 di1.",
+            "e": "This one's cheaper, but that one's faster.",
+            "bd": [
+              {
+                "c": "呢部",
+                "j": "ni1 bou6",
+                "e": "this one"
+              },
+              {
+                "c": "平啲",
+                "j": "peng4 di1",
+                "e": "cheaper"
+              },
+              {
+                "c": "不過",
+                "j": "bat1 gwo3",
+                "e": "but"
+              },
+              {
+                "c": "嗰部",
+                "j": "go2 bou6",
+                "e": "that one"
+              },
+              {
+                "c": "快啲",
+                "j": "faai3 di1",
+                "e": "faster"
+              }
+            ]
+          },
+          {
+            "u": false,
+            "c": "邊部最靚呀？",
+            "j": "bin1 bou6 zeoi3 leng3 aa3?",
+            "e": "Which is the nicest-looking?",
+            "bd": [
+              {
+                "c": "邊部",
+                "j": "bin1 bou6",
+                "e": "which one"
+              },
+              {
+                "c": "最靚",
+                "j": "zeoi3 leng3",
+                "e": "nicest"
+              },
+              {
+                "c": "呀",
+                "j": "aa3",
+                "e": "(particle)"
+              }
+            ]
+          },
+          {
+            "u": true,
+            "c": "兩部差唔多。",
+            "j": "loeng5 bou6 caa1 m4 do1.",
+            "e": "The two are about the same.",
+            "bd": [
+              {
+                "c": "兩部",
+                "j": "loeng5 bou6",
+                "e": "the two"
+              },
+              {
+                "c": "差唔多",
+                "j": "caa1 m4 do1",
+                "e": "about the same"
+              }
+            ]
+          },
+          {
+            "u": false,
+            "c": "咁價錢呢？",
+            "j": "gam2 gaa3 cin4 ne1?",
+            "e": "What about the price?",
+            "bd": [
+              {
+                "c": "咁",
+                "j": "gam2",
+                "e": "so"
+              },
+              {
+                "c": "價錢",
+                "j": "gaa3 cin4",
+                "e": "price"
+              },
+              {
+                "c": "呢",
+                "j": "ne1",
+                "e": "(what about)"
+              }
+            ]
+          },
+          {
+            "u": true,
+            "c": "呢部比嗰部平五百蚊。",
+            "j": "ni1 bou6 bei2 go2 bou6 peng4 ng5 baak3 man1.",
+            "e": "This one is $500 cheaper than that one.",
+            "bd": [
+              {
+                "c": "呢部",
+                "j": "ni1 bou6",
+                "e": "this one"
+              },
+              {
+                "c": "比",
+                "j": "bei2",
+                "e": "than"
+              },
+              {
+                "c": "嗰部",
+                "j": "go2 bou6",
+                "e": "that one"
+              },
+              {
+                "c": "平",
+                "j": "peng4",
+                "e": "cheaper by"
+              },
+              {
+                "c": "五百蚊",
+                "j": "ng5 baak3 man1",
+                "e": "500 dollars"
+              }
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "_sidSeq": 5
+}

@@ -1,0 +1,417 @@
+{
+  "meta": {
+    "label": "Modal Verbs",
+    "icon": "💭",
+    "color": "#5B8C9E"
+  },
+  "_idSeq": 12,
+  "rounds": {
+    "1": {
+      "note": "Modal verbs go right before the main verb to express wanting, ability, or permission. 想 (soeng2) = want to · 要 (jiu3) = need to / must · 可以 (ho2 ji5) = can / may · 會 (wui5) = will / be able to · 識 (sik1) = know how to (a skill) · 鍾意 (zung1 ji3) = like to. Negate with 唔 (m4): 唔想 (m4 soeng2, don’t want to), 唔可以 (m4 ho2 ji5, may not), 唔識 (m4 sik1, don’t know how).",
+      "words": [
+        {
+          "id": "modals-001",
+          "c": "想",
+          "j": "soeng2",
+          "e": "Want to"
+        },
+        {
+          "id": "modals-002",
+          "c": "要",
+          "j": "jiu3",
+          "e": "Need to / must"
+        },
+        {
+          "id": "modals-003",
+          "c": "可以",
+          "j": "ho2 ji5",
+          "e": "Can / may"
+        },
+        {
+          "id": "modals-004",
+          "c": "會",
+          "j": "wui5",
+          "e": "Will / be able to"
+        },
+        {
+          "id": "modals-005",
+          "c": "識",
+          "j": "sik1",
+          "e": "Know how to"
+        },
+        {
+          "id": "modals-006",
+          "c": "鍾意",
+          "j": "zung1 ji3",
+          "e": "Like to"
+        },
+        {
+          "id": "modals-007",
+          "c": "應該",
+          "j": "jing1 goi1",
+          "e": "Should"
+        },
+        {
+          "id": "modals-008",
+          "c": "需要",
+          "j": "seoi1 jiu3",
+          "e": "To need"
+        },
+        {
+          "id": "modals-009",
+          "c": "唔想",
+          "j": "m4 soeng2",
+          "e": "Don't want to"
+        },
+        {
+          "id": "modals-010",
+          "c": "唔使",
+          "j": "m4 sai2",
+          "e": "Needn't / no need"
+        },
+        {
+          "id": "modals-011",
+          "c": "唔識",
+          "j": "m4 sik1",
+          "e": "Don't know how to"
+        },
+        {
+          "id": "modals-012",
+          "c": "唔可以",
+          "j": "m4 ho2 ji5",
+          "e": "May not / can't"
+        }
+      ],
+      "sentences": [
+        {
+          "sid": "modals-t1-s01",
+          "c": "我想去香港。",
+          "j": "ngo5 soeng2 heoi3 hoeng1 gong2.",
+          "e": "I want to go to Hong Kong.",
+          "bd": [
+            {
+              "c": "我想",
+              "j": "ngo5 soeng2",
+              "e": "I want to"
+            },
+            {
+              "c": "去",
+              "j": "heoi3",
+              "e": "go"
+            },
+            {
+              "c": "香港",
+              "j": "hoeng1 gong2",
+              "e": "Hong Kong"
+            }
+          ]
+        },
+        {
+          "sid": "modals-t1-s02",
+          "c": "你可以幫我嗎？",
+          "j": "nei5 ho2 ji5 bong1 ngo5 maa3?",
+          "e": "Can you help me?",
+          "bd": [
+            {
+              "c": "你",
+              "j": "nei5",
+              "e": "you"
+            },
+            {
+              "c": "可以",
+              "j": "ho2 ji5",
+              "e": "can"
+            },
+            {
+              "c": "幫我",
+              "j": "bong1 ngo5",
+              "e": "help me"
+            },
+            {
+              "c": "嗎",
+              "j": "maa3",
+              "e": "(question particle)"
+            }
+          ]
+        },
+        {
+          "sid": "modals-t1-s03",
+          "c": "我唔識游水。",
+          "j": "ngo5 m4 sik1 jau4 seoi2.",
+          "e": "I don't know how to swim.",
+          "bd": [
+            {
+              "c": "我",
+              "j": "ngo5",
+              "e": "I"
+            },
+            {
+              "c": "唔識",
+              "j": "m4 sik1",
+              "e": "don't know how to"
+            },
+            {
+              "c": "游水",
+              "j": "jau4 seoi2",
+              "e": "swim"
+            }
+          ]
+        },
+        {
+          "sid": "modals-t1-s04",
+          "c": "聽日你要返工。",
+          "j": "ting1 jat6 nei5 jiu3 faan1 gung1.",
+          "e": "Tomorrow you have to work.",
+          "bd": [
+            {
+              "c": "聽日",
+              "j": "ting1 jat6",
+              "e": "tomorrow"
+            },
+            {
+              "c": "你",
+              "j": "nei5",
+              "e": "you"
+            },
+            {
+              "c": "要",
+              "j": "jiu3",
+              "e": "have to"
+            },
+            {
+              "c": "返工",
+              "j": "faan1 gung1",
+              "e": "go to work"
+            }
+          ]
+        },
+        {
+          "sid": "modals-t1-s05",
+          "c": "我鍾意飲咖啡。",
+          "j": "ngo5 zung1 ji3 jam2 gaa3 fe1.",
+          "e": "I like drinking coffee.",
+          "bd": [
+            {
+              "c": "我",
+              "j": "ngo5",
+              "e": "I"
+            },
+            {
+              "c": "鍾意",
+              "j": "zung1 ji3",
+              "e": "like to"
+            },
+            {
+              "c": "飲",
+              "j": "jam2",
+              "e": "drink"
+            },
+            {
+              "c": "咖啡",
+              "j": "gaa3 fe1",
+              "e": "coffee"
+            }
+          ]
+        }
+      ],
+      "convo": {
+        "title": "Learning to swim",
+        "speakers": [
+          "Friend",
+          "You"
+        ],
+        "lines": [
+          {
+            "u": false,
+            "c": "你聽日想做咩呀？",
+            "j": "nei5 ting1 jat6 soeng2 zou6 me1 aa3?",
+            "e": "What do you want to do tomorrow?",
+            "bd": [
+              {
+                "c": "你",
+                "j": "nei5",
+                "e": "you"
+              },
+              {
+                "c": "聽日",
+                "j": "ting1 jat6",
+                "e": "tomorrow"
+              },
+              {
+                "c": "想",
+                "j": "soeng2",
+                "e": "want to"
+              },
+              {
+                "c": "做咩",
+                "j": "zou6 me1",
+                "e": "do what"
+              },
+              {
+                "c": "呀",
+                "j": "aa3",
+                "e": "(particle)"
+              }
+            ]
+          },
+          {
+            "u": true,
+            "c": "我想學游水，但係我唔識。",
+            "j": "ngo5 soeng2 hok6 jau4 seoi2, daan6 hai6 ngo5 m4 sik1.",
+            "e": "I want to learn to swim, but I don't know how.",
+            "bd": [
+              {
+                "c": "我想",
+                "j": "ngo5 soeng2",
+                "e": "I want to"
+              },
+              {
+                "c": "學",
+                "j": "hok6",
+                "e": "learn"
+              },
+              {
+                "c": "游水",
+                "j": "jau4 seoi2",
+                "e": "swim"
+              },
+              {
+                "c": "但係",
+                "j": "daan6 hai6",
+                "e": "but"
+              },
+              {
+                "c": "我",
+                "j": "ngo5",
+                "e": "I"
+              },
+              {
+                "c": "唔識",
+                "j": "m4 sik1",
+                "e": "don't know how"
+              }
+            ]
+          },
+          {
+            "u": false,
+            "c": "我可以教你！",
+            "j": "ngo5 ho2 ji5 gaau3 nei5!",
+            "e": "I can teach you!",
+            "bd": [
+              {
+                "c": "我",
+                "j": "ngo5",
+                "e": "I"
+              },
+              {
+                "c": "可以",
+                "j": "ho2 ji5",
+                "e": "can"
+              },
+              {
+                "c": "教你",
+                "j": "gaau3 nei5",
+                "e": "teach you"
+              }
+            ]
+          },
+          {
+            "u": true,
+            "c": "真係？你會游咩？",
+            "j": "zan1 hai6? nei5 wui5 jau4 me1?",
+            "e": "Really? You can swim?",
+            "bd": [
+              {
+                "c": "真係",
+                "j": "zan1 hai6",
+                "e": "really"
+              },
+              {
+                "c": "你",
+                "j": "nei5",
+                "e": "you"
+              },
+              {
+                "c": "會游",
+                "j": "wui5 jau4",
+                "e": "can swim"
+              },
+              {
+                "c": "咩",
+                "j": "me1",
+                "e": "(question particle)"
+              }
+            ]
+          },
+          {
+            "u": false,
+            "c": "會呀，不過你要早啲起身。",
+            "j": "wui5 aa3, bat1 gwo3 nei5 jiu3 zou2 di1 hei2 san1.",
+            "e": "Yes, but you need to get up earlier.",
+            "bd": [
+              {
+                "c": "會呀",
+                "j": "wui5 aa3",
+                "e": "yes (can)"
+              },
+              {
+                "c": "不過",
+                "j": "bat1 gwo3",
+                "e": "but"
+              },
+              {
+                "c": "你要",
+                "j": "nei5 jiu3",
+                "e": "you need to"
+              },
+              {
+                "c": "早啲",
+                "j": "zou2 di1",
+                "e": "earlier"
+              },
+              {
+                "c": "起身",
+                "j": "hei2 san1",
+                "e": "get up"
+              }
+            ]
+          },
+          {
+            "u": true,
+            "c": "冇問題，我應該得㗎。",
+            "j": "mou5 man6 tai4, ngo5 jing1 goi1 dak1 gaa3.",
+            "e": "No problem, I should be fine.",
+            "bd": [
+              {
+                "c": "冇問題",
+                "j": "mou5 man6 tai4",
+                "e": "no problem"
+              },
+              {
+                "c": "我",
+                "j": "ngo5",
+                "e": "I"
+              },
+              {
+                "c": "應該",
+                "j": "jing1 goi1",
+                "e": "should"
+              },
+              {
+                "c": "得",
+                "j": "dak1",
+                "e": "be ok"
+              },
+              {
+                "c": "㗎",
+                "j": "gaa3",
+                "e": "(particle)"
+              }
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "_sidSeq": 5
+}

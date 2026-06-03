@@ -80,6 +80,9 @@
     "fruitveg": "food",
     "clothing": "daily",
     "classifiers": "everyday",
-    "adjectives": "everyday"
+    "adjectives": "everyday",
+    "comparisons": "everyday",
+    "modals": "everyday",
+    "location": "daily"
   }
 }

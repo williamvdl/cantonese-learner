@@ -455,6 +455,42 @@
       "wordCounts": {
         "1": 12
       }
+    },
+    {
+      "key": "comparisons",
+      "label": "Comparisons",
+      "icon": "⚖️",
+      "color": "#A0712B",
+      "rounds": [
+        1
+      ],
+      "wordCounts": {
+        "1": 12
+      }
+    },
+    {
+      "key": "modals",
+      "label": "Modal Verbs",
+      "icon": "💭",
+      "color": "#5B8C9E",
+      "rounds": [
+        1
+      ],
+      "wordCounts": {
+        "1": 12
+      }
+    },
+    {
+      "key": "location",
+      "label": "Location & Position",
+      "icon": "📍",
+      "color": "#6B8E5A",
+      "rounds": [
+        1
+      ],
+      "wordCounts": {
+        "1": 12
+      }
     }
   ]
 }

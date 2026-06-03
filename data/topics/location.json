@@ -1,0 +1,392 @@
+{
+  "meta": {
+    "label": "Location & Position",
+    "icon": "📍",
+    "color": "#6B8E5A"
+  },
+  "_idSeq": 12,
+  "rounds": {
+    "1": {
+      "note": "喺 (hai2) means “to be at / in / on” — 我喺屋企 (ngo5 hai2 uk1 kei2) = “I’m at home”. To say where something is, put a position word after the place: 喺枱上面 (hai2 toi2 soeng6 min6) = “on the table”, 喺箱入面 (hai2 soeng1 jap6 min6) = “inside the box”. Common ones: 上面 (soeng6 min6, on), 下面 (haa6 min6, under), 入面 (jap6 min6, inside), 出面 (ceot1 min6, outside).",
+      "words": [
+        {
+          "id": "location-001",
+          "c": "喺",
+          "j": "hai2",
+          "e": "At / in / on (to be)"
+        },
+        {
+          "id": "location-002",
+          "c": "上面",
+          "j": "soeng6 min6",
+          "e": "On top / above"
+        },
+        {
+          "id": "location-003",
+          "c": "下面",
+          "j": "haa6 min6",
+          "e": "Under / below"
+        },
+        {
+          "id": "location-004",
+          "c": "入面",
+          "j": "jap6 min6",
+          "e": "Inside"
+        },
+        {
+          "id": "location-005",
+          "c": "出面",
+          "j": "ceot1 min6",
+          "e": "Outside"
+        },
+        {
+          "id": "location-006",
+          "c": "隔籬",
+          "j": "gaak3 lei4",
+          "e": "Next to"
+        },
+        {
+          "id": "location-007",
+          "c": "旁邊",
+          "j": "pong4 bin1",
+          "e": "Beside"
+        },
+        {
+          "id": "location-008",
+          "c": "中間",
+          "j": "zung1 gaan1",
+          "e": "Middle / between"
+        },
+        {
+          "id": "location-009",
+          "c": "呢度",
+          "j": "ni1 dou6",
+          "e": "Here"
+        },
+        {
+          "id": "location-010",
+          "c": "嗰度",
+          "j": "go2 dou6",
+          "e": "There"
+        },
+        {
+          "id": "location-011",
+          "c": "前面",
+          "j": "cin4 min6",
+          "e": "In front"
+        },
+        {
+          "id": "location-012",
+          "c": "後面",
+          "j": "hau6 min6",
+          "e": "Behind"
+        }
+      ],
+      "sentences": [
+        {
+          "sid": "location-t1-s01",
+          "c": "我喺屋企。",
+          "j": "ngo5 hai2 uk1 kei2.",
+          "e": "I'm at home.",
+          "bd": [
+            {
+              "c": "我",
+              "j": "ngo5",
+              "e": "I"
+            },
+            {
+              "c": "喺",
+              "j": "hai2",
+              "e": "am at"
+            },
+            {
+              "c": "屋企",
+              "j": "uk1 kei2",
+              "e": "home"
+            }
+          ]
+        },
+        {
+          "sid": "location-t1-s02",
+          "c": "隻貓喺枱下面。",
+          "j": "zek3 maau1 hai2 toi2 haa6 min6.",
+          "e": "The cat is under the table.",
+          "bd": [
+            {
+              "c": "隻貓",
+              "j": "zek3 maau1",
+              "e": "the cat"
+            },
+            {
+              "c": "喺",
+              "j": "hai2",
+              "e": "is at"
+            },
+            {
+              "c": "枱",
+              "j": "toi2",
+              "e": "table"
+            },
+            {
+              "c": "下面",
+              "j": "haa6 min6",
+              "e": "underneath"
+            }
+          ]
+        },
+        {
+          "sid": "location-t1-s03",
+          "c": "你嘅銀包喺袋入面。",
+          "j": "nei5 ge3 ngan4 baau1 hai2 doi2 jap6 min6.",
+          "e": "Your wallet is inside the bag.",
+          "bd": [
+            {
+              "c": "你嘅",
+              "j": "nei5 ge3",
+              "e": "your"
+            },
+            {
+              "c": "銀包",
+              "j": "ngan4 baau1",
+              "e": "wallet"
+            },
+            {
+              "c": "喺",
+              "j": "hai2",
+              "e": "is in"
+            },
+            {
+              "c": "袋",
+              "j": "doi2",
+              "e": "bag"
+            },
+            {
+              "c": "入面",
+              "j": "jap6 min6",
+              "e": "inside"
+            }
+          ]
+        },
+        {
+          "sid": "location-t1-s04",
+          "c": "銀行喺郵局隔籬。",
+          "j": "ngan4 hong4 hai2 jau4 guk2 gaak3 lei4.",
+          "e": "The bank is next to the post office.",
+          "bd": [
+            {
+              "c": "銀行",
+              "j": "ngan4 hong4",
+              "e": "bank"
+            },
+            {
+              "c": "喺",
+              "j": "hai2",
+              "e": "is at"
+            },
+            {
+              "c": "郵局",
+              "j": "jau4 guk2",
+              "e": "post office"
+            },
+            {
+              "c": "隔籬",
+              "j": "gaak3 lei4",
+              "e": "next to"
+            }
+          ]
+        },
+        {
+          "sid": "location-t1-s05",
+          "c": "我哋喺呢度等你。",
+          "j": "ngo5 dei6 hai2 ni1 dou6 dang2 nei5.",
+          "e": "We'll wait for you here.",
+          "bd": [
+            {
+              "c": "我哋",
+              "j": "ngo5 dei6",
+              "e": "we"
+            },
+            {
+              "c": "喺",
+              "j": "hai2",
+              "e": "at"
+            },
+            {
+              "c": "呢度",
+              "j": "ni1 dou6",
+              "e": "here"
+            },
+            {
+              "c": "等你",
+              "j": "dang2 nei5",
+              "e": "wait for you"
+            }
+          ]
+        }
+      ],
+      "convo": {
+        "title": "Where is it?",
+        "speakers": [
+          "Friend",
+          "You"
+        ],
+        "lines": [
+          {
+            "u": false,
+            "c": "我本書喺邊度呀？",
+            "j": "ngo5 bun2 syu1 hai2 bin1 dou6 aa3?",
+            "e": "Where's my book?",
+            "bd": [
+              {
+                "c": "我",
+                "j": "ngo5",
+                "e": "my"
+              },
+              {
+                "c": "本書",
+                "j": "bun2 syu1",
+                "e": "book"
+              },
+              {
+                "c": "喺",
+                "j": "hai2",
+                "e": "is at"
+              },
+              {
+                "c": "邊度",
+                "j": "bin1 dou6",
+                "e": "where"
+              },
+              {
+                "c": "呀",
+                "j": "aa3",
+                "e": "(particle)"
+              }
+            ]
+          },
+          {
+            "u": true,
+            "c": "喺張枱上面。",
+            "j": "hai2 zoeng1 toi2 soeng6 min6.",
+            "e": "On the table.",
+            "bd": [
+              {
+                "c": "喺",
+                "j": "hai2",
+                "e": "at"
+              },
+              {
+                "c": "張枱",
+                "j": "zoeng1 toi2",
+                "e": "the table"
+              },
+              {
+                "c": "上面",
+                "j": "soeng6 min6",
+                "e": "on top"
+              }
+            ]
+          },
+          {
+            "u": false,
+            "c": "冇喎，唔喺度。",
+            "j": "mou5 wo3, m4 hai2 dou6.",
+            "e": "No, it's not there.",
+            "bd": [
+              {
+                "c": "冇",
+                "j": "mou5",
+                "e": "no / not there"
+              },
+              {
+                "c": "喎",
+                "j": "wo3",
+                "e": "(particle)"
+              },
+              {
+                "c": "唔喺度",
+                "j": "m4 hai2 dou6",
+                "e": "not here"
+              }
+            ]
+          },
+          {
+            "u": true,
+            "c": "咁睇下櫈下面。",
+            "j": "gam2 tai2 haa5 dang3 haa6 min6.",
+            "e": "Then look under the chair.",
+            "bd": [
+              {
+                "c": "咁",
+                "j": "gam2",
+                "e": "then"
+              },
+              {
+                "c": "睇下",
+                "j": "tai2 haa5",
+                "e": "have a look"
+              },
+              {
+                "c": "櫈",
+                "j": "dang3",
+                "e": "chair"
+              },
+              {
+                "c": "下面",
+                "j": "haa6 min6",
+                "e": "underneath"
+              }
+            ]
+          },
+          {
+            "u": false,
+            "c": "搵到喇！喺個袋入面。",
+            "j": "wan2 dou2 laa3! hai2 go3 doi2 jap6 min6.",
+            "e": "Found it! It's inside the bag.",
+            "bd": [
+              {
+                "c": "搵到",
+                "j": "wan2 dou2",
+                "e": "found it"
+              },
+              {
+                "c": "喇",
+                "j": "laa3",
+                "e": "(particle)"
+              },
+              {
+                "c": "喺",
+                "j": "hai2",
+                "e": "in"
+              },
+              {
+                "c": "個袋",
+                "j": "go3 doi2",
+                "e": "the bag"
+              },
+              {
+                "c": "入面",
+                "j": "jap6 min6",
+                "e": "inside"
+              }
+            ]
+          },
+          {
+            "u": true,
+            "c": "好彩！",
+            "j": "hou2 coi2!",
+            "e": "Lucky!",
+            "bd": [
+              {
+                "c": "好彩",
+                "j": "hou2 coi2",
+                "e": "lucky"
+              }
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "_sidSeq": 5
+}
