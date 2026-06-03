@@ -5,7 +5,7 @@
       "label": "Beginner",
       "icon": "🌱",
       "level": "Beginner",
-      "desc": "Foundations: greet people, count, talk about family, food, time, and getting around.",
+      "desc": "Start here. Everything you need to function in Cantonese — greetings to emergencies — in 8 themed chapters.",
       "lessons": [
         {
           "topic": "greetings",
@@ -28,11 +28,7 @@
           "round": 1
         },
         {
-          "topic": "family",
-          "round": 1
-        },
-        {
-          "topic": "time",
+          "topic": "particles",
           "round": 1
         },
         {
@@ -40,7 +36,31 @@
           "round": 1
         },
         {
+          "topic": "time",
+          "round": 1
+        },
+        {
           "topic": "food",
+          "round": 1
+        },
+        {
+          "topic": "restaurant",
+          "round": 1
+        },
+        {
+          "topic": "cooking",
+          "round": 1
+        },
+        {
+          "topic": "shopping",
+          "round": 1
+        },
+        {
+          "topic": "family",
+          "round": 1
+        },
+        {
+          "topic": "friends",
           "round": 1
         },
         {
@@ -48,7 +68,7 @@
           "round": 1
         },
         {
-          "topic": "particles",
+          "topic": "body",
           "round": 1
         },
         {
@@ -56,11 +76,11 @@
           "round": 1
         },
         {
-          "topic": "body",
+          "topic": "animals",
           "round": 1
         },
         {
-          "topic": "shopping",
+          "topic": "weather",
           "round": 1
         },
         {
@@ -70,128 +90,9 @@
         {
           "topic": "transport",
           "round": 1
-        }
-      ],
-      "stages": [
-        {
-          "id": "beginner-s1",
-          "name": "Getting Started",
-          "topics": [
-            "greetings",
-            "yesno",
-            "numbers",
-            "phrases"
-          ],
-          "checkpoint": {
-            "id": "beginner-s1-cp",
-            "drillCap": 15,
-            "wordCap": 25,
-            "convo": "beginner-s1"
-          }
         },
         {
-          "id": "beginner-s2",
-          "name": "Everyday Talk",
-          "topics": [
-            "questions",
-            "family",
-            "time",
-            "tense"
-          ],
-          "checkpoint": {
-            "id": "beginner-s2-cp",
-            "drillCap": 15,
-            "wordCap": 25,
-            "convo": "beginner-s2"
-          }
-        },
-        {
-          "id": "beginner-s3",
-          "name": "Describing Things",
-          "topics": [
-            "food",
-            "feelings",
-            "particles",
-            "colors"
-          ],
-          "checkpoint": {
-            "id": "beginner-s3-cp",
-            "drillCap": 15,
-            "wordCap": 25,
-            "convo": "beginner-s3"
-          }
-        },
-        {
-          "id": "beginner-s4",
-          "name": "Out & About",
-          "topics": [
-            "body",
-            "shopping",
-            "directions",
-            "transport"
-          ],
-          "checkpoint": {
-            "id": "beginner-s4-cp",
-            "drillCap": 15,
-            "wordCap": 25,
-            "convo": "beginner-s4"
-          }
-        }
-      ]
-    },
-    {
-      "key": "intermediate",
-      "label": "Intermediate",
-      "icon": "🌿",
-      "level": "Intermediate",
-      "desc": "Going deeper: harder vocabulary on familiar topics, plus new everyday contexts.",
-      "lessons": [
-        {
-          "topic": "greetings",
-          "round": 2
-        },
-        {
-          "topic": "numbers",
-          "round": 2
-        },
-        {
-          "topic": "food",
-          "round": 2
-        },
-        {
-          "topic": "feelings",
-          "round": 2
-        },
-        {
-          "topic": "body",
-          "round": 2
-        },
-        {
-          "topic": "shopping",
-          "round": 2
-        },
-        {
-          "topic": "restaurant",
-          "round": 1
-        },
-        {
-          "topic": "weather",
-          "round": 1
-        },
-        {
-          "topic": "friends",
-          "round": 1
-        },
-        {
-          "topic": "home",
-          "round": 1
-        },
-        {
-          "topic": "cooking",
-          "round": 1
-        },
-        {
-          "topic": "animals",
+          "topic": "attractions",
           "round": 1
         },
         {
@@ -199,7 +100,7 @@
           "round": 1
         },
         {
-          "topic": "attractions",
+          "topic": "home",
           "round": 1
         },
         {
@@ -230,7 +131,170 @@
           "topic": "emergencies",
           "round": 1
         }
+      ],
+      "stages": [
+        {
+          "id": "beginner-s1",
+          "name": "First Words",
+          "topics": [
+            "greetings",
+            "yesno",
+            "numbers",
+            "phrases"
+          ],
+          "checkpoint": {
+            "id": "beginner-s1-cp",
+            "drillCap": 15,
+            "wordCap": 25,
+            "convo": "beginner-s1"
+          }
+        },
+        {
+          "id": "beginner-s2",
+          "name": "Asking & Answering",
+          "topics": [
+            "questions",
+            "particles",
+            "tense",
+            "time"
+          ],
+          "checkpoint": {
+            "id": "beginner-s2-cp",
+            "drillCap": 15,
+            "wordCap": 25,
+            "convo": "beginner-s2"
+          }
+        },
+        {
+          "id": "beginner-s3",
+          "name": "Eating & Drinking",
+          "topics": [
+            "food",
+            "restaurant",
+            "cooking",
+            "shopping"
+          ],
+          "checkpoint": {
+            "id": "beginner-s3-cp",
+            "drillCap": 15,
+            "wordCap": 25,
+            "convo": "beginner-s3"
+          }
+        },
+        {
+          "id": "beginner-s4",
+          "name": "Me & My People",
+          "topics": [
+            "family",
+            "friends",
+            "feelings",
+            "body"
+          ],
+          "checkpoint": {
+            "id": "beginner-s4-cp",
+            "drillCap": 15,
+            "wordCap": 25,
+            "convo": "beginner-s4"
+          }
+        },
+        {
+          "id": "beginner-s5",
+          "name": "Describing the World",
+          "topics": [
+            "colors",
+            "animals",
+            "weather"
+          ],
+          "checkpoint": {
+            "id": "beginner-s5-cp",
+            "drillCap": 15,
+            "wordCap": 25,
+            "convo": "beginner-s5"
+          }
+        },
+        {
+          "id": "beginner-s6",
+          "name": "Out & About",
+          "topics": [
+            "directions",
+            "transport",
+            "attractions",
+            "hotels"
+          ],
+          "checkpoint": {
+            "id": "beginner-s6-cp",
+            "drillCap": 15,
+            "wordCap": 25,
+            "convo": "beginner-s6"
+          }
+        },
+        {
+          "id": "beginner-s7",
+          "name": "Daily Life & Work",
+          "topics": [
+            "home",
+            "work",
+            "school",
+            "tech",
+            "money"
+          ],
+          "checkpoint": {
+            "id": "beginner-s7-cp",
+            "drillCap": 15,
+            "wordCap": 25,
+            "convo": "beginner-s7"
+          }
+        },
+        {
+          "id": "beginner-s8",
+          "name": "Activity & Safety",
+          "topics": [
+            "hobbies",
+            "sports",
+            "emergencies"
+          ],
+          "checkpoint": {
+            "id": "beginner-s8-cp",
+            "drillCap": 15,
+            "wordCap": 25,
+            "convo": "beginner-s8"
+          }
+        }
       ]
+    },
+    {
+      "key": "intermediate",
+      "label": "Intermediate",
+      "icon": "🌿",
+      "level": "Intermediate",
+      "desc": "Deeper tier-2 vocabulary and longer sentences. (Being rebuilt — more coming.)",
+      "lessons": [
+        {
+          "topic": "greetings",
+          "round": 2
+        },
+        {
+          "topic": "numbers",
+          "round": 2
+        },
+        {
+          "topic": "food",
+          "round": 2
+        },
+        {
+          "topic": "feelings",
+          "round": 2
+        },
+        {
+          "topic": "body",
+          "round": 2
+        },
+        {
+          "topic": "shopping",
+          "round": 2
+        }
+      ],
+      "stages": []
     },
     {
       "key": "advanced",
