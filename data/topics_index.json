@@ -419,6 +419,42 @@
       "wordCounts": {
         "1": 12
       }
+    },
+    {
+      "key": "clothing",
+      "label": "Clothing",
+      "icon": "👕",
+      "color": "#6B7DB3",
+      "rounds": [
+        1
+      ],
+      "wordCounts": {
+        "1": 12
+      }
+    },
+    {
+      "key": "classifiers",
+      "label": "Classifiers & Demonstratives",
+      "icon": "🔢",
+      "color": "#7B6BA8",
+      "rounds": [
+        1
+      ],
+      "wordCounts": {
+        "1": 12
+      }
+    },
+    {
+      "key": "adjectives",
+      "label": "Common Adjectives",
+      "icon": "📏",
+      "color": "#C77D3A",
+      "rounds": [
+        1
+      ],
+      "wordCounts": {
+        "1": 12
+      }
     }
   ]
 }

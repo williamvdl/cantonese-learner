@@ -1,0 +1,392 @@
+{
+  "meta": {
+    "label": "Classifiers & Demonstratives",
+    "icon": "🔢",
+    "color": "#7B6BA8"
+  },
+  "_idSeq": 12,
+  "rounds": {
+    "1": {
+      "note": "In Cantonese a <b>classifier</b> (measure word) sits between a number — or 呢 (ni1, this) / 嗰 (go2, that) — and the noun, a bit like “a slice of” or “a pair of”. So “one book” is 一本書 (jat1 bun2 syu1), literally “one [classifier] book”. Different nouns take different classifiers, but 個 (go3) is the safe all-purpose one when you’re unsure.",
+      "words": [
+        {
+          "id": "classifiers-001",
+          "c": "個",
+          "j": "go3",
+          "e": "General classifier"
+        },
+        {
+          "id": "classifiers-002",
+          "c": "隻",
+          "j": "zek3",
+          "e": "Classifier: animals / one of a pair"
+        },
+        {
+          "id": "classifiers-003",
+          "c": "條",
+          "j": "tiu4",
+          "e": "Classifier: long things"
+        },
+        {
+          "id": "classifiers-004",
+          "c": "張",
+          "j": "zoeng1",
+          "e": "Classifier: flat things"
+        },
+        {
+          "id": "classifiers-005",
+          "c": "本",
+          "j": "bun2",
+          "e": "Classifier: books"
+        },
+        {
+          "id": "classifiers-006",
+          "c": "杯",
+          "j": "bui1",
+          "e": "Classifier: cups / drinks"
+        },
+        {
+          "id": "classifiers-007",
+          "c": "件",
+          "j": "gin6",
+          "e": "Classifier: items / clothing"
+        },
+        {
+          "id": "classifiers-008",
+          "c": "對",
+          "j": "deoi3",
+          "e": "Classifier: pairs"
+        },
+        {
+          "id": "classifiers-009",
+          "c": "部",
+          "j": "bou6",
+          "e": "Classifier: machines"
+        },
+        {
+          "id": "classifiers-010",
+          "c": "呢個",
+          "j": "ni1 go3",
+          "e": "This (one)"
+        },
+        {
+          "id": "classifiers-011",
+          "c": "嗰個",
+          "j": "go2 go3",
+          "e": "That (one)"
+        },
+        {
+          "id": "classifiers-012",
+          "c": "呢啲",
+          "j": "ni1 di1",
+          "e": "These"
+        }
+      ],
+      "sentences": [
+        {
+          "sid": "classifiers-t1-s01",
+          "c": "我要一杯咖啡。",
+          "j": "ngo5 jiu3 jat1 bui1 gaa3 fe1.",
+          "e": "I want a cup of coffee.",
+          "bd": [
+            {
+              "c": "我要",
+              "j": "ngo5 jiu3",
+              "e": "I want"
+            },
+            {
+              "c": "一杯",
+              "j": "jat1 bui1",
+              "e": "one cup of"
+            },
+            {
+              "c": "咖啡",
+              "j": "gaa3 fe1",
+              "e": "coffee"
+            }
+          ]
+        },
+        {
+          "sid": "classifiers-t1-s02",
+          "c": "呢本書好好睇。",
+          "j": "ni1 bun2 syu1 hou2 hou2 tai2.",
+          "e": "This book is very good.",
+          "bd": [
+            {
+              "c": "呢本",
+              "j": "ni1 bun2",
+              "e": "this [book]"
+            },
+            {
+              "c": "書",
+              "j": "syu1",
+              "e": "book"
+            },
+            {
+              "c": "好好睇",
+              "j": "hou2 hou2 tai2",
+              "e": "very good (to read)"
+            }
+          ]
+        },
+        {
+          "sid": "classifiers-t1-s03",
+          "c": "嗰隻狗係邊個㗎？",
+          "j": "go2 zek3 gau2 hai6 bin1 go3 gaa3?",
+          "e": "Whose dog is that?",
+          "bd": [
+            {
+              "c": "嗰隻",
+              "j": "go2 zek3",
+              "e": "that [animal]"
+            },
+            {
+              "c": "狗",
+              "j": "gau2",
+              "e": "dog"
+            },
+            {
+              "c": "係",
+              "j": "hai6",
+              "e": "is"
+            },
+            {
+              "c": "邊個",
+              "j": "bin1 go3",
+              "e": "whose / who"
+            },
+            {
+              "c": "㗎",
+              "j": "gaa3",
+              "e": "(particle)"
+            }
+          ]
+        },
+        {
+          "sid": "classifiers-t1-s04",
+          "c": "我買咗兩件衫。",
+          "j": "ngo5 maai5 zo2 loeng5 gin6 saam1.",
+          "e": "I bought two tops.",
+          "bd": [
+            {
+              "c": "我買咗",
+              "j": "ngo5 maai5 zo2",
+              "e": "I bought"
+            },
+            {
+              "c": "兩件",
+              "j": "loeng5 gin6",
+              "e": "two [items]"
+            },
+            {
+              "c": "衫",
+              "j": "saam1",
+              "e": "tops"
+            }
+          ]
+        },
+        {
+          "sid": "classifiers-t1-s05",
+          "c": "呢啲生果幾錢呀？",
+          "j": "ni1 di1 saang1 gwo2 gei2 cin2 aa3?",
+          "e": "How much is this fruit?",
+          "bd": [
+            {
+              "c": "呢啲",
+              "j": "ni1 di1",
+              "e": "these"
+            },
+            {
+              "c": "生果",
+              "j": "saang1 gwo2",
+              "e": "fruit"
+            },
+            {
+              "c": "幾錢",
+              "j": "gei2 cin2",
+              "e": "how much"
+            },
+            {
+              "c": "呀",
+              "j": "aa3",
+              "e": "(particle)"
+            }
+          ]
+        }
+      ],
+      "convo": {
+        "title": "Choosing at a shop",
+        "speakers": [
+          "Shopkeeper",
+          "You"
+        ],
+        "lines": [
+          {
+            "u": false,
+            "c": "你想要邊個呀？",
+            "j": "nei5 soeng2 jiu3 bin1 go3 aa3?",
+            "e": "Which one would you like?",
+            "bd": [
+              {
+                "c": "你想要",
+                "j": "nei5 soeng2 jiu3",
+                "e": "which would you"
+              },
+              {
+                "c": "邊個",
+                "j": "bin1 go3",
+                "e": "which one"
+              },
+              {
+                "c": "呀",
+                "j": "aa3",
+                "e": "(particle)"
+              }
+            ]
+          },
+          {
+            "u": true,
+            "c": "我想要呢個。",
+            "j": "ngo5 soeng2 jiu3 ni1 go3.",
+            "e": "I would like this one.",
+            "bd": [
+              {
+                "c": "我想要",
+                "j": "ngo5 soeng2 jiu3",
+                "e": "I would like"
+              },
+              {
+                "c": "呢個",
+                "j": "ni1 go3",
+                "e": "this one"
+              }
+            ]
+          },
+          {
+            "u": false,
+            "c": "要幾多個呀？",
+            "j": "jiu3 gei2 do1 go3 aa3?",
+            "e": "How many?",
+            "bd": [
+              {
+                "c": "要",
+                "j": "jiu3",
+                "e": "want"
+              },
+              {
+                "c": "幾多個",
+                "j": "gei2 do1 go3",
+                "e": "how many"
+              },
+              {
+                "c": "呀",
+                "j": "aa3",
+                "e": "(particle)"
+              }
+            ]
+          },
+          {
+            "u": true,
+            "c": "要兩個，同埋嗰張枱。",
+            "j": "jiu3 loeng5 go3, tung4 maai4 go2 zoeng1 toi2.",
+            "e": "Two, and that table.",
+            "bd": [
+              {
+                "c": "要",
+                "j": "jiu3",
+                "e": "want"
+              },
+              {
+                "c": "兩個",
+                "j": "loeng5 go3",
+                "e": "two"
+              },
+              {
+                "c": "同埋",
+                "j": "tung4 maai4",
+                "e": "and also"
+              },
+              {
+                "c": "嗰張",
+                "j": "go2 zoeng1",
+                "e": "that [flat thing]"
+              },
+              {
+                "c": "枱",
+                "j": "toi2",
+                "e": "table"
+              }
+            ]
+          },
+          {
+            "u": false,
+            "c": "好，仲要唔要呢啲杯？",
+            "j": "hou2, zung6 jiu3 m4 jiu3 ni1 di1 bui1?",
+            "e": "Okay, do you want these cups too?",
+            "bd": [
+              {
+                "c": "好",
+                "j": "hou2",
+                "e": "okay"
+              },
+              {
+                "c": "仲",
+                "j": "zung6",
+                "e": "also"
+              },
+              {
+                "c": "要唔要",
+                "j": "jiu3 m4 jiu3",
+                "e": "want"
+              },
+              {
+                "c": "呢啲",
+                "j": "ni1 di1",
+                "e": "these"
+              },
+              {
+                "c": "杯",
+                "j": "bui1",
+                "e": "cups"
+              }
+            ]
+          },
+          {
+            "u": true,
+            "c": "唔使喇，呢個就夠喇。",
+            "j": "m4 sai2 laa3, ni1 go3 zau6 gau3 laa3.",
+            "e": "No need, this is enough.",
+            "bd": [
+              {
+                "c": "唔使",
+                "j": "m4 sai2",
+                "e": "no need"
+              },
+              {
+                "c": "喇",
+                "j": "laa3",
+                "e": "(particle)"
+              },
+              {
+                "c": "呢個",
+                "j": "ni1 go3",
+                "e": "this one"
+              },
+              {
+                "c": "就夠",
+                "j": "zau6 gau3",
+                "e": "is enough"
+              },
+              {
+                "c": "喇",
+                "j": "laa3",
+                "e": "(particle)"
+              }
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "_sidSeq": 5
+}

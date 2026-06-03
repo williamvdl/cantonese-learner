@@ -6,7 +6,7 @@
 // up a new service worker when this string changes. If you forget to bump it,
 // users will keep serving the old index.html from cache.
 
-const CACHE_VERSION = 'cantonese-teahouse-v60';
+const CACHE_VERSION = 'cantonese-teahouse-v62';
 
 // App shell — fetched at install time.
 // NOTE: when adding a new .js or .css file to the app, add it here too,
@@ -28,11 +28,12 @@ const SHELL_ASSETS = [
 
 // Topic JSONs — pre-cached so every topic works offline from first install
 const TOPIC_KEYS = [
-  'animals', 'attractions', 'body', 'colors', 'cooking', 'directions', 'drinks',
-  'emergencies', 'family', 'feelings', 'food', 'friends', 'fruitveg', 'greetings',
-  'hobbies', 'home', 'hotels', 'meatseafood', 'money', 'numbers', 'particles',
-  'phrases', 'questions', 'restaurant', 'school', 'shopping', 'sports', 'tech',
-  'tense', 'time', 'transport', 'weather', 'work', 'yesno',
+  'adjectives', 'animals', 'attractions', 'body', 'classifiers', 'clothing', 'colors',
+  'cooking', 'directions', 'drinks', 'emergencies', 'family', 'feelings', 'food',
+  'friends', 'fruitveg', 'greetings', 'hobbies', 'home', 'hotels', 'meatseafood',
+  'money', 'numbers', 'particles', 'phrases', 'questions', 'restaurant', 'school',
+  'shopping', 'sports', 'tech', 'tense', 'time', 'transport', 'weather',
+  'work', 'yesno',
 ];
 const TOPIC_ASSETS = TOPIC_KEYS.map(k => `./data/topics/${k}.json`);
 

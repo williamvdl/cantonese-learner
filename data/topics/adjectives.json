@@ -1,0 +1,397 @@
+{
+  "meta": {
+    "label": "Common Adjectives",
+    "icon": "📏",
+    "color": "#C77D3A"
+  },
+  "_idSeq": 12,
+  "rounds": {
+    "1": {
+      "note": "In everyday Cantonese an adjective usually comes after 好 (hou2, very) even when you just mean “is”: 好大 (hou2 daai6) = “(is) big”. Make it negative with 唔 (m4, not) in front — 唔大 (m4 daai6) = “not big”; and use 太 (taai3) for “too…” — 太貴 (taai3 gwai3) = “too expensive”.",
+      "words": [
+        {
+          "id": "adjectives-001",
+          "c": "大",
+          "j": "daai6",
+          "e": "Big"
+        },
+        {
+          "id": "adjectives-002",
+          "c": "細",
+          "j": "sai3",
+          "e": "Small"
+        },
+        {
+          "id": "adjectives-003",
+          "c": "多",
+          "j": "do1",
+          "e": "Many / much"
+        },
+        {
+          "id": "adjectives-004",
+          "c": "少",
+          "j": "siu2",
+          "e": "Few / little"
+        },
+        {
+          "id": "adjectives-005",
+          "c": "快",
+          "j": "faai3",
+          "e": "Fast"
+        },
+        {
+          "id": "adjectives-006",
+          "c": "慢",
+          "j": "maan6",
+          "e": "Slow"
+        },
+        {
+          "id": "adjectives-007",
+          "c": "新",
+          "j": "san1",
+          "e": "New"
+        },
+        {
+          "id": "adjectives-008",
+          "c": "舊",
+          "j": "gau6",
+          "e": "Old (things)"
+        },
+        {
+          "id": "adjectives-009",
+          "c": "長",
+          "j": "coeng4",
+          "e": "Long"
+        },
+        {
+          "id": "adjectives-010",
+          "c": "短",
+          "j": "dyun2",
+          "e": "Short"
+        },
+        {
+          "id": "adjectives-011",
+          "c": "高",
+          "j": "gou1",
+          "e": "Tall / high"
+        },
+        {
+          "id": "adjectives-012",
+          "c": "矮",
+          "j": "ai2",
+          "e": "Short (height)"
+        }
+      ],
+      "sentences": [
+        {
+          "sid": "adjectives-t1-s01",
+          "c": "呢間屋好大。",
+          "j": "ni1 gaan1 uk1 hou2 daai6.",
+          "e": "This house is very big.",
+          "bd": [
+            {
+              "c": "呢間",
+              "j": "ni1 gaan1",
+              "e": "this [building]"
+            },
+            {
+              "c": "屋",
+              "j": "uk1",
+              "e": "house"
+            },
+            {
+              "c": "好大",
+              "j": "hou2 daai6",
+              "e": "very big"
+            }
+          ]
+        },
+        {
+          "sid": "adjectives-t1-s02",
+          "c": "我部電話太舊喇。",
+          "j": "ngo5 bou6 din6 waa2 taai3 gau6 laa3.",
+          "e": "My phone is too old.",
+          "bd": [
+            {
+              "c": "我",
+              "j": "ngo5",
+              "e": "my"
+            },
+            {
+              "c": "部",
+              "j": "bou6",
+              "e": "[machine]"
+            },
+            {
+              "c": "電話",
+              "j": "din6 waa2",
+              "e": "phone"
+            },
+            {
+              "c": "太舊",
+              "j": "taai3 gau6",
+              "e": "too old"
+            },
+            {
+              "c": "喇",
+              "j": "laa3",
+              "e": "(particle)"
+            }
+          ]
+        },
+        {
+          "sid": "adjectives-t1-s03",
+          "c": "佢行得好快。",
+          "j": "keoi5 haang4 dak1 hou2 faai3.",
+          "e": "He walks very fast.",
+          "bd": [
+            {
+              "c": "佢",
+              "j": "keoi5",
+              "e": "he"
+            },
+            {
+              "c": "行得",
+              "j": "haang4 dak1",
+              "e": "walks"
+            },
+            {
+              "c": "好快",
+              "j": "hou2 faai3",
+              "e": "very fast"
+            }
+          ]
+        },
+        {
+          "sid": "adjectives-t1-s04",
+          "c": "今日人好多。",
+          "j": "gam1 jat6 jan4 hou2 do1.",
+          "e": "There are a lot of people today.",
+          "bd": [
+            {
+              "c": "今日",
+              "j": "gam1 jat6",
+              "e": "today"
+            },
+            {
+              "c": "人",
+              "j": "jan4",
+              "e": "people"
+            },
+            {
+              "c": "好多",
+              "j": "hou2 do1",
+              "e": "very many"
+            }
+          ]
+        },
+        {
+          "sid": "adjectives-t1-s05",
+          "c": "呢條裙太長喇。",
+          "j": "ni1 tiu4 kwan4 taai3 coeng4 laa3.",
+          "e": "This skirt is too long.",
+          "bd": [
+            {
+              "c": "呢條",
+              "j": "ni1 tiu4",
+              "e": "this [long thing]"
+            },
+            {
+              "c": "裙",
+              "j": "kwan4",
+              "e": "skirt"
+            },
+            {
+              "c": "太長",
+              "j": "taai3 coeng4",
+              "e": "too long"
+            },
+            {
+              "c": "喇",
+              "j": "laa3",
+              "e": "(particle)"
+            }
+          ]
+        }
+      ],
+      "convo": {
+        "title": "Looking at a flat",
+        "speakers": [
+          "Friend",
+          "You"
+        ],
+        "lines": [
+          {
+            "u": false,
+            "c": "你覺得呢間屋點呀？",
+            "j": "nei5 gok3 dak1 ni1 gaan1 uk1 dim2 aa3?",
+            "e": "What do you think of this place?",
+            "bd": [
+              {
+                "c": "你覺得",
+                "j": "nei5 gok3 dak1",
+                "e": "do you think"
+              },
+              {
+                "c": "呢間屋",
+                "j": "ni1 gaan1 uk1",
+                "e": "this house"
+              },
+              {
+                "c": "點",
+                "j": "dim2",
+                "e": "how / what about"
+              },
+              {
+                "c": "呀",
+                "j": "aa3",
+                "e": "(particle)"
+              }
+            ]
+          },
+          {
+            "u": true,
+            "c": "好大，不過有啲舊。",
+            "j": "hou2 daai6, bat1 gwo3 jau5 di1 gau6.",
+            "e": "Very big, but a bit old.",
+            "bd": [
+              {
+                "c": "好大",
+                "j": "hou2 daai6",
+                "e": "very big"
+              },
+              {
+                "c": "不過",
+                "j": "bat1 gwo3",
+                "e": "but"
+              },
+              {
+                "c": "有啲",
+                "j": "jau5 di1",
+                "e": "a bit"
+              },
+              {
+                "c": "舊",
+                "j": "gau6",
+                "e": "old"
+              }
+            ]
+          },
+          {
+            "u": false,
+            "c": "嗰間就新啲，但係細啲。",
+            "j": "go2 gaan1 zau6 san1 di1, daan6 hai6 sai3 di1.",
+            "e": "That one's newer, but smaller.",
+            "bd": [
+              {
+                "c": "嗰間",
+                "j": "go2 gaan1",
+                "e": "that one"
+              },
+              {
+                "c": "就",
+                "j": "zau6",
+                "e": "then / is"
+              },
+              {
+                "c": "新啲",
+                "j": "san1 di1",
+                "e": "newer"
+              },
+              {
+                "c": "但係",
+                "j": "daan6 hai6",
+                "e": "but"
+              },
+              {
+                "c": "細啲",
+                "j": "sai3 di1",
+                "e": "smaller"
+              }
+            ]
+          },
+          {
+            "u": true,
+            "c": "租金貴唔貴呀？",
+            "j": "zou1 gam1 gwai3 m4 gwai3 aa3?",
+            "e": "Is the rent expensive?",
+            "bd": [
+              {
+                "c": "租金",
+                "j": "zou1 gam1",
+                "e": "rent"
+              },
+              {
+                "c": "貴唔貴",
+                "j": "gwai3 m4 gwai3",
+                "e": "expensive or not"
+              },
+              {
+                "c": "呀",
+                "j": "aa3",
+                "e": "(particle)"
+              }
+            ]
+          },
+          {
+            "u": false,
+            "c": "唔算貴，仲幾平。",
+            "j": "m4 syun3 gwai3, zung6 gei2 peng4.",
+            "e": "Not really — quite cheap, actually.",
+            "bd": [
+              {
+                "c": "唔算",
+                "j": "m4 syun3",
+                "e": "not really"
+              },
+              {
+                "c": "貴",
+                "j": "gwai3",
+                "e": "expensive"
+              },
+              {
+                "c": "仲",
+                "j": "zung6",
+                "e": "even"
+              },
+              {
+                "c": "幾平",
+                "j": "gei2 peng4",
+                "e": "quite cheap"
+              }
+            ]
+          },
+          {
+            "u": true,
+            "c": "咁我鍾意新嗰間。",
+            "j": "gam2 ngo5 zung1 ji3 san1 go2 gaan1.",
+            "e": "Then I like the new one.",
+            "bd": [
+              {
+                "c": "咁",
+                "j": "gam2",
+                "e": "then"
+              },
+              {
+                "c": "我鍾意",
+                "j": "ngo5 zung1 ji3",
+                "e": "I like"
+              },
+              {
+                "c": "新",
+                "j": "san1",
+                "e": "new"
+              },
+              {
+                "c": "嗰間",
+                "j": "go2 gaan1",
+                "e": "that one"
+              }
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "_sidSeq": 5
+}
