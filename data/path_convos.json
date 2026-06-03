@@ -333,6 +333,2804 @@
           ]
         }
       ]
+    },
+    "beginner-s2": {
+      "title": "Making weekend plans",
+      "speakers": [
+        "Friend",
+        "You"
+      ],
+      "lines": [
+        {
+          "u": false,
+          "c": "喂！你食咗飯未呀？",
+          "j": "wai3! nei5 sik6 zo2 faan6 mei6 aa3?",
+          "e": "Hey! Have you eaten yet?",
+          "bd": [
+            {
+              "c": "喂",
+              "j": "wai3",
+              "e": "hey"
+            },
+            {
+              "c": "食咗",
+              "j": "sik6 zo2",
+              "e": "have eaten"
+            },
+            {
+              "c": "飯",
+              "j": "faan6",
+              "e": "rice / a meal"
+            },
+            {
+              "c": "未",
+              "j": "mei6",
+              "e": "yet"
+            },
+            {
+              "c": "呀",
+              "j": "aa3",
+              "e": "(question particle)"
+            }
+          ]
+        },
+        {
+          "u": true,
+          "c": "未呀，仲未食。點解問呢？",
+          "j": "mei6 aa3, zung6 mei6 sik6. dim2 gaai2 man6 ne1?",
+          "e": "Not yet, still haven't eaten. Why do you ask?",
+          "bd": [
+            {
+              "c": "未",
+              "j": "mei6",
+              "e": "not yet"
+            },
+            {
+              "c": "仲未",
+              "j": "zung6 mei6",
+              "e": "still haven't"
+            },
+            {
+              "c": "食",
+              "j": "sik6",
+              "e": "eat"
+            },
+            {
+              "c": "點解",
+              "j": "dim2 gaai2",
+              "e": "why"
+            },
+            {
+              "c": "問",
+              "j": "man6",
+              "e": "ask"
+            },
+            {
+              "c": "呢",
+              "j": "ne1",
+              "e": "(and...?)"
+            }
+          ]
+        },
+        {
+          "u": false,
+          "c": "不如而家一齊去飲茶啦！你得唔得閒呀？",
+          "j": "bat1 jyu4 ji4 gaa1 jat1 cai4 heoi3 jam2 caa4 laa1! nei5 dak1 m4 dak1 haan4 aa3?",
+          "e": "Then let's go for yum cha now! Are you free?",
+          "bd": [
+            {
+              "c": "不如",
+              "j": "bat1 jyu4",
+              "e": "how about"
+            },
+            {
+              "c": "而家",
+              "j": "ji4 gaa1",
+              "e": "now"
+            },
+            {
+              "c": "一齊",
+              "j": "jat1 cai4",
+              "e": "together"
+            },
+            {
+              "c": "去",
+              "j": "heoi3",
+              "e": "go"
+            },
+            {
+              "c": "飲茶",
+              "j": "jam2 caa4",
+              "e": "yum cha"
+            },
+            {
+              "c": "啦",
+              "j": "laa1",
+              "e": "(suggestion particle)"
+            },
+            {
+              "c": "得唔得閒",
+              "j": "dak1 m4 dak1 haan4",
+              "e": "free or not"
+            }
+          ]
+        },
+        {
+          "u": true,
+          "c": "而家唔得喎，我要返工。星期六呢？",
+          "j": "ji4 gaa1 m4 dak1 wo3, ngo5 jiu3 faan1 gung1. sing1 kei4 luk6 ne1?",
+          "e": "Now's no good — I have to work. What about Saturday?",
+          "bd": [
+            {
+              "c": "而家",
+              "j": "ji4 gaa1",
+              "e": "now"
+            },
+            {
+              "c": "唔得",
+              "j": "m4 dak1",
+              "e": "no good"
+            },
+            {
+              "c": "喎",
+              "j": "wo3",
+              "e": "(noting particle)"
+            },
+            {
+              "c": "我",
+              "j": "ngo5",
+              "e": "I"
+            },
+            {
+              "c": "要",
+              "j": "jiu3",
+              "e": "have to"
+            },
+            {
+              "c": "返工",
+              "j": "faan1 gung1",
+              "e": "go to work"
+            },
+            {
+              "c": "星期六",
+              "j": "sing1 kei4 luk6",
+              "e": "Saturday"
+            },
+            {
+              "c": "呢",
+              "j": "ne1",
+              "e": "(what about...?)"
+            }
+          ]
+        },
+        {
+          "u": false,
+          "c": "星期六得呀！你去過嗰間茶樓未呀？",
+          "j": "sing1 kei4 luk6 dak1 aa3! nei5 heoi3 gwo3 go2 gaan1 caa4 lau4 mei6 aa3?",
+          "e": "Saturday works! Have you been to that teahouse before?",
+          "bd": [
+            {
+              "c": "星期六",
+              "j": "sing1 kei4 luk6",
+              "e": "Saturday"
+            },
+            {
+              "c": "得呀",
+              "j": "dak1 aa3",
+              "e": "works"
+            },
+            {
+              "c": "去過",
+              "j": "heoi3 gwo3",
+              "e": "been before"
+            },
+            {
+              "c": "嗰間",
+              "j": "go2 gaan1",
+              "e": "that"
+            },
+            {
+              "c": "茶樓",
+              "j": "caa4 lau4",
+              "e": "teahouse"
+            },
+            {
+              "c": "未",
+              "j": "mei6",
+              "e": "yet"
+            },
+            {
+              "c": "呀",
+              "j": "aa3",
+              "e": "(question particle)"
+            }
+          ]
+        },
+        {
+          "u": true,
+          "c": "未去過喎。我哋幾時見面？",
+          "j": "mei6 heoi3 gwo3 wo3. ngo5 dei6 gei2 si4 gin3 min6?",
+          "e": "I haven't. When shall we meet?",
+          "bd": [
+            {
+              "c": "未",
+              "j": "mei6",
+              "e": "not yet"
+            },
+            {
+              "c": "去過",
+              "j": "heoi3 gwo3",
+              "e": "been"
+            },
+            {
+              "c": "喎",
+              "j": "wo3",
+              "e": "(noting particle)"
+            },
+            {
+              "c": "我哋",
+              "j": "ngo5 dei6",
+              "e": "we"
+            },
+            {
+              "c": "幾時",
+              "j": "gei2 si4",
+              "e": "when"
+            },
+            {
+              "c": "見面",
+              "j": "gin3 min6",
+              "e": "meet"
+            }
+          ]
+        },
+        {
+          "u": false,
+          "c": "朝早十點得唔得呀？",
+          "j": "ziu1 zou2 sap6 dim2 dak1 m4 dak1 aa3?",
+          "e": "Is 10 in the morning okay?",
+          "bd": [
+            {
+              "c": "朝早",
+              "j": "ziu1 zou2",
+              "e": "morning"
+            },
+            {
+              "c": "十點",
+              "j": "sap6 dim2",
+              "e": "ten o'clock"
+            },
+            {
+              "c": "得唔得",
+              "j": "dak1 m4 dak1",
+              "e": "ok or not"
+            },
+            {
+              "c": "呀",
+              "j": "aa3",
+              "e": "(question particle)"
+            }
+          ]
+        },
+        {
+          "u": true,
+          "c": "好呀！邊個一齊去呀？",
+          "j": "hou2 aa3! bin1 go3 jat1 cai4 heoi3 aa3?",
+          "e": "Great! Who else is coming?",
+          "bd": [
+            {
+              "c": "好呀",
+              "j": "hou2 aa3",
+              "e": "great"
+            },
+            {
+              "c": "邊個",
+              "j": "bin1 go3",
+              "e": "who"
+            },
+            {
+              "c": "一齊",
+              "j": "jat1 cai4",
+              "e": "together"
+            },
+            {
+              "c": "去",
+              "j": "heoi3",
+              "e": "go"
+            },
+            {
+              "c": "呀",
+              "j": "aa3",
+              "e": "(question particle)"
+            }
+          ]
+        },
+        {
+          "u": false,
+          "c": "得我哋兩個咋，我已經諗好喇。",
+          "j": "dak1 ngo5 dei6 loeng5 go3 zaa3, ngo5 ji5 ging1 nam2 hou2 laa3.",
+          "e": "Just the two of us — I've already decided.",
+          "bd": [
+            {
+              "c": "得",
+              "j": "dak1",
+              "e": "only"
+            },
+            {
+              "c": "我哋",
+              "j": "ngo5 dei6",
+              "e": "we"
+            },
+            {
+              "c": "兩個",
+              "j": "loeng5 go3",
+              "e": "two"
+            },
+            {
+              "c": "咋",
+              "j": "zaa3",
+              "e": "(only — particle)"
+            },
+            {
+              "c": "已經",
+              "j": "ji5 ging1",
+              "e": "already"
+            },
+            {
+              "c": "諗好",
+              "j": "nam2 hou2",
+              "e": "decided"
+            },
+            {
+              "c": "喇",
+              "j": "laa3",
+              "e": "(completion particle)"
+            }
+          ]
+        },
+        {
+          "u": true,
+          "c": "明白喇！星期六朝早見啦！",
+          "j": "ming4 baak6 laa3! sing1 kei4 luk6 ziu1 zou2 gin3 laa1!",
+          "e": "Got it! See you Saturday morning!",
+          "bd": [
+            {
+              "c": "明白",
+              "j": "ming4 baak6",
+              "e": "understand"
+            },
+            {
+              "c": "喇",
+              "j": "laa3",
+              "e": "(completion particle)"
+            },
+            {
+              "c": "星期六",
+              "j": "sing1 kei4 luk6",
+              "e": "Saturday"
+            },
+            {
+              "c": "朝早",
+              "j": "ziu1 zou2",
+              "e": "morning"
+            },
+            {
+              "c": "見",
+              "j": "gin3",
+              "e": "see"
+            },
+            {
+              "c": "啦",
+              "j": "laa1",
+              "e": "(particle)"
+            }
+          ]
+        }
+      ]
+    },
+    "beginner-s3": {
+      "title": "Ordering at a restaurant",
+      "speakers": [
+        "Waiter",
+        "You"
+      ],
+      "lines": [
+        {
+          "u": false,
+          "c": "你好！呢個係餐牌，想落單未呀？",
+          "j": "nei5 hou2! ni1 go3 hai6 caan1 paai4, soeng2 lok6 daan1 mei6 aa3?",
+          "e": "Hello! Here's the menu — ready to order?",
+          "bd": [
+            {
+              "c": "你好",
+              "j": "nei5 hou2",
+              "e": "hello"
+            },
+            {
+              "c": "呢個",
+              "j": "ni1 go3",
+              "e": "this"
+            },
+            {
+              "c": "係",
+              "j": "hai6",
+              "e": "is"
+            },
+            {
+              "c": "餐牌",
+              "j": "caan1 paai4",
+              "e": "menu"
+            },
+            {
+              "c": "想",
+              "j": "soeng2",
+              "e": "want to"
+            },
+            {
+              "c": "落單",
+              "j": "lok6 daan1",
+              "e": "order"
+            },
+            {
+              "c": "未",
+              "j": "mei6",
+              "e": "yet"
+            },
+            {
+              "c": "呀",
+              "j": "aa3",
+              "e": "(question particle)"
+            }
+          ]
+        },
+        {
+          "u": true,
+          "c": "我好餓，想要啲點心。",
+          "j": "ngo5 hou2 ngo6, soeng2 jiu3 di1 dim2 sam1.",
+          "e": "I'm very hungry — I'd like some dim sum.",
+          "bd": [
+            {
+              "c": "我",
+              "j": "ngo5",
+              "e": "I"
+            },
+            {
+              "c": "好餓",
+              "j": "hou2 ngo6",
+              "e": "very hungry"
+            },
+            {
+              "c": "想要",
+              "j": "soeng2 jiu3",
+              "e": "would like"
+            },
+            {
+              "c": "啲",
+              "j": "di1",
+              "e": "some"
+            },
+            {
+              "c": "點心",
+              "j": "dim2 sam1",
+              "e": "dim sum"
+            }
+          ]
+        },
+        {
+          "u": false,
+          "c": "飲咩呀？凍茶定熱茶？",
+          "j": "jam2 me1 aa3? dung3 caa4 ding6 jit6 caa4?",
+          "e": "What to drink? Cold tea or hot tea?",
+          "bd": [
+            {
+              "c": "飲",
+              "j": "jam2",
+              "e": "drink"
+            },
+            {
+              "c": "咩",
+              "j": "me1",
+              "e": "what"
+            },
+            {
+              "c": "呀",
+              "j": "aa3",
+              "e": "(particle)"
+            },
+            {
+              "c": "凍茶",
+              "j": "dung3 caa4",
+              "e": "cold tea"
+            },
+            {
+              "c": "定",
+              "j": "ding6",
+              "e": "or"
+            },
+            {
+              "c": "熱茶",
+              "j": "jit6 caa4",
+              "e": "hot tea"
+            }
+          ]
+        },
+        {
+          "u": true,
+          "c": "熱茶啦，唔該。有冇魚同蔬菜？",
+          "j": "jit6 caa4 laa1, m4 goi1. jau5 mou5 jyu2 tung4 so1 coi3?",
+          "e": "Hot tea please. Do you have fish and vegetables?",
+          "bd": [
+            {
+              "c": "熱茶",
+              "j": "jit6 caa4",
+              "e": "hot tea"
+            },
+            {
+              "c": "啦",
+              "j": "laa1",
+              "e": "(particle)"
+            },
+            {
+              "c": "唔該",
+              "j": "m4 goi1",
+              "e": "please"
+            },
+            {
+              "c": "有冇",
+              "j": "jau5 mou5",
+              "e": "do you have"
+            },
+            {
+              "c": "魚",
+              "j": "jyu2",
+              "e": "fish"
+            },
+            {
+              "c": "同",
+              "j": "tung4",
+              "e": "and"
+            },
+            {
+              "c": "蔬菜",
+              "j": "so1 coi3",
+              "e": "vegetables"
+            }
+          ]
+        },
+        {
+          "u": false,
+          "c": "有呀，我哋啲魚係蒸嘅，好新鮮。",
+          "j": "jau5 aa3, ngo5 dei6 di1 jyu2 hai6 zing1 ge3, hou2 san1 sin1.",
+          "e": "Yes — our fish is steamed, very fresh.",
+          "bd": [
+            {
+              "c": "有呀",
+              "j": "jau5 aa3",
+              "e": "yes"
+            },
+            {
+              "c": "我哋",
+              "j": "ngo5 dei6",
+              "e": "our"
+            },
+            {
+              "c": "啲",
+              "j": "di1",
+              "e": "the"
+            },
+            {
+              "c": "魚",
+              "j": "jyu2",
+              "e": "fish"
+            },
+            {
+              "c": "係",
+              "j": "hai6",
+              "e": "is"
+            },
+            {
+              "c": "蒸",
+              "j": "zing1",
+              "e": "steamed"
+            },
+            {
+              "c": "嘅",
+              "j": "ge3",
+              "e": "(particle)"
+            },
+            {
+              "c": "好新鮮",
+              "j": "hou2 san1 sin1",
+              "e": "very fresh"
+            }
+          ]
+        },
+        {
+          "u": true,
+          "c": "好呀，要一條蒸魚同啲蔬菜。",
+          "j": "hou2 aa3, jiu3 jat1 tiu4 zing1 jyu2 tung4 di1 so1 coi3.",
+          "e": "Great, I'll have a steamed fish and some vegetables.",
+          "bd": [
+            {
+              "c": "好呀",
+              "j": "hou2 aa3",
+              "e": "great"
+            },
+            {
+              "c": "要",
+              "j": "jiu3",
+              "e": "want"
+            },
+            {
+              "c": "一條",
+              "j": "jat1 tiu4",
+              "e": "one (long thing)"
+            },
+            {
+              "c": "蒸魚",
+              "j": "zing1 jyu2",
+              "e": "steamed fish"
+            },
+            {
+              "c": "同",
+              "j": "tung4",
+              "e": "and"
+            },
+            {
+              "c": "啲",
+              "j": "di1",
+              "e": "some"
+            },
+            {
+              "c": "蔬菜",
+              "j": "so1 coi3",
+              "e": "vegetables"
+            }
+          ]
+        },
+        {
+          "u": false,
+          "c": "食得飽未呀？",
+          "j": "sik6 dak1 baau2 mei6 aa3?",
+          "e": "Are you full?",
+          "bd": [
+            {
+              "c": "食",
+              "j": "sik6",
+              "e": "eat"
+            },
+            {
+              "c": "得飽",
+              "j": "dak1 baau2",
+              "e": "full"
+            },
+            {
+              "c": "未",
+              "j": "mei6",
+              "e": "yet"
+            },
+            {
+              "c": "呀",
+              "j": "aa3",
+              "e": "(question particle)"
+            }
+          ]
+        },
+        {
+          "u": true,
+          "c": "好飽喇，好好食！唔該埋單。",
+          "j": "hou2 baau2 laa3, hou2 hou2 sik6! m4 goi1 maai4 daan1.",
+          "e": "Very full — delicious! Bill please.",
+          "bd": [
+            {
+              "c": "好飽",
+              "j": "hou2 baau2",
+              "e": "very full"
+            },
+            {
+              "c": "喇",
+              "j": "laa3",
+              "e": "(completion particle)"
+            },
+            {
+              "c": "好好食",
+              "j": "hou2 hou2 sik6",
+              "e": "very tasty"
+            },
+            {
+              "c": "唔該",
+              "j": "m4 goi1",
+              "e": "please"
+            },
+            {
+              "c": "埋單",
+              "j": "maai4 daan1",
+              "e": "the bill"
+            }
+          ]
+        },
+        {
+          "u": false,
+          "c": "一共二百蚊，要唔要收據呀？",
+          "j": "jat1 gung6 ji6 baak3 man1, jiu3 m4 jiu3 sau1 geoi3 aa3?",
+          "e": "Two hundred dollars in total — would you like a receipt?",
+          "bd": [
+            {
+              "c": "一共",
+              "j": "jat1 gung6",
+              "e": "in total"
+            },
+            {
+              "c": "二百蚊",
+              "j": "ji6 baak3 man1",
+              "e": "200 dollars"
+            },
+            {
+              "c": "要唔要",
+              "j": "jiu3 m4 jiu3",
+              "e": "want or not"
+            },
+            {
+              "c": "收據",
+              "j": "sau1 geoi3",
+              "e": "receipt"
+            },
+            {
+              "c": "呀",
+              "j": "aa3",
+              "e": "(question particle)"
+            }
+          ]
+        },
+        {
+          "u": true,
+          "c": "要呀，多謝！下次我去超市買食材，自己煮畀你食。",
+          "j": "jiu3 aa3, do1 ze6! haa6 ci3 ngo5 heoi3 ciu1 si5 maai5 sik6 coi4, zi6 gei2 zyu2 bei2 nei5 sik6.",
+          "e": "Yes please, thanks! Next time I'll go to the supermarket, buy ingredients, and cook for you myself.",
+          "bd": [
+            {
+              "c": "要呀",
+              "j": "jiu3 aa3",
+              "e": "yes"
+            },
+            {
+              "c": "多謝",
+              "j": "do1 ze6",
+              "e": "thanks"
+            },
+            {
+              "c": "下次",
+              "j": "haa6 ci3",
+              "e": "next time"
+            },
+            {
+              "c": "去",
+              "j": "heoi3",
+              "e": "go"
+            },
+            {
+              "c": "超市",
+              "j": "ciu1 si5",
+              "e": "supermarket"
+            },
+            {
+              "c": "買",
+              "j": "maai5",
+              "e": "buy"
+            },
+            {
+              "c": "食材",
+              "j": "sik6 coi4",
+              "e": "ingredients"
+            },
+            {
+              "c": "自己煮",
+              "j": "zi6 gei2 zyu2",
+              "e": "cook myself"
+            },
+            {
+              "c": "畀你食",
+              "j": "bei2 nei5 sik6",
+              "e": "for you to eat"
+            }
+          ]
+        }
+      ]
+    },
+    "beginner-s4": {
+      "title": "Checking in on a friend",
+      "speakers": [
+        "Friend",
+        "You"
+      ],
+      "lines": [
+        {
+          "u": false,
+          "c": "你今日好似唔開心喎，做咩呀？",
+          "j": "nei5 gam1 jat6 hou2 ci5 m4 hoi1 sam1 wo3, zou6 me1 aa3?",
+          "e": "You seem unhappy today — what's wrong?",
+          "bd": [
+            {
+              "c": "你",
+              "j": "nei5",
+              "e": "you"
+            },
+            {
+              "c": "今日",
+              "j": "gam1 jat6",
+              "e": "today"
+            },
+            {
+              "c": "好似",
+              "j": "hou2 ci5",
+              "e": "seem"
+            },
+            {
+              "c": "唔開心",
+              "j": "m4 hoi1 sam1",
+              "e": "unhappy"
+            },
+            {
+              "c": "喎",
+              "j": "wo3",
+              "e": "(noting particle)"
+            },
+            {
+              "c": "做咩",
+              "j": "zou6 me1",
+              "e": "what's up"
+            },
+            {
+              "c": "呀",
+              "j": "aa3",
+              "e": "(particle)"
+            }
+          ]
+        },
+        {
+          "u": true,
+          "c": "我有啲擔心，我媽媽病咗。",
+          "j": "ngo5 jau5 di1 daam1 sam1, ngo5 maa4 maa1 beng6 zo2.",
+          "e": "I'm a bit worried — my mum is sick.",
+          "bd": [
+            {
+              "c": "我",
+              "j": "ngo5",
+              "e": "I"
+            },
+            {
+              "c": "有啲",
+              "j": "jau5 di1",
+              "e": "a bit"
+            },
+            {
+              "c": "擔心",
+              "j": "daam1 sam1",
+              "e": "worried"
+            },
+            {
+              "c": "媽媽",
+              "j": "maa4 maa1",
+              "e": "mum"
+            },
+            {
+              "c": "病咗",
+              "j": "beng6 zo2",
+              "e": "got sick"
+            }
+          ]
+        },
+        {
+          "u": false,
+          "c": "吓？佢邊度唔舒服呀？",
+          "j": "haa2? keoi5 bin1 dou6 m4 syu1 fuk6 aa3?",
+          "e": "Oh? Where doesn't she feel well?",
+          "bd": [
+            {
+              "c": "吓",
+              "j": "haa2",
+              "e": "oh / huh"
+            },
+            {
+              "c": "佢",
+              "j": "keoi5",
+              "e": "she"
+            },
+            {
+              "c": "邊度",
+              "j": "bin1 dou6",
+              "e": "where"
+            },
+            {
+              "c": "唔舒服",
+              "j": "m4 syu1 fuk6",
+              "e": "unwell"
+            },
+            {
+              "c": "呀",
+              "j": "aa3",
+              "e": "(question particle)"
+            }
+          ]
+        },
+        {
+          "u": true,
+          "c": "佢個頭好痛，仲有啲肚痛。",
+          "j": "keoi5 go3 tau4 hou2 tung3, zung6 jau5 di1 tou5 tung3.",
+          "e": "Her head really hurts, and her stomach aches a bit too.",
+          "bd": [
+            {
+              "c": "佢",
+              "j": "keoi5",
+              "e": "her"
+            },
+            {
+              "c": "個頭",
+              "j": "go3 tau4",
+              "e": "head"
+            },
+            {
+              "c": "好痛",
+              "j": "hou2 tung3",
+              "e": "really hurts"
+            },
+            {
+              "c": "仲有",
+              "j": "zung6 jau5",
+              "e": "also has"
+            },
+            {
+              "c": "啲",
+              "j": "di1",
+              "e": "a bit of"
+            },
+            {
+              "c": "肚痛",
+              "j": "tou5 tung3",
+              "e": "stomach ache"
+            }
+          ]
+        },
+        {
+          "u": false,
+          "c": "唉，咁你一定好擔心。你爸爸知唔知呀？",
+          "j": "aai1, gam2 nei5 jat1 ding6 hou2 daam1 sam1. nei5 baa4 baa1 zi1 m4 zi1 aa3?",
+          "e": "Aw, you must be so worried. Does your dad know?",
+          "bd": [
+            {
+              "c": "唉",
+              "j": "aai1",
+              "e": "(sigh)"
+            },
+            {
+              "c": "咁",
+              "j": "gam2",
+              "e": "so / then"
+            },
+            {
+              "c": "你",
+              "j": "nei5",
+              "e": "you"
+            },
+            {
+              "c": "一定",
+              "j": "jat1 ding6",
+              "e": "must"
+            },
+            {
+              "c": "好擔心",
+              "j": "hou2 daam1 sam1",
+              "e": "very worried"
+            },
+            {
+              "c": "爸爸",
+              "j": "baa4 baa1",
+              "e": "dad"
+            },
+            {
+              "c": "知唔知",
+              "j": "zi1 m4 zi1",
+              "e": "know or not"
+            },
+            {
+              "c": "呀",
+              "j": "aa3",
+              "e": "(particle)"
+            }
+          ]
+        },
+        {
+          "u": true,
+          "c": "知呀，佢同我姐姐而家照顧緊佢。",
+          "j": "zi1 aa3, keoi5 tung4 ngo5 ze4 ze1 ji4 gaa1 ziu3 gu3 gan2 keoi5.",
+          "e": "Yes — he and my older sister are looking after her now.",
+          "bd": [
+            {
+              "c": "知呀",
+              "j": "zi1 aa3",
+              "e": "yes"
+            },
+            {
+              "c": "佢",
+              "j": "keoi5",
+              "e": "he"
+            },
+            {
+              "c": "同",
+              "j": "tung4",
+              "e": "and"
+            },
+            {
+              "c": "姐姐",
+              "j": "ze4 ze1",
+              "e": "older sister"
+            },
+            {
+              "c": "而家",
+              "j": "ji4 gaa1",
+              "e": "now"
+            },
+            {
+              "c": "照顧緊",
+              "j": "ziu3 gu3 gan2",
+              "e": "looking after"
+            },
+            {
+              "c": "佢",
+              "j": "keoi5",
+              "e": "her"
+            }
+          ]
+        },
+        {
+          "u": false,
+          "c": "你唔好太緊張，佢會好返嘅。",
+          "j": "nei5 m4 hou2 taai3 gan2 zoeng1, keoi5 wui5 hou2 faan1 ge3.",
+          "e": "Don't be too anxious — she'll get better.",
+          "bd": [
+            {
+              "c": "你",
+              "j": "nei5",
+              "e": "you"
+            },
+            {
+              "c": "唔好",
+              "j": "m4 hou2",
+              "e": "don't"
+            },
+            {
+              "c": "太",
+              "j": "taai3",
+              "e": "too"
+            },
+            {
+              "c": "緊張",
+              "j": "gan2 zoeng1",
+              "e": "anxious"
+            },
+            {
+              "c": "佢",
+              "j": "keoi5",
+              "e": "she"
+            },
+            {
+              "c": "會",
+              "j": "wui5",
+              "e": "will"
+            },
+            {
+              "c": "好返",
+              "j": "hou2 faan1",
+              "e": "recover"
+            },
+            {
+              "c": "嘅",
+              "j": "ge3",
+              "e": "(particle)"
+            }
+          ]
+        },
+        {
+          "u": true,
+          "c": "多謝你。有你呢個朋友真係好。",
+          "j": "do1 ze6 nei5. jau5 nei5 ni1 go3 pang4 jau5 zan1 hai6 hou2.",
+          "e": "Thank you. I'm lucky to have a friend like you.",
+          "bd": [
+            {
+              "c": "多謝你",
+              "j": "do1 ze6 nei5",
+              "e": "thank you"
+            },
+            {
+              "c": "有",
+              "j": "jau5",
+              "e": "have"
+            },
+            {
+              "c": "你",
+              "j": "nei5",
+              "e": "you"
+            },
+            {
+              "c": "呢個",
+              "j": "ni1 go3",
+              "e": "this"
+            },
+            {
+              "c": "朋友",
+              "j": "pang4 jau5",
+              "e": "friend"
+            },
+            {
+              "c": "真係好",
+              "j": "zan1 hai6 hou2",
+              "e": "is really good"
+            }
+          ]
+        },
+        {
+          "u": false,
+          "c": "應該嘅！得閒一齊去探佢啦。",
+          "j": "jing1 goi1 ge3! dak1 haan4 jat1 cai4 heoi3 taam3 keoi5 laa1.",
+          "e": "Of course! When we're free let's visit her together.",
+          "bd": [
+            {
+              "c": "應該",
+              "j": "jing1 goi1",
+              "e": "of course"
+            },
+            {
+              "c": "嘅",
+              "j": "ge3",
+              "e": "(particle)"
+            },
+            {
+              "c": "得閒",
+              "j": "dak1 haan4",
+              "e": "free"
+            },
+            {
+              "c": "一齊",
+              "j": "jat1 cai4",
+              "e": "together"
+            },
+            {
+              "c": "去",
+              "j": "heoi3",
+              "e": "go"
+            },
+            {
+              "c": "探",
+              "j": "taam3",
+              "e": "visit"
+            },
+            {
+              "c": "佢",
+              "j": "keoi5",
+              "e": "her"
+            },
+            {
+              "c": "啦",
+              "j": "laa1",
+              "e": "(particle)"
+            }
+          ]
+        },
+        {
+          "u": true,
+          "c": "好呀，佢一定會好開心。",
+          "j": "hou2 aa3, keoi5 jat1 ding6 wui5 hou2 hoi1 sam1.",
+          "e": "Yes — she'll be really happy.",
+          "bd": [
+            {
+              "c": "好呀",
+              "j": "hou2 aa3",
+              "e": "okay"
+            },
+            {
+              "c": "佢",
+              "j": "keoi5",
+              "e": "she"
+            },
+            {
+              "c": "一定",
+              "j": "jat1 ding6",
+              "e": "definitely"
+            },
+            {
+              "c": "會",
+              "j": "wui5",
+              "e": "will"
+            },
+            {
+              "c": "好開心",
+              "j": "hou2 hoi1 sam1",
+              "e": "very happy"
+            }
+          ]
+        }
+      ]
+    },
+    "beginner-s5": {
+      "title": "A walk in the park",
+      "speakers": [
+        "Friend",
+        "You"
+      ],
+      "lines": [
+        {
+          "u": false,
+          "c": "今日天氣真係好好！",
+          "j": "gam1 jat6 tin1 hei3 zan1 hai6 hou2 hou2!",
+          "e": "The weather is really lovely today!",
+          "bd": [
+            {
+              "c": "今日",
+              "j": "gam1 jat6",
+              "e": "today"
+            },
+            {
+              "c": "天氣",
+              "j": "tin1 hei3",
+              "e": "weather"
+            },
+            {
+              "c": "真係",
+              "j": "zan1 hai6",
+              "e": "really"
+            },
+            {
+              "c": "好好",
+              "j": "hou2 hou2",
+              "e": "very good"
+            }
+          ]
+        },
+        {
+          "u": true,
+          "c": "係呀，太陽好猛，又唔熱。",
+          "j": "hai6 aa3, taai3 joeng4 hou2 maang5, jau6 m4 jit6.",
+          "e": "Yes — the sun is strong, but it's not hot.",
+          "bd": [
+            {
+              "c": "係呀",
+              "j": "hai6 aa3",
+              "e": "yes"
+            },
+            {
+              "c": "太陽",
+              "j": "taai3 joeng4",
+              "e": "sun"
+            },
+            {
+              "c": "好猛",
+              "j": "hou2 maang5",
+              "e": "strong"
+            },
+            {
+              "c": "又",
+              "j": "jau6",
+              "e": "yet / and"
+            },
+            {
+              "c": "唔熱",
+              "j": "m4 jit6",
+              "e": "not hot"
+            }
+          ]
+        },
+        {
+          "u": false,
+          "c": "嗰隻狗好可愛呀！係你養㗎？",
+          "j": "go2 zek3 gau2 hou2 ho2 oi3 aa3! hai6 nei5 joeng5 gaa3?",
+          "e": "That dog is so cute! Is it yours?",
+          "bd": [
+            {
+              "c": "嗰隻",
+              "j": "go2 zek3",
+              "e": "that (animal)"
+            },
+            {
+              "c": "狗",
+              "j": "gau2",
+              "e": "dog"
+            },
+            {
+              "c": "好可愛",
+              "j": "hou2 ho2 oi3",
+              "e": "so cute"
+            },
+            {
+              "c": "呀",
+              "j": "aa3",
+              "e": "(particle)"
+            },
+            {
+              "c": "係",
+              "j": "hai6",
+              "e": "is"
+            },
+            {
+              "c": "你",
+              "j": "nei5",
+              "e": "you"
+            },
+            {
+              "c": "養",
+              "j": "joeng5",
+              "e": "keep / raise"
+            },
+            {
+              "c": "㗎",
+              "j": "gaa3",
+              "e": "(matter-of-fact particle)"
+            }
+          ]
+        },
+        {
+          "u": true,
+          "c": "係呀，佢係我嘅寵物。我仲養咗一隻貓。",
+          "j": "hai6 aa3, keoi5 hai6 ngo5 ge3 cung2 mat6. ngo5 zung6 joeng5 zo2 jat1 zek3 maau1.",
+          "e": "Yes, he's my pet. I also have a cat.",
+          "bd": [
+            {
+              "c": "係呀",
+              "j": "hai6 aa3",
+              "e": "yes"
+            },
+            {
+              "c": "佢",
+              "j": "keoi5",
+              "e": "he / it"
+            },
+            {
+              "c": "係",
+              "j": "hai6",
+              "e": "is"
+            },
+            {
+              "c": "我嘅",
+              "j": "ngo5 ge3",
+              "e": "my"
+            },
+            {
+              "c": "寵物",
+              "j": "cung2 mat6",
+              "e": "pet"
+            },
+            {
+              "c": "仲",
+              "j": "zung6",
+              "e": "also"
+            },
+            {
+              "c": "養咗",
+              "j": "joeng5 zo2",
+              "e": "keep"
+            },
+            {
+              "c": "一隻",
+              "j": "jat1 zek3",
+              "e": "one"
+            },
+            {
+              "c": "貓",
+              "j": "maau1",
+              "e": "cat"
+            }
+          ]
+        },
+        {
+          "u": false,
+          "c": "你隻貓係咩色㗎？",
+          "j": "nei5 zek3 maau1 hai6 me1 sik1 gaa3?",
+          "e": "What colour is your cat?",
+          "bd": [
+            {
+              "c": "你",
+              "j": "nei5",
+              "e": "your"
+            },
+            {
+              "c": "隻",
+              "j": "zek3",
+              "e": "(animal measure)"
+            },
+            {
+              "c": "貓",
+              "j": "maau1",
+              "e": "cat"
+            },
+            {
+              "c": "係",
+              "j": "hai6",
+              "e": "is"
+            },
+            {
+              "c": "咩色",
+              "j": "me1 sik1",
+              "e": "what colour"
+            },
+            {
+              "c": "㗎",
+              "j": "gaa3",
+              "e": "(particle)"
+            }
+          ]
+        },
+        {
+          "u": true,
+          "c": "白色同黑色嘅。佢隻眼係藍色，好靚。",
+          "j": "baak6 sik1 tung4 hak1 sik1 ge3. keoi5 zek3 ngaan5 hai6 laam4 sik1, hou2 leng3.",
+          "e": "Black and white. Its eyes are blue — very pretty.",
+          "bd": [
+            {
+              "c": "白色",
+              "j": "baak6 sik1",
+              "e": "white"
+            },
+            {
+              "c": "同",
+              "j": "tung4",
+              "e": "and"
+            },
+            {
+              "c": "黑色",
+              "j": "hak1 sik1",
+              "e": "black"
+            },
+            {
+              "c": "嘅",
+              "j": "ge3",
+              "e": "(particle)"
+            },
+            {
+              "c": "佢",
+              "j": "keoi5",
+              "e": "its"
+            },
+            {
+              "c": "隻眼",
+              "j": "zek3 ngaan5",
+              "e": "eye"
+            },
+            {
+              "c": "係",
+              "j": "hai6",
+              "e": "is"
+            },
+            {
+              "c": "藍色",
+              "j": "laam4 sik1",
+              "e": "blue"
+            },
+            {
+              "c": "好靚",
+              "j": "hou2 leng3",
+              "e": "very pretty"
+            }
+          ]
+        },
+        {
+          "u": false,
+          "c": "哇，聽日好似會落雨喎。",
+          "j": "waa3, ting1 jat6 hou2 ci5 wui5 lok6 jyu5 wo3.",
+          "e": "Wow. Looks like it'll rain tomorrow, though.",
+          "bd": [
+            {
+              "c": "哇",
+              "j": "waa3",
+              "e": "wow"
+            },
+            {
+              "c": "聽日",
+              "j": "ting1 jat6",
+              "e": "tomorrow"
+            },
+            {
+              "c": "好似",
+              "j": "hou2 ci5",
+              "e": "seems"
+            },
+            {
+              "c": "會",
+              "j": "wui5",
+              "e": "will"
+            },
+            {
+              "c": "落雨",
+              "j": "lok6 jyu5",
+              "e": "rain"
+            },
+            {
+              "c": "喎",
+              "j": "wo3",
+              "e": "(noting particle)"
+            }
+          ]
+        },
+        {
+          "u": true,
+          "c": "係呀，仲話有颱風。",
+          "j": "hai6 aa3, zung6 waa6 jau5 toi4 fung1.",
+          "e": "Yes, they say there's a typhoon coming too.",
+          "bd": [
+            {
+              "c": "係呀",
+              "j": "hai6 aa3",
+              "e": "yes"
+            },
+            {
+              "c": "仲話",
+              "j": "zung6 waa6",
+              "e": "they even say"
+            },
+            {
+              "c": "有",
+              "j": "jau5",
+              "e": "there is"
+            },
+            {
+              "c": "颱風",
+              "j": "toi4 fung1",
+              "e": "typhoon"
+            }
+          ]
+        },
+        {
+          "u": false,
+          "c": "咁今日真係要好好享受啲太陽喇。",
+          "j": "gam2 gam1 jat6 zan1 hai6 jiu3 hou2 hou2 hoeng2 sau6 di1 taai3 joeng4 laa3.",
+          "e": "Then we really should enjoy the sun today.",
+          "bd": [
+            {
+              "c": "咁",
+              "j": "gam2",
+              "e": "so"
+            },
+            {
+              "c": "今日",
+              "j": "gam1 jat6",
+              "e": "today"
+            },
+            {
+              "c": "真係",
+              "j": "zan1 hai6",
+              "e": "really"
+            },
+            {
+              "c": "要",
+              "j": "jiu3",
+              "e": "should"
+            },
+            {
+              "c": "好好",
+              "j": "hou2 hou2",
+              "e": "properly"
+            },
+            {
+              "c": "享受",
+              "j": "hoeng2 sau6",
+              "e": "enjoy"
+            },
+            {
+              "c": "啲",
+              "j": "di1",
+              "e": "the"
+            },
+            {
+              "c": "太陽",
+              "j": "taai3 joeng4",
+              "e": "sun"
+            },
+            {
+              "c": "喇",
+              "j": "laa3",
+              "e": "(particle)"
+            }
+          ]
+        },
+        {
+          "u": true,
+          "c": "啱呀！我哋帶隻狗去行下啦。",
+          "j": "ngaam1 aa3! ngo5 dei6 daai3 zek3 gau2 heoi3 haang4 haa5 laa1.",
+          "e": "Right! Let's take the dog for a walk.",
+          "bd": [
+            {
+              "c": "啱呀",
+              "j": "ngaam1 aa3",
+              "e": "right"
+            },
+            {
+              "c": "我哋",
+              "j": "ngo5 dei6",
+              "e": "we"
+            },
+            {
+              "c": "帶",
+              "j": "daai3",
+              "e": "bring"
+            },
+            {
+              "c": "隻狗",
+              "j": "zek3 gau2",
+              "e": "the dog"
+            },
+            {
+              "c": "去",
+              "j": "heoi3",
+              "e": "go"
+            },
+            {
+              "c": "行下",
+              "j": "haang4 haa5",
+              "e": "for a walk"
+            },
+            {
+              "c": "啦",
+              "j": "laa1",
+              "e": "(particle)"
+            }
+          ]
+        }
+      ]
+    },
+    "beginner-s6": {
+      "title": "Finding the way",
+      "speakers": [
+        "Local",
+        "You"
+      ],
+      "lines": [
+        {
+          "u": true,
+          "c": "唔該，請問去呢間酒店點行呀？",
+          "j": "m4 goi1, cing2 man6 heoi3 ni1 gaan1 zau2 dim3 dim2 haang4 aa3?",
+          "e": "Excuse me, how do I get to this hotel?",
+          "bd": [
+            {
+              "c": "唔該",
+              "j": "m4 goi1",
+              "e": "excuse me"
+            },
+            {
+              "c": "請問",
+              "j": "cing2 man6",
+              "e": "may I ask"
+            },
+            {
+              "c": "去",
+              "j": "heoi3",
+              "e": "go to"
+            },
+            {
+              "c": "呢間",
+              "j": "ni1 gaan1",
+              "e": "this"
+            },
+            {
+              "c": "酒店",
+              "j": "zau2 dim3",
+              "e": "hotel"
+            },
+            {
+              "c": "點行",
+              "j": "dim2 haang4",
+              "e": "how to walk"
+            },
+            {
+              "c": "呀",
+              "j": "aa3",
+              "e": "(question particle)"
+            }
+          ]
+        },
+        {
+          "u": false,
+          "c": "好近啫。你直行，然後喺前面轉左。",
+          "j": "hou2 kan5 ze1. nei5 zik6 haang4, jin4 hau6 hai2 cin4 min6 zyun3 zo2.",
+          "e": "It's very close. Go straight, then turn left up ahead.",
+          "bd": [
+            {
+              "c": "好近",
+              "j": "hou2 kan5",
+              "e": "very close"
+            },
+            {
+              "c": "啫",
+              "j": "ze1",
+              "e": "(just — particle)"
+            },
+            {
+              "c": "直行",
+              "j": "zik6 haang4",
+              "e": "go straight"
+            },
+            {
+              "c": "然後",
+              "j": "jin4 hau6",
+              "e": "then"
+            },
+            {
+              "c": "喺",
+              "j": "hai2",
+              "e": "at"
+            },
+            {
+              "c": "前面",
+              "j": "cin4 min6",
+              "e": "ahead"
+            },
+            {
+              "c": "轉左",
+              "j": "zyun3 zo2",
+              "e": "turn left"
+            }
+          ]
+        },
+        {
+          "u": true,
+          "c": "行路遠唔遠呀？定係搭的士好啲？",
+          "j": "haang4 lou6 jyun5 m4 jyun5 aa3? ding6 hai6 daap3 dik1 si2 hou2 di1?",
+          "e": "Is it far to walk? Or is a taxi better?",
+          "bd": [
+            {
+              "c": "行路",
+              "j": "haang4 lou6",
+              "e": "walking"
+            },
+            {
+              "c": "遠唔遠",
+              "j": "jyun5 m4 jyun5",
+              "e": "far or not"
+            },
+            {
+              "c": "呀",
+              "j": "aa3",
+              "e": "(particle)"
+            },
+            {
+              "c": "定係",
+              "j": "ding6 hai6",
+              "e": "or"
+            },
+            {
+              "c": "搭",
+              "j": "daap3",
+              "e": "take"
+            },
+            {
+              "c": "的士",
+              "j": "dik1 si2",
+              "e": "taxi"
+            },
+            {
+              "c": "好啲",
+              "j": "hou2 di1",
+              "e": "better"
+            }
+          ]
+        },
+        {
+          "u": false,
+          "c": "唔使啦，行路五分鐘咋。喺後面仲有個地鐵站。",
+          "j": "m4 sai2 laa1, haang4 lou6 ng5 fan1 zung1 zaa3. hai2 hau6 min6 zung6 jau5 go3 dei6 tit3 zaam6.",
+          "e": "No need — it's just a five-minute walk. There's also an MTR station behind you.",
+          "bd": [
+            {
+              "c": "唔使",
+              "j": "m4 sai2",
+              "e": "no need"
+            },
+            {
+              "c": "啦",
+              "j": "laa1",
+              "e": "(particle)"
+            },
+            {
+              "c": "行路",
+              "j": "haang4 lou6",
+              "e": "walking"
+            },
+            {
+              "c": "五分鐘",
+              "j": "ng5 fan1 zung1",
+              "e": "five minutes"
+            },
+            {
+              "c": "咋",
+              "j": "zaa3",
+              "e": "(only — particle)"
+            },
+            {
+              "c": "喺",
+              "j": "hai2",
+              "e": "at"
+            },
+            {
+              "c": "後面",
+              "j": "hau6 min6",
+              "e": "behind"
+            },
+            {
+              "c": "仲有",
+              "j": "zung6 jau5",
+              "e": "there's also"
+            },
+            {
+              "c": "個",
+              "j": "go3",
+              "e": "(measure)"
+            },
+            {
+              "c": "地鐵站",
+              "j": "dei6 tit3 zaam6",
+              "e": "MTR station"
+            }
+          ]
+        },
+        {
+          "u": true,
+          "c": "明白！酒店附近有冇景點呀？",
+          "j": "ming4 baak6! zau2 dim3 fu6 gan6 jau5 mou5 ging2 dim2 aa3?",
+          "e": "Got it! Are there any attractions near the hotel?",
+          "bd": [
+            {
+              "c": "明白",
+              "j": "ming4 baak6",
+              "e": "got it"
+            },
+            {
+              "c": "酒店",
+              "j": "zau2 dim3",
+              "e": "hotel"
+            },
+            {
+              "c": "附近",
+              "j": "fu6 gan6",
+              "e": "nearby"
+            },
+            {
+              "c": "有冇",
+              "j": "jau5 mou5",
+              "e": "are there"
+            },
+            {
+              "c": "景點",
+              "j": "ging2 dim2",
+              "e": "attractions"
+            },
+            {
+              "c": "呀",
+              "j": "aa3",
+              "e": "(question particle)"
+            }
+          ]
+        },
+        {
+          "u": false,
+          "c": "有呀，對面有個好出名嘅景點，可以拍照。",
+          "j": "jau5 aa3, deoi3 min6 jau5 go3 hou2 ceot1 meng2 ge3 ging2 dim2, ho2 ji5 paak3 ziu3.",
+          "e": "Yes — opposite there's a famous attraction where you can take photos.",
+          "bd": [
+            {
+              "c": "有呀",
+              "j": "jau5 aa3",
+              "e": "yes"
+            },
+            {
+              "c": "對面",
+              "j": "deoi3 min6",
+              "e": "opposite"
+            },
+            {
+              "c": "有個",
+              "j": "jau5 go3",
+              "e": "there's a"
+            },
+            {
+              "c": "好出名",
+              "j": "hou2 ceot1 meng2",
+              "e": "very famous"
+            },
+            {
+              "c": "嘅",
+              "j": "ge3",
+              "e": "(particle)"
+            },
+            {
+              "c": "景點",
+              "j": "ging2 dim2",
+              "e": "attraction"
+            },
+            {
+              "c": "可以",
+              "j": "ho2 ji5",
+              "e": "can"
+            },
+            {
+              "c": "拍照",
+              "j": "paak3 ziu3",
+              "e": "take photos"
+            }
+          ]
+        },
+        {
+          "u": true,
+          "c": "好正！要唔要買門票呀？",
+          "j": "hou2 zeng3! jiu3 m4 jiu3 maai5 mun4 piu3 aa3?",
+          "e": "Awesome! Do I need to buy a ticket?",
+          "bd": [
+            {
+              "c": "好正",
+              "j": "hou2 zeng3",
+              "e": "awesome"
+            },
+            {
+              "c": "要唔要",
+              "j": "jiu3 m4 jiu3",
+              "e": "need or not"
+            },
+            {
+              "c": "買",
+              "j": "maai5",
+              "e": "buy"
+            },
+            {
+              "c": "門票",
+              "j": "mun4 piu3",
+              "e": "entry ticket"
+            },
+            {
+              "c": "呀",
+              "j": "aa3",
+              "e": "(question particle)"
+            }
+          ]
+        },
+        {
+          "u": false,
+          "c": "要呀，不過而家要排隊，好多人。",
+          "j": "jiu3 aa3, bat1 gwo3 ji4 gaa1 jiu3 paai4 deoi2, hou2 do1 jan4.",
+          "e": "Yes, but right now you'd have to queue — lots of people.",
+          "bd": [
+            {
+              "c": "要呀",
+              "j": "jiu3 aa3",
+              "e": "yes"
+            },
+            {
+              "c": "不過",
+              "j": "bat1 gwo3",
+              "e": "but"
+            },
+            {
+              "c": "而家",
+              "j": "ji4 gaa1",
+              "e": "now"
+            },
+            {
+              "c": "要",
+              "j": "jiu3",
+              "e": "have to"
+            },
+            {
+              "c": "排隊",
+              "j": "paai4 deoi2",
+              "e": "queue"
+            },
+            {
+              "c": "好多人",
+              "j": "hou2 do1 jan4",
+              "e": "many people"
+            }
+          ]
+        },
+        {
+          "u": true,
+          "c": "咁我聽日先去啦。多謝晒你！",
+          "j": "gam2 ngo5 ting1 jat6 sin1 heoi3 laa1. do1 ze6 saai3 nei5!",
+          "e": "Then I'll go tomorrow instead. Thank you so much!",
+          "bd": [
+            {
+              "c": "咁",
+              "j": "gam2",
+              "e": "then"
+            },
+            {
+              "c": "我",
+              "j": "ngo5",
+              "e": "I"
+            },
+            {
+              "c": "聽日",
+              "j": "ting1 jat6",
+              "e": "tomorrow"
+            },
+            {
+              "c": "先去",
+              "j": "sin1 heoi3",
+              "e": "go (then)"
+            },
+            {
+              "c": "啦",
+              "j": "laa1",
+              "e": "(particle)"
+            },
+            {
+              "c": "多謝晒你",
+              "j": "do1 ze6 saai3 nei5",
+              "e": "thanks so much"
+            }
+          ]
+        },
+        {
+          "u": false,
+          "c": "唔使客氣！祝你旅途愉快！",
+          "j": "m4 sai2 haak3 hei3! zuk1 nei5 leoi5 tou4 jyu4 faai3!",
+          "e": "You're welcome! Enjoy your trip!",
+          "bd": [
+            {
+              "c": "唔使客氣",
+              "j": "m4 sai2 haak3 hei3",
+              "e": "you're welcome"
+            },
+            {
+              "c": "祝你",
+              "j": "zuk1 nei5",
+              "e": "wish you"
+            },
+            {
+              "c": "旅途",
+              "j": "leoi5 tou4",
+              "e": "journey"
+            },
+            {
+              "c": "愉快",
+              "j": "jyu4 faai3",
+              "e": "pleasant"
+            }
+          ]
+        }
+      ]
+    },
+    "beginner-s7": {
+      "title": "A busy day at work",
+      "speakers": [
+        "Colleague",
+        "You"
+      ],
+      "lines": [
+        {
+          "u": false,
+          "c": "喂，今日開唔開會呀？",
+          "j": "wai3, gam1 jat6 hoi1 m4 hoi1 wui2 aa3?",
+          "e": "Hey, is there a meeting today?",
+          "bd": [
+            {
+              "c": "喂",
+              "j": "wai3",
+              "e": "hey"
+            },
+            {
+              "c": "今日",
+              "j": "gam1 jat6",
+              "e": "today"
+            },
+            {
+              "c": "開唔開會",
+              "j": "hoi1 m4 hoi1 wui2",
+              "e": "is there a meeting"
+            },
+            {
+              "c": "呀",
+              "j": "aa3",
+              "e": "(question particle)"
+            }
+          ]
+        },
+        {
+          "u": true,
+          "c": "開呀，不過我部電腦壞咗。",
+          "j": "hoi1 aa3, bat1 gwo3 ngo5 bou6 din6 nou5 waai6 zo2.",
+          "e": "Yes, but my computer is broken.",
+          "bd": [
+            {
+              "c": "開呀",
+              "j": "hoi1 aa3",
+              "e": "yes (there is)"
+            },
+            {
+              "c": "不過",
+              "j": "bat1 gwo3",
+              "e": "but"
+            },
+            {
+              "c": "我",
+              "j": "ngo5",
+              "e": "my"
+            },
+            {
+              "c": "部",
+              "j": "bou6",
+              "e": "(machine measure)"
+            },
+            {
+              "c": "電腦",
+              "j": "din6 nou5",
+              "e": "computer"
+            },
+            {
+              "c": "壞咗",
+              "j": "waai6 zo2",
+              "e": "broke down"
+            }
+          ]
+        },
+        {
+          "u": false,
+          "c": "吓？係咪上唔到網呀？",
+          "j": "haa2? hai6 mai6 soeng5 m4 dou3 mong5 aa3?",
+          "e": "Oh? Can't get online?",
+          "bd": [
+            {
+              "c": "吓",
+              "j": "haa2",
+              "e": "huh"
+            },
+            {
+              "c": "係咪",
+              "j": "hai6 mai6",
+              "e": "is it that"
+            },
+            {
+              "c": "上唔到網",
+              "j": "soeng5 m4 dou3 mong5",
+              "e": "can't get online"
+            },
+            {
+              "c": "呀",
+              "j": "aa3",
+              "e": "(question particle)"
+            }
+          ]
+        },
+        {
+          "u": true,
+          "c": "係呀，個訊號好差，WiFi又壞咗。",
+          "j": "hai6 aa3, go3 seon3 hou6 hou2 caa1, WiFi jau6 waai6 zo2.",
+          "e": "Yeah, the signal's bad and the WiFi's down too.",
+          "bd": [
+            {
+              "c": "係呀",
+              "j": "hai6 aa3",
+              "e": "yes"
+            },
+            {
+              "c": "個",
+              "j": "go3",
+              "e": "the"
+            },
+            {
+              "c": "訊號",
+              "j": "seon3 hou6",
+              "e": "signal"
+            },
+            {
+              "c": "好差",
+              "j": "hou2 caa1",
+              "e": "very bad"
+            },
+            {
+              "c": "WiFi",
+              "j": "WiFi",
+              "e": "WiFi"
+            },
+            {
+              "c": "又",
+              "j": "jau6",
+              "e": "also"
+            },
+            {
+              "c": "壞咗",
+              "j": "waai6 zo2",
+              "e": "broke"
+            }
+          ]
+        },
+        {
+          "u": false,
+          "c": "你打電話問下老闆啦。",
+          "j": "nei5 daa2 din6 waa2 man6 haa5 lou5 baan2 laa1.",
+          "e": "Call and ask the boss.",
+          "bd": [
+            {
+              "c": "你",
+              "j": "nei5",
+              "e": "you"
+            },
+            {
+              "c": "打電話",
+              "j": "daa2 din6 waa2",
+              "e": "make a call"
+            },
+            {
+              "c": "問下",
+              "j": "man6 haa5",
+              "e": "ask"
+            },
+            {
+              "c": "老闆",
+              "j": "lou5 baan2",
+              "e": "boss"
+            },
+            {
+              "c": "啦",
+              "j": "laa1",
+              "e": "(particle)"
+            }
+          ]
+        },
+        {
+          "u": true,
+          "c": "好啦。講起，今個月出咗糧未呀？",
+          "j": "hou2 laa1. gong2 hei2, gam1 go3 jyut6 ceot1 zo2 loeng4 mei6 aa3?",
+          "e": "Okay. By the way, has this month's pay come through yet?",
+          "bd": [
+            {
+              "c": "好啦",
+              "j": "hou2 laa1",
+              "e": "okay"
+            },
+            {
+              "c": "講起",
+              "j": "gong2 hei2",
+              "e": "by the way"
+            },
+            {
+              "c": "今個月",
+              "j": "gam1 go3 jyut6",
+              "e": "this month"
+            },
+            {
+              "c": "出咗糧",
+              "j": "ceot1 zo2 loeng4",
+              "e": "got paid"
+            },
+            {
+              "c": "未",
+              "j": "mei6",
+              "e": "yet"
+            },
+            {
+              "c": "呀",
+              "j": "aa3",
+              "e": "(question particle)"
+            }
+          ]
+        },
+        {
+          "u": false,
+          "c": "出咗喇，今朝啱啱入咗銀行戶口。",
+          "j": "ceot1 zo2 laa3, gam1 ziu1 ngaam1 ngaam1 jap6 zo2 ngan4 hong4 wu6 hau2.",
+          "e": "It has — it just went into the bank account this morning.",
+          "bd": [
+            {
+              "c": "出咗",
+              "j": "ceot1 zo2",
+              "e": "paid"
+            },
+            {
+              "c": "喇",
+              "j": "laa3",
+              "e": "(completion particle)"
+            },
+            {
+              "c": "今朝",
+              "j": "gam1 ziu1",
+              "e": "this morning"
+            },
+            {
+              "c": "啱啱",
+              "j": "ngaam1 ngaam1",
+              "e": "just now"
+            },
+            {
+              "c": "入咗",
+              "j": "jap6 zo2",
+              "e": "went into"
+            },
+            {
+              "c": "銀行",
+              "j": "ngan4 hong4",
+              "e": "bank"
+            },
+            {
+              "c": "戶口",
+              "j": "wu6 hau2",
+              "e": "account"
+            }
+          ]
+        },
+        {
+          "u": true,
+          "c": "好彩！我等錢交租。",
+          "j": "hou2 coi2! ngo5 dang2 cin2 gaau1 zou1.",
+          "e": "Lucky! I need the money for rent.",
+          "bd": [
+            {
+              "c": "好彩",
+              "j": "hou2 coi2",
+              "e": "lucky"
+            },
+            {
+              "c": "我",
+              "j": "ngo5",
+              "e": "I"
+            },
+            {
+              "c": "等錢",
+              "j": "dang2 cin2",
+              "e": "waiting for money"
+            },
+            {
+              "c": "交租",
+              "j": "gaau1 zou1",
+              "e": "pay rent"
+            }
+          ]
+        },
+        {
+          "u": false,
+          "c": "你而家返屋企定係放工先去銀行？",
+          "j": "nei5 ji4 gaa1 faan1 uk1 kei2 ding6 hai6 fong3 gung1 sin1 heoi3 ngan4 hong4?",
+          "e": "Are you going home now or to the bank after work?",
+          "bd": [
+            {
+              "c": "你",
+              "j": "nei5",
+              "e": "you"
+            },
+            {
+              "c": "而家",
+              "j": "ji4 gaa1",
+              "e": "now"
+            },
+            {
+              "c": "返屋企",
+              "j": "faan1 uk1 kei2",
+              "e": "go home"
+            },
+            {
+              "c": "定係",
+              "j": "ding6 hai6",
+              "e": "or"
+            },
+            {
+              "c": "放工",
+              "j": "fong3 gung1",
+              "e": "after work"
+            },
+            {
+              "c": "先去",
+              "j": "sin1 heoi3",
+              "e": "then go"
+            },
+            {
+              "c": "銀行",
+              "j": "ngan4 hong4",
+              "e": "bank"
+            }
+          ]
+        },
+        {
+          "u": true,
+          "c": "放工先去啦，而家仲要開會添。",
+          "j": "fong3 gung1 sin1 heoi3 laa1, ji4 gaa1 zung6 jiu3 hoi1 wui2 tim1.",
+          "e": "After work — I still have the meeting now.",
+          "bd": [
+            {
+              "c": "放工",
+              "j": "fong3 gung1",
+              "e": "after work"
+            },
+            {
+              "c": "先去",
+              "j": "sin1 heoi3",
+              "e": "go then"
+            },
+            {
+              "c": "啦",
+              "j": "laa1",
+              "e": "(particle)"
+            },
+            {
+              "c": "而家",
+              "j": "ji4 gaa1",
+              "e": "now"
+            },
+            {
+              "c": "仲要",
+              "j": "zung6 jiu3",
+              "e": "still have to"
+            },
+            {
+              "c": "開會",
+              "j": "hoi1 wui2",
+              "e": "have a meeting"
+            },
+            {
+              "c": "添",
+              "j": "tim1",
+              "e": "as well"
+            }
+          ]
+        }
+      ]
+    },
+    "beginner-s8": {
+      "title": "A hike that goes wrong",
+      "speakers": [
+        "Friend",
+        "You"
+      ],
+      "lines": [
+        {
+          "u": false,
+          "c": "聽日得閒，不如去行山啦！",
+          "j": "ting1 jat6 dak1 haan4, bat1 jyu4 heoi3 haang4 saan1 laa1!",
+          "e": "If you're free tomorrow, let's go hiking!",
+          "bd": [
+            {
+              "c": "聽日",
+              "j": "ting1 jat6",
+              "e": "tomorrow"
+            },
+            {
+              "c": "得閒",
+              "j": "dak1 haan4",
+              "e": "free"
+            },
+            {
+              "c": "不如",
+              "j": "bat1 jyu4",
+              "e": "how about"
+            },
+            {
+              "c": "去",
+              "j": "heoi3",
+              "e": "go"
+            },
+            {
+              "c": "行山",
+              "j": "haang4 saan1",
+              "e": "hiking"
+            },
+            {
+              "c": "啦",
+              "j": "laa1",
+              "e": "(suggestion particle)"
+            }
+          ]
+        },
+        {
+          "u": true,
+          "c": "好呀！我最鍾意行山，又可以做運動。",
+          "j": "hou2 aa3! ngo5 zeoi3 zung1 ji3 haang4 saan1, jau6 ho2 ji5 zou6 wan6 dung6.",
+          "e": "Yes! I love hiking — it's good exercise too.",
+          "bd": [
+            {
+              "c": "好呀",
+              "j": "hou2 aa3",
+              "e": "great"
+            },
+            {
+              "c": "我",
+              "j": "ngo5",
+              "e": "I"
+            },
+            {
+              "c": "最鍾意",
+              "j": "zeoi3 zung1 ji3",
+              "e": "love most"
+            },
+            {
+              "c": "行山",
+              "j": "haang4 saan1",
+              "e": "hiking"
+            },
+            {
+              "c": "又可以",
+              "j": "jau6 ho2 ji5",
+              "e": "and can"
+            },
+            {
+              "c": "做運動",
+              "j": "zou6 wan6 dung6",
+              "e": "exercise"
+            }
+          ]
+        },
+        {
+          "u": false,
+          "c": "啱呀！行完我哋仲可以去游水。",
+          "j": "ngaam1 aa3! haang4 jyun4 ngo5 dei6 zung6 ho2 ji5 heoi3 jau4 seoi2.",
+          "e": "Right! After, we can go swimming too.",
+          "bd": [
+            {
+              "c": "啱呀",
+              "j": "ngaam1 aa3",
+              "e": "right"
+            },
+            {
+              "c": "行完",
+              "j": "haang4 jyun4",
+              "e": "after walking"
+            },
+            {
+              "c": "我哋",
+              "j": "ngo5 dei6",
+              "e": "we"
+            },
+            {
+              "c": "仲可以",
+              "j": "zung6 ho2 ji5",
+              "e": "can also"
+            },
+            {
+              "c": "去",
+              "j": "heoi3",
+              "e": "go"
+            },
+            {
+              "c": "游水",
+              "j": "jau4 seoi2",
+              "e": "swim"
+            }
+          ]
+        },
+        {
+          "u": false,
+          "c": "哎呀！我跌親，隻腳好痛！",
+          "j": "aai1 jaa3! ngo5 dit3 can1, zek3 goek3 hou2 tung3!",
+          "e": "Ow! I fell — my foot really hurts!",
+          "bd": [
+            {
+              "c": "哎呀",
+              "j": "aai1 jaa3",
+              "e": "ow"
+            },
+            {
+              "c": "我",
+              "j": "ngo5",
+              "e": "I"
+            },
+            {
+              "c": "跌親",
+              "j": "dit3 can1",
+              "e": "fell and hurt myself"
+            },
+            {
+              "c": "隻腳",
+              "j": "zek3 goek3",
+              "e": "foot"
+            },
+            {
+              "c": "好痛",
+              "j": "hou2 tung3",
+              "e": "really hurts"
+            }
+          ]
+        },
+        {
+          "u": true,
+          "c": "吓？你受咗傷呀？仲行唔行得呀？",
+          "j": "haa2? nei5 sau6 zo2 soeng1 aa3? zung6 haang4 m4 haang4 dak1 aa3?",
+          "e": "What? Are you injured? Can you still walk?",
+          "bd": [
+            {
+              "c": "吓",
+              "j": "haa2",
+              "e": "what"
+            },
+            {
+              "c": "你",
+              "j": "nei5",
+              "e": "you"
+            },
+            {
+              "c": "受咗傷",
+              "j": "sau6 zo2 soeng1",
+              "e": "got injured"
+            },
+            {
+              "c": "呀",
+              "j": "aa3",
+              "e": "(particle)"
+            },
+            {
+              "c": "仲",
+              "j": "zung6",
+              "e": "still"
+            },
+            {
+              "c": "行唔行得",
+              "j": "haang4 m4 haang4 dak1",
+              "e": "able to walk or not"
+            },
+            {
+              "c": "呀",
+              "j": "aa3",
+              "e": "(particle)"
+            }
+          ]
+        },
+        {
+          "u": false,
+          "c": "行唔到呀，好似好嚴重。",
+          "j": "haang4 m4 dou3 aa3, hou2 ci5 hou2 jim4 zung6.",
+          "e": "I can't — it seems quite serious.",
+          "bd": [
+            {
+              "c": "行唔到",
+              "j": "haang4 m4 dou3",
+              "e": "can't walk"
+            },
+            {
+              "c": "呀",
+              "j": "aa3",
+              "e": "(particle)"
+            },
+            {
+              "c": "好似",
+              "j": "hou2 ci5",
+              "e": "seems"
+            },
+            {
+              "c": "好嚴重",
+              "j": "hou2 jim4 zung6",
+              "e": "quite serious"
+            }
+          ]
+        },
+        {
+          "u": true,
+          "c": "唔好郁住！我即刻打999叫救護車。",
+          "j": "m4 hou2 juk1 zyu6! ngo5 zik1 hak1 daa2 gau2 gau2 gau2 giu3 gau3 wu6 ce1.",
+          "e": "Don't move! I'll call 999 for an ambulance right now.",
+          "bd": [
+            {
+              "c": "唔好",
+              "j": "m4 hou2",
+              "e": "don't"
+            },
+            {
+              "c": "郁住",
+              "j": "juk1 zyu6",
+              "e": "move / stay moving"
+            },
+            {
+              "c": "我",
+              "j": "ngo5",
+              "e": "I"
+            },
+            {
+              "c": "即刻",
+              "j": "zik1 hak1",
+              "e": "right now"
+            },
+            {
+              "c": "打",
+              "j": "daa2",
+              "e": "call"
+            },
+            {
+              "c": "999",
+              "j": "gau2 gau2 gau2",
+              "e": "999"
+            },
+            {
+              "c": "叫",
+              "j": "giu3",
+              "e": "call for"
+            },
+            {
+              "c": "救護車",
+              "j": "gau3 wu6 ce1",
+              "e": "ambulance"
+            }
+          ]
+        },
+        {
+          "u": false,
+          "c": "唔該晒你！好彩有你喺度。",
+          "j": "m4 goi1 saai3 nei5! hou2 coi2 jau5 nei5 hai2 dou6.",
+          "e": "Thank you so much! Lucky you're here.",
+          "bd": [
+            {
+              "c": "唔該晒你",
+              "j": "m4 goi1 saai3 nei5",
+              "e": "thanks so much"
+            },
+            {
+              "c": "好彩",
+              "j": "hou2 coi2",
+              "e": "lucky"
+            },
+            {
+              "c": "有你",
+              "j": "jau5 nei5",
+              "e": "you are"
+            },
+            {
+              "c": "喺度",
+              "j": "hai2 dou6",
+              "e": "here"
+            }
+          ]
+        },
+        {
+          "u": true,
+          "c": "唔使驚，救護車好快到。",
+          "j": "m4 sai2 geng1, gau3 wu6 ce1 hou2 faai3 dou3.",
+          "e": "Don't be scared — the ambulance will be here soon.",
+          "bd": [
+            {
+              "c": "唔使驚",
+              "j": "m4 sai2 geng1",
+              "e": "don't be scared"
+            },
+            {
+              "c": "救護車",
+              "j": "gau3 wu6 ce1",
+              "e": "ambulance"
+            },
+            {
+              "c": "好快",
+              "j": "hou2 faai3",
+              "e": "soon"
+            },
+            {
+              "c": "到",
+              "j": "dou3",
+              "e": "arrive"
+            }
+          ]
+        },
+        {
+          "u": false,
+          "c": "知喇，多謝你！下次小心啲先得。",
+          "j": "zi1 laa3, do1 ze6 nei5! haa6 ci3 siu2 sam1 di1 sin1 dak1.",
+          "e": "Okay, thank you! Next time we'd better be more careful.",
+          "bd": [
+            {
+              "c": "知喇",
+              "j": "zi1 laa3",
+              "e": "okay"
+            },
+            {
+              "c": "多謝你",
+              "j": "do1 ze6 nei5",
+              "e": "thank you"
+            },
+            {
+              "c": "下次",
+              "j": "haa6 ci3",
+              "e": "next time"
+            },
+            {
+              "c": "小心啲",
+              "j": "siu2 sam1 di1",
+              "e": "more careful"
+            },
+            {
+              "c": "先得",
+              "j": "sin1 dak1",
+              "e": "had better"
+            }
+          ]
+        }
+      ]
     }
   }
 }
