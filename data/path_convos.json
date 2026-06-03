@@ -728,7 +728,7 @@
         }
       ]
     },
-    "beginner-s3": {
+    "beginner-s4": {
       "title": "Ordering at a restaurant",
       "speakers": [
         "Waiter",
@@ -1137,421 +1137,7 @@
         }
       ]
     },
-    "beginner-s4": {
-      "title": "Checking in on a friend",
-      "speakers": [
-        "Friend",
-        "You"
-      ],
-      "lines": [
-        {
-          "u": false,
-          "c": "你今日好似唔開心喎，做咩呀？",
-          "j": "nei5 gam1 jat6 hou2 ci5 m4 hoi1 sam1 wo3, zou6 me1 aa3?",
-          "e": "You seem unhappy today — what's wrong?",
-          "bd": [
-            {
-              "c": "你",
-              "j": "nei5",
-              "e": "you"
-            },
-            {
-              "c": "今日",
-              "j": "gam1 jat6",
-              "e": "today"
-            },
-            {
-              "c": "好似",
-              "j": "hou2 ci5",
-              "e": "seem"
-            },
-            {
-              "c": "唔開心",
-              "j": "m4 hoi1 sam1",
-              "e": "unhappy"
-            },
-            {
-              "c": "喎",
-              "j": "wo3",
-              "e": "(noting particle)"
-            },
-            {
-              "c": "做咩",
-              "j": "zou6 me1",
-              "e": "what's up"
-            },
-            {
-              "c": "呀",
-              "j": "aa3",
-              "e": "(particle)"
-            }
-          ]
-        },
-        {
-          "u": true,
-          "c": "我有啲擔心，我媽媽病咗。",
-          "j": "ngo5 jau5 di1 daam1 sam1, ngo5 maa4 maa1 beng6 zo2.",
-          "e": "I'm a bit worried — my mum is sick.",
-          "bd": [
-            {
-              "c": "我",
-              "j": "ngo5",
-              "e": "I"
-            },
-            {
-              "c": "有啲",
-              "j": "jau5 di1",
-              "e": "a bit"
-            },
-            {
-              "c": "擔心",
-              "j": "daam1 sam1",
-              "e": "worried"
-            },
-            {
-              "c": "媽媽",
-              "j": "maa4 maa1",
-              "e": "mum"
-            },
-            {
-              "c": "病咗",
-              "j": "beng6 zo2",
-              "e": "got sick"
-            }
-          ]
-        },
-        {
-          "u": false,
-          "c": "吓？佢邊度唔舒服呀？",
-          "j": "haa2? keoi5 bin1 dou6 m4 syu1 fuk6 aa3?",
-          "e": "Oh? Where doesn't she feel well?",
-          "bd": [
-            {
-              "c": "吓",
-              "j": "haa2",
-              "e": "oh / huh"
-            },
-            {
-              "c": "佢",
-              "j": "keoi5",
-              "e": "she"
-            },
-            {
-              "c": "邊度",
-              "j": "bin1 dou6",
-              "e": "where"
-            },
-            {
-              "c": "唔舒服",
-              "j": "m4 syu1 fuk6",
-              "e": "unwell"
-            },
-            {
-              "c": "呀",
-              "j": "aa3",
-              "e": "(question particle)"
-            }
-          ]
-        },
-        {
-          "u": true,
-          "c": "佢個頭好痛，仲有啲肚痛。",
-          "j": "keoi5 go3 tau4 hou2 tung3, zung6 jau5 di1 tou5 tung3.",
-          "e": "Her head really hurts, and her stomach aches a bit too.",
-          "bd": [
-            {
-              "c": "佢",
-              "j": "keoi5",
-              "e": "her"
-            },
-            {
-              "c": "個頭",
-              "j": "go3 tau4",
-              "e": "head"
-            },
-            {
-              "c": "好痛",
-              "j": "hou2 tung3",
-              "e": "really hurts"
-            },
-            {
-              "c": "仲有",
-              "j": "zung6 jau5",
-              "e": "also has"
-            },
-            {
-              "c": "啲",
-              "j": "di1",
-              "e": "a bit of"
-            },
-            {
-              "c": "肚痛",
-              "j": "tou5 tung3",
-              "e": "stomach ache"
-            }
-          ]
-        },
-        {
-          "u": false,
-          "c": "唉，咁你一定好擔心。你爸爸知唔知呀？",
-          "j": "aai1, gam2 nei5 jat1 ding6 hou2 daam1 sam1. nei5 baa4 baa1 zi1 m4 zi1 aa3?",
-          "e": "Aw, you must be so worried. Does your dad know?",
-          "bd": [
-            {
-              "c": "唉",
-              "j": "aai1",
-              "e": "(sigh)"
-            },
-            {
-              "c": "咁",
-              "j": "gam2",
-              "e": "so / then"
-            },
-            {
-              "c": "你",
-              "j": "nei5",
-              "e": "you"
-            },
-            {
-              "c": "一定",
-              "j": "jat1 ding6",
-              "e": "must"
-            },
-            {
-              "c": "好擔心",
-              "j": "hou2 daam1 sam1",
-              "e": "very worried"
-            },
-            {
-              "c": "爸爸",
-              "j": "baa4 baa1",
-              "e": "dad"
-            },
-            {
-              "c": "知唔知",
-              "j": "zi1 m4 zi1",
-              "e": "know or not"
-            },
-            {
-              "c": "呀",
-              "j": "aa3",
-              "e": "(particle)"
-            }
-          ]
-        },
-        {
-          "u": true,
-          "c": "知呀，佢同我姐姐而家照顧緊佢。",
-          "j": "zi1 aa3, keoi5 tung4 ngo5 ze4 ze1 ji4 gaa1 ziu3 gu3 gan2 keoi5.",
-          "e": "Yes — he and my older sister are looking after her now.",
-          "bd": [
-            {
-              "c": "知呀",
-              "j": "zi1 aa3",
-              "e": "yes"
-            },
-            {
-              "c": "佢",
-              "j": "keoi5",
-              "e": "he"
-            },
-            {
-              "c": "同",
-              "j": "tung4",
-              "e": "and"
-            },
-            {
-              "c": "姐姐",
-              "j": "ze4 ze1",
-              "e": "older sister"
-            },
-            {
-              "c": "而家",
-              "j": "ji4 gaa1",
-              "e": "now"
-            },
-            {
-              "c": "照顧緊",
-              "j": "ziu3 gu3 gan2",
-              "e": "looking after"
-            },
-            {
-              "c": "佢",
-              "j": "keoi5",
-              "e": "her"
-            }
-          ]
-        },
-        {
-          "u": false,
-          "c": "你唔好太緊張，佢會好返嘅。",
-          "j": "nei5 m4 hou2 taai3 gan2 zoeng1, keoi5 wui5 hou2 faan1 ge3.",
-          "e": "Don't be too anxious — she'll get better.",
-          "bd": [
-            {
-              "c": "你",
-              "j": "nei5",
-              "e": "you"
-            },
-            {
-              "c": "唔好",
-              "j": "m4 hou2",
-              "e": "don't"
-            },
-            {
-              "c": "太",
-              "j": "taai3",
-              "e": "too"
-            },
-            {
-              "c": "緊張",
-              "j": "gan2 zoeng1",
-              "e": "anxious"
-            },
-            {
-              "c": "佢",
-              "j": "keoi5",
-              "e": "she"
-            },
-            {
-              "c": "會",
-              "j": "wui5",
-              "e": "will"
-            },
-            {
-              "c": "好返",
-              "j": "hou2 faan1",
-              "e": "recover"
-            },
-            {
-              "c": "嘅",
-              "j": "ge3",
-              "e": "(particle)"
-            }
-          ]
-        },
-        {
-          "u": true,
-          "c": "多謝你。有你呢個朋友真係好。",
-          "j": "do1 ze6 nei5. jau5 nei5 ni1 go3 pang4 jau5 zan1 hai6 hou2.",
-          "e": "Thank you. I'm lucky to have a friend like you.",
-          "bd": [
-            {
-              "c": "多謝你",
-              "j": "do1 ze6 nei5",
-              "e": "thank you"
-            },
-            {
-              "c": "有",
-              "j": "jau5",
-              "e": "have"
-            },
-            {
-              "c": "你",
-              "j": "nei5",
-              "e": "you"
-            },
-            {
-              "c": "呢個",
-              "j": "ni1 go3",
-              "e": "this"
-            },
-            {
-              "c": "朋友",
-              "j": "pang4 jau5",
-              "e": "friend"
-            },
-            {
-              "c": "真係好",
-              "j": "zan1 hai6 hou2",
-              "e": "is really good"
-            }
-          ]
-        },
-        {
-          "u": false,
-          "c": "應該嘅！得閒一齊去探佢啦。",
-          "j": "jing1 goi1 ge3! dak1 haan4 jat1 cai4 heoi3 taam3 keoi5 laa1.",
-          "e": "Of course! When we're free let's visit her together.",
-          "bd": [
-            {
-              "c": "應該",
-              "j": "jing1 goi1",
-              "e": "of course"
-            },
-            {
-              "c": "嘅",
-              "j": "ge3",
-              "e": "(particle)"
-            },
-            {
-              "c": "得閒",
-              "j": "dak1 haan4",
-              "e": "free"
-            },
-            {
-              "c": "一齊",
-              "j": "jat1 cai4",
-              "e": "together"
-            },
-            {
-              "c": "去",
-              "j": "heoi3",
-              "e": "go"
-            },
-            {
-              "c": "探",
-              "j": "taam3",
-              "e": "visit"
-            },
-            {
-              "c": "佢",
-              "j": "keoi5",
-              "e": "her"
-            },
-            {
-              "c": "啦",
-              "j": "laa1",
-              "e": "(particle)"
-            }
-          ]
-        },
-        {
-          "u": true,
-          "c": "好呀，佢一定會好開心。",
-          "j": "hou2 aa3, keoi5 jat1 ding6 wui5 hou2 hoi1 sam1.",
-          "e": "Yes — she'll be really happy.",
-          "bd": [
-            {
-              "c": "好呀",
-              "j": "hou2 aa3",
-              "e": "okay"
-            },
-            {
-              "c": "佢",
-              "j": "keoi5",
-              "e": "she"
-            },
-            {
-              "c": "一定",
-              "j": "jat1 ding6",
-              "e": "definitely"
-            },
-            {
-              "c": "會",
-              "j": "wui5",
-              "e": "will"
-            },
-            {
-              "c": "好開心",
-              "j": "hou2 hoi1 sam1",
-              "e": "very happy"
-            }
-          ]
-        }
-      ]
-    },
-    "beginner-s5": {
+    "beginner-s6": {
       "title": "A walk in the park",
       "speakers": [
         "Friend",
@@ -1975,7 +1561,421 @@
         }
       ]
     },
-    "beginner-s6": {
+    "beginner-s7": {
+      "title": "Checking in on a friend",
+      "speakers": [
+        "Friend",
+        "You"
+      ],
+      "lines": [
+        {
+          "u": false,
+          "c": "你今日好似唔開心喎，做咩呀？",
+          "j": "nei5 gam1 jat6 hou2 ci5 m4 hoi1 sam1 wo3, zou6 me1 aa3?",
+          "e": "You seem unhappy today — what's wrong?",
+          "bd": [
+            {
+              "c": "你",
+              "j": "nei5",
+              "e": "you"
+            },
+            {
+              "c": "今日",
+              "j": "gam1 jat6",
+              "e": "today"
+            },
+            {
+              "c": "好似",
+              "j": "hou2 ci5",
+              "e": "seem"
+            },
+            {
+              "c": "唔開心",
+              "j": "m4 hoi1 sam1",
+              "e": "unhappy"
+            },
+            {
+              "c": "喎",
+              "j": "wo3",
+              "e": "(noting particle)"
+            },
+            {
+              "c": "做咩",
+              "j": "zou6 me1",
+              "e": "what's up"
+            },
+            {
+              "c": "呀",
+              "j": "aa3",
+              "e": "(particle)"
+            }
+          ]
+        },
+        {
+          "u": true,
+          "c": "我有啲擔心，我媽媽病咗。",
+          "j": "ngo5 jau5 di1 daam1 sam1, ngo5 maa4 maa1 beng6 zo2.",
+          "e": "I'm a bit worried — my mum is sick.",
+          "bd": [
+            {
+              "c": "我",
+              "j": "ngo5",
+              "e": "I"
+            },
+            {
+              "c": "有啲",
+              "j": "jau5 di1",
+              "e": "a bit"
+            },
+            {
+              "c": "擔心",
+              "j": "daam1 sam1",
+              "e": "worried"
+            },
+            {
+              "c": "媽媽",
+              "j": "maa4 maa1",
+              "e": "mum"
+            },
+            {
+              "c": "病咗",
+              "j": "beng6 zo2",
+              "e": "got sick"
+            }
+          ]
+        },
+        {
+          "u": false,
+          "c": "吓？佢邊度唔舒服呀？",
+          "j": "haa2? keoi5 bin1 dou6 m4 syu1 fuk6 aa3?",
+          "e": "Oh? Where doesn't she feel well?",
+          "bd": [
+            {
+              "c": "吓",
+              "j": "haa2",
+              "e": "oh / huh"
+            },
+            {
+              "c": "佢",
+              "j": "keoi5",
+              "e": "she"
+            },
+            {
+              "c": "邊度",
+              "j": "bin1 dou6",
+              "e": "where"
+            },
+            {
+              "c": "唔舒服",
+              "j": "m4 syu1 fuk6",
+              "e": "unwell"
+            },
+            {
+              "c": "呀",
+              "j": "aa3",
+              "e": "(question particle)"
+            }
+          ]
+        },
+        {
+          "u": true,
+          "c": "佢個頭好痛，仲有啲肚痛。",
+          "j": "keoi5 go3 tau4 hou2 tung3, zung6 jau5 di1 tou5 tung3.",
+          "e": "Her head really hurts, and her stomach aches a bit too.",
+          "bd": [
+            {
+              "c": "佢",
+              "j": "keoi5",
+              "e": "her"
+            },
+            {
+              "c": "個頭",
+              "j": "go3 tau4",
+              "e": "head"
+            },
+            {
+              "c": "好痛",
+              "j": "hou2 tung3",
+              "e": "really hurts"
+            },
+            {
+              "c": "仲有",
+              "j": "zung6 jau5",
+              "e": "also has"
+            },
+            {
+              "c": "啲",
+              "j": "di1",
+              "e": "a bit of"
+            },
+            {
+              "c": "肚痛",
+              "j": "tou5 tung3",
+              "e": "stomach ache"
+            }
+          ]
+        },
+        {
+          "u": false,
+          "c": "唉，咁你一定好擔心。你爸爸知唔知呀？",
+          "j": "aai1, gam2 nei5 jat1 ding6 hou2 daam1 sam1. nei5 baa4 baa1 zi1 m4 zi1 aa3?",
+          "e": "Aw, you must be so worried. Does your dad know?",
+          "bd": [
+            {
+              "c": "唉",
+              "j": "aai1",
+              "e": "(sigh)"
+            },
+            {
+              "c": "咁",
+              "j": "gam2",
+              "e": "so / then"
+            },
+            {
+              "c": "你",
+              "j": "nei5",
+              "e": "you"
+            },
+            {
+              "c": "一定",
+              "j": "jat1 ding6",
+              "e": "must"
+            },
+            {
+              "c": "好擔心",
+              "j": "hou2 daam1 sam1",
+              "e": "very worried"
+            },
+            {
+              "c": "爸爸",
+              "j": "baa4 baa1",
+              "e": "dad"
+            },
+            {
+              "c": "知唔知",
+              "j": "zi1 m4 zi1",
+              "e": "know or not"
+            },
+            {
+              "c": "呀",
+              "j": "aa3",
+              "e": "(particle)"
+            }
+          ]
+        },
+        {
+          "u": true,
+          "c": "知呀，佢同我姐姐而家照顧緊佢。",
+          "j": "zi1 aa3, keoi5 tung4 ngo5 ze4 ze1 ji4 gaa1 ziu3 gu3 gan2 keoi5.",
+          "e": "Yes — he and my older sister are looking after her now.",
+          "bd": [
+            {
+              "c": "知呀",
+              "j": "zi1 aa3",
+              "e": "yes"
+            },
+            {
+              "c": "佢",
+              "j": "keoi5",
+              "e": "he"
+            },
+            {
+              "c": "同",
+              "j": "tung4",
+              "e": "and"
+            },
+            {
+              "c": "姐姐",
+              "j": "ze4 ze1",
+              "e": "older sister"
+            },
+            {
+              "c": "而家",
+              "j": "ji4 gaa1",
+              "e": "now"
+            },
+            {
+              "c": "照顧緊",
+              "j": "ziu3 gu3 gan2",
+              "e": "looking after"
+            },
+            {
+              "c": "佢",
+              "j": "keoi5",
+              "e": "her"
+            }
+          ]
+        },
+        {
+          "u": false,
+          "c": "你唔好太緊張，佢會好返嘅。",
+          "j": "nei5 m4 hou2 taai3 gan2 zoeng1, keoi5 wui5 hou2 faan1 ge3.",
+          "e": "Don't be too anxious — she'll get better.",
+          "bd": [
+            {
+              "c": "你",
+              "j": "nei5",
+              "e": "you"
+            },
+            {
+              "c": "唔好",
+              "j": "m4 hou2",
+              "e": "don't"
+            },
+            {
+              "c": "太",
+              "j": "taai3",
+              "e": "too"
+            },
+            {
+              "c": "緊張",
+              "j": "gan2 zoeng1",
+              "e": "anxious"
+            },
+            {
+              "c": "佢",
+              "j": "keoi5",
+              "e": "she"
+            },
+            {
+              "c": "會",
+              "j": "wui5",
+              "e": "will"
+            },
+            {
+              "c": "好返",
+              "j": "hou2 faan1",
+              "e": "recover"
+            },
+            {
+              "c": "嘅",
+              "j": "ge3",
+              "e": "(particle)"
+            }
+          ]
+        },
+        {
+          "u": true,
+          "c": "多謝你。有你呢個朋友真係好。",
+          "j": "do1 ze6 nei5. jau5 nei5 ni1 go3 pang4 jau5 zan1 hai6 hou2.",
+          "e": "Thank you. I'm lucky to have a friend like you.",
+          "bd": [
+            {
+              "c": "多謝你",
+              "j": "do1 ze6 nei5",
+              "e": "thank you"
+            },
+            {
+              "c": "有",
+              "j": "jau5",
+              "e": "have"
+            },
+            {
+              "c": "你",
+              "j": "nei5",
+              "e": "you"
+            },
+            {
+              "c": "呢個",
+              "j": "ni1 go3",
+              "e": "this"
+            },
+            {
+              "c": "朋友",
+              "j": "pang4 jau5",
+              "e": "friend"
+            },
+            {
+              "c": "真係好",
+              "j": "zan1 hai6 hou2",
+              "e": "is really good"
+            }
+          ]
+        },
+        {
+          "u": false,
+          "c": "應該嘅！得閒一齊去探佢啦。",
+          "j": "jing1 goi1 ge3! dak1 haan4 jat1 cai4 heoi3 taam3 keoi5 laa1.",
+          "e": "Of course! When we're free let's visit her together.",
+          "bd": [
+            {
+              "c": "應該",
+              "j": "jing1 goi1",
+              "e": "of course"
+            },
+            {
+              "c": "嘅",
+              "j": "ge3",
+              "e": "(particle)"
+            },
+            {
+              "c": "得閒",
+              "j": "dak1 haan4",
+              "e": "free"
+            },
+            {
+              "c": "一齊",
+              "j": "jat1 cai4",
+              "e": "together"
+            },
+            {
+              "c": "去",
+              "j": "heoi3",
+              "e": "go"
+            },
+            {
+              "c": "探",
+              "j": "taam3",
+              "e": "visit"
+            },
+            {
+              "c": "佢",
+              "j": "keoi5",
+              "e": "her"
+            },
+            {
+              "c": "啦",
+              "j": "laa1",
+              "e": "(particle)"
+            }
+          ]
+        },
+        {
+          "u": true,
+          "c": "好呀，佢一定會好開心。",
+          "j": "hou2 aa3, keoi5 jat1 ding6 wui5 hou2 hoi1 sam1.",
+          "e": "Yes — she'll be really happy.",
+          "bd": [
+            {
+              "c": "好呀",
+              "j": "hou2 aa3",
+              "e": "okay"
+            },
+            {
+              "c": "佢",
+              "j": "keoi5",
+              "e": "she"
+            },
+            {
+              "c": "一定",
+              "j": "jat1 ding6",
+              "e": "definitely"
+            },
+            {
+              "c": "會",
+              "j": "wui5",
+              "e": "will"
+            },
+            {
+              "c": "好開心",
+              "j": "hou2 hoi1 sam1",
+              "e": "very happy"
+            }
+          ]
+        }
+      ]
+    },
+    "beginner-s9": {
       "title": "Finding the way",
       "speakers": [
         "Local",
@@ -2394,7 +2394,7 @@
         }
       ]
     },
-    "beginner-s7": {
+    "beginner-s10": {
       "title": "A busy day at work",
       "speakers": [
         "Colleague",
@@ -2768,7 +2768,7 @@
         }
       ]
     },
-    "beginner-s8": {
+    "beginner-s11": {
       "title": "A hike that goes wrong",
       "speakers": [
         "Friend",

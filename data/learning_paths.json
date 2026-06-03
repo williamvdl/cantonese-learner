@@ -5,7 +5,7 @@
       "label": "Beginner",
       "icon": "🌱",
       "level": "Beginner",
-      "desc": "Start here. Everything you need to function in Cantonese — greetings to emergencies — in 8 themed chapters.",
+      "desc": "Everything you need to function in Cantonese — greetings to emergencies — across 11 themed chapters.",
       "lessons": [
         {
           "topic": "greetings",
@@ -40,7 +40,23 @@
           "round": 1
         },
         {
+          "topic": "classifiers",
+          "round": 1
+        },
+        {
           "topic": "food",
+          "round": 1
+        },
+        {
+          "topic": "meatseafood",
+          "round": 1
+        },
+        {
+          "topic": "fruitveg",
+          "round": 1
+        },
+        {
+          "topic": "drinks",
           "round": 1
         },
         {
@@ -53,6 +69,30 @@
         },
         {
           "topic": "shopping",
+          "round": 1
+        },
+        {
+          "topic": "modals",
+          "round": 1
+        },
+        {
+          "topic": "adjectives",
+          "round": 1
+        },
+        {
+          "topic": "comparisons",
+          "round": 1
+        },
+        {
+          "topic": "colors",
+          "round": 1
+        },
+        {
+          "topic": "animals",
+          "round": 1
+        },
+        {
+          "topic": "weather",
           "round": 1
         },
         {
@@ -72,15 +112,15 @@
           "round": 1
         },
         {
-          "topic": "colors",
+          "topic": "home",
           "round": 1
         },
         {
-          "topic": "animals",
+          "topic": "clothing",
           "round": 1
         },
         {
-          "topic": "weather",
+          "topic": "location",
           "round": 1
         },
         {
@@ -97,10 +137,6 @@
         },
         {
           "topic": "hotels",
-          "round": 1
-        },
-        {
-          "topic": "home",
           "round": 1
         },
         {
@@ -151,12 +187,13 @@
         },
         {
           "id": "beginner-s2",
-          "name": "Asking & Answering",
+          "name": "Building Sentences",
           "topics": [
             "questions",
             "particles",
             "tense",
-            "time"
+            "time",
+            "classifiers"
           ],
           "checkpoint": {
             "id": "beginner-s2-cp",
@@ -167,12 +204,12 @@
         },
         {
           "id": "beginner-s3",
-          "name": "Eating & Drinking",
+          "name": "Food & Drink",
           "topics": [
             "food",
-            "restaurant",
-            "cooking",
-            "shopping"
+            "meatseafood",
+            "fruitveg",
+            "drinks"
           ],
           "checkpoint": {
             "id": "beginner-s3-cp",
@@ -183,12 +220,11 @@
         },
         {
           "id": "beginner-s4",
-          "name": "Me & My People",
+          "name": "Eating Out & Shopping",
           "topics": [
-            "family",
-            "friends",
-            "feelings",
-            "body"
+            "restaurant",
+            "cooking",
+            "shopping"
           ],
           "checkpoint": {
             "id": "beginner-s4-cp",
@@ -199,11 +235,11 @@
         },
         {
           "id": "beginner-s5",
-          "name": "Describing the World",
+          "name": "Saying More",
           "topics": [
-            "colors",
-            "animals",
-            "weather"
+            "modals",
+            "adjectives",
+            "comparisons"
           ],
           "checkpoint": {
             "id": "beginner-s5-cp",
@@ -214,12 +250,11 @@
         },
         {
           "id": "beginner-s6",
-          "name": "Out & About",
+          "name": "Describing the World",
           "topics": [
-            "directions",
-            "transport",
-            "attractions",
-            "hotels"
+            "colors",
+            "animals",
+            "weather"
           ],
           "checkpoint": {
             "id": "beginner-s6-cp",
@@ -230,13 +265,12 @@
         },
         {
           "id": "beginner-s7",
-          "name": "Daily Life & Work",
+          "name": "Me & My People",
           "topics": [
-            "home",
-            "work",
-            "school",
-            "tech",
-            "money"
+            "family",
+            "friends",
+            "feelings",
+            "body"
           ],
           "checkpoint": {
             "id": "beginner-s7-cp",
@@ -247,6 +281,53 @@
         },
         {
           "id": "beginner-s8",
+          "name": "Home & Surroundings",
+          "topics": [
+            "home",
+            "clothing",
+            "location"
+          ],
+          "checkpoint": {
+            "id": "beginner-s8-cp",
+            "drillCap": 15,
+            "wordCap": 25,
+            "convo": "beginner-s8"
+          }
+        },
+        {
+          "id": "beginner-s9",
+          "name": "Out & About",
+          "topics": [
+            "directions",
+            "transport",
+            "attractions",
+            "hotels"
+          ],
+          "checkpoint": {
+            "id": "beginner-s9-cp",
+            "drillCap": 15,
+            "wordCap": 25,
+            "convo": "beginner-s9"
+          }
+        },
+        {
+          "id": "beginner-s10",
+          "name": "Daily Life & Work",
+          "topics": [
+            "work",
+            "school",
+            "tech",
+            "money"
+          ],
+          "checkpoint": {
+            "id": "beginner-s10-cp",
+            "drillCap": 15,
+            "wordCap": 25,
+            "convo": "beginner-s10"
+          }
+        },
+        {
+          "id": "beginner-s11",
           "name": "Activity & Safety",
           "topics": [
             "hobbies",
@@ -254,10 +335,10 @@
             "emergencies"
           ],
           "checkpoint": {
-            "id": "beginner-s8-cp",
+            "id": "beginner-s11-cp",
             "drillCap": 15,
             "wordCap": 25,
-            "convo": "beginner-s8"
+            "convo": "beginner-s11"
           }
         }
       ]
