@@ -372,9 +372,9 @@
   .sentence-english { font-size: 12px; color: #888; }
 
   /* Sentences-as-spine: reveal line, chips, optional note */
-  .sentence-reveal-line { margin-top: 7px; padding-top: 7px; border-top: 1px dashed var(--line, #E8DCC2); }
-  .sentence-eng-hint { font-size: 12px; color: var(--muted, #A89882); font-style: italic; }
-  .sentence-chips { display: flex; gap: 8px; margin-top: 10px; flex-wrap: wrap; }
+  .sentence-reveal-line { margin-top: 12px; padding: 4px 0; cursor: pointer; }
+  .sentence-eng-hint { font-size: 13.5px; color: var(--muted, #A89882); font-style: italic; padding: 4px 0; display: inline-block; }
+  .sentence-chips { display: flex; gap: 8px; margin-top: 14px; flex-wrap: wrap; }
   .s-chip { display: flex; align-items: center; gap: 5px; background: var(--parchment, #FCFAF4);
     border: 1.5px solid var(--line, #E8DCC2); border-radius: 999px; font-family: inherit;
     font-size: 12px; font-weight: 600; cursor: pointer; padding: 6px 12px; }
