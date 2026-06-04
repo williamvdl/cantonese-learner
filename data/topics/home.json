@@ -140,6 +140,7 @@
           "c": "廁所喺邊度？",
           "j": "ci3 so2 hai2 bin1 dou6?",
           "e": "Where is the toilet?",
+          "note": "廁所 (ci3 so2) is the plain word for \"toilet\"; in a restaurant or someone's home, the politer 洗手間 (sai2 sau2 gaan1) \"washroom\" sounds nicer. Both ask 喺邊度 (hai2 bin1 dou6) \"where?\".",
           "bd": [
             {
               "c": "廁所",
@@ -163,6 +164,7 @@
           "c": "我喺廚房煮飯。",
           "j": "ngo5 hai2 cyu4 fong2 zyu2 faan6.",
           "e": "I'm cooking in the kitchen.",
+          "note": "Where something happens comes *before* the verb — 喺廚房煮飯 (hai2 cyu4 fong2 zyu2 faan6) \"cook in the kitchen\", literally \"at-kitchen cook\". English puts it after; Cantonese puts the 喺 (hai2) place first.",
           "bd": [
             {
               "c": "我",
@@ -214,6 +216,7 @@
           "c": "開窗，唔該。",
           "j": "hoi1 coeng1, m4 goi1.",
           "e": "Open the window, please.",
+          "note": "開 (hoi1) \"open\" extends to switching things on — 開窗 (hoi1 coeng1) \"open the window\", 開燈 (hoi1 dang1) \"turn on the light\", 開冷氣 (hoi1 laang5 hei3) \"turn on the AC\". Its opposite is 閂 (saan1) \"close / shut\".",
           "bd": [
             {
               "c": "開",

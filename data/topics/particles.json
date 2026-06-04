@@ -75,6 +75,7 @@
           "c": "食飯喇！",
           "j": "sik6 faan6 laa3!",
           "e": "Time to eat!",
+          "note": "喇 (laa3) marks a change of state — \"now it's the case / now's the time\". 食飯喇！(sik6 faan6 laa3!) isn't just \"eat\" but \"it's time to eat now / food's ready\". The particle carries that \"now\" the English can't show.",
           "bd": [
             {
               "c": "食",
@@ -98,6 +99,7 @@
           "c": "一齊去啦。",
           "j": "jat1 cai4 heoi3 laa1.",
           "e": "Let's go together.",
+          "note": "啦 (laa1) softens an instruction into a friendly nudge — \"come on, let's…\". Watch the tone against 喇 (laa3): 啦 (laa1, high) urges or suggests, while 喇 (laa3, mid) marks \"now\" — near-identical particles, different tones, different jobs. 一齊 (jat1 cai4) is \"together\".",
           "bd": [
             {
               "c": "一齊",
@@ -121,6 +123,7 @@
           "c": "係呀！",
           "j": "hai6 aa3!",
           "e": "That's right!",
+          "note": "呀 (aa3) is a soft, warming particle — it takes the bare 係 (hai6) \"yes/correct\" and makes 係呀！(hai6 aa3!) sound natural and friendly rather than curt. It carries no meaning of its own; it just softens the tone.",
           "bd": [
             {
               "c": "係",
@@ -139,6 +142,7 @@
           "c": "咁貴喎！",
           "j": "gam3 gwai3 wo3!",
           "e": "That's so expensive!",
+          "note": "喎 (wo3) flags that you've just noticed or are remarking on something, often with mild surprise — 咁貴喎！(gam3 gwai3 wo3!) is \"oh — that's expensive!\". 咁 (gam3) here is \"so / that much\".",
           "bd": [
             {
               "c": "咁",
@@ -162,6 +166,7 @@
           "c": "你係咩？",
           "j": "nei5 hai6 me1?",
           "e": "Are you really?",
+          "note": "Tagging 咩 (me1) onto a statement turns it into a question, usually a surprised or doubtful one — 你係咩？(nei5 hai6 me1?) is less a neutral \"are you?\" and more \"oh, really? you are?\". (Same 咩 me1 as the casual \"what\", here doing question-particle duty.)",
           "bd": [
             {
               "c": "你",

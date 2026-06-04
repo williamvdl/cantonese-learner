@@ -75,6 +75,7 @@
           "c": "救命呀！",
           "j": "gau3 meng6 aa3!",
           "e": "Help!",
+          "note": "救命 (gau3 meng6) — literally \"save (my) life\" — is the cry for \"Help!\" in an emergency. 救 (gau3) \"to rescue\" also gives 救護車 (gau3 wu6 ce1) \"ambulance\", 救生員 (gau3 sang1 jyun4) \"lifeguard\".",
           "bd": [
             {
               "c": "救命",
@@ -93,6 +94,7 @@
           "c": "唔該叫救護車。",
           "j": "m4 goi1 giu3 gau3 wu6 ce1.",
           "e": "Please call an ambulance.",
+          "note": "叫 (giu3) here means \"call for / summon\" — 叫救護車 (giu3 gau3 wu6 ce1) \"call an ambulance\", 叫的士 (giu3 dik1 si2) \"hail a taxi\". (Yet another job for 叫 giu3, alongside \"be named\", \"order\", and \"tell someone to\".)",
           "bd": [
             {
               "c": "唔該",
@@ -116,6 +118,7 @@
           "c": "有人受傷。",
           "j": "jau5 jan4 sau6 soeng1.",
           "e": "Someone is hurt.",
+          "note": "有人 (jau5 jan4), literally \"there is a person\", means \"someone\" — 有人受傷 (jau5 jan4 sau6 soeng1) \"someone is hurt\". Likewise 冇人 (mou5 jan4) \"no one\". 受傷 (sau6 soeng1) \"injured\".",
           "bd": [
             {
               "c": "有人",
@@ -134,6 +137,7 @@
           "c": "報警啦！",
           "j": "bou3 ging2 laa1!",
           "e": "Call the police!",
+          "note": "報警 (bou3 ging2) is \"to report to / call the police\". Hong Kong's emergency number is 999 (gau2 gau2 gau2), not 911. 警 (ging2) is short for 警察 (ging2 caat3) \"police\".",
           "bd": [
             {
               "c": "報警",
@@ -152,6 +156,7 @@
           "c": "急症室喺邊度？",
           "j": "gap1 zing3 sat1 hai2 bin1 dou6?",
           "e": "Where is A&E?",
+          "note": "急症室 (gap1 zing3 sat1) is the \"A&E / emergency room\" — 急 (gap1) \"urgent\" + 症 (zing3) \"illness\" + 室 (sat1) \"room\". In an emergency, 喺邊度？(hai2 bin1 dou6?) \"where is it?\".",
           "bd": [
             {
               "c": "急症室",

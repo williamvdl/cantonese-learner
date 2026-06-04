@@ -82,6 +82,7 @@
           "c": "我鍾意食雞。",
           "j": "ngo5 zung1 ji3 sik6 gai1.",
           "e": "I like eating chicken.",
+          "note": "雞 (gai1) is \"chicken\" — the same word for the live bird and the meat on the plate. Cantonese doesn't add \"meat\" for poultry, unlike 牛肉 (ngau4 juk6) \"beef\" or 豬肉 (zyu1 juk6) \"pork\".",
           "bd": [
             {
               "c": "我",
@@ -110,6 +111,7 @@
           "c": "呢條魚好新鮮。",
           "j": "ni1 tiu4 jyu2 hou2 san1 sin1.",
           "e": "This fish is very fresh.",
+          "note": "魚 (jyu2) \"fish\" takes the classifier 條 (tiu4) — the one for long, thin things (also 一條路 jat1 tiu4 lou6 \"a road\", 一條裙 jat1 tiu4 kwan4 \"a skirt\"). 新鮮 (san1 sin1) is \"fresh\".",
           "bd": [
             {
               "c": "呢條",
@@ -133,6 +135,7 @@
           "c": "你想要牛肉定豬肉？",
           "j": "nei5 soeng2 jiu3 ngau4 juk6 ding6 zyu1 juk6?",
           "e": "Do you want beef or pork?",
+          "note": "定 (ding6) — sometimes 定係 (ding6 hai6) — is \"or\" when offering a choice: 牛肉定豬肉？(ngau4 juk6 ding6 zyu1 juk6?) \"beef or pork?\". Note meats are the animal + 肉 (juk6) \"meat\": 牛肉 (ngau4 juk6) \"cow-meat = beef\", 豬肉 (zyu1 juk6) \"pig-meat = pork\".",
           "bd": [
             {
               "c": "你",
@@ -166,6 +169,7 @@
           "c": "我唔食羊肉。",
           "j": "ngo5 m4 sik6 joeng4 juk6.",
           "e": "I don't eat lamb.",
+          "note": "羊肉 (joeng4 juk6) is \"sheep-meat\" — both lamb and mutton; Cantonese doesn't split them like English. 唔食 (m4 sik6) \"don't eat\" states a habit or dietary restriction here.",
           "bd": [
             {
               "c": "我",
@@ -189,6 +193,7 @@
           "c": "蝦同蟹都好貴。",
           "j": "haa1 tung4 haai5 dou1 hou2 gwai3.",
           "e": "Prawns and crab are both expensive.",
+          "note": "都 (dou1) means \"both / all / also\" and sits before the verb or adjective — 蝦同蟹都好貴 (haa1 tung4 haai5 dou1 hou2 gwai3) \"prawns and crab are both expensive\". When you list things and want \"both\", 都 (dou1) is the word.",
           "bd": [
             {
               "c": "蝦",

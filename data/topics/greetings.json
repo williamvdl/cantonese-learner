@@ -75,6 +75,7 @@
           "c": "你好！我叫William。",
           "j": "nei5 hou2! ngo5 giu3 William.",
           "e": "Hello! My name is William.",
+          "note": "你好 (nei5 hou2) is the all-purpose \"hello\", fine at any time of day. To give your name, 叫 (giu3) literally means \"to call\" — 我叫… (ngo5 giu3…) is \"I'm called…\", the natural way to say \"my name is\".",
           "bd": [
             {
               "c": "你好",
@@ -103,6 +104,7 @@
           "c": "早晨！你好嗎？",
           "j": "zou2 san4! nei5 hou2 maa3?",
           "e": "Good morning! How are you?",
+          "note": "早晨 (zou2 san4) is \"good morning\" specifically — mornings only, unlike 你好 (nei5 hou2). 你好嗎？(nei5 hou2 maa3?) is understood but a touch textbook; everyday Cantonese more often asks 你點呀？(nei5 dim2 aa3?) \"how's it going?\".",
           "bd": [
             {
               "c": "早晨",
@@ -126,6 +128,7 @@
           "c": "多謝，再見！",
           "j": "do1 ze6, zoi3 gin3!",
           "e": "Thank you, goodbye!",
+          "note": "Two \"thank-you\"s in Cantonese: 多謝 (do1 ze6) is for gifts and real kindness, while 唔該 (m4 goi1) is for service and small favours (a waiter, someone passing the salt). Mixing them up is the classic learner giveaway. 再見 (zoi3 gin3) is the standard \"goodbye\".",
           "bd": [
             {
               "c": "多謝",
@@ -144,6 +147,7 @@
           "c": "對唔住，我遲到。",
           "j": "deoi3 m4 zyu6, ngo5 ci4 dou3.",
           "e": "Sorry, I'm late.",
+          "note": "對唔住 (deoi3 m4 zyu6) is a genuine apology for doing something wrong (here, being late). For a lighter \"sorry to bother you / excuse me\" when no harm's done, use 唔好意思 (m4 hou2 ji3 si3) instead — reaching for 對唔住 (deoi3 m4 zyu6) there can sound oddly heavy.",
           "bd": [
             {
               "c": "對唔住",
@@ -167,6 +171,7 @@
           "c": "好高興認識你！",
           "j": "hou2 gou1 hing3 jing6 sik1 nei5!",
           "e": "Nice to meet you!",
+          "note": "Here 好 (hou2) means \"very\", not \"good\" — it's the everyday intensifier (好高興 hou2 gou1 hing3 = \"very happy\"). 認識 (jing6 sik1) is \"to know / be acquainted with\" a person, and the whole phrase is the set \"nice to meet you\".",
           "bd": [
             {
               "c": "好",

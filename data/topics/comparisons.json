@@ -88,6 +88,7 @@
           "c": "我比你高。",
           "j": "ngo5 bei2 nei5 gou1.",
           "e": "I'm taller than you.",
+          "note": "比 (bei2) makes a comparison — A 比 B + adjective = \"A is more ___ than B\": 我比你高 (ngo5 bei2 nei5 gou1) \"I'm taller than you\". (Careful: this 比 bei2 \"than\" sounds identical to 俾/畀 bei2 \"give\" — context tells them apart.)",
           "bd": [
             {
               "c": "我",
@@ -116,6 +117,7 @@
           "c": "今日凍過琴日。",
           "j": "gam1 jat6 dung3 gwo3 kam4 jat6.",
           "e": "Today is colder than yesterday.",
+          "note": "Another way to compare: adjective + 過 (gwo3) + the thing — 凍過琴日 (dung3 gwo3 kam4 jat6) \"colder than yesterday\". So 比 (bei2) goes *before* the adjective, 過 (gwo3) *after* it. (This 過 gwo3 is comparison, not the \"have-done-before\" 過 from the tense lesson.)",
           "bd": [
             {
               "c": "今日",
@@ -144,6 +146,7 @@
           "c": "呢個貴啲。",
           "j": "ni1 go3 gwai3 di1.",
           "e": "This one is a bit more expensive.",
+          "note": "Adjective + 啲 (di1) means \"a bit more ___\" — 貴啲 (gwai3 di1) \"a little more expensive\", 大啲 (daai6 di1) \"a bit bigger\". A quick way to say \"-er\" without naming what you're comparing to.",
           "bd": [
             {
               "c": "呢個",
@@ -162,6 +165,7 @@
           "c": "佢係最叻嗰個。",
           "j": "keoi5 hai6 zeoi3 lek1 go2 go3.",
           "e": "He's the cleverest one.",
+          "note": "最 (zeoi3) \"most\" makes the superlative — 最叻 (zeoi3 lek1) \"the cleverest / most capable\". 叻 (lek1) is a very Cantonese word for \"clever / sharp / good at something\". 嗰個 (go2 go3) \"that one\".",
           "bd": [
             {
               "c": "佢",
@@ -190,6 +194,7 @@
           "c": "你同我一樣高。",
           "j": "nei5 tung4 ngo5 jat1 joeng6 gou1.",
           "e": "You're as tall as me.",
+          "note": "同 … 一樣 (tung4 … jat1 joeng6) expresses \"the same as\" — 你同我一樣高 (nei5 tung4 ngo5 jat1 joeng6 gou1) \"you're as tall as me\", literally \"you with me same tall\". 一樣 (jat1 joeng6) on its own means \"the same\".",
           "bd": [
             {
               "c": "你",

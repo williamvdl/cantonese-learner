@@ -75,6 +75,7 @@
           "c": "我嘅電話冇電。",
           "j": "ngo5 ge3 din6 waa2 mou5 din6.",
           "e": "My phone has no battery.",
+          "note": "冇電 (mou5 din6), literally \"no electricity\", means \"out of battery\" — 電 (din6) covers both \"electricity\" and \"battery\". 冇 (mou5) is \"have not / there isn't\", the negative of 有 (jau5).",
           "bd": [
             {
               "c": "我嘅",
@@ -98,6 +99,7 @@
           "c": "WiFi密碼係咩？",
           "j": "WiFi mat6 maa5 hai6 me1?",
           "e": "What's the WiFi password?",
+          "note": "密碼 (mat6 maa5) is \"password / PIN\". The question 係咩？(hai6 me1?) \"is what?\" puts the casual 咩 (me1) \"what\" at the end — 密碼係咩？(mat6 maa5 hai6 me1?) \"what's the password?\".",
           "bd": [
             {
               "c": "WiFi",
@@ -126,6 +128,7 @@
           "c": "個程式壞咗。",
           "j": "go3 cing4 sik1 waai6 zo2.",
           "e": "The app is broken.",
+          "note": "壞 (waai6) means \"broken / spoiled\", and 壞咗 (waai6 zo2) \"has broken / is broken\" adds the completed 咗 (zo2) — 程式壞咗 (cing4 sik1 waai6 zo2) \"the app's broken\". (HK speakers often just say \"app\" in English too.)",
           "bd": [
             {
               "c": "個",
@@ -149,6 +152,7 @@
           "c": "我要充電。",
           "j": "ngo5 jiu3 cung1 din6.",
           "e": "I need to charge.",
+          "note": "充電 (cung1 din6) is \"to charge\" a battery — literally \"fill electricity\". 我要充電 (ngo5 jiu3 cung1 din6) \"I need to charge\". Same 電 (din6) \"electricity / battery\" as in 冇電 (mou5 din6) \"no battery\".",
           "bd": [
             {
               "c": "我",

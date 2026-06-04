@@ -75,6 +75,7 @@
           "c": "唔該，洗手間喺邊度？",
           "j": "m4 goi1, sai2 sau2 gaan1 hai2 bin1 dou6?",
           "e": "Excuse me, where is the bathroom?",
+          "note": "唔該 (m4 goi1) at the front is \"excuse me\" to get a stranger's attention. 喺邊度？(hai2 bin1 dou6?) is \"where (located)?\" — note the question word 邊度 (bin1 dou6) sits at the end, not the front. 洗手間 (sai2 sau2 gaan1) is literally \"wash-hands-room\".",
           "bd": [
             {
               "c": "唔該",
@@ -98,6 +99,7 @@
           "c": "我唔明，請講慢啲。",
           "j": "ngo5 m4 ming4, cing2 gong2 maan6 di1.",
           "e": "I don't understand, please speak slowly.",
+          "note": "啲 (di1) after an adjective means \"a bit / a little\" — 慢啲 (maan6 di1) \"a bit slower\", 快啲 (faai3 di1) \"a bit faster\". A very handy softener. 唔明 (m4 ming4) is \"don't understand\".",
           "bd": [
             {
               "c": "我",
@@ -131,6 +133,7 @@
           "c": "呢個幾錢？",
           "j": "ni1 go3 gei2 cin2?",
           "e": "How much is this?",
+          "note": "幾錢？(gei2 cin2?) \"how much (money)?\" is the everyday contraction — the fuller form is 幾多錢？(gei2 do1 cin2?). You'll hear the short 幾錢 (gei2 cin2) far more in shops and markets.",
           "bd": [
             {
               "c": "呢個",
@@ -149,6 +152,7 @@
           "c": "我叫William，你呢？",
           "j": "ngo5 giu3 William, nei5 ne1?",
           "e": "I'm William, and you?",
+          "note": "你呢？(nei5 ne1?) is the handy \"and you? / what about you?\" tag — attach 呢 (ne1) to bounce a question back. Mind the reading: this 呢 is ne1 (the particle), not the ni1 in 呢個 (ni1 go3) \"this one\" — same character, two jobs.",
           "bd": [
             {
               "c": "我",
@@ -177,6 +181,7 @@
           "c": "我要呢個，多謝。",
           "j": "ngo5 jiu3 ni1 go3, do1 ze6.",
           "e": "I want this one, thanks.",
+          "note": "要 (jiu3) is \"want / need\" — the blunt, direct way to ask for something (a shop, a menu). 呢個 (ni1 go3) is \"this one\"; point and say it. (A softer \"I'd like…\" is 我想… ngo5 soeng2…)",
           "bd": [
             {
               "c": "我要",

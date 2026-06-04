@@ -87,6 +87,7 @@
           "c": "我想飲茶。",
           "j": "ngo5 soeng2 jam2 caa4.",
           "e": "I want to drink tea.",
+          "note": "飲 (jam2) is the verb for drinking (Mandarin uses 喝). Note 飲茶 (jam2 caa4), literally \"drink tea\", is also the name for going out for dim sum — \"yum cha\". 想 (soeng2) here is the gentle \"want to\", softer than the blunt 要 (jiu3).",
           "bd": [
             {
               "c": "我",
@@ -115,6 +116,7 @@
           "c": "呢個飯好味！",
           "j": "ni1 go3 faan6 hou2 mei6!",
           "e": "This rice is delicious!",
+          "note": "好味 (hou2 mei6), literally \"good taste\", is the everyday \"delicious / tasty\". And 飯 (faan6) means \"cooked rice\" but stretches to a meal in general — 食飯 (sik6 faan6) is just \"to eat\".",
           "bd": [
             {
               "c": "呢個",
@@ -138,6 +140,7 @@
           "c": "我好餓，想食麵。",
           "j": "ngo5 hou2 ngo6, soeng2 sik6 min6.",
           "e": "I'm hungry, I want noodles.",
+          "note": "餓 (ngo6) \"hungry\" behaves like an adjective — 好餓 (hou2 ngo6) \"very hungry\". And 食 (sik6) is the Cantonese \"to eat\" (Mandarin uses 吃 hek3).",
           "bd": [
             {
               "c": "我",
@@ -166,6 +169,7 @@
           "c": "佢鍾意食魚。",
           "j": "keoi5 zung1 ji3 sik6 jyu2.",
           "e": "He likes eating fish.",
+          "note": "鍾意 (zung1 ji3) is the everyday \"to like\" — put any thing, person, or activity straight after it: 鍾意食魚 (zung1 ji3 sik6 jyu2) \"like eating fish\". (Mandarin's 喜歡 is rare in Cantonese speech.)",
           "bd": [
             {
               "c": "佢",
@@ -194,6 +198,7 @@
           "c": "咖啡同水，唔該。",
           "j": "gaa3 fe1 tung4 seoi2, m4 goi1.",
           "e": "Coffee and water, please.",
+          "note": "同 (tung4) links two things as \"and\" — 咖啡同水 (gaa3 fe1 tung4 seoi2) \"coffee and water\". It also means \"with\" — 同我一齊 (tung4 ngo5 jat1 cai4) \"together with me\". Ending with 唔該 (m4 goi1) is the polite \"please\" when ordering.",
           "bd": [
             {
               "c": "咖啡",

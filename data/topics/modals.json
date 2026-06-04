@@ -88,6 +88,7 @@
           "c": "我想去香港。",
           "j": "ngo5 soeng2 heoi3 hoeng1 gong2.",
           "e": "I want to go to Hong Kong.",
+          "note": "想 (soeng2) + a verb is \"want to / would like to\" — 想去 (soeng2 heoi3) \"want to go\". It's the gentle, polite \"want\"; 要 (jiu3) is the firmer \"need to / must\".",
           "bd": [
             {
               "c": "我想",
@@ -111,6 +112,7 @@
           "c": "你可以幫我嗎？",
           "j": "nei5 ho2 ji5 bong1 ngo5 maa3?",
           "e": "Can you help me?",
+          "note": "可以 (ho2 ji5) is \"can / may\" in the sense of being allowed or possible — 你可以幫我嗎？(nei5 ho2 ji5 bong1 ngo5 maa3?) \"can you help me?\". Different from 識 (sik1) \"know how to\" and 會 (wui5) \"will\".",
           "bd": [
             {
               "c": "你",
@@ -139,6 +141,7 @@
           "c": "我唔識游水。",
           "j": "ngo5 m4 sik1 jau4 seoi2.",
           "e": "I don't know how to swim.",
+          "note": "識 (sik1) here is \"know how to (do a skill)\" — 唔識游水 (m4 sik1 jau4 seoi2) \"can't swim / don't know how to\". 游水 (jau4 seoi2) is the Cantonese \"to swim\" (literally \"swim-water\").",
           "bd": [
             {
               "c": "我",
@@ -162,6 +165,7 @@
           "c": "聽日你要返工。",
           "j": "ting1 jat6 nei5 jiu3 faan1 gung1.",
           "e": "Tomorrow you have to work.",
+          "note": "要 (jiu3) here is \"have to / must\" (obligation) — 你要返工 (nei5 jiu3 faan1 gung1) \"you have to go to work\". Note 返 (faan1) \"return\": Cantonese uses it for routine going — 返工 (faan1 gung1) \"go to work\", 返屋企 (faan1 uk1 kei2) \"go home\".",
           "bd": [
             {
               "c": "聽日",

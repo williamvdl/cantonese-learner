@@ -123,6 +123,7 @@
           "c": "我爸爸好高。",
           "j": "ngo5 baa4 baa1 hou2 gou1.",
           "e": "My father is very tall.",
+          "note": "With close family you can drop the 嘅 (ge3) \"'s\" — 我爸爸 (ngo5 baa4 baa1) \"my dad\", not 我嘅爸爸. Note the tone shift in doubled kinship words: 爸爸 is baa4 baa1, the second syllable lifting high — same in 媽媽 (maa4 maa1), 哥哥 (go4 go1).",
           "bd": [
             {
               "c": "我",
@@ -174,6 +175,7 @@
           "c": "我有一個哥哥。",
           "j": "ngo5 jau5 jat1 go3 go4 go1.",
           "e": "I have one older brother.",
+          "note": "Cantonese names siblings by age, not just gender — 哥哥 (go4 go1) \"older brother\", 弟弟 (dai6 dai2) \"younger brother\", 姐姐 (ze4 ze1) \"older sister\", 妹妹 (mui4 mui2) \"younger sister\". There's no single word for just \"brother\"; you must pick older or younger.",
           "bd": [
             {
               "c": "我",
@@ -202,6 +204,7 @@
           "c": "妹妹好細個。",
           "j": "mui4 mui2 hou2 sai3 go3.",
           "e": "Younger sister is very young.",
+          "note": "細 (sai3) is the Cantonese \"small\" (Mandarin 小 siu2), and 細個 (sai3 go3) means \"young / little\" of a person — 好細個 (hou2 sai3 go3) \"very young\". Its opposite is 大 (daai6) \"big / grown / older\".",
           "bd": [
             {
               "c": "妹妹",
@@ -225,6 +228,7 @@
           "c": "爺爺住喺香港。",
           "j": "je4 je2 zyu6 hai2 hoeng1 gong2.",
           "e": "Grandfather lives in Hong Kong.",
+          "note": "Grandparents split by side of the family: 爺爺 (je4 je2) and 嫲嫲 (maa4 maa2) are your father's parents; 公公 (gung1 gung1) / 婆婆 (po4 po4) — or 外公 (ngoi6 gung1) / 外婆 (ngoi6 po4) — are your mother's. 住喺 (zyu6 hai2) is \"live at\".",
           "bd": [
             {
               "c": "爺爺",

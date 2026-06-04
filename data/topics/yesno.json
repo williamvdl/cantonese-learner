@@ -75,6 +75,7 @@
           "c": "係，我係。",
           "j": "hai6, ngo5 hai6.",
           "e": "Yes, I am.",
+          "note": "Cantonese has no all-purpose \"yes\" — you answer by echoing the verb. Asked 係唔係？(hai6 m4 hai6?) you reply 係 (hai6) \"am/is\"; asked 得唔得？(dak1 m4 dak1?) \"OK?\" you reply 得 (dak1). So 係 (hai6) only means \"yes\" to an \"is/are\" question.",
           "bd": [
             {
               "c": "係",
@@ -98,6 +99,7 @@
           "c": "唔係，唔該。",
           "j": "m4 hai6, m4 goi1.",
           "e": "No, thank you.",
+          "note": "唔 (m4) is the all-purpose \"not\" prefix — 唔係 (m4 hai6) \"is not\". And 唔該 (m4 goi1) is the workhorse politeness word: here \"no thanks\", but also \"excuse me\" to get attention and \"please\" when asking a favour.",
           "bd": [
             {
               "c": "唔係",
@@ -116,6 +118,7 @@
           "c": "得，冇問題。",
           "j": "dak1, mou5 man6 tai4.",
           "e": "OK, no problem.",
+          "note": "得 (dak1) is a hugely useful all-purpose \"OK / can do / that works\" — and it's how you say \"yes\" to a 得唔得？(dak1 m4 dak1?) question. 冇 (mou5) is \"have not / there isn't\", the negative of 有 (jau5) \"have\".",
           "bd": [
             {
               "c": "得",
@@ -139,6 +142,7 @@
           "c": "請坐。",
           "j": "cing2 co5.",
           "e": "Please sit down.",
+          "note": "請 (cing2) is \"please\", placed before the verb — 請坐 (cing2 co5) \"please sit\", 請講 (cing2 gong2) \"please speak\". It's slightly formal/polite; for everyday small favours you'd more likely use 唔該 (m4 goi1).",
           "bd": [
             {
               "c": "請",
@@ -157,6 +161,7 @@
           "c": "歡迎你嚟。",
           "j": "fun1 jing4 nei5 lai4.",
           "e": "Welcome / glad you came.",
+          "note": "歡迎 (fun1 jing4) is \"welcome\". Note 嚟 (lai4) \"to come\" — a distinctively Cantonese word (Mandarin uses 來 loi4); you'll see 嚟 (lai4) constantly for \"come (here)\".",
           "bd": [
             {
               "c": "歡迎",

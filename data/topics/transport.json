@@ -75,6 +75,7 @@
           "c": "我坐地鐵去。",
           "j": "ngo5 co5 dei6 tit3 heoi3.",
           "e": "I'm taking the MTR.",
+          "note": "Two verbs for taking transport: 坐 (co5) \"sit/ride\" and 搭 (daap3) \"take\" both work — 坐地鐵 (co5 dei6 tit3) or 搭地鐵 (daap3 dei6 tit3) \"take the MTR\". 地鐵 (dei6 tit3) is the subway/MTR; the verb 去 (heoi3) \"go\" comes at the end.",
           "bd": [
             {
               "c": "我",
@@ -103,6 +104,7 @@
           "c": "的士幾錢？",
           "j": "dik1 si2 gei2 cin2?",
           "e": "How much is the taxi?",
+          "note": "的士 (dik1 si2) \"taxi\" is borrowed straight from English — Cantonese has many such loanwords (巴士 baa1 si2 \"bus\", 啤酒 be1 zau2 \"beer\"). To hail one you 搭的士 (daap3 dik1 si2) \"take a taxi\".",
           "bd": [
             {
               "c": "的士",
@@ -121,6 +123,7 @@
           "c": "巴士喺邊度停？",
           "j": "baa1 si2 hai2 bin1 dou6 ting4?",
           "e": "Where does the bus stop?",
+          "note": "停 (ting4) is \"to stop\" — 喺邊度停 (hai2 bin1 dou6 ting4) \"where does it stop?\", i.e. where to get off. 巴士 (baa1 si2) \"bus\" is another English loanword.",
           "bd": [
             {
               "c": "巴士",
@@ -167,6 +170,7 @@
           "c": "我踩單車返工。",
           "j": "ngo5 caai2 daan1 ce1 faan1 gung1.",
           "e": "I cycle to work.",
+          "note": "單車 (daan1 ce1) is the Cantonese for \"bicycle\" (Mandarin 自行車), and you 踩 (caai2) \"pedal\" it — 踩單車 (caai2 daan1 ce1) \"ride a bike / cycle\". 踩 (caai2) literally means \"to step on\".",
           "bd": [
             {
               "c": "我",

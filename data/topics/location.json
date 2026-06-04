@@ -88,6 +88,7 @@
           "c": "我喺屋企。",
           "j": "ngo5 hai2 uk1 kei2.",
           "e": "I'm at home.",
+          "note": "喺 (hai2) alone can mean \"to be at (a place)\" — 我喺屋企 (ngo5 hai2 uk1 kei2) \"I'm at home\", no other verb needed. (Don't swap in 係 hai6 \"to be\" — for location it's always 喺 hai2.)",
           "bd": [
             {
               "c": "我",
@@ -111,6 +112,7 @@
           "c": "隻貓喺枱下面。",
           "j": "zek3 maau1 hai2 toi2 haa6 min6.",
           "e": "The cat is under the table.",
+          "note": "Position words go *after* the place, not before — 喺枱下面 (hai2 toi2 haa6 min6) \"under the table\", literally \"at table's underside\". Build them with 下面 (haa6 min6) under, 上面 (soeng6 min6) on top, 入面 (jap6 min6) inside.",
           "bd": [
             {
               "c": "隻貓",
@@ -172,6 +174,7 @@
           "c": "銀行喺郵局隔籬。",
           "j": "ngan4 hong4 hai2 jau4 guk2 gaak3 lei4.",
           "e": "The bank is next to the post office.",
+          "note": "隔籬 (gaak3 lei4) is the Cantonese for \"next to / beside\" — 喺郵局隔籬 (hai2 jau4 guk2 gaak3 lei4) \"next to the post office\". It also means \"the neighbour\" (隔籬屋 gaak3 lei4 uk1).",
           "bd": [
             {
               "c": "銀行",

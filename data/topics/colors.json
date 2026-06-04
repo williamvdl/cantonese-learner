@@ -75,6 +75,7 @@
           "c": "我鍾意紅色。",
           "j": "ngo5 zung1 ji3 hung4 sik1.",
           "e": "I like red.",
+          "note": "Cantonese colour words end in 色 (sik1) \"colour\" — 紅色 (hung4 sik1) \"red\" (red-colour), 藍色 (laam4 sik1) \"blue\", 綠色 (luk6 sik1) \"green\". To name a colour you keep the 色 (sik1).",
           "bd": [
             {
               "c": "我",
@@ -121,6 +122,7 @@
           "c": "呢件衫係白色。",
           "j": "ni1 gin6 saam1 hai6 baak6 sik1.",
           "e": "This shirt is white.",
+          "note": "衫 (saam1) is the general Cantonese word for a top or clothes — 件衫 (gin6 saam1) \"a top\", using the clothing classifier 件 (gin6). 白色 (baak6 sik1) \"white\".",
           "bd": [
             {
               "c": "呢件",
@@ -149,6 +151,7 @@
           "c": "佢著綠色嘅褲。",
           "j": "keoi5 zoek3 luk6 sik1 ge3 fu3.",
           "e": "He's wearing green pants.",
+          "note": "著 (zoek3) is the Cantonese \"to wear\" (clothes) — 著綠色嘅褲 (zoek3 luk6 sik1 ge3 fu3) \"wear green trousers\". The 嘅 (ge3) links a describer to a noun, like English \"'s\" or \"of\" — 綠色嘅褲 (luk6 sik1 ge3 fu3) \"green-coloured trousers\".",
           "bd": [
             {
               "c": "佢",

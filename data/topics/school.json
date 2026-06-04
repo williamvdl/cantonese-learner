@@ -98,6 +98,7 @@
           "c": "我做緊功課。",
           "j": "ngo5 zou6 gan2 gung1 fo3.",
           "e": "I'm doing homework.",
+          "note": "做緊 (zou6 gan2) \"doing (right now)\" uses the progressive 緊 (gan2) after 做 (zou6) \"do\". 功課 (gung1 fo3) is \"homework\" — 做功課 (zou6 gung1 fo3) \"do homework\".",
           "bd": [
             {
               "c": "我",
@@ -121,6 +122,7 @@
           "c": "聽日有考試。",
           "j": "ting1 jat6 jau5 haau2 si3.",
           "e": "There's an exam tomorrow.",
+          "note": "有 (jau5) \"have\" also introduces an upcoming event — 聽日有考試 (ting1 jat6 jau5 haau2 si3) \"there's an exam tomorrow\". 考試 (haau2 si3) is \"exam / test\".",
           "bd": [
             {
               "c": "聽日",
@@ -144,6 +146,7 @@
           "c": "我同學好聰明。",
           "j": "ngo5 tung4 hok6 hou2 cung1 ming4.",
           "e": "My classmate is very smart.",
+          "note": "同學 (tung4 hok6), literally \"same-study\", means \"classmate\" — the 同 (tung4) \"same / together\" prefix also gives 同事 (tung4 si6) \"colleague\", 同屋 (tung4 uk1) \"flatmate\". 聰明 (cung1 ming4) is \"clever / smart\".",
           "bd": [
             {
               "c": "我",
@@ -172,6 +175,7 @@
           "c": "我唔識答呢題。",
           "j": "ngo5 m4 sik1 daap3 ni1 tai4.",
           "e": "I don't know the answer to this question.",
+          "note": "答 (daap3) is \"to answer\" — 答題 (daap3 tai4) \"answer a question\". 題 (tai4) is the word for an exam/quiz question (and its own classifier): 呢題 (ni1 tai4) \"this question\". 唔識答 (m4 sik1 daap3) \"don't know how to answer\".",
           "bd": [
             {
               "c": "我",

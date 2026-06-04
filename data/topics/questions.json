@@ -75,6 +75,7 @@
           "c": "你係邊個？",
           "j": "nei5 hai6 bin1 go3?",
           "e": "Who are you?",
+          "note": "邊個 (bin1 go3) is \"who\", literally \"which one\". It goes exactly where the answer would sit — 你係邊個？(nei5 hai6 bin1 go3?) \"you are who?\" — Cantonese doesn't move question words to the front like English.",
           "bd": [
             {
               "c": "你",
@@ -98,6 +99,7 @@
           "c": "幾時走？",
           "j": "gei2 si4 zau2?",
           "e": "When are we leaving?",
+          "note": "幾時 (gei2 si4) is \"when\". Notice there's no word for \"we\" — Cantonese freely drops a subject that's obvious from context, so 幾時走？(gei2 si4 zau2?) is simply \"when leave?\".",
           "bd": [
             {
               "c": "幾時",
@@ -116,6 +118,7 @@
           "c": "點解唔嚟？",
           "j": "dim2 gaai2 m4 lai4?",
           "e": "Why aren't you coming?",
+          "note": "點解 (dim2 gaai2) is \"why\", literally \"how to explain\". 唔嚟 (m4 lai4) is \"not come\" — 唔 (m4) negates the verb 嚟 (lai4) \"come\".",
           "bd": [
             {
               "c": "點解",
@@ -139,6 +142,7 @@
           "c": "你住喺邊度？",
           "j": "nei5 zyu6 hai2 bin1 dou6?",
           "e": "Where do you live?",
+          "note": "Don't confuse 喺 (hai2) with 係 (hai6). 喺 (hai2) means \"at / in / located at\" — 住喺 (zyu6 hai2) \"live at\" — while 係 (hai6) means \"to be / is\". They sound close but do completely different jobs. 邊度 (bin1 dou6) \"where\" sits at the end.",
           "bd": [
             {
               "c": "你",
@@ -167,6 +171,7 @@
           "c": "你叫咩名？",
           "j": "nei5 giu3 me1 meng2?",
           "e": "What's your name?",
+          "note": "咩 (me1) is the casual \"what\", a contraction of 乜嘢 (mat1 je5). It stays in place: 你叫咩名？(nei5 giu3 me1 meng2?) is literally \"you called what name?\", with the answer slotting straight into the 咩 (me1) spot.",
           "bd": [
             {
               "c": "你",

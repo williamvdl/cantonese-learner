@@ -75,6 +75,7 @@
           "c": "我訂咗一間房。",
           "j": "ngo5 deng6 zo2 jat1 gaan1 fong2.",
           "e": "I booked a room.",
+          "note": "訂 (deng6) means \"to book / reserve\" — 訂房 (deng6 fong2) \"book a room\", 訂枱 (deng6 toi2) \"book a table\". The 咗 (zo2) marks it done: 訂咗 (deng6 zo2) \"have booked\". 間 (gaan1) is the room's classifier.",
           "bd": [
             {
               "c": "我",
@@ -126,6 +127,7 @@
           "c": "鎖匙俾我，唔該。",
           "j": "so2 si4 bei2 ngo5, m4 goi1.",
           "e": "The key please.",
+          "note": "鎖匙 (so2 si4) is the Cantonese for \"key\" (Mandarin 鑰匙). 鎖匙俾我 (so2 si4 bei2 ngo5) \"give me the key\" — fronting the thing (鎖匙) is natural for emphasis.",
           "bd": [
             {
               "c": "鎖匙",
@@ -154,6 +156,7 @@
           "c": "早餐喺幾樓？",
           "j": "zou2 caan1 hai2 gei2 lau2?",
           "e": "What floor is breakfast on?",
+          "note": "樓 (lau2) means \"floor / storey\" — 幾樓 (gei2 lau2) \"which floor?\", 三樓 (saam1 lau2) \"3rd floor\". Note 喺 (hai2) \"on/at\" for location: 喺幾樓 (hai2 gei2 lau2) \"on which floor\".",
           "bd": [
             {
               "c": "早餐",
@@ -177,6 +180,7 @@
           "c": "我聽朝退房。",
           "j": "ngo5 ting1 ziu1 teoi3 fong2.",
           "e": "I'm checking out tomorrow morning.",
+          "note": "聽朝 (ting1 ziu1) is \"tomorrow morning\" — a tighter form of 聽日朝早 (ting1 jat6 ziu1 zou2). Likewise 今朝 (gam1 ziu1) \"this morning\". 退房 (teoi3 fong2) is \"to check out\".",
           "bd": [
             {
               "c": "我",

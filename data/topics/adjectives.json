@@ -88,6 +88,7 @@
           "c": "呢間屋好大。",
           "j": "ni1 gaan1 uk1 hou2 daai6.",
           "e": "This house is very big.",
+          "note": "間 (gaan1) is the classifier for rooms, houses, and shops — 一間屋 (jat1 gaan1 uk1) \"a house\", 一間餐廳 (jat1 gaan1 caan1 teng1) \"a restaurant\". Adjectives take 好 (hou2) \"very\" in front: 好大 (hou2 daai6) \"very big\".",
           "bd": [
             {
               "c": "呢間",
@@ -111,6 +112,7 @@
           "c": "我部電話太舊喇。",
           "j": "ngo5 bou6 din6 waa2 taai3 gau6 laa3.",
           "e": "My phone is too old.",
+          "note": "部 (bou6) is the classifier for machines and devices — 一部電話 (jat1 bou6 din6 waa2) \"a phone\", 一部電腦 (jat1 bou6 din6 nou5) \"a computer\". 太 (taai3) \"too / excessively\" pairs with 喇 (laa3): 太舊喇 (taai3 gau6 laa3) \"too old (now)\".",
           "bd": [
             {
               "c": "我",
@@ -144,6 +146,7 @@
           "c": "佢行得好快。",
           "j": "keoi5 haang4 dak1 hou2 faai3.",
           "e": "He walks very fast.",
+          "note": "To describe *how* an action is done, use verb + 得 (dak1) + adjective — 行得好快 (haang4 dak1 hou2 faai3) \"walks very fast\", 講得好慢 (gong2 dak1 hou2 maan6) \"speaks very slowly\". The 得 (dak1) links the verb to its manner.",
           "bd": [
             {
               "c": "佢",
@@ -167,6 +170,7 @@
           "c": "今日人好多。",
           "j": "gam1 jat6 jan4 hou2 do1.",
           "e": "There are a lot of people today.",
+          "note": "An adjective can be the whole predicate — no \"is\" needed. 人好多 (jan4 hou2 do1) \"(the) people are very many = it's crowded\". 係 (hai6) \"to be\" is dropped before adjectives; you just say 好 (hou2) + adjective.",
           "bd": [
             {
               "c": "今日",
@@ -190,6 +194,7 @@
           "c": "呢條裙太長喇。",
           "j": "ni1 tiu4 kwan4 taai3 coeng4 laa3.",
           "e": "This skirt is too long.",
+          "note": "裙 (kwan4) \"skirt / dress\" takes 條 (tiu4), the classifier for long things — 一條裙 (jat1 tiu4 kwan4). (Same 條 tiu4 as for fish and roads.)",
           "bd": [
             {
               "c": "呢條",

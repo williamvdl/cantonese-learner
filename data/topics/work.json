@@ -116,6 +116,7 @@
           "c": "老闆叫我加班。",
           "j": "lou5 baan2 giu3 ngo5 gaa1 baan1.",
           "e": "The boss told me to do overtime.",
+          "note": "叫 (giu3) here means \"tell / get (someone to do something)\" — 老闆叫我加班 (lou5 baan2 giu3 ngo5 gaa1 baan1) \"the boss told me to do overtime\". So 叫 (giu3) covers \"be named\", \"order (food)\", and \"tell someone to\". 加班 (gaa1 baan1) is \"overtime\".",
           "bd": [
             {
               "c": "老闆",
@@ -144,6 +145,7 @@
           "c": "幾時放工呀？",
           "j": "gei2 si4 fong3 gung1 aa3?",
           "e": "When do you finish work?",
+          "note": "放工 (fong3 gung1) is \"to finish work / knock off\" — the bookend to 返工 (faan1 gung1) \"start work\". 放 (fong3) \"release\" also gives 放假 (fong3 gaa3) \"have a holiday\", 放學 (fong3 hok6) \"finish school\".",
           "bd": [
             {
               "c": "幾時",
@@ -167,6 +169,7 @@
           "c": "開會喺三點。",
           "j": "hoi1 wui2 hai2 saam1 dim2.",
           "e": "The meeting is at 3.",
+          "note": "開會 (hoi1 wui2) is \"to hold / have a meeting\" — 開 (hoi1) \"open\" again doing duty for starting things. 喺三點 (hai2 saam1 dim2) \"at 3 o'clock\", with 喺 (hai2) marking the time.",
           "bd": [
             {
               "c": "開會",

@@ -88,6 +88,7 @@
           "c": "我想飲杯咖啡。",
           "j": "ngo5 soeng2 jam2 bui1 gaa3 fe1.",
           "e": "I want to drink a coffee.",
+          "note": "In casual speech the 一 (jat1) \"one\" before a classifier often drops — 飲杯咖啡 (jam2 bui1 gaa3 fe1) \"drink a coffee\", short for 飲一杯咖啡 (jam2 jat1 bui1 gaa3 fe1). 杯 (bui1) \"cup\" is the classifier for drinks.",
           "bd": [
             {
               "c": "我",
@@ -121,6 +122,7 @@
           "c": "凍檸茶唔該！",
           "j": "dung3 ning4 caa4 m4 goi1!",
           "e": "Iced lemon tea, please!",
+          "note": "凍 (dung3) means \"cold / iced\" (opposite 熱 jit6 \"hot\") — 凍檸茶 (dung3 ning4 caa4) \"iced lemon tea\", a cha chaan teng classic. 檸 (ning4) is short for 檸檬 (ning4 mung1) \"lemon\".",
           "bd": [
             {
               "c": "凍檸茶",
@@ -139,6 +141,7 @@
           "c": "你想飲茶定咖啡？",
           "j": "nei5 soeng2 jam2 caa4 ding6 gaa3 fe1?",
           "e": "Do you want tea or coffee?",
+          "note": "定 (ding6) \"or\" offers a choice between two options — 茶定咖啡？(caa4 ding6 gaa3 fe1?) \"tea or coffee?\". (Not the same as listing with 同 tung4 \"and\".)",
           "bd": [
             {
               "c": "你",
@@ -172,6 +175,7 @@
           "c": "細路唔可以飲啤酒。",
           "j": "sai3 lou6 m4 ho2 ji5 jam2 be1 zau2.",
           "e": "Children can't drink beer.",
+          "note": "細路 (sai3 lou6) is the casual Cantonese for \"kid / child\". 唔可以 (m4 ho2 ji5) is \"may not / not allowed\". 啤酒 (be1 zau2) \"beer\" — 啤 (be1) is borrowed from English.",
           "bd": [
             {
               "c": "細路",
@@ -200,6 +204,7 @@
           "c": "我杯奶茶走甜。",
           "j": "ngo5 bui1 naai5 caa4 zau2 tim4.",
           "e": "My milk tea, no sugar.",
+          "note": "走 (zau2) in ordering means \"hold / leave out\" — 走甜 (zau2 tim4) \"no sugar\", 走冰 (zau2 bing1) \"no ice\". So 奶茶走甜 (naai5 caa4 zau2 tim4) is \"milk tea, no sugar\" — essential cha chaan teng shorthand.",
           "bd": [
             {
               "c": "我",

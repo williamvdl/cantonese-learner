@@ -75,6 +75,7 @@
           "c": "我食咗飯。",
           "j": "ngo5 sik6 zo2 faan6.",
           "e": "I have eaten.",
+          "note": "Cantonese marks <b>aspect</b> — whether an action is finished — not tense (when it happened). 咗 (zo2) tags an action as completed: 食咗 (sik6 zo2) \"have eaten / ate\". Context, not the verb, tells you it was today or yesterday. So 咗 (zo2) means \"done\", not strictly \"past\".",
           "bd": [
             {
               "c": "我",
@@ -103,6 +104,7 @@
           "c": "佢食緊飯。",
           "j": "keoi5 sik6 gan2 faan6.",
           "e": "He's eating now.",
+          "note": "緊 (gan2) marks an action in progress — the \"-ing\" of Cantonese. 食緊 (sik6 gan2) \"eating\", 睇緊 (tai2 gan2) \"watching\". It attaches right after the verb, the same slot 咗 (zo2) uses for \"completed\".",
           "bd": [
             {
               "c": "佢",
@@ -131,6 +133,7 @@
           "c": "我去過香港。",
           "j": "ngo5 heoi3 gwo3 hoeng1 gong2.",
           "e": "I have been to Hong Kong.",
+          "note": "過 (gwo3) marks experience — \"have done at least once\". 去過 (heoi3 gwo3) \"have been (there) before\". Compare 咗 (zo2): 去咗 (heoi3 zo2) is \"have gone (and maybe still there)\", while 去過 (heoi3 gwo3) is \"have visited at some point\".",
           "bd": [
             {
               "c": "我",
@@ -159,6 +162,7 @@
           "c": "我未食。",
           "j": "ngo5 mei6 sik6.",
           "e": "I haven't eaten yet.",
+          "note": "未 (mei6) means \"not yet\" — it leaves the door open for it to still happen. Keep it apart from 唔 (m4) \"not / won't\": 我未食 (ngo5 mei6 sik6) \"haven't eaten yet\" vs 我唔食 (ngo5 m4 sik6) \"I'm not eating / won't eat\". \"Not yet\" vs \"not at all\".",
           "bd": [
             {
               "c": "我",
@@ -182,6 +186,7 @@
           "c": "我會去。",
           "j": "ngo5 wui5 heoi3.",
           "e": "I will go.",
+          "note": "會 (wui5) before a verb marks the future — \"will\". 我會去 (ngo5 wui5 heoi3) \"I will go\". For \"have to / need to\" (obligation rather than prediction), use 要 (jiu3) instead.",
           "bd": [
             {
               "c": "我",

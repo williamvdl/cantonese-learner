@@ -88,6 +88,7 @@
           "c": "我要一杯咖啡。",
           "j": "ngo5 jiu3 jat1 bui1 gaa3 fe1.",
           "e": "I want a cup of coffee.",
+          "note": "Different nouns take different classifiers, and 杯 (bui1) \"cup / glass\" is the one for drinks — 一杯咖啡 (jat1 bui1 gaa3 fe1) \"a cup of coffee\", 一杯水 (jat1 bui1 seoi2) \"a glass of water\". (See the lesson note above for the general idea.)",
           "bd": [
             {
               "c": "我要",
@@ -111,6 +112,7 @@
           "c": "呢本書好好睇。",
           "j": "ni1 bun2 syu1 hou2 hou2 tai2.",
           "e": "This book is very good.",
+          "note": "本 (bun2) is the classifier for books and bound things — 一本書 (jat1 bun2 syu1) \"a book\". Also note 好好睇 (hou2 hou2 tai2): the first 好 (hou2) is \"very\", and 好睇 (hou2 tai2), literally \"good-to-look-at\", means \"nice / good\" (of things you watch or read).",
           "bd": [
             {
               "c": "呢本",
@@ -134,6 +136,7 @@
           "c": "嗰隻狗係邊個㗎？",
           "j": "go2 zek3 gau2 hai6 bin1 go3 gaa3?",
           "e": "Whose dog is that?",
+          "note": "嗰 (go2) is \"that\" (vs 呢 ni1 \"this\"), and 隻 (zek3) is the classifier for animals — 一隻狗 (jat1 zek3 gau2) \"a dog\". The 㗎 (gaa3) on the end just makes the question sound natural and casual.",
           "bd": [
             {
               "c": "嗰隻",
@@ -167,6 +170,7 @@
           "c": "我買咗兩件衫。",
           "j": "ngo5 maai5 zo2 loeng5 gin6 saam1.",
           "e": "I bought two tops.",
+          "note": "件 (gin6) is the classifier for clothing — 兩件衫 (loeng5 gin6 saam1) \"two tops\". (And note 兩 loeng5, not 二 ji6, before a classifier — see the numbers lesson.)",
           "bd": [
             {
               "c": "我買咗",
@@ -190,6 +194,7 @@
           "c": "呢啲生果幾錢呀？",
           "j": "ni1 di1 saang1 gwo2 gei2 cin2 aa3?",
           "e": "How much is this fruit?",
+          "note": "啲 (di1) is the all-purpose classifier for plurals and uncountable things — 呢啲 (ni1 di1) \"these\", 嗰啲 (go2 di1) \"those\". Use it where English would say \"some\" or make a noun plural. 生果 (saang1 gwo2) is \"fruit\".",
           "bd": [
             {
               "c": "呢啲",

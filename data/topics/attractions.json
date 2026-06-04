@@ -103,6 +103,7 @@
           "c": "一張門票幾錢？",
           "j": "jat1 zoeng1 mun4 piu3 gei2 cin2?",
           "e": "How much is one ticket?",
+          "note": "張 (zoeng1) is the classifier for flat things — 一張門票 (jat1 zoeng1 mun4 piu3) \"a ticket\", 一張紙 (jat1 zoeng1 zi2) \"a sheet of paper\", 一張枱 (jat1 zoeng1 toi2) \"a table\". 門票 (mun4 piu3) is an entry ticket.",
           "bd": [
             {
               "c": "一張",
@@ -126,6 +127,7 @@
           "c": "我哋去拍照啦！",
           "j": "ngo5 dei6 heoi3 paak3 ziu3 laa1!",
           "e": "Let's go take photos!",
+          "note": "去 (heoi3) + an activity means \"go (and) do it\" — 去拍照 (heoi3 paak3 ziu3) \"go take photos\", 去食飯 (heoi3 sik6 faan6) \"go eat\". (In Hong Kong you'll also hear 影相 jing2 soeng2 for \"take photos\".)",
           "bd": [
             {
               "c": "我哋",
@@ -154,6 +156,7 @@
           "c": "要排幾耐隊？",
           "j": "jiu3 paai4 gei2 noi6 deoi2?",
           "e": "How long is the queue?",
+          "note": "幾耐 (gei2 noi6) asks \"how long?\" (duration) — 要排幾耐隊？(jiu3 paai4 gei2 noi6 deoi2?) \"how long must (we) queue?\". Notice 排隊 (paai4 deoi2) \"queue\" splits apart to fit 幾耐 (gei2 noi6) in the middle — a \"separable verb\".",
           "bd": [
             {
               "c": "要",

@@ -75,6 +75,7 @@
           "c": "我鍾意打籃球。",
           "j": "ngo5 zung1 ji3 daa2 laam4 kau4.",
           "e": "I like playing basketball.",
+          "note": "打 (daa2) \"hit\" is the verb for ball sports played with the hands — 打籃球 (daa2 laam4 kau4) \"play basketball\", 打波 (daa2 bo1) \"play ball\". (Football, played with the feet, is different — 踢足球 tek3 zuk1 kau4 \"kick football\".)",
           "bd": [
             {
               "c": "我",
@@ -103,6 +104,7 @@
           "c": "我每朝跑步。",
           "j": "ngo5 mui5 ziu1 paau2 bou6.",
           "e": "I run every morning.",
+          "note": "跑步 (paau2 bou6) is \"to run / jog\". 每朝 (mui5 ziu1) \"every morning\" uses 朝 (ziu1) \"morning\" — tighter than 每日朝早 (mui5 jat6 ziu1 zou2). 每 (mui5) is \"every\".",
           "bd": [
             {
               "c": "我",
@@ -126,6 +128,7 @@
           "c": "我哋隊贏咗！",
           "j": "ngo5 dei6 deoi6 jeng4 zo2!",
           "e": "Our team won!",
+          "note": "贏 (jeng4) is \"to win\" — 贏咗 (jeng4 zo2) \"(we) won\", with 咗 (zo2) marking it done. Its opposite is 輸 (syu1) \"to lose\". 隊 (deoi6) is a \"team\".",
           "bd": [
             {
               "c": "我哋",
@@ -149,6 +152,7 @@
           "c": "你去唔去健身？",
           "j": "nei5 heoi3 m4 heoi3 gin6 san1?",
           "e": "Are you going to the gym?",
+          "note": "健身 (gin6 san1), literally \"strengthen body\", means \"work out / go to the gym\". The 去唔去 (heoi3 m4 heoi3) \"go-not-go\" is the standard way to ask \"are you going?\".",
           "bd": [
             {
               "c": "你",
@@ -172,6 +176,7 @@
           "c": "球場喺嗰邊。",
           "j": "kau4 coeng4 hai2 go2 bin1.",
           "e": "The court is over there.",
+          "note": "嗰邊 (go2 bin1) is \"over there\" and 呢邊 (ni1 bin1) \"over here\" — 邊 (bin1) \"side\" pairs with 呢/嗰 (ni1/go2) \"this/that\". 球場 (kau4 coeng4) is a court / pitch / field.",
           "bd": [
             {
               "c": "球場",

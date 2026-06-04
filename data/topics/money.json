@@ -75,6 +75,7 @@
           "c": "提款機喺邊度？",
           "j": "tai4 fun2 gei1 hai2 bin1 dou6?",
           "e": "Where is the ATM?",
+          "note": "提款機 (tai4 fun2 gei1) is \"ATM\" — 提款 (tai4 fun2) \"withdraw money\" + 機 (gei1) \"machine\". (You'll also hear the English \"ATM\" used directly in Hong Kong.)",
           "bd": [
             {
               "c": "提款機",
@@ -126,6 +127,7 @@
           "c": "有冇散紙？",
           "j": "jau5 mou5 saan3 zi2?",
           "e": "Got any small change?",
+          "note": "散紙 (saan3 zi2), literally \"loose paper\", is the Cantonese for \"small change / small notes\" — 有冇散紙？(jau5 mou5 saan3 zi2?) \"got any change?\". Handy for buses and markets.",
           "bd": [
             {
               "c": "有冇",
@@ -144,6 +146,7 @@
           "c": "信用卡得唔得？",
           "j": "seon3 jung6 kaat1 dak1 m4 dak1?",
           "e": "Can I use credit card?",
+          "note": "得唔得？(dak1 m4 dak1?) is \"is that OK? / can I?\" — the 得-唔-得 \"can-not-can\" question from 得 (dak1) \"OK / works\". 信用卡得唔得？(seon3 jung6 kaat1 dak1 m4 dak1?) \"is credit card OK?\". 卡 (kaat1) \"card\" is from English.",
           "bd": [
             {
               "c": "信用卡",
@@ -162,6 +165,7 @@
           "c": "唔該找錢俾我。",
           "j": "m4 goi1 zaau2 cin2 bei2 ngo5.",
           "e": "Please give me my change.",
+          "note": "找錢 (zaau2 cin2) is \"to give change\" (the money handed back) — 找錢俾我 (zaau2 cin2 bei2 ngo5) \"give me my change\". Note: this 找 (zaau2) \"give change\" is different from the 搵 (wan2) \"look for\" you saw for finding things.",
           "bd": [
             {
               "c": "唔該",

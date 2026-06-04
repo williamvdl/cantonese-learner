@@ -123,6 +123,7 @@
           "c": "我頭好痛。",
           "j": "ngo5 tau4 hou2 tung3.",
           "e": "My head really hurts.",
+          "note": "To say a body part hurts, name it as the topic then describe it — 我頭好痛 (ngo5 tau4 hou2 tung3) \"my head really hurts\", literally \"I, head, very hurts\". No \"my\" (嘅 ge3) needed. 痛 (tung3) is \"to hurt / be sore\".",
           "bd": [
             {
               "c": "我",
@@ -169,6 +170,7 @@
           "c": "洗手要用水。",
           "j": "sai2 sau2 jiu3 jung6 seoi2.",
           "e": "Washing hands requires water.",
+          "note": "用 (jung6) is \"to use\" — 用水 (jung6 seoi2) \"use water\". And 要 (jiu3) here means \"needs / requires\" rather than personal \"want\" — 洗手要用水 (sai2 sau2 jiu3 jung6 seoi2) \"washing hands needs water\".",
           "bd": [
             {
               "c": "洗手",
@@ -197,6 +199,7 @@
           "c": "我心好痛。",
           "j": "ngo5 sam1 hou2 tung3.",
           "e": "My heart hurts (sad).",
+          "note": "心痛 (sam1 tung3), literally \"heart hurts\", usually means *emotional* pain — heartache or distress — rather than a physical heart problem, like English \"it breaks my heart\". (Ties to the 心 sam1 \"heart\" feeling-words.)",
           "bd": [
             {
               "c": "我",
@@ -220,6 +223,7 @@
           "c": "佢腳受傷。",
           "j": "keoi5 goek3 sau6 soeng1.",
           "e": "His leg is injured.",
+          "note": "受傷 (sau6 soeng1) means \"to get injured / be hurt\" — 佢腳受傷 (keoi5 goek3 sau6 soeng1) \"his leg is injured\". Note 腳 (goek3) covers both \"leg\" and \"foot\" in Cantonese.",
           "bd": [
             {
               "c": "佢",

@@ -88,6 +88,7 @@
           "c": "我想買件新衫。",
           "j": "ngo5 soeng2 maai5 gin6 san1 saam1.",
           "e": "I want to buy a new top.",
+          "note": "A short adjective attaches straight to the noun, no 嘅 (ge3) needed — 新衫 (san1 saam1) \"new top\", 舊鞋 (gau6 haai4) \"old shoes\". (Longer or coloured descriptions take 嘅: 綠色嘅褲 luk6 sik1 ge3 fu3.) 件 (gin6) is the top's classifier.",
           "bd": [
             {
               "c": "我想",
@@ -116,6 +117,7 @@
           "c": "呢對鞋幾錢呀？",
           "j": "ni1 deoi3 haai4 gei2 cin2 aa3?",
           "e": "How much are these shoes?",
+          "note": "對 (deoi3) is the classifier for things that come in pairs — 一對鞋 (jat1 deoi3 haai4) \"a pair of shoes\", 一對襪 (jat1 deoi3 mat6) \"a pair of socks\", 一對筷子 (jat1 deoi3 faai3 zi2) \"chopsticks\".",
           "bd": [
             {
               "c": "呢對",
@@ -144,6 +146,7 @@
           "c": "今日好凍，記得著外套。",
           "j": "gam1 jat6 hou2 dung3, gei3 dak1 zoek3 ngoi6 tou3.",
           "e": "It's cold today, remember to wear a coat.",
+          "note": "記得 (gei3 dak1) is \"remember to\" — 記得著外套 (gei3 dak1 zoek3 ngoi6 tou3) \"remember to wear a coat\". The opposite, \"forget to\", is 唔記得 (m4 gei3 dak1).",
           "bd": [
             {
               "c": "今日",
@@ -177,6 +180,7 @@
           "c": "你條裙好靚！",
           "j": "nei5 tiu4 kwan4 hou2 leng3!",
           "e": "Your dress is so pretty!",
+          "note": "靚 (leng3) is the Cantonese for \"pretty / good-looking / nice\" — 好靚 (hou2 leng3) \"really pretty\", for people, clothes, food, or views. A word you'll use constantly. 條 (tiu4) is the classifier for the skirt.",
           "bd": [
             {
               "c": "你",
@@ -205,6 +209,7 @@
           "c": "我搵唔到對襪。",
           "j": "ngo5 wan2 m4 dou2 deoi3 mat6.",
           "e": "I can't find my socks.",
+          "note": "搵 (wan2) is Cantonese for \"look for / find\" (Mandarin 找). Add 唔到 (m4 dou2) \"can't manage to\" after a verb for failure — 搵唔到 (wan2 m4 dou2) \"can't find\", 買唔到 (maai5 m4 dou2) \"can't get\".",
           "bd": [
             {
               "c": "我",

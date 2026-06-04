@@ -75,6 +75,7 @@
           "c": "唔該，俾我個餐牌。",
           "j": "m4 goi1, bei2 ngo5 go3 caan1 paai4.",
           "e": "Excuse me, please give me the menu.",
+          "note": "俾 (bei2) \"give\" (also written 畀) — the order is give + thing + person: 俾我個餐牌 (bei2 ngo5 go3 caan1 paai4) \"give me the menu\". 餐牌 (caan1 paai4) is the menu.",
           "bd": [
             {
               "c": "唔該",
@@ -108,6 +109,7 @@
           "c": "我想叫凍檸茶。",
           "j": "ngo5 soeng2 giu3 dung3 ning4 caa4.",
           "e": "I'd like to order iced lemon tea.",
+          "note": "Here 叫 (giu3) means \"to order\" food or drink — 叫凍檸茶 (giu3 dung3 ning4 caa4) \"order an iced lemon tea\". Same 叫 (giu3) as \"to call / be named\" — context decides.",
           "bd": [
             {
               "c": "我",
@@ -169,6 +171,7 @@
           "c": "唔該，埋單。",
           "j": "m4 goi1, maai4 daan1.",
           "e": "Excuse me, the bill please.",
+          "note": "埋單 (maai4 daan1) is \"the bill, please / let's pay\" — the all-important phrase at the end of a meal. (Often Mandarinised elsewhere as \"mai dan\", but in Cantonese it's 埋單 maai4 daan1.)",
           "bd": [
             {
               "c": "唔該",
@@ -187,6 +190,7 @@
           "c": "呢個好食！",
           "j": "ni1 go3 hou2 sik6!",
           "e": "This is delicious!",
+          "note": "好食 (hou2 sik6), literally \"good-to-eat\", means \"delicious\". It's part of a family: 好食 (hou2 sik6) tasty, 好飲 (hou2 jam2) nice to drink, 好睇 (hou2 tai2) nice to watch — 好 (hou2) + a verb = \"nice to ___\".",
           "bd": [
             {
               "c": "呢個",

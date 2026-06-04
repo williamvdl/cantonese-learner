@@ -75,6 +75,7 @@
           "c": "今日天氣好熱。",
           "j": "gam1 jat6 tin1 hei3 hou2 jit6.",
           "e": "The weather today is very hot.",
+          "note": "天氣 (tin1 hei3) is \"weather\". Describe it with 好 (hou2) \"very\" + an adjective — 好熱 (hou2 jit6) \"very hot\", 好凍 (hou2 dung3) \"very cold\". 熱 (jit6) and 凍 (dung3) are the hot/cold pair.",
           "bd": [
             {
               "c": "今日",
@@ -98,6 +99,7 @@
           "c": "落雨喇，帶遮啦。",
           "j": "lok6 jyu5 laa3, daai3 ze1 laa1.",
           "e": "It's raining, bring an umbrella.",
+          "note": "落雨 (lok6 jyu5) is \"to rain\" — literally \"fall rain\" (Mandarin uses 下雨). And 遮 (ze1) is the everyday Cantonese for \"umbrella\" (not 雨傘). The 喇 (laa3) marks the change (\"it's raining now\"); 啦 (laa1) nudges (\"bring one\").",
           "bd": [
             {
               "c": "落雨",
@@ -131,6 +133,7 @@
           "c": "颱風嚟喇！",
           "j": "toi4 fung1 lai4 laa3!",
           "e": "The typhoon is coming!",
+          "note": "颱風 (toi4 fung1) \"typhoon\" — a big deal in Hong Kong, where a T8 signal usually means no work or school. 嚟喇 (lai4 laa3) \"is coming (now)\" pairs 嚟 (lai4) \"come\" with the change-of-state 喇 (laa3).",
           "bd": [
             {
               "c": "颱風",
@@ -154,6 +157,7 @@
           "c": "今日好凍，著多件。",
           "j": "gam1 jat6 hou2 dung3, zoek3 do1 gin6.",
           "e": "It's cold today, wear extra layers.",
+          "note": "著多件 (zoek3 do1 gin6) is \"wear one more (layer)\" — 著 (zoek3) \"wear\", 多 (do1) \"more\", 件 (gin6) the clothing classifier, with 衫 (saam1) \"top\" left unsaid. Cantonese happily drops an obvious noun.",
           "bd": [
             {
               "c": "今日",
@@ -182,6 +186,7 @@
           "c": "太陽好猛！",
           "j": "taai3 joeng4 hou2 maang5!",
           "e": "The sun is so strong!",
+          "note": "猛 (maang5) means \"strong / fierce / intense\" — 太陽好猛 (taai3 joeng4 hou2 maang5) \"the sun is really strong\". Used for sun, fire, and forceful things (you wouldn't use it for, say, strong coffee).",
           "bd": [
             {
               "c": "太陽",

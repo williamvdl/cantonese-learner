@@ -123,6 +123,7 @@
           "c": "我屋企有一隻貓。",
           "j": "ngo5 uk1 kei2 jau5 jat1 zek3 maau1.",
           "e": "I have a cat at home.",
+          "note": "屋企 (uk1 kei2) is the Cantonese word for \"home\" (Mandarin 家 gaa1). Animals take the classifier 隻 (zek3) — 一隻貓 (jat1 zek3 maau1) \"a cat\", 一隻狗 (jat1 zek3 gau2) \"a dog\".",
           "bd": [
             {
               "c": "我",
@@ -184,6 +185,7 @@
           "c": "你養唔養寵物？",
           "j": "nei5 joeng5 m4 joeng5 cung2 mat6?",
           "e": "Do you keep pets?",
+          "note": "養 (joeng5) means \"to keep / raise\" an animal — 養唔養寵物？(joeng5 m4 joeng5 cung2 mat6?) \"do you keep pets?\". The 養唔養 (joeng5 m4 joeng5) \"keep-not-keep\" shape is the standard yes/no question form.",
           "bd": [
             {
               "c": "你",
@@ -230,6 +232,7 @@
           "c": "兔仔食蔬菜。",
           "j": "tou3 zai2 sik6 so1 coi3.",
           "e": "Rabbits eat vegetables.",
+          "note": "兔仔 (tou3 zai2) \"rabbit\" — the 仔 (zai2) \"little\" suffix is hugely productive, attaching to animals and small things (薯仔 syu4 zai2 \"potato\", 狗仔 gau2 zai2 \"puppy\", 細路仔 sai3 lou6 zai2 \"little kid\").",
           "bd": [
             {
               "c": "兔仔",

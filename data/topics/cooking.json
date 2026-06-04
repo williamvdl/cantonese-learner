@@ -75,6 +75,7 @@
           "c": "我喺度煮飯。",
           "j": "ngo5 hai2 dou6 zyu2 faan6.",
           "e": "I'm cooking.",
+          "note": "喺度 (hai2 dou6), literally \"at here\", placed before a verb signals you're in the middle of doing it — 喺度煮飯 (hai2 dou6 zyu2 faan6) \"(I'm) cooking right now\". A common alternative to the 緊 (gan2) \"-ing\" marker. 煮飯 (zyu2 faan6) is \"to cook\".",
           "bd": [
             {
               "c": "我",
@@ -98,6 +99,7 @@
           "c": "加多啲鹽。",
           "j": "gaa1 do1 di1 jim4.",
           "e": "Add more salt.",
+          "note": "多啲 (do1 di1) means \"more / a bit more\" — 加多啲鹽 (gaa1 do1 di1 jim4) \"add a bit more salt\". The 啲 (di1) softens it to \"a little\"; drop it (加多 gaa1 do1) for plain \"add more\".",
           "bd": [
             {
               "c": "加多",
@@ -121,6 +123,7 @@
           "c": "我鍾意食蒸魚。",
           "j": "ngo5 zung1 ji3 sik6 zing1 jyu2.",
           "e": "I like steamed fish.",
+          "note": "蒸 (zing1) \"to steam\" — 蒸魚 (zing1 jyu2) \"steamed fish\" is the benchmark Cantonese home dish. Cooking methods sit before the food: 炒 (caau2) stir-fried, 煎 (zin1) pan-fried, 炆 (man1) braised.",
           "bd": [
             {
               "c": "我",
@@ -149,6 +152,7 @@
           "c": "切啲蔬菜。",
           "j": "cit3 di1 so1 coi3.",
           "e": "Cut some vegetables.",
+          "note": "切 (cit3) is \"to cut / slice\". This is a bare command — Cantonese drops \"you\" for instructions, so 切啲蔬菜 (cit3 di1 so1 coi3) is just \"cut some vegetables\". 蔬菜 (so1 coi3) is the fuller word for \"vegetables\" (everyday speech often just says 菜 coi3).",
           "bd": [
             {
               "c": "切",
@@ -172,6 +176,7 @@
           "c": "你識唔識炒飯？",
           "j": "nei5 sik1 m4 sik1 caau2 faan6?",
           "e": "Can you make fried rice?",
+          "note": "識 (sik1) means \"know how to\" (a learned skill) — 識唔識炒飯？(sik1 m4 sik1 caau2 faan6?) \"(do you) know how to make fried rice?\". Different from 可以 (ho2 ji5) \"may / allowed\" and 會 (wui5) \"will\". 炒 (caau2) is \"stir-fry\".",
           "bd": [
             {
               "c": "你",

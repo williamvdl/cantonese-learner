@@ -81,6 +81,7 @@
           "c": "我有三個蘋果。",
           "j": "ngo5 jau5 saam1 go3 ping4 gwo2.",
           "e": "I have three apples.",
+          "note": "That 個 (go3) between the number and the noun is a <b>classifier</b> — Cantonese needs one whenever you count things. 個 (go3) is the safe all-purpose one; you can't say 三蘋果 (saam1 ping4 gwo2) without it.",
           "bd": [
             {
               "c": "我",
@@ -109,6 +110,7 @@
           "c": "呢度有十個人。",
           "j": "ni1 dou6 jau5 sap6 go3 jan4.",
           "e": "There are ten people here.",
+          "note": "有 (jau5) means \"have\", but here it's doing \"there is/are\" — 呢度有… (ni1 dou6 jau5…) \"here there are…\". The one word covers both possession and existence. 呢度 (ni1 dou6) is \"here\".",
           "bd": [
             {
               "c": "呢度",
@@ -137,6 +139,7 @@
           "c": "一加二係三。",
           "j": "jat1 gaa1 ji6 hai6 saam1.",
           "e": "One plus two is three.",
+          "note": "In sums, 係 (hai6) \"to be\" doubles as \"equals\", and 加 (gaa1) is \"plus / add\". So 一加二係三 (jat1 gaa1 ji6 hai6 saam1) reads literally \"one add two is three\".",
           "bd": [
             {
               "c": "一",
@@ -170,6 +173,7 @@
           "c": "我兩歲。",
           "j": "ngo5 loeng5 seoi3.",
           "e": "I'm two years old.",
+          "note": "Two words for \"two\": 兩 (loeng5) before a classifier or measure — 兩歲 (loeng5 seoi3) \"two years old\", 兩個 (loeng5 go3) \"two of them\" — while 二 (ji6) is for counting and bigger numbers (二十 ji6 sap6 \"twenty\"). So it's 兩歲 (loeng5 seoi3), never 二歲 (ji6 seoi3).",
           "bd": [
             {
               "c": "我",
@@ -193,6 +197,7 @@
           "c": "佢有五個朋友。",
           "j": "keoi5 jau5 ng5 go3 pang4 jau5.",
           "e": "He has five friends.",
+          "note": "佢 (keoi5) covers \"he\", \"she\" and \"it\" all at once — Cantonese doesn't mark gender in pronouns, so 佢 (keoi5) here could just as easily be \"she\". Context tells you which.",
           "bd": [
             {
               "c": "佢",

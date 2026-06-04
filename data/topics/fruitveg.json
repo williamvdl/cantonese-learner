@@ -88,6 +88,7 @@
           "c": "我每日食一個蘋果。",
           "j": "ngo5 mui5 jat6 sik6 jat1 go3 ping4 gwo2.",
           "e": "I eat an apple every day.",
+          "note": "每 (mui5) means \"every\" — 每日 (mui5 jat6) \"every day\", 每朝 (mui5 ziu1) \"every morning\". Note the all-purpose classifier 個 (go3) on the apple: 一個蘋果 (jat1 go3 ping4 gwo2).",
           "bd": [
             {
               "c": "我",
@@ -121,6 +122,7 @@
           "c": "呢啲生果好甜。",
           "j": "ni1 di1 saang1 gwo2 hou2 tim4.",
           "e": "These fruits are very sweet.",
+          "note": "生果 (saang1 gwo2) is the Cantonese word for \"fruit\" (Mandarin says 水果 seoi2 gwo2). 呢啲 (ni1 di1) \"these\" uses the plural classifier 啲 (di1).",
           "bd": [
             {
               "c": "呢啲",
@@ -144,6 +146,7 @@
           "c": "你鍾意食邊種菜？",
           "j": "nei5 zung1 ji3 sik6 bin1 zung2 coi3?",
           "e": "Which vegetables do you like?",
+          "note": "邊種 (bin1 zung2) is \"which kind / type\" — 種 (zung2) is the classifier for varieties of things. 菜 (coi3) is \"vegetable\", and also \"a dish\" of food more broadly.",
           "bd": [
             {
               "c": "你",
@@ -172,6 +175,7 @@
           "c": "我想買啲薯仔同番茄。",
           "j": "ngo5 soeng2 maai5 di1 syu4 zai2 tung4 faan1 ke2.",
           "e": "I want to buy some potatoes and tomatoes.",
+          "note": "Here 啲 (di1) means \"some\" (not a specific number) — 買啲薯仔 (maai5 di1 syu4 zai2) \"buy some potatoes\". Note the Cantonese 薯仔 (syu4 zai2) \"potato\"; the 仔 (zai2) \"little\" suffix is everywhere in Cantonese names.",
           "bd": [
             {
               "c": "我想",
@@ -210,6 +214,7 @@
           "c": "西瓜喺夏天最好食。",
           "j": "sai1 gwaa1 hai2 haa6 tin1 zeoi3 hou2 sik6.",
           "e": "Watermelon is best in summer.",
+          "note": "最 (zeoi3) means \"most\" — 最好食 (zeoi3 hou2 sik6) \"the best-tasting / nicest to eat\". 喺 (hai2) here marks \"in\" a time (喺夏天 hai2 haa6 tin1 \"in summer\"), the same word used for places.",
           "bd": [
             {
               "c": "西瓜",

@@ -123,6 +123,7 @@
           "c": "今日係星期一。",
           "j": "gam1 jat6 hai6 sing1 kei4 jat1.",
           "e": "Today is Monday.",
+          "note": "Days of the week are simply numbered: 星期一 (sing1 kei4 jat1) \"week-one\" = Monday, through 星期六 (sing1 kei4 luk6) \"week-six\" = Saturday. The exception is Sunday — 星期日 (sing1 kei4 jat6) \"week-sun\", not \"week-seven\". Learn the numbers and six of seven days come free.",
           "bd": [
             {
               "c": "今日",
@@ -146,6 +147,7 @@
           "c": "琴日係星期六。",
           "j": "kam4 jat6 hai6 sing1 kei4 luk6.",
           "e": "Yesterday was Saturday.",
+          "note": "The everyday day-trio: 今日 (gam1 jat6) \"today\", 琴日 (kam4 jat6) \"yesterday\", 聽日 (ting1 jat6) \"tomorrow\". Cantonese also puts the time word first in the sentence, before the action.",
           "bd": [
             {
               "c": "琴日",
@@ -169,6 +171,7 @@
           "c": "聽日朝早見。",
           "j": "ting1 jat6 ziu1 zou2 gin3.",
           "e": "See you tomorrow morning.",
+          "note": "聽日 (ting1 jat6) is \"tomorrow\" and 朝早 (ziu1 zou2) is \"(in the) morning\" — stacked at the front as \"tomorrow morning\". 見 (gin3) \"see / meet\" on its own can mean \"see you\", with the subject left unsaid.",
           "bd": [
             {
               "c": "聽日",
@@ -192,6 +195,7 @@
           "c": "夜晚十點瞓覺。",
           "j": "je6 maan5 sap6 dim2 fan3 gaau3.",
           "e": "Sleep at 10pm.",
+          "note": "點 (dim2) is \"o'clock\" — 十點 (sap6 dim2) \"ten o'clock\", and 幾點？(gei2 dim2?) asks \"what time?\". 夜晚 (je6 maan5) is \"night / evening\". 瞓覺 (fan3 gaau3) \"to sleep\" is distinctively Cantonese (not the Mandarin word).",
           "bd": [
             {
               "c": "夜晚",
@@ -215,6 +219,7 @@
           "c": "星期日休息。",
           "j": "sing1 kei4 jat6 jau1 sik1.",
           "e": "Sunday is for resting.",
+          "note": "星期日 (sing1 kei4 jat6) \"Sunday\" — the one day that breaks the numbering (see Monday's note). 休息 (jau1 sik1) is the everyday word for \"rest / take a break / have time off\".",
           "bd": [
             {
               "c": "星期日",
