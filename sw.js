@@ -6,7 +6,7 @@
 // up a new service worker when this string changes. If you forget to bump it,
 // users will keep serving the old index.html from cache.
 
-const CACHE_VERSION = 'cantonese-teahouse-v65';
+const CACHE_VERSION = 'cantonese-teahouse-v66';
 
 // App shell — fetched at install time.
 // NOTE: when adding a new .js or .css file to the app, add it here too,
@@ -43,7 +43,10 @@ const PRECACHE = [...SHELL_ASSETS, ...TOPIC_ASSETS];
 self.addEventListener('install', event => {
   event.waitUntil(
     caches.open(CACHE_VERSION)
-      .then(cache => cache.addAll(PRECACHE))
+      // Resilient precache: cache each asset individually so a single missing
+      // or renamed file can't fail the whole install (which would block the SW
+      // from ever updating). addAll() is atomic and would reject on one 404.
+      .then(cache => Promise.allSettled(PRECACHE.map(u => cache.add(u))))
       .then(() => self.skipWaiting())
   );
 });

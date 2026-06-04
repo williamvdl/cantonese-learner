@@ -134,9 +134,16 @@ const store = {
     return j;
   },
 
-  // Convenience: load several topics in parallel
+  // Convenience: load several topics in parallel. Resilient — a single failed
+  // topic (e.g. a not-yet-deployed file) must not reject the whole batch and
+  // leave callers (like the path timeline) stuck on a loading screen. Returns
+  // the list of keys that failed so callers/devs can see what's missing.
   async loadTopics(keys) {
-    await Promise.all(keys.filter(k => !this.topicCache[k]).map(k => this.loadTopic(k)));
+    const need = keys.filter(k => !this.topicCache[k]);
+    const results = await Promise.allSettled(need.map(k => this.loadTopic(k)));
+    const failed = need.filter((_, i) => results[i].status === 'rejected');
+    if (failed.length) console.warn('[loadTopics] failed to load:', failed);
+    return failed;
   },
 };
 
