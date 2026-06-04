@@ -647,9 +647,9 @@
         },
         {
           "u": false,
-          "c": "得我哋兩個咋，我已經諗好喇。",
-          "j": "dak1 ngo5 dei6 loeng5 go3 zaa3, ngo5 ji5 ging1 nam2 hou2 laa3.",
-          "e": "Just the two of us — I've already decided.",
+          "c": "得我哋兩個咋。我訂咗張枱喇。",
+          "j": "dak1 ngo5 dei6 loeng5 go3 zaa3. ngo5 deng6 zo2 zoeng1 toi2 laa3.",
+          "e": "Just the two of us. I've booked a table.",
           "bd": [
             {
               "c": "得",
@@ -664,7 +664,7 @@
             {
               "c": "兩個",
               "j": "loeng5 go3",
-              "e": "two"
+              "e": "two [people]"
             },
             {
               "c": "咋",
@@ -672,19 +672,19 @@
               "e": "(only — particle)"
             },
             {
-              "c": "已經",
-              "j": "ji5 ging1",
-              "e": "already"
+              "c": "訂咗",
+              "j": "deng6 zo2",
+              "e": "booked"
             },
             {
-              "c": "諗好",
-              "j": "nam2 hou2",
-              "e": "decided"
+              "c": "張枱",
+              "j": "zoeng1 toi2",
+              "e": "a [flat-cl] table"
             },
             {
               "c": "喇",
               "j": "laa3",
-              "e": "(completion particle)"
+              "e": "(particle)"
             }
           ]
         },
@@ -723,6 +723,395 @@
               "c": "啦",
               "j": "laa1",
               "e": "(particle)"
+            }
+          ]
+        }
+      ]
+    },
+    "beginner-s3": {
+      "title": "Shopping for dinner",
+      "speakers": [
+        "Vendor",
+        "You"
+      ],
+      "lines": [
+        {
+          "u": true,
+          "c": "你好！我想買啲嘢煮飯。",
+          "j": "nei5 hou2! ngo5 soeng2 maai5 di1 je5 zyu2 faan6.",
+          "e": "Hi! I want to buy some things to cook a meal.",
+          "bd": [
+            {
+              "c": "你好",
+              "j": "nei5 hou2",
+              "e": "hi"
+            },
+            {
+              "c": "我想",
+              "j": "ngo5 soeng2",
+              "e": "I want to"
+            },
+            {
+              "c": "買",
+              "j": "maai5",
+              "e": "buy"
+            },
+            {
+              "c": "啲嘢",
+              "j": "di1 je5",
+              "e": "some things"
+            },
+            {
+              "c": "煮飯",
+              "j": "zyu2 faan6",
+              "e": "cook a meal"
+            }
+          ]
+        },
+        {
+          "u": false,
+          "c": "好呀！今日啲魚同蝦好新鮮。",
+          "j": "hou2 aa3! gam1 jat6 di1 jyu2 tung4 haa1 hou2 san1 sin1.",
+          "e": "Sure! Today's fish and prawns are very fresh.",
+          "bd": [
+            {
+              "c": "好呀",
+              "j": "hou2 aa3",
+              "e": "sure"
+            },
+            {
+              "c": "今日",
+              "j": "gam1 jat6",
+              "e": "today"
+            },
+            {
+              "c": "啲",
+              "j": "di1",
+              "e": "the"
+            },
+            {
+              "c": "魚",
+              "j": "jyu2",
+              "e": "fish"
+            },
+            {
+              "c": "同",
+              "j": "tung4",
+              "e": "and"
+            },
+            {
+              "c": "蝦",
+              "j": "haa1",
+              "e": "prawns"
+            },
+            {
+              "c": "好新鮮",
+              "j": "hou2 san1 sin1",
+              "e": "very fresh"
+            }
+          ]
+        },
+        {
+          "u": true,
+          "c": "咁我要一條魚同啲蝦。有冇牛肉？",
+          "j": "gam2 ngo5 jiu3 jat1 tiu4 jyu2 tung4 di1 haa1. jau5 mou5 ngau4 juk6?",
+          "e": "Then I'll have a fish and some prawns. Any beef?",
+          "bd": [
+            {
+              "c": "咁",
+              "j": "gam2",
+              "e": "then"
+            },
+            {
+              "c": "我要",
+              "j": "ngo5 jiu3",
+              "e": "I want"
+            },
+            {
+              "c": "一條魚",
+              "j": "jat1 tiu4 jyu2",
+              "e": "one fish"
+            },
+            {
+              "c": "同",
+              "j": "tung4",
+              "e": "and"
+            },
+            {
+              "c": "啲蝦",
+              "j": "di1 haa1",
+              "e": "some prawns"
+            },
+            {
+              "c": "有冇",
+              "j": "jau5 mou5",
+              "e": "is there"
+            },
+            {
+              "c": "牛肉",
+              "j": "ngau4 juk6",
+              "e": "beef"
+            }
+          ]
+        },
+        {
+          "u": false,
+          "c": "有，仲有雞同豬肉。",
+          "j": "jau5, zung6 jau5 gai1 tung4 zyu1 juk6.",
+          "e": "Yes, also chicken and pork.",
+          "bd": [
+            {
+              "c": "有",
+              "j": "jau5",
+              "e": "yes"
+            },
+            {
+              "c": "仲有",
+              "j": "zung6 jau5",
+              "e": "also have"
+            },
+            {
+              "c": "雞",
+              "j": "gai1",
+              "e": "chicken"
+            },
+            {
+              "c": "同",
+              "j": "tung4",
+              "e": "and"
+            },
+            {
+              "c": "豬肉",
+              "j": "zyu1 juk6",
+              "e": "pork"
+            }
+          ]
+        },
+        {
+          "u": true,
+          "c": "唔該畀啲牛肉。仲想買啲菜同生果。",
+          "j": "m4 goi1 bei2 di1 ngau4 juk6. zung6 soeng2 maai5 di1 coi3 tung4 saang1 gwo2.",
+          "e": "Beef please. I also want some vegetables and fruit.",
+          "bd": [
+            {
+              "c": "唔該",
+              "j": "m4 goi1",
+              "e": "please"
+            },
+            {
+              "c": "畀",
+              "j": "bei2",
+              "e": "give"
+            },
+            {
+              "c": "啲牛肉",
+              "j": "di1 ngau4 juk6",
+              "e": "some beef"
+            },
+            {
+              "c": "仲想",
+              "j": "zung6 soeng2",
+              "e": "also want to"
+            },
+            {
+              "c": "買",
+              "j": "maai5",
+              "e": "buy"
+            },
+            {
+              "c": "啲菜",
+              "j": "di1 coi3",
+              "e": "some vegetables"
+            },
+            {
+              "c": "同",
+              "j": "tung4",
+              "e": "and"
+            },
+            {
+              "c": "生果",
+              "j": "saang1 gwo2",
+              "e": "fruit"
+            }
+          ]
+        },
+        {
+          "u": false,
+          "c": "菜心好靚，蘋果同橙都好甜。",
+          "j": "coi3 sam1 hou2 leng3, ping4 gwo2 tung4 caang2 dou1 hou2 tim4.",
+          "e": "The choy sum is nice, and the apples and oranges are sweet.",
+          "bd": [
+            {
+              "c": "菜心",
+              "j": "coi3 sam1",
+              "e": "choy sum"
+            },
+            {
+              "c": "好靚",
+              "j": "hou2 leng3",
+              "e": "very nice"
+            },
+            {
+              "c": "蘋果",
+              "j": "ping4 gwo2",
+              "e": "apples"
+            },
+            {
+              "c": "同",
+              "j": "tung4",
+              "e": "and"
+            },
+            {
+              "c": "橙",
+              "j": "caang2",
+              "e": "oranges"
+            },
+            {
+              "c": "都",
+              "j": "dou1",
+              "e": "both"
+            },
+            {
+              "c": "好甜",
+              "j": "hou2 tim4",
+              "e": "very sweet"
+            }
+          ]
+        },
+        {
+          "u": true,
+          "c": "全部都要！仲有冇凍嘅飲品？",
+          "j": "cyun4 bou6 dou1 jiu3! zung6 jau5 mou5 dung3 ge3 jam2 ban2?",
+          "e": "I'll take it all! Any cold drinks?",
+          "bd": [
+            {
+              "c": "全部",
+              "j": "cyun4 bou6",
+              "e": "all of it"
+            },
+            {
+              "c": "都要",
+              "j": "dou1 jiu3",
+              "e": "I want"
+            },
+            {
+              "c": "仲有冇",
+              "j": "zung6 jau5 mou5",
+              "e": "is there also"
+            },
+            {
+              "c": "凍嘅",
+              "j": "dung3 ge3",
+              "e": "cold"
+            },
+            {
+              "c": "飲品",
+              "j": "jam2 ban2",
+              "e": "drinks"
+            }
+          ]
+        },
+        {
+          "u": false,
+          "c": "有汽水、果汁同啤酒。",
+          "j": "jau5 hei3 seoi2, gwo2 zap1 tung4 be1 zau2.",
+          "e": "There's soft drinks, juice and beer.",
+          "bd": [
+            {
+              "c": "有",
+              "j": "jau5",
+              "e": "there is"
+            },
+            {
+              "c": "汽水",
+              "j": "hei3 seoi2",
+              "e": "soft drinks"
+            },
+            {
+              "c": "果汁",
+              "j": "gwo2 zap1",
+              "e": "juice"
+            },
+            {
+              "c": "同",
+              "j": "tung4",
+              "e": "and"
+            },
+            {
+              "c": "啤酒",
+              "j": "be1 zau2",
+              "e": "beer"
+            }
+          ]
+        },
+        {
+          "u": true,
+          "c": "咁要汽水同啤酒啦。一共幾錢呀？",
+          "j": "gam2 jiu3 hei3 seoi2 tung4 be1 zau2 laa1. jat1 gung6 gei2 cin2 aa3?",
+          "e": "Then soft drinks and beer, please. How much in total?",
+          "bd": [
+            {
+              "c": "咁",
+              "j": "gam2",
+              "e": "then"
+            },
+            {
+              "c": "要",
+              "j": "jiu3",
+              "e": "want"
+            },
+            {
+              "c": "汽水",
+              "j": "hei3 seoi2",
+              "e": "soft drinks"
+            },
+            {
+              "c": "同",
+              "j": "tung4",
+              "e": "and"
+            },
+            {
+              "c": "啤酒",
+              "j": "be1 zau2",
+              "e": "beer"
+            },
+            {
+              "c": "啦",
+              "j": "laa1",
+              "e": "(particle)"
+            },
+            {
+              "c": "一共",
+              "j": "jat1 gung6",
+              "e": "in total"
+            },
+            {
+              "c": "幾錢",
+              "j": "gei2 cin2",
+              "e": "how much"
+            },
+            {
+              "c": "呀",
+              "j": "aa3",
+              "e": "(particle)"
+            }
+          ]
+        },
+        {
+          "u": false,
+          "c": "一共一百五十蚊。",
+          "j": "jat1 gung6 jat1 baak3 ng5 sap6 man1.",
+          "e": "150 dollars in total.",
+          "bd": [
+            {
+              "c": "一共",
+              "j": "jat1 gung6",
+              "e": "in total"
+            },
+            {
+              "c": "一百五十蚊",
+              "j": "jat1 baak3 ng5 sap6 man1",
+              "e": "150 dollars"
             }
           ]
         }
@@ -1132,6 +1521,325 @@
               "c": "畀你食",
               "j": "bei2 nei5 sik6",
               "e": "for you to eat"
+            }
+          ]
+        }
+      ]
+    },
+    "beginner-s5": {
+      "title": "Choosing a coat",
+      "speakers": [
+        "Friend",
+        "You"
+      ],
+      "lines": [
+        {
+          "u": false,
+          "c": "你想買邊件外套？",
+          "j": "nei5 soeng2 maai5 bin1 gin6 ngoi6 tou3?",
+          "e": "Which coat do you want to buy?",
+          "bd": [
+            {
+              "c": "你想",
+              "j": "nei5 soeng2",
+              "e": "do you want to"
+            },
+            {
+              "c": "買",
+              "j": "maai5",
+              "e": "buy"
+            },
+            {
+              "c": "邊件",
+              "j": "bin1 gin6",
+              "e": "which [item]"
+            },
+            {
+              "c": "外套",
+              "j": "ngoi6 tou3",
+              "e": "coat"
+            }
+          ]
+        },
+        {
+          "u": true,
+          "c": "我鍾意呢件，不過有啲貴。",
+          "j": "ngo5 zung1 ji3 ni1 gin6, bat1 gwo3 jau5 di1 gwai3.",
+          "e": "I like this one, but it's a bit expensive.",
+          "bd": [
+            {
+              "c": "我鍾意",
+              "j": "ngo5 zung1 ji3",
+              "e": "I like"
+            },
+            {
+              "c": "呢件",
+              "j": "ni1 gin6",
+              "e": "this one"
+            },
+            {
+              "c": "不過",
+              "j": "bat1 gwo3",
+              "e": "but"
+            },
+            {
+              "c": "有啲",
+              "j": "jau5 di1",
+              "e": "a bit"
+            },
+            {
+              "c": "貴",
+              "j": "gwai3",
+              "e": "expensive"
+            }
+          ]
+        },
+        {
+          "u": false,
+          "c": "嗰件平啲，而且仲新啲。",
+          "j": "go2 gin6 peng4 di1, ji4 ce2 zung6 san1 di1.",
+          "e": "That one's cheaper, and newer too.",
+          "bd": [
+            {
+              "c": "嗰件",
+              "j": "go2 gin6",
+              "e": "that one"
+            },
+            {
+              "c": "平啲",
+              "j": "peng4 di1",
+              "e": "cheaper"
+            },
+            {
+              "c": "而且",
+              "j": "ji4 ce2",
+              "e": "and also"
+            },
+            {
+              "c": "仲",
+              "j": "zung6",
+              "e": "even"
+            },
+            {
+              "c": "新啲",
+              "j": "san1 di1",
+              "e": "newer"
+            }
+          ]
+        },
+        {
+          "u": true,
+          "c": "但係呢件靚過嗰件。",
+          "j": "daan6 hai6 ni1 gin6 leng3 gwo3 go2 gin6.",
+          "e": "But this one is nicer than that one.",
+          "bd": [
+            {
+              "c": "但係",
+              "j": "daan6 hai6",
+              "e": "but"
+            },
+            {
+              "c": "呢件",
+              "j": "ni1 gin6",
+              "e": "this one"
+            },
+            {
+              "c": "靚過",
+              "j": "leng3 gwo3",
+              "e": "nicer than"
+            },
+            {
+              "c": "嗰件",
+              "j": "go2 gin6",
+              "e": "that one"
+            }
+          ]
+        },
+        {
+          "u": false,
+          "c": "你可以兩件都試下。",
+          "j": "nei5 ho2 ji5 loeng5 gin6 dou1 si3 haa5.",
+          "e": "You can try both on.",
+          "bd": [
+            {
+              "c": "你可以",
+              "j": "nei5 ho2 ji5",
+              "e": "you can"
+            },
+            {
+              "c": "兩件",
+              "j": "loeng5 gin6",
+              "e": "both [items]"
+            },
+            {
+              "c": "都",
+              "j": "dou1",
+              "e": "both"
+            },
+            {
+              "c": "試下",
+              "j": "si3 haa5",
+              "e": "try on"
+            }
+          ]
+        },
+        {
+          "u": true,
+          "c": "好主意！我想要最舒服嗰件。",
+          "j": "hou2 zyu2 ji3! ngo5 soeng2 jiu3 zeoi3 syu1 fuk6 go2 gin6.",
+          "e": "Good idea! I want the most comfortable one.",
+          "bd": [
+            {
+              "c": "好主意",
+              "j": "hou2 zyu2 ji3",
+              "e": "good idea"
+            },
+            {
+              "c": "我想要",
+              "j": "ngo5 soeng2 jiu3",
+              "e": "I want"
+            },
+            {
+              "c": "最舒服",
+              "j": "zeoi3 syu1 fuk6",
+              "e": "most comfortable"
+            },
+            {
+              "c": "嗰件",
+              "j": "go2 gin6",
+              "e": "that one"
+            }
+          ]
+        },
+        {
+          "u": false,
+          "c": "呢件大啲，著得舒服啲。",
+          "j": "ni1 gin6 daai6 di1, zoek3 dak1 syu1 fuk6 di1.",
+          "e": "This one is bigger, more comfortable to wear.",
+          "bd": [
+            {
+              "c": "呢件",
+              "j": "ni1 gin6",
+              "e": "this one"
+            },
+            {
+              "c": "大啲",
+              "j": "daai6 di1",
+              "e": "bigger"
+            },
+            {
+              "c": "著得",
+              "j": "zoek3 dak1",
+              "e": "to wear"
+            },
+            {
+              "c": "舒服啲",
+              "j": "syu1 fuk6 di1",
+              "e": "more comfortable"
+            }
+          ]
+        },
+        {
+          "u": true,
+          "c": "咁我應該買呢件喇。",
+          "j": "gam2 ngo5 jing1 goi1 maai5 ni1 gin6 laa3.",
+          "e": "Then I should buy this one.",
+          "bd": [
+            {
+              "c": "咁",
+              "j": "gam2",
+              "e": "then"
+            },
+            {
+              "c": "我",
+              "j": "ngo5",
+              "e": "I"
+            },
+            {
+              "c": "應該",
+              "j": "jing1 goi1",
+              "e": "should"
+            },
+            {
+              "c": "買",
+              "j": "maai5",
+              "e": "buy"
+            },
+            {
+              "c": "呢件",
+              "j": "ni1 gin6",
+              "e": "this one"
+            },
+            {
+              "c": "喇",
+              "j": "laa3",
+              "e": "(particle)"
+            }
+          ]
+        },
+        {
+          "u": false,
+          "c": "啱呀，呢件同你條褲好襯。",
+          "j": "ngaam1 aa3, ni1 gin6 tung4 nei5 tiu4 fu3 hou2 can3.",
+          "e": "Right, it goes well with your trousers.",
+          "bd": [
+            {
+              "c": "啱呀",
+              "j": "ngaam1 aa3",
+              "e": "right"
+            },
+            {
+              "c": "呢件",
+              "j": "ni1 gin6",
+              "e": "this one"
+            },
+            {
+              "c": "同",
+              "j": "tung4",
+              "e": "with"
+            },
+            {
+              "c": "你",
+              "j": "nei5",
+              "e": "your"
+            },
+            {
+              "c": "條褲",
+              "j": "tiu4 fu3",
+              "e": "trousers"
+            },
+            {
+              "c": "好襯",
+              "j": "hou2 can3",
+              "e": "matches well"
+            }
+          ]
+        },
+        {
+          "u": true,
+          "c": "決定喇，我要呢件！",
+          "j": "kyut3 ding6 laa3, ngo5 jiu3 ni1 gin6!",
+          "e": "Decided — I'll take this one!",
+          "bd": [
+            {
+              "c": "決定",
+              "j": "kyut3 ding6",
+              "e": "decided"
+            },
+            {
+              "c": "喇",
+              "j": "laa3",
+              "e": "(particle)"
+            },
+            {
+              "c": "我要",
+              "j": "ngo5 jiu3",
+              "e": "I want"
+            },
+            {
+              "c": "呢件",
+              "j": "ni1 gin6",
+              "e": "this one"
             }
           ]
         }
@@ -1970,6 +2678,335 @@
               "c": "好開心",
               "j": "hou2 hoi1 sam1",
               "e": "very happy"
+            }
+          ]
+        }
+      ]
+    },
+    "beginner-s8": {
+      "title": "Getting ready to go out",
+      "speakers": [
+        "Family",
+        "You"
+      ],
+      "lines": [
+        {
+          "u": false,
+          "c": "你準備好未呀？",
+          "j": "nei5 zeon2 bei6 hou2 mei6 aa3?",
+          "e": "Are you ready yet?",
+          "bd": [
+            {
+              "c": "你",
+              "j": "nei5",
+              "e": "you"
+            },
+            {
+              "c": "準備好",
+              "j": "zeon2 bei6 hou2",
+              "e": "ready"
+            },
+            {
+              "c": "未",
+              "j": "mei6",
+              "e": "yet"
+            },
+            {
+              "c": "呀",
+              "j": "aa3",
+              "e": "(particle)"
+            }
+          ]
+        },
+        {
+          "u": true,
+          "c": "仲未，我搵唔到件外套。",
+          "j": "zung6 mei6, ngo5 wan2 m4 dou2 gin6 ngoi6 tou3.",
+          "e": "Not yet, I can't find my coat.",
+          "bd": [
+            {
+              "c": "仲未",
+              "j": "zung6 mei6",
+              "e": "not yet"
+            },
+            {
+              "c": "我",
+              "j": "ngo5",
+              "e": "I"
+            },
+            {
+              "c": "搵唔到",
+              "j": "wan2 m4 dou2",
+              "e": "can't find"
+            },
+            {
+              "c": "件",
+              "j": "gin6",
+              "e": "[item]"
+            },
+            {
+              "c": "外套",
+              "j": "ngoi6 tou3",
+              "e": "coat"
+            }
+          ]
+        },
+        {
+          "u": false,
+          "c": "喺梳化上面呀。",
+          "j": "hai2 so1 faa2 soeng6 min6 aa3.",
+          "e": "It's on the sofa.",
+          "bd": [
+            {
+              "c": "喺",
+              "j": "hai2",
+              "e": "it's at"
+            },
+            {
+              "c": "梳化",
+              "j": "so1 faa2",
+              "e": "sofa"
+            },
+            {
+              "c": "上面",
+              "j": "soeng6 min6",
+              "e": "on top"
+            },
+            {
+              "c": "呀",
+              "j": "aa3",
+              "e": "(particle)"
+            }
+          ]
+        },
+        {
+          "u": true,
+          "c": "唔喺度喎。我對鞋呢？",
+          "j": "m4 hai2 dou6 wo3. ngo5 deoi3 haai4 ne1?",
+          "e": "It's not there. What about my shoes?",
+          "bd": [
+            {
+              "c": "唔喺度",
+              "j": "m4 hai2 dou6",
+              "e": "not there"
+            },
+            {
+              "c": "喎",
+              "j": "wo3",
+              "e": "(particle)"
+            },
+            {
+              "c": "我",
+              "j": "ngo5",
+              "e": "my"
+            },
+            {
+              "c": "對鞋",
+              "j": "deoi3 haai4",
+              "e": "pair of shoes"
+            },
+            {
+              "c": "呢",
+              "j": "ne1",
+              "e": "(what about)"
+            }
+          ]
+        },
+        {
+          "u": false,
+          "c": "鞋喺門口，櫃下面。",
+          "j": "haai4 hai2 mun4 hau2, gwai6 haa6 min6.",
+          "e": "The shoes are at the door, under the cabinet.",
+          "bd": [
+            {
+              "c": "鞋",
+              "j": "haai4",
+              "e": "shoes"
+            },
+            {
+              "c": "喺",
+              "j": "hai2",
+              "e": "are at"
+            },
+            {
+              "c": "門口",
+              "j": "mun4 hau2",
+              "e": "the doorway"
+            },
+            {
+              "c": "櫃",
+              "j": "gwai6",
+              "e": "cabinet"
+            },
+            {
+              "c": "下面",
+              "j": "haa6 min6",
+              "e": "underneath"
+            }
+          ]
+        },
+        {
+          "u": true,
+          "c": "搵到喇！我條褲喺邊度？",
+          "j": "wan2 dou2 laa3! ngo5 tiu4 fu3 hai2 bin1 dou6?",
+          "e": "Found them! Where are my trousers?",
+          "bd": [
+            {
+              "c": "搵到",
+              "j": "wan2 dou2",
+              "e": "found them"
+            },
+            {
+              "c": "喇",
+              "j": "laa3",
+              "e": "(particle)"
+            },
+            {
+              "c": "我",
+              "j": "ngo5",
+              "e": "my"
+            },
+            {
+              "c": "條褲",
+              "j": "tiu4 fu3",
+              "e": "trousers"
+            },
+            {
+              "c": "喺邊度",
+              "j": "hai2 bin1 dou6",
+              "e": "where"
+            }
+          ]
+        },
+        {
+          "u": false,
+          "c": "喺房入面，張床上面。",
+          "j": "hai2 fong2 jap6 min6, zoeng1 cong4 soeng6 min6.",
+          "e": "In the room, on the bed.",
+          "bd": [
+            {
+              "c": "喺",
+              "j": "hai2",
+              "e": "in"
+            },
+            {
+              "c": "房",
+              "j": "fong2",
+              "e": "room"
+            },
+            {
+              "c": "入面",
+              "j": "jap6 min6",
+              "e": "inside"
+            },
+            {
+              "c": "張床",
+              "j": "zoeng1 cong4",
+              "e": "the bed"
+            },
+            {
+              "c": "上面",
+              "j": "soeng6 min6",
+              "e": "on top"
+            }
+          ]
+        },
+        {
+          "u": true,
+          "c": "多謝！我嘅手錶又喺邊度？",
+          "j": "do1 ze6! ngo5 ge3 sau2 biu1 jau6 hai2 bin1 dou6?",
+          "e": "Thanks! And where's my watch?",
+          "bd": [
+            {
+              "c": "多謝",
+              "j": "do1 ze6",
+              "e": "thanks"
+            },
+            {
+              "c": "我嘅",
+              "j": "ngo5 ge3",
+              "e": "my"
+            },
+            {
+              "c": "手錶",
+              "j": "sau2 biu1",
+              "e": "watch"
+            },
+            {
+              "c": "又",
+              "j": "jau6",
+              "e": "also"
+            },
+            {
+              "c": "喺邊度",
+              "j": "hai2 bin1 dou6",
+              "e": "where"
+            }
+          ]
+        },
+        {
+          "u": false,
+          "c": "喺廁所，洗手盆旁邊。",
+          "j": "hai2 ci3 so2, sai2 sau2 pun4 pong4 bin1.",
+          "e": "In the bathroom, beside the sink.",
+          "bd": [
+            {
+              "c": "喺",
+              "j": "hai2",
+              "e": "in"
+            },
+            {
+              "c": "廁所",
+              "j": "ci3 so2",
+              "e": "bathroom"
+            },
+            {
+              "c": "洗手盆",
+              "j": "sai2 sau2 pun4",
+              "e": "sink"
+            },
+            {
+              "c": "旁邊",
+              "j": "pong4 bin1",
+              "e": "beside"
+            }
+          ]
+        },
+        {
+          "u": true,
+          "c": "終於搵齊喇，可以出門喇！",
+          "j": "zung1 jyu1 wan2 cai4 laa3, ho2 ji5 ceot1 mun4 laa3!",
+          "e": "Finally found everything — we can head out!",
+          "bd": [
+            {
+              "c": "終於",
+              "j": "zung1 jyu1",
+              "e": "finally"
+            },
+            {
+              "c": "搵齊",
+              "j": "wan2 cai4",
+              "e": "found everything"
+            },
+            {
+              "c": "喇",
+              "j": "laa3",
+              "e": "(particle)"
+            },
+            {
+              "c": "可以",
+              "j": "ho2 ji5",
+              "e": "can"
+            },
+            {
+              "c": "出門",
+              "j": "ceot1 mun4",
+              "e": "head out"
+            },
+            {
+              "c": "喇",
+              "j": "laa3",
+              "e": "(particle)"
             }
           ]
         }
