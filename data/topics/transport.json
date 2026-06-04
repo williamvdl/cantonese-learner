@@ -72,10 +72,10 @@
       "sentences": [
         {
           "sid": "transport-t1-s01",
-          "c": "我坐地鐵去。",
-          "j": "ngo5 co5 dei6 tit3 heoi3.",
+          "c": "我搭地鐵去。",
+          "j": "ngo5 daap3 dei6 tit3 heoi3.",
           "e": "I'm taking the MTR.",
-          "note": "Two verbs for taking transport: 坐 (co5) \"sit/ride\" and 搭 (daap3) \"take\" both work — 坐地鐵 (co5 dei6 tit3) or 搭地鐵 (daap3 dei6 tit3) \"take the MTR\". 地鐵 (dei6 tit3) is the subway/MTR; the verb 去 (heoi3) \"go\" comes at the end.",
+          "note": "搭 (daap3) is the everyday verb for taking public transport — 搭地鐵 (daap3 dei6 tit3) \"take the MTR\", 搭巴士 (daap3 baa1 si2) \"take the bus\". 坐 (co5) \"sit / ride\" also works and you'll hear it, but 搭 (daap3) is the more common choice. 地鐵 (dei6 tit3) is the subway/MTR; the verb 去 (heoi3) \"go\" comes at the end.",
           "bd": [
             {
               "c": "我",
@@ -83,9 +83,9 @@
               "e": "I"
             },
             {
-              "c": "坐",
-              "j": "co5",
-              "e": "take / sit"
+              "c": "搭",
+              "j": "daap3",
+              "e": "take"
             },
             {
               "c": "地鐵",
