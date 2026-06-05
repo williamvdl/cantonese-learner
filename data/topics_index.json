@@ -491,6 +491,18 @@
       "wordCounts": {
         "1": 12
       }
+    },
+    {
+      "key": "connectives",
+      "label": "Connectives",
+      "icon": "🔗",
+      "color": "#4E6E5D",
+      "rounds": [
+        1
+      ],
+      "wordCounts": {
+        "1": 16
+      }
     }
   ]
 }

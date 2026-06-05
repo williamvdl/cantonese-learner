@@ -348,8 +348,12 @@
       "label": "Intermediate",
       "icon": "🌿",
       "level": "Intermediate",
-      "desc": "Deeper tier-2 vocabulary and longer sentences. (Being rebuilt — more coming.)",
+      "desc": "Connectives first, then deeper tier-2 topics. (Being built out.)",
       "lessons": [
+        {
+          "topic": "connectives",
+          "round": 1
+        },
         {
           "topic": "greetings",
           "round": 2

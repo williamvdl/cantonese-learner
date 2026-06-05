@@ -1,0 +1,1407 @@
+{
+  "meta": {
+    "label": "Connectives",
+    "icon": "🔗",
+    "color": "#4E6E5D"
+  },
+  "rounds": {
+    "1": {
+      "note": "This lesson is your toolkit for joining ideas into longer sentences — the heart of Intermediate. Each word is a connective; the notes explain how to use and tell apart the tricky ones. Don't memorise them in isolation — watch how they link the clauses in the examples, then see several stack together in the last few sentences.",
+      "words": [
+        {
+          "id": "connectives-001",
+          "c": "因為…所以",
+          "j": "jan1 wai6…so2 ji5",
+          "e": "because … so"
+        },
+        {
+          "id": "connectives-002",
+          "c": "所以",
+          "j": "so2 ji5",
+          "e": "so; therefore"
+        },
+        {
+          "id": "connectives-003",
+          "c": "如果…就",
+          "j": "jyu4 gwo2…zau6",
+          "e": "if … then"
+        },
+        {
+          "id": "connectives-004",
+          "c": "但係",
+          "j": "daan6 hai6",
+          "e": "but"
+        },
+        {
+          "id": "connectives-005",
+          "c": "不過",
+          "j": "bat1 gwo3",
+          "e": "however; though"
+        },
+        {
+          "id": "connectives-006",
+          "c": "雖然…但係",
+          "j": "seoi1 jin4…daan6 hai6",
+          "e": "although … but"
+        },
+        {
+          "id": "connectives-007",
+          "c": "同埋",
+          "j": "tung4 maai4",
+          "e": "and (also)"
+        },
+        {
+          "id": "connectives-008",
+          "c": "而且",
+          "j": "ji4 ce2",
+          "e": "moreover; what's more"
+        },
+        {
+          "id": "connectives-009",
+          "c": "仲",
+          "j": "zung6",
+          "e": "also; on top of that"
+        },
+        {
+          "id": "connectives-010",
+          "c": "先…然後",
+          "j": "sin1…jin4 hau6",
+          "e": "first … then"
+        },
+        {
+          "id": "connectives-011",
+          "c": "跟住",
+          "j": "gan1 zyu6",
+          "e": "next; after that"
+        },
+        {
+          "id": "connectives-012",
+          "c": "之後",
+          "j": "zi1 hau6",
+          "e": "after; afterwards"
+        },
+        {
+          "id": "connectives-013",
+          "c": "之前",
+          "j": "zi1 cin4",
+          "e": "before"
+        },
+        {
+          "id": "connectives-014",
+          "c": "一…就",
+          "j": "jat1…zau6",
+          "e": "as soon as …"
+        },
+        {
+          "id": "connectives-015",
+          "c": "或者",
+          "j": "waak6 ze2",
+          "e": "or"
+        },
+        {
+          "id": "connectives-016",
+          "c": "不如",
+          "j": "bat1 jyu4",
+          "e": "how about; why don't we"
+        }
+      ],
+      "sentences": [
+        {
+          "sid": "connectives-t1-s01",
+          "c": "因為今日落雨，所以我哋唔出街。",
+          "j": "jan1 wai6 gam1 jat6 lok6 jyu5, so2 ji5 ngo5 dei6 m4 ceot1 gaai1.",
+          "e": "Because it's raining today, we're not going out.",
+          "note": "因為…所以 (jan1 wai6…so2 ji5) is the core \"because…so\" frame — reason first, result second. In speech you can drop 因為 (jan1 wai6) and just lead the result with <b>所以</b> (so2 ji5), as in the next sentence.",
+          "bd": [
+            {
+              "c": "因為",
+              "j": "jan1 wai6",
+              "e": "because"
+            },
+            {
+              "c": "今日",
+              "j": "gam1 jat6",
+              "e": "today"
+            },
+            {
+              "c": "落雨",
+              "j": "lok6 jyu5",
+              "e": "rain"
+            },
+            {
+              "c": "所以",
+              "j": "so2 ji5",
+              "e": "so"
+            },
+            {
+              "c": "我哋",
+              "j": "ngo5 dei6",
+              "e": "we"
+            },
+            {
+              "c": "唔",
+              "j": "m4",
+              "e": "not"
+            },
+            {
+              "c": "出街",
+              "j": "ceot1 gaai1",
+              "e": "go out"
+            }
+          ]
+        },
+        {
+          "sid": "connectives-t1-s02",
+          "c": "我好攰，所以想早啲瞓。",
+          "j": "ngo5 hou2 gui6, so2 ji5 soeng2 zou2 di1 fan3.",
+          "e": "I'm tired, so I want to sleep early.",
+          "bd": [
+            {
+              "c": "我",
+              "j": "ngo5",
+              "e": "I"
+            },
+            {
+              "c": "好攰",
+              "j": "hou2 gui6",
+              "e": "very tired"
+            },
+            {
+              "c": "所以",
+              "j": "so2 ji5",
+              "e": "so"
+            },
+            {
+              "c": "想",
+              "j": "soeng2",
+              "e": "want"
+            },
+            {
+              "c": "早啲",
+              "j": "zou2 di1",
+              "e": "earlier"
+            },
+            {
+              "c": "瞓",
+              "j": "fan3",
+              "e": "sleep"
+            }
+          ]
+        },
+        {
+          "sid": "connectives-t1-s03",
+          "c": "如果你得閒，就一齊食飯。",
+          "j": "jyu4 gwo2 nei5 dak1 haan4, zau6 jat1 cai4 sik6 faan6.",
+          "e": "If you're free, then let's eat together.",
+          "bd": [
+            {
+              "c": "如果",
+              "j": "jyu4 gwo2",
+              "e": "if"
+            },
+            {
+              "c": "你",
+              "j": "nei5",
+              "e": "you"
+            },
+            {
+              "c": "得閒",
+              "j": "dak1 haan4",
+              "e": "free"
+            },
+            {
+              "c": "就",
+              "j": "zau6",
+              "e": "then"
+            },
+            {
+              "c": "一齊",
+              "j": "jat1 cai4",
+              "e": "together"
+            },
+            {
+              "c": "食飯",
+              "j": "sik6 faan6",
+              "e": "eat"
+            }
+          ]
+        },
+        {
+          "sid": "connectives-t1-s04",
+          "c": "我想去，但係冇時間。",
+          "j": "ngo5 soeng2 heoi3, daan6 hai6 mou5 si4 gaan3.",
+          "e": "I want to go, but I don't have time.",
+          "bd": [
+            {
+              "c": "我",
+              "j": "ngo5",
+              "e": "I"
+            },
+            {
+              "c": "想",
+              "j": "soeng2",
+              "e": "want"
+            },
+            {
+              "c": "去",
+              "j": "heoi3",
+              "e": "go"
+            },
+            {
+              "c": "但係",
+              "j": "daan6 hai6",
+              "e": "but"
+            },
+            {
+              "c": "冇",
+              "j": "mou5",
+              "e": "not have"
+            },
+            {
+              "c": "時間",
+              "j": "si4 gaan3",
+              "e": "time"
+            }
+          ]
+        },
+        {
+          "sid": "connectives-t1-s05",
+          "c": "呢間餐廳好貴，不過好好食。",
+          "j": "ni1 gaan1 caan1 teng1 hou2 gwai3, bat1 gwo3 hou2 hou2 sik6.",
+          "e": "This restaurant is expensive, though the food's great.",
+          "note": "但係 (daan6 hai6) and <b>不過</b> (bat1 gwo3) both mean \"but\". 但係 (daan6 hai6) is the plain contrast; 不過 (bat1 gwo3) is a touch softer — more like \"though / mind you\" — and often opens a gentle objection.",
+          "bd": [
+            {
+              "c": "呢間",
+              "j": "ni1 gaan1",
+              "e": "this"
+            },
+            {
+              "c": "餐廳",
+              "j": "caan1 teng1",
+              "e": "restaurant"
+            },
+            {
+              "c": "好貴",
+              "j": "hou2 gwai3",
+              "e": "expensive"
+            },
+            {
+              "c": "不過",
+              "j": "bat1 gwo3",
+              "e": "however"
+            },
+            {
+              "c": "好好食",
+              "j": "hou2 hou2 sik6",
+              "e": "very tasty"
+            }
+          ]
+        },
+        {
+          "sid": "connectives-t1-s06",
+          "c": "雖然好凍，但係我都想去。",
+          "j": "seoi1 jin4 hou2 dung3, daan6 hai6 ngo5 dou1 soeng2 heoi3.",
+          "e": "Although it's cold, I still want to go.",
+          "note": "雖然…但係 (seoi1 jin4…daan6 hai6) \"although…but\" — Cantonese keeps <b>both</b> halves, where English drops one (\"although it's cold, [—] I want to go\"). Don't leave off the 但係 (daan6 hai6).",
+          "bd": [
+            {
+              "c": "雖然",
+              "j": "seoi1 jin4",
+              "e": "although"
+            },
+            {
+              "c": "好凍",
+              "j": "hou2 dung3",
+              "e": "cold"
+            },
+            {
+              "c": "但係",
+              "j": "daan6 hai6",
+              "e": "but"
+            },
+            {
+              "c": "我",
+              "j": "ngo5",
+              "e": "I"
+            },
+            {
+              "c": "都",
+              "j": "dou1",
+              "e": "still"
+            },
+            {
+              "c": "想去",
+              "j": "soeng2 heoi3",
+              "e": "want to go"
+            }
+          ]
+        },
+        {
+          "sid": "connectives-t1-s07",
+          "c": "我鍾意食魚同埋雞。",
+          "j": "ngo5 zung1 ji3 sik6 jyu2 tung4 maai4 gai1.",
+          "e": "I like eating fish and chicken.",
+          "bd": [
+            {
+              "c": "我",
+              "j": "ngo5",
+              "e": "I"
+            },
+            {
+              "c": "鍾意",
+              "j": "zung1 ji3",
+              "e": "like"
+            },
+            {
+              "c": "食",
+              "j": "sik6",
+              "e": "eat"
+            },
+            {
+              "c": "魚",
+              "j": "jyu2",
+              "e": "fish"
+            },
+            {
+              "c": "同埋",
+              "j": "tung4 maai4",
+              "e": "and"
+            },
+            {
+              "c": "雞",
+              "j": "gai1",
+              "e": "chicken"
+            }
+          ]
+        },
+        {
+          "sid": "connectives-t1-s08",
+          "c": "佢好叻，而且好勤力。",
+          "j": "keoi5 hou2 lek1, ji4 ce2 hou2 kan4 lik6.",
+          "e": "She's clever, and what's more, hardworking.",
+          "bd": [
+            {
+              "c": "佢",
+              "j": "keoi5",
+              "e": "she"
+            },
+            {
+              "c": "好叻",
+              "j": "hou2 lek1",
+              "e": "clever"
+            },
+            {
+              "c": "而且",
+              "j": "ji4 ce2",
+              "e": "moreover"
+            },
+            {
+              "c": "好",
+              "j": "hou2",
+              "e": "very"
+            },
+            {
+              "c": "勤力",
+              "j": "kan4 lik6",
+              "e": "hardworking"
+            }
+          ]
+        },
+        {
+          "sid": "connectives-t1-s09",
+          "c": "我食咗飯，仲飲咗茶。",
+          "j": "ngo5 sik6 zo2 faan6, zung6 jam2 zo2 caa4.",
+          "e": "I ate, and also drank tea.",
+          "note": "Three ways to add: 同埋 (tung4 maai4) \"and (also)\" simply joins; 而且 (ji4 ce2) \"moreover\" adds a stronger point; <b>仲</b> (zung6) \"on top of that\" piles one more on. 同埋 (tung4 maai4) can link nouns or whole clauses.",
+          "bd": [
+            {
+              "c": "我",
+              "j": "ngo5",
+              "e": "I"
+            },
+            {
+              "c": "食咗",
+              "j": "sik6 zo2",
+              "e": "ate"
+            },
+            {
+              "c": "飯",
+              "j": "faan6",
+              "e": "rice/meal"
+            },
+            {
+              "c": "仲",
+              "j": "zung6",
+              "e": "also"
+            },
+            {
+              "c": "飲咗",
+              "j": "jam2 zo2",
+              "e": "drank"
+            },
+            {
+              "c": "茶",
+              "j": "caa4",
+              "e": "tea"
+            }
+          ]
+        },
+        {
+          "sid": "connectives-t1-s10",
+          "c": "我先做功課，然後睇電視。",
+          "j": "ngo5 sin1 zou6 gung1 fo3, jin4 hau6 tai2 din6 si6.",
+          "e": "I do homework first, then watch TV.",
+          "bd": [
+            {
+              "c": "我",
+              "j": "ngo5",
+              "e": "I"
+            },
+            {
+              "c": "先",
+              "j": "sin1",
+              "e": "first"
+            },
+            {
+              "c": "做",
+              "j": "zou6",
+              "e": "do"
+            },
+            {
+              "c": "功課",
+              "j": "gung1 fo3",
+              "e": "homework"
+            },
+            {
+              "c": "然後",
+              "j": "jin4 hau6",
+              "e": "then"
+            },
+            {
+              "c": "睇",
+              "j": "tai2",
+              "e": "watch"
+            },
+            {
+              "c": "電視",
+              "j": "din6 si6",
+              "e": "TV"
+            }
+          ]
+        },
+        {
+          "sid": "connectives-t1-s11",
+          "c": "我哋食完飯，跟住去行街。",
+          "j": "ngo5 dei6 sik6 jyun4 faan6, gan1 zyu6 heoi3 haang4 gaai1.",
+          "e": "After we eat, then we go for a stroll.",
+          "bd": [
+            {
+              "c": "我哋",
+              "j": "ngo5 dei6",
+              "e": "we"
+            },
+            {
+              "c": "食完",
+              "j": "sik6 jyun4",
+              "e": "finish eating"
+            },
+            {
+              "c": "飯",
+              "j": "faan6",
+              "e": "meal"
+            },
+            {
+              "c": "跟住",
+              "j": "gan1 zyu6",
+              "e": "next"
+            },
+            {
+              "c": "去",
+              "j": "heoi3",
+              "e": "go"
+            },
+            {
+              "c": "行街",
+              "j": "haang4 gaai1",
+              "e": "stroll"
+            }
+          ]
+        },
+        {
+          "sid": "connectives-t1-s12",
+          "c": "放工之後，我會去做運動。",
+          "j": "fong3 gung1 zi1 hau6, ngo5 wui5 heoi3 zou6 wan6 dung6.",
+          "e": "After work, I'll go and exercise.",
+          "bd": [
+            {
+              "c": "放工",
+              "j": "fong3 gung1",
+              "e": "finish work"
+            },
+            {
+              "c": "之後",
+              "j": "zi1 hau6",
+              "e": "after"
+            },
+            {
+              "c": "我",
+              "j": "ngo5",
+              "e": "I"
+            },
+            {
+              "c": "會",
+              "j": "wui5",
+              "e": "will"
+            },
+            {
+              "c": "去",
+              "j": "heoi3",
+              "e": "go"
+            },
+            {
+              "c": "做運動",
+              "j": "zou6 wan6 dung6",
+              "e": "exercise"
+            }
+          ]
+        },
+        {
+          "sid": "connectives-t1-s13",
+          "c": "瞓覺之前，記得熄燈。",
+          "j": "fan3 gaau3 zi1 cin4, gei3 dak1 sik1 dang1.",
+          "e": "Before sleeping, remember to turn off the light.",
+          "note": "Sequencing words: 先…然後 (sin1…jin4 hau6) \"first…then\", 跟住 (gan1 zyu6) \"next\". Note 之後 (zi1 hau6) \"after\" and <b>之前</b> (zi1 cin4) \"before\" come after the event they anchor — 瞓覺之前 (fan3 gaau3 zi1 cin4) \"before sleeping\".",
+          "bd": [
+            {
+              "c": "瞓覺",
+              "j": "fan3 gaau3",
+              "e": "sleep"
+            },
+            {
+              "c": "之前",
+              "j": "zi1 cin4",
+              "e": "before"
+            },
+            {
+              "c": "記得",
+              "j": "gei3 dak1",
+              "e": "remember"
+            },
+            {
+              "c": "熄燈",
+              "j": "sik1 dang1",
+              "e": "turn off light"
+            }
+          ]
+        },
+        {
+          "sid": "connectives-t1-s14",
+          "c": "我一返到屋企就好攰。",
+          "j": "ngo5 jat1 faan1 dou3 uk1 kei2 zau6 hou2 gui6.",
+          "e": "As soon as I get home, I'm exhausted.",
+          "note": "一…就 (jat1…zau6) means \"as soon as / the moment that\" — 一返到就攰 (jat1 faan1 dou3 zau6 gui6) \"the moment I get back, I'm exhausted\". The two actions feel immediate and linked.",
+          "bd": [
+            {
+              "c": "我",
+              "j": "ngo5",
+              "e": "I"
+            },
+            {
+              "c": "一",
+              "j": "jat1",
+              "e": "as soon as"
+            },
+            {
+              "c": "返到",
+              "j": "faan1 dou3",
+              "e": "get back"
+            },
+            {
+              "c": "屋企",
+              "j": "uk1 kei2",
+              "e": "home"
+            },
+            {
+              "c": "就",
+              "j": "zau6",
+              "e": "then"
+            },
+            {
+              "c": "好攰",
+              "j": "hou2 gui6",
+              "e": "exhausted"
+            }
+          ]
+        },
+        {
+          "sid": "connectives-t1-s15",
+          "c": "我哋可以搭巴士或者地鐵。",
+          "j": "ngo5 dei6 ho2 ji5 daap3 baa1 si2 waak6 ze2 dei6 tit3.",
+          "e": "We can take the bus or the MTR.",
+          "note": "或者 (waak6 ze2) is \"or\" in statements and offers — 巴士或者地鐵 (baa1 si2 waak6 ze2 dei6 tit3) \"bus or MTR\". In a yes/no choice question you'd more often use 定(係) (ding6 (hai6)) from the beginner lessons.",
+          "bd": [
+            {
+              "c": "我哋",
+              "j": "ngo5 dei6",
+              "e": "we"
+            },
+            {
+              "c": "可以",
+              "j": "ho2 ji5",
+              "e": "can"
+            },
+            {
+              "c": "搭",
+              "j": "daap3",
+              "e": "take"
+            },
+            {
+              "c": "巴士",
+              "j": "baa1 si2",
+              "e": "bus"
+            },
+            {
+              "c": "或者",
+              "j": "waak6 ze2",
+              "e": "or"
+            },
+            {
+              "c": "地鐵",
+              "j": "dei6 tit3",
+              "e": "MTR"
+            }
+          ]
+        },
+        {
+          "sid": "connectives-t1-s16",
+          "c": "不如我哋今晚食火鍋啦。",
+          "j": "bat1 jyu4 ngo5 dei6 gam1 maan5 sik6 fo2 wo1 laa1.",
+          "e": "How about we have hotpot tonight?",
+          "note": "不如 (bat1 jyu4) \"how about / why don't we\" is the natural way to float a suggestion — friendlier than a flat 我哋食… (ngo5 dei6 sik6…). It often pairs with 啦 (laa1) at the end.",
+          "bd": [
+            {
+              "c": "不如",
+              "j": "bat1 jyu4",
+              "e": "how about"
+            },
+            {
+              "c": "我哋",
+              "j": "ngo5 dei6",
+              "e": "we"
+            },
+            {
+              "c": "今晚",
+              "j": "gam1 maan5",
+              "e": "tonight"
+            },
+            {
+              "c": "食",
+              "j": "sik6",
+              "e": "eat"
+            },
+            {
+              "c": "火鍋",
+              "j": "fo2 wo1",
+              "e": "hotpot"
+            },
+            {
+              "c": "啦",
+              "j": "laa1",
+              "e": "(particle)"
+            }
+          ]
+        },
+        {
+          "sid": "connectives-t1-s17",
+          "c": "因為今日好熱，所以如果你出街，就記得帶水。",
+          "j": "jan1 wai6 gam1 jat6 hou2 jit6, so2 ji5 jyu4 gwo2 nei5 ceot1 gaai1, zau6 gei3 dak1 daai3 seoi2.",
+          "e": "Because it's hot today, if you go out, then remember to bring water.",
+          "note": "Connectives stack — real Cantonese chains several in one sentence: 因為…所以…如果…就 (jan1 wai6…so2 ji5…jyu4 gwo2…zau6) flows reason → result → condition → instruction. This stacking is the Intermediate target.",
+          "bd": [
+            {
+              "c": "因為",
+              "j": "jan1 wai6",
+              "e": "because"
+            },
+            {
+              "c": "今日",
+              "j": "gam1 jat6",
+              "e": "today"
+            },
+            {
+              "c": "好熱",
+              "j": "hou2 jit6",
+              "e": "hot"
+            },
+            {
+              "c": "所以",
+              "j": "so2 ji5",
+              "e": "so"
+            },
+            {
+              "c": "如果",
+              "j": "jyu4 gwo2",
+              "e": "if"
+            },
+            {
+              "c": "你",
+              "j": "nei5",
+              "e": "you"
+            },
+            {
+              "c": "出街",
+              "j": "ceot1 gaai1",
+              "e": "go out"
+            },
+            {
+              "c": "就",
+              "j": "zau6",
+              "e": "then"
+            },
+            {
+              "c": "記得",
+              "j": "gei3 dak1",
+              "e": "remember"
+            },
+            {
+              "c": "帶水",
+              "j": "daai3 seoi2",
+              "e": "bring water"
+            }
+          ]
+        },
+        {
+          "sid": "connectives-t1-s18",
+          "c": "雖然呢間舖頭貴啲，但係啲嘢好靚，而且服務好好。",
+          "j": "seoi1 jin4 ni1 gaan1 pou3 tau2 gwai3 di1, daan6 hai6 di1 je5 hou2 leng3, ji4 ce2 fuk6 mou6 hou2 hou2.",
+          "e": "Although this shop is a bit pricey, the goods are lovely, and the service is great.",
+          "bd": [
+            {
+              "c": "雖然",
+              "j": "seoi1 jin4",
+              "e": "although"
+            },
+            {
+              "c": "呢間",
+              "j": "ni1 gaan1",
+              "e": "this"
+            },
+            {
+              "c": "舖頭",
+              "j": "pou3 tau2",
+              "e": "shop"
+            },
+            {
+              "c": "貴啲",
+              "j": "gwai3 di1",
+              "e": "a bit pricey"
+            },
+            {
+              "c": "但係",
+              "j": "daan6 hai6",
+              "e": "but"
+            },
+            {
+              "c": "啲嘢",
+              "j": "di1 je5",
+              "e": "the goods"
+            },
+            {
+              "c": "好靚",
+              "j": "hou2 leng3",
+              "e": "lovely"
+            },
+            {
+              "c": "而且",
+              "j": "ji4 ce2",
+              "e": "moreover"
+            },
+            {
+              "c": "服務",
+              "j": "fuk6 mou6",
+              "e": "service"
+            },
+            {
+              "c": "好好",
+              "j": "hou2 hou2",
+              "e": "great"
+            }
+          ]
+        },
+        {
+          "sid": "connectives-t1-s19",
+          "c": "我哋先食飯，然後睇戲，之後再去飲嘢。",
+          "j": "ngo5 dei6 sin1 sik6 faan6, jin4 hau6 tai2 hei3, zi1 hau6 zoi3 heoi3 jam2 je5.",
+          "e": "We'll eat first, then watch a film, and after that go for drinks.",
+          "bd": [
+            {
+              "c": "我哋",
+              "j": "ngo5 dei6",
+              "e": "we"
+            },
+            {
+              "c": "先",
+              "j": "sin1",
+              "e": "first"
+            },
+            {
+              "c": "食飯",
+              "j": "sik6 faan6",
+              "e": "eat"
+            },
+            {
+              "c": "然後",
+              "j": "jin4 hau6",
+              "e": "then"
+            },
+            {
+              "c": "睇戲",
+              "j": "tai2 hei3",
+              "e": "watch a film"
+            },
+            {
+              "c": "之後",
+              "j": "zi1 hau6",
+              "e": "after"
+            },
+            {
+              "c": "再",
+              "j": "zoi3",
+              "e": "then"
+            },
+            {
+              "c": "去",
+              "j": "heoi3",
+              "e": "go"
+            },
+            {
+              "c": "飲嘢",
+              "j": "jam2 je5",
+              "e": "drinks"
+            }
+          ]
+        },
+        {
+          "sid": "connectives-t1-s20",
+          "c": "如果你唔舒服，不如早啲返屋企，因為聽日仲要返工。",
+          "j": "jyu4 gwo2 nei5 m4 syu1 fuk6, bat1 jyu4 zou2 di1 faan1 uk1 kei2, jan1 wai6 ting1 jat6 zung6 jiu3 faan1 gung1.",
+          "e": "If you're not well, how about heading home early, because you still have work tomorrow.",
+          "bd": [
+            {
+              "c": "如果",
+              "j": "jyu4 gwo2",
+              "e": "if"
+            },
+            {
+              "c": "你",
+              "j": "nei5",
+              "e": "you"
+            },
+            {
+              "c": "唔舒服",
+              "j": "m4 syu1 fuk6",
+              "e": "unwell"
+            },
+            {
+              "c": "不如",
+              "j": "bat1 jyu4",
+              "e": "how about"
+            },
+            {
+              "c": "早啲",
+              "j": "zou2 di1",
+              "e": "early"
+            },
+            {
+              "c": "返屋企",
+              "j": "faan1 uk1 kei2",
+              "e": "go home"
+            },
+            {
+              "c": "因為",
+              "j": "jan1 wai6",
+              "e": "because"
+            },
+            {
+              "c": "聽日",
+              "j": "ting1 jat6",
+              "e": "tomorrow"
+            },
+            {
+              "c": "仲",
+              "j": "zung6",
+              "e": "still"
+            },
+            {
+              "c": "要",
+              "j": "jiu3",
+              "e": "have to"
+            },
+            {
+              "c": "返工",
+              "j": "faan1 gung1",
+              "e": "work"
+            }
+          ]
+        }
+      ],
+      "convo": {
+        "title": "Planning tonight",
+        "speakers": [
+          "Friend",
+          "You"
+        ],
+        "lines": [
+          {
+            "u": false,
+            "c": "今晚不如一齊食飯啊？",
+            "j": "gam1 maan5 bat1 jyu4 jat1 cai4 sik6 faan6 aa3?",
+            "e": "How about dinner together tonight?",
+            "bd": [
+              {
+                "c": "今晚",
+                "j": "gam1 maan5",
+                "e": "tonight"
+              },
+              {
+                "c": "不如",
+                "j": "bat1 jyu4",
+                "e": "how about"
+              },
+              {
+                "c": "一齊",
+                "j": "jat1 cai4",
+                "e": "together"
+              },
+              {
+                "c": "食飯",
+                "j": "sik6 faan6",
+                "e": "eat"
+              },
+              {
+                "c": "啊",
+                "j": "aa3",
+                "e": "(particle)"
+              }
+            ]
+          },
+          {
+            "u": true,
+            "c": "好啊，不過我而家仲喺公司。",
+            "j": "hou2 aa3, bat1 gwo3 ngo5 ji4 gaa1 zung6 hai2 gung1 si1.",
+            "e": "Sure, but I'm still at the office.",
+            "opts": [
+              "好啊，不過我而家仲喺公司。",
+              "好啊，我而家得閒。",
+              "唔得，我好忙。"
+            ],
+            "optsJ": [
+              "hou2 aa3, bat1 gwo3 ngo5 ji4 gaa1 zung6 hai2 gung1 si1.",
+              "hou2 aa3, ngo5 ji4 gaa1 dak1 haan4.",
+              "m4 dak1, ngo5 hou2 mong4."
+            ],
+            "bd": [
+              {
+                "c": "好啊",
+                "j": "hou2 aa3",
+                "e": "OK"
+              },
+              {
+                "c": "不過",
+                "j": "bat1 gwo3",
+                "e": "but"
+              },
+              {
+                "c": "我",
+                "j": "ngo5",
+                "e": "I"
+              },
+              {
+                "c": "而家",
+                "j": "ji4 gaa1",
+                "e": "now"
+              },
+              {
+                "c": "仲",
+                "j": "zung6",
+                "e": "still"
+              },
+              {
+                "c": "喺",
+                "j": "hai2",
+                "e": "at"
+              },
+              {
+                "c": "公司",
+                "j": "gung1 si1",
+                "e": "office"
+              }
+            ]
+          },
+          {
+            "u": false,
+            "c": "咁如果你放工，就打畀我啦。",
+            "j": "gam2 jyu4 gwo2 nei5 fong3 gung1, zau6 daa2 bei2 ngo5 laa1.",
+            "e": "Then if you get off work, call me.",
+            "bd": [
+              {
+                "c": "咁",
+                "j": "gam2",
+                "e": "then"
+              },
+              {
+                "c": "如果",
+                "j": "jyu4 gwo2",
+                "e": "if"
+              },
+              {
+                "c": "你",
+                "j": "nei5",
+                "e": "you"
+              },
+              {
+                "c": "放工",
+                "j": "fong3 gung1",
+                "e": "finish work"
+              },
+              {
+                "c": "就",
+                "j": "zau6",
+                "e": "then"
+              },
+              {
+                "c": "打畀我",
+                "j": "daa2 bei2 ngo5",
+                "e": "call me"
+              },
+              {
+                "c": "啦",
+                "j": "laa1",
+                "e": "(particle)"
+              }
+            ]
+          },
+          {
+            "u": true,
+            "c": "冇問題。因為我好餓，所以想食多啲。",
+            "j": "mou5 man6 tai4. jan1 wai6 ngo5 hou2 ngo6, so2 ji5 soeng2 sik6 do1 di1.",
+            "e": "No problem. Because I'm hungry, I want to eat a lot.",
+            "opts": [
+              "冇問題。因為我好餓，所以想食多啲。",
+              "冇問題，幾點見？",
+              "我而家唔係好餓。"
+            ],
+            "optsJ": [
+              "mou5 man6 tai4. jan1 wai6 ngo5 hou2 ngo6, so2 ji5 soeng2 sik6 do1 di1.",
+              "mou5 man6 tai4, gei2 dim2 gin3?",
+              "ngo5 ji4 gaa1 m4 hai6 hou2 ngo6."
+            ],
+            "bd": [
+              {
+                "c": "冇問題",
+                "j": "mou5 man6 tai4",
+                "e": "no problem"
+              },
+              {
+                "c": "因為",
+                "j": "jan1 wai6",
+                "e": "because"
+              },
+              {
+                "c": "我",
+                "j": "ngo5",
+                "e": "I"
+              },
+              {
+                "c": "好餓",
+                "j": "hou2 ngo6",
+                "e": "hungry"
+              },
+              {
+                "c": "所以",
+                "j": "so2 ji5",
+                "e": "so"
+              },
+              {
+                "c": "想",
+                "j": "soeng2",
+                "e": "want"
+              },
+              {
+                "c": "食多啲",
+                "j": "sik6 do1 di1",
+                "e": "eat more"
+              }
+            ]
+          },
+          {
+            "u": false,
+            "c": "我哋可以食火鍋或者燒烤。",
+            "j": "ngo5 dei6 ho2 ji5 sik6 fo2 wo1 waak6 ze2 siu1 haau1.",
+            "e": "We could do hotpot or barbecue.",
+            "bd": [
+              {
+                "c": "我哋",
+                "j": "ngo5 dei6",
+                "e": "we"
+              },
+              {
+                "c": "可以",
+                "j": "ho2 ji5",
+                "e": "can"
+              },
+              {
+                "c": "食",
+                "j": "sik6",
+                "e": "eat"
+              },
+              {
+                "c": "火鍋",
+                "j": "fo2 wo1",
+                "e": "hotpot"
+              },
+              {
+                "c": "或者",
+                "j": "waak6 ze2",
+                "e": "or"
+              },
+              {
+                "c": "燒烤",
+                "j": "siu1 haau1",
+                "e": "barbecue"
+              }
+            ]
+          },
+          {
+            "u": true,
+            "c": "火鍋啦！雖然有啲貴，但係好暖。",
+            "j": "fo2 wo1 laa1! seoi1 jin4 jau5 di1 gwai3, daan6 hai6 hou2 nyun5.",
+            "e": "Hotpot! Although a bit pricey, it's warm.",
+            "opts": [
+              "火鍋啦！雖然有啲貴，但係好暖。",
+              "隨便啦。",
+              "我唔鍾意火鍋。"
+            ],
+            "optsJ": [
+              "fo2 wo1 laa1! seoi1 jin4 jau5 di1 gwai3, daan6 hai6 hou2 nyun5.",
+              "ceoi4 bin2 laa1.",
+              "ngo5 m4 zung1 ji3 fo2 wo1."
+            ],
+            "bd": [
+              {
+                "c": "火鍋",
+                "j": "fo2 wo1",
+                "e": "hotpot"
+              },
+              {
+                "c": "啦",
+                "j": "laa1",
+                "e": "(particle)"
+              },
+              {
+                "c": "雖然",
+                "j": "seoi1 jin4",
+                "e": "although"
+              },
+              {
+                "c": "有啲",
+                "j": "jau5 di1",
+                "e": "a bit"
+              },
+              {
+                "c": "貴",
+                "j": "gwai3",
+                "e": "pricey"
+              },
+              {
+                "c": "但係",
+                "j": "daan6 hai6",
+                "e": "but"
+              },
+              {
+                "c": "好暖",
+                "j": "hou2 nyun5",
+                "e": "warm"
+              }
+            ]
+          },
+          {
+            "u": false,
+            "c": "好。我哋先去買嘢，然後返我屋企煮。",
+            "j": "hou2. ngo5 dei6 sin1 heoi3 maai5 je5, jin4 hau6 faan1 ngo5 uk1 kei2 zyu2.",
+            "e": "OK. We'll buy stuff first, then cook at my place.",
+            "bd": [
+              {
+                "c": "好",
+                "j": "hou2",
+                "e": "OK"
+              },
+              {
+                "c": "我哋",
+                "j": "ngo5 dei6",
+                "e": "we"
+              },
+              {
+                "c": "先",
+                "j": "sin1",
+                "e": "first"
+              },
+              {
+                "c": "去買嘢",
+                "j": "heoi3 maai5 je5",
+                "e": "go buy stuff"
+              },
+              {
+                "c": "然後",
+                "j": "jin4 hau6",
+                "e": "then"
+              },
+              {
+                "c": "返",
+                "j": "faan1",
+                "e": "go back"
+              },
+              {
+                "c": "我屋企",
+                "j": "ngo5 uk1 kei2",
+                "e": "my place"
+              },
+              {
+                "c": "煮",
+                "j": "zyu2",
+                "e": "cook"
+              }
+            ]
+          },
+          {
+            "u": true,
+            "c": "好主意！食完之後仲可以打機。",
+            "j": "hou2 zyu2 ji3! sik6 jyun4 zi1 hau6 zung6 ho2 ji5 daa2 gei1.",
+            "e": "Great idea! After eating we can also game.",
+            "opts": [
+              "好主意！食完之後仲可以打機。",
+              "好，我帶飲品。",
+              "我食完要走喇。"
+            ],
+            "optsJ": [
+              "hou2 zyu2 ji3! sik6 jyun4 zi1 hau6 zung6 ho2 ji5 daa2 gei1.",
+              "hou2, ngo5 daai3 jam2 ban2.",
+              "ngo5 sik6 jyun4 jiu3 zau2 laa3."
+            ],
+            "bd": [
+              {
+                "c": "好主意",
+                "j": "hou2 zyu2 ji3",
+                "e": "great idea"
+              },
+              {
+                "c": "食完",
+                "j": "sik6 jyun4",
+                "e": "after eating"
+              },
+              {
+                "c": "之後",
+                "j": "zi1 hau6",
+                "e": "after"
+              },
+              {
+                "c": "仲",
+                "j": "zung6",
+                "e": "also"
+              },
+              {
+                "c": "可以",
+                "j": "ho2 ji5",
+                "e": "can"
+              },
+              {
+                "c": "打機",
+                "j": "daa2 gei1",
+                "e": "game"
+              }
+            ]
+          },
+          {
+            "u": false,
+            "c": "同埋我買咗啤酒添。",
+            "j": "tung4 maai4 ngo5 maai5 zo2 be1 zau2 tim1.",
+            "e": "And I bought beer too.",
+            "bd": [
+              {
+                "c": "同埋",
+                "j": "tung4 maai4",
+                "e": "and also"
+              },
+              {
+                "c": "我",
+                "j": "ngo5",
+                "e": "I"
+              },
+              {
+                "c": "買咗",
+                "j": "maai5 zo2",
+                "e": "bought"
+              },
+              {
+                "c": "啤酒",
+                "j": "be1 zau2",
+                "e": "beer"
+              },
+              {
+                "c": "添",
+                "j": "tim1",
+                "e": "too"
+              }
+            ]
+          },
+          {
+            "u": true,
+            "c": "太好喇，咁就今晚見啦！",
+            "j": "taai3 hou2 laa3, gam2 zau6 gam1 maan5 gin3 laa1!",
+            "e": "Great, see you tonight then!",
+            "opts": [
+              "太好喇，咁就今晚見啦！",
+              "唔該晒！",
+              "遲啲再講。"
+            ],
+            "optsJ": [
+              "taai3 hou2 laa3, gam2 zau6 gam1 maan5 gin3 laa1!",
+              "m4 goi1 saai3!",
+              "ci4 di1 zoi3 gong2."
+            ],
+            "bd": [
+              {
+                "c": "太好喇",
+                "j": "taai3 hou2 laa3",
+                "e": "great"
+              },
+              {
+                "c": "咁就",
+                "j": "gam2 zau6",
+                "e": "then"
+              },
+              {
+                "c": "今晚",
+                "j": "gam1 maan5",
+                "e": "tonight"
+              },
+              {
+                "c": "見",
+                "j": "gin3",
+                "e": "see"
+              },
+              {
+                "c": "啦",
+                "j": "laa1",
+                "e": "(particle)"
+              }
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "_idSeq": 16,
+  "_sidSeq": 20
+}
