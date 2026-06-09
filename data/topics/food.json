@@ -447,131 +447,250 @@
       }
     },
     "2": {
-      "note": null,
+      "note": "Tier 2 moves from naming food to talking about meals — when you eat, what's in a dish, how it tastes, and what you can or can't eat.",
       "words": [
         {
-          "id": "food-013",
+          "id": "food-031",
           "c": "早餐",
           "j": "zou2 caan1",
-          "e": "Breakfast"
+          "e": "breakfast"
         },
         {
-          "id": "food-014",
+          "id": "food-032",
           "c": "午餐",
           "j": "ng5 caan1",
-          "e": "Lunch"
+          "e": "lunch"
         },
         {
-          "id": "food-015",
+          "id": "food-033",
           "c": "晚餐",
           "j": "maan5 caan1",
-          "e": "Dinner"
+          "e": "dinner"
         },
         {
-          "id": "food-016",
-          "c": "凍飲",
-          "j": "dung3 jam2",
-          "e": "Cold drink"
+          "id": "food-034",
+          "c": "宵夜",
+          "j": "siu1 je2",
+          "e": "late-night supper"
         },
         {
-          "id": "food-017",
-          "c": "熱飲",
-          "j": "jit6 jam2",
-          "e": "Hot drink"
+          "id": "food-035",
+          "c": "餸",
+          "j": "sung3",
+          "e": "a dish (to go with rice)"
         },
         {
-          "id": "food-018",
-          "c": "加冰",
-          "j": "gaa1 bing1",
-          "e": "Add ice"
+          "id": "food-036",
+          "c": "味道",
+          "j": "mei6 dou6",
+          "e": "flavour / taste"
         },
         {
-          "id": "food-019",
-          "c": "走甜",
-          "j": "zau2 tim4",
-          "e": "No sugar / less sweet"
+          "id": "food-037",
+          "c": "辣",
+          "j": "laat6",
+          "e": "spicy"
         },
         {
-          "id": "food-020",
-          "c": "少冰",
-          "j": "siu2 bing1",
-          "e": "Less ice"
+          "id": "food-038",
+          "c": "肚餓",
+          "j": "tou5 ngo6",
+          "e": "hungry"
         },
         {
-          "id": "food-021",
+          "id": "food-039",
           "c": "飽",
           "j": "baau2",
-          "e": "Full"
+          "e": "full (after eating)"
         },
         {
-          "id": "food-022",
-          "c": "嘥嘢",
-          "j": "saai1 je5",
-          "e": "Wasteful"
+          "id": "food-040",
+          "c": "食素",
+          "j": "sik6 sou3",
+          "e": "eat vegetarian"
         }
       ],
       "sentences": [
         {
           "sid": "food-t2-s06",
-          "c": "我要凍奶茶，走甜。",
-          "j": "ngo5 jiu3 dung3 naai5 caa4, zau2 tim4.",
-          "e": "I want iced milk tea, no sugar.",
+          "c": "如果唔食早餐，我就冇精神。",
+          "j": "jyu4 gwo2 m4 sik6 zou2 caan1, ngo5 zau6 mou5 zing1 san4.",
+          "e": "If I don't eat breakfast, I have no energy.",
           "bd": [
             {
-              "c": "我要",
-              "j": "ngo5 jiu3",
-              "e": "I want"
+              "c": "如果",
+              "j": "jyu4 gwo2",
+              "e": "if"
             },
             {
-              "c": "凍",
-              "j": "dung3",
-              "e": "cold"
+              "c": "唔食",
+              "j": "m4 sik6",
+              "e": "don't eat"
             },
-            {
-              "c": "奶茶",
-              "j": "naai5 caa4",
-              "e": "milk tea"
-            },
-            {
-              "c": "走甜",
-              "j": "zau2 tim4",
-              "e": "no sugar"
-            }
-          ]
-        },
-        {
-          "sid": "food-t2-s07",
-          "c": "早餐食咗未？",
-          "j": "zou2 caan1 sik6 zo2 mei6?",
-          "e": "Have you eaten breakfast yet?",
-          "bd": [
             {
               "c": "早餐",
               "j": "zou2 caan1",
               "e": "breakfast"
             },
             {
-              "c": "食",
-              "j": "sik6",
-              "e": "eat"
+              "c": "我",
+              "j": "ngo5",
+              "e": "I"
             },
             {
-              "c": "咗",
-              "j": "zo2",
-              "e": "(completed)"
+              "c": "就",
+              "j": "zau6",
+              "e": "then"
             },
             {
-              "c": "未",
-              "j": "mei6",
-              "e": "yet"
+              "c": "冇精神",
+              "j": "mou5 zing1 san4",
+              "e": "no energy"
+            }
+          ]
+        },
+        {
+          "sid": "food-t2-s07",
+          "c": "午餐食得簡單，不過晚餐我會煮幾味餸。",
+          "j": "ng5 caan1 sik6 dak1 gaan2 daan1, bat1 gwo3 maan5 caan1 ngo5 wui5 zyu2 gei2 mei6 sung3.",
+          "e": "Lunch I eat simply, but for dinner I'll cook a few dishes.",
+          "note": "餸 (sung3) \"a dish to go with rice\" is counted with the classifier 味 (mei6) — 幾味餸 (gei2 mei6 sung3) \"a few dishes\". Reuses 煮 (zyu2) \"cook\" from the cooking lesson.",
+          "bd": [
+            {
+              "c": "午餐",
+              "j": "ng5 caan1",
+              "e": "lunch"
+            },
+            {
+              "c": "食得簡單",
+              "j": "sik6 dak1 gaan2 daan1",
+              "e": "eat simply"
+            },
+            {
+              "c": "不過",
+              "j": "bat1 gwo3",
+              "e": "but"
+            },
+            {
+              "c": "晚餐",
+              "j": "maan5 caan1",
+              "e": "dinner"
+            },
+            {
+              "c": "我",
+              "j": "ngo5",
+              "e": "I"
+            },
+            {
+              "c": "會",
+              "j": "wui5",
+              "e": "will"
+            },
+            {
+              "c": "煮",
+              "j": "zyu2",
+              "e": "cook"
+            },
+            {
+              "c": "幾味餸",
+              "j": "gei2 mei6 sung3",
+              "e": "a few dishes"
             }
           ]
         },
         {
           "sid": "food-t2-s08",
-          "c": "我好飽，唔食得喇。",
-          "j": "ngo5 hou2 baau2, m4 sik6 dak1 laa3.",
-          "e": "I'm so full, can't eat anymore.",
+          "c": "因為我食素，所以唔食肉。",
+          "j": "jan1 wai6 ngo5 sik6 sou3, so2 ji5 m4 sik6 juk6.",
+          "e": "Because I'm vegetarian, I don't eat meat.",
+          "bd": [
+            {
+              "c": "因為",
+              "j": "jan1 wai6",
+              "e": "because"
+            },
+            {
+              "c": "我",
+              "j": "ngo5",
+              "e": "I"
+            },
+            {
+              "c": "食素",
+              "j": "sik6 sou3",
+              "e": "eat vegetarian"
+            },
+            {
+              "c": "所以",
+              "j": "so2 ji5",
+              "e": "so"
+            },
+            {
+              "c": "唔食",
+              "j": "m4 sik6",
+              "e": "don't eat"
+            },
+            {
+              "c": "肉",
+              "j": "juk6",
+              "e": "meat"
+            }
+          ]
+        },
+        {
+          "sid": "food-t2-s09",
+          "c": "呢碟餸雖然有啲辣，但係味道好好。",
+          "j": "ni1 dip6 sung3 seoi1 jin4 jau5 di1 laat6, daan6 hai6 mei6 dou6 hou2 hou2.",
+          "e": "Although this dish is a bit spicy, the flavour is great.",
+          "note": "味道 (mei6 dou6) \"flavour / taste\" lets you talk about the taste itself — 味道好好 (mei6 dou6 hou2 hou2) \"the flavour is great\". It builds on tier-1 好味 (hou2 mei6) \"tasty\". 碟 (dip6) is the classifier for a plated dish.",
+          "bd": [
+            {
+              "c": "呢碟",
+              "j": "ni1 dip6",
+              "e": "this dish"
+            },
+            {
+              "c": "餸",
+              "j": "sung3",
+              "e": "dish"
+            },
+            {
+              "c": "雖然",
+              "j": "seoi1 jin4",
+              "e": "although"
+            },
+            {
+              "c": "有啲",
+              "j": "jau5 di1",
+              "e": "a bit"
+            },
+            {
+              "c": "辣",
+              "j": "laat6",
+              "e": "spicy"
+            },
+            {
+              "c": "但係",
+              "j": "daan6 hai6",
+              "e": "but"
+            },
+            {
+              "c": "味道",
+              "j": "mei6 dou6",
+              "e": "flavour"
+            },
+            {
+              "c": "好好",
+              "j": "hou2 hou2",
+              "e": "very good"
+            }
+          ]
+        },
+        {
+          "sid": "food-t2-s10",
+          "c": "我而家好肚餓，想快啲食飯。",
+          "j": "ngo5 ji4 gaa1 hou2 tou5 ngo6, soeng2 faai3 di1 sik6 faan6.",
+          "e": "I'm really hungry now, I want to eat soon.",
+          "note": "肚餓 (tou5 ngo6) \"hungry\" escalates tier-1 餓 (ngo6) by adding 肚 (tou5) \"belly\" — literally \"belly-hungry\". Reuses tier-1 食飯 (sik6 faan6) \"eat\".",
           "bd": [
             {
               "c": "我",
@@ -579,274 +698,497 @@
               "e": "I"
             },
             {
-              "c": "好飽",
-              "j": "hou2 baau2",
-              "e": "very full"
+              "c": "而家",
+              "j": "ji4 gaa1",
+              "e": "now"
             },
             {
-              "c": "唔食得",
-              "j": "m4 sik6 dak1",
-              "e": "can't eat"
+              "c": "好肚餓",
+              "j": "hou2 tou5 ngo6",
+              "e": "very hungry"
+            },
+            {
+              "c": "想",
+              "j": "soeng2",
+              "e": "want"
+            },
+            {
+              "c": "快啲",
+              "j": "faai3 di1",
+              "e": "soon"
+            },
+            {
+              "c": "食飯",
+              "j": "sik6 faan6",
+              "e": "eat"
+            }
+          ]
+        },
+        {
+          "sid": "food-t2-s11",
+          "c": "我已經食飽喇，唔該唔好再加餸。",
+          "j": "ngo5 ji5 ging1 sik6 baau2 laa3, m4 goi1 m4 hou2 zoi3 gaa1 sung3.",
+          "e": "I'm already full, please don't add any more dishes.",
+          "note": "食飽 (sik6 baau2) \"eaten one's fill\" — 飽 (baau2) \"full\" is the result of 食 (sik6). Reuses 唔好 (m4 hou2) \"don't\" from the feelings lesson.",
+          "bd": [
+            {
+              "c": "我",
+              "j": "ngo5",
+              "e": "I"
+            },
+            {
+              "c": "已經",
+              "j": "ji5 ging1",
+              "e": "already"
+            },
+            {
+              "c": "食飽",
+              "j": "sik6 baau2",
+              "e": "full"
             },
             {
               "c": "喇",
               "j": "laa3",
               "e": "(particle)"
-            }
-          ]
-        },
-        {
-          "sid": "food-t2-s09",
-          "c": "少冰多奶，唔該。",
-          "j": "siu2 bing1 do1 naai5, m4 goi1.",
-          "e": "Less ice, more milk, please.",
-          "bd": [
-            {
-              "c": "少冰",
-              "j": "siu2 bing1",
-              "e": "less ice"
-            },
-            {
-              "c": "多奶",
-              "j": "do1 naai5",
-              "e": "more milk"
             },
             {
               "c": "唔該",
               "j": "m4 goi1",
               "e": "please"
+            },
+            {
+              "c": "唔好",
+              "j": "m4 hou2",
+              "e": "don't"
+            },
+            {
+              "c": "再",
+              "j": "zoi3",
+              "e": "more"
+            },
+            {
+              "c": "加餸",
+              "j": "gaa1 sung3",
+              "e": "add dishes"
             }
           ]
         },
         {
-          "sid": "food-t2-s10",
-          "c": "剩咗咁多嘢，好嘥。",
-          "j": "zing6 zo2 gam3 do1 je5, hou2 saai1.",
-          "e": "So much left over, what a waste.",
+          "sid": "food-t2-s12",
+          "c": "如果你鍾意食辣，我哋可以叫多碟餸。",
+          "j": "jyu4 gwo2 nei5 zung1 ji3 sik6 laat6, ngo5 dei6 ho2 ji5 giu3 do1 dip6 sung3.",
+          "e": "If you like spicy food, we can order another dish.",
           "bd": [
             {
-              "c": "剩咗",
-              "j": "zing6 zo2",
-              "e": "left over"
+              "c": "如果",
+              "j": "jyu4 gwo2",
+              "e": "if"
             },
             {
-              "c": "咁多",
-              "j": "gam3 do1",
-              "e": "so much"
+              "c": "你",
+              "j": "nei5",
+              "e": "you"
             },
             {
-              "c": "嘢",
-              "j": "je5",
-              "e": "things / stuff"
+              "c": "鍾意",
+              "j": "zung1 ji3",
+              "e": "like"
             },
             {
-              "c": "好嘥",
-              "j": "hou2 saai1",
-              "e": "such a waste"
+              "c": "食辣",
+              "j": "sik6 laat6",
+              "e": "eat spicy"
+            },
+            {
+              "c": "我哋",
+              "j": "ngo5 dei6",
+              "e": "we"
+            },
+            {
+              "c": "可以",
+              "j": "ho2 ji5",
+              "e": "can"
+            },
+            {
+              "c": "叫",
+              "j": "giu3",
+              "e": "order"
+            },
+            {
+              "c": "多碟餸",
+              "j": "do1 dip6 sung3",
+              "e": "another dish"
+            }
+          ]
+        },
+        {
+          "sid": "food-t2-s13",
+          "c": "食得太多宵夜，第二朝會肚痛。",
+          "j": "sik6 dak1 taai3 do1 siu1 je2, dai6 ji6 ziu1 wui5 tou5 tung3.",
+          "e": "Eat too much late-night food and your stomach hurts the next morning.",
+          "note": "宵夜 (siu1 je2) \"late-night supper\" — a Hong Kong habit, a meal in its own right after dinner. Reuses 太多 (taai3 do1) \"too much\".",
+          "bd": [
+            {
+              "c": "食得太多",
+              "j": "sik6 dak1 taai3 do1",
+              "e": "eat too much"
+            },
+            {
+              "c": "宵夜",
+              "j": "siu1 je2",
+              "e": "late-night food"
+            },
+            {
+              "c": "第二朝",
+              "j": "dai6 ji6 ziu1",
+              "e": "next morning"
+            },
+            {
+              "c": "會",
+              "j": "wui5",
+              "e": "will"
+            },
+            {
+              "c": "肚痛",
+              "j": "tou5 tung3",
+              "e": "stomachache"
             }
           ]
         }
       ],
       "convo": {
-        "title": "Customising an order at a cha chaan teng",
+        "title": "Ordering dinner",
         "speakers": [
-          "Waiter",
+          "Friend",
           "You"
         ],
         "lines": [
           {
             "u": false,
-            "c": "飲咩呀？",
-            "j": "jam2 me1 aa3?",
-            "e": "What would you like to drink?",
+            "c": "你晚餐想食咩餸？",
+            "j": "nei5 maan5 caan1 soeng2 sik6 me1 sung3?",
+            "e": "What dish do you want for dinner?",
             "bd": [
               {
-                "c": "飲",
-                "j": "jam2",
-                "e": "drink"
+                "c": "你",
+                "j": "nei5",
+                "e": "you"
               },
               {
-                "c": "咩",
-                "j": "me1",
-                "e": "what"
+                "c": "晚餐",
+                "j": "maan5 caan1",
+                "e": "dinner"
               },
               {
-                "c": "呀",
-                "j": "aa3",
-                "e": "(soft particle)"
+                "c": "想食",
+                "j": "soeng2 sik6",
+                "e": "want to eat"
+              },
+              {
+                "c": "咩餸",
+                "j": "me1 sung3",
+                "e": "what dish"
               }
             ]
           },
           {
             "u": true,
-            "c": "凍奶茶，走甜，唔該。",
-            "j": "dung3 naai5 caa4, zau2 tim4, m4 goi1.",
-            "e": "Iced milk tea, no sugar, please.",
+            "c": "我而家好肚餓，想食多啲。",
+            "j": "ngo5 ji4 gaa1 hou2 tou5 ngo6, soeng2 sik6 do1 di1.",
+            "e": "I'm really hungry now, I want to eat a lot.",
             "opts": [
-              "凍奶茶，走甜，唔該。",
-              "熱咖啡，加糖。",
-              "水就得啦。"
+              "我而家好肚餓，想食多啲。",
+              "求其啦。",
+              "我唔餓。"
             ],
             "optsJ": [
-              "dung3 naai5 caa4, zau2 tim4, m4 goi1.",
-              "jit6 gaa3 fe1, gaa1 tong4.",
-              "seoi2 zau6 dak1 laa1."
+              "ngo5 ji4 gaa1 hou2 tou5 ngo6, soeng2 sik6 do1 di1.",
+              "kau4 kei4 laa1.",
+              "ngo5 m4 ngo6."
             ],
             "bd": [
               {
-                "c": "凍",
-                "j": "dung3",
-                "e": "cold"
+                "c": "我",
+                "j": "ngo5",
+                "e": "I"
               },
               {
-                "c": "奶茶",
-                "j": "naai5 caa4",
-                "e": "milk tea"
+                "c": "而家",
+                "j": "ji4 gaa1",
+                "e": "now"
               },
               {
-                "c": "走甜",
-                "j": "zau2 tim4",
-                "e": "no sugar"
+                "c": "好肚餓",
+                "j": "hou2 tou5 ngo6",
+                "e": "very hungry"
               },
               {
-                "c": "唔該",
-                "j": "m4 goi1",
-                "e": "please"
+                "c": "想",
+                "j": "soeng2",
+                "e": "want"
+              },
+              {
+                "c": "食多啲",
+                "j": "sik6 do1 di1",
+                "e": "eat more"
               }
             ]
           },
           {
             "u": false,
-            "c": "少冰呢？",
-            "j": "siu2 bing1 ne1?",
-            "e": "Less ice?",
+            "c": "不過你唔係食素咩？",
+            "j": "bat1 gwo3 nei5 m4 hai6 sik6 sou3 me1?",
+            "e": "But aren't you vegetarian?",
             "bd": [
               {
-                "c": "少冰",
-                "j": "siu2 bing1",
-                "e": "less ice"
+                "c": "不過",
+                "j": "bat1 gwo3",
+                "e": "but"
               },
               {
-                "c": "呢",
-                "j": "ne1",
-                "e": "(question particle)"
+                "c": "你",
+                "j": "nei5",
+                "e": "you"
+              },
+              {
+                "c": "唔係",
+                "j": "m4 hai6",
+                "e": "aren't"
+              },
+              {
+                "c": "食素",
+                "j": "sik6 sou3",
+                "e": "vegetarian"
+              },
+              {
+                "c": "咩",
+                "j": "me1",
+                "e": "(question)"
               }
             ]
           },
           {
             "u": true,
-            "c": "好呀，少冰。仲有西多士。",
-            "j": "hou2 aa3, siu2 bing1. zung6 jau5 sai1 do1 si2.",
-            "e": "Yes, less ice. Also french toast.",
+            "c": "係呀，所以唔好叫魚同雞。",
+            "j": "hai6 aa3, so2 ji5 m4 hou2 giu3 jyu2 tung4 gai1.",
+            "e": "Yes, so don't order fish or chicken.",
             "opts": [
-              "好呀，少冰。仲有西多士。",
-              "正常冰。",
-              "唔要冰。"
+              "係呀，所以唔好叫魚同雞。",
+              "係呀，叫多啲肉。",
+              "唔係。"
             ],
             "optsJ": [
-              "hou2 aa3, siu2 bing1. zung6 jau5 sai1 do1 si2.",
-              "zing3 soeng4 bing1.",
-              "m4 jiu3 bing1."
+              "hai6 aa3, so2 ji5 m4 hou2 giu3 jyu2 tung4 gai1.",
+              "hai6 aa3, giu3 do1 di1 juk6.",
+              "m4 hai6."
+            ],
+            "bd": [
+              {
+                "c": "係呀",
+                "j": "hai6 aa3",
+                "e": "yes"
+              },
+              {
+                "c": "所以",
+                "j": "so2 ji5",
+                "e": "so"
+              },
+              {
+                "c": "唔好",
+                "j": "m4 hou2",
+                "e": "don't"
+              },
+              {
+                "c": "叫",
+                "j": "giu3",
+                "e": "order"
+              },
+              {
+                "c": "魚",
+                "j": "jyu2",
+                "e": "fish"
+              },
+              {
+                "c": "同",
+                "j": "tung4",
+                "e": "and"
+              },
+              {
+                "c": "雞",
+                "j": "gai1",
+                "e": "chicken"
+              }
+            ]
+          },
+          {
+            "u": false,
+            "c": "咁呢碟豆腐好唔好？雖然有啲辣，但係味道幾好。",
+            "j": "gam2 ni1 dip6 dau6 fu6 hou2 m4 hou2? seoi1 jin4 jau5 di1 laat6, daan6 hai6 mei6 dou6 gei2 hou2.",
+            "e": "Then how about this tofu? Although a bit spicy, the flavour's quite good.",
+            "bd": [
+              {
+                "c": "咁",
+                "j": "gam2",
+                "e": "then"
+              },
+              {
+                "c": "呢碟",
+                "j": "ni1 dip6",
+                "e": "this"
+              },
+              {
+                "c": "豆腐",
+                "j": "dau6 fu6",
+                "e": "tofu"
+              },
+              {
+                "c": "好唔好",
+                "j": "hou2 m4 hou2",
+                "e": "OK?"
+              },
+              {
+                "c": "雖然",
+                "j": "seoi1 jin4",
+                "e": "although"
+              },
+              {
+                "c": "有啲辣",
+                "j": "jau5 di1 laat6",
+                "e": "a bit spicy"
+              },
+              {
+                "c": "但係",
+                "j": "daan6 hai6",
+                "e": "but"
+              },
+              {
+                "c": "味道",
+                "j": "mei6 dou6",
+                "e": "flavour"
+              },
+              {
+                "c": "幾好",
+                "j": "gei2 hou2",
+                "e": "quite good"
+              }
+            ]
+          },
+          {
+            "u": true,
+            "c": "好呀！我鍾意食辣。",
+            "j": "hou2 aa3! ngo5 zung1 ji3 sik6 laat6.",
+            "e": "Great! I like spicy food.",
+            "opts": [
+              "好呀！我鍾意食辣。",
+              "唔好喇，太辣。",
+              "隨便。"
+            ],
+            "optsJ": [
+              "hou2 aa3! ngo5 zung1 ji3 sik6 laat6.",
+              "m4 hou2 laa3, taai3 laat6.",
+              "ceoi4 bin2."
             ],
             "bd": [
               {
                 "c": "好呀",
                 "j": "hou2 aa3",
-                "e": "OK"
+                "e": "great"
               },
               {
-                "c": "少冰",
-                "j": "siu2 bing1",
-                "e": "less ice"
+                "c": "我",
+                "j": "ngo5",
+                "e": "I"
               },
               {
-                "c": "仲有",
-                "j": "zung6 jau5",
-                "e": "and also"
+                "c": "鍾意",
+                "j": "zung1 ji3",
+                "e": "like"
               },
               {
-                "c": "西多士",
-                "j": "sai1 do1 si2",
-                "e": "french toast"
+                "c": "食辣",
+                "j": "sik6 laat6",
+                "e": "spicy food"
               }
             ]
           },
           {
             "u": false,
-            "c": "西多士走牛油得唔得？",
-            "j": "sai1 do1 si2 zau2 ngau4 jau4 dak1 m4 dak1?",
-            "e": "French toast without butter, OK?",
+            "c": "因為今晚好凍，所以叫多個湯啦。",
+            "j": "jan1 wai6 gam1 maan5 hou2 dung3, so2 ji5 giu3 do1 go3 tong1 laa1.",
+            "e": "Because it's cold tonight, let's order an extra soup.",
             "bd": [
               {
-                "c": "西多士",
-                "j": "sai1 do1 si2",
-                "e": "french toast"
+                "c": "因為",
+                "j": "jan1 wai6",
+                "e": "because"
               },
               {
-                "c": "走",
-                "j": "zau2",
-                "e": "without"
+                "c": "今晚",
+                "j": "gam1 maan5",
+                "e": "tonight"
               },
               {
-                "c": "牛油",
-                "j": "ngau4 jau4",
-                "e": "butter"
+                "c": "好凍",
+                "j": "hou2 dung3",
+                "e": "cold"
               },
               {
-                "c": "得唔得",
-                "j": "dak1 m4 dak1",
-                "e": "OK?"
+                "c": "所以",
+                "j": "so2 ji5",
+                "e": "so"
+              },
+              {
+                "c": "叫",
+                "j": "giu3",
+                "e": "order"
+              },
+              {
+                "c": "多個湯",
+                "j": "do1 go3 tong1",
+                "e": "an extra soup"
+              },
+              {
+                "c": "啦",
+                "j": "laa1",
+                "e": "(particle)"
               }
             ]
           },
           {
             "u": true,
-            "c": "得呀，唔該！",
-            "j": "dak1 aa3, m4 goi1!",
-            "e": "Sure, thanks!",
+            "c": "好！食飽先返屋企。",
+            "j": "hou2! sik6 baau2 sin1 faan1 uk1 kei2.",
+            "e": "Good! Let's eat our fill before heading home.",
             "opts": [
-              "得呀，唔該！",
-              "唔要喇。",
-              "加多啲牛油。"
+              "好！食飽先返屋企。",
+              "我想走喇。",
+              "唔使食咁多。"
             ],
             "optsJ": [
-              "dak1 aa3, m4 goi1!",
-              "m4 jiu3 laa3.",
-              "gaa1 do1 di1 ngau4 jau4."
+              "hou2! sik6 baau2 sin1 faan1 uk1 kei2.",
+              "ngo5 soeng2 zau2 laa3.",
+              "m4 sai2 sik6 gam3 do1."
             ],
             "bd": [
               {
-                "c": "得呀",
-                "j": "dak1 aa3",
-                "e": "OK / sure"
+                "c": "好",
+                "j": "hou2",
+                "e": "good"
               },
               {
-                "c": "唔該",
-                "j": "m4 goi1",
-                "e": "thanks"
-              }
-            ]
-          },
-          {
-            "u": false,
-            "c": "等陣就嚟。",
-            "j": "dang2 zan6 zau6 lai4.",
-            "e": "Coming right up.",
-            "bd": [
-              {
-                "c": "等陣",
-                "j": "dang2 zan6",
-                "e": "in a moment"
+                "c": "食飽",
+                "j": "sik6 baau2",
+                "e": "eat full"
               },
               {
-                "c": "就",
-                "j": "zau6",
-                "e": "will"
+                "c": "先",
+                "j": "sin1",
+                "e": "first"
               },
               {
-                "c": "嚟",
-                "j": "lai4",
-                "e": "come"
+                "c": "返屋企",
+                "j": "faan1 uk1 kei2",
+                "e": "go home"
               }
             ]
           }
@@ -854,6 +1196,6 @@
       }
     }
   },
-  "_idSeq": 30,
-  "_sidSeq": 10
+  "_idSeq": 40,
+  "_sidSeq": 13
 }

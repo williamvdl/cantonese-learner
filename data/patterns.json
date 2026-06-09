@@ -1242,7 +1242,7 @@
           },
           "distractors": [
             {
-              "wid": "food-021",
+              "wid": "food-039",
               "c": "飽",
               "j": "baau2",
               "e": "full"
@@ -1254,10 +1254,10 @@
               "e": "delicious"
             },
             {
-              "wid": "food-022",
-              "c": "嘥嘢",
-              "j": "saai1 je5",
-              "e": "wasteful"
+              "wid": "food-037",
+              "c": "辣",
+              "j": "laat6",
+              "e": "spicy"
             }
           ],
           "topics": [
@@ -5124,105 +5124,6 @@
           ],
           "topics": [
             "colors"
-          ]
-        }
-      ]
-    },
-    {
-      "label": "Drink orders, your way",
-      "structure": "[drink] + zau2 tim4 / jit6 jam2",
-      "note": "Cha chaan teng customisation: 走甜 (zau2 tim4, no sugar), 加冰 (gaa1 bing1, add ice), 少冰 (siu2 bing1, less ice); and 熱飲 (jit6 jam2, hot drink) vs 凍飲 (dung3 jam2, cold drink).",
-      "group": "Food & drink",
-      "tier": 2,
-      "examples": [
-        {
-          "c": "凍檸茶走甜",
-          "j": "dung3 ning4 caa4 zau2 tim4",
-          "e": "iced lemon tea, no sugar"
-        },
-        {
-          "c": "我要熱飲",
-          "j": "ngo5 jiu3 jit6 jam2",
-          "e": "I'll have a hot drink"
-        },
-        {
-          "c": "少冰",
-          "j": "siu2 bing1",
-          "e": "less ice"
-        }
-      ],
-      "drills": [
-        {
-          "did": "drill-107",
-          "frameC": "凍咖啡▢，唔好太甜。",
-          "frameJ": "dung3 gaa3 fe1 ▢, m4 hou2 taai3 tim4.",
-          "english": "Iced coffee, no sugar — not too sweet.",
-          "frameE": "Iced coffee, … — not too sweet.",
-          "answer": {
-            "wid": "food-019",
-            "c": "走甜",
-            "j": "zau2 tim4",
-            "e": "no sugar / less sweet"
-          },
-          "distractors": [
-            {
-              "wid": "food-018",
-              "c": "加冰",
-              "j": "gaa1 bing1",
-              "e": "add ice"
-            },
-            {
-              "wid": "food-020",
-              "c": "少冰",
-              "j": "siu2 bing1",
-              "e": "less ice"
-            },
-            {
-              "wid": "food-017",
-              "c": "熱飲",
-              "j": "jit6 jam2",
-              "e": "hot drink"
-            }
-          ],
-          "topics": [
-            "food"
-          ]
-        },
-        {
-          "did": "drill-108",
-          "frameC": "好凍呀，我要▢。",
-          "frameJ": "hou2 dung3 aa3, ngo5 jiu3 ▢.",
-          "english": "It's cold — I'll have a hot drink.",
-          "frameE": "It's cold — I'll have a …",
-          "answer": {
-            "wid": "food-017",
-            "c": "熱飲",
-            "j": "jit6 jam2",
-            "e": "hot drink"
-          },
-          "distractors": [
-            {
-              "wid": "food-016",
-              "c": "凍飲",
-              "j": "dung3 jam2",
-              "e": "cold drink"
-            },
-            {
-              "wid": "food-018",
-              "c": "加冰",
-              "j": "gaa1 bing1",
-              "e": "add ice"
-            },
-            {
-              "wid": "food-005",
-              "c": "咖啡",
-              "j": "gaa3 fe1",
-              "e": "coffee"
-            }
-          ],
-          "topics": [
-            "drinks",
-            "food"
           ]
         }
       ]
