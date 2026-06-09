@@ -4168,6 +4168,359 @@
           ]
         }
       ]
+    },
+    "intermediate-s1": {
+      "title": "Making weekend plans",
+      "speakers": [
+        "Friend",
+        "You"
+      ],
+      "lines": [
+        {
+          "u": false,
+          "c": "聽日放假，你想做啲咩？",
+          "j": "ting1 jat6 fong3 gaa3, nei5 soeng2 zou6 di1 me1?",
+          "e": "Tomorrow's a day off — what do you want to do?",
+          "bd": [
+            {
+              "c": "聽日",
+              "j": "ting1 jat6",
+              "e": "tomorrow"
+            },
+            {
+              "c": "放假",
+              "j": "fong3 gaa3",
+              "e": "day off"
+            },
+            {
+              "c": "你",
+              "j": "nei5",
+              "e": "you"
+            },
+            {
+              "c": "想",
+              "j": "soeng2",
+              "e": "want"
+            },
+            {
+              "c": "做啲咩",
+              "j": "zou6 di1 me1",
+              "e": "do what"
+            }
+          ]
+        },
+        {
+          "u": true,
+          "c": "如果天氣好，我哋就去行山。",
+          "j": "jyu4 gwo2 tin1 hei3 hou2, ngo5 dei6 zau6 heoi3 haang4 saan1.",
+          "e": "If the weather's good, we'll go hiking.",
+          "opts": [
+            "如果天氣好，我哋就去行山。",
+            "我唔知。",
+            "聽日見。"
+          ],
+          "optsJ": [
+            "jyu4 gwo2 tin1 hei3 hou2, ngo5 dei6 zau6 heoi3 haang4 saan1.",
+            "ngo5 m4 zi1.",
+            "ting1 jat6 gin3."
+          ],
+          "bd": [
+            {
+              "c": "如果",
+              "j": "jyu4 gwo2",
+              "e": "if"
+            },
+            {
+              "c": "天氣",
+              "j": "tin1 hei3",
+              "e": "weather"
+            },
+            {
+              "c": "好",
+              "j": "hou2",
+              "e": "good"
+            },
+            {
+              "c": "我哋",
+              "j": "ngo5 dei6",
+              "e": "we"
+            },
+            {
+              "c": "就",
+              "j": "zau6",
+              "e": "then"
+            },
+            {
+              "c": "去",
+              "j": "heoi3",
+              "e": "go"
+            },
+            {
+              "c": "行山",
+              "j": "haang4 saan1",
+              "e": "hiking"
+            }
+          ]
+        },
+        {
+          "u": false,
+          "c": "不過聽日可能落雨喎。",
+          "j": "bat1 gwo3 ting1 jat6 ho2 nang4 lok6 jyu5 wo3.",
+          "e": "But it might rain tomorrow.",
+          "bd": [
+            {
+              "c": "不過",
+              "j": "bat1 gwo3",
+              "e": "but"
+            },
+            {
+              "c": "聽日",
+              "j": "ting1 jat6",
+              "e": "tomorrow"
+            },
+            {
+              "c": "可能",
+              "j": "ho2 nang4",
+              "e": "maybe"
+            },
+            {
+              "c": "落雨",
+              "j": "lok6 jyu5",
+              "e": "rain"
+            },
+            {
+              "c": "喎",
+              "j": "wo3",
+              "e": "(particle)"
+            }
+          ]
+        },
+        {
+          "u": true,
+          "c": "咁如果落雨，我哋就去睇戲。",
+          "j": "gam2 jyu4 gwo2 lok6 jyu5, ngo5 dei6 zau6 heoi3 tai2 hei3.",
+          "e": "Then if it rains, we'll go to a film.",
+          "opts": [
+            "咁如果落雨，我哋就去睇戲。",
+            "咁算啦。",
+            "我鍾意落雨。"
+          ],
+          "optsJ": [
+            "gam2 jyu4 gwo2 lok6 jyu5, ngo5 dei6 zau6 heoi3 tai2 hei3.",
+            "gam2 syun3 laa1.",
+            "ngo5 zung1 ji3 lok6 jyu5."
+          ],
+          "bd": [
+            {
+              "c": "咁",
+              "j": "gam2",
+              "e": "then"
+            },
+            {
+              "c": "如果",
+              "j": "jyu4 gwo2",
+              "e": "if"
+            },
+            {
+              "c": "落雨",
+              "j": "lok6 jyu5",
+              "e": "rain"
+            },
+            {
+              "c": "我哋",
+              "j": "ngo5 dei6",
+              "e": "we"
+            },
+            {
+              "c": "就",
+              "j": "zau6",
+              "e": "then"
+            },
+            {
+              "c": "去",
+              "j": "heoi3",
+              "e": "go"
+            },
+            {
+              "c": "睇戲",
+              "j": "tai2 hei3",
+              "e": "watch a film"
+            }
+          ]
+        },
+        {
+          "u": false,
+          "c": "好。雖然戲飛貴啲，但係好過喺屋企。",
+          "j": "hou2. seoi1 jin4 hei3 fei1 gwai3 di1, daan6 hai6 hou2 gwo3 hai2 uk1 kei2.",
+          "e": "OK. Although film tickets are a bit pricey, it beats staying home.",
+          "bd": [
+            {
+              "c": "好",
+              "j": "hou2",
+              "e": "OK"
+            },
+            {
+              "c": "雖然",
+              "j": "seoi1 jin4",
+              "e": "although"
+            },
+            {
+              "c": "戲飛",
+              "j": "hei3 fei1",
+              "e": "film ticket"
+            },
+            {
+              "c": "貴啲",
+              "j": "gwai3 di1",
+              "e": "a bit pricey"
+            },
+            {
+              "c": "但係",
+              "j": "daan6 hai6",
+              "e": "but"
+            },
+            {
+              "c": "好過",
+              "j": "hou2 gwo3",
+              "e": "better than"
+            },
+            {
+              "c": "喺屋企",
+              "j": "hai2 uk1 kei2",
+              "e": "staying home"
+            }
+          ]
+        },
+        {
+          "u": true,
+          "c": "而且睇完戲，我哋仲可以食飯。",
+          "j": "ji4 ce2 tai2 jyun4 hei3, ngo5 dei6 zung6 ho2 ji5 sik6 faan6.",
+          "e": "And after the film, we can also have a meal.",
+          "opts": [
+            "而且睇完戲，我哋仲可以食飯。",
+            "我唔肚餓。",
+            "唔使喇。"
+          ],
+          "optsJ": [
+            "ji4 ce2 tai2 jyun4 hei3, ngo5 dei6 zung6 ho2 ji5 sik6 faan6.",
+            "ngo5 m4 tou5 ngo6.",
+            "m4 sai2 laa3."
+          ],
+          "bd": [
+            {
+              "c": "而且",
+              "j": "ji4 ce2",
+              "e": "moreover"
+            },
+            {
+              "c": "睇完戲",
+              "j": "tai2 jyun4 hei3",
+              "e": "after the film"
+            },
+            {
+              "c": "我哋",
+              "j": "ngo5 dei6",
+              "e": "we"
+            },
+            {
+              "c": "仲",
+              "j": "zung6",
+              "e": "also"
+            },
+            {
+              "c": "可以",
+              "j": "ho2 ji5",
+              "e": "can"
+            },
+            {
+              "c": "食飯",
+              "j": "sik6 faan6",
+              "e": "eat"
+            }
+          ]
+        },
+        {
+          "u": false,
+          "c": "因為我好耐冇睇戲，所以好期待。",
+          "j": "jan1 wai6 ngo5 hou2 noi6 mou5 tai2 hei3, so2 ji5 hou2 kei4 doi6.",
+          "e": "Because I haven't seen a film in ages, I'm really looking forward to it.",
+          "bd": [
+            {
+              "c": "因為",
+              "j": "jan1 wai6",
+              "e": "because"
+            },
+            {
+              "c": "我",
+              "j": "ngo5",
+              "e": "I"
+            },
+            {
+              "c": "好耐",
+              "j": "hou2 noi6",
+              "e": "a long time"
+            },
+            {
+              "c": "冇",
+              "j": "mou5",
+              "e": "haven't"
+            },
+            {
+              "c": "睇戲",
+              "j": "tai2 hei3",
+              "e": "seen a film"
+            },
+            {
+              "c": "所以",
+              "j": "so2 ji5",
+              "e": "so"
+            },
+            {
+              "c": "好期待",
+              "j": "hou2 kei4 doi6",
+              "e": "really looking forward"
+            }
+          ]
+        },
+        {
+          "u": true,
+          "c": "咁就決定喇，聽日見！",
+          "j": "gam2 zau6 kyut3 ding6 laa3, ting1 jat6 gin3!",
+          "e": "Then it's decided — see you tomorrow!",
+          "opts": [
+            "咁就決定喇，聽日見！",
+            "我再諗下。",
+            "唔該晒。"
+          ],
+          "optsJ": [
+            "gam2 zau6 kyut3 ding6 laa3, ting1 jat6 gin3!",
+            "ngo5 zoi3 nam2 haa5.",
+            "m4 goi1 saai3."
+          ],
+          "bd": [
+            {
+              "c": "咁就",
+              "j": "gam2 zau6",
+              "e": "then"
+            },
+            {
+              "c": "決定",
+              "j": "kyut3 ding6",
+              "e": "decide"
+            },
+            {
+              "c": "喇",
+              "j": "laa3",
+              "e": "(particle)"
+            },
+            {
+              "c": "聽日見",
+              "j": "ting1 jat6 gin3",
+              "e": "see you tomorrow"
+            }
+          ]
+        }
+      ]
     }
   }
 }
