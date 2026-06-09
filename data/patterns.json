@@ -292,42 +292,6 @@
           "topics": [
             "shopping"
           ]
-        },
-        {
-          "did": "drill-007",
-          "frameC": "呢件太細,有冇▢？",
-          "frameJ": "ni1 gin6 taai3 sai3, jau5 mou5 ▢?",
-          "english": "This one's too small — got a large?",
-          "frameE": "This one's too small — got a …?",
-          "answer": {
-            "wid": "shopping-019",
-            "c": "大碼",
-            "j": "daai6 maa5",
-            "e": "large size"
-          },
-          "distractors": [
-            {
-              "wid": "shopping-020",
-              "c": "細碼",
-              "j": "sai3 maa5",
-              "e": "small size"
-            },
-            {
-              "wid": "shopping-015",
-              "c": "尺碼",
-              "j": "cek3 maa5",
-              "e": "size"
-            },
-            {
-              "wid": "shopping-008",
-              "c": "收據",
-              "j": "sau1 geoi3",
-              "e": "receipt"
-            }
-          ],
-          "topics": [
-            "shopping"
-          ]
         }
       ]
     },
@@ -905,42 +869,6 @@
           ]
         },
         {
-          "did": "drill-019",
-          "frameC": "太▢喇！",
-          "frameJ": "taai3 ▢ laa3!",
-          "english": "Too expensive!",
-          "frameE": "Too …!",
-          "answer": {
-            "wid": "shopping-003",
-            "c": "貴",
-            "j": "gwai3",
-            "e": "expensive"
-          },
-          "distractors": [
-            {
-              "wid": "shopping-004",
-              "c": "平",
-              "j": "peng4",
-              "e": "cheap"
-            },
-            {
-              "wid": "shopping-017",
-              "c": "緊",
-              "j": "gan2",
-              "e": "tight"
-            },
-            {
-              "wid": "shopping-018",
-              "c": "鬆",
-              "j": "sung1",
-              "e": "loose"
-            }
-          ],
-          "topics": [
-            "shopping"
-          ]
-        },
-        {
           "did": "drill-020",
           "frameC": "佢成日幫人，好▢。",
           "frameJ": "keoi5 sing4 jat6 bong1 jan4, hou2 ▢.",
@@ -1154,42 +1082,6 @@
           ],
           "topics": [
             "directions"
-          ]
-        },
-        {
-          "did": "drill-026",
-          "frameC": "呢條褲太▢,著唔落。",
-          "frameJ": "ni1 tiu4 fu3 taai3 ▢, zoek3 m4 lok6.",
-          "english": "These trousers are too tight — can't get them on.",
-          "frameE": "These trousers are too … — can't get them on.",
-          "answer": {
-            "wid": "shopping-017",
-            "c": "緊",
-            "j": "gan2",
-            "e": "tight"
-          },
-          "distractors": [
-            {
-              "wid": "shopping-018",
-              "c": "鬆",
-              "j": "sung1",
-              "e": "loose"
-            },
-            {
-              "wid": "shopping-003",
-              "c": "貴",
-              "j": "gwai3",
-              "e": "expensive"
-            },
-            {
-              "wid": "shopping-004",
-              "c": "平",
-              "j": "peng4",
-              "e": "cheap"
-            }
-          ],
-          "topics": [
-            "shopping"
           ]
         },
         {
@@ -7032,10 +6924,10 @@
               "e": "sell"
             },
             {
-              "wid": "shopping-016",
-              "c": "試吓",
-              "j": "si3 haa5",
-              "e": "try on"
+              "wid": "shopping-028",
+              "c": "換",
+              "j": "wun6",
+              "e": "exchange"
             },
             {
               "wid": "shopping-010",

@@ -389,75 +389,172 @@
       }
     },
     "2": {
-      "note": "Tier 2 zooms in on shopping for clothes. Sizes use a <em>maa5</em> (碼) suffix: <em>daai6 maa5</em> (大碼, large), <em>zung1 maa5</em> (中碼, medium), <em>sai3 maa5</em> (細碼, small). The most useful verb is <strong>si3</strong> (試, to try on) — almost always paired with <em>haa5</em> as <em>si3 haa5</em> ('try a bit'). Note <em>gan2</em> (緊, tight) and <em>sung1</em> (鬆, loose) — these describe how clothes fit and also work in general 'tight/loose' contexts.",
+      "note": "Tier-1 gave you price and buying words; tier 2 is about closing the deal — getting a better price, reading a discount, choosing how to pay, and sorting out exchanges.",
       "words": [
         {
-          "id": "shopping-011",
-          "c": "恤衫",
-          "j": "seot1 saam1",
-          "e": "Shirt"
+          "id": "shopping-021",
+          "c": "講價",
+          "j": "gong2 gaa3",
+          "e": "to haggle / bargain"
         },
         {
-          "id": "shopping-012",
-          "c": "褲",
-          "j": "fu3",
-          "e": "Pants / trousers"
+          "id": "shopping-022",
+          "c": "平啲",
+          "j": "peng4 di1",
+          "e": "(a bit) cheaper"
         },
         {
-          "id": "shopping-013",
-          "c": "裙",
-          "j": "kwan4",
-          "e": "Skirt / dress"
+          "id": "shopping-023",
+          "c": "打折",
+          "j": "daa2 zit3",
+          "e": "give a discount"
         },
         {
-          "id": "shopping-014",
-          "c": "鞋",
-          "j": "haai4",
-          "e": "Shoes"
+          "id": "shopping-024",
+          "c": "特價",
+          "j": "dak6 gaa3",
+          "e": "special / sale price"
         },
         {
-          "id": "shopping-015",
-          "c": "尺碼",
-          "j": "cek3 maa5",
-          "e": "Size"
+          "id": "shopping-025",
+          "c": "現金",
+          "j": "jin6 gam1",
+          "e": "cash"
         },
         {
-          "id": "shopping-016",
-          "c": "試吓",
-          "j": "si3 haa5",
-          "e": "Try on"
+          "id": "shopping-026",
+          "c": "碌卡",
+          "j": "luk1 kaat1",
+          "e": "pay by card"
         },
         {
-          "id": "shopping-017",
-          "c": "緊",
-          "j": "gan2",
-          "e": "Tight"
+          "id": "shopping-027",
+          "c": "八達通",
+          "j": "baat3 daat6 tung1",
+          "e": "Octopus card"
         },
         {
-          "id": "shopping-018",
-          "c": "鬆",
-          "j": "sung1",
-          "e": "Loose"
+          "id": "shopping-028",
+          "c": "換",
+          "j": "wun6",
+          "e": "exchange (for another)"
         },
         {
-          "id": "shopping-019",
-          "c": "大碼",
-          "j": "daai6 maa5",
-          "e": "Large size"
-        },
-        {
-          "id": "shopping-020",
-          "c": "細碼",
-          "j": "sai3 maa5",
-          "e": "Small size"
+          "id": "shopping-029",
+          "c": "冇貨",
+          "j": "mou5 fo3",
+          "e": "out of stock"
         }
       ],
       "sentences": [
         {
           "sid": "shopping-t2-s06",
-          "c": "我想試呢件恤衫。",
-          "j": "ngo5 soeng2 si3 ni1 gin6 seot1 saam1.",
-          "e": "I'd like to try this shirt.",
+          "c": "如果太貴，你可以講價。",
+          "j": "jyu4 gwo2 taai3 gwai3, nei5 ho2 ji5 gong2 gaa3.",
+          "e": "If it's too expensive, you can haggle.",
+          "note": "講價 (gong2 gaa3) \"to haggle\" — common at street markets and small independent shops, but not in malls or chain stores, where prices are fixed. Reuses tier-1 貴 (gwai3) \"expensive\".",
+          "bd": [
+            {
+              "c": "如果",
+              "j": "jyu4 gwo2",
+              "e": "if"
+            },
+            {
+              "c": "太貴",
+              "j": "taai3 gwai3",
+              "e": "too expensive"
+            },
+            {
+              "c": "你",
+              "j": "nei5",
+              "e": "you"
+            },
+            {
+              "c": "可以",
+              "j": "ho2 ji5",
+              "e": "can"
+            },
+            {
+              "c": "講價",
+              "j": "gong2 gaa3",
+              "e": "haggle"
+            }
+          ]
+        },
+        {
+          "sid": "shopping-t2-s07",
+          "c": "呢件嘢可唔可以平啲？",
+          "j": "ni1 gin6 je5 ho2 m4 ho2 ji5 peng4 di1?",
+          "e": "Can this be a bit cheaper?",
+          "note": "平啲 (peng4 di1) \"a bit cheaper\" adds 啲 (di1) to tier-1 平 (peng4) \"cheap\" to soften it into a polite request. 件 (gin6) is the classifier for clothing and many objects.",
+          "bd": [
+            {
+              "c": "呢件",
+              "j": "ni1 gin6",
+              "e": "this"
+            },
+            {
+              "c": "嘢",
+              "j": "je5",
+              "e": "thing"
+            },
+            {
+              "c": "可唔可以",
+              "j": "ho2 m4 ho2 ji5",
+              "e": "can it"
+            },
+            {
+              "c": "平啲",
+              "j": "peng4 di1",
+              "e": "cheaper"
+            }
+          ]
+        },
+        {
+          "sid": "shopping-t2-s08",
+          "c": "因為今日特價，所以全部打折。",
+          "j": "jan1 wai6 gam1 jat6 dak6 gaa3, so2 ji5 cyun4 bou6 daa2 zit3.",
+          "e": "Because it's on sale today, everything is discounted.",
+          "note": "打折 (daa2 zit3) \"give a discount\" runs backwards from English: 打八折 (daa2 baat3 zit3) means you pay 80% — i.e. 20% off. The number is what you pay, not what you save. 打對折 (daa2 deoi3 zit3) = half price.",
+          "bd": [
+            {
+              "c": "因為",
+              "j": "jan1 wai6",
+              "e": "because"
+            },
+            {
+              "c": "今日",
+              "j": "gam1 jat6",
+              "e": "today"
+            },
+            {
+              "c": "特價",
+              "j": "dak6 gaa3",
+              "e": "on sale"
+            },
+            {
+              "c": "所以",
+              "j": "so2 ji5",
+              "e": "so"
+            },
+            {
+              "c": "全部",
+              "j": "cyun4 bou6",
+              "e": "everything"
+            },
+            {
+              "c": "打折",
+              "j": "daa2 zit3",
+              "e": "discounted"
+            }
+          ]
+        },
+        {
+          "sid": "shopping-t2-s09",
+          "c": "我想換呢件衫，因為太細。",
+          "j": "ngo5 soeng2 wun6 ni1 gin6 saam1, jan1 wai6 taai3 sai3.",
+          "e": "I want to exchange this shirt because it's too small.",
+          "note": "換 (wun6) \"to exchange\" — swap an item for a different one. 換貨 (wun6 fo3) \"exchange goods\"; bringing your 收據 (sau1 geoi3) \"receipt\" makes it straightforward.",
           "bd": [
             {
               "c": "我",
@@ -467,114 +564,50 @@
             {
               "c": "想",
               "j": "soeng2",
-              "e": "would like"
+              "e": "want"
             },
             {
-              "c": "試",
-              "j": "si3",
-              "e": "try"
+              "c": "換",
+              "j": "wun6",
+              "e": "exchange"
             },
             {
               "c": "呢件",
               "j": "ni1 gin6",
-              "e": "this (clothing item)"
+              "e": "this"
             },
             {
-              "c": "恤衫",
-              "j": "seot1 saam1",
+              "c": "衫",
+              "j": "saam1",
               "e": "shirt"
-            }
-          ]
-        },
-        {
-          "sid": "shopping-t2-s07",
-          "c": "有冇大碼？",
-          "j": "jau5 mou5 daai6 maa5?",
-          "e": "Do you have a large size?",
-          "bd": [
-            {
-              "c": "有冇",
-              "j": "jau5 mou5",
-              "e": "have or not (yes/no)"
             },
             {
-              "c": "大碼",
-              "j": "daai6 maa5",
-              "e": "large size"
-            }
-          ]
-        },
-        {
-          "sid": "shopping-t2-s08",
-          "c": "件褲太緊喇。",
-          "j": "gin6 fu3 taai3 gan2 laa3.",
-          "e": "These pants are too tight.",
-          "bd": [
-            {
-              "c": "件",
-              "j": "gin6",
-              "e": "(measure word)"
+              "c": "因為",
+              "j": "jan1 wai6",
+              "e": "because"
             },
             {
-              "c": "褲",
-              "j": "fu3",
-              "e": "pants"
-            },
-            {
-              "c": "太",
-              "j": "taai3",
-              "e": "too"
-            },
-            {
-              "c": "緊",
-              "j": "gan2",
-              "e": "tight"
-            },
-            {
-              "c": "喇",
-              "j": "laa3",
-              "e": "(particle)"
-            }
-          ]
-        },
-        {
-          "sid": "shopping-t2-s09",
-          "c": "對鞋好靚。",
-          "j": "deoi3 haai4 hou2 leng3.",
-          "e": "These shoes are nice.",
-          "bd": [
-            {
-              "c": "對",
-              "j": "deoi3",
-              "e": "(pair - measure word)"
-            },
-            {
-              "c": "鞋",
-              "j": "haai4",
-              "e": "shoes"
-            },
-            {
-              "c": "好",
-              "j": "hou2",
-              "e": "very"
-            },
-            {
-              "c": "靚",
-              "j": "leng3",
-              "e": "pretty / nice"
+              "c": "太細",
+              "j": "taai3 sai3",
+              "e": "too small"
             }
           ]
         },
         {
           "sid": "shopping-t2-s10",
-          "c": "我可以試吓嗎？",
-          "j": "ngo5 ho2 ji5 si3 haa5 maa3?",
-          "e": "Can I try it on?",
+          "c": "如果唔啱，可以用收據換。",
+          "j": "jyu4 gwo2 m4 ngaam1, ho2 ji5 jung6 sau1 geoi3 wun6.",
+          "e": "If it doesn't suit, you can exchange it with the receipt.",
           "bd": [
             {
-              "c": "我",
-              "j": "ngo5",
-              "e": "I"
+              "c": "如果",
+              "j": "jyu4 gwo2",
+              "e": "if"
+            },
+            {
+              "c": "唔啱",
+              "j": "m4 ngaam1",
+              "e": "not right"
             },
             {
               "c": "可以",
@@ -582,137 +615,411 @@
               "e": "can"
             },
             {
-              "c": "試吓",
-              "j": "si3 haa5",
-              "e": "try on"
+              "c": "用",
+              "j": "jung6",
+              "e": "use"
             },
             {
-              "c": "嗎",
-              "j": "maa3",
-              "e": "(yes/no)"
+              "c": "收據",
+              "j": "sau1 geoi3",
+              "e": "receipt"
+            },
+            {
+              "c": "換",
+              "j": "wun6",
+              "e": "exchange"
+            }
+          ]
+        },
+        {
+          "sid": "shopping-t2-s11",
+          "c": "唔該，呢度可唔可以碌卡？",
+          "j": "m4 goi1, ni1 dou6 ho2 m4 ho2 ji5 luk1 kaat1?",
+          "e": "Excuse me, can I pay by card here?",
+          "bd": [
+            {
+              "c": "唔該",
+              "j": "m4 goi1",
+              "e": "excuse me"
+            },
+            {
+              "c": "呢度",
+              "j": "ni1 dou6",
+              "e": "here"
+            },
+            {
+              "c": "可唔可以",
+              "j": "ho2 m4 ho2 ji5",
+              "e": "can"
+            },
+            {
+              "c": "碌卡",
+              "j": "luk1 kaat1",
+              "e": "pay by card"
+            }
+          ]
+        },
+        {
+          "sid": "shopping-t2-s12",
+          "c": "我冇現金，不過有八達通。",
+          "j": "ngo5 mou5 jin6 gam1, bat1 gwo3 jau5 baat3 daat6 tung1.",
+          "e": "I don't have cash, but I have an Octopus card.",
+          "note": "八達通 (baat3 daat6 tung1) \"Octopus card\" — Hong Kong's tap-and-go stored-value card, used on transport, in convenience stores and at many shops. Often quicker than 現金 (jin6 gam1) \"cash\" or 碌卡 (luk1 kaat1) \"tapping a card\".",
+          "bd": [
+            {
+              "c": "我",
+              "j": "ngo5",
+              "e": "I"
+            },
+            {
+              "c": "冇",
+              "j": "mou5",
+              "e": "don't have"
+            },
+            {
+              "c": "現金",
+              "j": "jin6 gam1",
+              "e": "cash"
+            },
+            {
+              "c": "不過",
+              "j": "bat1 gwo3",
+              "e": "but"
+            },
+            {
+              "c": "有",
+              "j": "jau5",
+              "e": "have"
+            },
+            {
+              "c": "八達通",
+              "j": "baat3 daat6 tung1",
+              "e": "Octopus card"
+            }
+          ]
+        },
+        {
+          "sid": "shopping-t2-s13",
+          "c": "雖然想買，但係呢款冇貨。",
+          "j": "seoi1 jin4 soeng2 maai5, daan6 hai6 ni1 fun2 mou5 fo3.",
+          "e": "Although I want to buy it, this style is out of stock.",
+          "bd": [
+            {
+              "c": "雖然",
+              "j": "seoi1 jin4",
+              "e": "although"
+            },
+            {
+              "c": "想買",
+              "j": "soeng2 maai5",
+              "e": "want to buy"
+            },
+            {
+              "c": "但係",
+              "j": "daan6 hai6",
+              "e": "but"
+            },
+            {
+              "c": "呢款",
+              "j": "ni1 fun2",
+              "e": "this style"
+            },
+            {
+              "c": "冇貨",
+              "j": "mou5 fo3",
+              "e": "out of stock"
             }
           ]
         }
       ],
       "convo": {
-        "title": "Buying shoes at a shop",
+        "title": "Haggling at a stall",
         "speakers": [
-          "Clerk",
+          "Vendor",
           "You"
         ],
         "lines": [
           {
             "u": false,
-            "c": "你要乜嘢尺碼？",
-            "j": "nei5 jiu3 mat1 je5 cek3 maa5?",
-            "e": "What size do you need?",
+            "c": "呢件幾靚㗎，鍾意就買啦。",
+            "j": "ni1 gin6 gei2 leng3 gaa3, zung1 ji3 zau6 maai5 laa1.",
+            "e": "This one's lovely — if you like it, get it.",
             "bd": [
               {
-                "c": "你",
-                "j": "nei5",
-                "e": "you"
+                "c": "呢件",
+                "j": "ni1 gin6",
+                "e": "this"
               },
               {
-                "c": "要",
-                "j": "jiu3",
-                "e": "want / need"
+                "c": "幾靚",
+                "j": "gei2 leng3",
+                "e": "quite nice"
               },
               {
-                "c": "乜嘢",
-                "j": "mat1 je5",
-                "e": "what"
+                "c": "㗎",
+                "j": "gaa3",
+                "e": "(particle)"
               },
               {
-                "c": "尺碼",
-                "j": "cek3 maa5",
-                "e": "size"
-              }
-            ]
-          },
-          {
-            "u": true,
-            "c": "細碼，唔該。",
-            "j": "sai3 maa5, m4 goi1.",
-            "e": "Small, please.",
-            "opts": [
-              "細碼，唔該。",
-              "唔知道。",
-              "好貴呀。"
-            ],
-            "optsJ": [
-              "sai3 maa5, m4 goi1.",
-              "m4 zi1 dou3.",
-              "hou2 gwai3 aa3."
-            ],
-            "bd": [
-              {
-                "c": "細碼",
-                "j": "sai3 maa5",
-                "e": "small size"
+                "c": "鍾意",
+                "j": "zung1 ji3",
+                "e": "like"
               },
               {
-                "c": "唔該",
-                "j": "m4 goi1",
-                "e": "please / thanks"
-              }
-            ]
-          },
-          {
-            "u": false,
-            "c": "試吓呢對啦。",
-            "j": "si3 haa5 ni1 deoi3 laa1.",
-            "e": "Try this pair.",
-            "bd": [
-              {
-                "c": "試吓",
-                "j": "si3 haa5",
-                "e": "try on"
+                "c": "就",
+                "j": "zau6",
+                "e": "then"
               },
               {
-                "c": "呢對",
-                "j": "ni1 deoi3",
-                "e": "this pair"
+                "c": "買",
+                "j": "maai5",
+                "e": "buy"
               },
               {
                 "c": "啦",
                 "j": "laa1",
-                "e": "(suggestion)"
+                "e": "(particle)"
               }
             ]
           },
           {
             "u": true,
-            "c": "有啲緊。",
-            "j": "jau5 di1 gan2.",
-            "e": "A bit tight.",
+            "c": "幾錢呀？可唔可以平啲？",
+            "j": "gei2 cin2 aa3? ho2 m4 ho2 ji5 peng4 di1?",
+            "e": "How much? Can it be cheaper?",
             "opts": [
-              "有啲緊。",
-              "啱晒。",
-              "唔該。"
+              "幾錢呀？可唔可以平啲？",
+              "我買喇。",
+              "太貴喇。"
             ],
             "optsJ": [
-              "jau5 di1 gan2.",
-              "ngaam1 saai3.",
-              "m4 goi1."
+              "gei2 cin2 aa3? ho2 m4 ho2 ji5 peng4 di1?",
+              "ngo5 maai5 laa3.",
+              "taai3 gwai3 laa3."
             ],
             "bd": [
               {
-                "c": "有啲",
-                "j": "jau5 di1",
-                "e": "a bit"
+                "c": "幾錢",
+                "j": "gei2 cin2",
+                "e": "how much"
               },
               {
-                "c": "緊",
-                "j": "gan2",
-                "e": "tight"
+                "c": "呀",
+                "j": "aa3",
+                "e": "(particle)"
+              },
+              {
+                "c": "可唔可以",
+                "j": "ho2 m4 ho2 ji5",
+                "e": "can it"
+              },
+              {
+                "c": "平啲",
+                "j": "peng4 di1",
+                "e": "cheaper"
               }
             ]
           },
           {
             "u": false,
-            "c": "咁試大一碼啦。",
-            "j": "gam2 si3 daai6 jat1 maa5 laa1.",
-            "e": "Then try one size larger.",
+            "c": "今日特價，已經打咗八折喇。",
+            "j": "gam1 jat6 dak6 gaa3, ji5 ging1 daa2 zo2 baat3 zit3 laa3.",
+            "e": "Sale today — it's already 20% off.",
+            "bd": [
+              {
+                "c": "今日",
+                "j": "gam1 jat6",
+                "e": "today"
+              },
+              {
+                "c": "特價",
+                "j": "dak6 gaa3",
+                "e": "on sale"
+              },
+              {
+                "c": "已經",
+                "j": "ji5 ging1",
+                "e": "already"
+              },
+              {
+                "c": "打咗八折",
+                "j": "daa2 zo2 baat3 zit3",
+                "e": "20% off"
+              },
+              {
+                "c": "喇",
+                "j": "laa3",
+                "e": "(particle)"
+              }
+            ]
+          },
+          {
+            "u": true,
+            "c": "如果再平啲，我就買兩件。",
+            "j": "jyu4 gwo2 zoi3 peng4 di1, ngo5 zau6 maai5 loeng5 gin6.",
+            "e": "If it's a bit cheaper, I'll buy two.",
+            "opts": [
+              "如果再平啲，我就買兩件。",
+              "咁我唔買喇。",
+              "好貴。"
+            ],
+            "optsJ": [
+              "jyu4 gwo2 zoi3 peng4 di1, ngo5 zau6 maai5 loeng5 gin6.",
+              "gam2 ngo5 m4 maai5 laa3.",
+              "hou2 gwai3."
+            ],
+            "bd": [
+              {
+                "c": "如果",
+                "j": "jyu4 gwo2",
+                "e": "if"
+              },
+              {
+                "c": "再",
+                "j": "zoi3",
+                "e": "more"
+              },
+              {
+                "c": "平啲",
+                "j": "peng4 di1",
+                "e": "cheaper"
+              },
+              {
+                "c": "我",
+                "j": "ngo5",
+                "e": "I"
+              },
+              {
+                "c": "就",
+                "j": "zau6",
+                "e": "then"
+              },
+              {
+                "c": "買",
+                "j": "maai5",
+                "e": "buy"
+              },
+              {
+                "c": "兩件",
+                "j": "loeng5 gin6",
+                "e": "two"
+              }
+            ]
+          },
+          {
+            "u": false,
+            "c": "好啦好啦，不過唔可以換㗎。",
+            "j": "hou2 laa1 hou2 laa1, bat1 gwo3 m4 ho2 ji5 wun6 gaa3.",
+            "e": "Fine, fine — but no exchanges then.",
+            "bd": [
+              {
+                "c": "好啦",
+                "j": "hou2 laa1",
+                "e": "fine"
+              },
+              {
+                "c": "不過",
+                "j": "bat1 gwo3",
+                "e": "but"
+              },
+              {
+                "c": "唔可以",
+                "j": "m4 ho2 ji5",
+                "e": "can't"
+              },
+              {
+                "c": "換",
+                "j": "wun6",
+                "e": "exchange"
+              },
+              {
+                "c": "㗎",
+                "j": "gaa3",
+                "e": "(particle)"
+              }
+            ]
+          },
+          {
+            "u": true,
+            "c": "冇問題。呢度可唔可以碌卡？",
+            "j": "mou5 man6 tai4. ni1 dou6 ho2 m4 ho2 ji5 luk1 kaat1?",
+            "e": "No problem. Can I pay by card here?",
+            "opts": [
+              "冇問題。呢度可唔可以碌卡？",
+              "唔該。",
+              "我有現金。"
+            ],
+            "optsJ": [
+              "mou5 man6 tai4. ni1 dou6 ho2 m4 ho2 ji5 luk1 kaat1?",
+              "m4 goi1.",
+              "ngo5 jau5 jin6 gam1."
+            ],
+            "bd": [
+              {
+                "c": "冇問題",
+                "j": "mou5 man6 tai4",
+                "e": "no problem"
+              },
+              {
+                "c": "呢度",
+                "j": "ni1 dou6",
+                "e": "here"
+              },
+              {
+                "c": "可唔可以",
+                "j": "ho2 m4 ho2 ji5",
+                "e": "can"
+              },
+              {
+                "c": "碌卡",
+                "j": "luk1 kaat1",
+                "e": "pay by card"
+              }
+            ]
+          },
+          {
+            "u": false,
+            "c": "碌卡或者八達通都得。",
+            "j": "luk1 kaat1 waak6 ze2 baat3 daat6 tung1 dou1 dak1.",
+            "e": "Card or Octopus, both work.",
+            "bd": [
+              {
+                "c": "碌卡",
+                "j": "luk1 kaat1",
+                "e": "card"
+              },
+              {
+                "c": "或者",
+                "j": "waak6 ze2",
+                "e": "or"
+              },
+              {
+                "c": "八達通",
+                "j": "baat3 daat6 tung1",
+                "e": "Octopus"
+              },
+              {
+                "c": "都得",
+                "j": "dou1 dak1",
+                "e": "both fine"
+              }
+            ]
+          },
+          {
+            "u": true,
+            "c": "咁我用八達通，唔該畀張收據我。",
+            "j": "gam2 ngo5 jung6 baat3 daat6 tung1, m4 goi1 bei2 zoeng1 sau1 geoi3 ngo5.",
+            "e": "Then I'll tap Octopus — receipt please.",
+            "opts": [
+              "咁我用八達通，唔該畀張收據我。",
+              "唔使收據。",
+              "拜拜。"
+            ],
+            "optsJ": [
+              "gam2 ngo5 jung6 baat3 daat6 tung1, m4 goi1 bei2 zoeng1 sau1 geoi3 ngo5.",
+              "m4 sai2 sau1 geoi3.",
+              "baai1 baai3."
+            ],
             "bd": [
               {
                 "c": "咁",
@@ -720,57 +1027,44 @@
                 "e": "then"
               },
               {
-                "c": "試",
-                "j": "si3",
-                "e": "try"
+                "c": "我",
+                "j": "ngo5",
+                "e": "I"
               },
               {
-                "c": "大",
-                "j": "daai6",
-                "e": "larger"
+                "c": "用",
+                "j": "jung6",
+                "e": "use"
               },
               {
-                "c": "一碼",
-                "j": "jat1 maa5",
-                "e": "one size"
+                "c": "八達通",
+                "j": "baat3 daat6 tung1",
+                "e": "Octopus"
               },
               {
-                "c": "啦",
-                "j": "laa1",
-                "e": "(suggestion)"
-              }
-            ]
-          },
-          {
-            "u": true,
-            "c": "好！呢對啱晒。",
-            "j": "hou2! ni1 deoi3 ngaam1 saai3.",
-            "e": "OK! This pair fits perfectly.",
-            "opts": [
-              "好！呢對啱晒。",
-              "太貴喇。",
-              "點解？"
-            ],
-            "optsJ": [
-              "hou2! ni1 deoi3 ngaam1 saai3.",
-              "taai3 gwai3 laa3.",
-              "dim2 gaai2?"
-            ],
-            "bd": [
-              {
-                "c": "好",
-                "j": "hou2",
-                "e": "OK / good"
+                "c": "唔該",
+                "j": "m4 goi1",
+                "e": "please"
               },
               {
-                "c": "呢對",
-                "j": "ni1 deoi3",
-                "e": "this pair"
+                "c": "畀",
+                "j": "bei2",
+                "e": "give"
               },
               {
-                "c": "啱晒",
-                "j": "ngaam1 saai3",
-                "e": "fits perfectly"
+                "c": "張",
+                "j": "zoeng1",
+                "e": "(classifier)"
+              },
+              {
+                "c": "收據",
+                "j": "sau1 geoi3",
+                "e": "receipt"
+              },
+              {
+                "c": "我",
+                "j": "ngo5",
+                "e": "me"
               }
             ]
           }
@@ -778,6 +1072,6 @@
       }
     }
   },
-  "_idSeq": 20,
-  "_sidSeq": 10
+  "_idSeq": 29,
+  "_sidSeq": 13
 }
