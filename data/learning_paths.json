@@ -8,6 +8,10 @@
       "desc": "Everything you need to function in Cantonese — greetings to emergencies — across 11 themed chapters.",
       "lessons": [
         {
+          "topic": "pronouns",
+          "round": 1
+        },
+        {
           "topic": "greetings",
           "round": 1
         },
@@ -173,6 +177,7 @@
           "id": "beginner-s1",
           "name": "First Words",
           "topics": [
+            "pronouns",
             "greetings",
             "yesno",
             "numbers",

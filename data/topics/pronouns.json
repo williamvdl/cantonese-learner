@@ -1,0 +1,508 @@
+{
+  "meta": {
+    "label": "Me, You & Them",
+    "icon": "👥",
+    "color": "#A6572B"
+  },
+  "rounds": {
+    "1": {
+      "note": "These are the \"who\" words — the people in every Cantonese sentence, and your very first building blocks. Good news for English speakers: they barely change. 我 (ngo5) is both \"I\" and \"me\"; 你 (nei5) is \"you\" whoever is doing what. To talk about more than one person, add 哋 (dei6); to show something belongs to someone, add 嘅 (ge3). Learn these few and you can already point to everyone around you.",
+      "words": [
+        {
+          "id": "pronouns-001",
+          "c": "我",
+          "j": "ngo5",
+          "e": "I / me"
+        },
+        {
+          "id": "pronouns-002",
+          "c": "你",
+          "j": "nei5",
+          "e": "you"
+        },
+        {
+          "id": "pronouns-003",
+          "c": "佢",
+          "j": "keoi5",
+          "e": "he / she / it"
+        },
+        {
+          "id": "pronouns-004",
+          "c": "我哋",
+          "j": "ngo5 dei6",
+          "e": "we / us"
+        },
+        {
+          "id": "pronouns-005",
+          "c": "你哋",
+          "j": "nei5 dei6",
+          "e": "you (more than one)"
+        },
+        {
+          "id": "pronouns-006",
+          "c": "佢哋",
+          "j": "keoi5 dei6",
+          "e": "they / them"
+        },
+        {
+          "id": "pronouns-007",
+          "c": "我嘅",
+          "j": "ngo5 ge3",
+          "e": "my / mine"
+        },
+        {
+          "id": "pronouns-008",
+          "c": "你嘅",
+          "j": "nei5 ge3",
+          "e": "your / yours"
+        },
+        {
+          "id": "pronouns-009",
+          "c": "佢嘅",
+          "j": "keoi5 ge3",
+          "e": "his / hers"
+        },
+        {
+          "id": "pronouns-010",
+          "c": "哋",
+          "j": "dei6",
+          "e": "plural marker (more than one)"
+        },
+        {
+          "id": "pronouns-011",
+          "c": "嘅",
+          "j": "ge3",
+          "e": "possessive marker (like 's)"
+        },
+        {
+          "id": "pronouns-012",
+          "c": "係",
+          "j": "hai6",
+          "e": "to be (is / am / are)"
+        },
+        {
+          "id": "pronouns-013",
+          "c": "朋友",
+          "j": "pang4 jau5",
+          "e": "friend"
+        },
+        {
+          "id": "pronouns-014",
+          "c": "呢個",
+          "j": "ni1 go3",
+          "e": "this one"
+        }
+      ],
+      "sentences": [
+        {
+          "sid": "pronouns-t1-s01",
+          "c": "我係阿明。",
+          "j": "ngo5 hai6 aa3 ming4.",
+          "e": "I am Ah Ming.",
+          "note": "係 (hai6) means \"is / am / are\" — one word for all three. 我係 (ngo5 hai6) \"I am\", 你係 (nei5 hai6) \"you are\", 佢係 (keoi5 hai6) \"he is\". And 我 (ngo5) is both \"I\" and \"me\" — it never changes shape.",
+          "bd": [
+            {
+              "c": "我",
+              "j": "ngo5",
+              "e": "I"
+            },
+            {
+              "c": "係",
+              "j": "hai6",
+              "e": "am"
+            },
+            {
+              "c": "阿明",
+              "j": "aa3 ming4",
+              "e": "Ah Ming (a name)"
+            }
+          ]
+        },
+        {
+          "sid": "pronouns-t1-s02",
+          "c": "你係我嘅朋友。",
+          "j": "nei5 hai6 ngo5 ge3 pang4 jau5.",
+          "e": "You are my friend.",
+          "note": "Add <b>嘅</b> (ge3) after a person-word to mean \"belonging to them\", like \"'s\" in English — 我嘅 (ngo5 ge3) \"my\", 你嘅 (nei5 ge3) \"your\", 佢嘅 (keoi5 ge3) \"his / her\".",
+          "bd": [
+            {
+              "c": "你",
+              "j": "nei5",
+              "e": "you"
+            },
+            {
+              "c": "係",
+              "j": "hai6",
+              "e": "are"
+            },
+            {
+              "c": "我嘅",
+              "j": "ngo5 ge3",
+              "e": "my"
+            },
+            {
+              "c": "朋友",
+              "j": "pang4 jau5",
+              "e": "friend"
+            }
+          ]
+        },
+        {
+          "sid": "pronouns-t1-s03",
+          "c": "佢係我嘅朋友。",
+          "j": "keoi5 hai6 ngo5 ge3 pang4 jau5.",
+          "e": "He / she is my friend.",
+          "note": "<b>佢</b> (keoi5) is \"he\", \"she\" and \"it\" all in one — Cantonese doesn't separate them. The situation tells you which is meant.",
+          "bd": [
+            {
+              "c": "佢",
+              "j": "keoi5",
+              "e": "he/she"
+            },
+            {
+              "c": "係",
+              "j": "hai6",
+              "e": "is"
+            },
+            {
+              "c": "我嘅",
+              "j": "ngo5 ge3",
+              "e": "my"
+            },
+            {
+              "c": "朋友",
+              "j": "pang4 jau5",
+              "e": "friend"
+            }
+          ]
+        },
+        {
+          "sid": "pronouns-t1-s04",
+          "c": "我哋係朋友。",
+          "j": "ngo5 dei6 hai6 pang4 jau5.",
+          "e": "We are friends.",
+          "note": "To talk about more than one, add <b>哋</b> (dei6): 我 (ngo5) \"I\" → 我哋 (ngo5 dei6) \"we\"; 你 (nei5) → 你哋 (nei5 dei6) \"you all\"; 佢 (keoi5) → 佢哋 (keoi5 dei6) \"they\". One rule, no exceptions.",
+          "bd": [
+            {
+              "c": "我哋",
+              "j": "ngo5 dei6",
+              "e": "we"
+            },
+            {
+              "c": "係",
+              "j": "hai6",
+              "e": "are"
+            },
+            {
+              "c": "朋友",
+              "j": "pang4 jau5",
+              "e": "friends"
+            }
+          ]
+        },
+        {
+          "sid": "pronouns-t1-s05",
+          "c": "佢哋係我嘅朋友。",
+          "j": "keoi5 dei6 hai6 ngo5 ge3 pang4 jau5.",
+          "e": "They are my friends.",
+          "bd": [
+            {
+              "c": "佢哋",
+              "j": "keoi5 dei6",
+              "e": "they"
+            },
+            {
+              "c": "係",
+              "j": "hai6",
+              "e": "are"
+            },
+            {
+              "c": "我嘅",
+              "j": "ngo5 ge3",
+              "e": "my"
+            },
+            {
+              "c": "朋友",
+              "j": "pang4 jau5",
+              "e": "friends"
+            }
+          ]
+        },
+        {
+          "sid": "pronouns-t1-s06",
+          "c": "呢個係我嘅。",
+          "j": "ni1 go3 hai6 ngo5 ge3.",
+          "e": "This one is mine.",
+          "note": "我嘅 (ngo5 ge3) is both \"my\" and \"mine\" — there's no separate word. \"my friend\" and \"it's mine\" both use 我嘅 (ngo5 ge3).",
+          "bd": [
+            {
+              "c": "呢個",
+              "j": "ni1 go3",
+              "e": "this one"
+            },
+            {
+              "c": "係",
+              "j": "hai6",
+              "e": "is"
+            },
+            {
+              "c": "我嘅",
+              "j": "ngo5 ge3",
+              "e": "mine"
+            }
+          ]
+        },
+        {
+          "sid": "pronouns-t1-s07",
+          "c": "呢個係你嘅。",
+          "j": "ni1 go3 hai6 nei5 ge3.",
+          "e": "This one is yours.",
+          "bd": [
+            {
+              "c": "呢個",
+              "j": "ni1 go3",
+              "e": "this one"
+            },
+            {
+              "c": "係",
+              "j": "hai6",
+              "e": "is"
+            },
+            {
+              "c": "你嘅",
+              "j": "nei5 ge3",
+              "e": "yours"
+            }
+          ]
+        },
+        {
+          "sid": "pronouns-t1-s08",
+          "c": "佢哋係你嘅朋友。",
+          "j": "keoi5 dei6 hai6 nei5 ge3 pang4 jau5.",
+          "e": "They are your friends.",
+          "bd": [
+            {
+              "c": "佢哋",
+              "j": "keoi5 dei6",
+              "e": "they"
+            },
+            {
+              "c": "係",
+              "j": "hai6",
+              "e": "are"
+            },
+            {
+              "c": "你嘅",
+              "j": "nei5 ge3",
+              "e": "your"
+            },
+            {
+              "c": "朋友",
+              "j": "pang4 jau5",
+              "e": "friends"
+            }
+          ]
+        }
+      ],
+      "convo": {
+        "title": "Meeting someone",
+        "speakers": [
+          "Someone",
+          "You"
+        ],
+        "lines": [
+          {
+            "u": false,
+            "c": "我係阿明。",
+            "j": "ngo5 hai6 aa3 ming4.",
+            "e": "I'm Ah Ming.",
+            "bd": [
+              {
+                "c": "我",
+                "j": "ngo5",
+                "e": "I"
+              },
+              {
+                "c": "係",
+                "j": "hai6",
+                "e": "am"
+              },
+              {
+                "c": "阿明",
+                "j": "aa3 ming4",
+                "e": "Ah Ming"
+              }
+            ]
+          },
+          {
+            "u": true,
+            "c": "我係阿玲。",
+            "j": "ngo5 hai6 aa3 ling4.",
+            "e": "I'm Ah Ling.",
+            "opts": [
+              "我係阿玲。",
+              "我係你嘅朋友。",
+              "佢係阿玲。"
+            ],
+            "optsJ": [
+              "ngo5 hai6 aa3 ling4.",
+              "ngo5 hai6 nei5 ge3 pang4 jau5.",
+              "keoi5 hai6 aa3 ling4."
+            ],
+            "bd": [
+              {
+                "c": "我",
+                "j": "ngo5",
+                "e": "I"
+              },
+              {
+                "c": "係",
+                "j": "hai6",
+                "e": "am"
+              },
+              {
+                "c": "阿玲",
+                "j": "aa3 ling4",
+                "e": "Ah Ling"
+              }
+            ]
+          },
+          {
+            "u": false,
+            "c": "佢係我嘅朋友阿華。",
+            "j": "keoi5 hai6 ngo5 ge3 pang4 jau5 aa3 waa4.",
+            "e": "She's my friend Ah Wah.",
+            "bd": [
+              {
+                "c": "佢",
+                "j": "keoi5",
+                "e": "she"
+              },
+              {
+                "c": "係",
+                "j": "hai6",
+                "e": "is"
+              },
+              {
+                "c": "我嘅",
+                "j": "ngo5 ge3",
+                "e": "my"
+              },
+              {
+                "c": "朋友",
+                "j": "pang4 jau5",
+                "e": "friend"
+              },
+              {
+                "c": "阿華",
+                "j": "aa3 waa4",
+                "e": "Ah Wah"
+              }
+            ]
+          },
+          {
+            "u": true,
+            "c": "你哋係朋友？",
+            "j": "nei5 dei6 hai6 pang4 jau5?",
+            "e": "You two are friends?",
+            "opts": [
+              "你哋係朋友？",
+              "佢係你嘅朋友？",
+              "你係阿明？"
+            ],
+            "optsJ": [
+              "nei5 dei6 hai6 pang4 jau5?",
+              "keoi5 hai6 nei5 ge3 pang4 jau5?",
+              "nei5 hai6 aa3 ming4?"
+            ],
+            "bd": [
+              {
+                "c": "你哋",
+                "j": "nei5 dei6",
+                "e": "you two"
+              },
+              {
+                "c": "係",
+                "j": "hai6",
+                "e": "are"
+              },
+              {
+                "c": "朋友",
+                "j": "pang4 jau5",
+                "e": "friends"
+              }
+            ]
+          },
+          {
+            "u": false,
+            "c": "係！我哋係朋友。",
+            "j": "hai6! ngo5 dei6 hai6 pang4 jau5.",
+            "e": "Yes! We're friends.",
+            "bd": [
+              {
+                "c": "係",
+                "j": "hai6",
+                "e": "yes"
+              },
+              {
+                "c": "我哋",
+                "j": "ngo5 dei6",
+                "e": "we"
+              },
+              {
+                "c": "係",
+                "j": "hai6",
+                "e": "are"
+              },
+              {
+                "c": "朋友",
+                "j": "pang4 jau5",
+                "e": "friends"
+              }
+            ]
+          },
+          {
+            "u": true,
+            "c": "你哋係我嘅朋友！",
+            "j": "nei5 dei6 hai6 ngo5 ge3 pang4 jau5!",
+            "e": "You're my friends!",
+            "opts": [
+              "你哋係我嘅朋友！",
+              "佢哋係朋友。",
+              "我係朋友。"
+            ],
+            "optsJ": [
+              "nei5 dei6 hai6 ngo5 ge3 pang4 jau5!",
+              "keoi5 dei6 hai6 pang4 jau5.",
+              "ngo5 hai6 pang4 jau5."
+            ],
+            "bd": [
+              {
+                "c": "你哋",
+                "j": "nei5 dei6",
+                "e": "you"
+              },
+              {
+                "c": "係",
+                "j": "hai6",
+                "e": "are"
+              },
+              {
+                "c": "我嘅",
+                "j": "ngo5 ge3",
+                "e": "my"
+              },
+              {
+                "c": "朋友",
+                "j": "pang4 jau5",
+                "e": "friends"
+              }
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "_idSeq": 14,
+  "_sidSeq": 8
+}

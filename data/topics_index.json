@@ -1,6 +1,18 @@
 {
   "topics": [
     {
+      "key": "pronouns",
+      "label": "Me, You & Them",
+      "icon": "👥",
+      "color": "#A6572B",
+      "rounds": [
+        1
+      ],
+      "wordCounts": {
+        "1": 14
+      }
+    },
+    {
       "key": "greetings",
       "label": "Greetings",
       "icon": "👋",
