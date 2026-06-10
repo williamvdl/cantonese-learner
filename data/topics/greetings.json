@@ -410,7 +410,7 @@
       }
     },
     "2": {
-      "note": null,
+      "note": "Tier-2 greetings is about register — the more formal, polite phrases for first meetings, reunions, and social situations where 你好 (nei5 hou2) isn't quite enough.",
       "words": [
         {
           "id": "greetings-011",
@@ -476,32 +476,44 @@
       "sentences": [
         {
           "sid": "greetings-t2-s06",
-          "c": "幸會幸會！",
-          "j": "hang6 wui6 hang6 wui6!",
-          "e": "A pleasure to meet you!",
+          "c": "幸會幸會！好高興認識你。",
+          "j": "hang6 wui6 hang6 wui6! hou2 gou1 hing3 jing6 sik1 nei5.",
+          "e": "A pleasure! So glad to meet you.",
+          "note": "<b>幸會</b> (hang6 wui6) \"a pleasure to meet you\" — more formal than 你好 (nei5 hou2) and reserved for first meetings with someone you respect or have been told about. Often said twice — 幸會幸會 (hang6 wui6 hang6 wui6) — for extra warmth.",
           "bd": [
             {
-              "c": "幸會",
-              "j": "hang6 wui6",
-              "e": "pleased to meet (formal)"
+              "c": "幸會幸會",
+              "j": "hang6 wui6 hang6 wui6",
+              "e": "a pleasure"
+            },
+            {
+              "c": "好高興",
+              "j": "hou2 gou1 hing3",
+              "e": "so glad"
+            },
+            {
+              "c": "認識",
+              "j": "jing6 sik1",
+              "e": "meet/know"
+            },
+            {
+              "c": "你",
+              "j": "nei5",
+              "e": "you"
             }
           ]
         },
         {
           "sid": "greetings-t2-s07",
-          "c": "好耐冇見，你點呀？",
-          "j": "hou2 noi6 mou5 gin3, nei5 dim2 aa3?",
-          "e": "Long time no see, how are you?",
+          "c": "好耐冇見，你近排點呀？",
+          "j": "hou2 noi6 mou5 gin3, nei5 gan6 paai2 dim2 aa3?",
+          "e": "Long time no see — how you have been lately?",
+          "note": "好耐冇見 (hou2 noi6 mou5 gin3) \"long time no see\" + <b>近排點呀</b> (gan6 paai2 dim2 aa3) \"how you have been lately\" naturally pair up as a reunion greeting. 近排 (gan6 paai2) means \"recently / these days\".",
           "bd": [
             {
-              "c": "好耐",
-              "j": "hou2 noi6",
-              "e": "long time"
-            },
-            {
-              "c": "冇見",
-              "j": "mou5 gin3",
-              "e": "haven't seen"
+              "c": "好耐冇見",
+              "j": "hou2 noi6 mou5 gin3",
+              "e": "long time no see"
             },
             {
               "c": "你",
@@ -509,22 +521,124 @@
               "e": "you"
             },
             {
+              "c": "近排",
+              "j": "gan6 paai2",
+              "e": "lately"
+            },
+            {
               "c": "點呀",
               "j": "dim2 aa3",
-              "e": "how / what"
+              "e": "how"
             }
           ]
         },
         {
           "sid": "greetings-t2-s08",
-          "c": "麻煩你幫我。",
-          "j": "maa4 faan4 nei5 bong1 ngo5.",
-          "e": "Sorry to trouble you, please help me.",
+          "c": "雖然係第一次見面，但係久仰你大名。",
+          "j": "seoi1 jin4 hai6 dai6 jat1 ci3 gin3 min6, daan6 hai6 gau2 joeng5 nei5 daai6 ming4.",
+          "e": "Although it's our first meeting, I have long heard of you.",
+          "note": "<b>久仰</b> (gau2 joeng5) \"I've heard a lot about you / your reputation precedes you\" — formal, used when finally meeting someone you've heard about. More elevated than everyday greetings; suits professional or networking contexts.",
           "bd": [
             {
-              "c": "麻煩",
-              "j": "maa4 faan4",
-              "e": "trouble"
+              "c": "雖然",
+              "j": "seoi1 jin4",
+              "e": "although"
+            },
+            {
+              "c": "第一次",
+              "j": "dai6 jat1 ci3",
+              "e": "first time"
+            },
+            {
+              "c": "見面",
+              "j": "gin3 min6",
+              "e": "meet"
+            },
+            {
+              "c": "但係",
+              "j": "daan6 hai6",
+              "e": "but"
+            },
+            {
+              "c": "久仰",
+              "j": "gau2 joeng5",
+              "e": "heard a lot"
+            },
+            {
+              "c": "你大名",
+              "j": "nei5 daai6 ming4",
+              "e": "your name"
+            }
+          ]
+        },
+        {
+          "sid": "greetings-t2-s09",
+          "c": "麻煩你幫我介紹下；失禮喇，初次見面。",
+          "j": "maa4 faan4 nei5 bong1 ngo5 gaai3 siu6 haa5; sat1 lai5 laa3, co1 ci3 gin3 min6.",
+          "e": "Sorry to trouble you — could you introduce me? Pardon me, first time meeting.",
+          "note": "麻煩你 (maa4 faan4 nei5) \"sorry to trouble you\" is softer and more polite than 唔該 (m4 goi1) for requests. <b>失禮</b> (sat1 lai5) goes one step further — \"excuse my imposition / forgive the rudeness\" — for taking leave or making a more formal apology.",
+          "bd": [
+            {
+              "c": "麻煩你",
+              "j": "maa4 faan4 nei5",
+              "e": "sorry to trouble you"
+            },
+            {
+              "c": "幫我介紹下",
+              "j": "bong1 ngo5 gaai3 siu6 haa5",
+              "e": "introduce me"
+            },
+            {
+              "c": "失禮喇",
+              "j": "sat1 lai5 laa3",
+              "e": "excuse me"
+            },
+            {
+              "c": "初次見面",
+              "j": "co1 ci3 gin3 min6",
+              "e": "first time meeting"
+            }
+          ]
+        },
+        {
+          "sid": "greetings-t2-s10",
+          "c": "歡迎晒！請多關照，有咩唔識就問我。",
+          "j": "fun1 jing4 saai3! cing2 do1 gwaan1 ziu3, jau5 me1 m4 sik1 zau6 man6 ngo5.",
+          "e": "Welcome everyone! Please look out for us — if there is anything you don't know, just ask.",
+          "note": "歡迎 (fun1 jing4) is the host's \"welcome\" — said on arrival or to open a gathering. 請多關照 (cing2 do1 gwaan1 ziu3) is the natural <b>response</b> when introduced or welcomed: \"please look after me / I'm in your hands.\"",
+          "bd": [
+            {
+              "c": "歡迎晒",
+              "j": "fun1 jing4 saai3",
+              "e": "welcome everyone"
+            },
+            {
+              "c": "請多關照",
+              "j": "cing2 do1 gwaan1 ziu3",
+              "e": "please look out for us"
+            },
+            {
+              "c": "有咩唔識",
+              "j": "jau5 me1 m4 sik1",
+              "e": "if anything unknown"
+            },
+            {
+              "c": "就問我",
+              "j": "zau6 man6 ngo5",
+              "e": "just ask me"
+            }
+          ]
+        },
+        {
+          "sid": "greetings-t2-s11",
+          "c": "如果你唔係咁忙，不如今晚一齊食飯？",
+          "j": "jyu4 gwo2 nei5 m4 hai6 gam3 mong4, bat1 jyu4 gam1 maan5 jat1 cai4 sik6 faan6?",
+          "e": "If you're not too busy, how about dinner tonight?",
+          "bd": [
+            {
+              "c": "如果",
+              "j": "jyu4 gwo2",
+              "e": "if"
             },
             {
               "c": "你",
@@ -532,86 +646,74 @@
               "e": "you"
             },
             {
-              "c": "幫",
-              "j": "bong1",
-              "e": "help"
+              "c": "唔係咁忙",
+              "j": "m4 hai6 gam3 mong4",
+              "e": "not so busy"
             },
             {
-              "c": "我",
-              "j": "ngo5",
-              "e": "me"
+              "c": "不如",
+              "j": "bat1 jyu4",
+              "e": "how about"
+            },
+            {
+              "c": "今晚",
+              "j": "gam1 maan5",
+              "e": "tonight"
+            },
+            {
+              "c": "一齊食飯",
+              "j": "jat1 cai4 sik6 faan6",
+              "e": "dinner together"
             }
           ]
         },
         {
-          "sid": "greetings-t2-s09",
-          "c": "請多關照我。",
-          "j": "cing2 do1 gwaan1 ziu3 ngo5.",
-          "e": "Please take care of me / look out for me.",
+          "sid": "greetings-t2-s12",
+          "c": "我而家要返工喇，放工之後再傾。",
+          "j": "ngo5 ji4 gaa1 jiu3 faan1 gung1 laa3, fong3 gung1 zi1 hau6 zoi3 king1.",
+          "e": "I have to head to work now — let's catch up after work.",
+          "note": "返工 (faan1 gung1) \"go to work\" and <b>放工</b> (fong3 gung1) \"finish work\" double as casual passing greetings — 返工呀? (faan1 gung1 aa3) \"heading to work?\" is a warm remark you might say to a neighbour, not a real question.",
           "bd": [
             {
-              "c": "請",
-              "j": "cing2",
-              "e": "please"
+              "c": "我而家",
+              "j": "ngo5 ji4 gaa1",
+              "e": "I now"
             },
             {
-              "c": "多",
-              "j": "do1",
-              "e": "much"
+              "c": "要返工喇",
+              "j": "jiu3 faan1 gung1 laa3",
+              "e": "have to go to work"
             },
             {
-              "c": "關照",
-              "j": "gwaan1 ziu3",
-              "e": "look after"
+              "c": "放工之後",
+              "j": "fong3 gung1 zi1 hau6",
+              "e": "after work"
             },
             {
-              "c": "我",
-              "j": "ngo5",
-              "e": "me"
-            }
-          ]
-        },
-        {
-          "sid": "greetings-t2-s10",
-          "c": "放工嘞，再見！",
-          "j": "fong3 gung1 laak3, zoi3 gin3!",
-          "e": "Off work now, goodbye!",
-          "bd": [
-            {
-              "c": "放工",
-              "j": "fong3 gung1",
-              "e": "off work"
-            },
-            {
-              "c": "嘞",
-              "j": "laak3",
-              "e": "(now / completion)"
-            },
-            {
-              "c": "再見",
-              "j": "zoi3 gin3",
-              "e": "goodbye"
+              "c": "再傾",
+              "j": "zoi3 king1",
+              "e": "chat more"
             }
           ]
         }
       ],
       "convo": {
-        "title": "Bumping into a former colleague",
+        "title": "Bumping into an old contact",
         "speakers": [
-          "Former colleague",
+          "Friend",
           "You"
         ],
         "lines": [
           {
             "u": false,
-            "c": "嘩！好耐冇見，你近排點呀？",
-            "j": "waa3! hou2 noi6 mou5 gin3, nei5 gan6 paai2 dim2 aa3?",
-            "e": "Wow! Long time no see, how have you been lately?",
+            "c": "嘩！好耐冇見！你近排點呀？",
+            "j": "waa3! hou2 noi6 mou5 gin3! nei5 gan6 paai2 dim2 aa3?",
+            "e": "Wow, long time no see! How've you been?",
             "bd": [
               {
                 "c": "嘩",
                 "j": "waa3",
-                "e": "(exclamation - wow)"
+                "e": "wow"
               },
               {
                 "c": "好耐冇見",
@@ -624,85 +726,60 @@
                 "e": "you"
               },
               {
-                "c": "近排",
-                "j": "gan6 paai2",
-                "e": "lately"
-              },
-              {
-                "c": "點呀",
-                "j": "dim2 aa3",
-                "e": "how"
+                "c": "近排點呀",
+                "j": "gan6 paai2 dim2 aa3",
+                "e": "how you've been"
               }
             ]
           },
           {
             "u": true,
-            "c": "係呀！我都係幾忙，你呢？",
-            "j": "hai6 aa3! ngo5 dou1 hai6 gei2 mong4, nei5 ne1?",
-            "e": "Yeah! I've been pretty busy, and you?",
+            "c": "幾好呀，多謝。你呢？",
+            "j": "gei2 hou2 aa3, do1 ze6. nei5 ne1?",
+            "e": "Pretty good, thanks. And you?",
             "opts": [
-              "係呀！我都係幾忙，你呢？",
-              "唔知喎。",
-              "好攰啦。"
+              "幾好呀，多謝。你呢？",
+              "都係，你呢？",
+              "唔係好好，好忙。"
             ],
             "optsJ": [
-              "hai6 aa3! ngo5 dou1 hai6 gei2 mong4, nei5 ne1?",
-              "m4 zi1 wo3.",
-              "hou2 gui6 laa1."
+              "gei2 hou2 aa3, do1 ze6. nei5 ne1?",
+              "dou1 hai6, nei5 ne1?",
+              "m4 hai6 hou2 hou2, hou2 mong4."
             ],
             "bd": [
               {
-                "c": "係呀",
-                "j": "hai6 aa3",
-                "e": "yes / right"
+                "c": "幾好",
+                "j": "gei2 hou2",
+                "e": "pretty good"
               },
               {
-                "c": "我",
-                "j": "ngo5",
-                "e": "I"
-              },
-              {
-                "c": "都係",
-                "j": "dou1 hai6",
-                "e": "also am"
-              },
-              {
-                "c": "幾忙",
-                "j": "gei2 mong4",
-                "e": "pretty busy"
+                "c": "多謝",
+                "j": "do1 ze6",
+                "e": "thanks"
               },
               {
                 "c": "你呢",
                 "j": "nei5 ne1",
-                "e": "and you?"
+                "e": "and you"
               }
             ]
           },
           {
             "u": false,
-            "c": "我啱啱換咗份工，仲喺度適應緊。",
-            "j": "ngo5 ngaam1 ngaam1 wun6 zo2 fan6 gung1, zung6 hai2 dou6 sik1 jing3 gan2.",
-            "e": "I just changed jobs, still adjusting.",
+            "c": "我啱啱換工，仲喺度適應緊。不過新工幾好㗎。",
+            "j": "ngo5 ngaam1 ngaam1 wun6 gung1, zung6 hai2 dou6 sik1 jing3 gan2. bat1 gwo3 san1 gung1 gei2 hou2 gaa3.",
+            "e": "I just changed jobs, still adjusting. But the new one's pretty good.",
             "bd": [
-              {
-                "c": "我",
-                "j": "ngo5",
-                "e": "I"
-              },
               {
                 "c": "啱啱",
                 "j": "ngaam1 ngaam1",
                 "e": "just"
               },
               {
-                "c": "換咗",
-                "j": "wun6 zo2",
-                "e": "changed"
-              },
-              {
-                "c": "份工",
-                "j": "fan6 gung1",
-                "e": "a job"
+                "c": "換工",
+                "j": "wun6 gung1",
+                "e": "changed jobs"
               },
               {
                 "c": "仲",
@@ -712,63 +789,78 @@
               {
                 "c": "適應緊",
                 "j": "sik1 jing3 gan2",
-                "e": "adjusting (currently)"
+                "e": "adjusting"
+              },
+              {
+                "c": "不過",
+                "j": "bat1 gwo3",
+                "e": "but"
+              },
+              {
+                "c": "新工",
+                "j": "san1 gung1",
+                "e": "new job"
+              },
+              {
+                "c": "幾好",
+                "j": "gei2 hou2",
+                "e": "pretty good"
               }
             ]
           },
           {
             "u": true,
-            "c": "咁就辛苦你喇，加油呀！",
-            "j": "gam2 zau6 san1 fu2 nei5 laa3, gaa1 jau4 aa3!",
-            "e": "That's tough, hang in there!",
+            "c": "雖然換工辛苦，但係新開始係好事！",
+            "j": "seoi1 jin4 wun6 gung1 san1 fu2, daan6 hai6 san1 hoi1 ci2 hai6 hou2 si6!",
+            "e": "Although changing jobs is tough, a new start is a good thing!",
             "opts": [
-              "咁就辛苦你喇，加油呀！",
-              "唔關我事。",
-              "我要走啦。"
+              "雖然換工辛苦，但係新開始係好事！",
+              "係咩，辛唔辛苦？",
+              "加油呀！"
             ],
             "optsJ": [
-              "gam2 zau6 san1 fu2 nei5 laa3, gaa1 jau4 aa3!",
-              "m4 gwaan1 ngo5 si6.",
-              "ngo5 jiu3 zau2 laa1."
+              "seoi1 jin4 wun6 gung1 san1 fu2, daan6 hai6 san1 hoi1 ci2 hai6 hou2 si6!",
+              "hai6 me1, san1 m4 san1 fu2?",
+              "gaa1 jau4 aa3!"
             ],
             "bd": [
               {
-                "c": "咁就",
-                "j": "gam2 zau6",
-                "e": "then it's"
+                "c": "雖然",
+                "j": "seoi1 jin4",
+                "e": "although"
+              },
+              {
+                "c": "換工",
+                "j": "wun6 gung1",
+                "e": "changing jobs"
               },
               {
                 "c": "辛苦",
                 "j": "san1 fu2",
-                "e": "hard / tough"
+                "e": "tough"
               },
               {
-                "c": "你",
-                "j": "nei5",
-                "e": "you"
+                "c": "但係",
+                "j": "daan6 hai6",
+                "e": "but"
               },
               {
-                "c": "喇",
-                "j": "laa3",
-                "e": "(particle)"
+                "c": "新開始",
+                "j": "san1 hoi1 ci2",
+                "e": "new start"
               },
               {
-                "c": "加油",
-                "j": "gaa1 jau4",
-                "e": "hang in there"
-              },
-              {
-                "c": "呀",
-                "j": "aa3",
-                "e": "(soft)"
+                "c": "係好事",
+                "j": "hai6 hou2 si6",
+                "e": "is a good thing"
               }
             ]
           },
           {
             "u": false,
-            "c": "多謝！下次一齊食飯啦。",
-            "j": "do1 ze6! haa6 ci3 jat1 cai4 sik6 faan6 laa1.",
-            "e": "Thanks! Let's eat together next time.",
+            "c": "多謝！哦，呢位係我新同事阿華。",
+            "j": "do1 ze6! o3, ni1 wai2 hai6 ngo5 san1 tung4 si6 aa3 waa4.",
+            "e": "Thanks! Oh, this is my new colleague Ah Wah.",
             "bd": [
               {
                 "c": "多謝",
@@ -776,85 +868,151 @@
                 "e": "thanks"
               },
               {
-                "c": "下次",
-                "j": "haa6 ci3",
-                "e": "next time"
+                "c": "呢位",
+                "j": "ni1 wai2",
+                "e": "this person"
               },
               {
-                "c": "一齊",
-                "j": "jat1 cai4",
-                "e": "together"
+                "c": "係",
+                "j": "hai6",
+                "e": "is"
               },
               {
-                "c": "食飯",
-                "j": "sik6 faan6",
-                "e": "eat / have a meal"
+                "c": "新同事",
+                "j": "san1 tung4 si6",
+                "e": "new colleague"
               },
               {
-                "c": "啦",
-                "j": "laa1",
-                "e": "(suggestion)"
+                "c": "阿華",
+                "j": "aa3 waa4",
+                "e": "Ah Wah"
               }
             ]
           },
           {
             "u": true,
-            "c": "好呀，得閒再傾。",
-            "j": "hou2 aa3, dak1 haan4 zoi3 king1.",
-            "e": "Sure, let's catch up when free.",
+            "c": "幸會幸會！久仰大名，請多關照。",
+            "j": "hang6 wui6 hang6 wui6! gau2 joeng5 daai6 ming4, cing2 do1 gwaan1 ziu3.",
+            "e": "A pleasure! I have heard so much — please look out for me.",
             "opts": [
-              "好呀，得閒再傾。",
-              "唔得閒。",
-              "我唔識你。"
+              "幸會幸會！久仰大名，請多關照。",
+              "你好！",
+              "幸會，認識你好開心。"
             ],
             "optsJ": [
-              "hou2 aa3, dak1 haan4 zoi3 king1.",
-              "m4 dak1 haan4.",
-              "ngo5 m4 sik1 nei5."
+              "hang6 wui6 hang6 wui6! gau2 joeng5 daai6 ming4, cing2 do1 gwaan1 ziu3.",
+              "nei5 hou2!",
+              "hang6 wui6, jing6 sik1 nei5 hou2 hoi1 sam1."
             ],
             "bd": [
               {
-                "c": "好呀",
-                "j": "hou2 aa3",
-                "e": "OK / sure"
+                "c": "幸會幸會",
+                "j": "hang6 wui6 hang6 wui6",
+                "e": "a pleasure"
               },
               {
-                "c": "得閒",
-                "j": "dak1 haan4",
-                "e": "have time / free"
+                "c": "久仰大名",
+                "j": "gau2 joeng5 daai6 ming4",
+                "e": "heard a lot"
               },
               {
-                "c": "再",
-                "j": "zoi3",
-                "e": "again"
-              },
-              {
-                "c": "傾",
-                "j": "king1",
-                "e": "chat"
+                "c": "請多關照",
+                "j": "cing2 do1 gwaan1 ziu3",
+                "e": "please look out for me"
               }
             ]
           },
           {
             "u": false,
-            "c": "OK，再見啦！",
-            "j": "OK, zoi3 gin3 laa1!",
-            "e": "OK, see you!",
+            "c": "唔使客氣！如果有咩唔識，麻煩你哋問我。",
+            "j": "m4 sai2 haak3 hei3! jyu4 gwo2 jau5 me1 m4 sik1, maa4 faan4 nei5 dei6 man6 ngo5.",
+            "e": "Don't be shy! If there's anything you don't know, don't hesitate to ask me.",
             "bd": [
               {
-                "c": "OK",
-                "j": "OK",
-                "e": "OK"
+                "c": "唔使客氣",
+                "j": "m4 sai2 haak3 hei3",
+                "e": "don't be shy"
               },
               {
-                "c": "再見",
-                "j": "zoi3 gin3",
-                "e": "goodbye"
+                "c": "如果",
+                "j": "jyu4 gwo2",
+                "e": "if"
               },
               {
-                "c": "啦",
-                "j": "laa1",
-                "e": "(softening)"
+                "c": "有咩唔識",
+                "j": "jau5 me1 m4 sik1",
+                "e": "anything don't know"
+              },
+              {
+                "c": "麻煩你哋",
+                "j": "maa4 faan4 nei5 dei6",
+                "e": "please"
+              },
+              {
+                "c": "問我",
+                "j": "man6 ngo5",
+                "e": "ask me"
+              }
+            ]
+          },
+          {
+            "u": true,
+            "c": "好㗎！放工之後，不如一齊食飯？",
+            "j": "hou2 gaa3! fong3 gung1 zi1 hau6, bat1 jyu4 jat1 cai4 sik6 faan6?",
+            "e": "Great! After work, how about dinner together?",
+            "opts": [
+              "好㗎！放工之後，不如一齊食飯？",
+              "好！幾時返工？",
+              "今日唔得喇，改日啦。"
+            ],
+            "optsJ": [
+              "hou2 gaa3! fong3 gung1 zi1 hau6, bat1 jyu4 jat1 cai4 sik6 faan6?",
+              "hou2! gei2 si4 faan1 gung1?",
+              "gam1 jat6 m4 dak1 laa3, goi2 jat6 laa1."
+            ],
+            "bd": [
+              {
+                "c": "好㗎",
+                "j": "hou2 gaa3",
+                "e": "great"
+              },
+              {
+                "c": "放工之後",
+                "j": "fong3 gung1 zi1 hau6",
+                "e": "after work"
+              },
+              {
+                "c": "不如",
+                "j": "bat1 jyu4",
+                "e": "how about"
+              },
+              {
+                "c": "一齊食飯",
+                "j": "jat1 cai4 sik6 faan6",
+                "e": "dinner together"
+              }
+            ]
+          },
+          {
+            "u": false,
+            "c": "好呀！咁就今晚見！",
+            "j": "hou2 aa3! gam2 zau6 gam1 maan5 gin3!",
+            "e": "Great, see you tonight then!",
+            "bd": [
+              {
+                "c": "好呀",
+                "j": "hou2 aa3",
+                "e": "great"
+              },
+              {
+                "c": "咁就",
+                "j": "gam2 zau6",
+                "e": "then"
+              },
+              {
+                "c": "今晚見",
+                "j": "gam1 maan5 gin3",
+                "e": "see you tonight"
               }
             ]
           }
@@ -863,5 +1021,5 @@
     }
   },
   "_idSeq": 20,
-  "_sidSeq": 10
+  "_sidSeq": 12
 }

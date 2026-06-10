@@ -4521,6 +4521,776 @@
           ]
         }
       ]
+    },
+    "intermediate-s4": {
+      "title": "A night out",
+      "speakers": [
+        "Friend",
+        "You"
+      ],
+      "lines": [
+        {
+          "u": false,
+          "c": "今晚不如出去食飯，然後行下街？",
+          "j": "gam1 maan5 bat1 jyu4 ceot1 heoi3 sik6 faan6, jin4 hau6 haang4 haa5 gaai1?",
+          "e": "How about going out to eat tonight, then some shopping?",
+          "bd": [
+            {
+              "c": "今晚",
+              "j": "gam1 maan5",
+              "e": "tonight"
+            },
+            {
+              "c": "不如",
+              "j": "bat1 jyu4",
+              "e": "how about"
+            },
+            {
+              "c": "出去",
+              "j": "ceot1 heoi3",
+              "e": "go out"
+            },
+            {
+              "c": "食飯",
+              "j": "sik6 faan6",
+              "e": "eat"
+            },
+            {
+              "c": "然後",
+              "j": "jin4 hau6",
+              "e": "then"
+            },
+            {
+              "c": "行下街",
+              "j": "haang4 haa5 gaai1",
+              "e": "shopping"
+            }
+          ]
+        },
+        {
+          "u": true,
+          "c": "好啊！如果想食好嘢，最好訂枱。",
+          "j": "hou2 aa3! jyu4 gwo2 soeng2 sik6 hou2 je5, zeoi3 hou2 deng6 toi2.",
+          "e": "Great! If we want good food, best to book a table.",
+          "opts": [
+            "好啊！如果想食好嘢，最好訂枱。",
+            "我唔想去。",
+            "隨便啦。"
+          ],
+          "optsJ": [
+            "hou2 aa3! jyu4 gwo2 soeng2 sik6 hou2 je5, zeoi3 hou2 deng6 toi2.",
+            "ngo5 m4 soeng2 heoi3.",
+            "ceoi4 bin2 laa1."
+          ],
+          "bd": [
+            {
+              "c": "好啊",
+              "j": "hou2 aa3",
+              "e": "great"
+            },
+            {
+              "c": "如果",
+              "j": "jyu4 gwo2",
+              "e": "if"
+            },
+            {
+              "c": "想食",
+              "j": "soeng2 sik6",
+              "e": "want to eat"
+            },
+            {
+              "c": "好嘢",
+              "j": "hou2 je5",
+              "e": "good food"
+            },
+            {
+              "c": "最好",
+              "j": "zeoi3 hou2",
+              "e": "best to"
+            },
+            {
+              "c": "訂枱",
+              "j": "deng6 toi2",
+              "e": "book a table"
+            }
+          ]
+        },
+        {
+          "u": false,
+          "c": "我訂咗喇。不過今晚好多人，可能要等位。",
+          "j": "ngo5 deng6 zo2 laa3. bat1 gwo3 gam1 maan5 hou2 do1 jan4, ho2 nang4 jiu3 dang2 wai2.",
+          "e": "I booked. But there are lots of people tonight, we might have to wait.",
+          "bd": [
+            {
+              "c": "我",
+              "j": "ngo5",
+              "e": "I"
+            },
+            {
+              "c": "訂咗",
+              "j": "deng6 zo2",
+              "e": "booked"
+            },
+            {
+              "c": "喇",
+              "j": "laa3",
+              "e": "(particle)"
+            },
+            {
+              "c": "不過",
+              "j": "bat1 gwo3",
+              "e": "but"
+            },
+            {
+              "c": "今晚",
+              "j": "gam1 maan5",
+              "e": "tonight"
+            },
+            {
+              "c": "好多人",
+              "j": "hou2 do1 jan4",
+              "e": "many people"
+            },
+            {
+              "c": "可能",
+              "j": "ho2 nang4",
+              "e": "maybe"
+            },
+            {
+              "c": "要",
+              "j": "jiu3",
+              "e": "have to"
+            },
+            {
+              "c": "等位",
+              "j": "dang2 wai2",
+              "e": "wait for a table"
+            }
+          ]
+        },
+        {
+          "u": true,
+          "c": "冇問題。我食素，所以想叫啲唔辣嘅餸。",
+          "j": "mou5 man6 tai4. ngo5 sik6 sou3, so2 ji5 soeng2 giu3 di1 m4 laat6 ge3 sung3.",
+          "e": "No problem. I'm vegetarian, so I want to order some non-spicy dishes.",
+          "opts": [
+            "冇問題。我食素，所以想叫啲唔辣嘅餸。",
+            "我鍾意食辣。",
+            "我乜都食。"
+          ],
+          "optsJ": [
+            "mou5 man6 tai4. ngo5 sik6 sou3, so2 ji5 soeng2 giu3 di1 m4 laat6 ge3 sung3.",
+            "ngo5 zung1 ji3 sik6 laat6.",
+            "ngo5 mat1 dou1 sik6."
+          ],
+          "bd": [
+            {
+              "c": "冇問題",
+              "j": "mou5 man6 tai4",
+              "e": "no problem"
+            },
+            {
+              "c": "我",
+              "j": "ngo5",
+              "e": "I"
+            },
+            {
+              "c": "食素",
+              "j": "sik6 sou3",
+              "e": "vegetarian"
+            },
+            {
+              "c": "所以",
+              "j": "so2 ji5",
+              "e": "so"
+            },
+            {
+              "c": "想叫",
+              "j": "soeng2 giu3",
+              "e": "want to order"
+            },
+            {
+              "c": "啲",
+              "j": "di1",
+              "e": "some"
+            },
+            {
+              "c": "唔辣",
+              "j": "m4 laat6",
+              "e": "not spicy"
+            },
+            {
+              "c": "嘅餸",
+              "j": "ge3 sung3",
+              "e": "dishes"
+            }
+          ]
+        },
+        {
+          "u": false,
+          "c": "好。我哋可以叫侍應介紹下。",
+          "j": "hou2. ngo5 dei6 ho2 ji5 giu3 si6 jing3 gaai3 siu6 haa5.",
+          "e": "OK. We can ask the waiter to recommend something.",
+          "bd": [
+            {
+              "c": "好",
+              "j": "hou2",
+              "e": "OK"
+            },
+            {
+              "c": "我哋",
+              "j": "ngo5 dei6",
+              "e": "we"
+            },
+            {
+              "c": "可以",
+              "j": "ho2 ji5",
+              "e": "can"
+            },
+            {
+              "c": "叫",
+              "j": "giu3",
+              "e": "ask"
+            },
+            {
+              "c": "侍應",
+              "j": "si6 jing3",
+              "e": "waiter"
+            },
+            {
+              "c": "介紹下",
+              "j": "gaai3 siu6 haa5",
+              "e": "to recommend"
+            }
+          ]
+        },
+        {
+          "u": true,
+          "c": "食完飯之後，不如去行街買嘢。",
+          "j": "sik6 jyun4 faan6 zi1 hau6, bat1 jyu4 heoi3 haang4 gaai1 maai5 je5.",
+          "e": "After we eat, how about going shopping?",
+          "opts": [
+            "食完飯之後，不如去行街買嘢。",
+            "食完就返屋企。",
+            "我唔買嘢。"
+          ],
+          "optsJ": [
+            "sik6 jyun4 faan6 zi1 hau6, bat1 jyu4 heoi3 haang4 gaai1 maai5 je5.",
+            "sik6 jyun4 zau6 faan1 uk1 kei2.",
+            "ngo5 m4 maai5 je5."
+          ],
+          "bd": [
+            {
+              "c": "食完飯",
+              "j": "sik6 jyun4 faan6",
+              "e": "after eating"
+            },
+            {
+              "c": "之後",
+              "j": "zi1 hau6",
+              "e": "after"
+            },
+            {
+              "c": "不如",
+              "j": "bat1 jyu4",
+              "e": "how about"
+            },
+            {
+              "c": "去",
+              "j": "heoi3",
+              "e": "go"
+            },
+            {
+              "c": "行街",
+              "j": "haang4 gaai1",
+              "e": "shopping"
+            },
+            {
+              "c": "買嘢",
+              "j": "maai5 je5",
+              "e": "buy things"
+            }
+          ]
+        },
+        {
+          "u": false,
+          "c": "好主意！如果見到平嘅，我哋可以講價。",
+          "j": "hou2 zyu2 ji3! jyu4 gwo2 gin3 dou2 peng4 ge3, ngo5 dei6 ho2 ji5 gong2 gaa3.",
+          "e": "Good idea! If we spot cheap ones, we can haggle.",
+          "bd": [
+            {
+              "c": "好主意",
+              "j": "hou2 zyu2 ji3",
+              "e": "good idea"
+            },
+            {
+              "c": "如果",
+              "j": "jyu4 gwo2",
+              "e": "if"
+            },
+            {
+              "c": "見到",
+              "j": "gin3 dou2",
+              "e": "see"
+            },
+            {
+              "c": "平嘅",
+              "j": "peng4 ge3",
+              "e": "cheap ones"
+            },
+            {
+              "c": "我哋",
+              "j": "ngo5 dei6",
+              "e": "we"
+            },
+            {
+              "c": "可以",
+              "j": "ho2 ji5",
+              "e": "can"
+            },
+            {
+              "c": "講價",
+              "j": "gong2 gaa3",
+              "e": "haggle"
+            }
+          ]
+        },
+        {
+          "u": true,
+          "c": "而且好多舖頭特價，可以碌卡或者用八達通。",
+          "j": "ji4 ce2 hou2 do1 pou3 tau2 dak6 gaa3, ho2 ji5 luk1 kaat1 waak6 ze2 jung6 baat3 daat6 tung1.",
+          "e": "And lots of shops are on sale — we can pay by card or use Octopus.",
+          "opts": [
+            "而且好多舖頭特價，可以碌卡或者用八達通。",
+            "我淨係用現金。",
+            "我冇錢。"
+          ],
+          "optsJ": [
+            "ji4 ce2 hou2 do1 pou3 tau2 dak6 gaa3, ho2 ji5 luk1 kaat1 waak6 ze2 jung6 baat3 daat6 tung1.",
+            "ngo5 zing6 hai6 jung6 jin6 gam1.",
+            "ngo5 mou5 cin2."
+          ],
+          "bd": [
+            {
+              "c": "而且",
+              "j": "ji4 ce2",
+              "e": "moreover"
+            },
+            {
+              "c": "好多",
+              "j": "hou2 do1",
+              "e": "many"
+            },
+            {
+              "c": "舖頭",
+              "j": "pou3 tau2",
+              "e": "shops"
+            },
+            {
+              "c": "特價",
+              "j": "dak6 gaa3",
+              "e": "on sale"
+            },
+            {
+              "c": "可以",
+              "j": "ho2 ji5",
+              "e": "can"
+            },
+            {
+              "c": "碌卡",
+              "j": "luk1 kaat1",
+              "e": "pay by card"
+            },
+            {
+              "c": "或者",
+              "j": "waak6 ze2",
+              "e": "or"
+            },
+            {
+              "c": "用",
+              "j": "jung6",
+              "e": "use"
+            },
+            {
+              "c": "八達通",
+              "j": "baat3 daat6 tung1",
+              "e": "Octopus"
+            }
+          ]
+        },
+        {
+          "u": false,
+          "c": "太好喇，咁就今晚見！",
+          "j": "taai3 hou2 laa3, gam2 zau6 gam1 maan5 gin3!",
+          "e": "Great, see you tonight then!",
+          "bd": [
+            {
+              "c": "太好喇",
+              "j": "taai3 hou2 laa3",
+              "e": "great"
+            },
+            {
+              "c": "咁就",
+              "j": "gam2 zau6",
+              "e": "then"
+            },
+            {
+              "c": "今晚見",
+              "j": "gam1 maan5 gin3",
+              "e": "see you tonight"
+            }
+          ]
+        }
+      ]
+    },
+    "intermediate-s5": {
+      "title": "Catching up over coffee",
+      "speakers": [
+        "Friend",
+        "You"
+      ],
+      "lines": [
+        {
+          "u": false,
+          "c": "好耐冇見！你近排點呀？",
+          "j": "hou2 noi6 mou5 gin3! nei5 gan6 paai2 dim2 aa3?",
+          "e": "Long time no see! How have you been?",
+          "bd": [
+            {
+              "c": "好耐冇見",
+              "j": "hou2 noi6 mou5 gin3",
+              "e": "long time no see"
+            },
+            {
+              "c": "近排點呀",
+              "j": "gan6 paai2 dim2 aa3",
+              "e": "how have you been"
+            }
+          ]
+        },
+        {
+          "u": true,
+          "c": "幾好呀！好掛住你㗎。",
+          "j": "gei2 hou2 aa3! hou2 gwaa3 zyu6 nei5 gaa3.",
+          "e": "Pretty good! I really missed you.",
+          "opts": [
+            "幾好呀！好掛住你㗎。",
+            "都係咁上下，你呢？",
+            "好忙，冇時間出街。"
+          ],
+          "optsJ": [
+            "gei2 hou2 aa3! hou2 gwaa3 zyu6 nei5 gaa3.",
+            "dou1 hai6 gam2 soeng5 haa5, nei5 ne1?",
+            "hou2 mong4, mou5 si4 gaan3 ceot1 gaai1."
+          ],
+          "bd": [
+            {
+              "c": "幾好",
+              "j": "gei2 hou2",
+              "e": "pretty good"
+            },
+            {
+              "c": "好掛住你",
+              "j": "hou2 gwaa3 zyu6 nei5",
+              "e": "really missed you"
+            }
+          ]
+        },
+        {
+          "u": false,
+          "c": "你有冇聯絡阿華？佢上個月病咗。",
+          "j": "nei5 jau5 mou5 lyun4 lok3 aa3 waa4? keoi5 soeng6 go3 jyut6 beng6 zo2.",
+          "e": "Have you been in touch with Ah Wah? She was sick last month.",
+          "bd": [
+            {
+              "c": "有冇聯絡",
+              "j": "jau5 mou5 lyun4 lok3",
+              "e": "been in touch"
+            },
+            {
+              "c": "阿華",
+              "j": "aa3 waa4",
+              "e": "Ah Wah"
+            },
+            {
+              "c": "上個月",
+              "j": "soeng6 go3 jyut6",
+              "e": "last month"
+            },
+            {
+              "c": "病咗",
+              "j": "beng6 zo2",
+              "e": "was sick"
+            }
+          ]
+        },
+        {
+          "u": true,
+          "c": "係咩？佢有冇去睇醫生？",
+          "j": "hai6 me1? keoi5 jau5 mou5 heoi3 tai2 ji1 sang1?",
+          "e": "Really? Did she go see a doctor?",
+          "opts": [
+            "係咩？佢有冇去睇醫生？",
+            "點解病咗？",
+            "佢要去醫院咩？"
+          ],
+          "optsJ": [
+            "hai6 me1? keoi5 jau5 mou5 heoi3 tai2 ji1 sang1?",
+            "dim2 gaai2 beng6 zo2?",
+            "keoi5 jiu3 heoi3 ji1 jyun2 me1?"
+          ],
+          "bd": [
+            {
+              "c": "係咩",
+              "j": "hai6 me1",
+              "e": "really"
+            },
+            {
+              "c": "有冇去",
+              "j": "jau5 mou5 heoi3",
+              "e": "did she go"
+            },
+            {
+              "c": "睇醫生",
+              "j": "tai2 ji1 sang1",
+              "e": "see a doctor"
+            }
+          ]
+        },
+        {
+          "u": false,
+          "c": "去喇。醫生話佢要多啲休息，而且要食藥，一日三次。",
+          "j": "heoi3 laa3. ji1 sang1 waa6 keoi5 jiu3 do1 di1 jau1 sik1, ji4 ce2 jiu3 sik6 joek6, jat1 jat6 saam1 ci3.",
+          "e": "She did. The doctor said she needs more rest, and also medicine, three times a day.",
+          "bd": [
+            {
+              "c": "去喇",
+              "j": "heoi3 laa3",
+              "e": "she went"
+            },
+            {
+              "c": "醫生話",
+              "j": "ji1 sang1 waa6",
+              "e": "doctor said"
+            },
+            {
+              "c": "多啲休息",
+              "j": "do1 di1 jau1 sik1",
+              "e": "more rest"
+            },
+            {
+              "c": "而且",
+              "j": "ji4 ce2",
+              "e": "and also"
+            },
+            {
+              "c": "食藥",
+              "j": "sik6 joek6",
+              "e": "take medicine"
+            },
+            {
+              "c": "一日三次",
+              "j": "jat1 jat6 saam1 ci3",
+              "e": "three times a day"
+            }
+          ]
+        },
+        {
+          "u": true,
+          "c": "雖然佢有啲懶，但係希望佢快啲好返。",
+          "j": "seoi1 jin4 keoi5 jau5 di1 laan5, daan6 hai6 hei1 mong6 keoi5 faai3 di1 hou2 faan1.",
+          "e": "Although she is a bit lazy, I hope she gets better soon.",
+          "opts": [
+            "雖然佢有啲懶，但係希望佢快啲好返。",
+            "佢好勤力㗎，一定快好。",
+            "我會聯絡佢。"
+          ],
+          "optsJ": [
+            "seoi1 jin4 keoi5 jau5 di1 laan5, daan6 hai6 hei1 mong6 keoi5 faai3 di1 hou2 faan1.",
+            "keoi5 hou2 kan4 lik6 gaa3, jat1 ding6 faai3 hou2.",
+            "ngo5 wui5 lyun4 lok3 keoi5."
+          ],
+          "bd": [
+            {
+              "c": "雖然",
+              "j": "seoi1 jin4",
+              "e": "although"
+            },
+            {
+              "c": "有啲懶",
+              "j": "jau5 di1 laan5",
+              "e": "a bit lazy"
+            },
+            {
+              "c": "但係",
+              "j": "daan6 hai6",
+              "e": "but"
+            },
+            {
+              "c": "希望",
+              "j": "hei1 mong6",
+              "e": "hope"
+            },
+            {
+              "c": "快啲好返",
+              "j": "faai3 di1 hou2 faan1",
+              "e": "get better soon"
+            }
+          ]
+        },
+        {
+          "u": false,
+          "c": "哈！係。佢係咁㗎，不過佢好善良，對朋友好好。",
+          "j": "haa1! hai6. keoi5 hai6 gam2 gaa3, bat1 gwo3 keoi5 hou2 sin6 loeng4, deoi3 pang4 jau5 hou2 hou2.",
+          "e": "Ha! True. She is like that, but she is very kind — great to her friends.",
+          "bd": [
+            {
+              "c": "哈",
+              "j": "haa1",
+              "e": "ha"
+            },
+            {
+              "c": "佢係咁㗎",
+              "j": "keoi5 hai6 gam2 gaa3",
+              "e": "she is like that"
+            },
+            {
+              "c": "不過",
+              "j": "bat1 gwo3",
+              "e": "but"
+            },
+            {
+              "c": "好善良",
+              "j": "hou2 sin6 loeng4",
+              "e": "very kind"
+            },
+            {
+              "c": "對朋友好好",
+              "j": "deoi3 pang4 jau5 hou2 hou2",
+              "e": "great to friends"
+            }
+          ]
+        },
+        {
+          "u": true,
+          "c": "因為我好掛住佢，不如計劃下去探佢？",
+          "j": "jan1 wai6 ngo5 hou2 gwaa3 zyu6 keoi5, bat1 jyu4 gai3 waak6 haa5 heoi3 taam3 keoi5?",
+          "e": "Because I really miss her, how about we plan to go visit her?",
+          "opts": [
+            "因為我好掛住佢，不如計劃下去探佢？",
+            "好呀，我哋一齊去。",
+            "等佢好返先去啦。"
+          ],
+          "optsJ": [
+            "jan1 wai6 ngo5 hou2 gwaa3 zyu6 keoi5, bat1 jyu4 gai3 waak6 haa5 heoi3 taam3 keoi5?",
+            "hou2 aa3, ngo5 dei6 jat1 cai4 heoi3.",
+            "dang2 keoi5 hou2 faan1 sin1 heoi3 laa1."
+          ],
+          "bd": [
+            {
+              "c": "因為",
+              "j": "jan1 wai6",
+              "e": "because"
+            },
+            {
+              "c": "好掛住佢",
+              "j": "hou2 gwaa3 zyu6 keoi5",
+              "e": "really miss her"
+            },
+            {
+              "c": "不如",
+              "j": "bat1 jyu4",
+              "e": "how about"
+            },
+            {
+              "c": "計劃下",
+              "j": "gai3 waak6 haa5",
+              "e": "make some plans"
+            },
+            {
+              "c": "去探佢",
+              "j": "heoi3 taam3 keoi5",
+              "e": "go visit her"
+            }
+          ]
+        },
+        {
+          "u": false,
+          "c": "好主意！如果佢好返，我哋仲可以一齊去敘舊。",
+          "j": "hou2 zyu2 ji3! jyu4 gwo2 keoi5 hou2 faan1, ngo5 dei6 zung6 ho2 ji5 jat1 cai4 heoi3 zeoi6 gau6.",
+          "e": "Great idea! If she gets better, we can all catch up together.",
+          "bd": [
+            {
+              "c": "好主意",
+              "j": "hou2 zyu2 ji3",
+              "e": "great idea"
+            },
+            {
+              "c": "如果",
+              "j": "jyu4 gwo2",
+              "e": "if"
+            },
+            {
+              "c": "好返",
+              "j": "hou2 faan1",
+              "e": "gets better"
+            },
+            {
+              "c": "仲可以",
+              "j": "zung6 ho2 ji5",
+              "e": "can also"
+            },
+            {
+              "c": "一齊去敘舊",
+              "j": "jat1 cai4 heoi3 zeoi6 gau6",
+              "e": "catch up together"
+            }
+          ]
+        },
+        {
+          "u": true,
+          "c": "好呀！記住保持聯絡，唔好再爽約㗎。",
+          "j": "hou2 aa3! gei3 zyu6 bou2 ci4 lyun4 lok3, m4 hou2 zoi3 song2 joek3 gaa3.",
+          "e": "Great! Remember to stay in touch — no cancelling again.",
+          "opts": [
+            "好呀！記住保持聯絡，唔好再爽約㗎。",
+            "好，下次早啲計劃。",
+            "係！幸會你㗎。"
+          ],
+          "optsJ": [
+            "hou2 aa3! gei3 zyu6 bou2 ci4 lyun4 lok3, m4 hou2 zoi3 song2 joek3 gaa3.",
+            "hou2, haa6 ci3 zou2 di1 gai3 waak6.",
+            "hai6! hang6 wui6 nei5 gaa3."
+          ],
+          "bd": [
+            {
+              "c": "好呀",
+              "j": "hou2 aa3",
+              "e": "great"
+            },
+            {
+              "c": "記住",
+              "j": "gei3 zyu6",
+              "e": "remember"
+            },
+            {
+              "c": "保持聯絡",
+              "j": "bou2 ci4 lyun4 lok3",
+              "e": "stay in touch"
+            },
+            {
+              "c": "唔好再",
+              "j": "m4 hou2 zoi3",
+              "e": "don't again"
+            },
+            {
+              "c": "爽約",
+              "j": "song2 joek3",
+              "e": "cancel"
+            }
+          ]
+        }
+      ]
     }
   }
 }

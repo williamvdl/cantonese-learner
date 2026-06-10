@@ -1030,7 +1030,7 @@ function checkpointProgress(pathKey, stageId) {
   if (!cp || !stage) return { done: 0, total: 0, complete: false, available: [] };
   const available = CHECKPOINT_ACTIVITIES.filter(a => {
     if (a === 'convo') return !!(cp.convo && store.pathConvo(cp.convo));
-    if (a === 'words') return getCheckpointWords(stage).length > 0;
+    if (a === 'words') return getCheckpointWords(pathKey, stage).length > 0;
     if (a === 'patterns') return getCheckpointDrills(stage).length > 0;
     return false;
   });
@@ -1056,22 +1056,30 @@ function getCheckpointDrills(stage) {
   }
   return out;
 }
-function getCheckpointWords(stage) {
-  // Words pool: round-1 vocab across the stage's topics, deduped by Chinese surface
-  // form. Round 1 is the core taught vocab for each topic; later rounds can be
-  // thematically different extensions (e.g. greetings round 2 includes commute/work
-  // words), so pulling all rounds would surface vocab the stage never "taught".
-  // NOTE: this is intentionally distinct from DRILL validation, which checks answer
-  // words against a topic's full (all-rounds) vocab — a drill may legitimately use a
-  // round-2 word (e.g. number drills use 一百). Word review covers core vocab only.
+// The round(s) a topic is taught at in this path — read from path.lessons, which
+// records the round each lesson presents (round 1 on Beginner, round 2 for tier-2
+// Intermediate chapters). Falls back to round 1 if no explicit lesson entry.
+function stageTopicRounds(pathKey, topicKey) {
+  const path = (store.paths || []).find(p => p.key === pathKey);
+  const rounds = (path?.lessons || []).filter(l => l.topic === topicKey).map(l => l.round);
+  return rounds.length ? rounds : [1];
+}
+function getCheckpointWords(pathKey, stage) {
+  // Words pool: the vocab this stage actually teaches — each topic at the round it
+  // is presented at in THIS path (round 1 on Beginner, round 2 for tier-2
+  // Intermediate chapters, or a mix), deduped by Chinese surface form. Reads the
+  // round from path.lessons rather than assuming round 1, so a tier-2 checkpoint
+  // reviews its tier-2 vocab. NOTE: still distinct from DRILL validation, which
+  // checks answers against a topic's full (all-rounds) vocab.
   const seen = new Set();
   const out = [];
   for (const topicKey of (stage.topics || [])) {
-    const words = getRoundWords(topicKey, 1) || [];
-    for (const w of words) {
-      if (seen.has(w.c)) continue;
-      seen.add(w.c);
-      out.push(w);
+    for (const round of stageTopicRounds(pathKey, topicKey)) {
+      for (const w of (getRoundWords(topicKey, round) || [])) {
+        if (seen.has(w.c)) continue;
+        seen.add(w.c);
+        out.push(w);
+      }
     }
   }
   return out;
@@ -1101,7 +1109,7 @@ function startCheckpointWords() {
   const stage = getStage(cpState.pathKey, cpState.stageId);
   const cp = getStageCheckpoint(cpState.pathKey, cpState.stageId);
   const cap = (cp && cp.wordCap) || CHECKPOINT_WORD_CAP_DEFAULT;
-  const pool = shuffle(getCheckpointWords(stage)).slice(0, cap);
+  const pool = shuffle(getCheckpointWords(cpState.pathKey, stage)).slice(0, cap);
   if (!pool.length) return;
   state.checkpointAct = 'words';
   state.checkpointQuiz = {
@@ -1153,13 +1161,14 @@ function checkpointDiagnostic(stage, missedTopicKeys) {
   if (!best || counts[best] < 2) return null;
   return { topicKey: best, label: (lessonShape(best) || {}).label || best, count: counts[best] };
 }
-// Which stage topic does a word belong to? (first stage topic whose round-1 vocab
-// contains this Chinese surface form). Used to attribute word-quiz misses.
-function wordTopicInStage(stage, word) {
-  // Matches the round-1-only word pool (see getCheckpointWords).
+// Which stage topic does a word belong to? (first stage topic whose taught-round
+// vocab contains this Chinese surface form). Used to attribute word-quiz misses.
+function wordTopicInStage(pathKey, stage, word) {
+  // Matches the taught-round word pool (see getCheckpointWords).
   for (const tk of (stage.topics || [])) {
-    const words = getRoundWords(tk, 1) || [];
-    if (words.some(w => w.c === word.c)) return tk;
+    for (const round of stageTopicRounds(pathKey, tk)) {
+      if ((getRoundWords(tk, round) || []).some(w => w.c === word.c)) return tk;
+    }
   }
   return null;
 }

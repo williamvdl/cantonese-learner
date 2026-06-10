@@ -425,7 +425,7 @@
       }
     },
     "2": {
-      "note": "Tier 1 was about emotional states ('I'm happy/sad'). Tier 2 shifts to character — describing what someone is like as a person. The structure stays simple: subject + <em>hou2</em> + adjective ('X is very [trait]'). To negate, use <strong>m4</strong> before the adjective: <em>m4 sin6 loeng4</em> means 'not kind'. Most traits are two-character compounds learned as units rather than syllables.",
+      "note": "Tier-1 was how you feel; tier 2 is how people are — describing personality and character, the deeper vocabulary for talking about the people around you.",
       "words": [
         {
           "id": "feelings-011",
@@ -491,83 +491,101 @@
       "sentences": [
         {
           "sid": "feelings-t2-s06",
-          "c": "佢好善良。",
-          "j": "keoi5 hou2 sin6 loeng4.",
-          "e": "He/she is very kind.",
+          "c": "佢好善良，成日幫人。",
+          "j": "keoi5 hou2 sin6 loeng4, sing4 jat6 bong1 jan4.",
+          "e": "She is very kind — always helping others.",
+          "note": "善良 (sin6 loeng4) \"kind / good-natured\" and <b>友善</b> (jau5 sin6) \"friendly\" are close but distinct — 善良 (sin6 loeng4) is deeper moral goodness; 友善 (jau5 sin6) is outward warmth toward others. Both use 善 (sin6) \"good/kind\".",
           "bd": [
             {
               "c": "佢",
               "j": "keoi5",
-              "e": "he/she"
+              "e": "she"
             },
             {
-              "c": "好",
-              "j": "hou2",
-              "e": "very"
+              "c": "好善良",
+              "j": "hou2 sin6 loeng4",
+              "e": "very kind"
             },
             {
-              "c": "善良",
-              "j": "sin6 loeng4",
-              "e": "kind"
+              "c": "成日",
+              "j": "sing4 jat6",
+              "e": "always"
+            },
+            {
+              "c": "幫人",
+              "j": "bong1 jan4",
+              "e": "help others"
             }
           ]
         },
         {
           "sid": "feelings-t2-s07",
-          "c": "我細佬好聰明。",
-          "j": "ngo5 sai3 lou2 hou2 cung1 ming4.",
-          "e": "My younger brother is very smart.",
+          "c": "雖然佢有啲懶，但係真係好搞笑。",
+          "j": "seoi1 jin4 keoi5 jau5 di1 laan5, daan6 hai6 zan1 hai6 hou2 gaau2 siu3.",
+          "e": "Although he is a bit lazy, he is genuinely hilarious.",
+          "note": "To describe people, wrap adjectives in 雖然…但係 (seoi1 jin4…daan6 hai6) to give a balanced view — acknowledging a flaw before a strength. 搞笑 (gaau2 siu3) \"funny/hilarious\" is informal and colloquial, stronger than just 好笑 (hou2 siu3).",
           "bd": [
             {
-              "c": "我",
-              "j": "ngo5",
-              "e": "my"
+              "c": "雖然",
+              "j": "seoi1 jin4",
+              "e": "although"
             },
             {
-              "c": "細佬",
-              "j": "sai3 lou2",
-              "e": "younger brother"
+              "c": "有啲懶",
+              "j": "jau5 di1 laan5",
+              "e": "a bit lazy"
             },
             {
-              "c": "好",
-              "j": "hou2",
-              "e": "very"
+              "c": "但係",
+              "j": "daan6 hai6",
+              "e": "but"
             },
             {
-              "c": "聰明",
-              "j": "cung1 ming4",
-              "e": "smart"
+              "c": "真係",
+              "j": "zan1 hai6",
+              "e": "genuinely"
+            },
+            {
+              "c": "好搞笑",
+              "j": "hou2 gaau2 siu3",
+              "e": "hilarious"
             }
           ]
         },
         {
           "sid": "feelings-t2-s08",
-          "c": "佢哋好搞笑。",
-          "j": "keoi5 dei6 hou2 gaau2 siu3.",
-          "e": "They are very funny.",
+          "c": "我細佬好聰明，而且好勤力。",
+          "j": "ngo5 sai3 lou2 hou2 cung1 ming4, ji4 ce2 hou2 kan4 lik6.",
+          "e": "My younger brother is smart, and what's more, hardworking.",
           "bd": [
             {
-              "c": "佢哋",
-              "j": "keoi5 dei6",
-              "e": "they"
+              "c": "我細佬",
+              "j": "ngo5 sai3 lou2",
+              "e": "my younger brother"
             },
             {
-              "c": "好",
-              "j": "hou2",
-              "e": "very"
+              "c": "好聰明",
+              "j": "hou2 cung1 ming4",
+              "e": "very smart"
             },
             {
-              "c": "搞笑",
-              "j": "gaau2 siu3",
-              "e": "funny"
+              "c": "而且",
+              "j": "ji4 ce2",
+              "e": "moreover"
+            },
+            {
+              "c": "好勤力",
+              "j": "hou2 kan4 lik6",
+              "e": "very hardworking"
             }
           ]
         },
         {
           "sid": "feelings-t2-s09",
-          "c": "我怕醜，唔識講嘢。",
-          "j": "ngo5 paa3 cau2, m4 sik1 gong2 je5.",
-          "e": "I'm shy, not good at speaking.",
+          "c": "我有啲怕醜，唔係好識同人傾偈。",
+          "j": "ngo5 jau5 di1 paa3 cau2, m4 hai6 hou2 sik1 tung4 jan4 king1 gai2.",
+          "e": "I'm a bit shy — not great at chatting with people.",
+          "note": "<b>怕醜</b> (paa3 cau2) \"shy\" — literally \"scared of embarrassment\". A very natural Cantonese word for shyness or social anxiety. More colloquial and warmer than 內向 (noi6 joeng3) \"introverted\".",
           "bd": [
             {
               "c": "我",
@@ -575,48 +593,131 @@
               "e": "I"
             },
             {
-              "c": "怕醜",
-              "j": "paa3 cau2",
-              "e": "shy"
+              "c": "有啲怕醜",
+              "j": "jau5 di1 paa3 cau2",
+              "e": "a bit shy"
             },
             {
-              "c": "唔識",
-              "j": "m4 sik1",
-              "e": "don't know how"
+              "c": "唔係好識",
+              "j": "m4 hai6 hou2 sik1",
+              "e": "not great at"
             },
             {
-              "c": "講嘢",
-              "j": "gong2 je5",
-              "e": "to speak"
+              "c": "同人傾偈",
+              "j": "tung4 jan4 king1 gai2",
+              "e": "chatting with people"
             }
           ]
         },
         {
           "sid": "feelings-t2-s10",
-          "c": "你好友善！",
-          "j": "nei5 hou2 jau5 sin6!",
-          "e": "You're so friendly!",
+          "c": "因為佢好細心，所以做嘢做得好好。",
+          "j": "jan1 wai6 keoi5 hou2 sai3 sam1, so2 ji5 zou6 je5 zou6 dak1 hou2 hou2.",
+          "e": "Because she is so thorough, she does everything really well.",
           "bd": [
             {
-              "c": "你",
-              "j": "nei5",
-              "e": "you"
+              "c": "因為",
+              "j": "jan1 wai6",
+              "e": "because"
             },
             {
-              "c": "好",
-              "j": "hou2",
-              "e": "so / very"
+              "c": "好細心",
+              "j": "hou2 sai3 sam1",
+              "e": "very thorough"
             },
             {
-              "c": "友善",
-              "j": "jau5 sin6",
-              "e": "friendly"
+              "c": "所以",
+              "j": "so2 ji5",
+              "e": "so"
+            },
+            {
+              "c": "做嘢",
+              "j": "zou6 je5",
+              "e": "do things"
+            },
+            {
+              "c": "做得好好",
+              "j": "zou6 dak1 hou2 hou2",
+              "e": "does very well"
+            }
+          ]
+        },
+        {
+          "sid": "feelings-t2-s11",
+          "c": "佢好嚴肅，不過對人好大方。",
+          "j": "keoi5 hou2 jim4 suk1, bat1 gwo3 deoi3 jan4 hou2 daai6 fong1.",
+          "e": "He's very serious, but very generous with people.",
+          "note": "嚴肅 (jim4 suk1) \"serious / stern\" describes manner and bearing — not necessarily unfriendly, just formal. Contrast 大方 (daai6 fong1) \"generous / open-handed\", which means free with money and time as well as <b>confident in bearing</b> — the opposite of 怕醜 (paa3 cau2).",
+          "bd": [
+            {
+              "c": "佢",
+              "j": "keoi5",
+              "e": "he"
+            },
+            {
+              "c": "好嚴肅",
+              "j": "hou2 jim4 suk1",
+              "e": "very serious"
+            },
+            {
+              "c": "不過",
+              "j": "bat1 gwo3",
+              "e": "but"
+            },
+            {
+              "c": "對人",
+              "j": "deoi3 jan4",
+              "e": "with people"
+            },
+            {
+              "c": "好大方",
+              "j": "hou2 daai6 fong1",
+              "e": "very generous"
+            }
+          ]
+        },
+        {
+          "sid": "feelings-t2-s12",
+          "c": "如果你想識朋友，最好做個友善細心嘅人。",
+          "j": "jyu4 gwo2 nei5 soeng2 sik1 pang4 jau5, zeoi3 hou2 zou6 go3 jau5 sin6 sai3 sam1 ge3 jan4.",
+          "e": "If you want to make friends, best to be a friendly and thoughtful person.",
+          "note": "如果 (jyu4 gwo2) + 最好 (zeoi3 hou2) \"if…best to\" is a gentle advice frame. 細心 (sai3 sam1) \"careful/thorough\" (lit. \"fine heart\") describes someone attentive to detail — 你好細心 (nei5 hou2 sai3 sam1) is a genuine compliment.",
+          "bd": [
+            {
+              "c": "如果",
+              "j": "jyu4 gwo2",
+              "e": "if"
+            },
+            {
+              "c": "想識朋友",
+              "j": "soeng2 sik1 pang4 jau5",
+              "e": "want to make friends"
+            },
+            {
+              "c": "最好",
+              "j": "zeoi3 hou2",
+              "e": "best to"
+            },
+            {
+              "c": "做個",
+              "j": "zou6 go3",
+              "e": "be a"
+            },
+            {
+              "c": "友善細心",
+              "j": "jau5 sin6 sai3 sam1",
+              "e": "friendly and thoughtful"
+            },
+            {
+              "c": "嘅人",
+              "j": "ge3 jan4",
+              "e": "person"
             }
           ]
         }
       ],
       "convo": {
-        "title": "Describing a new colleague",
+        "title": "Describing a new teacher",
         "speakers": [
           "Friend",
           "You"
@@ -624,183 +725,264 @@
         "lines": [
           {
             "u": false,
-            "c": "你個新同事點呀？",
-            "j": "nei5 go3 san1 tung4 si6 dim2 aa3?",
-            "e": "How's your new colleague?",
+            "c": "你覺得新老師點樣？",
+            "j": "nei5 gok3 dak1 san1 lou5 si1 dim2 joeng2?",
+            "e": "What do you think of the new teacher?",
             "bd": [
               {
-                "c": "你",
-                "j": "nei5",
-                "e": "your"
+                "c": "你覺得",
+                "j": "nei5 gok3 dak1",
+                "e": "do you think"
               },
               {
-                "c": "個",
-                "j": "go3",
-                "e": "(measure word)"
+                "c": "新老師",
+                "j": "san1 lou5 si1",
+                "e": "new teacher"
               },
               {
-                "c": "新",
-                "j": "san1",
-                "e": "new"
-              },
-              {
-                "c": "同事",
-                "j": "tung4 si6",
-                "e": "colleague"
-              },
-              {
-                "c": "點呀",
-                "j": "dim2 aa3",
+                "c": "點樣",
+                "j": "dim2 joeng2",
                 "e": "how"
               }
             ]
           },
           {
             "u": true,
-            "c": "佢好友善，仲好勤力。",
-            "j": "keoi5 hou2 jau5 sin6, zung6 hou2 kan4 lik6.",
-            "e": "He/she's very friendly, and hardworking too.",
+            "c": "佢好嚴肅，但係又好細心。",
+            "j": "keoi5 hou2 jim4 suk1, daan6 hai6 jau6 hou2 sai3 sam1.",
+            "e": "She is very serious, but also very thorough.",
             "opts": [
-              "佢好友善，仲好勤力。",
-              "我好攰。",
-              "唔知。"
+              "佢好嚴肅，但係又好細心。",
+              "佢好友善，好搞笑。",
+              "唔係好識佢。"
             ],
             "optsJ": [
-              "keoi5 hou2 jau5 sin6, zung6 hou2 kan4 lik6.",
-              "ngo5 hou2 gui6.",
-              "m4 zi1."
+              "keoi5 hou2 jim4 suk1, daan6 hai6 jau6 hou2 sai3 sam1.",
+              "keoi5 hou2 jau5 sin6, hou2 gaau2 siu3.",
+              "m4 hai6 hou2 sik1 keoi5."
             ],
             "bd": [
               {
                 "c": "佢",
                 "j": "keoi5",
-                "e": "he/she"
+                "e": "she"
               },
               {
-                "c": "好",
-                "j": "hou2",
-                "e": "very"
+                "c": "好嚴肅",
+                "j": "hou2 jim4 suk1",
+                "e": "very serious"
               },
               {
-                "c": "友善",
-                "j": "jau5 sin6",
-                "e": "friendly"
+                "c": "但係",
+                "j": "daan6 hai6",
+                "e": "but"
               },
               {
-                "c": "仲",
-                "j": "zung6",
+                "c": "又",
+                "j": "jau6",
                 "e": "also"
               },
               {
-                "c": "勤力",
-                "j": "kan4 lik6",
-                "e": "hardworking"
+                "c": "好細心",
+                "j": "hou2 sai3 sam1",
+                "e": "very thorough"
               }
             ]
           },
           {
             "u": false,
-            "c": "聰唔聰明？",
-            "j": "cung1 m4 cung1 ming4?",
-            "e": "Is he/she smart?",
+            "c": "嚴肅係好嘢，起碼認真。聰明唔聰明？",
+            "j": "jim4 suk1 hai6 hou2 je5, hei2 maa5 jing6 zan1. cung1 ming4 m4 cung1 ming4?",
+            "e": "Seriousness is good, at least they mean business. Is she smart?",
             "bd": [
               {
-                "c": "聰唔聰明",
-                "j": "cung1 m4 cung1 ming4",
-                "e": "smart-not-smart? (yes/no pattern)"
+                "c": "嚴肅",
+                "j": "jim4 suk1",
+                "e": "seriousness"
+              },
+              {
+                "c": "係好嘢",
+                "j": "hai6 hou2 je5",
+                "e": "is good"
+              },
+              {
+                "c": "起碼",
+                "j": "hei2 maa5",
+                "e": "at least"
+              },
+              {
+                "c": "認真",
+                "j": "jing6 zan1",
+                "e": "serious/genuine"
+              },
+              {
+                "c": "聰明唔聰明",
+                "j": "cung1 ming4 m4 cung1 ming4",
+                "e": "is she smart"
               }
             ]
           },
           {
             "u": true,
-            "c": "好聰明，細心又大方。",
-            "j": "hou2 cung1 ming4, sai3 sam1 jau6 daai6 fong1.",
-            "e": "Very smart, careful and generous.",
+            "c": "好聰明，而且好善良，唔係嬲㗎。",
+            "j": "hou2 cung1 ming4, ji4 ce2 hou2 sin6 loeng4, m4 hai6 nau1 gaa3.",
+            "e": "Very smart, and kind too — not someone who gets angry.",
             "opts": [
-              "好聰明，細心又大方。",
-              "唔係。",
-              "你呢？"
+              "好聰明，而且好善良，唔係嬲㗎。",
+              "好聰明，不過有啲嚴肅。",
+              "唔知，仲未熟。"
             ],
             "optsJ": [
-              "hou2 cung1 ming4, sai3 sam1 jau6 daai6 fong1.",
-              "m4 hai6.",
-              "nei5 ne1?"
+              "hou2 cung1 ming4, ji4 ce2 hou2 sin6 loeng4, m4 hai6 nau1 gaa3.",
+              "hou2 cung1 ming4, bat1 gwo3 jau5 di1 jim4 suk1.",
+              "m4 zi1, zung6 mei6 suk6."
             ],
             "bd": [
               {
-                "c": "好",
-                "j": "hou2",
-                "e": "very"
+                "c": "好聰明",
+                "j": "hou2 cung1 ming4",
+                "e": "very smart"
               },
               {
-                "c": "聰明",
-                "j": "cung1 ming4",
-                "e": "smart"
+                "c": "而且",
+                "j": "ji4 ce2",
+                "e": "moreover"
               },
               {
-                "c": "細心",
-                "j": "sai3 sam1",
-                "e": "careful"
+                "c": "好善良",
+                "j": "hou2 sin6 loeng4",
+                "e": "very kind"
               },
               {
-                "c": "又",
-                "j": "jau6",
-                "e": "and / also"
-              },
-              {
-                "c": "大方",
-                "j": "daai6 fong1",
-                "e": "generous"
+                "c": "唔係嬲㗎",
+                "j": "m4 hai6 nau1 gaa3",
+                "e": "not someone who gets angry"
               }
             ]
           },
           {
             "u": false,
-            "c": "好彩你揾到好同事。",
-            "j": "hou2 coi2 nei5 wan2 dou2 hou2 tung4 si6.",
-            "e": "Lucky you found good colleagues.",
+            "c": "雖然我有啲怕醜，但係想同佢傾偈。",
+            "j": "seoi1 jin4 ngo5 jau5 di1 paa3 cau2, daan6 hai6 soeng2 tung4 keoi5 king1 gai2.",
+            "e": "Although I'm a bit shy, I'd like to chat with her.",
             "bd": [
+              {
+                "c": "雖然",
+                "j": "seoi1 jin4",
+                "e": "although"
+              },
+              {
+                "c": "有啲怕醜",
+                "j": "jau5 di1 paa3 cau2",
+                "e": "a bit shy"
+              },
+              {
+                "c": "但係",
+                "j": "daan6 hai6",
+                "e": "but"
+              },
+              {
+                "c": "想",
+                "j": "soeng2",
+                "e": "want"
+              },
+              {
+                "c": "同佢傾偈",
+                "j": "tung4 keoi5 king1 gai2",
+                "e": "chat with her"
+              }
+            ]
+          },
+          {
+            "u": true,
+            "c": "如果你勤力啲，佢一定會幫你㗎。",
+            "j": "jyu4 gwo2 nei5 kan4 lik6 di1, keoi5 jat1 ding6 wui5 bong1 nei5 gaa3.",
+            "e": "If you work hard, she'll definitely help you.",
+            "opts": [
+              "如果你勤力啲，佢一定會幫你㗎。",
+              "唔好怕醜，去傾啦。",
+              "佢咁嚴肅，我唔敢。"
+            ],
+            "optsJ": [
+              "jyu4 gwo2 nei5 kan4 lik6 di1, keoi5 jat1 ding6 wui5 bong1 nei5 gaa3.",
+              "m4 hou2 paa3 cau2, heoi3 king1 laa1.",
+              "keoi5 gam3 jim4 suk1, ngo5 m4 gam2."
+            ],
+            "bd": [
+              {
+                "c": "如果",
+                "j": "jyu4 gwo2",
+                "e": "if"
+              },
+              {
+                "c": "你勤力啲",
+                "j": "nei5 kan4 lik6 di1",
+                "e": "you work harder"
+              },
+              {
+                "c": "佢",
+                "j": "keoi5",
+                "e": "she"
+              },
+              {
+                "c": "一定",
+                "j": "jat1 ding6",
+                "e": "definitely"
+              },
+              {
+                "c": "會幫你",
+                "j": "wui5 bong1 nei5",
+                "e": "will help you"
+              }
+            ]
+          },
+          {
+            "u": false,
+            "c": "咁就好喇。我哋好彩有咁好嘅老師。",
+            "j": "gam2 zau6 hou2 laa3. ngo5 dei6 hou2 coi2 jau5 gam3 hou2 ge3 lou5 si1.",
+            "e": "Great. We're lucky to have such a good teacher.",
+            "bd": [
+              {
+                "c": "咁就好喇",
+                "j": "gam2 zau6 hou2 laa3",
+                "e": "great"
+              },
+              {
+                "c": "我哋",
+                "j": "ngo5 dei6",
+                "e": "we"
+              },
               {
                 "c": "好彩",
                 "j": "hou2 coi2",
                 "e": "lucky"
               },
               {
-                "c": "你",
-                "j": "nei5",
-                "e": "you"
+                "c": "有",
+                "j": "jau5",
+                "e": "have"
               },
               {
-                "c": "揾到",
-                "j": "wan2 dou2",
-                "e": "found"
-              },
-              {
-                "c": "好",
-                "j": "hou2",
-                "e": "good"
-              },
-              {
-                "c": "同事",
-                "j": "tung4 si6",
-                "e": "colleague"
+                "c": "咁好嘅老師",
+                "j": "gam3 hou2 ge3 lou5 si1",
+                "e": "such a good teacher"
               }
             ]
           },
           {
             "u": true,
-            "c": "係呀，我都好開心。",
-            "j": "hai6 aa3, ngo5 dou1 hou2 hoi1 sam1.",
-            "e": "Yes, I'm happy too.",
+            "c": "係呀！因為佢好，所以我哋要更加勤力。",
+            "j": "hai6 aa3! jan1 wai6 keoi5 hou2, so2 ji5 ngo5 dei6 jiu3 gang3 gaa1 kan4 lik6.",
+            "e": "Yes! Because she is good, we need to work even harder.",
             "opts": [
-              "係呀，我都好開心。",
-              "我好懶。",
-              "點解？"
+              "係呀！因為佢好，所以我哋要更加勤力。",
+              "係，希望係咁喇。",
+              "我唔係咁覺得。"
             ],
             "optsJ": [
-              "hai6 aa3, ngo5 dou1 hou2 hoi1 sam1.",
-              "ngo5 hou2 laan5.",
-              "dim2 gaai2?"
+              "hai6 aa3! jan1 wai6 keoi5 hou2, so2 ji5 ngo5 dei6 jiu3 gang3 gaa1 kan4 lik6.",
+              "hai6, hei1 mong6 hai6 gam2 laa3.",
+              "ngo5 m4 hai6 gam2 gok3 dak1."
             ],
             "bd": [
               {
@@ -809,24 +991,34 @@
                 "e": "yes"
               },
               {
-                "c": "我",
-                "j": "ngo5",
-                "e": "I"
+                "c": "因為",
+                "j": "jan1 wai6",
+                "e": "because"
               },
               {
-                "c": "都",
-                "j": "dou1",
-                "e": "also"
+                "c": "佢好",
+                "j": "keoi5 hou2",
+                "e": "she is good"
               },
               {
-                "c": "好",
-                "j": "hou2",
-                "e": "very"
+                "c": "所以",
+                "j": "so2 ji5",
+                "e": "so"
               },
               {
-                "c": "開心",
-                "j": "hoi1 sam1",
-                "e": "happy"
+                "c": "我哋",
+                "j": "ngo5 dei6",
+                "e": "we"
+              },
+              {
+                "c": "要",
+                "j": "jiu3",
+                "e": "need to"
+              },
+              {
+                "c": "更加勤力",
+                "j": "gang3 gaa1 kan4 lik6",
+                "e": "even harder"
               }
             ]
           }
@@ -835,5 +1027,5 @@
     }
   },
   "_idSeq": 20,
-  "_sidSeq": 10
+  "_sidSeq": 12
 }

@@ -387,8 +387,621 @@
           }
         ]
       }
+    },
+    "2": {
+      "note": "Tier-1 covered social activities; tier 2 is about the relationships themselves — the different kinds of friends and colleagues, making and keeping plans, and staying connected.",
+      "words": [
+        {
+          "id": "friends-011",
+          "c": "同學",
+          "j": "tung4 hok6",
+          "e": "classmate"
+        },
+        {
+          "id": "friends-012",
+          "c": "同事",
+          "j": "tung4 si6",
+          "e": "colleague"
+        },
+        {
+          "id": "friends-013",
+          "c": "掛住",
+          "j": "gwaa3 zyu6",
+          "e": "miss (someone)"
+        },
+        {
+          "id": "friends-014",
+          "c": "夾",
+          "j": "gaap3",
+          "e": "get along / click"
+        },
+        {
+          "id": "friends-015",
+          "c": "聯絡",
+          "j": "lyun4 lok3",
+          "e": "keep in touch / contact"
+        },
+        {
+          "id": "friends-016",
+          "c": "爽約",
+          "j": "song2 joek3",
+          "e": "cancel on someone"
+        },
+        {
+          "id": "friends-017",
+          "c": "計劃",
+          "j": "gai3 waak6",
+          "e": "plan / make plans"
+        },
+        {
+          "id": "friends-018",
+          "c": "陪",
+          "j": "pui4",
+          "e": "accompany / keep company"
+        },
+        {
+          "id": "friends-019",
+          "c": "敘舊",
+          "j": "zeoi6 gau6",
+          "e": "catch up with old friends"
+        }
+      ],
+      "sentences": [
+        {
+          "sid": "friends-t2-s06",
+          "c": "佢係我嘅同學，而且而家仲係同事。",
+          "j": "keoi5 hai6 ngo5 ge3 tung4 hok6, ji4 ce2 ji4 gaa1 zung6 hai6 tung4 si6.",
+          "e": "She is my classmate, and now she is also my colleague.",
+          "note": "同學 (tung4 hok6) \"classmate\" and <b>同事</b> (tung4 si6) \"colleague\" share 同 (tung4) \"same\" — the person you share school or work with. Easy to remember as a pair.",
+          "bd": [
+            {
+              "c": "佢",
+              "j": "keoi5",
+              "e": "she"
+            },
+            {
+              "c": "係",
+              "j": "hai6",
+              "e": "is"
+            },
+            {
+              "c": "我嘅同學",
+              "j": "ngo5 ge3 tung4 hok6",
+              "e": "my classmate"
+            },
+            {
+              "c": "而且",
+              "j": "ji4 ce2",
+              "e": "moreover"
+            },
+            {
+              "c": "而家",
+              "j": "ji4 gaa1",
+              "e": "now"
+            },
+            {
+              "c": "仲係",
+              "j": "zung6 hai6",
+              "e": "also is"
+            },
+            {
+              "c": "同事",
+              "j": "tung4 si6",
+              "e": "colleague"
+            }
+          ]
+        },
+        {
+          "sid": "friends-t2-s07",
+          "c": "因為我哋好夾，所以成日一齊出街。",
+          "j": "jan1 wai6 ngo5 dei6 hou2 gaap3, so2 ji5 sing4 jat6 jat1 cai4 ceot1 gaai1.",
+          "e": "Because we really click, we always hang out together.",
+          "note": "<b>夾</b> (gaap3) \"click / get along\" — a distinctively Cantonese word for natural chemistry between people. 好夾 (hou2 gaap3) \"we really click\"; 唔夾 (m4 gaap3) \"we don't really get on\". Hard to translate directly.",
+          "bd": [
+            {
+              "c": "因為",
+              "j": "jan1 wai6",
+              "e": "because"
+            },
+            {
+              "c": "我哋",
+              "j": "ngo5 dei6",
+              "e": "we"
+            },
+            {
+              "c": "好夾",
+              "j": "hou2 gaap3",
+              "e": "really click"
+            },
+            {
+              "c": "所以",
+              "j": "so2 ji5",
+              "e": "so"
+            },
+            {
+              "c": "成日",
+              "j": "sing4 jat6",
+              "e": "always"
+            },
+            {
+              "c": "一齊出街",
+              "j": "jat1 cai4 ceot1 gaai1",
+              "e": "hang out"
+            }
+          ]
+        },
+        {
+          "sid": "friends-t2-s08",
+          "c": "好耐冇聯絡喇，你而家點呀？",
+          "j": "hou2 noi6 mou5 lyun4 lok3 laa3, nei5 ji4 gaa1 dim2 aa3?",
+          "e": "Haven't been in touch for ages — how are you these days?",
+          "note": "聯絡 (lyun4 lok3) \"keep in touch / contact\" — casual Cantonese says 聯絡下 (lyun4 lok3 haa5) \"drop me a line\", and 保持聯絡 (bou2 ci4 lyun4 lok3) is the fuller \"stay in touch\". A natural follow-up at the end of a reunion.",
+          "bd": [
+            {
+              "c": "好耐",
+              "j": "hou2 noi6",
+              "e": "long time"
+            },
+            {
+              "c": "冇聯絡",
+              "j": "mou5 lyun4 lok3",
+              "e": "haven't contacted"
+            },
+            {
+              "c": "喇",
+              "j": "laa3",
+              "e": "(particle)"
+            },
+            {
+              "c": "你",
+              "j": "nei5",
+              "e": "you"
+            },
+            {
+              "c": "而家點呀",
+              "j": "ji4 gaa1 dim2 aa3",
+              "e": "how are you now"
+            }
+          ]
+        },
+        {
+          "sid": "friends-t2-s09",
+          "c": "如果你得閒，不如一齊去敘舊？",
+          "j": "jyu4 gwo2 nei5 dak1 haan4, bat1 jyu4 jat1 cai4 heoi3 zeoi6 gau6?",
+          "e": "If you're free, how about getting together to catch up?",
+          "bd": [
+            {
+              "c": "如果",
+              "j": "jyu4 gwo2",
+              "e": "if"
+            },
+            {
+              "c": "得閒",
+              "j": "dak1 haan4",
+              "e": "free"
+            },
+            {
+              "c": "不如",
+              "j": "bat1 jyu4",
+              "e": "how about"
+            },
+            {
+              "c": "一齊",
+              "j": "jat1 cai4",
+              "e": "together"
+            },
+            {
+              "c": "去敘舊",
+              "j": "heoi3 zeoi6 gau6",
+              "e": "go catch up"
+            }
+          ]
+        },
+        {
+          "sid": "friends-t2-s10",
+          "c": "佢爽約喇，所以我哋要改計劃。",
+          "j": "keoi5 song2 joek3 laa3, so2 ji5 ngo5 dei6 jiu3 goi2 gai3 waak6.",
+          "e": "She cancelled, so we need to change our plans.",
+          "note": "<b>爽約</b> (song2 joek3) \"cancel / stand someone up\" — escalates tier-1 約 (joek3) \"make plans\". 爽 (song2) here means \"to void/break\". The more severe version: 放飛機 (fong3 fei1 gei1) \"stand someone up\" (literally \"release the aeroplane\").",
+          "bd": [
+            {
+              "c": "佢",
+              "j": "keoi5",
+              "e": "she"
+            },
+            {
+              "c": "爽約",
+              "j": "song2 joek3",
+              "e": "cancelled"
+            },
+            {
+              "c": "喇",
+              "j": "laa3",
+              "e": "(particle)"
+            },
+            {
+              "c": "所以",
+              "j": "so2 ji5",
+              "e": "so"
+            },
+            {
+              "c": "我哋",
+              "j": "ngo5 dei6",
+              "e": "we"
+            },
+            {
+              "c": "要改計劃",
+              "j": "jiu3 goi2 gai3 waak6",
+              "e": "need to change plans"
+            }
+          ]
+        },
+        {
+          "sid": "friends-t2-s11",
+          "c": "雖然我哋係同事，但係唔係好夾。",
+          "j": "seoi1 jin4 ngo5 dei6 hai6 tung4 si6, daan6 hai6 m4 hai6 hou2 gaap3.",
+          "e": "Although we're colleagues, we don't really click.",
+          "bd": [
+            {
+              "c": "雖然",
+              "j": "seoi1 jin4",
+              "e": "although"
+            },
+            {
+              "c": "同事",
+              "j": "tung4 si6",
+              "e": "colleagues"
+            },
+            {
+              "c": "但係",
+              "j": "daan6 hai6",
+              "e": "but"
+            },
+            {
+              "c": "唔係好夾",
+              "j": "m4 hai6 hou2 gaap3",
+              "e": "don't really click"
+            }
+          ]
+        },
+        {
+          "sid": "friends-t2-s12",
+          "c": "我好掛住你哋，好想一齊去敘舊。",
+          "j": "ngo5 hou2 gwaa3 zyu6 nei5 dei6, hou2 soeng2 jat1 cai4 heoi3 zeoi6 gau6.",
+          "e": "I really miss you all — want to catch up together so much.",
+          "note": "掛住 (gwaa3 zyu6) \"miss someone\" — 掛 (gwaa3) literally \"hang / be hung up on\". 掛住你 (gwaa3 zyu6 nei5) \"I miss you\" is warmer and more colloquial than the Mandarin-influenced 想念 (soeng2 nim6). Common in messages and reunions.",
+          "bd": [
+            {
+              "c": "我",
+              "j": "ngo5",
+              "e": "I"
+            },
+            {
+              "c": "好掛住",
+              "j": "hou2 gwaa3 zyu6",
+              "e": "really miss"
+            },
+            {
+              "c": "你哋",
+              "j": "nei5 dei6",
+              "e": "you all"
+            },
+            {
+              "c": "好想",
+              "j": "hou2 soeng2",
+              "e": "really want"
+            },
+            {
+              "c": "一齊去敘舊",
+              "j": "jat1 cai4 heoi3 zeoi6 gau6",
+              "e": "catch up together"
+            }
+          ]
+        },
+        {
+          "sid": "friends-t2-s13",
+          "c": "唔該你陪我去，因為我唔識路。",
+          "j": "m4 goi1 nei5 pui4 ngo5 heoi3, jan1 wai6 ngo5 m4 sik1 lou6.",
+          "e": "Please come with me — I don't know the way.",
+          "bd": [
+            {
+              "c": "唔該",
+              "j": "m4 goi1",
+              "e": "please"
+            },
+            {
+              "c": "你",
+              "j": "nei5",
+              "e": "you"
+            },
+            {
+              "c": "陪我去",
+              "j": "pui4 ngo5 heoi3",
+              "e": "come with me"
+            },
+            {
+              "c": "因為",
+              "j": "jan1 wai6",
+              "e": "because"
+            },
+            {
+              "c": "我",
+              "j": "ngo5",
+              "e": "I"
+            },
+            {
+              "c": "唔識路",
+              "j": "m4 sik1 lou6",
+              "e": "don't know the way"
+            }
+          ]
+        }
+      ],
+      "convo": {
+        "title": "Reconnecting with an old friend",
+        "speakers": [
+          "Friend",
+          "You"
+        ],
+        "lines": [
+          {
+            "u": false,
+            "c": "好耐冇聯絡！你近排點呀？",
+            "j": "hou2 noi6 mou5 lyun4 lok3! nei5 gan6 paai2 dim2 aa3?",
+            "e": "Haven't heard from you in ages! How have you been?",
+            "bd": [
+              {
+                "c": "好耐冇聯絡",
+                "j": "hou2 noi6 mou5 lyun4 lok3",
+                "e": "haven't been in touch"
+              },
+              {
+                "c": "近排點呀",
+                "j": "gan6 paai2 dim2 aa3",
+                "e": "how you've been"
+              }
+            ]
+          },
+          {
+            "u": true,
+            "c": "幾好呀，好掛住你㗎！",
+            "j": "gei2 hou2 aa3, hou2 gwaa3 zyu6 nei5 gaa3!",
+            "e": "Pretty good — I've really missed you!",
+            "opts": [
+              "幾好呀，好掛住你㗎！",
+              "都係咁上下。",
+              "好忙，冇時間出街。"
+            ],
+            "optsJ": [
+              "gei2 hou2 aa3, hou2 gwaa3 zyu6 nei5 gaa3!",
+              "dou1 hai6 gam2 soeng5 haa5.",
+              "hou2 mong4, mou5 si4 gaan3 ceot1 gaai1."
+            ],
+            "bd": [
+              {
+                "c": "幾好",
+                "j": "gei2 hou2",
+                "e": "pretty good"
+              },
+              {
+                "c": "好掛住你",
+                "j": "hou2 gwaa3 zyu6 nei5",
+                "e": "really missed you"
+              }
+            ]
+          },
+          {
+            "u": false,
+            "c": "我哋上次見面係幾時呀？好耐喇。",
+            "j": "ngo5 dei6 soeng6 ci3 gin3 min6 hai6 gei2 si4 aa3? hou2 noi6 laa3.",
+            "e": "When did we last meet? It's been so long.",
+            "bd": [
+              {
+                "c": "我哋",
+                "j": "ngo5 dei6",
+                "e": "we"
+              },
+              {
+                "c": "上次見面",
+                "j": "soeng6 ci3 gin3 min6",
+                "e": "last meeting"
+              },
+              {
+                "c": "係幾時",
+                "j": "hai6 gei2 si4",
+                "e": "was when"
+              },
+              {
+                "c": "好耐喇",
+                "j": "hou2 noi6 laa3",
+                "e": "so long ago"
+              }
+            ]
+          },
+          {
+            "u": true,
+            "c": "唔記得喇！不如計劃下，去敘舊？",
+            "j": "m4 gei3 dak1 laa3! bat1 jyu4 gai3 waak6 haa5, heoi3 zeoi6 gau6?",
+            "e": "Can't remember! How about we make plans to catch up?",
+            "opts": [
+              "唔記得喇！不如計劃下，去敘舊？",
+              "可能半年前？",
+              "係你爽約嗰次囉。"
+            ],
+            "optsJ": [
+              "m4 gei3 dak1 laa3! bat1 jyu4 gai3 waak6 haa5, heoi3 zeoi6 gau6?",
+              "ho2 nang4 bun3 nin4 cin4?",
+              "hai6 nei5 song2 joek3 go2 ci3 lo3."
+            ],
+            "bd": [
+              {
+                "c": "唔記得",
+                "j": "m4 gei3 dak1",
+                "e": "can't remember"
+              },
+              {
+                "c": "不如",
+                "j": "bat1 jyu4",
+                "e": "how about"
+              },
+              {
+                "c": "計劃下",
+                "j": "gai3 waak6 haa5",
+                "e": "make some plans"
+              },
+              {
+                "c": "去敘舊",
+                "j": "heoi3 zeoi6 gau6",
+                "e": "catch up"
+              }
+            ]
+          },
+          {
+            "u": false,
+            "c": "好主意！你幾時得閒？",
+            "j": "hou2 zyu2 ji3! nei5 gei2 si4 dak1 haan4?",
+            "e": "Great idea! When are you free?",
+            "bd": [
+              {
+                "c": "好主意",
+                "j": "hou2 zyu2 ji3",
+                "e": "great idea"
+              },
+              {
+                "c": "你幾時",
+                "j": "nei5 gei2 si4",
+                "e": "when are you"
+              },
+              {
+                "c": "得閒",
+                "j": "dak1 haan4",
+                "e": "free"
+              }
+            ]
+          },
+          {
+            "u": true,
+            "c": "如果你週末得閒，不如一齊出街？仲可以叫埋同學。",
+            "j": "jyu4 gwo2 nei5 zau1 mut3 dak1 haan4, bat1 jyu4 jat1 cai4 ceot1 gaai1? zung6 ho2 ji5 giu3 maai4 tung4 hok6.",
+            "e": "If you're free on the weekend, how about hanging out? We can invite classmates too.",
+            "opts": [
+              "如果你週末得閒，不如一齊出街？仲可以叫埋同學。",
+              "我星期六得閒。",
+              "你決定啦，我跟你。"
+            ],
+            "optsJ": [
+              "jyu4 gwo2 nei5 zau1 mut3 dak1 haan4, bat1 jyu4 jat1 cai4 ceot1 gaai1? zung6 ho2 ji5 giu3 maai4 tung4 hok6.",
+              "ngo5 sing1 kei4 luk6 dak1 haan4.",
+              "nei5 kyut3 ding6 laa1, ngo5 gan1 nei5."
+            ],
+            "bd": [
+              {
+                "c": "如果",
+                "j": "jyu4 gwo2",
+                "e": "if"
+              },
+              {
+                "c": "週末得閒",
+                "j": "zau1 mut3 dak1 haan4",
+                "e": "free on weekend"
+              },
+              {
+                "c": "不如",
+                "j": "bat1 jyu4",
+                "e": "how about"
+              },
+              {
+                "c": "一齊出街",
+                "j": "jat1 cai4 ceot1 gaai1",
+                "e": "hang out"
+              },
+              {
+                "c": "仲可以",
+                "j": "zung6 ho2 ji5",
+                "e": "can also"
+              },
+              {
+                "c": "叫埋同學",
+                "j": "giu3 maai4 tung4 hok6",
+                "e": "invite classmates"
+              }
+            ]
+          },
+          {
+            "u": false,
+            "c": "好呀！因為我哋好夾，一定好好玩。",
+            "j": "hou2 aa3! jan1 wai6 ngo5 dei6 hou2 gaap3, jat1 ding6 hou2 hou2 waan2.",
+            "e": "Great! Because we click so well, it'll definitely be fun.",
+            "bd": [
+              {
+                "c": "好呀",
+                "j": "hou2 aa3",
+                "e": "great"
+              },
+              {
+                "c": "因為",
+                "j": "jan1 wai6",
+                "e": "because"
+              },
+              {
+                "c": "我哋好夾",
+                "j": "ngo5 dei6 hou2 gaap3",
+                "e": "we click well"
+              },
+              {
+                "c": "一定",
+                "j": "jat1 ding6",
+                "e": "definitely"
+              },
+              {
+                "c": "好好玩",
+                "j": "hou2 hou2 waan2",
+                "e": "very fun"
+              }
+            ]
+          },
+          {
+            "u": true,
+            "c": "係！記住之後保持聯絡㗎。",
+            "j": "hai6! gei3 zyu6 zi1 hau6 bou2 ci4 lyun4 lok3 gaa3.",
+            "e": "Yes! Remember to stay in touch after.",
+            "opts": [
+              "係！記住之後保持聯絡㗎。",
+              "好，下次唔好爽約。",
+              "好主意！"
+            ],
+            "optsJ": [
+              "hai6! gei3 zyu6 zi1 hau6 bou2 ci4 lyun4 lok3 gaa3.",
+              "hou2, haa6 ci3 m4 hou2 song2 joek3.",
+              "hou2 zyu2 ji3!"
+            ],
+            "bd": [
+              {
+                "c": "係",
+                "j": "hai6",
+                "e": "yes"
+              },
+              {
+                "c": "記住",
+                "j": "gei3 zyu6",
+                "e": "remember"
+              },
+              {
+                "c": "之後",
+                "j": "zi1 hau6",
+                "e": "after"
+              },
+              {
+                "c": "保持聯絡",
+                "j": "bou2 ci4 lyun4 lok3",
+                "e": "stay in touch"
+              }
+            ]
+          }
+        ]
+      }
     }
   },
-  "_idSeq": 10,
-  "_sidSeq": 5
+  "_idSeq": 19,
+  "_sidSeq": 13
 }

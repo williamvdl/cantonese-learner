@@ -467,7 +467,7 @@
       }
     },
     "2": {
-      "note": "Tier 1 covered anatomy; Tier 2 puts it to use when you're unwell. The structure is simple: <strong>body part + tung3</strong> (痛, pain) describes any ache — <em>tau4 tung3</em> (頭痛, headache), <em>tou5 tung3</em> (肚痛, stomachache). The verb <strong>beng6</strong> (病) covers being ill generally. At the pharmacy (<em>joek6 fong2</em>, 藥房) you'll buy <em>joek6</em> (藥, medicine) — same character, different role.",
+      "note": "Tier-1 named the body parts; tier 2 puts them to use — symptoms, illness, and navigating Hong Kong's healthcare from clinic to pharmacy.",
       "words": [
         {
           "id": "body-011",
@@ -533,9 +533,10 @@
       "sentences": [
         {
           "sid": "body-t2-s06",
-          "c": "我頭痛。",
-          "j": "ngo5 tau4 tung3.",
-          "e": "I have a headache.",
+          "c": "我頭痛，而且有啲發燒。",
+          "j": "ngo5 tau4 tung3, ji4 ce2 jau5 di1 faat3 siu1.",
+          "e": "I have a headache, and also a slight fever.",
+          "note": "Add a body part before <b>痛</b> (tung3) \"pain/ache\" to name any ache: 頭痛 (tau4 tung3) \"headache\", 肚痛 (tou5 tung3) \"stomachache\", 喉嚨痛 (hau4 lung4 tung3) \"sore throat\". The pattern is body part + 痛 (tung3).",
           "bd": [
             {
               "c": "我",
@@ -546,65 +547,144 @@
               "c": "頭痛",
               "j": "tau4 tung3",
               "e": "headache"
+            },
+            {
+              "c": "而且",
+              "j": "ji4 ce2",
+              "e": "and also"
+            },
+            {
+              "c": "有啲發燒",
+              "j": "jau5 di1 faat3 siu1",
+              "e": "a slight fever"
             }
           ]
         },
         {
           "sid": "body-t2-s07",
-          "c": "我發燒。",
-          "j": "ngo5 faat3 siu1.",
-          "e": "I have a fever.",
+          "c": "如果你唔舒服，最好去睇醫生。",
+          "j": "jyu4 gwo2 nei5 m4 syu1 fuk6, zeoi3 hou2 heoi3 tai2 ji1 sang1.",
+          "e": "If you're not well, best to see a doctor.",
+          "note": "睇醫生 (tai2 ji1 sang1) \"see a doctor\" vs 去醫院 (heoi3 ji1 jyun2) \"go to hospital\" — in Hong Kong you'd usually 睇醫生 (tai2 ji1 sang1) at a clinic first; <b>醫院</b> (ji1 jyun2) is for emergencies or serious illness.",
           "bd": [
             {
-              "c": "我",
-              "j": "ngo5",
-              "e": "I"
+              "c": "如果",
+              "j": "jyu4 gwo2",
+              "e": "if"
             },
             {
-              "c": "發燒",
-              "j": "faat3 siu1",
-              "e": "have a fever"
+              "c": "唔舒服",
+              "j": "m4 syu1 fuk6",
+              "e": "not well"
+            },
+            {
+              "c": "最好",
+              "j": "zeoi3 hou2",
+              "e": "best to"
+            },
+            {
+              "c": "去睇醫生",
+              "j": "heoi3 tai2 ji1 sang1",
+              "e": "see a doctor"
             }
           ]
         },
         {
           "sid": "body-t2-s08",
-          "c": "我要去睇醫生。",
-          "j": "ngo5 jiu3 heoi3 tai2 ji1 sang1.",
-          "e": "I need to see a doctor.",
+          "c": "因為佢病咗，所以唔可以返工。",
+          "j": "jan1 wai6 keoi5 beng6 zo2, so2 ji5 m4 ho2 ji5 faan1 gung1.",
+          "e": "Because she is sick, she can't go to work.",
           "bd": [
             {
-              "c": "我",
-              "j": "ngo5",
-              "e": "I"
+              "c": "因為",
+              "j": "jan1 wai6",
+              "e": "because"
             },
             {
-              "c": "要",
-              "j": "jiu3",
-              "e": "need to"
+              "c": "病咗",
+              "j": "beng6 zo2",
+              "e": "got sick"
             },
             {
-              "c": "去",
-              "j": "heoi3",
-              "e": "go"
+              "c": "所以",
+              "j": "so2 ji5",
+              "e": "so"
             },
             {
-              "c": "睇",
-              "j": "tai2",
-              "e": "see"
+              "c": "唔可以",
+              "j": "m4 ho2 ji5",
+              "e": "can't"
             },
             {
-              "c": "醫生",
-              "j": "ji1 sang1",
-              "e": "doctor"
+              "c": "返工",
+              "j": "faan1 gung1",
+              "e": "go to work"
             }
           ]
         },
         {
           "sid": "body-t2-s09",
-          "c": "藥房喺邊度？",
-          "j": "joek6 fong2 hai2 bin1 dou6?",
-          "e": "Where is the pharmacy?",
+          "c": "醫生叫我食藥，一日三次。",
+          "j": "ji1 sang1 giu3 ngo5 sik6 joek6, jat1 jat6 saam1 ci3.",
+          "e": "The doctor told me to take medicine, three times a day.",
+          "note": "食藥 (sik6 joek6) \"take medicine\" — Cantonese uses 食 (sik6) \"eat\" for taking medicine, not a separate verb. The standard dose instruction: 一日三次 (jat1 jat6 saam1 ci3) \"three times a day\".",
+          "bd": [
+            {
+              "c": "醫生",
+              "j": "ji1 sang1",
+              "e": "doctor"
+            },
+            {
+              "c": "叫我",
+              "j": "giu3 ngo5",
+              "e": "told me"
+            },
+            {
+              "c": "食藥",
+              "j": "sik6 joek6",
+              "e": "take medicine"
+            },
+            {
+              "c": "一日三次",
+              "j": "jat1 jat6 saam1 ci3",
+              "e": "three times a day"
+            }
+          ]
+        },
+        {
+          "sid": "body-t2-s10",
+          "c": "雖然我咳，但係冇發燒。",
+          "j": "seoi1 jin4 ngo5 kat1, daan6 hai6 mou5 faat3 siu1.",
+          "e": "Although I'm coughing, I don't have a fever.",
+          "bd": [
+            {
+              "c": "雖然",
+              "j": "seoi1 jin4",
+              "e": "although"
+            },
+            {
+              "c": "我咳",
+              "j": "ngo5 kat1",
+              "e": "I'm coughing"
+            },
+            {
+              "c": "但係",
+              "j": "daan6 hai6",
+              "e": "but"
+            },
+            {
+              "c": "冇發燒",
+              "j": "mou5 faat3 siu1",
+              "e": "no fever"
+            }
+          ]
+        },
+        {
+          "sid": "body-t2-s11",
+          "c": "藥房就喺醫院隔離，好方便。",
+          "j": "joek6 fong2 zau6 hai2 ji1 jyun2 gaak3 lei4, hou2 fong1 bin6.",
+          "e": "The pharmacy is right next to the hospital — very convenient.",
+          "note": "藥房 (joek6 fong2) \"pharmacy\" — in Hong Kong, many minor ailments are handled at the 藥房 (joek6 fong2) without seeing a doctor. The pharmacist (<b>藥劑師</b> joek6 zai1 si1) can advise on common symptoms and sell most over-the-counter medicines.",
           "bd": [
             {
               "c": "藥房",
@@ -612,90 +692,144 @@
               "e": "pharmacy"
             },
             {
-              "c": "喺",
-              "j": "hai2",
-              "e": "is at"
+              "c": "就喺",
+              "j": "zau6 hai2",
+              "e": "is right at"
             },
             {
-              "c": "邊度",
-              "j": "bin1 dou6",
-              "e": "where"
+              "c": "醫院",
+              "j": "ji1 jyun2",
+              "e": "hospital"
+            },
+            {
+              "c": "隔離",
+              "j": "gaak3 lei4",
+              "e": "next to"
+            },
+            {
+              "c": "好方便",
+              "j": "hou2 fong1 bin6",
+              "e": "very convenient"
             }
           ]
         },
         {
-          "sid": "body-t2-s10",
-          "c": "食咗藥未呀？",
-          "j": "sik6 zo2 joek6 mei6 aa3?",
-          "e": "Have you taken your medicine?",
+          "sid": "body-t2-s12",
+          "c": "我肚痛，不如唔好食咁多宵夜。",
+          "j": "ngo5 tou5 tung3, bat1 jyu4 m4 hou2 sik6 gam3 do1 siu1 je2.",
+          "e": "I have a stomachache — maybe I shouldn't eat so much late-night food.",
           "bd": [
             {
-              "c": "食咗",
-              "j": "sik6 zo2",
-              "e": "taken / eaten"
+              "c": "我",
+              "j": "ngo5",
+              "e": "I"
             },
             {
-              "c": "藥",
-              "j": "joek6",
-              "e": "medicine"
+              "c": "肚痛",
+              "j": "tou5 tung3",
+              "e": "stomachache"
             },
             {
-              "c": "未",
-              "j": "mei6",
-              "e": "yet"
+              "c": "不如",
+              "j": "bat1 jyu4",
+              "e": "how about"
             },
             {
-              "c": "呀",
-              "j": "aa3",
-              "e": "(soft particle)"
+              "c": "唔好",
+              "j": "m4 hou2",
+              "e": "don't"
+            },
+            {
+              "c": "食咁多",
+              "j": "sik6 gam3 do1",
+              "e": "eat so much"
+            },
+            {
+              "c": "宵夜",
+              "j": "siu1 je2",
+              "e": "late-night food"
+            }
+          ]
+        },
+        {
+          "sid": "body-t2-s13",
+          "c": "如果食咗藥都唔好返，就要去醫院喇。",
+          "j": "jyu4 gwo2 sik6 zo2 joek6 dou1 m4 hou2 faan1, zau6 jiu3 heoi3 ji1 jyun2 laa3.",
+          "e": "If you've taken medicine and still don't get better, then you need to go to hospital.",
+          "note": "如果…就 (jyu4 gwo2…zau6) \"if…then\" is useful for medical conditionals: if symptoms persist → take action. 好返 (hou2 faan1) \"recover / get better\" — literally \"good again\".",
+          "bd": [
+            {
+              "c": "如果",
+              "j": "jyu4 gwo2",
+              "e": "if"
+            },
+            {
+              "c": "食咗藥",
+              "j": "sik6 zo2 joek6",
+              "e": "taken medicine"
+            },
+            {
+              "c": "都唔好返",
+              "j": "dou1 m4 hou2 faan1",
+              "e": "still not better"
+            },
+            {
+              "c": "就",
+              "j": "zau6",
+              "e": "then"
+            },
+            {
+              "c": "要去醫院",
+              "j": "jiu3 heoi3 ji1 jyun2",
+              "e": "need to go to hospital"
             }
           ]
         }
       ],
       "convo": {
-        "title": "At the pharmacy",
+        "title": "At the doctor",
         "speakers": [
-          "Pharmacist",
+          "Doctor",
           "You"
         ],
         "lines": [
           {
             "u": false,
-            "c": "係咩問題？",
-            "j": "hai6 me1 man6 tai4?",
-            "e": "What's the problem?",
+            "c": "你好，你有咩唔舒服？",
+            "j": "nei5 hou2, nei5 jau5 me1 m4 syu1 fuk6?",
+            "e": "Hello — what seems to be the problem?",
             "bd": [
               {
-                "c": "係",
-                "j": "hai6",
-                "e": "is"
+                "c": "你好",
+                "j": "nei5 hou2",
+                "e": "hello"
               },
               {
-                "c": "咩",
-                "j": "me1",
+                "c": "有咩",
+                "j": "jau5 me1",
                 "e": "what"
               },
               {
-                "c": "問題",
-                "j": "man6 tai4",
-                "e": "problem"
+                "c": "唔舒服",
+                "j": "m4 syu1 fuk6",
+                "e": "not well"
               }
             ]
           },
           {
             "u": true,
-            "c": "我頭痛同發燒。",
-            "j": "ngo5 tau4 tung3 tung4 faat3 siu1.",
-            "e": "I have a headache and a fever.",
+            "c": "我頭痛，而且有啲發燒。",
+            "j": "ngo5 tau4 tung3, ji4 ce2 jau5 di1 faat3 siu1.",
+            "e": "I have a headache and a slight fever.",
             "opts": [
-              "我頭痛同發燒。",
-              "我好開心。",
-              "幾錢？"
+              "我頭痛，而且有啲發燒。",
+              "我咳咗幾日。",
+              "我肚痛，食唔落嘢。"
             ],
             "optsJ": [
-              "ngo5 tau4 tung3 tung4 faat3 siu1.",
-              "ngo5 hou2 hoi1 sam1.",
-              "gei2 cin2?"
+              "ngo5 tau4 tung3, ji4 ce2 jau5 di1 faat3 siu1.",
+              "ngo5 kat1 zo2 gei2 jat6.",
+              "ngo5 tou5 tung3, sik6 m4 lok6 je5."
             ],
             "bd": [
               {
@@ -709,115 +843,196 @@
                 "e": "headache"
               },
               {
-                "c": "同",
-                "j": "tung4",
-                "e": "and"
+                "c": "而且",
+                "j": "ji4 ce2",
+                "e": "and also"
               },
               {
-                "c": "發燒",
-                "j": "faat3 siu1",
-                "e": "fever"
+                "c": "有啲發燒",
+                "j": "jau5 di1 faat3 siu1",
+                "e": "slight fever"
               }
             ]
           },
           {
             "u": false,
-            "c": "幾耐喇？",
-            "j": "gei2 noi6 laa3?",
-            "e": "How long has it been?",
+            "c": "幾耐喇？有冇咳？",
+            "j": "gei2 noi6 laa3? jau5 mou5 kat1?",
+            "e": "How long has it been? Do you have a cough?",
             "bd": [
               {
-                "c": "幾耐",
-                "j": "gei2 noi6",
+                "c": "幾耐喇",
+                "j": "gei2 noi6 laa3",
                 "e": "how long"
               },
               {
-                "c": "喇",
-                "j": "laa3",
-                "e": "(particle - now)"
+                "c": "有冇咳",
+                "j": "jau5 mou5 kat1",
+                "e": "any cough"
               }
             ]
           },
           {
             "u": true,
-            "c": "兩日喇。",
-            "j": "loeng5 jat6 laa3.",
-            "e": "Two days now.",
+            "c": "兩日喇，而且越嚟越差。",
+            "j": "loeng5 jat6 laa3, ji4 ce2 jyut6 lai4 jyut6 caa3.",
+            "e": "Two days now, and getting worse and worse.",
             "opts": [
-              "兩日喇。",
-              "我好飽。",
-              "唔該晒。"
+              "兩日喇，而且越嚟越差。",
+              "昨日先開始。",
+              "唔係好清楚。"
             ],
             "optsJ": [
-              "loeng5 jat6 laa3.",
-              "ngo5 hou2 baau2.",
-              "m4 goi1 saai3."
+              "loeng5 jat6 laa3, ji4 ce2 jyut6 lai4 jyut6 caa3.",
+              "kam4 jat6 sin1 hoi1 ci2.",
+              "m4 hai6 hou2 cing1 co2."
             ],
             "bd": [
               {
-                "c": "兩日",
-                "j": "loeng5 jat6",
+                "c": "兩日喇",
+                "j": "loeng5 jat6 laa3",
                 "e": "two days"
               },
               {
-                "c": "喇",
-                "j": "laa3",
-                "e": "(particle - now)"
+                "c": "而且",
+                "j": "ji4 ce2",
+                "e": "and also"
+              },
+              {
+                "c": "越嚟越差",
+                "j": "jyut6 lai4 jyut6 caa3",
+                "e": "getting worse and worse"
               }
             ]
           },
           {
             "u": false,
-            "c": "食呢隻藥啦，一日三次。",
-            "j": "sik6 ni1 zek3 joek6 laa1, jat1 jat6 saam1 ci3.",
-            "e": "Take this medicine, three times a day.",
+            "c": "睇吓。係，有啲發炎。因為你病咗，所以要多啲休息。",
+            "j": "tai2 haa5. hai6, jau5 di1 faat3 jim4. jan1 wai6 nei5 beng6 zo2, so2 ji5 jiu3 do1 di1 jau1 sik1.",
+            "e": "Let me see. Yes, some inflammation. Since you're sick, you need more rest.",
             "bd": [
               {
-                "c": "食",
-                "j": "sik6",
-                "e": "take"
+                "c": "睇吓",
+                "j": "tai2 haa5",
+                "e": "let me see"
               },
               {
-                "c": "呢隻",
-                "j": "ni1 zek3",
-                "e": "this (type)"
+                "c": "有啲發炎",
+                "j": "jau5 di1 faat3 jim4",
+                "e": "some inflammation"
               },
               {
-                "c": "藥",
-                "j": "joek6",
-                "e": "medicine"
+                "c": "因為",
+                "j": "jan1 wai6",
+                "e": "because"
               },
               {
-                "c": "啦",
-                "j": "laa1",
-                "e": "(suggestion)"
+                "c": "病咗",
+                "j": "beng6 zo2",
+                "e": "sick"
               },
               {
-                "c": "一日",
-                "j": "jat1 jat6",
-                "e": "one day"
+                "c": "所以",
+                "j": "so2 ji5",
+                "e": "so"
               },
               {
-                "c": "三次",
-                "j": "saam1 ci3",
-                "e": "three times"
+                "c": "多啲休息",
+                "j": "do1 di1 jau1 sik1",
+                "e": "more rest"
               }
             ]
           },
           {
             "u": true,
-            "c": "好，唔該。",
-            "j": "hou2, m4 goi1.",
-            "e": "OK, thanks.",
+            "c": "要唔要食藥？係咪要去醫院？",
+            "j": "jiu3 m4 jiu3 sik6 joek6? hai6 m4 hai6 jiu3 heoi3 ji1 jyun2?",
+            "e": "Do I need medicine? Do I need to go to hospital?",
             "opts": [
-              "好，唔該。",
-              "唔好。",
-              "你係邊個？"
+              "要唔要食藥？係咪要去醫院？",
+              "藥房喺邊？",
+              "好，我明。"
             ],
             "optsJ": [
-              "hou2, m4 goi1.",
-              "m4 hou2.",
-              "nei5 hai6 bin1 go3?"
+              "jiu3 m4 jiu3 sik6 joek6? hai6 m4 hai6 jiu3 heoi3 ji1 jyun2?",
+              "joek6 fong2 hai2 bin1?",
+              "hou2, ngo5 ming4."
+            ],
+            "bd": [
+              {
+                "c": "要唔要",
+                "j": "jiu3 m4 jiu3",
+                "e": "do I need to"
+              },
+              {
+                "c": "食藥",
+                "j": "sik6 joek6",
+                "e": "take medicine"
+              },
+              {
+                "c": "係咪要",
+                "j": "hai6 m4 hai6 jiu3",
+                "e": "do I need to"
+              },
+              {
+                "c": "去醫院",
+                "j": "heoi3 ji1 jyun2",
+                "e": "go to hospital"
+              }
+            ]
+          },
+          {
+            "u": false,
+            "c": "要食藥，一日三次。唔使去醫院，但係如果唔好返，就要返嚟睇多次。",
+            "j": "jiu3 sik6 joek6, jat1 jat6 saam1 ci3. m4 sai2 heoi3 ji1 jyun2, daan6 hai6 jyu4 gwo2 m4 hou2 faan1, zau6 jiu3 faan1 lai4 tai2 do1 ci3.",
+            "e": "Take medicine, three times a day. No need for hospital, but if you don't get better, come back.",
+            "bd": [
+              {
+                "c": "要食藥",
+                "j": "jiu3 sik6 joek6",
+                "e": "take medicine"
+              },
+              {
+                "c": "一日三次",
+                "j": "jat1 jat6 saam1 ci3",
+                "e": "three times a day"
+              },
+              {
+                "c": "唔使",
+                "j": "m4 sai2",
+                "e": "no need"
+              },
+              {
+                "c": "去醫院",
+                "j": "heoi3 ji1 jyun2",
+                "e": "hospital"
+              },
+              {
+                "c": "如果唔好返",
+                "j": "jyu4 gwo2 m4 hou2 faan1",
+                "e": "if not better"
+              },
+              {
+                "c": "就要返嚟",
+                "j": "zau6 jiu3 faan1 lai4",
+                "e": "then come back"
+              }
+            ]
+          },
+          {
+            "u": true,
+            "c": "好，唔該。藥房係唔係喺附近？",
+            "j": "hou2, m4 goi1. joek6 fong2 hai6 m4 hai6 hai2 fu6 gan6?",
+            "e": "OK, thanks. Is the pharmacy nearby?",
+            "opts": [
+              "好，唔該。藥房係唔係喺附近？",
+              "好，我會注意。",
+              "我唔想食藥。"
+            ],
+            "optsJ": [
+              "hou2, m4 goi1. joek6 fong2 hai6 m4 hai6 hai2 fu6 gan6?",
+              "hou2, ngo5 wui5 zyu3 ji3.",
+              "ngo5 m4 soeng2 sik6 joek6."
             ],
             "bd": [
               {
@@ -829,6 +1044,54 @@
                 "c": "唔該",
                 "j": "m4 goi1",
                 "e": "thanks"
+              },
+              {
+                "c": "藥房",
+                "j": "joek6 fong2",
+                "e": "pharmacy"
+              },
+              {
+                "c": "係唔係喺",
+                "j": "hai6 m4 hai6 hai2",
+                "e": "is it"
+              },
+              {
+                "c": "附近",
+                "j": "fu6 gan6",
+                "e": "nearby"
+              }
+            ]
+          },
+          {
+            "u": false,
+            "c": "係，藥房就喺醫院隔離，好方便㗎。",
+            "j": "hai6, joek6 fong2 zau6 hai2 ji1 jyun2 gaak3 lei4, hou2 fong1 bin6 gaa3.",
+            "e": "Yes, the pharmacy is right next to the hospital — very convenient.",
+            "bd": [
+              {
+                "c": "係",
+                "j": "hai6",
+                "e": "yes"
+              },
+              {
+                "c": "藥房",
+                "j": "joek6 fong2",
+                "e": "pharmacy"
+              },
+              {
+                "c": "就喺",
+                "j": "zau6 hai2",
+                "e": "right at"
+              },
+              {
+                "c": "醫院隔離",
+                "j": "ji1 jyun2 gaak3 lei4",
+                "e": "next to the hospital"
+              },
+              {
+                "c": "好方便",
+                "j": "hou2 fong1 bin6",
+                "e": "very convenient"
               }
             ]
           }
@@ -837,5 +1100,5 @@
     }
   },
   "_idSeq": 28,
-  "_sidSeq": 10
+  "_sidSeq": 13
 }

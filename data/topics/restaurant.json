@@ -387,8 +387,646 @@
           }
         ]
       }
+    },
+    "2": {
+      "note": "Tier-1 got you ordering and paying; tier 2 is the full sit-down experience — booking and waiting for a table, asking staff what's good, customising your order, and handling the bill (service charge included).",
+      "words": [
+        {
+          "id": "restaurant-011",
+          "c": "訂枱",
+          "j": "deng6 toi2",
+          "e": "book a table"
+        },
+        {
+          "id": "restaurant-012",
+          "c": "幾多位",
+          "j": "gei2 do1 wai2",
+          "e": "for how many (people)"
+        },
+        {
+          "id": "restaurant-013",
+          "c": "等位",
+          "j": "dang2 wai2",
+          "e": "wait for a table"
+        },
+        {
+          "id": "restaurant-014",
+          "c": "搭枱",
+          "j": "daap3 toi2",
+          "e": "share a table"
+        },
+        {
+          "id": "restaurant-015",
+          "c": "介紹",
+          "j": "gaai3 siu6",
+          "e": "recommend / introduce"
+        },
+        {
+          "id": "restaurant-016",
+          "c": "走青",
+          "j": "zau2 ceng1",
+          "e": "hold the spring onion"
+        },
+        {
+          "id": "restaurant-017",
+          "c": "加水",
+          "j": "gaa1 seoi2",
+          "e": "refill / more water"
+        },
+        {
+          "id": "restaurant-018",
+          "c": "上錯",
+          "j": "soeng5 co3",
+          "e": "bring the wrong (dish)"
+        },
+        {
+          "id": "restaurant-019",
+          "c": "加一",
+          "j": "gaa1 jat1",
+          "e": "10% service charge"
+        }
+      ],
+      "sentences": [
+        {
+          "sid": "restaurant-t2-s06",
+          "c": "如果想食好嘢，最好訂枱。",
+          "j": "jyu4 gwo2 soeng2 sik6 hou2 je5, zeoi3 hou2 deng6 toi2.",
+          "e": "If you want to eat well, it's best to book a table.",
+          "bd": [
+            {
+              "c": "如果",
+              "j": "jyu4 gwo2",
+              "e": "if"
+            },
+            {
+              "c": "想食",
+              "j": "soeng2 sik6",
+              "e": "want to eat"
+            },
+            {
+              "c": "好嘢",
+              "j": "hou2 je5",
+              "e": "good stuff"
+            },
+            {
+              "c": "最好",
+              "j": "zeoi3 hou2",
+              "e": "best to"
+            },
+            {
+              "c": "訂枱",
+              "j": "deng6 toi2",
+              "e": "book a table"
+            }
+          ]
+        },
+        {
+          "sid": "restaurant-t2-s07",
+          "c": "因為今日好多人，所以要等位。",
+          "j": "jan1 wai6 gam1 jat6 hou2 do1 jan4, so2 ji5 jiu3 dang2 wai2.",
+          "e": "Because there are many people today, we have to wait for a table.",
+          "note": "位 (wai2) is the polite classifier for people — 兩位 (loeng5 wai2) \"two people\", 幾多位 (gei2 do1 wai2) \"how many?\". 等位 (dang2 wai2) \"waiting for a table\" is a Hong Kong inevitability at popular spots.",
+          "bd": [
+            {
+              "c": "因為",
+              "j": "jan1 wai6",
+              "e": "because"
+            },
+            {
+              "c": "今日",
+              "j": "gam1 jat6",
+              "e": "today"
+            },
+            {
+              "c": "好多人",
+              "j": "hou2 do1 jan4",
+              "e": "many people"
+            },
+            {
+              "c": "所以",
+              "j": "so2 ji5",
+              "e": "so"
+            },
+            {
+              "c": "要",
+              "j": "jiu3",
+              "e": "have to"
+            },
+            {
+              "c": "等位",
+              "j": "dang2 wai2",
+              "e": "wait for a table"
+            }
+          ]
+        },
+        {
+          "sid": "restaurant-t2-s08",
+          "c": "侍應問我哋幾多位。",
+          "j": "si6 jing3 man6 ngo5 dei6 gei2 do1 wai2.",
+          "e": "The waiter asks how many of us there are.",
+          "bd": [
+            {
+              "c": "侍應",
+              "j": "si6 jing3",
+              "e": "waiter"
+            },
+            {
+              "c": "問",
+              "j": "man6",
+              "e": "asks"
+            },
+            {
+              "c": "我哋",
+              "j": "ngo5 dei6",
+              "e": "us"
+            },
+            {
+              "c": "幾多位",
+              "j": "gei2 do1 wai2",
+              "e": "how many people"
+            }
+          ]
+        },
+        {
+          "sid": "restaurant-t2-s09",
+          "c": "如果冇位，可以搭枱。",
+          "j": "jyu4 gwo2 mou5 wai2, ho2 ji5 daap3 toi2.",
+          "e": "If there are no seats, you can share a table.",
+          "note": "搭枱 (daap3 toi2) \"sharing a table\" with strangers is normal at busy, cheaper Hong Kong restaurants — you may be seated with people you don't know. 枱 (toi2) is the table.",
+          "bd": [
+            {
+              "c": "如果",
+              "j": "jyu4 gwo2",
+              "e": "if"
+            },
+            {
+              "c": "冇位",
+              "j": "mou5 wai2",
+              "e": "no seats"
+            },
+            {
+              "c": "可以",
+              "j": "ho2 ji5",
+              "e": "can"
+            },
+            {
+              "c": "搭枱",
+              "j": "daap3 toi2",
+              "e": "share a table"
+            }
+          ]
+        },
+        {
+          "sid": "restaurant-t2-s10",
+          "c": "唔該你介紹下有咩好食。",
+          "j": "m4 goi1 nei5 gaai3 siu6 haa5 jau5 me1 hou2 sik6.",
+          "e": "Please recommend what's good to eat.",
+          "note": "介紹 (gaai3 siu6) \"recommend / introduce\" — 介紹下 (gaai3 siu6 haa5), softened by 下 (haa5) \"a little\", is a polite way to ask staff what's good.",
+          "bd": [
+            {
+              "c": "唔該",
+              "j": "m4 goi1",
+              "e": "please"
+            },
+            {
+              "c": "你",
+              "j": "nei5",
+              "e": "you"
+            },
+            {
+              "c": "介紹下",
+              "j": "gaai3 siu6 haa5",
+              "e": "recommend"
+            },
+            {
+              "c": "有咩",
+              "j": "jau5 me1",
+              "e": "what"
+            },
+            {
+              "c": "好食",
+              "j": "hou2 sik6",
+              "e": "good to eat"
+            }
+          ]
+        },
+        {
+          "sid": "restaurant-t2-s11",
+          "c": "我要碗麵，唔該走青。",
+          "j": "ngo5 jiu3 wun2 min6, m4 goi1 zau2 ceng1.",
+          "e": "I'll have a bowl of noodles, no spring onion please.",
+          "note": "走青 (zau2 ceng1) \"hold the spring onion\" — 走 (zau2) \"leave out\" removes anything: 走冰 (zau2 bing1) \"no ice\", 走甜 (zau2 tim4) \"no sugar\". 青 (ceng1) here is spring onion / greens.",
+          "bd": [
+            {
+              "c": "我",
+              "j": "ngo5",
+              "e": "I"
+            },
+            {
+              "c": "要",
+              "j": "jiu3",
+              "e": "want"
+            },
+            {
+              "c": "碗麵",
+              "j": "wun2 min6",
+              "e": "a bowl of noodles"
+            },
+            {
+              "c": "唔該",
+              "j": "m4 goi1",
+              "e": "please"
+            },
+            {
+              "c": "走青",
+              "j": "zau2 ceng1",
+              "e": "no spring onion"
+            }
+          ]
+        },
+        {
+          "sid": "restaurant-t2-s12",
+          "c": "唔該加水，同埋呢碟上錯咗。",
+          "j": "m4 goi1 gaa1 seoi2, tung4 maai4 ni1 dip6 soeng5 co3 zo2.",
+          "e": "More water please, and this dish came wrong.",
+          "bd": [
+            {
+              "c": "唔該",
+              "j": "m4 goi1",
+              "e": "please"
+            },
+            {
+              "c": "加水",
+              "j": "gaa1 seoi2",
+              "e": "more water"
+            },
+            {
+              "c": "同埋",
+              "j": "tung4 maai4",
+              "e": "and"
+            },
+            {
+              "c": "呢碟",
+              "j": "ni1 dip6",
+              "e": "this dish"
+            },
+            {
+              "c": "上錯咗",
+              "j": "soeng5 co3 zo2",
+              "e": "came wrong"
+            }
+          ]
+        },
+        {
+          "sid": "restaurant-t2-s13",
+          "c": "因為要加一，所以埋單貴咗啲。",
+          "j": "jan1 wai6 jiu3 gaa1 jat1, so2 ji5 maai4 daan1 gwai3 zo2 di1.",
+          "e": "Because of the 10% service charge, the bill is a bit more.",
+          "note": "加一 (gaa1 jat1) is the automatic 10% service charge at most sit-down restaurants — literally \"add one [tenth]\". It's already on the 埋單 (maai4 daan1) \"bill\", so extra tipping isn't expected.",
+          "bd": [
+            {
+              "c": "因為",
+              "j": "jan1 wai6",
+              "e": "because"
+            },
+            {
+              "c": "要",
+              "j": "jiu3",
+              "e": "there's"
+            },
+            {
+              "c": "加一",
+              "j": "gaa1 jat1",
+              "e": "10% service charge"
+            },
+            {
+              "c": "所以",
+              "j": "so2 ji5",
+              "e": "so"
+            },
+            {
+              "c": "埋單",
+              "j": "maai4 daan1",
+              "e": "the bill"
+            },
+            {
+              "c": "貴咗啲",
+              "j": "gwai3 zo2 di1",
+              "e": "a bit more"
+            }
+          ]
+        }
+      ],
+      "convo": {
+        "title": "A table for two",
+        "speakers": [
+          "Waiter",
+          "You"
+        ],
+        "lines": [
+          {
+            "u": false,
+            "c": "你好，幾多位呀？",
+            "j": "nei5 hou2, gei2 do1 wai2 aa3?",
+            "e": "Hi, table for how many?",
+            "bd": [
+              {
+                "c": "你好",
+                "j": "nei5 hou2",
+                "e": "hello"
+              },
+              {
+                "c": "幾多位",
+                "j": "gei2 do1 wai2",
+                "e": "how many people"
+              },
+              {
+                "c": "呀",
+                "j": "aa3",
+                "e": "(particle)"
+              }
+            ]
+          },
+          {
+            "u": true,
+            "c": "兩位，唔該。要唔要等位？",
+            "j": "loeng5 wai2, m4 goi1. jiu3 m4 jiu3 dang2 wai2?",
+            "e": "Two please. Do we need to wait?",
+            "opts": [
+              "兩位，唔該。要唔要等位？",
+              "我哋走喇。",
+              "有冇餐牌？"
+            ],
+            "optsJ": [
+              "loeng5 wai2, m4 goi1. jiu3 m4 jiu3 dang2 wai2?",
+              "ngo5 dei6 zau2 laa3.",
+              "jau5 mou5 caan1 paai4?"
+            ],
+            "bd": [
+              {
+                "c": "兩位",
+                "j": "loeng5 wai2",
+                "e": "two people"
+              },
+              {
+                "c": "唔該",
+                "j": "m4 goi1",
+                "e": "please"
+              },
+              {
+                "c": "要唔要",
+                "j": "jiu3 m4 jiu3",
+                "e": "do we need"
+              },
+              {
+                "c": "等位",
+                "j": "dang2 wai2",
+                "e": "wait for a table"
+              }
+            ]
+          },
+          {
+            "u": false,
+            "c": "唔使等，不過要搭枱，得唔得？",
+            "j": "m4 sai2 dang2, bat1 gwo3 jiu3 daap3 toi2, dak1 m4 dak1?",
+            "e": "No wait, but you'll share a table — OK?",
+            "bd": [
+              {
+                "c": "唔使等",
+                "j": "m4 sai2 dang2",
+                "e": "no need to wait"
+              },
+              {
+                "c": "不過",
+                "j": "bat1 gwo3",
+                "e": "but"
+              },
+              {
+                "c": "要",
+                "j": "jiu3",
+                "e": "need to"
+              },
+              {
+                "c": "搭枱",
+                "j": "daap3 toi2",
+                "e": "share a table"
+              },
+              {
+                "c": "得唔得",
+                "j": "dak1 m4 dak1",
+                "e": "is that OK"
+              }
+            ]
+          },
+          {
+            "u": true,
+            "c": "冇問題。你哋有咩好介紹？",
+            "j": "mou5 man6 tai4. nei5 dei6 jau5 me1 hou2 gaai3 siu6?",
+            "e": "No problem. What do you recommend?",
+            "opts": [
+              "冇問題。你哋有咩好介紹？",
+              "我唔搭枱。",
+              "埋單。"
+            ],
+            "optsJ": [
+              "mou5 man6 tai4. nei5 dei6 jau5 me1 hou2 gaai3 siu6?",
+              "ngo5 m4 daap3 toi2.",
+              "maai4 daan1."
+            ],
+            "bd": [
+              {
+                "c": "冇問題",
+                "j": "mou5 man6 tai4",
+                "e": "no problem"
+              },
+              {
+                "c": "你哋",
+                "j": "nei5 dei6",
+                "e": "you"
+              },
+              {
+                "c": "有咩",
+                "j": "jau5 me1",
+                "e": "what"
+              },
+              {
+                "c": "好介紹",
+                "j": "hou2 gaai3 siu6",
+                "e": "good to recommend"
+              }
+            ]
+          },
+          {
+            "u": false,
+            "c": "我哋嘅點心好好食，好多人鍾意。",
+            "j": "ngo5 dei6 ge3 dim2 sam1 hou2 hou2 sik6, hou2 do1 jan4 zung1 ji3.",
+            "e": "Our dim sum is great, lots of people love it.",
+            "bd": [
+              {
+                "c": "我哋嘅",
+                "j": "ngo5 dei6 ge3",
+                "e": "our"
+              },
+              {
+                "c": "點心",
+                "j": "dim2 sam1",
+                "e": "dim sum"
+              },
+              {
+                "c": "好好食",
+                "j": "hou2 hou2 sik6",
+                "e": "very tasty"
+              },
+              {
+                "c": "好多人",
+                "j": "hou2 do1 jan4",
+                "e": "many people"
+              },
+              {
+                "c": "鍾意",
+                "j": "zung1 ji3",
+                "e": "like"
+              }
+            ]
+          },
+          {
+            "u": true,
+            "c": "好，落單啦。唔該一份點心，走青。",
+            "j": "hou2, lok6 daan1 laa1. m4 goi1 jat1 fan6 dim2 sam1, zau2 ceng1.",
+            "e": "OK, let's order. One dim sum, no spring onion please.",
+            "opts": [
+              "好，落單啦。唔該一份點心，走青。",
+              "我唔餓。",
+              "有冇平啲？"
+            ],
+            "optsJ": [
+              "hou2, lok6 daan1 laa1. m4 goi1 jat1 fan6 dim2 sam1, zau2 ceng1.",
+              "ngo5 m4 ngo6.",
+              "jau5 mou5 peng4 di1?"
+            ],
+            "bd": [
+              {
+                "c": "好",
+                "j": "hou2",
+                "e": "OK"
+              },
+              {
+                "c": "落單",
+                "j": "lok6 daan1",
+                "e": "order"
+              },
+              {
+                "c": "啦",
+                "j": "laa1",
+                "e": "(particle)"
+              },
+              {
+                "c": "唔該",
+                "j": "m4 goi1",
+                "e": "please"
+              },
+              {
+                "c": "一份",
+                "j": "jat1 fan6",
+                "e": "one serving"
+              },
+              {
+                "c": "點心",
+                "j": "dim2 sam1",
+                "e": "dim sum"
+              },
+              {
+                "c": "走青",
+                "j": "zau2 ceng1",
+                "e": "no spring onion"
+              }
+            ]
+          },
+          {
+            "u": false,
+            "c": "冇問題。食完唔該叫我埋單。",
+            "j": "mou5 man6 tai4. sik6 jyun4 m4 goi1 giu3 ngo5 maai4 daan1.",
+            "e": "Sure. When you're done, call me to settle up.",
+            "bd": [
+              {
+                "c": "冇問題",
+                "j": "mou5 man6 tai4",
+                "e": "no problem"
+              },
+              {
+                "c": "食完",
+                "j": "sik6 jyun4",
+                "e": "when done"
+              },
+              {
+                "c": "唔該",
+                "j": "m4 goi1",
+                "e": "please"
+              },
+              {
+                "c": "叫我",
+                "j": "giu3 ngo5",
+                "e": "call me"
+              },
+              {
+                "c": "埋單",
+                "j": "maai4 daan1",
+                "e": "settle the bill"
+              }
+            ]
+          },
+          {
+            "u": true,
+            "c": "唔該。因為要加一，所以畀多啲。",
+            "j": "m4 goi1. jan1 wai6 jiu3 gaa1 jat1, so2 ji5 bei2 do1 di1.",
+            "e": "Thanks. Because of the 10% charge, I'll pay a bit more.",
+            "opts": [
+              "唔該。因為要加一，所以畀多啲。",
+              "唔使加一。",
+              "我唔畀錢。"
+            ],
+            "optsJ": [
+              "m4 goi1. jan1 wai6 jiu3 gaa1 jat1, so2 ji5 bei2 do1 di1.",
+              "m4 sai2 gaa1 jat1.",
+              "ngo5 m4 bei2 cin2."
+            ],
+            "bd": [
+              {
+                "c": "唔該",
+                "j": "m4 goi1",
+                "e": "thanks"
+              },
+              {
+                "c": "因為",
+                "j": "jan1 wai6",
+                "e": "because"
+              },
+              {
+                "c": "要",
+                "j": "jiu3",
+                "e": "there's"
+              },
+              {
+                "c": "加一",
+                "j": "gaa1 jat1",
+                "e": "10% charge"
+              },
+              {
+                "c": "所以",
+                "j": "so2 ji5",
+                "e": "so"
+              },
+              {
+                "c": "畀多啲",
+                "j": "bei2 do1 di1",
+                "e": "pay a bit more"
+              }
+            ]
+          }
+        ]
+      }
     }
   },
-  "_idSeq": 10,
-  "_sidSeq": 5
+  "_idSeq": 19,
+  "_sidSeq": 13
 }

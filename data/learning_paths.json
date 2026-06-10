@@ -382,6 +382,14 @@
         {
           "topic": "shopping",
           "round": 2
+        },
+        {
+          "topic": "restaurant",
+          "round": 2
+        },
+        {
+          "topic": "friends",
+          "round": 2
         }
       ],
       "stages": [
@@ -396,6 +404,37 @@
             "drillCap": 15,
             "wordCap": 25,
             "convo": "intermediate-s1"
+          }
+        },
+        {
+          "id": "intermediate-s4",
+          "name": "Food, Dining & Shopping",
+          "topics": [
+            "food",
+            "restaurant",
+            "shopping"
+          ],
+          "checkpoint": {
+            "id": "intermediate-s4-cp",
+            "drillCap": 15,
+            "wordCap": 30,
+            "convo": "intermediate-s4"
+          }
+        },
+        {
+          "id": "intermediate-s5",
+          "name": "Me & My People",
+          "topics": [
+            "greetings",
+            "feelings",
+            "body",
+            "friends"
+          ],
+          "checkpoint": {
+            "id": "intermediate-s5-cp",
+            "drillCap": 15,
+            "wordCap": 35,
+            "convo": "intermediate-s5"
           }
         }
       ]

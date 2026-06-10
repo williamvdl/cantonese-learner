@@ -974,7 +974,7 @@ function renderCheckpointWords() {
       score: q.score,
       total,
       stage,
-      missedTopicKeys: q.missed.map(w => wordTopicInStage(stage, w)).filter(Boolean),
+      missedTopicKeys: q.missed.map(w => wordTopicInStage(cpState.pathKey, stage, w)).filter(Boolean),
       missedItems: q.missed.map(w => ({ c:w.c, j:w.j, e:w.e })),
       activity: 'words',
     });
