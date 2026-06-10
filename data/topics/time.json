@@ -232,6 +232,151 @@
               "e": "to rest"
             }
           ]
+        },
+        {
+          "sid": "time-t1-s06",
+          "c": "我生日係三月十號。",
+          "j": "ngo5 saang1 jat6 hai6 saam1 jyut6 sap6 hou6.",
+          "e": "My birthday is the 10th of March.",
+          "note": "月 (jyut6) \"month\" and <b>號</b> (hou6) \"date / day of month\" are the building blocks of dates: 三月十號 (saam1 jyut6 sap6 hou6) = \"March 10th\". 幾月幾號 (gei2 jyut6 gei2 hou6) = \"what date?\"",
+          "bd": [
+            {
+              "c": "我",
+              "j": "ngo5",
+              "e": "I"
+            },
+            {
+              "c": "生日",
+              "j": "saang1 jat6",
+              "e": "birthday"
+            },
+            {
+              "c": "係",
+              "j": "hai6",
+              "e": "is"
+            },
+            {
+              "c": "三月",
+              "j": "saam1 jyut6",
+              "e": "March"
+            },
+            {
+              "c": "十號",
+              "j": "sap6 hou6",
+              "e": "10th"
+            }
+          ]
+        },
+        {
+          "sid": "time-t1-s07",
+          "c": "今年係我第一年學廣東話。",
+          "j": "gam1 nin4 hai6 ngo5 dai6 jat1 nin4 hok6 gwong2 dung1 waa2.",
+          "e": "This year is my first year learning Cantonese.",
+          "note": "年 (nin4) \"year\" follows the same logic: 今年 (gam1 nin4) \"this year\", 去年 (heoi3 nin4) \"last year\" (not in the word list but useful), 明年 (ming4 nin4) \"next year\". Numbers + 年 give the calendar year.",
+          "bd": [
+            {
+              "c": "今年",
+              "j": "gam1 nin4",
+              "e": "this year"
+            },
+            {
+              "c": "係",
+              "j": "hai6",
+              "e": "is"
+            },
+            {
+              "c": "我",
+              "j": "ngo5",
+              "e": "my"
+            },
+            {
+              "c": "第一年",
+              "j": "dai6 jat1 nin4",
+              "e": "first year"
+            },
+            {
+              "c": "學廣東話",
+              "j": "hok6 gwong2 dung1 waa2",
+              "e": "learning Cantonese"
+            }
+          ]
+        },
+        {
+          "sid": "time-t1-s08",
+          "c": "上個月好忙，下個月應該好啲。",
+          "j": "soeng6 go3 jyut6 hou2 mong4, haa6 go3 jyut6 jing1 goi1 hou2 di1.",
+          "e": "Last month was hectic — next month should be better.",
+          "note": "上個月 (soeng6 go3 jyut6) \"last month\" and <b>下個月</b> (haa6 go3 jyut6) \"next month\" follow the same 上/下 (soeng6/haa6) \"above/below\" logic as 上個星期/下個星期 (last/next week). A consistent Cantonese pattern.",
+          "bd": [
+            {
+              "c": "上個月",
+              "j": "soeng6 go3 jyut6",
+              "e": "last month"
+            },
+            {
+              "c": "好忙",
+              "j": "hou2 mong4",
+              "e": "very busy"
+            },
+            {
+              "c": "下個月",
+              "j": "haa6 go3 jyut6",
+              "e": "next month"
+            },
+            {
+              "c": "應該",
+              "j": "jing1 goi1",
+              "e": "should"
+            },
+            {
+              "c": "好啲",
+              "j": "hou2 di1",
+              "e": "better"
+            }
+          ]
+        },
+        {
+          "sid": "time-t1-s09",
+          "c": "我星期二同星期三上班，星期四同星期五放假。",
+          "j": "ngo5 sing1 kei4 ji6 tung4 sing1 kei4 saam1 soeng5 baan1, sing1 kei4 sei3 tung4 sing1 kei4 ng5 fong3 gaa3.",
+          "e": "I work Tuesday and Wednesday, and have Thursday and Friday off.",
+          "bd": [
+            {
+              "c": "星期二",
+              "j": "sing1 kei4 ji6",
+              "e": "Tuesday"
+            },
+            {
+              "c": "同",
+              "j": "tung4",
+              "e": "and"
+            },
+            {
+              "c": "星期三",
+              "j": "sing1 kei4 saam1",
+              "e": "Wednesday"
+            },
+            {
+              "c": "上班",
+              "j": "soeng5 baan1",
+              "e": "work"
+            },
+            {
+              "c": "星期四",
+              "j": "sing1 kei4 sei3",
+              "e": "Thursday"
+            },
+            {
+              "c": "星期五",
+              "j": "sing1 kei4 ng5",
+              "e": "Friday"
+            },
+            {
+              "c": "放假",
+              "j": "fong3 gaa3",
+              "e": "day off"
+            }
+          ]
         }
       ],
       "convo": {
@@ -439,5 +584,5 @@
     }
   },
   "_idSeq": 18,
-  "_sidSeq": 5
+  "_sidSeq": 9
 }

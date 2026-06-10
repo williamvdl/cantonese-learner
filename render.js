@@ -1505,7 +1505,11 @@ function renderConversation(color) {
   // keep the three checkpoint activities on a deliberate recall→apply→produce
   // gradient rather than overlapping the pattern drill's MCQ feel.
   const inCheckpointConvo = !!(state.checkpoint && state.checkpointAct === 'convo');
-  const gapBtnHtml = inCheckpointConvo ? '' : `
+  // Only show Fill-the-Gap if at least one user turn has authored opts — pre-spec
+  // convos have u:true lines but no opts array, and trying to render choices for them
+  // throws a TypeError that corrupts the event-listener state for the whole page.
+  const hasGapLines = lines.some(l => l.u && Array.isArray(l.opts) && l.opts.length > 0);
+  const gapBtnHtml = (inCheckpointConvo || !hasGapLines) ? '' : `
       <button class="convo-ctrl-btn${gapOn?' on':''}" id="gap-mode-btn"
         style="${gapOn?'background:'+color+';color:#fff;border-color:'+color:''}">
         🧩 Fill-the-Gap
@@ -1639,8 +1643,9 @@ function renderConversation(color) {
     const playing  = cv.playingLine === i;
     const playColor = isUser ? 'rgba(255,255,255,0.8)' : color;
 
-    // Gap mode: hide user lines until answered
-    if (gapOn && isUser) {
+    // Gap mode: hide user lines until answered. Guard against pre-spec convos
+    // where u:true lines have no opts array — those render as normal bubbles.
+    if (gapOn && isUser && Array.isArray(line.opts) && Array.isArray(line.optsJ)) {
       const answered = cv.gapAnswers[i];
       if (!answered) {
         // Show choices
