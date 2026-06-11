@@ -5291,6 +5291,374 @@
           ]
         }
       ]
+    },
+    "intermediate-s3": {
+      "title": "Making plans",
+      "speakers": [
+        "Friend",
+        "You"
+      ],
+      "lines": [
+        {
+          "u": false,
+          "c": "你今個週末想做咩呀？",
+          "j": "nei5 gam1 go3 zau1 mut6 soeng2 zou6 me1 aa3?",
+          "e": "What do you want to do this weekend?",
+          "bd": [
+            {
+              "c": "你",
+              "j": "nei5",
+              "e": "you"
+            },
+            {
+              "c": "今個週末",
+              "j": "gam1 go3 zau1 mut6",
+              "e": "this weekend"
+            },
+            {
+              "c": "想做咩",
+              "j": "soeng2 zou6 me1",
+              "e": "want to do what"
+            },
+            {
+              "c": "呀",
+              "j": "aa3",
+              "e": "(particle)"
+            }
+          ]
+        },
+        {
+          "u": true,
+          "c": "我好想去行山，你肯唔肯一齊去？",
+          "j": "ngo5 hou2 soeng2 heoi3 haang4 saan1, nei5 hang2 m4 hang2 jat1 cai4 heoi3?",
+          "e": "I really want to go hiking — are you willing to come along?",
+          "bd": [
+            {
+              "c": "我",
+              "j": "ngo5",
+              "e": "I"
+            },
+            {
+              "c": "好想",
+              "j": "hou2 soeng2",
+              "e": "really want to"
+            },
+            {
+              "c": "去行山",
+              "j": "heoi3 haang4 saan1",
+              "e": "go hiking"
+            },
+            {
+              "c": "你",
+              "j": "nei5",
+              "e": "you"
+            },
+            {
+              "c": "肯唔肯",
+              "j": "hang2 m4 hang2",
+              "e": "willing or not"
+            },
+            {
+              "c": "一齊去",
+              "j": "jat1 cai4 heoi3",
+              "e": "go together"
+            }
+          ],
+          "opts": [
+            "我好想去行山，你肯唔肯一齊去？",
+            "我唔知喎，你有咩計劃？",
+            "我想去，不過要睇吓天氣先。"
+          ],
+          "optsJ": [
+            "ngo5 hou2 soeng2 heoi3 haang4 saan1, nei5 hang2 m4 hang2 jat1 cai4 heoi3?",
+            "ngo5 m4 ji1 wo3, nei5 jau5 me1 gai3 waak6?",
+            "ngo5 soeng2 heoi3, bat1 gwo3 jiu3 tai2 haa5 tin1 hei3 sin1."
+          ]
+        },
+        {
+          "u": false,
+          "c": "我好似得㗎，不過我唔識行山喎。你識唔識帶路㗎？",
+          "j": "ngo5 hou2 ci5 dak1 gaa3, bat1 gwo3 ngo5 m4 sik1 haang4 saan1 wo3. nei5 sik1 m4 sik1 daai3 lou6 gaa3?",
+          "e": "I think I can make it, but I don't know how to hike. Do you know the way?",
+          "bd": [
+            {
+              "c": "我好似得",
+              "j": "ngo5 hou2 ci5 dak1",
+              "e": "I think I can make it"
+            },
+            {
+              "c": "㗎",
+              "j": "gaa3",
+              "e": "(particle)"
+            },
+            {
+              "c": "不過",
+              "j": "bat1 gwo3",
+              "e": "but"
+            },
+            {
+              "c": "我唔識行山",
+              "j": "ngo5 m4 sik1 haang4 saan1",
+              "e": "I don't know how to hike"
+            },
+            {
+              "c": "喎",
+              "j": "wo3",
+              "e": "(particle — new info)"
+            },
+            {
+              "c": "你",
+              "j": "nei5",
+              "e": "you"
+            },
+            {
+              "c": "識唔識帶路",
+              "j": "sik1 m4 sik1 daai3 lou6",
+              "e": "know the way or not"
+            },
+            {
+              "c": "㗎",
+              "j": "gaa3",
+              "e": "(question particle)"
+            }
+          ]
+        },
+        {
+          "u": true,
+          "c": "識㗎，我實會帶你去，你唔使擔心。",
+          "j": "sik1 gaa3, ngo5 sat6 wui5 daai3 nei5 heoi3, nei5 m4 sai2 daam1 sam1.",
+          "e": "Yes, I'll definitely take you — no need to worry.",
+          "bd": [
+            {
+              "c": "識㗎",
+              "j": "sik1 gaa3",
+              "e": "yes, I know how"
+            },
+            {
+              "c": "我",
+              "j": "ngo5",
+              "e": "I"
+            },
+            {
+              "c": "實會",
+              "j": "sat6 wui5",
+              "e": "will definitely"
+            },
+            {
+              "c": "帶你去",
+              "j": "daai3 nei5 heoi3",
+              "e": "take you there"
+            },
+            {
+              "c": "你唔使",
+              "j": "nei5 m4 sai2",
+              "e": "you don't need to"
+            },
+            {
+              "c": "擔心",
+              "j": "daam1 sam1",
+              "e": "worry"
+            }
+          ],
+          "opts": [
+            "識㗎，我實會帶你去，你唔使擔心。",
+            "識少少，不過我哋可以一齊研究。",
+            "唔係好識，如果你想去，應該問其他人。"
+          ],
+          "optsJ": [
+            "sik1 gaa3, ngo5 sat6 wui5 daai3 nei5 heoi3, nei5 m4 sai2 daam1 sam1.",
+            "sik1 siu2 siu2, bat1 gwo3 ngo5 dei6 ho2 ji5 jat1 cai4 jin4 gau3.",
+            "m4 hai6 hou2 sik1, jyu4 gwo2 nei5 soeng2 heoi3, jing1 goi1 man6 kei4 taa1 jan4."
+          ]
+        },
+        {
+          "u": false,
+          "c": "太好喇！如果天氣好，我哋應該早啲出發。",
+          "j": "taai3 hou2 laa3! jyu4 gwo2 tin1 hei3 hou2, ngo5 dei6 jing1 goi1 zou2 di1 ceot1 faat3.",
+          "e": "Wonderful! If the weather is good, we should set off early.",
+          "bd": [
+            {
+              "c": "太好喇",
+              "j": "taai3 hou2 laa3",
+              "e": "wonderful"
+            },
+            {
+              "c": "如果",
+              "j": "jyu4 gwo2",
+              "e": "if"
+            },
+            {
+              "c": "天氣好",
+              "j": "tin1 hei3 hou2",
+              "e": "weather is good"
+            },
+            {
+              "c": "我哋",
+              "j": "ngo5 dei6",
+              "e": "we"
+            },
+            {
+              "c": "應該",
+              "j": "jing1 goi1",
+              "e": "should"
+            },
+            {
+              "c": "早啲",
+              "j": "zou2 di1",
+              "e": "earlier"
+            },
+            {
+              "c": "出發",
+              "j": "ceot1 faat3",
+              "e": "set off"
+            }
+          ]
+        },
+        {
+          "u": true,
+          "c": "好呀，雖然我唔係好叻，但係我會努力㗎。",
+          "j": "hou2 aa3, seoi1 jin4 ngo5 m4 hai6 hou2 lek1, daan6 hai6 ngo5 wui5 nou5 lik6 gaa3.",
+          "e": "Sure! Although I'm not very fit, I'll work hard.",
+          "bd": [
+            {
+              "c": "好呀",
+              "j": "hou2 aa3",
+              "e": "sure"
+            },
+            {
+              "c": "雖然",
+              "j": "seoi1 jin4",
+              "e": "although"
+            },
+            {
+              "c": "我唔係好叻",
+              "j": "ngo5 m4 hai6 hou2 lek1",
+              "e": "I'm not that capable / fit"
+            },
+            {
+              "c": "但係",
+              "j": "daan6 hai6",
+              "e": "but"
+            },
+            {
+              "c": "我會",
+              "j": "ngo5 wui5",
+              "e": "I will"
+            },
+            {
+              "c": "努力",
+              "j": "nou5 lik6",
+              "e": "work hard / give it my best"
+            },
+            {
+              "c": "㗎",
+              "j": "gaa3",
+              "e": "(assertive particle)"
+            }
+          ],
+          "opts": [
+            "好呀，雖然我唔係好叻，但係我會努力㗎。",
+            "得㗎，不過我需要買對好啲嘅鞋先。",
+            "好，我實準時，你唔使擔心㗎。"
+          ],
+          "optsJ": [
+            "hou2 aa3, seoi1 jin4 ngo5 m4 hai6 hou2 lek1, daan6 hai6 ngo5 wui5 nou5 lik6 gaa3.",
+            "dak1 gaa3, bat1 gwo3 ngo5 seoi1 jiu3 maai5 deoi3 hou2 di1 ge3 haai4 sin1.",
+            "hou2, ngo5 sat6 zeon2 si4, nei5 m4 sai2 daam1 sam1 gaa3."
+          ]
+        },
+        {
+          "u": false,
+          "c": "唔使擔心，呢條路唔係好難，你實得㗎！",
+          "j": "m4 sai2 daam1 sam1, ni1 tiu4 lou6 m4 hai6 hou2 naan4, nei5 sat6 dak1 gaa3!",
+          "e": "Don't worry — this trail isn't too hard, you'll definitely manage!",
+          "bd": [
+            {
+              "c": "唔使擔心",
+              "j": "m4 sai2 daam1 sam1",
+              "e": "no need to worry"
+            },
+            {
+              "c": "呢條路",
+              "j": "ni1 tiu4 lou6",
+              "e": "this trail / road"
+            },
+            {
+              "c": "唔係好難",
+              "j": "m4 hai6 hou2 naan4",
+              "e": "not too hard"
+            },
+            {
+              "c": "你",
+              "j": "nei5",
+              "e": "you"
+            },
+            {
+              "c": "實得㗎",
+              "j": "sat6 dak1 gaa3",
+              "e": "will definitely manage"
+            }
+          ]
+        },
+        {
+          "u": true,
+          "c": "好，咁我哋幾點出發好？你話事㗎喇！",
+          "j": "hou2, gam2 ngo5 dei6 gei2 dim2 ceot1 faat3 hou2? nei5 waa6 si6 gaa3 laa3!",
+          "e": "Great, what time should we set off? You decide!",
+          "bd": [
+            {
+              "c": "好",
+              "j": "hou2",
+              "e": "great"
+            },
+            {
+              "c": "咁",
+              "j": "gam2",
+              "e": "so then"
+            },
+            {
+              "c": "我哋",
+              "j": "ngo5 dei6",
+              "e": "we"
+            },
+            {
+              "c": "幾點",
+              "j": "gei2 dim2",
+              "e": "what time"
+            },
+            {
+              "c": "出發",
+              "j": "ceot1 faat3",
+              "e": "set off"
+            },
+            {
+              "c": "好",
+              "j": "hou2",
+              "e": "good / ok"
+            },
+            {
+              "c": "你話事",
+              "j": "nei5 waa6 si6",
+              "e": "you decide / you're in charge"
+            },
+            {
+              "c": "㗎喇",
+              "j": "gaa3 laa3",
+              "e": "(particle — softened assertion)"
+            }
+          ],
+          "opts": [
+            "好，咁我哋幾點出發好？你話事㗎喇！",
+            "正！不過我需要早少少準備，八點得唔得？",
+            "好㗎，如果你俾我揀，我想八點半出發。"
+          ],
+          "optsJ": [
+            "hou2, gam2 ngo5 dei6 gei2 dim2 ceot1 faat3 hou2? nei5 waa6 si6 gaa3 laa3!",
+            "zing3! bat1 gwo3 ngo5 seoi1 jiu3 zou2 siu2 siu2 zeon2 bei6, baat3 dim2 dak1 m4 dak1?",
+            "hou2 gaa3, jyu4 gwo2 nei5 bei2 ngo5 gaan2, ngo5 soeng2 baat3 dim2 bun3 ceot1 faat3."
+          ]
+        }
+      ]
     }
   }
 }

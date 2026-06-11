@@ -390,6 +390,14 @@
         {
           "topic": "friends",
           "round": 2
+        },
+        {
+          "topic": "modals",
+          "round": 2
+        },
+        {
+          "topic": "comparisons",
+          "round": 2
         }
       ],
       "stages": [
@@ -404,6 +412,19 @@
             "drillCap": 15,
             "wordCap": 25,
             "convo": "intermediate-s1"
+          }
+        },
+        {
+          "id": "intermediate-s3",
+          "name": "Saying More",
+          "topics": [
+            "modals",
+            "comparisons"
+          ],
+          "checkpoint": {
+            "words": true,
+            "patterns": false,
+            "convo": "intermediate-s3"
           }
         },
         {
