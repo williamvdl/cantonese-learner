@@ -4,7 +4,7 @@
     "icon": "⚖️",
     "color": "#A0712B"
   },
-  "_idSeq": 12,
+  "_idSeq": 21,
   "rounds": {
     "1": {
       "note": "Two ways to compare. (1) A 比 (bei2) B + adjective: 我比你高 (ngo5 bei2 nei5 gou1) = “I’m taller than you”. (2) A + adjective + 過 (gwo3) B: 我高過你 (ngo5 gou1 gwo3 nei5) — same meaning, very common in speech. Add 啲 (di1) for “a bit more” (高啲 gou1 di1 = taller), 最 (zeoi3) for “the most” (最高 zeoi3 gou1 = tallest), and 同…一樣 (tung4…jat1 joeng6) for “the same as”.",
@@ -386,7 +386,796 @@
           }
         ]
       }
+    },
+    "2": {
+      "note": "Tier-2 comparisons move beyond basic frames to degree expressions, the 越嚟越 (jyut6 lai4 jyut6) construction, and multi-clause comparative sentences. Key additions: 得多 (dak1 do1) and 好多 (hou2 do1) for 'much more'; 越嚟越 (jyut6 lai4 jyut6) for 'more and more'; 有冇 (jau5 mou5)…咁 (gam3) for comparison questions; 反而 (faan2 ji4) for contrary results; 其實 (kei4 sat6) for corrections.",
+      "words": [
+        {
+          "id": "comparisons-013",
+          "c": "得多",
+          "j": "dak1 do1",
+          "e": "Much more / by a lot (after adjective in comparison)"
+        },
+        {
+          "id": "comparisons-014",
+          "c": "越嚟越",
+          "j": "jyut6 lai4 jyut6",
+          "e": "More and more"
+        },
+        {
+          "id": "comparisons-015",
+          "c": "好多",
+          "j": "hou2 do1",
+          "e": "Much more / a lot more (colloquial degree intensifier)"
+        },
+        {
+          "id": "comparisons-016",
+          "c": "反而",
+          "j": "faan2 ji4",
+          "e": "On the contrary / instead (opposite to expectation)"
+        },
+        {
+          "id": "comparisons-017",
+          "c": "其實",
+          "j": "kei4 sat6",
+          "e": "Actually / in fact"
+        },
+        {
+          "id": "comparisons-018",
+          "c": "難",
+          "j": "naan4",
+          "e": "Difficult"
+        },
+        {
+          "id": "comparisons-019",
+          "c": "易",
+          "j": "ji6",
+          "e": "Easy"
+        },
+        {
+          "id": "comparisons-020",
+          "c": "有冇",
+          "j": "jau5 mou5",
+          "e": "Have or not / as ___ as? (comparison question)"
+        },
+        {
+          "id": "comparisons-021",
+          "c": "分別",
+          "j": "fan1 bit6",
+          "e": "Difference / distinction"
+        }
+      ],
+      "sentences": [
+        {
+          "sid": "comparisons-t2-s01",
+          "c": "呢間餐廳比嗰間貴得多。",
+          "j": "ni1 gaan1 caan1 teng1 bei2 go2 gaan1 gwai3 dak1 do1.",
+          "e": "This restaurant is much more expensive than that one.",
+          "note": "得多 (dak1 do1) after an adjective in a 比 (bei2) comparison means by a lot — 貴得多 (gwai3 dak1 do1) much more expensive. Stronger than 貴啲 (gwai3 di1) a bit more expensive.",
+          "bd": [
+            {
+              "c": "呢間餐廳",
+              "j": "ni1 gaan1 caan1 teng1",
+              "e": "this restaurant"
+            },
+            {
+              "c": "比",
+              "j": "bei2",
+              "e": "than"
+            },
+            {
+              "c": "嗰間",
+              "j": "go2 gaan1",
+              "e": "that one"
+            },
+            {
+              "c": "貴得多",
+              "j": "gwai3 dak1 do1",
+              "e": "much more expensive"
+            }
+          ]
+        },
+        {
+          "sid": "comparisons-t2-s02",
+          "c": "天氣越嚟越熱，我越嚟越唔想出街。",
+          "j": "tin1 hei3 jyut6 lai4 jyut6 jit6, ngo5 jyut6 lai4 jyut6 m4 soeng2 ceot1 gaai1.",
+          "e": "The weather is getting hotter and hotter, and I'm less and less willing to go out.",
+          "note": "越嚟越 (jyut6 lai4 jyut6) + adjective or verb = more and more ___. It stacks naturally across two clauses — one describing the situation, one the reaction — which is the real Intermediate target.",
+          "bd": [
+            {
+              "c": "天氣",
+              "j": "tin1 hei3",
+              "e": "weather"
+            },
+            {
+              "c": "越嚟越熱",
+              "j": "jyut6 lai4 jyut6 jit6",
+              "e": "getting hotter and hotter"
+            },
+            {
+              "c": "我",
+              "j": "ngo5",
+              "e": "I"
+            },
+            {
+              "c": "越嚟越唔想",
+              "j": "jyut6 lai4 jyut6 m4 soeng2",
+              "e": "less and less want to"
+            },
+            {
+              "c": "出街",
+              "j": "ceot1 gaai1",
+              "e": "go out"
+            }
+          ]
+        },
+        {
+          "sid": "comparisons-t2-s03",
+          "c": "你有冇佢咁叻㗎？",
+          "j": "nei5 jau5 mou5 keoi5 gam3 lek1 gaa3?",
+          "e": "Are you as clever as him?",
+          "note": "有冇 (jau5 mou5)…咁 (gam3) + adjective questions equality — 有冇佢咁叻 (jau5 mou5 keoi5 gam3 lek1) as clever as him? Contrast with 同 (tung4)…一樣 (jat1 joeng6) which asserts equality; 有冇 (jau5 mou5)…咁 (gam3) asks whether it holds.",
+          "bd": [
+            {
+              "c": "你",
+              "j": "nei5",
+              "e": "you"
+            },
+            {
+              "c": "有冇",
+              "j": "jau5 mou5",
+              "e": "as ___ as? / have or not"
+            },
+            {
+              "c": "佢咁叻",
+              "j": "keoi5 gam3 lek1",
+              "e": "as clever as him"
+            },
+            {
+              "c": "㗎",
+              "j": "gaa3",
+              "e": "(question particle)"
+            }
+          ]
+        },
+        {
+          "sid": "comparisons-t2-s04",
+          "c": "雖然呢個難啲，但係其實都幾易㗎。",
+          "j": "seoi1 jin4 ni1 go3 naan4 di1, daan6 hai6 kei4 sat6 dou1 gei2 ji6 gaa3.",
+          "e": "Although this one is a bit harder, it's actually quite easy.",
+          "note": "其實 (kei4 sat6) introduces a correction or surprise — actually / in fact. 幾 (gei2) before an adjective means quite or fairly: 幾易 (gei2 ji6) quite easy, 幾好 (gei2 hou2) quite good.",
+          "bd": [
+            {
+              "c": "雖然",
+              "j": "seoi1 jin4",
+              "e": "although"
+            },
+            {
+              "c": "呢個",
+              "j": "ni1 go3",
+              "e": "this one"
+            },
+            {
+              "c": "難啲",
+              "j": "naan4 di1",
+              "e": "a bit harder"
+            },
+            {
+              "c": "但係",
+              "j": "daan6 hai6",
+              "e": "but"
+            },
+            {
+              "c": "其實",
+              "j": "kei4 sat6",
+              "e": "actually"
+            },
+            {
+              "c": "都幾易",
+              "j": "dou1 gei2 ji6",
+              "e": "quite easy (still)"
+            },
+            {
+              "c": "㗎",
+              "j": "gaa3",
+              "e": "(assertive particle)"
+            }
+          ]
+        },
+        {
+          "sid": "comparisons-t2-s05",
+          "c": "我以為呢條路易，但係反而比嗰條難好多。",
+          "j": "ngo5 ji5 wai4 ni1 tiu4 lou6 ji6, daan6 hai6 faan2 ji4 bei2 go2 tiu4 naan4 hou2 do1.",
+          "e": "I thought this road would be easy, but it turned out to be much harder than that one.",
+          "note": "反而 (faan2 ji4) signals a result opposite to expectation — on the contrary / instead. 好多 (hou2 do1) after 比 (bei2) works like 得多 (dak1 do1): both mean much more, with 好多 (hou2 do1) the slightly more colloquial choice.",
+          "bd": [
+            {
+              "c": "我以為",
+              "j": "ngo5 ji5 wai4",
+              "e": "I thought"
+            },
+            {
+              "c": "呢條路",
+              "j": "ni1 tiu4 lou6",
+              "e": "this road"
+            },
+            {
+              "c": "易",
+              "j": "ji6",
+              "e": "easy"
+            },
+            {
+              "c": "但係",
+              "j": "daan6 hai6",
+              "e": "but"
+            },
+            {
+              "c": "反而",
+              "j": "faan2 ji4",
+              "e": "on the contrary"
+            },
+            {
+              "c": "比嗰條",
+              "j": "bei2 go2 tiu4",
+              "e": "than that one"
+            },
+            {
+              "c": "難好多",
+              "j": "naan4 hou2 do1",
+              "e": "much harder"
+            }
+          ]
+        },
+        {
+          "sid": "comparisons-t2-s06",
+          "c": "兩個方法有咩分別？其實差唔多㗎喎。",
+          "j": "loeng5 go3 fong1 faat3 jau5 me1 fan1 bit6? kei4 sat6 caa1 m4 do1 gaa3 wo3.",
+          "e": "What's the difference between the two methods? Actually they're about the same.",
+          "note": "分別 (fan1 bit6) difference is the natural noun after 有咩 (jau5 me1) what is there — 有咩分別 (jau5 me1 fan1 bit6) what difference is there? A useful phrase for any comparison.",
+          "bd": [
+            {
+              "c": "兩個",
+              "j": "loeng5 go3",
+              "e": "the two"
+            },
+            {
+              "c": "方法",
+              "j": "fong1 faat3",
+              "e": "methods"
+            },
+            {
+              "c": "有咩分別",
+              "j": "jau5 me1 fan1 bit6",
+              "e": "what difference is there"
+            },
+            {
+              "c": "其實",
+              "j": "kei4 sat6",
+              "e": "actually"
+            },
+            {
+              "c": "差唔多",
+              "j": "caa1 m4 do1",
+              "e": "about the same"
+            },
+            {
+              "c": "㗎喎",
+              "j": "gaa3 wo3",
+              "e": "(particle — mild surprise)"
+            }
+          ]
+        },
+        {
+          "sid": "comparisons-t2-s07",
+          "c": "佢比我叻好多，所以我要努力追。",
+          "j": "keoi5 bei2 ngo5 lek1 hou2 do1, so2 ji5 ngo5 jiu3 nou5 lik6 zeoi1.",
+          "e": "She's much more capable than me, so I need to work hard to catch up.",
+          "note": "追 (zeoi1) chase / catch up is the natural verb here — 努力追 (nou5 lik6 zeoi1) work hard to catch up. The sentence uses 比 (bei2) + 好多 (hou2 do1) for degree, then 所以 (so2 ji5) to show consequence.",
+          "bd": [
+            {
+              "c": "佢",
+              "j": "keoi5",
+              "e": "she"
+            },
+            {
+              "c": "比我",
+              "j": "bei2 ngo5",
+              "e": "than me"
+            },
+            {
+              "c": "叻好多",
+              "j": "lek1 hou2 do1",
+              "e": "much more capable"
+            },
+            {
+              "c": "所以",
+              "j": "so2 ji5",
+              "e": "so"
+            },
+            {
+              "c": "我要",
+              "j": "ngo5 jiu3",
+              "e": "I need to"
+            },
+            {
+              "c": "努力追",
+              "j": "nou5 lik6 zeoi1",
+              "e": "work hard to catch up"
+            }
+          ]
+        },
+        {
+          "sid": "comparisons-t2-s08",
+          "c": "如果你覺得呢個方法太難，不如試吓嗰個，可能易啲。",
+          "j": "jyu4 gwo2 nei5 gok3 dak1 ni1 go3 fong1 faat3 taai3 naan4, bat1 jyu4 si3 haa5 go2 go3, ho2 nang4 ji6 di1.",
+          "e": "If you find this method too hard, you might as well try that one — it might be a bit easier.",
+          "note": "太 (taai3) before an adjective means too — 太難 (taai3 naan4) too hard. 不如 (bat1 jyu4) you might as well / why not is a suggestion softener from the connectives lesson. 可能 (ho2 nang4) maybe hedges the comparison.",
+          "bd": [
+            {
+              "c": "如果",
+              "j": "jyu4 gwo2",
+              "e": "if"
+            },
+            {
+              "c": "你覺得",
+              "j": "nei5 gok3 dak1",
+              "e": "you find / you think"
+            },
+            {
+              "c": "呢個方法",
+              "j": "ni1 go3 fong1 faat3",
+              "e": "this method"
+            },
+            {
+              "c": "太難",
+              "j": "taai3 naan4",
+              "e": "too hard"
+            },
+            {
+              "c": "不如",
+              "j": "bat1 jyu4",
+              "e": "you might as well / why not"
+            },
+            {
+              "c": "試吓嗰個",
+              "j": "si3 haa5 go2 go3",
+              "e": "try that one"
+            },
+            {
+              "c": "可能",
+              "j": "ho2 nang4",
+              "e": "maybe"
+            },
+            {
+              "c": "易啲",
+              "j": "ji6 di1",
+              "e": "a bit easier"
+            }
+          ]
+        }
+      ],
+      "convo": {
+        "title": "Choosing a gym class",
+        "speakers": [
+          "Friend",
+          "You"
+        ],
+        "lines": [
+          {
+            "u": false,
+            "c": "你覺得瑜伽同普拉提有咩分別？",
+            "j": "nei5 gok3 dak1 jyu4 gaa1 tung4 pou2 laa1 tai4 jau5 me1 fan1 bit6?",
+            "e": "What do you think is the difference between yoga and pilates?",
+            "bd": [
+              {
+                "c": "你覺得",
+                "j": "nei5 gok3 dak1",
+                "e": "what do you think"
+              },
+              {
+                "c": "瑜伽",
+                "j": "jyu4 gaa1",
+                "e": "yoga"
+              },
+              {
+                "c": "同",
+                "j": "tung4",
+                "e": "and"
+              },
+              {
+                "c": "普拉提",
+                "j": "pou2 laa1 tai4",
+                "e": "pilates"
+              },
+              {
+                "c": "有咩分別",
+                "j": "jau5 me1 fan1 bit6",
+                "e": "what difference is there"
+              }
+            ]
+          },
+          {
+            "u": true,
+            "c": "瑜伽比普拉提易啲，但係兩個都幾好。",
+            "j": "jyu4 gaa1 bei2 pou2 laa1 tai4 ji6 di1, daan6 hai6 loeng5 go3 dou1 gei2 hou2.",
+            "e": "Yoga is a bit easier than pilates, but both are quite good.",
+            "bd": [
+              {
+                "c": "瑜伽",
+                "j": "jyu4 gaa1",
+                "e": "yoga"
+              },
+              {
+                "c": "比",
+                "j": "bei2",
+                "e": "than"
+              },
+              {
+                "c": "普拉提",
+                "j": "pou2 laa1 tai4",
+                "e": "pilates"
+              },
+              {
+                "c": "易啲",
+                "j": "ji6 di1",
+                "e": "a bit easier"
+              },
+              {
+                "c": "但係",
+                "j": "daan6 hai6",
+                "e": "but"
+              },
+              {
+                "c": "兩個",
+                "j": "loeng5 go3",
+                "e": "both"
+              },
+              {
+                "c": "都幾好",
+                "j": "dou1 gei2 hou2",
+                "e": "quite good"
+              }
+            ],
+            "opts": [
+              "瑜伽比普拉提易啲，但係兩個都幾好。",
+              "兩個差唔多，其實都幾難㗎。",
+              "我唔知喎，我兩個都未試過。"
+            ],
+            "optsJ": [
+              "jyu4 gaa1 bei2 pou2 laa1 tai4 ji6 di1, daan6 hai6 loeng5 go3 dou1 gei2 hou2.",
+              "loeng5 go3 caa1 m4 do1, kei4 sat6 dou1 gei2 naan4 gaa3.",
+              "ngo5 m4 ji1 wo3, ngo5 loeng5 go3 dou1 mei6 si3 gwo3."
+            ]
+          },
+          {
+            "u": false,
+            "c": "我以為兩個差唔多，但係其實唔同㗎？",
+            "j": "ngo5 ji5 wai4 loeng5 go3 caa1 m4 do1, daan6 hai6 kei4 sat6 m4 tung4 gaa3?",
+            "e": "I thought they were about the same — but actually they're different?",
+            "bd": [
+              {
+                "c": "我以為",
+                "j": "ngo5 ji5 wai4",
+                "e": "I thought"
+              },
+              {
+                "c": "兩個",
+                "j": "loeng5 go3",
+                "e": "the two"
+              },
+              {
+                "c": "差唔多",
+                "j": "caa1 m4 do1",
+                "e": "about the same"
+              },
+              {
+                "c": "但係",
+                "j": "daan6 hai6",
+                "e": "but"
+              },
+              {
+                "c": "其實",
+                "j": "kei4 sat6",
+                "e": "actually"
+              },
+              {
+                "c": "唔同",
+                "j": "m4 tung4",
+                "e": "different"
+              },
+              {
+                "c": "㗎",
+                "j": "gaa3",
+                "e": "(question particle)"
+              }
+            ]
+          },
+          {
+            "u": true,
+            "c": "係㗎，普拉提反而比瑜伽難好多，要用好多核心。",
+            "j": "hai6 gaa3, pou2 laa1 tai4 faan2 ji4 bei2 jyu4 gaa1 naan4 hou2 do1, jiu3 jung6 hou2 do1 hat6 sam1.",
+            "e": "Yeah — pilates is actually much harder than yoga, it uses a lot of core.",
+            "bd": [
+              {
+                "c": "係㗎",
+                "j": "hai6 gaa3",
+                "e": "that's right"
+              },
+              {
+                "c": "普拉提",
+                "j": "pou2 laa1 tai4",
+                "e": "pilates"
+              },
+              {
+                "c": "反而",
+                "j": "faan2 ji4",
+                "e": "on the contrary"
+              },
+              {
+                "c": "比瑜伽",
+                "j": "bei2 jyu4 gaa1",
+                "e": "than yoga"
+              },
+              {
+                "c": "難好多",
+                "j": "naan4 hou2 do1",
+                "e": "much harder"
+              },
+              {
+                "c": "要用",
+                "j": "jiu3 jung6",
+                "e": "requires using"
+              },
+              {
+                "c": "好多核心",
+                "j": "hou2 do1 hat6 sam1",
+                "e": "a lot of core"
+              }
+            ],
+            "opts": [
+              "係㗎，普拉提反而比瑜伽難好多，要用好多核心。",
+              "唔係喎，我覺得其實差唔多㗎。",
+              "係有啲唔同，不過睇你點練法。"
+            ],
+            "optsJ": [
+              "hai6 gaa3, pou2 laa1 tai4 faan2 ji4 bei2 jyu4 gaa1 naan4 hou2 do1, jiu3 jung6 hou2 do1 hat6 sam1.",
+              "m4 hai6 wo3, ngo5 gok3 dak1 kei4 sat6 caa1 m4 do1 gaa3.",
+              "hai6 jau5 di1 m4 tung4, bat1 gwo3 tai2 nei5 dim2 lin6 faat3."
+            ]
+          },
+          {
+            "u": false,
+            "c": "咁我可能唔得喎，我而家越嚟越少做運動。",
+            "j": "gam2 ngo5 ho2 nang4 m4 dak1 wo3, ngo5 ji4 gaa1 jyut6 lai4 jyut6 siu2 zou6 wan6 dung6.",
+            "e": "Then I might not manage — I've been doing less and less exercise lately.",
+            "bd": [
+              {
+                "c": "咁",
+                "j": "gam2",
+                "e": "so then"
+              },
+              {
+                "c": "我可能",
+                "j": "ngo5 ho2 nang4",
+                "e": "I might"
+              },
+              {
+                "c": "唔得",
+                "j": "m4 dak1",
+                "e": "not manage"
+              },
+              {
+                "c": "喎",
+                "j": "wo3",
+                "e": "(particle — mild concern)"
+              },
+              {
+                "c": "我而家",
+                "j": "ngo5 ji4 gaa1",
+                "e": "I nowadays"
+              },
+              {
+                "c": "越嚟越少",
+                "j": "jyut6 lai4 jyut6 siu2",
+                "e": "less and less"
+              },
+              {
+                "c": "做運動",
+                "j": "zou6 wan6 dung6",
+                "e": "exercise"
+              }
+            ]
+          },
+          {
+            "u": true,
+            "c": "唔使擔心，你有冇我咁叻都係可以學㗎。",
+            "j": "m4 sai2 daam1 sam1, nei5 jau5 mou5 ngo5 gam3 lek1 dou1 hai6 ho2 ji5 hok6 gaa3.",
+            "e": "No need to worry — whether or not you're as fit as me, you can still learn.",
+            "bd": [
+              {
+                "c": "唔使擔心",
+                "j": "m4 sai2 daam1 sam1",
+                "e": "no need to worry"
+              },
+              {
+                "c": "你",
+                "j": "nei5",
+                "e": "you"
+              },
+              {
+                "c": "有冇我咁叻",
+                "j": "jau5 mou5 ngo5 gam3 lek1",
+                "e": "as capable as me or not"
+              },
+              {
+                "c": "都係",
+                "j": "dou1 hai6",
+                "e": "still / either way"
+              },
+              {
+                "c": "可以學",
+                "j": "ho2 ji5 hok6",
+                "e": "can learn"
+              },
+              {
+                "c": "㗎",
+                "j": "gaa3",
+                "e": "(assertive particle)"
+              }
+            ],
+            "opts": [
+              "唔使擔心，你有冇我咁叻都係可以學㗎。",
+              "冇問題㗎，瑜伽比你想像易好多。",
+              "係喎，不如由易嗰個開始？"
+            ],
+            "optsJ": [
+              "m4 sai2 daam1 sam1, nei5 jau5 mou5 ngo5 gam3 lek1 dou1 hai6 ho2 ji5 hok6 gaa3.",
+              "mou5 man6 tai4 gaa3, jyu4 gaa1 bei2 nei5 soeng2 zoeng6 ji6 hou2 do1.",
+              "hai6 wo3, bat1 jyu4 jau4 ji6 go2 go3 hoi1 ci2?"
+            ]
+          },
+          {
+            "u": false,
+            "c": "如果普拉提對我嚟講太難，不如試瑜伽先？",
+            "j": "jyu4 gwo2 pou2 laa1 tai4 deoi3 ngo5 lai4 gong2 taai3 naan4, bat1 jyu4 si3 jyu4 gaa1 sin1?",
+            "e": "If pilates is too hard for me, why not try yoga first?",
+            "bd": [
+              {
+                "c": "如果",
+                "j": "jyu4 gwo2",
+                "e": "if"
+              },
+              {
+                "c": "普拉提",
+                "j": "pou2 laa1 tai4",
+                "e": "pilates"
+              },
+              {
+                "c": "對我嚟講",
+                "j": "deoi3 ngo5 lai4 gong2",
+                "e": "for me"
+              },
+              {
+                "c": "太難",
+                "j": "taai3 naan4",
+                "e": "too hard"
+              },
+              {
+                "c": "不如",
+                "j": "bat1 jyu4",
+                "e": "why not"
+              },
+              {
+                "c": "試瑜伽先",
+                "j": "si3 jyu4 gaa1 sin1",
+                "e": "try yoga first"
+              }
+            ]
+          },
+          {
+            "u": true,
+            "c": "係囉，瑜伽易好多，而且動作比普拉提靚好多。",
+            "j": "hai6 lo3, jyu4 gaa1 ji6 hou2 do1, ji4 ce2 dung6 zok3 bei2 pou2 laa1 tai4 leng3 hou2 do1.",
+            "e": "Exactly — yoga is much easier, and the movements are much nicer than pilates too.",
+            "bd": [
+              {
+                "c": "係囉",
+                "j": "hai6 lo3",
+                "e": "exactly"
+              },
+              {
+                "c": "瑜伽",
+                "j": "jyu4 gaa1",
+                "e": "yoga"
+              },
+              {
+                "c": "易好多",
+                "j": "ji6 hou2 do1",
+                "e": "much easier"
+              },
+              {
+                "c": "而且",
+                "j": "ji4 ce2",
+                "e": "and moreover"
+              },
+              {
+                "c": "動作",
+                "j": "dung6 zok3",
+                "e": "movements"
+              },
+              {
+                "c": "比普拉提",
+                "j": "bei2 pou2 laa1 tai4",
+                "e": "than pilates"
+              },
+              {
+                "c": "靚好多",
+                "j": "leng3 hou2 do1",
+                "e": "much nicer"
+              }
+            ],
+            "opts": [
+              "係囉，瑜伽易好多，而且動作比普拉提靚好多。",
+              "啱㗎，不過其實兩個我都推薦㗎。",
+              "係，瑜伽最啱初學者，比普拉提易得多。"
+            ],
+            "optsJ": [
+              "hai6 lo3, jyu4 gaa1 ji6 hou2 do1, ji4 ce2 dung6 zok3 bei2 pou2 laa1 tai4 leng3 hou2 do1.",
+              "ngaam1 gaa3, bat1 gwo3 kei4 sat6 loeng5 go3 ngo5 dou1 teoi1 zin3 gaa3.",
+              "hai6, jyu4 gaa1 zeoi3 ngaam1 co1 hok6 ze2, bei2 pou2 laa1 tai4 ji6 dak1 do1."
+            ]
+          },
+          {
+            "u": false,
+            "c": "好，咁我哋一齊去試吓，你話係最好㗎喇！",
+            "j": "hou2, gam2 ngo5 dei6 jat1 cai4 heoi3 si3 haa5, nei5 waa6 hai6 zeoi3 hou2 gaa3 laa3!",
+            "e": "Great, let's go try it together — you say it's the best, after all!",
+            "bd": [
+              {
+                "c": "好",
+                "j": "hou2",
+                "e": "great"
+              },
+              {
+                "c": "咁",
+                "j": "gam2",
+                "e": "so then"
+              },
+              {
+                "c": "我哋",
+                "j": "ngo5 dei6",
+                "e": "we"
+              },
+              {
+                "c": "一齊去",
+                "j": "jat1 cai4 heoi3",
+                "e": "go together"
+              },
+              {
+                "c": "試吓",
+                "j": "si3 haa5",
+                "e": "try it"
+              },
+              {
+                "c": "你話",
+                "j": "nei5 waa6",
+                "e": "you say"
+              },
+              {
+                "c": "係最好",
+                "j": "hai6 zeoi3 hou2",
+                "e": "is the best"
+              },
+              {
+                "c": "㗎喇",
+                "j": "gaa3 laa3",
+                "e": "(particle — after all / settled)"
+              }
+            ]
+          }
+        ]
+      }
     }
   },
-  "_sidSeq": 5
+  "_sidSeq": 13
 }

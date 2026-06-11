@@ -4,7 +4,7 @@
     "icon": "💭",
     "color": "#5B8C9E"
   },
-  "_idSeq": 12,
+  "_idSeq": 23,
   "rounds": {
     "1": {
       "note": "Modal verbs go right before the main verb to express wanting, ability, or permission. 想 (soeng2) = want to · 要 (jiu3) = need to / must · 可以 (ho2 ji5) = can / may · 會 (wui5) = will / be able to · 識 (sik1) = know how to (a skill) · 鍾意 (zung1 ji3) = like to. Negate with 唔 (m4): 唔想 (m4 soeng2, don’t want to), 唔可以 (m4 ho2 ji5, may not), 唔識 (m4 sik1, don’t know how).",
@@ -80,6 +80,12 @@
           "c": "唔可以",
           "j": "m4 ho2 ji5",
           "e": "May not / can't"
+        },
+        {
+          "id": "modals-013",
+          "c": "唔該",
+          "j": "m4 goi1",
+          "e": "Please (polite request) / excuse me / thank you (for a service)"
         }
       ],
       "sentences": [
@@ -415,7 +421,807 @@
           }
         ]
       }
+    },
+    "2": {
+      "note": "Tier-2 modals shift from single-verb frames to how modals combine and how permission, willingness, and polite requests work in real situations. Key contrasts: 俾 (bei2) vs 准 (zeon2) for allowing/permitting; 唔肯 (m4 hang2) vs 唔想 (m4 soeng2) for refusal; 好似 (hou2 ci5) for hedging; 實 (sat6) for emphasis. Use 可唔可以 (ho2 m4 ho2 ji5) and 唔該 (m4 goi1) together for polite requests.",
+      "words": [
+        {
+          "id": "modals-014",
+          "c": "俾",
+          "j": "bei2",
+          "e": "To give / to let / to allow"
+        },
+        {
+          "id": "modals-015",
+          "c": "唔俾",
+          "j": "m4 bei2",
+          "e": "To not allow / won't let"
+        },
+        {
+          "id": "modals-016",
+          "c": "准",
+          "j": "zeon2",
+          "e": "To permit / to allow (formal)"
+        },
+        {
+          "id": "modals-017",
+          "c": "唔准",
+          "j": "m4 zeon2",
+          "e": "Not permitted / not allowed"
+        },
+        {
+          "id": "modals-018",
+          "c": "肯",
+          "j": "hang2",
+          "e": "Willing to / agree to"
+        },
+        {
+          "id": "modals-019",
+          "c": "唔肯",
+          "j": "m4 hang2",
+          "e": "Unwilling to / refuse to"
+        },
+        {
+          "id": "modals-020",
+          "c": "好似",
+          "j": "hou2 ci5",
+          "e": "Seem to / it looks like"
+        },
+        {
+          "id": "modals-021",
+          "c": "實",
+          "j": "sat6",
+          "e": "Definitely / surely (emphatic)"
+        },
+        {
+          "id": "modals-022",
+          "c": "幫手",
+          "j": "bong1 sau2",
+          "e": "To help out / lend a hand"
+        },
+        {
+          "id": "modals-023",
+          "c": "扮",
+          "j": "ban6",
+          "e": "To pretend / to act as"
+        }
+      ],
+      "sentences": [
+        {
+          "sid": "modals-t2-s01",
+          "c": "你可唔可以唔該幫我一陣？",
+          "j": "nei5 ho2 m4 ho2 ji5 m4 goi1 bong1 ngo5 jat1 zan6?",
+          "e": "Could you please help me for a moment?",
+          "note": "可唔可以 (ho2 m4 ho2 ji5) is the A-not-A question form of 可以 (ho2 ji5) — the standard polite way to make a request. Paired with 唔該 (m4 goi1) it becomes extra-polite.",
+          "bd": [
+            {
+              "c": "你",
+              "j": "nei5",
+              "e": "you"
+            },
+            {
+              "c": "可唔可以",
+              "j": "ho2 m4 ho2 ji5",
+              "e": "could you / can or can't you"
+            },
+            {
+              "c": "唔該",
+              "j": "m4 goi1",
+              "e": "please"
+            },
+            {
+              "c": "幫我",
+              "j": "bong1 ngo5",
+              "e": "help me"
+            },
+            {
+              "c": "一陣",
+              "j": "jat1 zan6",
+              "e": "a moment"
+            }
+          ]
+        },
+        {
+          "sid": "modals-t2-s02",
+          "c": "媽媽唔俾我出去，所以我要留係屋企。",
+          "j": "maa1 maa1 m4 bei2 ngo5 ceot1 heoi3, so2 ji5 ngo5 jiu3 lau4 hai2 uk1 kei2.",
+          "e": "Mum won't let me go out, so I have to stay home.",
+          "note": "唔俾 (m4 bei2) + person + verb = won't let [someone] do [something]. Colloquial and personal — 唔俾我出去 (m4 bei2 ngo5 ceot1 heoi3) is what a parent says; contrast 唔准 (m4 zeon2) which is more formal, used by rules or authority.",
+          "bd": [
+            {
+              "c": "媽媽",
+              "j": "maa1 maa1",
+              "e": "mum"
+            },
+            {
+              "c": "唔俾我",
+              "j": "m4 bei2 ngo5",
+              "e": "won't let me"
+            },
+            {
+              "c": "出去",
+              "j": "ceot1 heoi3",
+              "e": "go out"
+            },
+            {
+              "c": "所以",
+              "j": "so2 ji5",
+              "e": "so"
+            },
+            {
+              "c": "我要",
+              "j": "ngo5 jiu3",
+              "e": "I have to"
+            },
+            {
+              "c": "留係",
+              "j": "lau4 hai2",
+              "e": "stay at"
+            },
+            {
+              "c": "屋企",
+              "j": "uk1 kei2",
+              "e": "home"
+            }
+          ]
+        },
+        {
+          "sid": "modals-t2-s03",
+          "c": "呢度唔准飲食，你唔該注意吓。",
+          "j": "ni1 dou6 m4 zeon2 jam2 sik6, nei5 m4 goi1 zyu3 ji3 haa5.",
+          "e": "No eating or drinking here, please be mindful.",
+          "note": "唔准 (m4 zeon2) is the formal or official prohibition — signs, rules, authority contexts. 唔俾 (m4 bei2) is what a person says to another person; 唔准 (m4 zeon2) is what rules say.",
+          "bd": [
+            {
+              "c": "呢度",
+              "j": "ni1 dou6",
+              "e": "here"
+            },
+            {
+              "c": "唔准",
+              "j": "m4 zeon2",
+              "e": "not allowed"
+            },
+            {
+              "c": "飲食",
+              "j": "jam2 sik6",
+              "e": "eat or drink"
+            },
+            {
+              "c": "你",
+              "j": "nei5",
+              "e": "you"
+            },
+            {
+              "c": "唔該",
+              "j": "m4 goi1",
+              "e": "please"
+            },
+            {
+              "c": "注意吓",
+              "j": "zyu3 ji3 haa5",
+              "e": "be mindful"
+            }
+          ]
+        },
+        {
+          "sid": "modals-t2-s04",
+          "c": "佢好似唔肯幫手，但係我唔知點解。",
+          "j": "keoi5 hou2 ci5 m4 hang2 bong1 sau2, daan6 hai6 ngo5 m4 ji1 dim2 gaai2.",
+          "e": "She doesn't seem willing to help, but I don't know why.",
+          "note": "好似 (hou2 ci5) hedges an observation. 唔肯 (m4 hang2) is stronger than 唔想 (m4 soeng2): 唔想 (m4 soeng2) means don't feel like it; 唔肯 (m4 hang2) means actively refuse to.",
+          "bd": [
+            {
+              "c": "佢",
+              "j": "keoi5",
+              "e": "she / he"
+            },
+            {
+              "c": "好似",
+              "j": "hou2 ci5",
+              "e": "seems like"
+            },
+            {
+              "c": "唔肯",
+              "j": "m4 hang2",
+              "e": "unwilling to"
+            },
+            {
+              "c": "幫手",
+              "j": "bong1 sau2",
+              "e": "help out"
+            },
+            {
+              "c": "但係",
+              "j": "daan6 hai6",
+              "e": "but"
+            },
+            {
+              "c": "我唔知",
+              "j": "ngo5 m4 ji1",
+              "e": "I don't know"
+            },
+            {
+              "c": "點解",
+              "j": "dim2 gaai2",
+              "e": "why"
+            }
+          ]
+        },
+        {
+          "sid": "modals-t2-s05",
+          "c": "如果你唔識，應該問吓，唔使扮識。",
+          "j": "jyu4 gwo2 nei5 m4 sik1, jing1 goi1 man6 haa5, m4 sai2 ban6 sik1.",
+          "e": "If you don't know how, you should just ask — no need to pretend you do.",
+          "note": "扮識 (ban6 sik1) is a natural collocation — 扮 (ban6) means pretend or act as, so 扮識 (ban6 sik1) is pretend to know how. The sentence stacks two tier-1 modals: 應該 (jing1 goi1) should + 唔使 (m4 sai2) no need to.",
+          "bd": [
+            {
+              "c": "如果",
+              "j": "jyu4 gwo2",
+              "e": "if"
+            },
+            {
+              "c": "你唔識",
+              "j": "nei5 m4 sik1",
+              "e": "you don't know how"
+            },
+            {
+              "c": "應該",
+              "j": "jing1 goi1",
+              "e": "should"
+            },
+            {
+              "c": "問吓",
+              "j": "man6 haa5",
+              "e": "ask"
+            },
+            {
+              "c": "唔使",
+              "j": "m4 sai2",
+              "e": "no need to"
+            },
+            {
+              "c": "扮識",
+              "j": "ban6 sik1",
+              "e": "pretend to know how"
+            }
+          ]
+        },
+        {
+          "sid": "modals-t2-s06",
+          "c": "我實會學識㗎，唔該你耐心教我。",
+          "j": "ngo5 sat6 wui5 hok6 sik1 gaa3, m4 goi1 nei5 naai6 sam1 gaau3 ngo5.",
+          "e": "I'll definitely learn it — please be patient teaching me.",
+          "note": "學識 (hok6 sik1) is a result-complement — 學 (hok6) learn + 識 (sik1) know how, meaning successfully acquire a skill. 實 (sat6) at the front gives confident emphasis: definitely will.",
+          "bd": [
+            {
+              "c": "我",
+              "j": "ngo5",
+              "e": "I"
+            },
+            {
+              "c": "實",
+              "j": "sat6",
+              "e": "definitely"
+            },
+            {
+              "c": "會",
+              "j": "wui5",
+              "e": "will"
+            },
+            {
+              "c": "學識",
+              "j": "hok6 sik1",
+              "e": "learn to know how"
+            },
+            {
+              "c": "㗎",
+              "j": "gaa3",
+              "e": "(assertive particle)"
+            },
+            {
+              "c": "唔該你",
+              "j": "m4 goi1 nei5",
+              "e": "please (to you)"
+            },
+            {
+              "c": "耐心",
+              "j": "naai6 sam1",
+              "e": "patiently"
+            },
+            {
+              "c": "教我",
+              "j": "gaau3 ngo5",
+              "e": "teach me"
+            }
+          ]
+        },
+        {
+          "sid": "modals-t2-s07",
+          "c": "你肯唔肯試吓？唔識都冇問題㗎。",
+          "j": "nei5 hang2 m4 hang2 si3 haa5? m4 sik1 dou1 mou5 man6 tai4 gaa3.",
+          "e": "Are you willing to give it a try? It's fine even if you don't know how.",
+          "note": "肯唔肯 (hang2 m4 hang2) is the A-not-A form of 肯 (hang2) — an open invitation without pressure. 都 (dou1) in 唔識都冇問題 (m4 sik1 dou1 mou5 man6 tai4) means even in this concessive frame: even if you can't, no problem.",
+          "bd": [
+            {
+              "c": "你",
+              "j": "nei5",
+              "e": "you"
+            },
+            {
+              "c": "肯唔肯",
+              "j": "hang2 m4 hang2",
+              "e": "willing or not"
+            },
+            {
+              "c": "試吓",
+              "j": "si3 haa5",
+              "e": "give it a try"
+            },
+            {
+              "c": "唔識",
+              "j": "m4 sik1",
+              "e": "don't know how"
+            },
+            {
+              "c": "都",
+              "j": "dou1",
+              "e": "even"
+            },
+            {
+              "c": "冇問題",
+              "j": "mou5 man6 tai4",
+              "e": "no problem"
+            },
+            {
+              "c": "㗎",
+              "j": "gaa3",
+              "e": "(assertive particle)"
+            }
+          ]
+        },
+        {
+          "sid": "modals-t2-s08",
+          "c": "雖然我而家唔識，但係我好想學，所以我會努力㗎。",
+          "j": "seoi1 jin4 ngo5 ji4 gaa1 m4 sik1, daan6 hai6 ngo5 hou2 soeng2 hok6, so2 ji5 ngo5 wui5 nou5 lik6 gaa3.",
+          "e": "Although I can't do it now, I really want to learn, so I'll work hard.",
+          "note": "Three modals across two connective clauses: 唔識 (m4 sik1) can't + 想 (soeng2) want to + 會 (wui5) will — the full arc of inability to desire to commitment. A natural multi-clause Intermediate target.",
+          "bd": [
+            {
+              "c": "雖然",
+              "j": "seoi1 jin4",
+              "e": "although"
+            },
+            {
+              "c": "我而家",
+              "j": "ngo5 ji4 gaa1",
+              "e": "I right now"
+            },
+            {
+              "c": "唔識",
+              "j": "m4 sik1",
+              "e": "can't / don't know how"
+            },
+            {
+              "c": "但係",
+              "j": "daan6 hai6",
+              "e": "but"
+            },
+            {
+              "c": "我",
+              "j": "ngo5",
+              "e": "I"
+            },
+            {
+              "c": "好想",
+              "j": "hou2 soeng2",
+              "e": "really want to"
+            },
+            {
+              "c": "學",
+              "j": "hok6",
+              "e": "learn"
+            },
+            {
+              "c": "所以",
+              "j": "so2 ji5",
+              "e": "so"
+            },
+            {
+              "c": "我會",
+              "j": "ngo5 wui5",
+              "e": "I will"
+            },
+            {
+              "c": "努力",
+              "j": "nou5 lik6",
+              "e": "work hard"
+            },
+            {
+              "c": "㗎",
+              "j": "gaa3",
+              "e": "(assertive particle)"
+            }
+          ]
+        }
+      ],
+      "convo": {
+        "title": "Asking a favour",
+        "speakers": [
+          "Colleague",
+          "You"
+        ],
+        "lines": [
+          {
+            "u": false,
+            "c": "唔該，你而家得唔得閒？",
+            "j": "m4 goi1, nei5 ji4 gaa1 dak1 m4 dak1 haan4?",
+            "e": "Excuse me, are you free right now?",
+            "bd": [
+              {
+                "c": "唔該",
+                "j": "m4 goi1",
+                "e": "excuse me"
+              },
+              {
+                "c": "你",
+                "j": "nei5",
+                "e": "you"
+              },
+              {
+                "c": "而家",
+                "j": "ji4 gaa1",
+                "e": "right now"
+              },
+              {
+                "c": "得唔得閒",
+                "j": "dak1 m4 dak1 haan4",
+                "e": "free or not free"
+              }
+            ]
+          },
+          {
+            "u": true,
+            "c": "得呀，你想我幫咩手？",
+            "j": "dak1 aa3, nei5 soeng2 ngo5 bong1 me1 sau2?",
+            "e": "Sure, what do you need help with?",
+            "bd": [
+              {
+                "c": "得呀",
+                "j": "dak1 aa3",
+                "e": "yes, fine"
+              },
+              {
+                "c": "你想",
+                "j": "nei5 soeng2",
+                "e": "you want"
+              },
+              {
+                "c": "我",
+                "j": "ngo5",
+                "e": "me"
+              },
+              {
+                "c": "幫咩手",
+                "j": "bong1 me1 sau2",
+                "e": "help with what"
+              }
+            ],
+            "opts": [
+              "得呀，你想我幫咩手？",
+              "冇問題，有咩事？",
+              "好呀，需要我做咩？"
+            ],
+            "optsJ": [
+              "dak1 aa3, nei5 soeng2 ngo5 bong1 me1 sau2?",
+              "mou5 man6 tai4, jau5 me1 si6?",
+              "hou2 aa3, seoi1 jiu3 ngo5 zou6 me1?"
+            ]
+          },
+          {
+            "u": false,
+            "c": "我唔識用呢個程式，你識唔識㗎？",
+            "j": "ngo5 m4 sik1 jung6 ni1 go3 cing4 sik1, nei5 sik1 m4 sik1 gaa3?",
+            "e": "I don't know how to use this software — do you?",
+            "bd": [
+              {
+                "c": "我",
+                "j": "ngo5",
+                "e": "I"
+              },
+              {
+                "c": "唔識用",
+                "j": "m4 sik1 jung6",
+                "e": "don't know how to use"
+              },
+              {
+                "c": "呢個",
+                "j": "ni1 go3",
+                "e": "this"
+              },
+              {
+                "c": "程式",
+                "j": "cing4 sik1",
+                "e": "software / programme"
+              },
+              {
+                "c": "你",
+                "j": "nei5",
+                "e": "you"
+              },
+              {
+                "c": "識唔識",
+                "j": "sik1 m4 sik1",
+                "e": "know how or not"
+              },
+              {
+                "c": "㗎",
+                "j": "gaa3",
+                "e": "(question particle)"
+              }
+            ]
+          },
+          {
+            "u": true,
+            "c": "我好似識少少，唔該你等我一陣。",
+            "j": "ngo5 hou2 ci5 sik1 siu2 siu2, m4 goi1 nei5 dang2 ngo5 jat1 zan6.",
+            "e": "I think I know a little — please wait a moment.",
+            "bd": [
+              {
+                "c": "我",
+                "j": "ngo5",
+                "e": "I"
+              },
+              {
+                "c": "好似識",
+                "j": "hou2 ci5 sik1",
+                "e": "seem to know"
+              },
+              {
+                "c": "少少",
+                "j": "siu2 siu2",
+                "e": "a little"
+              },
+              {
+                "c": "唔該你",
+                "j": "m4 goi1 nei5",
+                "e": "please (to you)"
+              },
+              {
+                "c": "等我",
+                "j": "dang2 ngo5",
+                "e": "wait for me"
+              },
+              {
+                "c": "一陣",
+                "j": "jat1 zan6",
+                "e": "a moment"
+              }
+            ],
+            "opts": [
+              "我好似識少少，唔該你等我一陣。",
+              "唔識喎，不過我可以試吓。",
+              "我識㗎，俾我睇吓先。"
+            ],
+            "optsJ": [
+              "ngo5 hou2 ci5 sik1 siu2 siu2, m4 goi1 nei5 dang2 ngo5 jat1 zan6.",
+              "m4 sik1 wo3, bat1 gwo3 ngo5 ho2 ji5 si3 haa5.",
+              "ngo5 sik1 gaa3, bei2 ngo5 tai2 haa5 sin1."
+            ]
+          },
+          {
+            "u": false,
+            "c": "唔使急，你肯幫我我已經好感激㗎喇。",
+            "j": "m4 sai2 gap1, nei5 hang2 bong1 ngo5 ngo5 ji5 ging1 hou2 gam2 gik1 gaa3 laa3.",
+            "e": "No rush — just that you're willing to help means a lot.",
+            "bd": [
+              {
+                "c": "唔使急",
+                "j": "m4 sai2 gap1",
+                "e": "no need to rush"
+              },
+              {
+                "c": "你肯",
+                "j": "nei5 hang2",
+                "e": "you are willing to"
+              },
+              {
+                "c": "幫我",
+                "j": "bong1 ngo5",
+                "e": "help me"
+              },
+              {
+                "c": "我已經",
+                "j": "ngo5 ji5 ging1",
+                "e": "I already"
+              },
+              {
+                "c": "好感激",
+                "j": "hou2 gam2 gik1",
+                "e": "very grateful"
+              },
+              {
+                "c": "㗎喇",
+                "j": "gaa3 laa3",
+                "e": "(softened assertive particle)"
+              }
+            ]
+          },
+          {
+            "u": true,
+            "c": "呢個功能你可唔可以俾我睇吓先？",
+            "j": "ni1 go3 gung1 nang4 nei5 ho2 m4 ho2 ji5 bei2 ngo5 tai2 haa5 sin1?",
+            "e": "Can you let me see this function first?",
+            "bd": [
+              {
+                "c": "呢個功能",
+                "j": "ni1 go3 gung1 nang4",
+                "e": "this function"
+              },
+              {
+                "c": "你",
+                "j": "nei5",
+                "e": "you"
+              },
+              {
+                "c": "可唔可以",
+                "j": "ho2 m4 ho2 ji5",
+                "e": "could you"
+              },
+              {
+                "c": "俾我",
+                "j": "bei2 ngo5",
+                "e": "let me"
+              },
+              {
+                "c": "睇吓",
+                "j": "tai2 haa5",
+                "e": "have a look"
+              },
+              {
+                "c": "先",
+                "j": "sin1",
+                "e": "first"
+              }
+            ],
+            "opts": [
+              "呢個功能你可唔可以俾我睇吓先？",
+              "你唔該俾我睇吓個設定。",
+              "我可以自己試吓㗎，唔使擔心。"
+            ],
+            "optsJ": [
+              "ni1 go3 gung1 nang4 nei5 ho2 m4 ho2 ji5 bei2 ngo5 tai2 haa5 sin1?",
+              "nei5 m4 goi1 bei2 ngo5 tai2 haa5 go3 cit3 ding6.",
+              "ngo5 ho2 ji5 zi6 gei2 si3 haa5 gaa3, m4 sai2 daam1 sam1."
+            ]
+          },
+          {
+            "u": false,
+            "c": "得㗎，呢度睇。不過有啲地方係唔准改㗎。",
+            "j": "dak1 gaa3, ni1 dou6 tai2. bat1 gwo3 jau5 di1 dei6 fong1 hai6 m4 zeon2 goi2 gaa3.",
+            "e": "Sure, look here. But some parts aren't allowed to be changed.",
+            "bd": [
+              {
+                "c": "得㗎",
+                "j": "dak1 gaa3",
+                "e": "sure / ok"
+              },
+              {
+                "c": "呢度睇",
+                "j": "ni1 dou6 tai2",
+                "e": "look here"
+              },
+              {
+                "c": "不過",
+                "j": "bat1 gwo3",
+                "e": "but"
+              },
+              {
+                "c": "有啲地方",
+                "j": "jau5 di1 dei6 fong1",
+                "e": "some parts"
+              },
+              {
+                "c": "係",
+                "j": "hai6",
+                "e": "are"
+              },
+              {
+                "c": "唔准改",
+                "j": "m4 zeon2 goi2",
+                "e": "not allowed to change"
+              },
+              {
+                "c": "㗎",
+                "j": "gaa3",
+                "e": "(assertive particle)"
+              }
+            ]
+          },
+          {
+            "u": true,
+            "c": "明白㗎喇。你唔使擔心，我唔會亂改㗎。",
+            "j": "ming4 baak6 gaa3 laa3. nei5 m4 sai2 daam1 sam1, ngo5 m4 wui5 lyun6 goi2 gaa3.",
+            "e": "Got it. No need to worry — I won't change things randomly.",
+            "bd": [
+              {
+                "c": "明白㗎喇",
+                "j": "ming4 baak6 gaa3 laa3",
+                "e": "understood"
+              },
+              {
+                "c": "你唔使",
+                "j": "nei5 m4 sai2",
+                "e": "you don't need to"
+              },
+              {
+                "c": "擔心",
+                "j": "daam1 sam1",
+                "e": "worry"
+              },
+              {
+                "c": "我唔會",
+                "j": "ngo5 m4 wui5",
+                "e": "I won't"
+              },
+              {
+                "c": "亂改",
+                "j": "lyun6 goi2",
+                "e": "change randomly"
+              },
+              {
+                "c": "㗎",
+                "j": "gaa3",
+                "e": "(assertive particle)"
+              }
+            ],
+            "opts": [
+              "明白㗎喇。你唔使擔心，我唔會亂改㗎。",
+              "好，我會小心㗎，唔俾你擔心。",
+              "知㗎，我唔准自己改，放心啦。"
+            ],
+            "optsJ": [
+              "ming4 baak6 gaa3 laa3. nei5 m4 sai2 daam1 sam1, ngo5 m4 wui5 lyun6 goi2 gaa3.",
+              "hou2, ngo5 wui5 siu2 sam1 gaa3, m4 bei2 nei5 daam1 sam1.",
+              "ji1 gaa3, ngo5 m4 zeon2 zi6 gei2 goi2, fong3 sam1 laa1."
+            ]
+          },
+          {
+            "u": false,
+            "c": "好，咁就麻煩你喇，唔該晒！",
+            "j": "hou2, gam2 zau6 maa4 faan4 nei5 laa3, m4 goi1 saai3!",
+            "e": "Great, sorry to trouble you — thanks so much!",
+            "bd": [
+              {
+                "c": "好",
+                "j": "hou2",
+                "e": "great"
+              },
+              {
+                "c": "咁就",
+                "j": "gam2 zau6",
+                "e": "so then"
+              },
+              {
+                "c": "麻煩你",
+                "j": "maa4 faan4 nei5",
+                "e": "sorry to trouble you"
+              },
+              {
+                "c": "喇",
+                "j": "laa3",
+                "e": "(particle)"
+              },
+              {
+                "c": "唔該晒",
+                "j": "m4 goi1 saai3",
+                "e": "thank you so much"
+              }
+            ]
+          }
+        ]
+      }
     }
   },
-  "_sidSeq": 5
+  "_sidSeq": 13
 }
