@@ -1334,7 +1334,7 @@
 
   /* ── Outer wrapper ── */
   .dash-wrap {
-    padding: 4px 16px 28px;
+    padding: 12px 16px 48px;   /* 12px top to clear voice banner gap; 48px bottom for Android nav bar */
   }
 
   /* ── Shared section label (reuses the existing .section-label pattern) ── */
@@ -1345,7 +1345,7 @@
     letter-spacing: 0.06em;
     text-transform: uppercase;
     color: var(--muted);
-    margin: 0 0 10px;
+    margin: 20px 0 12px;       /* top gap separates it from the preceding element; 12px below before the card */
   }
 
   /* ── Hero card ── */
@@ -1436,8 +1436,8 @@
 
   /* ── Path progress stack ── */
   .dash-path-stack {
-    display: flex; flex-direction: column; gap: 10px;
-    margin-bottom: 20px;
+    display: flex; flex-direction: column; gap: 12px;
+    margin-bottom: 0;   /* section label above next element provides the gap */
   }
   .dash-path-card {
     border-radius: var(--r-md, 12px);
@@ -1493,7 +1493,7 @@
     padding: 14px 16px;
     box-shadow: var(--elev-1);
     border: 1px solid rgba(139,58,78,0.15);
-    margin-bottom: 20px;
+    margin-bottom: 0;        /* section label above tiles provides the gap */
     cursor: pointer;
     transition: box-shadow 0.12s;
   }
