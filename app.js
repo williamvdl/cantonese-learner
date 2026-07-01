@@ -324,7 +324,7 @@ function colorJyutping(text) {
 // ── State ─────────────────────────────────────────────────────────────────────
 let state = {
   speed: 'normal',
-  nav: 'path',                    // app opens on the Learning Path list (the homepage)
+  nav: 'dashboard',               // app opens on the new Dashboard homepage
   drawerOpen: false,
   homeView: true,                 // true = show home screen, false = inside a topic
   selectedCategory: 'all',        // 'all' or a category key
@@ -926,6 +926,24 @@ function isSeqItemComplete(pathKey, item) {
 // when everything is done.
 function nextPathPosition(pathKey) {
   return buildPathSequence(pathKey).find(it => !isSeqItemComplete(pathKey, it)) || null;
+}
+
+// ── Dashboard "next up" resolution ────────────────────────────────────────────
+// Walks Beginner first, then Intermediate, then Advanced — the same order the
+// path list displays them in — and returns the first incomplete item found
+// across all of them, tagged with which path it belongs to. Returns null only
+// when every path that exists is fully complete (or no paths are loaded yet).
+// Reuses nextPathPosition() so this can never disagree with what the path
+// timeline itself highlights as "Next up".
+const DASHBOARD_PATH_ORDER = ['beginner', 'intermediate', 'advanced'];
+function dashboardNextUp() {
+  for (const pathKey of DASHBOARD_PATH_ORDER) {
+    const path = (store.paths || []).find(p => p.key === pathKey);
+    if (!path || path.comingSoon) continue;
+    const item = nextPathPosition(pathKey);
+    if (item) return { pathKey, path, item };
+  }
+  return null; // every available path is fully complete
 }
 
 // Return { path, step, total, isLast, nextStep, nextTopic } for the current path-mode state,

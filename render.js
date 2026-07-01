@@ -9,6 +9,7 @@ function renderDrawer() {
   const rc = state.reviewBadge.liveCount;
   const pc = state.patternReviewBadge.liveCount;
   const items = [
+    { key:'dashboard', icon:'🏠', label:'Home',            desc:'Your next step at a glance'             },
     { key:'path',      icon:'🛤️', label:'Learning Path',  desc:'Curated curriculum, ordered & tracked'  },
     { key:'topics',    icon:'📖', label:'Topics',         desc:'Vocabulary, sentences & conversations' },
     { key:'patterns',  icon:'🔨', label:'Patterns',        desc:'Sentence building blocks'              },
@@ -721,6 +722,153 @@ function renderPatternReview() {
   return `<div class="content">${renderDrillBody(pr)}</div>`;
 }
 
+// ── Dashboard (new homepage) ──────────────────────────────────────────────────
+// Replaces the path list as the app's default landing screen. Surfaces: the
+// single next thing to do (hero, coloured by that lesson's own topic colour),
+// path progress for Beginner/Intermediate (and Advanced once it exists), the
+// Word Review count, and two secondary "Jump to" tiles (Topics, Translate).
+// Deliberately does NOT include Pattern Review or a Patterns tile — patterns
+// are heading toward deprecation per William's direction.
+function renderDashboard() {
+  const next = dashboardNextUp();
+  const heroHtml = renderDashboardHero(next);
+
+  // Path progress cards — Beginner + Intermediate only for now (Advanced has
+  // no content yet; once it does, this list naturally picks it up because it
+  // walks store.paths rather than a hardcoded pair).
+  const progressPaths = (store.paths || []).filter(p => !p.comingSoon && (p.key === 'beginner' || p.key === 'intermediate'));
+  const pathCardsHtml = progressPaths.map(p => renderDashboardPathCard(p)).join('');
+
+  const rc = state.reviewBadge.liveCount;
+  const reviewHtml = `
+    <div class="section-label">To review</div>
+    <button class="dash-review-pill" id="dash-review-open">
+      <span class="dash-review-icon">📖</span>
+      <span class="dash-review-text">
+        <span class="dash-review-title">Word Review</span>
+        <span class="dash-review-sub">${rc > 0 ? `${rc} word${rc === 1 ? '' : 's'} flagged for practice` : 'Nothing flagged right now'}</span>
+      </span>
+      ${rc > 0 ? `<span class="dash-review-badge">${rc}</span>` : ''}
+    </button>`;
+
+  const tilesHtml = `
+    <div class="section-label">Jump to</div>
+    <div class="dash-tile-grid">
+      <button class="dash-tile dash-tile-topics" id="dash-tile-topics">
+        <span class="dash-tile-arrow">→</span>
+        <span class="dash-tile-icon-badge">📖</span>
+        <span class="dash-tile-label">Topics</span>
+        <span class="dash-tile-desc">Vocabulary, sentences & conversations</span>
+      </button>
+      <button class="dash-tile dash-tile-translate" id="dash-tile-translate">
+        <span class="dash-tile-arrow">→</span>
+        <span class="dash-tile-icon-badge">🌐</span>
+        <span class="dash-tile-label">Translate</span>
+        <span class="dash-tile-desc">AI-powered translation & breakdown</span>
+      </button>
+    </div>`;
+
+  return `
+    <div class="dash-wrap">
+      ${heroHtml}
+      ${pathCardsHtml ? `<div class="section-label">Path progress</div><div class="dash-path-stack">${pathCardsHtml}</div>` : ''}
+      ${reviewHtml}
+      ${tilesHtml}
+    </div>`;
+}
+
+// The hero card. `next` is dashboardNextUp()'s return value (or null when every
+// path is complete, in which case a quiet completion state is shown instead).
+function renderDashboardHero(next) {
+  if (!next) {
+    return `
+      <div class="dash-hero dash-hero-done">
+        <div class="dash-hero-eyebrow">All caught up</div>
+        <div class="dash-hero-title">Every path is complete 🎉</div>
+        <div class="dash-hero-sub">Check back as new chapters are added, or revisit Review to keep things fresh.</div>
+      </div>`;
+  }
+  const { pathKey, path, item } = next;
+  const pathLabel = `${path.icon} ${path.label}`;
+
+  if (item.kind === 'checkpoint') {
+    return `
+      <div class="dash-hero" style="--hero-c:${GOLD_HERO};--hero-c-deep:#8a6716" data-dash-hero-cp="${pathKey}" data-dash-hero-stage="${item.stageId}">
+        <div class="dash-hero-bg-char">字</div>
+        <div class="dash-hero-top-row">
+          <div class="dash-hero-eyebrow">Next up</div>
+          <div class="dash-hero-icon-badge">◆</div>
+        </div>
+        <div class="dash-hero-stage">${pathLabel} · Checkpoint</div>
+        <div class="dash-hero-title">${item.stageName}</div>
+        <button class="dash-hero-cta">▶ Open checkpoint</button>
+      </div>`;
+  }
+
+  // Lesson item — colour the hero from the actual topic's own colour, so the
+  // dashboard previews what's next rather than always looking the same.
+  const meta = store.topicMeta(item.topic);
+  const color = (meta && meta.color) || BRAND_HERO;
+  const tierLabel = item.tier > 1 ? `Tier ${item.tier}` : null;
+  return `
+    <div class="dash-hero" style="--hero-c:${color};--hero-c-deep:${darkenHex(color, 0.22)}" data-dash-hero-topic="${item.topic}" data-dash-hero-tier="${item.tier}">
+      <div class="dash-hero-bg-char">字</div>
+      <div class="dash-hero-top-row">
+        <div class="dash-hero-eyebrow">Next up</div>
+        <div class="dash-hero-icon-badge">${meta ? meta.icon : '📖'}</div>
+      </div>
+      <div class="dash-hero-stage">${pathLabel}</div>
+      <div class="dash-hero-title">${meta ? meta.label : item.topic}${tierLabel ? `<span class="dash-hero-tier">${tierLabel}</span>` : ''}</div>
+      <button class="dash-hero-cta">▶ Resume lesson</button>
+    </div>`;
+}
+
+// One path's progress card. Beginner and Intermediate get distinct tinted
+// treatments (jade / gold) so they read as different paths, not duplicated cards.
+function renderDashboardPathCard(p) {
+  const total = p.lessons.length;
+  const done = pathCompleteCount(p.key);
+  const pct = total > 0 ? Math.round((done / total) * 100) : 0;
+  const complete = total > 0 && done === total;
+  const tint = p.key === 'beginner' ? 'jade' : 'gold';
+  const barColor = p.key === 'beginner' ? 'var(--jade)' : 'var(--gold)';
+  const sub = complete
+    ? `Complete — all ${countPathChapters(p)} chapters`
+    : `${total - done} lesson${(total - done) === 1 ? '' : 's'} to go`;
+  return `
+    <div class="dash-path-card dash-path-card-${tint}" data-dash-path-open="${p.key}">
+      <div class="dash-path-row">
+        <div class="dash-path-name">${p.icon} ${p.label} ${complete ? '<span class="dash-path-check">✓</span>' : ''}</div>
+        <div class="dash-path-frac dash-path-frac-${tint}">${done}/${total}</div>
+      </div>
+      <div class="dash-path-track"><div class="dash-path-fill" style="width:${pct}%;background:${barColor}"></div></div>
+      <div class="dash-path-sub">${sub}</div>
+    </div>`;
+}
+
+// Counts distinct chapter/stage groupings for a path's "complete" subtitle.
+// Falls back to lesson count if the path has no stage structure.
+function countPathChapters(p) {
+  const stages = getPathStages(p.key);
+  return stages.length || p.lessons.length;
+}
+
+// Brand-fallback colours for the hero when no topic colour is available.
+const BRAND_HERO = '#8B3A4E';
+const GOLD_HERO   = '#B7861E';
+
+// Darkens a #RRGGBB hex colour by `amount` (0-1) for the hero's gradient end —
+// mirrors what a CSS color-mix would do, kept dependency-free.
+function darkenHex(hex, amount) {
+  const h = hex.replace('#', '');
+  if (h.length !== 6) return hex;
+  const r = Math.round(parseInt(h.slice(0,2),16) * (1 - amount));
+  const g = Math.round(parseInt(h.slice(2,4),16) * (1 - amount));
+  const b = Math.round(parseInt(h.slice(4,6),16) * (1 - amount));
+  const toHex = n => Math.max(0, Math.min(255, n)).toString(16).padStart(2, '0');
+  return `#${toHex(r)}${toHex(g)}${toHex(b)}`;
+}
+
 function renderLearningPath() {
   if (state.pathView === 'timeline') {
     return renderPathTimeline(state.activePath);
@@ -1204,6 +1352,8 @@ function render() {
         </div>
         ${toastEl}`;
     }
+  } else if (state.nav === 'dashboard') {
+    mainContent = `${renderVoiceBanner()}${renderDashboard()}`;
   } else if (state.nav === 'patterns') {
     mainContent = renderPatterns();
   } else if (state.nav === 'review') {
@@ -3032,6 +3182,96 @@ function attachEvents(lesson, color) {
     });
   }
 
+  // ── Dashboard events ──────────────────────────────────────────────
+  // Hero CTA / card → opens the actual next-up item. Mirrors data-path-lesson's
+  // full state reset (so no stale flipped/speaking/sentence state leaks in from
+  // wherever the user was before), and openCheckpoint() for the checkpoint case.
+  document.querySelectorAll('[data-dash-hero-topic]').forEach(card => {
+    card.addEventListener('click', () => {
+      const topicKey = card.dataset.dashHeroTopic;
+      const tier     = parseInt(card.dataset.dashHeroTier, 10) || 1;
+      state.topic        = topicKey;
+      state.currentRound = tier;
+      state.nav          = 'topics';
+      state.homeView     = false;
+      state.fromPath      = true;
+      state.fromPathTier  = tier;
+      state.mode          = 'study';
+      state.tab           = 'words';
+      state.flipped        = {};
+      state.speaking       = null;
+      state.sentenceBreakdownOpen = {};
+      state.sentenceRevealed     = {};
+      state.sentenceNoteClosed   = {};
+      state.patternRevealed      = {};
+      state.convo = { convMode:'read', playingLine:null, gapAnswers:{}, bubbleRevealed:{}, breakdownOpen:{}, speakStep:0, speakStatus:'idle', speakHeard:'', speakAutoPlayed:false, speakRevealed:{} };
+      // Find which path this lesson belongs to so the path-banner / "back to
+      // timeline" context is correct if the user backs out of the lesson.
+      const owningPath = (store.paths || []).find(p => (p.lessons || []).some(l => l.topic === topicKey && l.round === tier));
+      if (owningPath) state.activePath = owningPath.key;
+      pushNav();                 // dashboard → lesson: BACK returns to dashboard
+      window.scrollTo(0, 0);
+      render();
+    });
+  });
+  document.querySelectorAll('[data-dash-hero-cp]').forEach(card => {
+    card.addEventListener('click', () => {
+      const pathKey = card.dataset.dashHeroCp;
+      const stageId = card.dataset.dashHeroStage;
+      state.activePath = pathKey;
+      openCheckpoint(pathKey, stageId);   // openCheckpoint() itself calls pushNav() + render()
+    });
+  });
+
+  // Path progress card → open that path's timeline directly
+  document.querySelectorAll('[data-dash-path-open]').forEach(card => {
+    card.addEventListener('click', () => {
+      state.activePath = card.dataset.dashPathOpen;
+      state.nav        = 'path';
+      state.pathView   = 'timeline';
+      pushNav();                 // dashboard → path timeline: BACK returns to dashboard
+      window.scrollTo(0, 0);
+      render();
+    });
+  });
+
+  // Word Review pill → straight into the Words review screen
+  const dashReviewOpen = document.getElementById('dash-review-open');
+  if (dashReviewOpen) {
+    dashReviewOpen.addEventListener('click', () => {
+      state.nav = 'review';
+      state.reviewView = 'words';
+      state.wordReview = null;
+      state.patternReview = null;
+      pushNav();                 // dashboard → review: BACK returns to dashboard
+      window.scrollTo(0, 0);
+      refreshReviewBadge().then(render);
+    });
+  }
+
+  // Jump-to tiles
+  const dashTileTopics = document.getElementById('dash-tile-topics');
+  if (dashTileTopics) {
+    dashTileTopics.addEventListener('click', () => {
+      state.nav = 'topics';
+      state.homeView = true;
+      state.fromPath = false;
+      state.fromPathTier = null;
+      pushNav();                 // dashboard → topics: BACK returns to dashboard
+      window.scrollTo(0, 0);
+      render();
+    });
+  }
+  const dashTileTranslate = document.getElementById('dash-tile-translate');
+  if (dashTileTranslate) {
+    dashTileTranslate.addEventListener('click', () => {
+      state.nav = 'translate';
+      pushNav();                 // dashboard → translate: BACK returns to dashboard
+      window.scrollTo(0, 0);
+      render();
+    });
+  }
+
   // ── Learning Path events ──────────────────────────────────────────
   // Open a path from the list view → switch to that path's timeline
   document.querySelectorAll('[data-path-open]').forEach(btn => {
@@ -3280,8 +3520,8 @@ function attachEvents(lesson, color) {
       applyNavSnapshot(snap);
     } else {
       // No snapshot (we're at the very first entry) — treat as the homepage,
-      // which is now the Learning Path list.
-      state.nav = 'path';
+      // which is now the Dashboard.
+      state.nav = 'dashboard';
       state.pathView = 'list';
       state.homeView = true;
       state.drawerOpen = false;
