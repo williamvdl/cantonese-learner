@@ -99,19 +99,19 @@
     --muted-light:         #A8A29E;   /* lighter muted — tertiary / meta text */
 
     /* ── Header + drawer tokens (visual identity: independent of body palette) ──
-       Set to OPTION C — "deep blue". Swap this block to retheme the top bar +
-       slide-out menu without touching anything else. */
-    --header-bg:      #0C4A6E;   /* deep blue bar */
-    --header-text:    #F5A623;   /* warm gold-orange brand mark */
-    --header-sub:     rgba(255,255,255,0.55);
-    --header-icon:    #F5A623;
+       Set to OPTION C1 — "exact secondary blue" (#0369A1, the --gold token).
+       Swap this block to retheme the top bar + slide-out menu only. */
+    --header-bg:      #0369A1;   /* exact secondary blue */
+    --header-text:    #FFE7C2;   /* warm cream mark for contrast on bright blue */
+    --header-sub:     rgba(255,255,255,0.6);
+    --header-icon:    #FFE7C2;
     --header-border:  transparent;
-    --drawer-bg:      #0C4A6E;
-    --drawer-text:    #F1F5F9;
-    --drawer-sub:     rgba(255,255,255,0.5);
-    --drawer-accent:  #FFD9C2;         /* active item label / ticks (warm on blue) */
-    --drawer-active-bg: rgba(194,65,12,0.30);
-    --drawer-border:  rgba(255,255,255,0.10);
+    --drawer-bg:      #0369A1;
+    --drawer-text:    #F1F7FB;
+    --drawer-sub:     rgba(255,255,255,0.55);
+    --drawer-accent:  #FFD9C2;         /* warm active label / ticks on blue */
+    --drawer-active-bg: rgba(194,65,12,0.32);
+    --drawer-border:  rgba(255,255,255,0.12);
   }
 
   * { box-sizing: border-box; margin: 0; padding: 0; }
