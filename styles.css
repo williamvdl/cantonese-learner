@@ -99,19 +99,19 @@
     --muted-light:         #A8A29E;   /* lighter muted — tertiary / meta text */
 
     /* ── Header + drawer tokens (visual identity: independent of body palette) ──
-       Set to OPTION D — "cream + hairline" (LIGHT header & drawer). Swap this
-       block to retheme the top bar + slide-out menu without touching anything else. */
-    --header-bg:      #F0E7D9;   /* warm cream bar */
-    --header-text:    #C2410C;   /* burnt-orange brand mark */
-    --header-sub:     #A8998A;
-    --header-icon:    #C2410C;
-    --header-border:  #DFD3C0;   /* defining hairline so it doesn't wash out */
-    --drawer-bg:      #F7F1E8;   /* light drawer */
-    --drawer-text:    #292524;   /* dark text — auto-switches for light drawer */
-    --drawer-sub:     #A8A29E;
-    --drawer-accent:  #C2410C;         /* active item label / ticks */
-    --drawer-active-bg: rgba(194,65,12,0.10);
-    --drawer-border:  #E5DDD0;
+       Set to OPTION C — "deep blue". Swap this block to retheme the top bar +
+       slide-out menu without touching anything else. */
+    --header-bg:      #0C4A6E;   /* deep blue bar */
+    --header-text:    #F5A623;   /* warm gold-orange brand mark */
+    --header-sub:     rgba(255,255,255,0.55);
+    --header-icon:    #F5A623;
+    --header-border:  transparent;
+    --drawer-bg:      #0C4A6E;
+    --drawer-text:    #F1F5F9;
+    --drawer-sub:     rgba(255,255,255,0.5);
+    --drawer-accent:  #FFD9C2;         /* active item label / ticks (warm on blue) */
+    --drawer-active-bg: rgba(194,65,12,0.30);
+    --drawer-border:  rgba(255,255,255,0.10);
   }
 
   * { box-sizing: border-box; margin: 0; padding: 0; }
