@@ -185,7 +185,7 @@ function renderPatternDrill(drillCount) {
 // Shared drill body — the done-summary or the active question. Caller-agnostic:
 // works for the Patterns-page drill and the topic-scoped drill alike.
 function renderDrillBody(pd) {
-  const color = '#8B3A4E';   // drill uses the brand cinnabar, like Word Review
+  const color = BRAND_ACCENT;   // drill uses the brand accent, like Word Review
 
   // --- Done summary ---
   if (pd.done) {
@@ -279,7 +279,7 @@ function renderDrillBody(pd) {
 function renderTopicDrillView(topicColor) {
   const pd = state.patternDrill;
   if (!pd) return '';
-  const color = topicColor || '#8B3A4E';
+  const color = topicColor || BRAND_ACCENT;
   const topicLabel = (lessonShape(pd.topicKey) || {}).label || 'Topic';
   return `
     <button class="back-home-btn" id="topic-drill-back">
@@ -513,7 +513,7 @@ function renderQuizCore(opts) {
 // Shows three stats — reviewed / graduated / still learning — plus a "review N
 // more" (or all-clear) and a Done button. `still learning = reviewed - graduated`.
 function renderReviewDone(o) {
-  const color = o.color || '#8B3A4E';
+  const color = o.color || BRAND_ACCENT;
   const stillLearning = Math.max(0, o.reviewed - o.graduated);
   const moreOrClear = o.liveCount > 0
     ? `<button class="review-start-btn" id="${o.againId}">Review ${Math.min(o.liveCount, REVIEW_SESSION_CAP)} more</button>`
@@ -582,7 +582,7 @@ function renderWordReview() {
       </div>`;
   }
 
-  const color = '#8B3A4E';   // review uses the brand cinnabar as its accent
+  const color = BRAND_ACCENT;   // review uses the brand accent
 
   // --- Done state: session summary (shared stat screen) ---
   if (wr.done) {
@@ -854,7 +854,7 @@ function countPathChapters(p) {
 }
 
 // Brand-fallback colours for the hero when no topic colour is available.
-const BRAND_HERO = '#8B3A4E';
+const BRAND_HERO = BRAND_ACCENT;
 const GOLD_HERO   = '#B7861E';
 
 // Darkens a #RRGGBB hex colour by `amount` (0-1) for the hero's gradient end —
@@ -1597,7 +1597,7 @@ function renderTopics() {
     const key = l.key;
     const active = state.topic === key;
     const style = active
-      ? `background:${l.color};color:#fff;border-color:${l.color}`
+      ? `background:${BRAND_ACCENT};color:#fff;border-color:${BRAND_ACCENT}`
       : `background:#fff;color:#555;border-color:#ddd`;
     return `<button class="topic-btn${active?' active':''}" style="${style}" data-topic="${key}">${l.icon} ${l.label}</button>`;
   }).join('');
@@ -1748,7 +1748,7 @@ function renderConversation(color) {
         ${englishEl}
         ${isUser ? `
           <button class="mic-btn ${status==='listening'?'listening':'idle'}" id="mic-btn"
-            style="color:${status==='listening'?'#8B3A4E':color};border:3px solid ${status==='listening'?'#8B3A4E':color}">
+            style="color:${status==='listening'?BRAND_ACCENT:color};border:3px solid ${status==='listening'?BRAND_ACCENT:color}">
             ${status==='listening'?'🔴':'🎙'}
           </button>
           <div class="speak-status">${statusText}</div>
@@ -1817,7 +1817,7 @@ function renderConversation(color) {
         // Show answered line with result highlight
         const correct = answered === line.c;
         const hlColor = correct ? '#d4edda' : '#f8d7da';
-        const hlBorder = correct ? '#2D5040' : '#8B3A4E';
+        const hlBorder = correct ? '#15803D' : BRAND_ACCENT;
         return `
           <div class="bubble-row ${side}">
             <div class="bubble-wrap">

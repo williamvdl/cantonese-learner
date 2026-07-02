@@ -3,10 +3,14 @@
 // Loaded FIRST. Defines: THEME, ICON_PATHS, icon(), iconPlay(), store, storage.
 // ===================================================================
 
+// Single brand accent used for all topic/lesson UI colouring. Category colours
+// are intentionally dropped (see topicMeta). Keep this in sync with CSS --brand.
+const BRAND_ACCENT = '#C2410C';
+
 const THEME = {
-  cardSurface:    '#FCFAF4',  // warm white card bg (unflipped)
+  cardSurface:    '#FFFFFF',  // card bg (unflipped) — Scholar white surface
   cardInverseText:'#FFFFFF',  // text colour when card is flipped (on coloured bg)
-  bubbleBg:       '#FCFAF4',  // non-user bubble background
+  bubbleBg:       '#FFFFFF',  // non-user bubble background
 };
 
 // ── Icon System ──────────────────────────────────────────────────────────────
@@ -80,11 +84,11 @@ const store = {
     const cached = this.topicCache[key];
     const baseLabel = cached ? cached.meta.label : (this.indexEntry(key)?.label || '');
     const baseIcon  = cached ? cached.meta.icon  : (this.indexEntry(key)?.icon  || '');
-    // Resolve category → category colour, falling back to topic's own colour if unavailable
-    const catKey = (this.topicCategories || {})[key];
-    const cat = (this.categoryList || []).find(c => c.key === catKey);
-    const fallbackColor = cached ? cached.meta.color : (this.indexEntry(key)?.color || '#888');
-    const color = (cat && cat.color) ? cat.color : fallbackColor;
+    // Visual identity: category/topic accent colours are dropped in favour of a
+    // single coherent brand accent. The per-category colours still exist in the
+    // data (categories.json / topics_index.json) but are no longer surfaced as
+    // UI accents. Jyutping tone colours are a SEPARATE system and unaffected.
+    const color = BRAND_ACCENT;
     return { label: baseLabel, icon: baseIcon, color };
   },
 
