@@ -3488,17 +3488,19 @@ function attachEvents(lesson, color) {
 
   const voices = await loadVoices();
   // Count Cantonese voices specifically — dual-speaker only makes sense if we
-  // have 2+ zh-HK voices, since mixing in a Mandarin voice for speaker B would
-  // make the conversation half-Mandarin.
-  const hkVoices    = voices.filter(v => v.lang === 'zh-HK');
-  const otherZh     = voices.filter(v => v.lang.startsWith('zh') && v.lang !== 'zh-HK');
+  // have 2+ Cantonese voices, since mixing in a Mandarin voice for speaker B
+  // would make the conversation half-Mandarin. Uses isCantoneseVoice/normLang so
+  // Android's "zh_HK_#Hant" is correctly recognised as Cantonese (previously an
+  // exact "zh-HK" check missed it and wrongly reported "no Cantonese voice").
+  const hkVoices    = voices.filter(isCantoneseVoice);
+  const otherZh     = voices.filter(v => isChineseVoice(v) && !isCantoneseVoice(v));
   const hkCount     = hkVoices.length;
   if (hkCount >= 2) {
     state.voiceInfo = { status:'hk',    label:`Cantonese (zh-HK) ready ✓ · ${hkCount} voices found — dual speaker active`, name: hkVoices[0].name };
   } else if (hkCount === 1) {
     state.voiceInfo = { status:'hk',    label:'Cantonese (zh-HK) ready ✓ · 1 voice found — using pitch to differentiate speakers', name: hkVoices[0].name };
   } else if (otherZh.length) {
-    state.voiceInfo = { status:'other', label:`No Cantonese voice — audio will sound like Mandarin (using ${otherZh[0].lang})`, name: otherZh[0].name };
+    state.voiceInfo = { status:'other', label:`No Cantonese voice — audio will sound like Mandarin (using ${normLang(otherZh[0].lang)})`, name: otherZh[0].name };
   } else {
     state.voiceInfo = { status:'none',  label:'No Chinese voice found — install one via Android Settings → General Management → Language & Input → Text-to-Speech → Google TTS → Install voice data → Chinese (Hong Kong)', name: '' };
   }

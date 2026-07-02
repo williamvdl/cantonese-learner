@@ -248,18 +248,40 @@ function loadVoices() {
   });
 }
 
+// Normalise a voice's lang tag for comparison. Browsers report BCP-47 tags in
+// two different shapes: standard hyphenated ("zh-HK") on desktop Chrome/Safari,
+// and ICU-style underscored + script-suffixed ("zh_HK_#Hant", "zh_CN_#Hans") on
+// Android. Lower-cased hyphen form, script suffix dropped: "zh_HK_#Hant" → "zh-hk".
+function normLang(lang) {
+  return String(lang || '')
+    .replace(/_#.*$/, '')   // drop "_#Hant" / "_#Hans" script suffix
+    .replace(/_/g, '-')      // underscores → hyphens
+    .toLowerCase();
+}
+// Is this voice Cantonese? Cantonese TTS is reported as zh-HK (and occasionally
+// zh-yue). zh-TW is Taiwanese Mandarin (not Cantonese) but is a much closer
+// pronunciation match than zh-CN, so it stays a fallback in pickVoicePair, not
+// here. This predicate is strictly "is it Cantonese".
+function isCantoneseVoice(v) {
+  const l = normLang(v.lang);
+  return l === 'zh-hk' || l.startsWith('zh-yue');
+}
+function isChineseVoice(v) {
+  return normLang(v.lang).startsWith('zh');
+}
+
 function pickVoicePair(voices) {
-  const zh = voices.filter(v => v.lang === 'zh-HK' || v.lang === 'zh-TW' || v.lang.startsWith('zh'));
+  const zh = voices.filter(isChineseVoice);
   if (zh.length === 0) return { a: null, b: null };
-  // Primary voice: prefer Cantonese (zh-HK), then any other zh.
-  // Without this, systems that list zh-CN first (e.g. Chrome on Windows) would
-  // play Mandarin audio even though a perfectly good zh-HK voice exists.
-  const a = zh.find(v => v.lang === 'zh-HK')
-          || zh.find(v => v.lang === 'zh-TW')
+  // Primary voice: prefer Cantonese (zh-HK), then Taiwanese Mandarin (zh-TW,
+  // closer than mainland), then any other zh. Uses normLang so Android's
+  // "zh_HK_#Hant" is recognised as Cantonese, not lumped in with Mandarin.
+  const a = zh.find(isCantoneseVoice)
+          || zh.find(v => normLang(v.lang) === 'zh-tw')
           || zh[0];
-  // Secondary voice for the second speaker: prefer another zh-HK voice if
-  // there's more than one, otherwise any other zh voice, otherwise reuse `a`.
-  const sameLang = zh.filter(v => v.lang === a.lang && v !== a);
+  // Secondary voice for the second speaker: prefer another voice of the same
+  // lang if there's more than one, otherwise any other zh voice, otherwise `a`.
+  const sameLang = zh.filter(v => normLang(v.lang) === normLang(a.lang) && v !== a);
   const b = sameLang[0] || zh.find(v => v !== a) || null;
   return { a, b };
 }
