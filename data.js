@@ -62,9 +62,6 @@ const store = {
   paths:           null,   // [ {key, label, ..., lessons, stages?} ]
   pathConvos:      {},      // { 'beginner-s1': {title, speakers, lines} } — checkpoint consolidation convos.
                             // Defaults to {} so a checkpoint with no authored convo simply finds nothing.
-  patterns:        [],     // [ {label, structure, note, examples, drills?} ] — see patterns.json.
-                           // Defaults to [] (not null) so any render before loadPatterns()
-                           // resolves yields an empty list rather than throwing.
   topicCache:      {},     // { greetings: {meta, rounds}, ... }
 
   // Index lookups — synchronous after init
@@ -123,10 +120,6 @@ const store = {
     } catch (e) { this.pathConvos = {}; }
   },
   pathConvo(key) { return this.pathConvos[key] || null; },
-  async loadPatterns() {
-    const r = await fetch('./data/patterns.json');
-    this.patterns = (await r.json()).patterns;
-  },
 
   // Topic loader (cached) — returns the cached topic object
   async loadTopic(key) {
@@ -171,7 +164,6 @@ const store = {
 // Key registry — every storage key defined once, consistent naming.
 const STORAGE_KEYS = {
   wordReview:    'cantonese:wordReview',
-  patternReview: 'cantonese:patternReview',
   quizDirection: 'cantonese:quizDirection',
   apiKey:        'cantonese:apiKey',
   pathProgress:  'cantonese:pathProgress',
@@ -181,7 +173,6 @@ const STORAGE_KEYS = {
 // and add a matching case in _migrate(). All start at 1.
 const STORAGE_SCHEMA = {
   wordReview:    2,
-  patternReview: 1,
   quizDirection: 1,
   apiKey:        1,
   pathProgress:  1,
@@ -192,7 +183,6 @@ const STORAGE_SCHEMA = {
 // is adopted. Ensures existing users keep their path progress, API key, etc.
 const STORAGE_LEGACY_KEYS = {
   wordReview:    'cantonese-word-review-v1',
-  patternReview: null,                           // new feature — no pre-existing key
   quizDirection: 'cantonese.quizDirection',
   apiKey:        'cantonese_api_key',
   pathProgress:  'cantonese_path_progress',
@@ -259,7 +249,6 @@ const storage = {
   _hydrate() {
     const defaults = {
       wordReview:    { everUsed: false, entries: [] },
-      patternReview: { everUsed: false, entries: [] },
       quizDirection: 'zh-en',
       apiKey:        '',
       pathProgress:  {},
@@ -296,10 +285,6 @@ const storage = {
   // Word Review bin: { everUsed, entries }
   getWordReview()        { return this._cache.wordReview; },
   async setWordReview(v) { this._cache.wordReview = v; this._persist('wordReview', v); },
-
-  // Pattern Review bin: { everUsed, entries:[{did,missCount,correctCount,addedAt}] }
-  getPatternReview()        { return this._cache.patternReview; },
-  async setPatternReview(v) { this._cache.patternReview = v; this._persist('patternReview', v); },
 
   // Quiz direction: string
   getQuizDirection()        { return this._cache.quizDirection; },

@@ -185,7 +185,6 @@
           ],
           "checkpoint": {
             "id": "beginner-s1-cp",
-            "drillCap": 15,
             "wordCap": 25,
             "convo": "beginner-s1"
           }
@@ -202,7 +201,6 @@
           ],
           "checkpoint": {
             "id": "beginner-s2-cp",
-            "drillCap": 15,
             "wordCap": 25,
             "convo": "beginner-s2"
           }
@@ -218,7 +216,6 @@
           ],
           "checkpoint": {
             "id": "beginner-s3-cp",
-            "drillCap": 15,
             "wordCap": 25,
             "convo": "beginner-s3"
           }
@@ -233,7 +230,6 @@
           ],
           "checkpoint": {
             "id": "beginner-s4-cp",
-            "drillCap": 15,
             "wordCap": 25,
             "convo": "beginner-s4"
           }
@@ -248,7 +244,6 @@
           ],
           "checkpoint": {
             "id": "beginner-s5-cp",
-            "drillCap": 15,
             "wordCap": 25,
             "convo": "beginner-s5"
           }
@@ -263,7 +258,6 @@
           ],
           "checkpoint": {
             "id": "beginner-s6-cp",
-            "drillCap": 15,
             "wordCap": 25,
             "convo": "beginner-s6"
           }
@@ -279,7 +273,6 @@
           ],
           "checkpoint": {
             "id": "beginner-s7-cp",
-            "drillCap": 15,
             "wordCap": 25,
             "convo": "beginner-s7"
           }
@@ -294,7 +287,6 @@
           ],
           "checkpoint": {
             "id": "beginner-s8-cp",
-            "drillCap": 15,
             "wordCap": 25,
             "convo": "beginner-s8"
           }
@@ -310,7 +302,6 @@
           ],
           "checkpoint": {
             "id": "beginner-s9-cp",
-            "drillCap": 15,
             "wordCap": 25,
             "convo": "beginner-s9"
           }
@@ -326,7 +317,6 @@
           ],
           "checkpoint": {
             "id": "beginner-s10-cp",
-            "drillCap": 15,
             "wordCap": 25,
             "convo": "beginner-s10"
           }
@@ -341,7 +331,6 @@
           ],
           "checkpoint": {
             "id": "beginner-s11-cp",
-            "drillCap": 15,
             "wordCap": 25,
             "convo": "beginner-s11"
           }
@@ -409,7 +398,6 @@
           ],
           "checkpoint": {
             "id": "intermediate-s1-cp",
-            "drillCap": 15,
             "wordCap": 25,
             "convo": "intermediate-s1"
           }
@@ -423,7 +411,6 @@
           ],
           "checkpoint": {
             "words": true,
-            "patterns": false,
             "convo": "intermediate-s3"
           }
         },
@@ -437,7 +424,6 @@
           ],
           "checkpoint": {
             "id": "intermediate-s4-cp",
-            "drillCap": 15,
             "wordCap": 30,
             "convo": "intermediate-s4"
           }
@@ -453,7 +439,6 @@
           ],
           "checkpoint": {
             "id": "intermediate-s5-cp",
-            "drillCap": 15,
             "wordCap": 35,
             "convo": "intermediate-s5"
           }

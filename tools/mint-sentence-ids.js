@@ -2,7 +2,7 @@
 /* mint-sentence-ids.js — assign stable ids (`sid`) to every example sentence in
  * every topic/tier. Vanilla Node, zero deps. Run from repo root:
  *     node tools/mint-sentence-ids.js [--dry]
- * Same guarantees as the word/drill minters: APPEND-ONLY, idempotent, per-topic
+ * Same guarantees as the word id minter: APPEND-ONLY, idempotent, per-topic
  * `_sidSeq` high-water mark, refuses to write on any violation. Format
  * "<topic>-t<tier>-sNN" (2+ digit pad). `sid` inserted as the FIRST key of each
  * sentence. Preserves 2-space indent + NO trailing newline (topic-file convention).

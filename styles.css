@@ -304,96 +304,7 @@
   .apikey-toggle-row { display: flex; justify-content: flex-end; margin-top: 6px; }
   .apikey-toggle-btn { background: transparent; border: none; color: #999; font-size: var(--fs-micro); cursor: pointer; padding: 0; text-decoration: underline; }
 
-  /* Patterns section */
-  .patterns-wrap { padding: var(--sp-4) var(--sp-5) var(--sp-7); max-width: 680px; margin: 0 auto; }
-  .patterns-header { padding: 16px 20px 0; max-width: 680px; margin: 0 auto; margin-bottom: var(--sp-4); }
-  .patterns-header h2 { font-size: 20px; font-weight: var(--fw-bold); color: var(--brand); margin-bottom: 4px; }
-  .patterns-header p { font-size: var(--fs-meta); color: #999; margin-bottom: 16px; }
-  .pattern-card { background: var(--parchment); border-radius: var(--r-md); padding: var(--sp-4); margin-bottom: var(--sp-3); border: 1px solid var(--parchment-border); box-shadow: var(--elev-1); overflow: hidden; }
-  .pattern-head { padding: 14px 16px 12px; background: var(--parchment-deep); border-left: 4px solid var(--brand); margin-bottom: var(--sp-2); gap: var(--sp-2); }
-  .pattern-number { font-size: 10px; color: var(--brand); font-weight: var(--fw-bold); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 2px; }
-  .pattern-label { font-size: var(--fs-lead); font-weight: var(--fw-bold); color: var(--ink); margin-bottom: 6px; }
-  .pattern-structure { display: inline-block; background: rgba(26,24,21,0.06); border-radius: 8px; padding: 4px 10px; font-size: var(--fs-meta); color: var(--muted-dark); font-family: monospace; }
-  .pattern-body { padding: 12px 16px 14px; }
-  .pattern-note { font-size: var(--fs-meta); color: #888; margin-bottom: 12px; line-height: 1.5; font-style: italic; }
-  .pattern-examples { display: flex; flex-direction: column; gap: var(--sp-2); }
-  .pattern-example { display: flex; align-items: center; gap: var(--sp-3); background: var(--parchment-warm); border-radius: var(--r-sm); padding: var(--sp-3); }
-  .pattern-ex-text { flex: 1; }
-  .pattern-ex-zh { font-size: var(--fs-lead); color: var(--ink); margin-bottom: 3px; line-height: 1.3; }
-  .pattern-ex-jp { font-size: var(--fs-meta); margin-bottom: 3px; }
-  .pattern-ex-en { font-size: var(--fs-micro); color: #888; }
-  .pattern-ex-play { width: 40px; height: 40px; border-radius: 50%; border: 1.5px solid var(--brand); background: transparent; color: var(--brand); cursor: pointer; font-size: 14px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: all 0.15s; }
-  .pattern-ex-play.speaking { background: var(--brand); color: var(--parchment); animation: pulse 0.6s infinite alternate; }
-
-  /* Stage 4 — grouped reference library (two-level accordion) */
-  .pattern-library { margin-top: 4px; }
-  .lib-group { margin-bottom: 10px; border-radius: 12px; overflow: hidden; border: 1px solid var(--parchment-border); background: var(--parchment); }
-  .lib-group-head { display: flex; align-items: center; gap: 10px; padding: 14px; cursor: pointer; background: var(--parchment-deep); user-select: none; }
-  .lib-group-head:active { background: var(--parchment-border); }
-  .lib-chev { color: var(--brand); font-size: var(--fs-meta); flex-shrink: 0; transition: transform 0.18s; display: inline-block; }
-  .lib-group.open > .lib-group-head .lib-chev,
-  .lib-frame.open > .lib-frame-head .lib-chev { transform: rotate(90deg); }
-  .lib-group-title { font-size: 15.5px; font-weight: var(--fw-bold); color: var(--brand); flex: 1; line-height: 1.2; }
-  .lib-group-desc { display: block; font-size: var(--fs-micro); font-weight: var(--fw-regular); color: var(--muted); margin-top: 2px; }
-  .lib-group-count { font-size: var(--fs-micro); color: var(--muted); background: var(--parchment); border: 1px solid var(--parchment-border); border-radius: 20px; padding: 3px 9px; flex-shrink: 0; }
-  .lib-group-body { padding: 8px 10px 12px; }
-  .lib-frame { background: var(--parchment-warm); border: 1px solid var(--parchment-border); border-radius: 10px; margin: 8px 0; overflow: hidden; }
-  .lib-frame-head { padding: 10px 12px; cursor: pointer; display: flex; align-items: flex-start; gap: 8px; user-select: none; }
-  .lib-frame-head:active { background: var(--parchment-border); }
-  .lib-frame .lib-chev { font-size: var(--fs-micro); margin-top: 3px; }
-  .lib-frame-titles { flex: 1; min-width: 0; }
-  .lib-frame-label { font-size: 14.5px; font-weight: var(--fw-bold); color: var(--ink); line-height: 1.25; }
-  .lib-frame-struct { font-family: monospace; font-size: 11.5px; color: var(--muted); margin-top: 2px; }
-  .lib-frame-body { padding: 0 12px 12px; }
-  .lib-frame-body .pattern-note { font-style: normal; background: var(--gold-tint); border-left: 2px solid var(--gold); border-radius: 6px; padding: 8px 10px; color: var(--ink); opacity: 0.82; }
-
-  /* Pattern drill */
-  .patterns-subtabs { margin-bottom: 16px; }
-  .drill-card { text-align: center; }
-  .drill-frame { font-size: 30px; color: var(--ink); line-height: 1.4; margin: 6px 0 4px; font-family: var(--font-serif); }
-  .drill-frame-jp { font-size: 14px; margin-bottom: 12px; }
-  .drill-slot { display: inline-block; min-width: 44px; padding: 0 8px; border-radius: 8px; }
-  .drill-slot-empty { background: rgba(139,58,78,0.10); border: 2px dashed var(--brand); color: var(--brand); }
-  .drill-slot.correct { background: var(--feedback-good-tint); color: var(--feedback-good-text); }
-  .drill-slot.wrong { background: var(--brand-tint); color: var(--brand-text-dark); }
-  .drill-slot-jp { display: inline-block; padding: 0 4px; color: var(--brand); font-weight: var(--fw-bold); }
-  .drill-target { font-size: var(--fs-lead); font-weight: var(--fw-bold); color: var(--ink); margin: 2px 0 2px; }
-  .drill-target-hint { font-size: var(--fs-micro); color: #999; font-style: italic; margin-bottom: 12px; }
-  .drill-hint { font-size: var(--fs-meta); color: #999; font-style: italic; }
-
-  /* Learn-tab "Patterns with these words" section */
-  .topic-patterns { margin-top: 22px; }
-  .topic-patterns h3 { font-size: var(--fs-body); margin-bottom: 10px; }
-  .topic-pattern-card { background: var(--parchment); border-radius: 12px; border: 1px solid var(--parchment-border);
-    border-left: 4px solid var(--brand); margin-bottom: 10px; overflow: hidden; }
-  /* Tinted header band — label + structure, demarcated from body via background */
-  .tp-head-band { background: var(--parchment-deep); padding: 12px 14px; }
-  .tp-head-label { font-family: var(--font-ui); font-size: var(--fs-lead); font-weight: var(--fw-bold);
-    color: var(--brand); line-height: var(--lh-heading); letter-spacing: -0.005em; margin-bottom: 4px; }
-  .tp-head-struct { font-family: monospace; font-size: var(--fs-meta); color: var(--muted); line-height: 1.5; }
-  /* Body — note + worked example + breakdown */
-  .tp-body { padding: 12px 14px; }
-  /* Pattern teaching note — context for what the pattern does */
-  .tp-note { font-size: var(--fs-small); color: var(--ink-soft); opacity: 0.82;
-    line-height: var(--lh-body); padding: 8px 10px; margin-bottom: 12px;
-    background: var(--gold-tint); border-left: 2px solid var(--gold); border-radius: 6px; }
-  .tp-worked { display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; }
-  .tp-ex-sep { margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--parchment-border); }
-  .tp-card-main { flex: 1; cursor: pointer; }
-  /* Stacked breakdown — Frame piece, then Fills-the-blank piece */
-  .tp-bd-panel { margin-top: 8px; background: var(--parchment-warm);
-    border: 1px solid var(--parchment-border); border-radius: 10px; padding: 12px 12px 4px; }
-  .tp-bd-piece { padding-bottom: 12px; }
-  .tp-bd-piece + .tp-bd-piece { margin-top: 4px; padding-top: 12px; border-top: 1px solid var(--parchment-border); }
-  .tp-bd-label { font-size: 10px; font-weight: var(--fw-bold); letter-spacing: 0.1em;
-    text-transform: uppercase; color: var(--muted); margin-bottom: 6px; }
-  .tp-bd-zh { font-size: 18px; color: var(--ink); line-height: 1.3; margin-bottom: 2px; }
-  .tp-bd-jp { font-size: var(--fs-small); margin-bottom: 2px; }
-  .tp-bd-en { font-size: var(--fs-small); color: var(--muted); }
-  .topic-drill-btn { display: block; width: 100%; text-align: center; padding: 12px;
-    border-radius: 12px; color: #fff; font-size: var(--fs-small); font-weight: var(--fw-bold); border: none;
-    margin-top: 6px; cursor: pointer; }
-  .topic-drill-heading { font-size: var(--fs-small); font-weight: var(--fw-bold); color: var(--muted);
+  .cp-activity-heading { font-size: var(--fs-small); font-weight: var(--fw-bold); color: var(--muted);
     text-transform: uppercase; letter-spacing: 0.5px; margin: 4px 0 14px; }
 
   /* Sentences */
@@ -421,9 +332,6 @@
   .sentence-note { margin-top: 8px; background: rgba(183,134,30,.09); border: 1px solid rgba(183,134,30,.25);
     border-radius: 10px; padding: 10px 13px; font-size: var(--fs-small); color: var(--muted-dark); line-height: 1.5; }
 
-  /* Patterns tab intro banner */
-  .patterns-tab-intro { background: var(--parchment-warm); border-left: 4px solid var(--gold);
-    border-radius: 0 10px 10px 0; padding: 11px 14px; font-size: var(--fs-small); color: var(--muted-dark); line-height: 1.5; margin-bottom: 16px; }
   .sentence-play { flex-shrink: 0; width: 44px; height: 44px; border-radius: 50%; cursor: pointer; font-size: 18px; display: flex; align-items: center; justify-content: center; transition: all 0.15s; border: 1.5px solid; background: transparent; margin-top: 2px; }
 
   .bubble-row.right .bubble .bubble-jyutping span { color: rgba(255,255,255,0.88) !important; }
@@ -586,18 +494,16 @@
   .review-empty-text { font-size: var(--fs-small); color: #999; margin: 8px auto 0; max-width: 300px; line-height: 1.5; }
   .review-allclear-note { font-size: var(--fs-small); color: var(--muted-dark); margin: 14px 0 4px; }
 
-  /* Review hub (Option B): two cards routing to Words / Patterns */
+  /* Review hub: card routing to Word Review */
   .review-hub-card { display: flex; align-items: center; gap: 15px; width: 100%; text-align: left;
     background: var(--parchment); border: 1.5px solid var(--parchment-border); border-radius: 16px; padding: 18px;
     margin-bottom: 14px; cursor: pointer; position: relative; overflow: hidden; transition: transform 0.12s; }
   .review-hub-card:active { transform: scale(0.99); }
   .review-hub-card::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 5px; }
   .review-hub-card.words::before { background: var(--brand); }
-  .review-hub-card.patterns::before { background: var(--gold); }
   .review-hub-card .rh-ic { width: 50px; height: 50px; border-radius: 13px; display: flex; align-items: center;
     justify-content: center; font-size: 24px; flex-shrink: 0; }
   .review-hub-card.words .rh-ic { background: rgba(139,58,78,0.10); }
-  .review-hub-card.patterns .rh-ic { background: rgba(183,134,30,0.13); }
   .review-hub-card .rh-body { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
   .review-hub-card .rh-name { font-family: var(--font-serif); font-size: var(--fs-lead); font-weight: var(--fw-bold); color: var(--ink); }
   .review-hub-card .rh-desc { font-size: 12.5px; color: var(--muted-light); }
@@ -605,10 +511,9 @@
   .review-hub-card .rh-count b { display: block; font-family: var(--font-serif); font-size: 24px; line-height: 1; }
   .review-hub-card .rh-count span { font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; }
   .review-hub-card.words .rh-count b { color: var(--brand); }
-  .review-hub-card.patterns .rh-count b { color: var(--gold); }
   .review-hub-card .rh-count.zero b { color: var(--muted); }
 
-  /* Shared review done-screen stats (Word + Pattern Review) */
+  /* Word Review done-screen stats */
   .review-done-stats { display: flex; gap: 10px; margin: 14px 0 18px; }
   .review-done-stats .rd-stat { flex: 1; background: var(--parchment); border: 1.5px solid var(--parchment-border);
     border-radius: 13px; padding: 14px 6px; }
@@ -740,14 +645,11 @@
   .quiz-chinese,
   .sentence-chinese,
   .bubble-chinese,
-  .pattern-structure,
   .quiz-review-chinese,
   .quiz-wrong-chinese,
   .speak-target-zh,
   .translate-zh,
-  .pattern-ex-zh,
   .breakdown-zh,
-  .tp-bd-zh,
   .home-title,
   .lesson-title,
   .quiz-prompt-en {
@@ -763,8 +665,6 @@
   .header-title .en,
   .quiz-label,
   .quiz-review-title,
-  .pattern-label,
-  .pattern-number,
   .round-label {
     font-family: var(--font-ui);
     font-weight: var(--fw-bold);
@@ -774,8 +674,8 @@
 
   /* Jyutping pronunciation — slightly nicer, weight up */
   .card-jyutping, .sentence-jyutping, .bubble-jyutping,
-  .quiz-jyutping, .quiz-review-jp, .quiz-wrong-jp, .pattern-ex-jp,
-  .translate-jp, .breakdown-jp, .tp-bd-jp {
+  .quiz-jyutping, .quiz-review-jp, .quiz-wrong-jp,
+  .translate-jp, .breakdown-jp {
     font-family: var(--font-ui);
     font-weight: var(--fw-semi);
     letter-spacing: 0.01em;
@@ -790,10 +690,7 @@
     letter-spacing: 0.01em;
   }
 
-  /* Pattern + path titles — proper editorial */
-  .pattern-card .pattern-head .pattern-label {
-    /* already covered */
-  }
+  /* Path titles — proper editorial */
   .path-card-title, .path-timeline-title, .path-step-title {
     font-family: var(--font-serif);
     font-weight: var(--fw-bold);
@@ -804,7 +701,7 @@
   .path-step-title { font-size: var(--fs-body); }
 
   /* Notes + descriptive prose */
-  .pattern-note, .lesson-note-body, .path-card-desc, .path-timeline-sub,
+  .lesson-note-body, .path-card-desc, .path-timeline-sub,
   .home-subtitle, .hint {
     font-family: var(--font-ui);
     font-weight: var(--fw-regular);
@@ -814,11 +711,11 @@
 
   /* English translations — softer */
   .card-english, .sentence-english, .bubble-english,
-  .pattern-ex-en, .quiz-review-en, .quiz-wrong-en {
+  .quiz-review-en, .quiz-wrong-en {
     font-family: var(--font-ui);
     letter-spacing: 0;
   }
-  .sentence-english, .pattern-ex-en { font-size: var(--fs-small); }
+  .sentence-english { font-size: var(--fs-small); }
 
   /* Voice banner — quieter spacing */
 
@@ -857,13 +754,6 @@
   /* Conversation bubbles */
   .convo-meta { margin-bottom: var(--sp-2); padding: 0 var(--sp-1); }
   .bubble-jyutping { margin-top: var(--sp-1); }
-
-  /* Patterns page */
-  .pattern-number { padding: var(--sp-1) var(--sp-2); }
-  .pattern-structure { margin-bottom: var(--sp-2); }
-  .pattern-note { margin-bottom: var(--sp-3); }
-  .pattern-ex-zh { margin-bottom: var(--sp-1); }
-  .pattern-ex-jp { margin-bottom: var(--sp-1); }
 
   /* Translate page */
 
@@ -971,7 +861,7 @@
   .topic-card:active, .path-card:active, .path-step-card:active {
     transform: scale(0.98);
   }
-  .word-card:hover, .sentence-card:hover, .pattern-card:hover,
+  .word-card:hover, .sentence-card:hover,
   .quiz-review-item:hover {
     box-shadow: var(--elev-2);
   }
@@ -1005,17 +895,17 @@
   }
 
   /* Circular play buttons — consistent treatment + press feedback */
-  .speak-btn, .sentence-play, .quiz-listen, .pattern-ex-play,
+  .speak-btn, .sentence-play, .quiz-listen,
   .quiz-review-play, .bubble-play, .quiz-replay {
     transition: transform var(--dur-fast) var(--ease),
                 box-shadow var(--dur-base) var(--ease),
                 background-color var(--dur-base) var(--ease);
   }
-  .speak-btn:active, .sentence-play:active, .pattern-ex-play:active,
+  .speak-btn:active, .sentence-play:active,
   .quiz-review-play:active, .bubble-play:active {
     transform: scale(0.90);
   }
-  .speak-btn:hover, .sentence-play:hover, .pattern-ex-play:hover,
+  .speak-btn:hover, .sentence-play:hover,
   .quiz-review-play:hover, .quiz-review-play:hover {
     box-shadow: var(--elev-1);
   }

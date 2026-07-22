@@ -1,6 +1,6 @@
 // ===================================================================
 // app.js — state, logic, helpers
-// Loaded SECOND (after data.js). Word Review storage, helpers, state, patterns,
+// Loaded SECOND (after data.js). Word Review storage, helpers, state,
 // audio, translation, speech recognition.
 // ===================================================================
 
@@ -106,68 +106,6 @@ async function getReviewStats() {
   return { liveCount: data.entries.length, everUsed: data.everUsed };
 }
 
-// ── Pattern Review storage layer ──────────────────────────────────────────────
-// Mirror of the Word Review bin, but for pattern DRILLS rather than vocab words.
-// Identity is the stable `did` (drill id). A drill carries its own display text
-// (answer/distractors with cached c/j/e), so reviewing needs no topic load.
-// Payload (STORAGE_KEYS.patternReview, envelope v1):
-//   { everUsed, entries: [ {did, missCount, correctCount, addedAt} ] }
-async function _readPatternStore() {
-  const data = storage.getPatternReview() || { everUsed: false, entries: [] };
-  return { everUsed: !!data.everUsed, entries: Array.isArray(data.entries) ? data.entries : [] };
-}
-async function _writePatternStore(data) { await storage.setPatternReview(data); }
-
-async function getPatternBin() { return (await _readPatternStore()).entries; }
-
-// Record a missed drill. New → new entry; already-binned → missCount++, correct reset.
-async function addPatternMiss(did) {
-  if (!did) return;
-  const data = await _readPatternStore();
-  data.everUsed = true;
-  const existing = data.entries.find(e => e.did === did);
-  if (existing) {
-    existing.missCount += 1;
-    existing.correctCount = 0;
-  } else {
-    data.entries.push({ did, missCount: 1, correctCount: 0, addedAt: Date.now() });
-  }
-  await _writePatternStore(data);
-}
-
-// Record a review result. Correct → correctCount++, graduates (removed) at
-// REVIEW_GRADUATE_AT. Wrong → reset to 0. Returns { graduated }.
-async function recordPatternReviewResult(did, wasCorrect) {
-  const data = await _readPatternStore();
-  const entry = data.entries.find(e => e.did === did);
-  if (!entry) return { graduated: false };
-  let graduated = false;
-  if (wasCorrect) {
-    entry.correctCount += 1;
-    if (entry.correctCount >= REVIEW_GRADUATE_AT) {
-      data.entries = data.entries.filter(e => e !== entry);
-      graduated = true;
-    }
-  } else {
-    entry.correctCount = 0;
-  }
-  await _writePatternStore(data);
-  return { graduated };
-}
-
-// Drop an entry outright — used for a did that no longer resolves to a drill.
-async function dropPatternBinEntry(did) {
-  const data = await _readPatternStore();
-  data.entries = data.entries.filter(e => e.did !== did);
-  await _writePatternStore(data);
-}
-
-async function getPatternReviewStats() {
-  const data = await _readPatternStore();
-  return { liveCount: data.entries.length, everUsed: data.everUsed };
-}
-
-
 // ── Round accessors — single point of truth for "what content is in topic+round" ──
 // These assume the topic has been loaded; return safe defaults otherwise.
 function getAvailableRounds(topic) {
@@ -227,10 +165,6 @@ const TONES = {
   "6":{"color":"#8E44AD","desc":"Low level",   "ex":"事 si6"},
 };
 
-// ── Patterns ──────────────────────────────────────────────────────────────────
-// Pattern + drill content now lives in /data/patterns.json, loaded once on init
-// by store.loadPatterns(). Access the array via store.patterns. The schema is
-// documented in the Pattern Drill section below.
 // ── Audio ─────────────────────────────────────────────────────────────────────
 let _voices = null;
 
@@ -286,7 +220,7 @@ function pickVoicePair(voices) {
   return { a, b };
 }
 
-// Some pattern frames are written as two-speaker dialogues, e.g.
+// Some spoken text is written as a two-speaker dialogue, e.g.
 //   "A：你叫乜名？B：我叫William。"
 // The on-screen text keeps the A:/B: labels (they make the exchange clear to
 // read), but those letters must NOT be voiced — TTS would literally say "A… B…".
@@ -376,33 +310,21 @@ let state = {
   sentenceBreakdownOpen: {},
   sentenceRevealed: {},
   sentenceNoteClosed: {},
-  patternRevealed: {},
-  patternBreakdownOpen: {},
   voiceInfo: null,
   quiz: null,
   // Word Review session — null when not in a session. Shape set by startWordReview().
   wordReview: null,
-  // Pattern Drill session — null when not in a session. Shape set by startPatternDrill().
-  patternDrill: null,
-  // Pattern Review session — null when not in a session. Shape set by startPatternReview().
-  patternReview: null,
-  // Which Review sub-screen is showing: 'hub' (cards), 'words', or 'patterns'.
+  // Which Review sub-screen is showing: 'hub' (cards) or 'words'.
   reviewView: 'hub',
   // Checkpoint (Stage 3) — null when no checkpoint hub is open.
   //   checkpoint:     { pathKey, stageId, cpId } | null  — which hub is open
-  //   checkpointAct:  'words' | 'patterns' | 'convo' | null — which activity within it
+  //   checkpointAct:  'words' | 'convo' | null — which activity within it
   //   checkpointQuiz: the Words-activity quiz session (own shape) | null
   checkpoint: null,
   checkpointAct: null,
   checkpointQuiz: null,
-  // Patterns page is a grouped reference library (Stage 4). These track which
-  // groups / frames are expanded (all collapsed by default). Keyed by group name
-  // and by `${groupIdx}-${frameIdx}`.
-  patternGroupsOpen: {},
-  patternFramesOpen: {},
   // Cached {liveCount, everUsed} for the menu badge — refreshed by refreshReviewBadge().
   reviewBadge: { liveCount: 0, everUsed: false },
-  patternReviewBadge: { liveCount: 0, everUsed: false },
   convo: {
     convMode: 'read',
     playingLine: null,
@@ -554,7 +476,6 @@ const REVIEW_SESSION_CAP = 20;   // max words per review session; oldest-missed 
 // should see reflected (e.g. finishing a quiz, finishing a review session).
 async function refreshReviewBadge() {
   state.reviewBadge = await getReviewStats();
-  state.patternReviewBadge = await getPatternReviewStats();
 }
 
 // Build and start a Word Review session. Pulls the bin, takes the oldest-missed
@@ -646,182 +567,6 @@ function advanceWordReview() {
   render();
 }
 
-// ── Pattern Drill session ─────────────────────────────────────────────────────
-// A drill quizzes sentence patterns: a pattern frame with one slot blanked, the
-// learner picks the vocab that fills it. Built on renderQuizCore, same as the
-// quiz and Word Review.
-//
-// MULTI-DRILL MODEL: a pattern carries a `drills` array — one frame, but several
-// topic-scoped fill-in instances, each with its own answer/distractors/topics.
-// This keeps every drill's answer + distractors genuinely the tagged topic's own
-// vocabulary while still letting one grammatical frame serve many topics.
-// A pattern without a `drills` array (or an empty one) is reference-only.
-//
-// state.patternDrill shape (null when not in a drill):
-//   { queue: [{pattern, drill},…], idx, selected (choice index|null), done,
-//     score, topicKey, choices: [option,…] }
-// Each queue entry pairs the parent pattern (for its label/structure) with the
-// specific drill being asked. A drill option is a plain { c, j, e } word object;
-// the answer object is drill.answer, the distractors are drill.distractors.
-
-// Build the 4 shuffled choices for one drill: the answer + its 3 distractors.
-function buildDrillChoices(drill) {
-  return shuffle([drill.answer, ...drill.distractors]);
-}
-
-// Every drill tagged to a topic, as {pattern, drill} pairs. A pattern may
-// contribute more than one drill if multiple of its drills tag the topic.
-// Single source of truth for "what does this topic drill" — used by the
-// Learn-tab patterns section and the topic-scoped drill.
-function getTopicDrills(topicKey) {
-  const out = [];
-  for (const p of store.patterns) {
-    if (!Array.isArray(p.drills)) continue;
-    for (const dr of p.drills) {
-      if (Array.isArray(dr.topics) && dr.topics.includes(topicKey)) {
-        out.push({ pattern: p, drill: dr });
-      }
-    }
-  }
-  return out;
-}
-
-// Distinct patterns that have at least one drill tagged to the topic.
-// Kept for callers that need patterns rather than drills (e.g. future stages).
-function getTopicPatterns(topicKey) {
-  return [...new Set(getTopicDrills(topicKey).map(x => x.pattern))];
-}
-
-// Start a pattern drill session.
-//  - No argument        → drills every drillable pattern, one drill each (legacy / library).
-//  - topicKey (string)  → drills only that topic's drills (the Learn-tab drill).
-//  - { kind:'checkpoint', stage } → drills the stage's pooled drills, capped (Stage 3).
-// The session records its scope so the drill view knows where "back" returns and
-// the done screen knows what to offer.
-function startPatternDrill(scope) {
-  let drillable, scopeKind, topicKey = null, checkpointStage = null;
-
-  if (scope && typeof scope === 'object' && scope.kind === 'checkpoint') {
-    // Checkpoint scope: pooled drills across the stage's topics, capped.
-    scopeKind = 'checkpoint';
-    checkpointStage = scope.stage;
-    const cp = checkpointStage.checkpoint || {};
-    const cap = cp.drillCap || CHECKPOINT_DRILL_CAP_DEFAULT;
-    drillable = shuffle(getCheckpointDrills(checkpointStage)).slice(0, cap);
-  } else if (scope) {
-    // Topic scope (string topicKey) — existing Learn-tab behaviour.
-    scopeKind = 'topic';
-    topicKey = scope;
-    drillable = getTopicDrills(topicKey);
-  } else {
-    // Legacy / library scope — one drill per tier-1 drillable pattern.
-    scopeKind = 'all';
-    drillable = store.patterns.filter(p => p.tier === 1 && Array.isArray(p.drills) && p.drills.length)
-        .map(p => ({ pattern: p, drill: p.drills[0] }));
-  }
-
-  if (!drillable.length) { state.patternDrill = null; render(); return; }
-  const queue = scopeKind === 'checkpoint' ? drillable : shuffle(drillable);
-  state.patternDrill = {
-    queue,
-    idx: 0,
-    selected: null,
-    done: false,
-    score: 0,
-    topicKey: topicKey,                 // null unless topic scope (keeps existing callers working)
-    scopeKind: scopeKind,               // 'topic' | 'all' | 'checkpoint'
-    checkpointStage: checkpointStage,   // the stage object when checkpoint-scoped
-    missed: [],                         // {pattern,drill} pairs answered wrong — feeds diagnostic
-    choices: buildDrillChoices(queue[0].drill),
-  };
-  // A drill session is one "screen" for the back button — entering it pushes a
-  // history entry, so phone BACK (and the on-screen exit) leaves the session.
-  pushNav();
-  render();
-}
-
-// Advance the drill to the next pattern, or mark the session done.
-function advancePatternDrill() {
-  const pd = state.patternDrill;
-  if (!pd) return;
-  const next = pd.idx + 1;
-  if (next >= pd.queue.length) {
-    pd.done = true;
-    render();
-    return;
-  }
-  pd.idx = next;
-  pd.selected = null;
-  pd.choices = buildDrillChoices(pd.queue[next].drill);
-  render();
-}
-
-// ── Pattern Review session ────────────────────────────────────────────────────
-// Re-serves missed drills (resolved by stable `did`) using the SAME {pattern,drill}
-// session shape as the live drill, so renderDrillBody renders the active question
-// unchanged. Distinct from state.patternDrill (the live drilling session) — this is
-// the Review screen's session, the exact parallel of state.wordReview.
-
-// did → {pattern, drill} lookup over all loaded patterns (patterns load at init).
-function _drillById() {
-  const map = {};
-  for (const p of store.patterns) {
-    for (const dr of (p.drills || [])) if (dr.did) map[dr.did] = { pattern: p, drill: dr };
-  }
-  return map;
-}
-
-async function startPatternReview() {
-  const bin = await getPatternBin();
-  const picked = bin.slice().sort((a, b) => a.addedAt - b.addedAt).slice(0, REVIEW_SESSION_CAP);
-  const byId = _drillById();
-
-  const queue = [];
-  for (const entry of picked) {
-    const pair = byId[entry.did];
-    if (!pair) { await dropPatternBinEntry(entry.did); continue; }   // drill no longer exists → drop once
-    queue.push(pair);
-  }
-
-  if (!queue.length) {
-    state.patternReview = null;
-    await refreshReviewBadge();
-    render();
-    return;
-  }
-
-  const shuffled = shuffle(queue);
-  state.patternReview = {
-    queue: shuffled,
-    idx: 0,
-    selected: null,
-    done: false,
-    score: 0,
-    scopeKind: 'review',
-    reviewedThisSession: 0,
-    graduatedThisSession: 0,
-    missed: [],                                  // unused in review; keeps the pd shape safe
-    choices: buildDrillChoices(shuffled[0].drill),
-  };
-  pushNav();   // one screen for the back button — back exits to the Pattern Review landing
-  render();
-}
-
-function advancePatternReview() {
-  const pr = state.patternReview;
-  if (!pr) return;
-  const next = pr.idx + 1;
-  if (next >= pr.queue.length) {
-    pr.done = true;
-    refreshReviewBadge().then(render);
-    return;
-  }
-  pr.idx = next;
-  pr.selected = null;
-  pr.choices = buildDrillChoices(pr.queue[next].drill);
-  render();
-}
-
 function playAllConvo(lines, idx) {
   if (idx >= lines.length) { state.convo.playingLine = null; render(); return; }
   state.convo.playingLine = idx;
@@ -832,7 +577,7 @@ function playAllConvo(lines, idx) {
 
 // ── Translation (provider-abstracted) ─────────────────────────────────────────
 // Configuration — change provider here to swap. Each provider implementation
-// returns the same standardised shape: { zh, jp, en, bd, pattern? }
+// returns the same standardised shape: { zh, jp, en, bd }
 const TRANSLATION_PROVIDER = 'gemini';   // 'gemini' | 'claude' | 'openai'
 
 function getApiKey() {
@@ -1012,8 +757,8 @@ function getPathContext() {
 
 // ── Checkpoint module (Stage 3) ───────────────────────────────────────────────
 // A "checkpoint" is the capstone of a stage (a named cluster of ~4 topics in a
-// path). It opens a small hub of three independent activities — Words (recall),
-// Patterns (apply), Conversation (produce) — none required.
+// path). It opens a small hub of two independent activities — Words (recall),
+// Conversation (produce) — none required.
 //
 // SCALABILITY: stages + checkpoints live entirely in learning_paths.json. Adding
 // a checkpoint to another stage is a DATA edit — no code change. This module is
@@ -1027,9 +772,8 @@ function getPathContext() {
 // bumping STORAGE_SCHEMA.pathProgress and adding a _migrate case — no call-site
 // changes, because callers only ever ask "is this activity done?".
 
-const CHECKPOINT_DRILL_CAP_DEFAULT = 15;
 const CHECKPOINT_WORD_CAP_DEFAULT  = 25;
-const CHECKPOINT_ACTIVITIES = ['words', 'patterns', 'convo'];
+const CHECKPOINT_ACTIVITIES = ['words', 'convo'];
 
 // All stages for a path (empty array if the path has none — renders as a flat list).
 function getPathStages(pathKey) {
@@ -1063,7 +807,7 @@ function setCheckpointActivityDone(pathKey, cpId, activity, val) {
 }
 // Derived progress for a checkpoint: { done, total, complete, available }.
 // `available` is the list of activities this checkpoint actually offers (a stage
-// with no authored convo offers only words + patterns).
+// with no authored convo offers only words).
 function checkpointProgress(pathKey, stageId) {
   const cp = getStageCheckpoint(pathKey, stageId);
   const stage = getStage(pathKey, stageId);
@@ -1071,31 +815,12 @@ function checkpointProgress(pathKey, stageId) {
   const available = CHECKPOINT_ACTIVITIES.filter(a => {
     if (a === 'convo') return !!(cp.convo && store.pathConvo(cp.convo));
     if (a === 'words') return getCheckpointWords(pathKey, stage).length > 0;
-    if (a === 'patterns') return getCheckpointDrills(stage).length > 0;
     return false;
   });
   const done = available.filter(a => checkpointActivityDone(pathKey, cp.id, a)).length;
   return { done, total: available.length, complete: available.length > 0 && done === available.length, available };
 }
 
-// Build the checkpoint's drill queue: all drills across the stage's topics,
-// deduped by drill identity, shuffled, capped. Reuses getTopicDrills so these are
-// the exact same validated {pattern, drill} pairs the topic drill uses.
-function getCheckpointDrills(stage) {
-  const seen = new Set();
-  const out = [];
-  for (const topicKey of (stage.topics || [])) {
-    for (const pair of getTopicDrills(topicKey)) {
-      // Dedupe by parent label + frame + english — a drill tagged to two topics
-      // in the same stage must not appear twice.
-      const id = pair.pattern.label + '|' + pair.drill.frameC + '|' + pair.drill.english;
-      if (seen.has(id)) continue;
-      seen.add(id);
-      out.push(pair);
-    }
-  }
-  return out;
-}
 // The round(s) a topic is taught at in this path — read from path.lessons, which
 // records the round each lesson presents (round 1 on Beginner, round 2 for tier-2
 // Intermediate chapters). Falls back to round 1 if no explicit lesson entry.
@@ -1182,14 +907,10 @@ function advanceCheckpointWords() {
   render();
 }
 
-// ── Checkpoint Patterns activity ──────────────────────────────────────────────
-// Reuses the pattern-drill engine via a checkpoint scope. startPatternDrill (below,
-// extended) builds the queue from getCheckpointDrills with the cap applied.
-
 // ── Diagnostic (session-only, no persistence) ─────────────────────────────────
-// Given a list of missed items (word objects or {pattern,drill} pairs) and the
-// stage, find the topic that accounts for the most misses. Returns { topicKey,
-// label, count } only when a topic has 2+ misses (a genuine signal), else null.
+// Given the missed words' stage topics, find the topic that accounts for the
+// most misses. Returns { topicKey, label, count } only when a topic has 2+
+// misses (a genuine signal), else null.
 function checkpointDiagnostic(stage, missedTopicKeys) {
   if (!missedTopicKeys || !missedTopicKeys.length) return null;
   const counts = {};

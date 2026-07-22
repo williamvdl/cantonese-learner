@@ -7,13 +7,11 @@
 // ── Render ────────────────────────────────────────────────────────────────────
 function renderDrawer() {
   const rc = state.reviewBadge.liveCount;
-  const pc = state.patternReviewBadge.liveCount;
   const items = [
     { key:'dashboard', icon:'🏠', label:'Home',            desc:'Your next step at a glance'             },
     { key:'path',      icon:'🛤️', label:'Learning Path',  desc:'Curated curriculum, ordered & tracked'  },
     { key:'topics',    icon:'📖', label:'Topics',         desc:'Vocabulary, sentences & conversations' },
-    { key:'patterns',  icon:'🔨', label:'Patterns',        desc:'Sentence building blocks'              },
-    { key:'review',    icon:'🗂️', label:'Review',          desc:'Words & patterns to practise',         badge: rc + pc },
+    { key:'review',    icon:'🗂️', label:'Review',          desc:'Words you got wrong in quizzes',       badge: rc },
     { key:'translate', icon:'🌐', label:'Translate',       desc:'AI-powered translation & breakdown'    },
   ];
   const open = state.drawerOpen ? 'open' : '';
@@ -60,233 +58,11 @@ function renderDrawer() {
               <button class="nav-sub-item${state.nav==='review'&&state.reviewView==='words'?' active':''}" data-review-sub="words">
                 📖 Words ${rc > 0 ? `<span class="ns-badge">${rc}</span>` : ''}
               </button>
-              <button class="nav-sub-item${state.nav==='review'&&state.reviewView==='patterns'?' active':''}" data-review-sub="patterns">
-                🔨 Patterns ${pc > 0 ? `<span class="ns-badge">${pc}</span>` : ''}
-              </button>
             </div>` : ''}`).join('')}
           ${settingsSection}
         </div>
       </div>
     </div>`;
-}
-
-// Stage 4: the Patterns page is a grouped reference library (no Drill sub-tab —
-// drilling now lives in each topic's Learn tab). Tier-1 frames only; Tier-2 are
-// topic-local. Two-level accordion: tap a group to open, tap a frame to reveal
-// its note + examples. All collapsed by default.
-const PATTERN_GROUP_ORDER = [
-  ['Wants, needs & requests',    'asking for things, ordering, permission'],
-  ['Likes, feelings & describing','preferences, emotions, adjectives'],
-  ['Identifying, having & giving','naming, possessing, giving'],
-  ['Place, direction & time',    'where and when'],
-  ['Asking questions',           'the question words'],
-  ['Grammar: tense & particles', 'time markers and sentence-final particles'],
-  ['Numbers & sequencing',       'counting, quantity, doing things in order'],
-  ['Everyday expressions',       'set social phrases'],
-];
-
-function renderPatterns() {
-  const libFrames = store.patterns.filter(p => p.tier === 1);
-  return `
-    <div class="patterns-wrap">
-      ${renderPageHeader('🔨', 'Sentence Patterns', `${libFrames.length} building blocks`)}
-      ${renderPatternBrowse()}
-    </div>`;
-}
-
-// Grouped, collapsible reference library.
-function renderPatternBrowse() {
-  const lib = store.patterns.filter(p => p.tier === 1);
-  // Bucket frames by their group, preserving each frame's index within the group.
-  const byGroup = {};
-  lib.forEach(p => { (byGroup[p.group] = byGroup[p.group] || []).push(p); });
-
-  const groups = PATTERN_GROUP_ORDER.map(([name, desc], gi) => {
-    const frames = byGroup[name] || [];
-    const groupOpen = !!state.patternGroupsOpen[name];
-
-    const frameCards = frames.map((p, fi) => {
-      const fKey = `${gi}-${fi}`;
-      const frameOpen = !!state.patternFramesOpen[fKey];
-
-      const examples = p.examples.map((ex, ei) => {
-        const key = `p${gi}-${fi}-e${ei}`;          // unique reveal/play key
-        const speaking = state.speaking === key;
-        const revealed = state.patternRevealed[key];
-        const englishEl = revealed
-          ? `<div class="pattern-ex-en">${ex.e}</div>`
-          : `<div class="pattern-ex-en pattern-ex-eng-hint" data-pat-reveal="${key}" style="font-style:italic;color:#bbb;cursor:pointer">tap to see English</div>`;
-        return `
-          <div class="pattern-example">
-            <div class="pattern-ex-text">
-              <div class="pattern-ex-zh">${ex.c}</div>
-              <div class="pattern-ex-jp">${colorJyutping(ex.j)}</div>
-              ${englishEl}
-            </div>
-            <button class="pattern-ex-play${speaking?' speaking':''}" data-pex="${key}" data-pex-chinese="${ex.c}">
-              ${speaking ? icon('volume',20) : iconPlay(18)}
-            </button>
-          </div>`;
-      }).join('');
-
-      return `
-        <div class="lib-frame${frameOpen ? ' open' : ''}">
-          <div class="lib-frame-head" data-frame-toggle="${fKey}">
-            <span class="lib-chev">▶</span>
-            <div class="lib-frame-titles">
-              <div class="lib-frame-label">${p.label}</div>
-              <div class="lib-frame-struct">${colorJyutping(p.structure)}</div>
-            </div>
-          </div>
-          ${frameOpen ? `
-            <div class="lib-frame-body">
-              <div class="pattern-note">${p.note}</div>
-              <div class="pattern-examples">${examples}</div>
-            </div>` : ''}
-        </div>`;
-    }).join('');
-
-    return `
-      <div class="lib-group${groupOpen ? ' open' : ''}">
-        <div class="lib-group-head" data-group-toggle="${name}">
-          <span class="lib-chev">▶</span>
-          <div class="lib-group-title">${name}<span class="lib-group-desc">${desc}</span></div>
-          <span class="lib-group-count">${frames.length}</span>
-        </div>
-        ${groupOpen ? `<div class="lib-group-body">${frameCards}</div>` : ''}
-      </div>`;
-  }).join('');
-
-  return `<div class="pattern-library">${groups}</div>`;
-}
-
-// The drill — landing screen, active question, or done summary.
-// Used by the Patterns page's Drill tab. The topic-scoped drill uses
-// renderTopicDrillView, which shares renderDrillBody for the question/done parts.
-function renderPatternDrill(drillCount) {
-  const pd = state.patternDrill;
-
-  // --- Landing (no active session) ---
-  if (!pd) {
-    return `
-      <div class="review-landing">
-        <div class="review-landing-count">${drillCount}</div>
-        <div class="review-landing-label">pattern${drillCount===1?'':'s'} ready to drill</div>
-        <p class="review-landing-note">
-          Fill the blank in each sentence pattern with the word that fits.
-          One question per pattern.
-        </p>
-        <button class="review-start-btn" id="drill-start">Start drill</button>
-      </div>`;
-  }
-  return renderDrillBody(pd);
-}
-
-// Shared drill body — the done-summary or the active question. Caller-agnostic:
-// works for the Patterns-page drill and the topic-scoped drill alike.
-function renderDrillBody(pd) {
-  const color = BRAND_ACCENT;   // drill uses the brand accent, like Word Review
-
-  // --- Done summary ---
-  if (pd.done) {
-    // Checkpoint-scoped drills get the richer done screen (diagnostic + missed list).
-    if (pd.scopeKind === 'checkpoint' && pd.checkpointStage) {
-      const stage = pd.checkpointStage;
-      const missedTopicKeys = [];
-      pd.missed.forEach(pair => {
-        // Attribute each missed drill to the stage topic(s) it's tagged to.
-        (pair.drill.topics || []).forEach(tk => {
-          if ((stage.topics || []).includes(tk)) missedTopicKeys.push(tk);
-        });
-      });
-      return renderCheckpointDone({
-        activityLabel: 'Patterns',
-        emoji: '🔨',
-        score: pd.score,
-        total: pd.queue.length,
-        stage,
-        missedTopicKeys,
-        missedItems: pd.missed.map(pair => ({ c: pair.drill.answer.c, j: pair.drill.answer.j, e: pair.drill.answer.e })),
-        activity: 'patterns',
-      });
-    }
-    const total = pd.queue.length;
-    return `
-      <div class="result">
-        <div class="result-emoji">${pd.score === total ? '🌟' : '✅'}</div>
-        <div class="result-score" style="color:${color}">${pd.score} / ${total} correct</div>
-        <div class="result-msg">
-          ${pd.score === total
-            ? 'Perfect — every pattern filled correctly.'
-            : 'Nice work. Drill again to sharpen the ones you missed.'}
-        </div>
-        <button class="review-start-btn" id="drill-again">Drill again</button>
-        <button class="back-btn" id="drill-exit" style="background:${color}"><span class="icon-label">${icon('arrowLeft',15)} Done</span></button>
-      </div>`;
-  }
-
-  // --- Active question ---
-  const { pattern, drill: d } = pd.queue[pd.idx];
-  const answered = pd.selected !== null && pd.selected !== undefined;
-
-  const core = renderQuizCore({
-    word:       d.answer,
-    choices:    pd.choices,
-    selected:   pd.selected,
-    direction:  'en-zh',          // choices show Chinese + jyutping, like en-zh quiz
-    color:      color,
-    idx:        pd.idx,
-    total:      pd.queue.length,
-    ariaLabel:  'Pattern drill',
-    dirAttr:    'data-drill-dir-unused',   // drill has no direction toggle
-    choiceAttr: 'data-drill-choice',
-    listenId:   'drill-listen',
-    replayId:   'drill-replay',
-    nextId:     'drill-next',
-  });
-
-  const chosenWord = answered ? pd.choices[pd.selected] : null;
-  const slotZh = answered
-    ? `<span class="drill-slot ${chosenWord===d.answer?'correct':'wrong'}">${chosenWord.c}</span>`
-    : `<span class="drill-slot drill-slot-empty">▢</span>`;
-  const frameDisplay = d.frameC.replace('▢', slotZh);
-
-  const promptCard = `
-    <div class="quiz-card drill-card" style="border:2px solid ${color}22">
-      <div class="quiz-label">${pattern.label}</div>
-      <div class="drill-target">${d.english}</div>
-      <div class="drill-target-hint">Build this sentence — pick the missing word</div>
-      <div class="drill-frame">${frameDisplay}</div>
-      <div class="drill-frame-jp">${colorJyutping(d.frameJ).replace('▢','<span class="drill-slot-jp">▢</span>')}</div>
-      ${answered
-        ? `<button class="quiz-listen" id="drill-listen" style="border:1.5px solid ${color};color:${color}"><span class="icon-label">${iconPlay(13)} Hear full sentence</span></button>`
-        : ''}
-    </div>`;
-
-  return `
-    <div class="quiz-meta">
-      <span style="color:#888">Pattern ${pd.idx+1} / ${pd.queue.length}</span>
-      <span style="color:${color};font-weight:700">Score: ${pd.score}</span>
-    </div>
-    ${core.progressBar}
-    ${promptCard}
-    ${core.choiceGrid}
-    ${core.answerPanel}`;
-}
-
-// The topic-scoped drill as its own full-screen view, with a "← <Topic>" header
-// that returns to the topic. Reuses renderDrillBody for the question/done parts.
-function renderTopicDrillView(topicColor) {
-  const pd = state.patternDrill;
-  if (!pd) return '';
-  const color = topicColor || BRAND_ACCENT;
-  const topicLabel = (lessonShape(pd.topicKey) || {}).label || 'Topic';
-  return `
-    <button class="back-home-btn" id="topic-drill-back">
-      <span class="icon-label">${icon('arrowLeft',15)} ${topicLabel}</span>
-    </button>
-    <div class="topic-drill-heading">🔨 Pattern drill</div>
-    ${renderDrillBody(pd)}`;
 }
 
 function renderTranslate() {
@@ -393,8 +169,8 @@ function renderTranslate() {
 // CSS classes (quiz-card, choice-btn, quiz-dir-toggle, quiz-wrong-panel) so it
 // reads as part of the same family without refactoring renderQuiz itself.
 // ── Shared quiz UI core ───────────────────────────────────────────────────────
-// The active-question UI is identical between the topic Quiz and Word Review (and
-// will be reused by Pattern Drills). This function renders that shared middle:
+// The active-question UI is identical between the topic Quiz and Word Review.
+// This function renders that shared middle:
 // direction toggle, prompt card, choice grid, progress bar, wrong-answer panel.
 //
 // It generates MARKUP ONLY — it wires no events. Each caller keeps its own click
@@ -509,9 +285,9 @@ function renderQuizCore(opts) {
   };
 }
 
-// Shared "session complete" screen for BOTH Word Review and Pattern Review.
-// Shows three stats — reviewed / graduated / still learning — plus a "review N
-// more" (or all-clear) and a Done button. `still learning = reviewed - graduated`.
+// Word Review's "session complete" screen. Shows three stats — reviewed /
+// graduated / still learning — plus a "review N more" (or all-clear) and a
+// Done button. `still learning = reviewed - graduated`.
 function renderReviewDone(o) {
   const color = o.color || BRAND_ACCENT;
   const stillLearning = Math.max(0, o.reviewed - o.graduated);
@@ -531,7 +307,7 @@ function renderReviewDone(o) {
         <div class="result-msg">
           ${o.graduated > 0
             ? `${o.graduated} ${o.noun}${o.graduated === 1 ? '' : 's'} cleared from your review list.`
-            : `Keep going — get ${o.noun === 'word' ? 'a word' : 'a pattern'} right 3 times to clear it.`}
+            : `Keep going — get a ${o.noun} right 3 times to clear it.`}
         </div>
         ${moreOrClear}
         <button class="back-btn" id="${o.exitId}" style="background:${color}"><span class="icon-label">${icon('arrowLeft',15)} Done</span></button>
@@ -647,7 +423,6 @@ function renderWordReview() {
 // ── Review hub (Option B): one Review destination with two cards ──────────────
 function renderReviewHub() {
   const wc = state.reviewBadge.liveCount;
-  const pc = state.patternReviewBadge.liveCount;
   const card = (cls, view, icon, name, desc, count, noun) => `
     <button class="review-hub-card ${cls}" data-review-go="${view}">
       <span class="rh-ic">${icon}</span>
@@ -656,79 +431,11 @@ function renderReviewHub() {
     </button>`;
   return `
     <div class="content">
-      ${renderPageHeader('🗂️', 'Review', 'Practise what you\'ve missed — words and patterns are tracked separately')}
+      ${renderPageHeader('🗂️', 'Review', 'Practise the words you\'ve missed')}
       ${card('words', 'words', '📖', 'Word Review', 'Vocabulary you got wrong in quizzes', wc, 'words')}
-      ${card('patterns', 'patterns', '🔨', 'Pattern Review', 'Sentence patterns you got wrong in drills', pc, 'patterns')}
     </div>`;
 }
 
-// ── Pattern Review (parallel to Word Review; reuses the drill card) ───────────
-function renderPatternReview() {
-  const pr = state.patternReview;
-  const color = '#B7861E';   // pattern review uses gold as its accent
-
-  // Landing / empty when no active session.
-  if (!pr) {
-    const { liveCount, everUsed } = state.patternReviewBadge;
-    let body;
-    if (liveCount > 0) {
-      body = `
-        <div class="review-landing">
-          <div class="review-landing-count" style="color:${color}">${liveCount}</div>
-          <div class="review-landing-label">pattern${liveCount === 1 ? '' : 's'} ready to review</div>
-          <p class="review-landing-note">
-            ${liveCount > REVIEW_SESSION_CAP
-              ? `This session will cover the ${REVIEW_SESSION_CAP} oldest. Get a pattern right 3 times to clear it.`
-              : `Get a pattern right 3 times to clear it from your review list.`}
-          </p>
-          <button class="review-start-btn" id="pattern-review-start" style="background:${color}">Start review</button>
-        </div>`;
-    } else if (everUsed) {
-      body = `
-        <div class="review-empty">
-          <div class="review-empty-emoji">🎉</div>
-          <div class="review-empty-title">All caught up — great work!</div>
-          <p class="review-empty-text">You've reviewed every pattern. New ones appear here as you do more drills.</p>
-        </div>`;
-    } else {
-      body = `
-        <div class="review-empty">
-          <div class="review-empty-emoji">📥</div>
-          <div class="review-empty-title">No review patterns yet</div>
-          <p class="review-empty-text">Patterns you miss in drills will collect here to practise later.</p>
-        </div>`;
-    }
-    return `
-      <div class="content">
-        ${renderPageHeader('🔨', 'Pattern Review', 'Practise the sentence patterns you\'ve missed')}
-        ${body}
-      </div>`;
-  }
-
-  // Done — shared stat screen.
-  if (pr.done) {
-    return renderReviewDone({
-      icon: '🔨', title: 'Pattern Review', color,
-      reviewed: pr.reviewedThisSession,
-      graduated: pr.graduatedThisSession,
-      liveCount: state.patternReviewBadge.liveCount,
-      noun: 'pattern',
-      allClearNote: 'No patterns left to review — nicely done.',
-      againId: 'pattern-review-again', exitId: 'pattern-review-exit',
-    });
-  }
-
-  // Active question — reuse the live drill card body (pr has the {pattern,drill} shape).
-  return `<div class="content">${renderDrillBody(pr)}</div>`;
-}
-
-// ── Dashboard (new homepage) ──────────────────────────────────────────────────
-// Replaces the path list as the app's default landing screen. Surfaces: the
-// single next thing to do (hero, coloured by that lesson's own topic colour),
-// path progress for Beginner/Intermediate (and Advanced once it exists), the
-// Word Review count, and two secondary "Jump to" tiles (Topics, Translate).
-// Deliberately does NOT include Pattern Review or a Patterns tile — patterns
-// are heading toward deprecation per William's direction.
 function renderDashboard() {
   const next = dashboardNextUp();
   const heroHtml = renderDashboardHero(next);
@@ -1053,8 +760,8 @@ function renderPathTimeline(pathKey) {
 // ── Checkpoint screens (Stage 3) ──────────────────────────────────────────────
 const CP_GOLD = '#B7861E';
 
-// The hub: three independent activities. Reuses no learning engine itself — it
-// routes into the Words / Patterns / Conversation activities.
+// The hub: two independent activities. Reuses no learning engine itself — it
+// routes into the Words / Conversation activities.
 function renderCheckpointHub() {
   const cpState = state.checkpoint;
   if (!cpState) return '';
@@ -1065,7 +772,6 @@ function renderCheckpointHub() {
 
   const meta = {
     words:    { icon:'📖', name:'Words',        tag:'RECALL',  desc:'Vocabulary from all topics in this stage' },
-    patterns: { icon:'🔨', name:'Patterns',     tag:'APPLY',   desc:'Sentence-pattern drills, reshuffled each time' },
     convo:    { icon:'💬', name:'Conversation', tag:'PRODUCE', desc:'A longer scene — read & speak' },
   };
   const cards = prog.available.map(act => {
@@ -1100,7 +806,7 @@ function renderCheckpointHub() {
         <div class="cp-hero-prog">${prog.done} of ${prog.total} reviewed</div>
         <div class="cp-optional">🔓 Optional — do any, in any order</div>
       </div>
-      <div class="cp-flow-hint">Suggested flow: recall → apply → produce</div>
+      <div class="cp-flow-hint">Suggested flow: recall → produce</div>
       ${cards}
       <button class="${finishCls}" data-cp-back>${finishLabel}</button>
     </div>`;
@@ -1147,7 +853,7 @@ function renderCheckpointWords() {
   return `
     <div class="content">
       <button class="back-home-btn" data-cp-act-back><span class="icon-label">${icon('arrowLeft',15)} Checkpoint</span></button>
-      <div class="topic-drill-heading">📖 Words review</div>
+      <div class="cp-activity-heading">📖 Words review</div>
       <div class="quiz-meta">
         <span style="color:#888">Word ${q.idx+1} / ${q.pool.length}</span>
         <span style="color:${CP_GOLD};font-weight:700">Score: ${q.score}</span>
@@ -1198,18 +904,6 @@ function renderCheckpointDone(opts) {
       ${diagBlock}
       ${missedBlock}
       <button class="cp-finish" data-cp-act-done="${activity}">✓ Back to checkpoint</button>
-    </div>`;
-}
-
-// Patterns activity wrapper — the drill engine with a "← Checkpoint" header.
-function renderCheckpointPatterns() {
-  const pd = state.patternDrill;
-  if (!pd) return '';
-  return `
-    <div class="content">
-      <button class="back-home-btn" data-cp-act-back><span class="icon-label">${icon('arrowLeft',15)} Checkpoint</span></button>
-      <div class="topic-drill-heading">🔨 Pattern drill</div>
-      ${renderDrillBody(pd)}
     </div>`;
 }
 
@@ -1294,8 +988,8 @@ function render() {
     }
   }
 
-  // If a checkpoint is open, ensure its stage's topics are loaded (word pools and
-  // drills depend on cached topic data). Normally the timeline pre-warm above has
+  // If a checkpoint is open, ensure its stage's topics are loaded (word pools
+  // depend on cached topic data). Normally the timeline pre-warm above has
   // already cached them, but this guards direct/restored entry into a checkpoint.
   if (state.checkpoint) {
     const stage = getStage(state.checkpoint.pathKey, state.checkpoint.stageId);
@@ -1323,14 +1017,10 @@ function render() {
   // timeline). Checked before other nav so it's a focused full-screen view.
   if (state.checkpoint && state.checkpointAct === 'words') {
     mainContent = renderCheckpointWords();
-  } else if (state.checkpoint && state.checkpointAct === 'patterns') {
-    mainContent = renderCheckpointPatterns();
   } else if (state.checkpoint && state.checkpointAct === 'convo') {
     mainContent = renderCheckpointConvo();
   } else if (state.checkpoint) {
     mainContent = renderCheckpointHub();
-  } else if (state.patternDrill && state.patternDrill.topicKey) {
-    mainContent = `<div class="content">${renderTopicDrillView(color)}</div>`;
   } else if (state.nav === 'topics') {
     if (state.homeView) {
       mainContent = `
@@ -1348,17 +1038,14 @@ function render() {
           ${headerEl}
           ${renderRoundSelector(state.topic, color)}
           ${renderLessonHeader(lesson, color)}
-          ${state.mode === 'quiz' ? renderQuiz(lesson, color) : state.tab === 'convo' ? renderConversation(color) : state.tab === 'patterns' ? renderTopicPatternsTab(color) : renderStudy(lesson, color)}
+          ${state.mode === 'quiz' ? renderQuiz(lesson, color) : state.tab === 'convo' ? renderConversation(color) : renderStudy(lesson, color)}
         </div>
         ${toastEl}`;
     }
   } else if (state.nav === 'dashboard') {
     mainContent = `${renderVoiceBanner()}${renderDashboard()}`;
-  } else if (state.nav === 'patterns') {
-    mainContent = renderPatterns();
   } else if (state.nav === 'review') {
     if (state.reviewView === 'words')         mainContent = renderWordReview();
-    else if (state.reviewView === 'patterns') mainContent = renderPatternReview();
     else                                      mainContent = renderReviewHub();
   } else if (state.nav === 'translate') {
     mainContent = renderTranslate();
@@ -1375,8 +1062,8 @@ function render() {
   attachEvents(lesson, color);
 }
 
-// Unified page-section header — used by Topics, Learning Path, Patterns, Translate
-// so all four read consistently. icon = emoji string, title + subtitle text.
+// Unified page-section header — used by Topics, Learning Path, Review, Translate
+// so they read consistently. icon = emoji string, title + subtitle text.
 function renderPageHeader(emoji, title, subtitle) {
   return `
     <div class="page-header">
@@ -1610,8 +1297,6 @@ function renderLessonHeader(lesson, color) {
   // 'words' and 'convo' are state.tab values (with mode='study'); 'quiz' is mode='quiz'.
   const wordsActive = !isQuiz && state.tab === 'words';
   const convoActive = !isQuiz && state.tab === 'convo';
-  const patternsActive = !isQuiz && state.tab === 'patterns';
-  const hasPatterns = getTopicDrills(state.topic).length > 0;
   const segTabs = `
     <div class="subtabs">
       <button class="subtab-btn${wordsActive?' active':''}" id="tab-words"
@@ -1622,10 +1307,6 @@ function renderLessonHeader(lesson, color) {
         style="${convoActive?'background:'+color:''}">
         <span class="icon-label">${icon('messageCircle',14)} Chat</span>
       </button>
-      ${hasPatterns ? `<button class="subtab-btn${patternsActive?' active':''}" id="tab-patterns"
-        style="${patternsActive?'background:'+color:''}">
-        <span class="icon-label">🔨 Patterns</span>
-      </button>` : ''}
       <button class="subtab-btn${isQuiz?' active':''}" id="tab-quiz"
         style="${isQuiz?'background:'+color:''}">
         <span class="icon-label">${icon('quiz',14)} Quiz</span>
@@ -1652,8 +1333,7 @@ function renderConversation(color) {
   const gapOn    = cv.convMode === 'gap';
   const speakOn  = cv.convMode === 'speak';
   // Checkpoint consolidation convo is read + speak only (no Fill-the-Gap), to
-  // keep the three checkpoint activities on a deliberate recall→apply→produce
-  // gradient rather than overlapping the pattern drill's MCQ feel.
+  // keep it feeling distinct from the recall-focused Words activity.
   const inCheckpointConvo = !!(state.checkpoint && state.checkpointAct === 'convo');
   // Only show Fill-the-Gap if at least one user turn has authored opts — pre-spec
   // convos have u:true lines but no opts array, and trying to render choices for them
@@ -1940,123 +1620,6 @@ function renderSentences(topic, color) {
     </div>`;
 }
 
-// The Patterns TAB (relocated from the Learn tab). Sentences are the reading
-// spine in Learn; patterns are retrieval practice, in their own tab, in context
-// with the topic's vocab. Frames the section, then reuses renderTopicPatterns.
-function renderTopicPatternsTab(color) {
-  const body = renderTopicPatterns(state.topic, color);
-  if (!body) {
-    return `<p style="color:#aaa;padding:20px 0">No patterns for this topic yet.</p>`;
-  }
-  return `
-    <div class="patterns-tab-intro">
-      Patterns are <b>practice</b> — reusable sentence frames built from this topic's words.
-      Read the example sentences in <b>Learn</b>, then drill the structure here.
-    </div>
-    ${body}`;
-}
-
-// The "Patterns with these words" section. Used by the Patterns tab. Only renders
-// if the topic has associated patterns — a topic with none shows nothing.
-function renderTopicPatterns(topicKey, color) {
-  const items = getTopicDrills(topicKey);
-  if (!items.length) return '';
-
-  // Group the topic's drills by their parent pattern, preserving first-seen order.
-  // After consolidation a pattern (esp. a Tier-2 cluster) can own several of a
-  // topic's drills, so one card shows the pattern's note once + each drill as a
-  // stacked worked-example. A cross-topic frame usually contributes one.
-  const groups = [];
-  const seen = new Map();
-  items.forEach(({ pattern, drill }) => {
-    let g = seen.get(pattern);
-    if (!g) { g = { pattern, drills: [] }; seen.set(pattern, g); groups.push(g); }
-    g.drills.push(drill);
-  });
-
-  const cards = groups.map((g, gi) => {
-    const p = g.pattern;
-
-    // Each drill within the card gets its own stable key so reveal/play/breakdown
-    // state is independent per worked-example.
-    const worked = g.drills.map((d, di) => {
-      const exC = d.frameC.replace('▢', d.answer.c);
-      const exJ = d.frameJ.replace('▢', d.answer.j);
-      const key = 'tp-' + topicKey + '-' + gi + '-' + di;
-      const speaking = state.speaking === key;
-      const revealed = state.patternRevealed[key];
-      const bdOpen   = state.patternBreakdownOpen[key];
-
-      const frameOnlyC = d.frameC.replace('▢', '').replace(/\s+/g, ' ').trim();
-      const frameOnlyJ = d.frameJ.replace('▢', '').replace(/\s+/g, ' ').trim();
-      const bdPanel = bdOpen ? `
-        <div class="tp-bd-panel">
-          <div class="tp-bd-piece">
-            <div class="tp-bd-label">Frame</div>
-            <div class="tp-bd-zh">${frameOnlyC}</div>
-            <div class="tp-bd-jp">${colorJyutping(frameOnlyJ)}</div>
-            <div class="tp-bd-en">${d.frameE}</div>
-          </div>
-          <div class="tp-bd-piece">
-            <div class="tp-bd-label">Fills the blank</div>
-            <div class="tp-bd-zh">${d.answer.c}</div>
-            <div class="tp-bd-jp">${colorJyutping(d.answer.j)}</div>
-            <div class="tp-bd-en">${d.answer.e}</div>
-          </div>
-        </div>` : '';
-
-      const englishEl = revealed
-        ? `<div class="sentence-english">${d.english}</div>`
-        : `<div class="sentence-eng-hint" style="font-size:11px;color:#aaa;font-style:italic;margin-top:2px;pointer-events:none">tap to see English</div>`;
-
-      return `
-        <div class="tp-ex${di > 0 ? ' tp-ex-sep' : ''}">
-          <div class="tp-worked">
-            <div class="tp-card-main" data-pat-card-reveal="${key}">
-              <div class="sentence-chinese">${exC}</div>
-              <div class="sentence-jyutping">${colorJyutping(exJ)}</div>
-              ${englishEl}
-            </div>
-            <button class="sentence-play${speaking ? ' speaking' : ''}" data-pat-card-play="${key}" data-pat-card-c="${exC}"
-              style="border-color:${color};color:${speaking ? THEME.cardInverseText : color};background:${speaking ? color : 'transparent'}"
-              title="Listen to example">
-              ${speaking ? icon('volume',20) : iconPlay(18)}
-            </button>
-          </div>
-          <button class="breakdown-btn" data-pat-card-bd="${key}" style="color:${color};margin-top:6px">
-            ${bdOpen ? '▲ hide breakdown' : '🔍 word breakdown'}
-          </button>
-          ${bdPanel}
-        </div>`;
-    }).join('');
-
-    return `
-      <div class="topic-pattern-card" style="border-left-color:${color}">
-        <div class="tp-head-band">
-          <div class="tp-head-label" style="color:${color}">${p.label}</div>
-          <div class="tp-head-struct">${colorJyutping(p.structure)}</div>
-        </div>
-        <div class="tp-body">
-          <div class="tp-note">${p.note}</div>
-          ${worked}
-        </div>
-      </div>`;
-  }).join('');
-
-  // The drill button — all topic patterns here are drillable by definition.
-  const drillBtn = `
-    <button class="topic-drill-btn" id="topic-drill-start" style="background:${color}">
-      <span class="icon-label">${icon('quiz',15)} Drill ${items.length} pattern${items.length===1?'':'s'}</span>
-    </button>`;
-
-  return `
-    <div class="topic-patterns">
-      <h3>🔨 Patterns with these words</h3>
-      ${cards}
-      ${drillBtn}
-    </div>`;
-}
-
 function renderStudy(lesson, color) {
   const words = getRoundWords(state.topic, state.currentRound);
   const cards = words.map((w, i) => {
@@ -2216,13 +1779,12 @@ function attachEvents(lesson, color) {
   document.querySelectorAll('[data-nav]').forEach(btn => {
     btn.addEventListener('click', () => {
       const target = btn.dataset.nav;
-      // Leaving via the menu must exit any open checkpoint or drill session first.
-      // render() checks state.checkpoint/patternDrill BEFORE state.nav, so without
-      // this the chosen destination never shows — the checkpoint hub just redraws.
+      // Leaving via the menu must exit any open checkpoint session first. render()
+      // checks state.checkpoint BEFORE state.nav, so without this the chosen
+      // destination never shows — the checkpoint hub just redraws.
       state.checkpoint = null;
       state.checkpointAct = null;
       state.checkpointQuiz = null;
-      state.patternDrill = null;
       // Tapping Topics from the drawer always returns to home view
       if (target === 'topics') state.homeView = true;
       // Tapping Learning Path from the drawer always returns to the path list
@@ -2231,13 +1793,7 @@ function attachEvents(lesson, color) {
       if (target === 'review') {
         state.reviewView = 'hub';
         state.wordReview = null;
-        state.patternReview = null;
         refreshReviewBadge().then(render);
-      }
-      // Entering Patterns always starts with the library all-collapsed
-      if (target === 'patterns') {
-        state.patternGroupsOpen = {};
-        state.patternFramesOpen = {};
       }
       state.nav = target;
       state.fromPath = false;          // any drawer navigation clears the path-return flag
@@ -2250,28 +1806,26 @@ function attachEvents(lesson, color) {
     });
   });
 
-  // Review hub cards → open a sub-view (Words / Patterns). Pushes a history entry
+  // Review hub card → open the Word Review sub-view. Pushes a history entry
   // so BACK returns to the hub.
   document.querySelectorAll('[data-review-go]').forEach(btn => {
     btn.addEventListener('click', () => {
       state.reviewView = btn.dataset.reviewGo;
       state.wordReview = null;
-      state.patternReview = null;
       pushNav();
       window.scrollTo(0, 0);
       refreshReviewBadge().then(render);
     });
   });
 
-  // Menu sub-list (Words / Patterns under Review) → deep-link straight to a sub-view.
+  // Menu sub-list (Words under Review) → deep-link straight to the sub-view.
   document.querySelectorAll('[data-review-sub]').forEach(btn => {
     btn.addEventListener('click', () => {
       state.nav = 'review';
       state.reviewView = btn.dataset.reviewSub;
       state.wordReview = null;
-      state.patternReview = null;
       state.checkpoint = null; state.checkpointAct = null;
-      state.checkpointQuiz = null; state.patternDrill = null;
+      state.checkpointQuiz = null;
       state.fromPath = false; state.fromPathTier = null;
       state.drawerOpen = false;
       navReplace();
@@ -2401,130 +1955,6 @@ function attachEvents(lesson, color) {
     setTimeout(() => { if (state.speaking === 'translate-result') { state.speaking = null; render(); } }, 6000);
   });
 
-  // Pattern example play buttons
-  document.querySelectorAll('[data-pex]').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const key     = btn.dataset.pex;
-      const chinese = btn.dataset.pexChinese;
-      state.speaking = key;
-      render();
-      speak(chinese, () => { state.speaking = null; render(); });
-      setTimeout(() => { if (state.speaking === key) { state.speaking = null; render(); } }, 5000);
-    });
-  });
-
-  // ── Patterns library (Stage 4): grouped accordion toggles ──
-  document.querySelectorAll('[data-group-toggle]').forEach(el => {
-    el.addEventListener('click', () => {
-      const name = el.dataset.groupToggle;
-      state.patternGroupsOpen[name] = !state.patternGroupsOpen[name];
-      render();
-    });
-  });
-  document.querySelectorAll('[data-frame-toggle]').forEach(el => {
-    el.addEventListener('click', () => {
-      const k = el.dataset.frameToggle;
-      state.patternFramesOpen[k] = !state.patternFramesOpen[k];
-      render();
-    });
-  });
-
-  // Landing: start a drill (Patterns-page drill — all drillable patterns)
-  const drillStart = document.getElementById('drill-start');
-  if (drillStart) drillStart.addEventListener('click', () => startPatternDrill());
-
-  // Topic Learn-tab: "Drill N patterns" — scoped to the current topic
-  const topicDrillStart = document.getElementById('topic-drill-start');
-  if (topicDrillStart) topicDrillStart.addEventListener('click', () => startPatternDrill(state.topic));
-
-  // Learn-tab pattern cards: reveal English, play example, toggle breakdown
-  document.querySelectorAll('[data-pat-card-reveal]').forEach(el => {
-    el.addEventListener('click', () => {
-      const key = el.dataset.patCardReveal;
-      state.patternRevealed[key] = !state.patternRevealed[key];
-      render();
-    });
-  });
-  document.querySelectorAll('[data-pat-card-play]').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const key = btn.dataset.patCardPlay;
-      const chinese = btn.dataset.patCardC;
-      state.speaking = key;
-      render();
-      speak(chinese, () => { state.speaking = null; render(); });
-      setTimeout(() => { if (state.speaking === key) { state.speaking = null; render(); } }, 5000);
-    });
-  });
-  document.querySelectorAll('[data-pat-card-bd]').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const key = btn.dataset.patCardBd;
-      state.patternBreakdownOpen[key] = !state.patternBreakdownOpen[key];
-      render();
-    });
-  });
-
-  // Topic drill view: back to the topic (routed through history, like other backs)
-  const topicDrillBack = document.getElementById('topic-drill-back');
-  if (topicDrillBack) topicDrillBack.addEventListener('click', () => {
-    if (_navReady) { history.back(); return; }
-    state.patternDrill = null;
-    render();
-  });
-
-  // Done screen: drill again (re-run the SAME scope), or exit
-  const drillAgain = document.getElementById('drill-again');
-  if (drillAgain) drillAgain.addEventListener('click', () => {
-    // Preserve topic scope: a topic drill re-drills that topic, not all patterns.
-    const scope = state.patternDrill && state.patternDrill.topicKey;
-    startPatternDrill(scope || undefined);
-  });
-  const drillExit = document.getElementById('drill-exit');
-  if (drillExit) drillExit.addEventListener('click', () => {
-    // history.back() pops the drill-session entry; popstate clears state.patternDrill.
-    if (_navReady) { history.back(); return; }
-    state.patternDrill = null;
-    render();
-  });
-
-  // Active drill question
-  if (state.patternDrill && !state.patternDrill.done) {
-    const pd = state.patternDrill;
-    const d = pd.queue[pd.idx].drill;
-    // The full assembled sentence — frame with the blank replaced by the answer.
-    const fullSentence = d.frameC.replace('▢', d.answer.c);
-
-    // Listen button (only present after answering) — plays the complete sentence
-    const dListen = document.getElementById('drill-listen');
-    if (dListen) dListen.addEventListener('click', () => speak(fullSentence));
-
-    // Choice buttons
-    document.querySelectorAll('[data-drill-choice]').forEach(btn => {
-      btn.addEventListener('click', () => {
-        if (pd.selected !== null && pd.selected !== undefined) return;
-        const idx = parseInt(btn.dataset.drillChoice, 10);
-        const chosenOpt = pd.choices[idx];
-        const correct = chosenOpt === d.answer;     // object identity
-        pd.selected = idx;
-        if (correct) pd.score++;
-        else if (pd.scopeKind === 'checkpoint') pd.missed.push(pd.queue[pd.idx]);  // for diagnostic
-        else if (pd.scopeKind === 'topic') {
-          // A missed pattern in a topic drill goes to the Pattern Review bin.
-          addPatternMiss(pd.queue[pd.idx].drill.did).then(refreshReviewBadge);
-        }
-        // Play the full assembled sentence so the learner hears the result.
-        speak(fullSentence);
-        render();
-        // Stop-and-confirm: both correct and wrong wait for the Next tap.
-      });
-    });
-
-    // Answer-panel buttons (present once answered, correct or wrong)
-    const dReplay = document.getElementById('drill-replay');
-    if (dReplay) dReplay.addEventListener('click', () => speak(fullSentence));
-    const dNext = document.getElementById('drill-next');
-    if (dNext) dNext.addEventListener('click', () => advancePatternDrill());
-  }
-
   // Speed toggle
   ['slow','normal','fast'].forEach(s => {
     const btn = document.getElementById('speed-' + s);
@@ -2546,7 +1976,6 @@ function attachEvents(lesson, color) {
       state.sentenceBreakdownOpen = {};
       state.sentenceRevealed = {};
       state.sentenceNoteClosed = {};
-      state.patternRevealed = {};
       state.convo   = { convMode:'read', playingLine:null, gapAnswers:{}, bubbleRevealed:{}, breakdownOpen:{}, speakStep:0, speakStatus:'idle', speakHeard:'', speakAutoPlayed:false, speakRevealed:{} };
       render();
     });
@@ -2565,7 +1994,6 @@ function attachEvents(lesson, color) {
       state.sentenceBreakdownOpen = {};
       state.sentenceRevealed = {};
       state.sentenceNoteClosed = {};
-      state.patternRevealed = {};
       state.convo        = { convMode:'read', playingLine:null, gapAnswers:{}, bubbleRevealed:{}, breakdownOpen:{}, speakStep:0, speakStatus:'idle', speakHeard:'', speakAutoPlayed:false, speakRevealed:{} };
       pushNav();                 // home → topic: BACK returns to home
       window.scrollTo(0, 0);
@@ -2611,7 +2039,6 @@ function attachEvents(lesson, color) {
       state.sentenceBreakdownOpen = {};
       state.sentenceRevealed = {};
       state.sentenceNoteClosed = {};
-      state.patternRevealed = {};
       state.convo = { convMode:'read', playingLine:null, gapAnswers:{}, bubbleRevealed:{}, breakdownOpen:{}, speakStep:0, speakStatus:'idle', speakHeard:'', speakAutoPlayed:false, speakRevealed:{} };
       window.scrollTo(0, 0);
       render();
@@ -2627,10 +2054,6 @@ function attachEvents(lesson, color) {
   });
   if (tabConvo) tabConvo.addEventListener('click', () => {
     state.mode = 'study'; state.tab = 'convo'; render();
-  });
-  const tabPatterns = document.getElementById('tab-patterns');
-  if (tabPatterns) tabPatterns.addEventListener('click', () => {
-    state.mode = 'study'; state.tab = 'patterns'; render();
   });
   if (tabQuiz) tabQuiz.addEventListener('click', () => {
     if (state.mode !== 'quiz') {
@@ -2851,16 +2274,6 @@ function attachEvents(lesson, color) {
     });
   });
 
-  // Pattern example English reveal
-  document.querySelectorAll('[data-pat-reveal]').forEach(el => {
-    el.addEventListener('click', e => {
-      e.stopPropagation();
-      const key = el.dataset.patReveal;
-      state.patternRevealed[key] = true;
-      render();
-    });
-  });
-
   // Speak target English reveal
   document.querySelectorAll('[data-speak-reveal]').forEach(el => {
     el.addEventListener('click', e => {
@@ -2965,49 +2378,6 @@ function attachEvents(lesson, color) {
     state.wordReview = null;
     refreshReviewBadge().then(render);
   });
-
-  // ── Pattern Review session handlers (mirror Word Review) ──
-  const prStart = document.getElementById('pattern-review-start');
-  if (prStart) prStart.addEventListener('click', () => startPatternReview());
-  const prAgain = document.getElementById('pattern-review-again');
-  if (prAgain) prAgain.addEventListener('click', () => startPatternReview());
-  const prExit = document.getElementById('pattern-review-exit');
-  if (prExit) prExit.addEventListener('click', () => {
-    if (_navReady) { history.back(); return; }
-    state.patternReview = null;
-    refreshReviewBadge().then(render);
-  });
-
-  // Active Pattern Review question — reuses the drill card DOM (data-drill-choice,
-  // drill-listen/replay/next). Only one of patternDrill/patternReview is ever active,
-  // so binding the same selectors here is safe.
-  if (state.patternReview && !state.patternReview.done) {
-    const pr = state.patternReview;
-    const d = pr.queue[pr.idx].drill;
-    const fullSentence = d.frameC.replace('▢', d.answer.c);
-    const pl = document.getElementById('drill-listen');
-    if (pl) pl.addEventListener('click', () => speak(fullSentence));
-    document.querySelectorAll('[data-drill-choice]').forEach(btn => {
-      btn.addEventListener('click', () => {
-        if (pr.selected !== null && pr.selected !== undefined) return;
-        const idx = parseInt(btn.dataset.drillChoice, 10);
-        const correct = pr.choices[idx] === d.answer;     // object identity
-        pr.selected = idx;
-        pr.reviewedThisSession++;
-        if (correct) pr.score++;
-        recordPatternReviewResult(d.did, correct).then(res => {
-          if (res.graduated) pr.graduatedThisSession++;
-          refreshReviewBadge();
-        });
-        speak(fullSentence);
-        render();
-      });
-    });
-    const prReplay = document.getElementById('drill-replay');
-    if (prReplay) prReplay.addEventListener('click', () => speak(fullSentence));
-    const prNext = document.getElementById('drill-next');
-    if (prNext) prNext.addEventListener('click', () => advancePatternReview());
-  }
 
   // Active review question
   if (state.wordReview && !state.wordReview.done) {
@@ -3174,7 +2544,6 @@ function attachEvents(lesson, color) {
       state.sentenceBreakdownOpen = {};
       state.sentenceRevealed = {};
       state.sentenceNoteClosed = {};
-      state.patternRevealed = {};
       state.convo        = { convMode:'read', playingLine:null, gapAnswers:{}, bubbleRevealed:{}, breakdownOpen:{}, speakStep:0, speakStatus:'idle', speakHeard:'', speakAutoPlayed:false, speakRevealed:{} };
       pushNav();                 // path next-step → next lesson: BACK returns to previous lesson
       window.scrollTo(0, 0);
@@ -3203,7 +2572,6 @@ function attachEvents(lesson, color) {
       state.sentenceBreakdownOpen = {};
       state.sentenceRevealed     = {};
       state.sentenceNoteClosed   = {};
-      state.patternRevealed      = {};
       state.convo = { convMode:'read', playingLine:null, gapAnswers:{}, bubbleRevealed:{}, breakdownOpen:{}, speakStep:0, speakStatus:'idle', speakHeard:'', speakAutoPlayed:false, speakRevealed:{} };
       // Find which path this lesson belongs to so the path-banner / "back to
       // timeline" context is correct if the user backs out of the lesson.
@@ -3242,7 +2610,6 @@ function attachEvents(lesson, color) {
       state.nav = 'review';
       state.reviewView = 'words';
       state.wordReview = null;
-      state.patternReview = null;
       pushNav();                 // dashboard → review: BACK returns to dashboard
       window.scrollTo(0, 0);
       refreshReviewBadge().then(render);
@@ -3315,7 +2682,6 @@ function attachEvents(lesson, color) {
       state.sentenceBreakdownOpen = {};
       state.sentenceRevealed = {};
       state.sentenceNoteClosed = {};
-      state.patternRevealed = {};
       state.convo        = { convMode:'read', playingLine:null, gapAnswers:{}, bubbleRevealed:{}, breakdownOpen:{}, speakStep:0, speakStatus:'idle', speakHeard:'', speakAutoPlayed:false, speakRevealed:{} };
       pushNav();                 // path timeline → lesson: BACK returns to timeline
       window.scrollTo(0, 0);
@@ -3362,9 +2728,6 @@ function attachEvents(lesson, color) {
       const stage = getStage(cpState.pathKey, cpState.stageId);
       if (act === 'words') {
         startCheckpointWords();
-      } else if (act === 'patterns') {
-        state.checkpointAct = 'patterns';
-        startPatternDrill({ kind: 'checkpoint', stage });
       } else if (act === 'convo') {
         state.checkpointAct = 'convo';
         state.convo = { convMode:'read', playingLine:null, gapAnswers:{}, bubbleRevealed:{}, breakdownOpen:{}, speakStep:0, speakStatus:'idle', speakHeard:'', speakAutoPlayed:false, speakRevealed:{} };
@@ -3379,7 +2742,7 @@ function attachEvents(lesson, color) {
   document.querySelectorAll('[data-cp-act-back]').forEach(btn => {
     btn.addEventListener('click', () => {
       if (_navReady) { history.back(); return; }
-      state.checkpointAct = null; state.patternDrill = null; state.checkpointQuiz = null;
+      state.checkpointAct = null; state.checkpointQuiz = null;
       window.scrollTo(0, 0);
       render();
     });
@@ -3393,7 +2756,7 @@ function attachEvents(lesson, color) {
       if (cpState) setCheckpointActivityDone(cpState.pathKey, cpState.cpId, act, true);
       // Clear the session and return to the hub via history (pops the activity entry).
       if (_navReady) { history.back(); return; }
-      state.checkpointAct = null; state.patternDrill = null; state.checkpointQuiz = null;
+      state.checkpointAct = null; state.checkpointQuiz = null;
       window.scrollTo(0, 0);
       render();
     });
@@ -3404,7 +2767,7 @@ function attachEvents(lesson, color) {
     btn.addEventListener('click', () => {
       const topicKey = btn.dataset.cpRevisit;
       state.checkpoint = null; state.checkpointAct = null;
-      state.patternDrill = null; state.checkpointQuiz = null;
+      state.checkpointQuiz = null;
       state.topic = topicKey;
       state.currentRound = 1;
       state.nav = 'topics';
@@ -3412,7 +2775,7 @@ function attachEvents(lesson, color) {
       state.fromPath = false; state.fromPathTier = null;
       state.mode = 'study'; state.tab = 'words';
       state.flipped = {}; state.sentenceRevealed = {};
-      state.sentenceNoteClosed = {}; state.patternRevealed = {};
+      state.sentenceNoteClosed = {};
       pushNav();
       window.scrollTo(0, 0);
       render();
@@ -3473,7 +2836,6 @@ function attachEvents(lesson, color) {
       store.loadCategories(),
       store.loadPaths(),
       store.loadPathConvos(),
-      store.loadPatterns(),
     ]);
   } catch (err) {
     console.error('[init] reference data load failed', err);
@@ -3481,7 +2843,7 @@ function attachEvents(lesson, color) {
     return;
   }
 
-  render(); // first paint with index/categories/paths/patterns available
+  render(); // first paint with index/categories/paths available
 
   await refreshReviewBadge();   // populate the Word Review menu count
   render();                     // re-render so the badge shows
@@ -3534,19 +2896,6 @@ function attachEvents(lesson, color) {
     // lands on review, clear any session — back should show the LANDING screen.
     if (state.wordReview) {
       state.wordReview = null;
-      refreshReviewBadge();
-    }
-
-    // Likewise a pattern drill session: backing out returns to the Patterns
-    // page (Drill tab landing). Clear the session so it's not stale.
-    if (state.patternDrill) {
-      state.patternDrill = null;
-    }
-
-    // Pattern Review session: not part of the nav snapshot, so backing out lands
-    // on the Pattern Review screen — clear the session to show the landing fresh.
-    if (state.patternReview) {
-      state.patternReview = null;
       refreshReviewBadge();
     }
 
