@@ -1,26 +1,29 @@
 #!/usr/bin/env node
 /* generate-audio.js — batch-generates Cantonese speech audio (MP3) for every
- * word, sentence, and conversation line, using Google Cloud Text-to-Speech's
- * Chirp3-HD yue-HK voice. Vanilla Node, zero npm deps — uses Node's built-in
- * fetch() and authenticates via the gcloud CLI's access token, so you must
- * have already run (once):
+ * word, sentence, and conversation line — including BOTH the per-topic Chat
+ * tab conversations (the `convo` field inside each topic round) AND the
+ * checkpoint capstone conversations (data/path_convos.json) — using Google
+ * Cloud Text-to-Speech's Chirp3-HD yue-HK voice. Vanilla Node, zero npm deps
+ * — uses Node's built-in fetch() and authenticates via the gcloud CLI's
+ * access token, so you must have already run (once):
  *     gcloud init
  *
  * INCREMENTAL: skips any output file that already exists, so re-running only
  * fills gaps from newly added content. Edited existing text won't auto-detect
  * as stale — delete the specific file (or use --force) to regenerate it.
  *
- * Words/sentences use one narrator voice (--voice). Conversation lines use
- * TWO voices, picked automatically per line based on who's speaking: the
- * "You" role (the learner's own lines) always gets --voice-you, and the
- * other character (Vendor/Friend/Waiter/etc., whoever it is that scene)
- * always gets --voice-other — so every conversation in the app consistently
- * sounds like two distinct people, without needing per-scene configuration.
+ * Words/sentences use one narrator voice (--voice). ALL conversation lines —
+ * both topic Chat tabs and checkpoint conversations — use TWO voices, picked
+ * automatically per line based on who's speaking: the "You" role (the
+ * learner's own lines) always gets --voice-you, and the other character
+ * (Vendor/Friend/Doctor/etc., whoever it is that scene) always gets
+ * --voice-other — so every conversation in the app consistently sounds like
+ * two distinct people, without needing per-scene configuration.
  *
  * Usage:
  *   node tools/generate-audio.js                    # everything missing
- *   node tools/generate-audio.js --topic=greetings   # just one topic's words/sentences (testing)
- *   node tools/generate-audio.js --convo=beginner-s1 # just one conversation (testing)
+ *   node tools/generate-audio.js --topic=greetings   # one topic's words/sentences/chat (testing)
+ *   node tools/generate-audio.js --convo=beginner-s1 # just one checkpoint conversation (testing)
  *   node tools/generate-audio.js --dry               # list what would generate, no API calls, no auth needed
  *   node tools/generate-audio.js --force              # regenerate EVERYTHING
  *   node tools/generate-audio.js --force=greetings    # regenerate just one topic/convo's existing files too
@@ -32,9 +35,10 @@
  * https://cloud.google.com/text-to-speech/docs/chirp3-hd
  *
  * Output layout:
- *   audio/words/{wordId}.mp3         e.g. audio/words/greetings-001.mp3
- *   audio/sentences/{sid}.mp3        e.g. audio/sentences/greetings-t1-s01.mp3
- *   audio/convos/{convoKey}-line{NN}.mp3   e.g. audio/convos/beginner-s1-line01.mp3
+ *   audio/words/{wordId}.mp3                    e.g. audio/words/greetings-001.mp3
+ *   audio/sentences/{sid}.mp3                   e.g. audio/sentences/greetings-t1-s01.mp3
+ *   audio/convos/topic-{topicKey}-r{round}-line{NN}.mp3   e.g. audio/convos/topic-greetings-r1-line01.mp3
+ *   audio/convos/{convoKey}-line{NN}.mp3        e.g. audio/convos/beginner-s1-line01.mp3
  *
  * NOTE: conversation lines' `opts` (alternate multiple-choice answers in Fill-
  * the-Gap mode) are NOT included yet — only the canonical `c` line per turn.
@@ -111,8 +115,9 @@ async function synthesize(text, voice, accessToken, projectId) {
   return Buffer.from(data.audioContent, 'base64');
 }
 
-// Walks every topic file (all rounds) + path_convos.json and builds the full
-// list of { outPath, text, voice, label } jobs. No network access, no auth needed.
+// Walks every topic file (all rounds, including each round's Chat-tab convo)
+// + path_convos.json and builds the full list of { outPath, text, voice,
+// label } jobs. No network access, no auth needed.
 function collectJobs() {
   const jobs = [];
 
@@ -122,20 +127,31 @@ function collectJobs() {
       const topicKey = file.replace(/\.json$/, '');
       if (ONLY_TOPIC && topicKey !== ONLY_TOPIC) continue;
       const data = JSON.parse(fs.readFileSync(path.join(TOPICS_DIR, file), 'utf8'));
-      for (const round of Object.values(data.rounds || {})) {
+      for (const [roundKey, round] of Object.entries(data.rounds || {})) {
         for (const w of (round.words || [])) {
           jobs.push({ outPath: path.join(OUT_WORDS, `${w.id}.mp3`), text: w.c, voice: VOICE_NAME, label: `word ${w.id} (${w.c})` });
         }
         for (const s of (round.sentences || [])) {
           jobs.push({ outPath: path.join(OUT_SENTENCES, `${s.sid}.mp3`), text: s.c, voice: VOICE_NAME, label: `sentence ${s.sid}` });
         }
+        // Topic Chat tab conversation — separate data source from the
+        // checkpoint conversations below, but same two-voice-by-role logic.
+        if (round.convo) {
+          const [otherName] = round.convo.speakers || ['Other', 'You'];
+          (round.convo.lines || []).forEach((line, i) => {
+            const n = String(i + 1).padStart(2, '0');
+            const voice = line.u ? VOICE_YOU : VOICE_OTHER;
+            const speakerLabel = line.u ? 'You' : otherName;
+            jobs.push({ outPath: path.join(OUT_CONVOS, `topic-${topicKey}-r${roundKey}-line${n}.mp3`), text: line.c, voice, label: `${topicKey} chat r${roundKey} line ${n} (${speakerLabel})` });
+          });
+        }
       }
     }
   }
 
-  // Conversations are keyed by checkpoint/path, not topic — skip entirely
-  // when testing a single topic, since there's no meaningful overlap. Each
-  // line's voice is picked by who's speaking (line.u), not the run's --voice.
+  // Checkpoint conversations are keyed by checkpoint/path, not topic — skip
+  // entirely when testing a single --topic, since there's no meaningful
+  // overlap (that content lives in topic-scoped Chat convos above instead).
   if (!ONLY_TOPIC) {
     const convoData = JSON.parse(fs.readFileSync(CONVOS_FILE, 'utf8'));
     for (const [convoKey, convo] of Object.entries(convoData.convos || {})) {
