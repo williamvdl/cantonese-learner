@@ -235,6 +235,13 @@ function sanitizeForSpeech(text) {
     .trim();
 }
 
+// Web Speech API — as of the pre-generated audio pipeline (below), this is
+// ONLY still used by the Translate tab's "Listen" button. Every other speech
+// need in the app (words, sentences, both kinds of conversation) now plays a
+// pre-generated file instead — Translate can't use that, because it speaks
+// whatever the AI just translated, which has no stable id and can't be
+// pre-generated ahead of time. This is deliberately narrow scope, not
+// leftover code from before the audio pipeline existed.
 async function speak(text, onEnd, voiceOverride, pitchOverride, langOverride) {
   if (!window.speechSynthesis) return;
   window.speechSynthesis.cancel();
@@ -251,12 +258,81 @@ async function speak(text, onEnd, voiceOverride, pitchOverride, langOverride) {
   window.speechSynthesis.speak(utt);
 }
 
-// Speak as a specific conversation speaker — uses subtle pitch variation
-async function speakAs(text, isUser, onEnd) {
-  const voices = _voices || await loadVoices();
-  const { a } = pickVoicePair(voices);
-  const pitch = isUser ? 0.85 : 1.1;
-  speak(text, onEnd, a, pitch, 'zh-HK');
+// ── Pre-generated audio playback ────────────────────────────────────────────
+// Catalogued content (words, sentences, topic Chat conversations, checkpoint
+// conversations) plays from the Chirp3-HD files tools/generate-audio.js
+// produces, instead of the browser's synthetic voice. Deliberately NO
+// fallback to speak() here — if a file is missing (new content added but the
+// generator hasn't been re-run yet), the play button shows a toast instead of
+// silently substituting a lower-quality voice, so the gap stays visible.
+//
+// NAMING CONTRACT with tools/generate-audio.js — if either side's naming
+// scheme changes, the other must be updated to match:
+//   audio/words/{wordId}.mp3
+//   audio/sentences/{sid}.mp3
+//   audio/convos/topic-{topicKey}-r{round}-line{NN}.mp3
+//   audio/convos/{convoKey}-line{NN}.mp3
+
+function showToast(text, kind) {
+  state.toast = { text, kind };
+  render();
+  setTimeout(() => {
+    if (state.toast && state.toast.text === text) { state.toast = null; render(); }
+  }, 2200);
+}
+
+let _currentAudio = null;
+
+// Stops whatever pre-generated audio is currently playing, if any. Mirrors
+// the old speak()'s internal speechSynthesis.cancel() — without this, rapid
+// clicks (or an auto-play firing while a previous clip is still finishing)
+// would overlap two clips instead of the new one replacing the old.
+function stopAudioFile() {
+  if (_currentAudio) { _currentAudio.pause(); _currentAudio = null; }
+}
+
+function playAudioFile(url, onEnd) {
+  stopAudioFile();
+  const audio = new Audio(url);
+  _currentAudio = audio;
+  let settled = false;
+  const fail = () => {
+    if (settled) return;
+    settled = true;
+    if (_currentAudio === audio) _currentAudio = null;
+    showToast('Audio not generated for this yet', 'audio-missing');
+    if (onEnd) onEnd();
+  };
+  audio.addEventListener('ended', () => {
+    if (settled) return;
+    settled = true;
+    if (_currentAudio === audio) _currentAudio = null;
+    if (onEnd) onEnd();
+  });
+  audio.addEventListener('error', fail);
+  audio.play().catch(fail);
+}
+
+// kind: 'word' | 'sentence'
+function speakItem(kind, id, onEnd) {
+  if (!id) { if (onEnd) onEnd(); return; }
+  const dir = kind === 'word' ? 'words' : 'sentences';
+  playAudioFile(`./audio/${dir}/${id}.mp3`, onEnd);
+}
+
+// Plays conversation line `lineIndex` (0-based) from whichever conversation
+// is currently active. Reuses the exact same checkpoint-vs-topic check as
+// activeConvoSource() so the two can never disagree about which source is
+// live — if that check ever changes, update it in both places.
+function speakConvoLine(lineIndex, onEnd) {
+  const n = String(lineIndex + 1).padStart(2, '0');
+  if (state.checkpoint && state.checkpointAct === 'convo') {
+    const cp = getStageCheckpoint(state.checkpoint.pathKey, state.checkpoint.stageId);
+    if (!cp || !cp.convo) { if (onEnd) onEnd(); return; }
+    playAudioFile(`./audio/convos/${cp.convo}-line${n}.mp3`, onEnd);
+  } else {
+    playAudioFile(`./audio/convos/topic-${state.topic}-r${state.currentRound}-line${n}.mp3`, onEnd);
+  }
 }
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
@@ -290,9 +366,10 @@ let state = {
   pathProgress: {},               // { beginner: { greetings:true, ... }, ... } — loaded from localStorage
   fromPath: false,                // true when user entered a topic via the Learning Path
   fromPathTier: null,             // the tier of the path step they entered — preserved if they switch tier mid-study
-  pathToast: null,
+  toast: null,                    // { text, kind } — transient overlay message; cleared after timeout.
+                                   // kind: 'step' | 'final' (path completion) | 'audio-missing'
   headerDetailsOpen: false,             // ⓘ in header expands tone legend + speed settings
-  voiceBannerDismissed: false,          // user has tapped × on the voice banner                // { text, kind } — transient completion overlay; cleared after timeout
+  voiceBannerDismissed: false,          // user has tapped × on the voice banner
   translate: {
     direction:   'en-yue',     // 'en-yue' | 'yue-en'
     inputText:   '',
@@ -571,8 +648,7 @@ function playAllConvo(lines, idx) {
   if (idx >= lines.length) { state.convo.playingLine = null; render(); return; }
   state.convo.playingLine = idx;
   render();
-  const line = lines[idx];
-  speakAs(line.c, line.u, () => setTimeout(() => playAllConvo(lines, idx + 1), 500));
+  speakConvoLine(idx, () => setTimeout(() => playAllConvo(lines, idx + 1), 500));
 }
 
 // ── Translation (provider-abstracted) ─────────────────────────────────────────
@@ -1268,11 +1344,11 @@ function startListening() {
         state.convo.speakStatus = 'idle';
         state.convo.speakHeard  = '';
       } else {
-        const target = getRoundConvo(state.topic, state.currentRound).lines[state.convo.speakStep].c;
+        const target = activeConvoSource().lines[state.convo.speakStep].c;
         const matched = fuzzyMatch(heard, target);
         state.convo.speakHeard  = heard;
         state.convo.speakStatus = matched ? 'matched' : 'mismatch';
-        if (matched) speak(target);
+        if (matched) speakConvoLine(state.convo.speakStep);
       }
       render();
     }

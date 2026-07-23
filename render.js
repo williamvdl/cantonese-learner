@@ -885,7 +885,7 @@ function renderCheckpointDone(opts) {
       <div class="cp-missed-lbl">Worth another look</div>
       ${missedItems.map(m => `
         <div class="cp-missed-item">
-          <button class="play-mini" data-cp-say="${m.c}">${iconPlay(12)}</button>
+          <button class="play-mini" data-cp-say="${m.id}">${iconPlay(12)}</button>
           <div><div class="cp-missed-c">${m.c}</div><div class="cp-missed-j">${colorJyutping(m.j)}</div></div>
           <span class="cp-missed-e">${m.e}</span>
         </div>`).join('')}
@@ -1031,7 +1031,6 @@ function render() {
       const headerEl = ctx
         ? renderPathBanner(ctx, color)
         : `<button class="back-home-btn" id="back-home-btn"><span class="icon-label">${icon('arrowLeft',15)} Back to topics</span></button>`;
-      const toastEl  = state.pathToast ? renderPathToast(state.pathToast) : '';
       mainContent = `
         ${renderVoiceBanner()}
         <div class="content">
@@ -1039,8 +1038,7 @@ function render() {
           ${renderRoundSelector(state.topic, color)}
           ${renderLessonHeader(lesson, color)}
           ${state.mode === 'quiz' ? renderQuiz(lesson, color) : state.tab === 'convo' ? renderConversation(color) : renderStudy(lesson, color)}
-        </div>
-        ${toastEl}`;
+        </div>`;
     }
   } else if (state.nav === 'dashboard') {
     mainContent = `${renderVoiceBanner()}${renderDashboard()}`;
@@ -1056,6 +1054,7 @@ function render() {
   app.innerHTML = `
     ${renderHeader(color)}
     ${mainContent}
+    ${state.toast ? renderToast(state.toast) : ''}
     ${renderDrawer()}
   `;
 
@@ -1178,8 +1177,9 @@ function renderPathBanner(ctx, color) {
 
 // Transient overlay shown after marking complete. Auto-dissolves via setTimeout
 // scheduled in the click handler.
-function renderPathToast(t) {
-  return `<div class="path-toast ${t.kind === 'final' ? 'path-toast-final' : ''}">${t.text}</div>`;
+function renderToast(t) {
+  const cls = t.kind === 'final' ? 'toast-final' : t.kind === 'audio-missing' ? 'toast-audio-missing' : 'toast-step';
+  return `<div class="toast ${cls}">${t.text}</div>`;
 }
 
 function renderVoiceBanner() {
@@ -1699,7 +1699,7 @@ function renderQuiz(lesson, color) {
               : '—';
             return `
             <div class="quiz-review-item">
-              <button class="quiz-review-play" data-quiz-review-play="${w.word.c}" style="border-color:${color};color:${color}" aria-label="Listen">${iconPlay(15)}</button>
+              <button class="quiz-review-play" data-quiz-review-play="${w.word.id}" style="border-color:${color};color:${color}" aria-label="Listen">${iconPlay(15)}</button>
               <div class="quiz-review-body">
                 <div class="quiz-review-chinese">${w.word.c}</div>
                 <div class="quiz-review-jp">${colorJyutping(w.word.j)}</div>
@@ -2006,6 +2006,7 @@ function attachEvents(lesson, color) {
   const backHomeBtn = document.getElementById('back-home-btn');
   if (backHomeBtn) backHomeBtn.addEventListener('click', () => {
     window.speechSynthesis.cancel();
+    stopAudioFile();
     if (_navReady) { history.back(); return; }
     // Fallback if history isn't available — replicate the original logic.
     if (state.fromPath) {
@@ -2068,6 +2069,7 @@ function attachEvents(lesson, color) {
   if (playAllBtn) playAllBtn.addEventListener('click', () => {
     if (state.convo.playingLine !== null) {
       window.speechSynthesis.cancel();
+      stopAudioFile();
       state.convo.playingLine = null;
       render();
     } else {
@@ -2090,6 +2092,7 @@ function attachEvents(lesson, color) {
   if (speakBtn) speakBtn.addEventListener('click', () => {
     stopListening();
     window.speechSynthesis.cancel();
+    stopAudioFile();
     state.convo.convMode    = state.convo.convMode === 'speak' ? 'read' : 'speak';
     state.convo.speakStep   = 0;
     state.convo.speakStatus = 'idle';
@@ -2117,10 +2120,9 @@ function attachEvents(lesson, color) {
   // Speak: listen button (other speaker's turn)
   const speakListenBtn = document.getElementById('speak-listen-btn');
   if (speakListenBtn) speakListenBtn.addEventListener('click', () => {
-    const line = activeConvoSource().lines[state.convo.speakStep];
     state.convo.playingLine = state.convo.speakStep;
     render();
-    speakAs(line.c, line.u, () => { state.convo.playingLine = null; render(); });
+    speakConvoLine(state.convo.speakStep, () => { state.convo.playingLine = null; render(); });
   });
 
   // Speak: next button
@@ -2129,6 +2131,7 @@ function attachEvents(lesson, color) {
     const lines = activeConvoSource().lines;
     stopListening();
     window.speechSynthesis.cancel();
+    stopAudioFile();
     state.convo.playingLine = null;
     state.convo.speakStatus = 'idle';
     state.convo.speakHeard  = '';
@@ -2186,10 +2189,9 @@ function attachEvents(lesson, color) {
   document.querySelectorAll('[data-bubble]').forEach(btn => {
     btn.addEventListener('click', () => {
       const i = parseInt(btn.dataset.bubble);
-      const line = activeConvoSource().lines[i];
       state.convo.playingLine = i;
       render();
-      speakAs(line.c, line.u, () => { state.convo.playingLine = null; render(); });
+      speakConvoLine(i, () => { state.convo.playingLine = null; render(); });
       setTimeout(() => { if (state.convo.playingLine === i) { state.convo.playingLine = null; render(); } }, 6000);
     });
   });
@@ -2201,7 +2203,7 @@ function attachEvents(lesson, color) {
       const chosen  = btn.dataset.gapAns;
       state.convo.gapAnswers[lineIdx] = chosen;
       const correct = chosen === activeConvoSource().lines[lineIdx].c;
-      if (correct) speak(chosen);
+      if (correct) speakConvoLine(lineIdx);
       render();
     });
   });
@@ -2226,7 +2228,7 @@ function attachEvents(lesson, color) {
       if (!word) return;
       state.speaking = i;
       render();
-      speak(word.c, () => { state.speaking = null; render(); });
+      speakItem('word', word.id, () => { state.speaking = null; render(); });
       setTimeout(() => { if (state.speaking === i) { state.speaking = null; render(); } }, 4000);
     });
   });
@@ -2239,7 +2241,7 @@ function attachEvents(lesson, color) {
       const sentence = getRoundSentences(state.topic, state.currentRound)[i];
       state.speaking = 'sent-' + i;
       render();
-      speak(sentence.c, () => { state.speaking = null; render(); });
+      speakItem('sentence', sentence.sid, () => { state.speaking = null; render(); });
       setTimeout(() => { if (state.speaking === 'sent-' + i) { state.speaking = null; render(); } }, 6000);
     });
   });
@@ -2287,7 +2289,7 @@ function attachEvents(lesson, color) {
   // Quiz listen
   const ql = document.getElementById('quiz-listen');
   if (ql && state.quiz) {
-    ql.addEventListener('click', () => speak(state.quiz.queue[state.quiz.idx].c));
+    ql.addEventListener('click', () => speakItem('word', state.quiz.queue[state.quiz.idx].id));
   }
 
   // Quiz choices
@@ -2299,7 +2301,7 @@ function attachEvents(lesson, color) {
         const chosenOpt = state.quiz.choices[idx];
         const cw = state.quiz.queue[state.quiz.idx];
         const correct = chosenOpt === cw;          // object identity, not string
-        speak(cw.c);
+        speakItem('word', cw.id);
         state.quiz.selected = idx;
         if (correct) {
           state.quiz.score++;
@@ -2350,9 +2352,7 @@ function attachEvents(lesson, color) {
       setTimeout(() => {
         if (state.quiz && !state.quiz.done && state.quiz.direction === 'listen-en' &&
             state.quiz._listenAutoPlayed === state.quiz.idx) {
-          // Explicit cancel before speaking so there's no overlap with prior audio
-          try { window.speechSynthesis.cancel(); } catch(e) {}
-          speak(state.quiz.queue[state.quiz.idx].c);
+          speakItem('word', state.quiz.queue[state.quiz.idx].id);
         }
       }, 900);
     }
@@ -2361,7 +2361,7 @@ function attachEvents(lesson, color) {
   // Replay-correct button on the wrong-answer pause panel
   const qReplay = document.getElementById('quiz-replay');
   if (qReplay && state.quiz) {
-    qReplay.addEventListener('click', () => speak(state.quiz.queue[state.quiz.idx].c));
+    qReplay.addEventListener('click', () => speakItem('word', state.quiz.queue[state.quiz.idx].id));
   }
 
   // ── Word Review session handlers ──
@@ -2386,7 +2386,7 @@ function attachEvents(lesson, color) {
 
     // Listen button (audio prompt / replay)
     const rListen = document.getElementById('review-listen');
-    if (rListen) rListen.addEventListener('click', () => speak(item.word.c));
+    if (rListen) rListen.addEventListener('click', () => speakItem('word', item.word.id));
 
     // Choice buttons
     document.querySelectorAll('[data-review-choice]').forEach(btn => {
@@ -2396,7 +2396,7 @@ function attachEvents(lesson, color) {
         const chosenOpt = wr.choices[idx];
         const cw = item.word;
         const correct = chosenOpt === cw;          // object identity, not string
-        speak(cw.c);
+        speakItem('word', cw.id);
         wr.selected = idx;
         wr.reviewedThisSession++;
         if (correct) wr.correctThisSession++;
@@ -2425,7 +2425,7 @@ function attachEvents(lesson, color) {
 
     // Replay on the wrong-answer panel
     const rReplay = document.getElementById('review-replay');
-    if (rReplay) rReplay.addEventListener('click', () => speak(item.word.c));
+    if (rReplay) rReplay.addEventListener('click', () => speakItem('word', item.word.id));
 
     // Direction toggle — switching restarts the session cleanly with the new direction
     document.querySelectorAll('[data-review-dir]').forEach(btn => {
@@ -2448,8 +2448,7 @@ function attachEvents(lesson, color) {
           if (state.wordReview && !state.wordReview.done &&
               state.wordReview.direction === 'listen-en' &&
               state.wordReview._listenAutoPlayed === state.wordReview.idx) {
-            try { window.speechSynthesis.cancel(); } catch(e) {}
-            speak(state.wordReview.queue[state.wordReview.idx].word.c);
+            speakItem('word', state.wordReview.queue[state.wordReview.idx].word.id);
           }
         }, 900);
       }
@@ -2480,7 +2479,7 @@ function attachEvents(lesson, color) {
 
   // End-of-quiz: play a missed word from the review list
   document.querySelectorAll('[data-quiz-review-play]').forEach(btn => {
-    btn.addEventListener('click', () => speak(btn.dataset.quizReviewPlay));
+    btn.addEventListener('click', () => speakItem('word', btn.dataset.quizReviewPlay));
   });
 
   // Quiz back
@@ -2499,13 +2498,13 @@ function attachEvents(lesson, color) {
       if (!isLessonComplete(state.activePath, state.topic, tier)) {
         toggleLessonComplete(state.activePath, state.topic, tier);
       }
-      state.pathToast = ctx.isLast
+      state.toast = ctx.isLast
         ? { text: '🎉 Path complete!', kind: 'final' }
         : { text: '✓ Step complete!',  kind: 'step'  };
       render();
       // Dissolve the toast after a beat. If it was the final step, also auto-return to the timeline.
       setTimeout(() => {
-        state.pathToast = null;
+        state.toast = null;
         if (ctx.isLast) {
           state.nav         = 'path';
           state.pathView    = 'timeline';
@@ -2528,6 +2527,7 @@ function attachEvents(lesson, color) {
       const ctx = getPathContext();
       if (!ctx || !ctx.nextStep) return;
       window.speechSynthesis.cancel();
+      stopAudioFile();
       // Checkpoint comes next → open its hub (openCheckpoint self-pushes nav).
       if (ctx.nextStep.kind === 'checkpoint') {
         openCheckpoint(state.activePath, ctx.nextStep.stageId);
@@ -2784,7 +2784,7 @@ function attachEvents(lesson, color) {
 
   // Play a missed item's audio on the done screen.
   document.querySelectorAll('[data-cp-say]').forEach(btn => {
-    btn.addEventListener('click', () => speak(btn.dataset.cpSay));
+    btn.addEventListener('click', () => speakItem('word', btn.dataset.cpSay));
   });
 
   // Checkpoint Words quiz — choices, direction toggle, next, listen/replay.
@@ -2799,7 +2799,7 @@ function attachEvents(lesson, color) {
         cpq.selected = idx;
         if (chosen === cw) cpq.score++;
         else cpq.missed.push(cw);
-        speak(cw.c);
+        speakItem('word', cw.id);
         render();
       });
     });
@@ -2811,9 +2811,9 @@ function attachEvents(lesson, color) {
       });
     });
     const cpwListen = document.getElementById('cpw-listen');
-    if (cpwListen) cpwListen.addEventListener('click', () => speak(cw.c));
+    if (cpwListen) cpwListen.addEventListener('click', () => speakItem('word', cw.id));
     const cpwReplay = document.getElementById('cpw-replay');
-    if (cpwReplay) cpwReplay.addEventListener('click', () => speak(cw.c));
+    if (cpwReplay) cpwReplay.addEventListener('click', () => speakItem('word', cw.id));
     const cpwNext = document.getElementById('cpw-next');
     if (cpwNext) cpwNext.addEventListener('click', () => advanceCheckpointWords());
   }
@@ -2878,6 +2878,7 @@ function attachEvents(lesson, color) {
     // BACK was pressed. The browser hands back the snapshot stored for the
     // entry we moved to. Restore it and re-render.
     window.speechSynthesis.cancel();   // stop any audio when leaving a screen
+    stopAudioFile();
 
     const snap = e.state;
     if (snap) {

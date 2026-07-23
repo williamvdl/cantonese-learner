@@ -259,11 +259,21 @@
   /* Path banner action button — bottom row, full width */
   /* (path banner action buttons are styled in the Path banner block above) */
 
-  /* Celebration toast — slides in over the content, dissolves after ~3s total */
-  .path-toast { position: fixed; left: 50%; top: 28%; transform: translate(-50%, -50%); background: var(--jade); color: var(--parchment); padding: 18px 26px; border-radius: var(--r-lg); font-size: 20px; font-weight: var(--fw-bold); box-shadow: var(--elev-4); z-index: 10000; animation: pathToastIn 0.25s ease-out, pathToastFade 0.4s ease-in 2.6s forwards; }
-  .path-toast-final { background: var(--brand); font-size: var(--fs-h3); padding: 22px 30px; }
-  @keyframes pathToastIn   { from { opacity: 0; transform: translate(-50%, -50%) scale(0.85); } to { opacity: 1; transform: translate(-50%, -50%) scale(1); } }
-  @keyframes pathToastFade { from { opacity: 1; } to { opacity: 0; transform: translate(-50%, -50%) scale(0.95); } }
+  /* Toast — transient overlay message, slides in and dissolves. Two flavors:
+     step/final are the celebratory path-completion messages (bigger, brand
+     colors); audio-missing is a quieter utility notice (smaller, neutral). */
+  .toast { position: fixed; left: 50%; top: 28%; transform: translate(-50%, -50%);
+    border-radius: var(--r-lg); font-weight: var(--fw-bold); box-shadow: var(--elev-4); z-index: 10000; }
+  .toast-step, .toast-final { background: var(--jade); color: var(--parchment); padding: 18px 26px;
+    font-size: 20px; animation: toastIn 0.25s ease-out, toastFade 0.4s ease-in 2.6s forwards; }
+  .toast-final { background: var(--brand); font-size: var(--fs-h3); padding: 22px 30px; }
+  .toast-audio-missing { background: var(--ink); color: var(--parchment); padding: 10px 18px;
+    font-size: var(--fs-small); font-weight: var(--fw-regular); top: auto; bottom: 90px;
+    transform: translateX(-50%); animation: toastInBottom 0.2s ease-out, toastFadeBottom 0.3s ease-in 1.9s forwards; }
+  @keyframes toastIn   { from { opacity: 0; transform: translate(-50%, -50%) scale(0.85); } to { opacity: 1; transform: translate(-50%, -50%) scale(1); } }
+  @keyframes toastFade { from { opacity: 1; } to { opacity: 0; transform: translate(-50%, -50%) scale(0.95); } }
+  @keyframes toastInBottom   { from { opacity: 0; transform: translateX(-50%) scale(0.9); } to { opacity: 1; transform: translateX(-50%) scale(1); } }
+  @keyframes toastFadeBottom { from { opacity: 1; } to { opacity: 0; transform: translateX(-50%) scale(0.95); } }
 
   /* Translate */
   .translate-wrap { padding: var(--sp-4) var(--sp-5) var(--sp-7); box-shadow: var(--elev-1); max-width: 680px; margin: 0 auto; }
