@@ -53,12 +53,7 @@ function renderDrawer() {
               </span>
               ${item.badge > 0 ? `<span class="ni-badge">${item.badge}</span>` : ''}
               <span class="ni-tick">✓</span>
-            </button>${item.key === 'review' ? `
-            <div class="nav-sub">
-              <button class="nav-sub-item${state.nav==='review'&&state.reviewView==='words'?' active':''}" data-review-sub="words">
-                📖 Words ${rc > 0 ? `<span class="ns-badge">${rc}</span>` : ''}
-              </button>
-            </div>` : ''}`).join('')}
+            </button>`).join('')}
           ${settingsSection}
         </div>
       </div>
@@ -417,22 +412,6 @@ function renderWordReview() {
       ${core.promptCard}
       ${core.choiceGrid}
       ${core.answerPanel}
-    </div>`;
-}
-
-// ── Review hub (Option B): one Review destination with two cards ──────────────
-function renderReviewHub() {
-  const wc = state.reviewBadge.liveCount;
-  const card = (cls, view, icon, name, desc, count, noun) => `
-    <button class="review-hub-card ${cls}" data-review-go="${view}">
-      <span class="rh-ic">${icon}</span>
-      <span class="rh-body"><span class="rh-name">${name}</span><span class="rh-desc">${desc}</span></span>
-      <span class="rh-count ${count === 0 ? 'zero' : ''}"><b>${count}</b><span>${noun}</span></span>
-    </button>`;
-  return `
-    <div class="content">
-      ${renderPageHeader('🗂️', 'Review', 'Practise the words you\'ve missed')}
-      ${card('words', 'words', '📖', 'Word Review', 'Vocabulary you got wrong in quizzes', wc, 'words')}
     </div>`;
 }
 
@@ -950,7 +929,6 @@ function render() {
   if (needsTopic && !store.isTopicLoaded(state.topic)) {
     app.innerHTML = `
       ${renderHeader(null)}
-      ${renderVoiceBanner()}
       <div class="content"><div style="padding:40px 20px;text-align:center;color:#888;font-size:14px;">Loading topic…</div></div>
       ${renderDrawer()}
     `;
@@ -975,7 +953,6 @@ function render() {
       if (missing.length) {
         app.innerHTML = `
           ${renderHeader(null)}
-          ${renderVoiceBanner()}
           <div class="content"><div style="padding:40px 20px;text-align:center;color:#888;font-size:14px;">Loading path…</div></div>
           ${renderDrawer()}
         `;
@@ -998,7 +975,6 @@ function render() {
       if (missing.length) {
         app.innerHTML = `
           ${renderHeader(null)}
-          ${renderVoiceBanner()}
           <div class="content"><div style="padding:40px 20px;text-align:center;color:#888;font-size:14px;">Loading checkpoint…</div></div>
           ${renderDrawer()}
         `;
@@ -1023,16 +999,13 @@ function render() {
     mainContent = renderCheckpointHub();
   } else if (state.nav === 'topics') {
     if (state.homeView) {
-      mainContent = `
-        ${renderVoiceBanner()}
-        ${renderHomeScreen()}`;
+      mainContent = `${renderHomeScreen()}`;
     } else {
       const ctx = getPathContext();
       const headerEl = ctx
         ? renderPathBanner(ctx, color)
         : `<button class="back-home-btn" id="back-home-btn"><span class="icon-label">${icon('arrowLeft',15)} Back to topics</span></button>`;
       mainContent = `
-        ${renderVoiceBanner()}
         <div class="content">
           ${headerEl}
           ${renderRoundSelector(state.topic, color)}
@@ -1041,14 +1014,13 @@ function render() {
         </div>`;
     }
   } else if (state.nav === 'dashboard') {
-    mainContent = `${renderVoiceBanner()}${renderDashboard()}`;
+    mainContent = `${renderDashboard()}`;
   } else if (state.nav === 'review') {
-    if (state.reviewView === 'words')         mainContent = renderWordReview();
-    else                                      mainContent = renderReviewHub();
+    mainContent = renderWordReview();
   } else if (state.nav === 'translate') {
     mainContent = renderTranslate();
   } else if (state.nav === 'path') {
-    mainContent = `${renderVoiceBanner()}${renderLearningPath()}`;
+    mainContent = `${renderLearningPath()}`;
   }
 
   app.innerHTML = `
@@ -1180,26 +1152,6 @@ function renderPathBanner(ctx, color) {
 function renderToast(t) {
   const cls = t.kind === 'final' ? 'toast-final' : t.kind === 'audio-missing' ? 'toast-audio-missing' : 'toast-step';
   return `<div class="toast ${cls}">${t.text}</div>`;
-}
-
-function renderVoiceBanner() {
-  if (!state.voiceInfo) return '';
-  if (state.voiceBannerDismissed) return '';
-  const v = state.voiceInfo;
-  // Quiet success state: a single-line confirmation, dismissible.
-  // Warning/error states: full message with details.
-  if (v.status === 'hk') {
-    return `<div class="voice-banner voice-ok voice-banner-compact">
-      <span class="voice-banner-text"><span class="icon-label">${icon('volume',14)} Cantonese voice ready</span></span>
-      <button class="voice-banner-dismiss" id="voice-banner-dismiss" aria-label="Dismiss">×</button>
-    </div>`;
-  }
-  const cls = v.status === 'other' ? 'voice-warn' : 'voice-none';
-  const statusIcon = v.status !== 'none' ? '🔊' : '⚠️';
-  const extra = v.status === 'none'
-    ? ' · Try Chrome, or go to Android Settings → General Management → Language → TTS → install Chinese (Hong Kong)'
-    : '';
-  return `<div class="voice-banner ${cls}">${statusIcon} ${v.label}${v.name ? ' — ' + v.name : ''}${extra}</div>`;
 }
 
 function renderCategoryFilter() {
@@ -1763,10 +1715,6 @@ function attachEvents(lesson, color) {
   const headerInfo = document.getElementById('header-info-toggle');
   if (headerInfo) headerInfo.addEventListener('click', () => { state.headerDetailsOpen = !state.headerDetailsOpen; render(); });
 
-  // Voice banner dismiss
-  const vbd = document.getElementById('voice-banner-dismiss');
-  if (vbd) vbd.addEventListener('click', () => { state.voiceBannerDismissed = true; render(); });
-
   // Drawer close (X button and backdrop). The drawer-open pushed a history entry,
   // so closing steps back through history — keeping the stack consistent and
   // letting the popstate handler perform the actual close.
@@ -1789,9 +1737,8 @@ function attachEvents(lesson, color) {
       if (target === 'topics') state.homeView = true;
       // Tapping Learning Path from the drawer always returns to the path list
       if (target === 'path') state.pathView = 'list';
-      // Entering Review opens the hub (landing), never a stale session
+      // Entering Review always shows Words directly (no session, always fresh)
       if (target === 'review') {
-        state.reviewView = 'hub';
         state.wordReview = null;
         refreshReviewBadge().then(render);
       }
@@ -1806,33 +1753,6 @@ function attachEvents(lesson, color) {
     });
   });
 
-  // Review hub card → open the Word Review sub-view. Pushes a history entry
-  // so BACK returns to the hub.
-  document.querySelectorAll('[data-review-go]').forEach(btn => {
-    btn.addEventListener('click', () => {
-      state.reviewView = btn.dataset.reviewGo;
-      state.wordReview = null;
-      pushNav();
-      window.scrollTo(0, 0);
-      refreshReviewBadge().then(render);
-    });
-  });
-
-  // Menu sub-list (Words under Review) → deep-link straight to the sub-view.
-  document.querySelectorAll('[data-review-sub]').forEach(btn => {
-    btn.addEventListener('click', () => {
-      state.nav = 'review';
-      state.reviewView = btn.dataset.reviewSub;
-      state.wordReview = null;
-      state.checkpoint = null; state.checkpointAct = null;
-      state.checkpointQuiz = null;
-      state.fromPath = false; state.fromPathTier = null;
-      state.drawerOpen = false;
-      navReplace();
-      window.scrollTo(0, 0);
-      refreshReviewBadge().then(render);
-    });
-  });
   document.querySelectorAll('[data-cat-jump]').forEach(btn => {
     btn.addEventListener('click', () => {
       state.nav = 'topics';
@@ -2608,7 +2528,6 @@ function attachEvents(lesson, color) {
   if (dashReviewOpen) {
     dashReviewOpen.addEventListener('click', () => {
       state.nav = 'review';
-      state.reviewView = 'words';
       state.wordReview = null;
       pushNav();                 // dashboard → review: BACK returns to dashboard
       window.scrollTo(0, 0);
@@ -2847,27 +2766,6 @@ function attachEvents(lesson, color) {
 
   await refreshReviewBadge();   // populate the Word Review menu count
   render();                     // re-render so the badge shows
-
-  const voices = await loadVoices();
-  // Count Cantonese voices specifically — dual-speaker only makes sense if we
-  // have 2+ Cantonese voices, since mixing in a Mandarin voice for speaker B
-  // would make the conversation half-Mandarin. Uses isCantoneseVoice/normLang so
-  // Android's "zh_HK_#Hant" is correctly recognised as Cantonese (previously an
-  // exact "zh-HK" check missed it and wrongly reported "no Cantonese voice").
-  const hkVoices    = voices.filter(isCantoneseVoice);
-  const otherZh     = voices.filter(v => isChineseVoice(v) && !isCantoneseVoice(v));
-  const hkCount     = hkVoices.length;
-  if (hkCount >= 2) {
-    state.voiceInfo = { status:'hk',    label:`Cantonese (zh-HK) ready ✓ · ${hkCount} voices found — dual speaker active`, name: hkVoices[0].name };
-  } else if (hkCount === 1) {
-    state.voiceInfo = { status:'hk',    label:'Cantonese (zh-HK) ready ✓ · 1 voice found — using pitch to differentiate speakers', name: hkVoices[0].name };
-  } else if (otherZh.length) {
-    state.voiceInfo = { status:'other', label:`No Cantonese voice — audio will sound like Mandarin (using ${normLang(otherZh[0].lang)})`, name: otherZh[0].name };
-  } else {
-    state.voiceInfo = { status:'none',  label:'No Chinese voice found — install one via Android Settings → General Management → Language & Input → Text-to-Speech → Google TTS → Install voice data → Chinese (Hong Kong)', name: '' };
-  }
-
-  render(); // re-render with voice info
 
   // ── Back-button integration ──
   // Seed the initial history entry (the starting screen) and register the

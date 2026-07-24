@@ -149,12 +149,6 @@
   .tone-key span { font-size: var(--fs-micro); font-weight: var(--fw-bold); }
   .tone-key .label { color: #555; font-weight: var(--fw-regular); }
 
-  /* Voice banner */
-  .voice-banner { margin: var(--sp-3) var(--sp-5) 0; padding: var(--sp-2) var(--sp-3); border-radius: var(--r-sm); font-size: var(--fs-micro); display: flex; align-items: center; gap: 6px; }
-  .voice-ok  { background: var(--feedback-good-tint); border: 1px solid var(--jade); color: var(--jade); }
-  .voice-warn{ background: var(--parchment-deep); border: 1px solid var(--gold); color: var(--gold-text); }
-  .voice-none{ background: var(--brand-tint); border: 1px solid var(--brand); color: var(--brand-dark); }
-
   /* Topic pills */
   .topics { display: flex; gap: 8px; overflow-x: auto; padding: 14px 20px 6px; scrollbar-width: none; }
   .topic-btn { flex-shrink: 0; padding: 7px 13px; border-radius: 30px; cursor: pointer; font-size: var(--fs-small); font-weight: var(--fw-semi); border: 2px solid #ddd; background: var(--parchment); color: #555; white-space: nowrap; transition: all 0.18s; }
@@ -504,25 +498,6 @@
   .review-empty-text { font-size: var(--fs-small); color: #999; margin: 8px auto 0; max-width: 300px; line-height: 1.5; }
   .review-allclear-note { font-size: var(--fs-small); color: var(--muted-dark); margin: 14px 0 4px; }
 
-  /* Review hub: card routing to Word Review */
-  .review-hub-card { display: flex; align-items: center; gap: 15px; width: 100%; text-align: left;
-    background: var(--parchment); border: 1.5px solid var(--parchment-border); border-radius: 16px; padding: 18px;
-    margin-bottom: 14px; cursor: pointer; position: relative; overflow: hidden; transition: transform 0.12s; }
-  .review-hub-card:active { transform: scale(0.99); }
-  .review-hub-card::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 5px; }
-  .review-hub-card.words::before { background: var(--brand); }
-  .review-hub-card .rh-ic { width: 50px; height: 50px; border-radius: 13px; display: flex; align-items: center;
-    justify-content: center; font-size: 24px; flex-shrink: 0; }
-  .review-hub-card.words .rh-ic { background: rgba(139,58,78,0.10); }
-  .review-hub-card .rh-body { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
-  .review-hub-card .rh-name { font-family: var(--font-serif); font-size: var(--fs-lead); font-weight: var(--fw-bold); color: var(--ink); }
-  .review-hub-card .rh-desc { font-size: 12.5px; color: var(--muted-light); }
-  .review-hub-card .rh-count { flex-shrink: 0; text-align: center; min-width: 50px; font-weight: var(--fw-bold); }
-  .review-hub-card .rh-count b { display: block; font-family: var(--font-serif); font-size: 24px; line-height: 1; }
-  .review-hub-card .rh-count span { font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; }
-  .review-hub-card.words .rh-count b { color: var(--brand); }
-  .review-hub-card .rh-count.zero b { color: var(--muted); }
-
   /* Word Review done-screen stats */
   .review-done-stats { display: flex; gap: 10px; margin: 14px 0 18px; }
   .review-done-stats .rd-stat { flex: 1; background: var(--parchment); border: 1.5px solid var(--parchment-border);
@@ -646,10 +621,6 @@
   .header .tone-key .label { color: var(--muted); }
 
   /* Compact voice banner (when OK) */
-  .voice-banner-compact { justify-content: space-between; padding: var(--sp-1) var(--sp-3); font-size: var(--fs-micro); display: flex; align-items: center; }
-  .voice-banner-text { flex: 1; }
-  .voice-banner-dismiss { background: transparent; border: none; color: inherit; font-size: 16px; line-height: 1; cursor: pointer; padding: 0 4px; opacity: 0.6; }
-  .voice-banner-dismiss:hover { opacity: 1; }
 
   .card-chinese,
   .quiz-chinese,
@@ -1039,7 +1010,7 @@
   /* ═══════════════════════════════════════════════════════════════════
      Dashboard (new homepage)
      All selectors namespaced .dash-* to avoid any clash with the
-     existing .path-card / .review-hub-card / .path-step rules.
+     existing .path-card / .path-step rules.
   ═══════════════════════════════════════════════════════════════════ */
 
   /* ── Outer wrapper ── */

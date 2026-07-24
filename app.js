@@ -291,9 +291,12 @@ function stopAudioFile() {
   if (_currentAudio) { _currentAudio.pause(); _currentAudio = null; }
 }
 
+const AUDIO_RATES = { slow: 0.75, normal: 1.0, fast: 1.3 };
+
 function playAudioFile(url, onEnd) {
   stopAudioFile();
   const audio = new Audio(url);
+  audio.playbackRate = AUDIO_RATES[state.speed] || 1.0;
   _currentAudio = audio;
   let settled = false;
   const fail = () => {
@@ -369,7 +372,6 @@ let state = {
   toast: null,                    // { text, kind } — transient overlay message; cleared after timeout.
                                    // kind: 'step' | 'final' (path completion) | 'audio-missing'
   headerDetailsOpen: false,             // ⓘ in header expands tone legend + speed settings
-  voiceBannerDismissed: false,          // user has tapped × on the voice banner
   translate: {
     direction:   'en-yue',     // 'en-yue' | 'yue-en'
     inputText:   '',
@@ -387,12 +389,9 @@ let state = {
   sentenceBreakdownOpen: {},
   sentenceRevealed: {},
   sentenceNoteClosed: {},
-  voiceInfo: null,
   quiz: null,
   // Word Review session — null when not in a session. Shape set by startWordReview().
   wordReview: null,
-  // Which Review sub-screen is showing: 'hub' (cards) or 'words'.
-  reviewView: 'hub',
   // Checkpoint (Stage 3) — null when no checkpoint hub is open.
   //   checkpoint:     { pathKey, stageId, cpId } | null  — which hub is open
   //   checkpointAct:  'words' | 'convo' | null — which activity within it
@@ -436,7 +435,7 @@ const NAV_FIELDS = [
   'nav', 'drawerOpen', 'homeView', 'pathView', 'activePath',
   'topic', 'currentRound', 'fromPath', 'fromPathTier',
   'mode', 'tab', 'selectedCategory',
-  'checkpoint', 'checkpointAct', 'reviewView',
+  'checkpoint', 'checkpointAct',
 ];
 
 // Capture the current navigation-relevant state into a plain snapshot object.
