@@ -78,7 +78,9 @@
     --gold:           #0369A1;   /* deep blue — secondary accent / brand mark */
     --muted:          #A8A29E;   /* muted text / borders */
     --feedback-good:  #16A34A;   /* quiz "correct" — semantic green */
-    --feedback-bad:   #DC2626;   /* quiz "wrong" / stop — semantic red */
+    --feedback-bad:   #B42318;   /* quiz "wrong" / stop — warm red, W2. Must stay
+                                    distinct from --milestone: both are deep reds
+                                    and they meet during a checkpoint quiz. */
 
     /* ── Derived / semantic tokens (Phase 1 cleanup) ───────────────────────────
        Tints, shades and state colours used throughout the app but previously
@@ -86,11 +88,21 @@
        Values are derived from the primary palette above — do not introduce new
        hues here without updating the visual identity exploration notes. */
     --brand-dark:          #9A3412;   /* brand pressed state / 3D shadow */
-    --brand-tint:          #FEF0E9;   /* error / wrong-answer surface bg */
-    --brand-text-dark:     #9A3412;   /* error text on --brand-tint surfaces */
+    --brand-tint:          #FEF0E9;   /* BRAND surface bg — NOT error. See below. */
+    --brand-text-dark:     #9A3412;   /* brand text on --brand-tint surfaces */
     --jade-shadow:         #14532D;   /* jade pressed state / 3D shadow */
     --feedback-good-tint:  #DCFCE7;   /* correct-answer surface bg */
     --feedback-good-text:  #15803D;   /* correct-answer text */
+
+    /* ── State edges + tints (DESIGN_SYSTEM §1.4) ──────────────────────────────
+       Hairline border colours, one per state, so a tinted surface and its border
+       always come from the same family. --feedback-bad-tint exists because
+       --brand-tint was previously doing duty as the wrong-answer background:
+       brand tint should mean brand. Re-pointing those 8 call sites is phase 2. */
+    --brand-edge:          #F5D9C9;   /* border on brand-tinted surfaces */
+    --jade-edge:           #C9E7D3;   /* border on jade / correct surfaces */
+    --feedback-bad-tint:   #FEF3F2;   /* wrong-answer surface bg */
+    --feedback-bad-edge:   #F5CFCB;   /* border on wrong-answer surfaces */
     --gold-tint:           #E0F2FE;   /* soft blue surface (checkpoint cards etc.) */
     --gold-text:           #075985;   /* legible text on gold-tinted surfaces */
     --parchment-border:    #EAE4DC;   /* standard card / divider border */
@@ -99,19 +111,44 @@
     --muted-light:         #A8A29E;   /* lighter muted — tertiary / meta text */
 
     /* ── Header + drawer tokens (visual identity: independent of body palette) ──
-       Set to OPTION C1 — "exact secondary blue" (#0369A1, the --gold token).
-       Swap this block to retheme the top bar + slide-out menu only. */
-    --header-bg:      #0369A1;   /* exact secondary blue */
-    --header-text:    #FFE7C2;   /* warm cream mark for contrast on bright blue */
+       Set to OXBLOOD #6E2639, chosen from 8 solid options.
+       Swap this block to retheme the top bar + slide-out menu as a unit.
+       The drawer now derives from the header rather than repeating its hex, so
+       the two can't drift apart while the drawer waits to be retired (phase 6). */
+    --header-bg:      #6E2639;   /* oxblood */
+    --header-text:    #F7EEE8;   /* warm off-white on oxblood */
     --header-sub:     rgba(255,255,255,0.6);
-    --header-icon:    #FFE7C2;
+    --header-icon:    #F7EEE8;
     --header-border:  transparent;
-    --drawer-bg:      #0369A1;
-    --drawer-text:    #F1F7FB;
+    --drawer-bg:      var(--header-bg);
+    --drawer-text:    var(--header-text);
     --drawer-sub:     rgba(255,255,255,0.55);
-    --drawer-accent:  #FFD9C2;         /* warm active label / ticks on blue */
-    --drawer-active-bg: rgba(194,65,12,0.32);
+    --drawer-accent:  #FFD9C2;         /* warm active label / ticks */
+    --drawer-active-bg: rgba(255,255,255,0.14);   /* neutral wash — brand orange
+                                    at 32% went muddy against oxblood */
     --drawer-border:  rgba(255,255,255,0.12);
+
+    /* ── Milestone (DESIGN_SYSTEM §4) ──────────────────────────────────────────
+       A checkpoint is an event, not a lesson. --milestone deliberately derives
+       from --header-bg: it is the only place the header colour reappears in the
+       body of the app, and that shared value is what makes a checkpoint read as
+       an event. If the header is rethemed, milestone follows it on purpose —
+       but re-derive the tint and edge below by hand, they can't follow a var(). */
+    --milestone:       var(--header-bg);
+    --milestone-tint:  #FBF0F2;
+    --milestone-edge:  #EBD3D9;
+
+    /* ── Layout (DESIGN_SYSTEM §1.5) ───────────────────────────────────────────
+       --measure replaces the current 680 / 760 / 680 / 680 disagreement between
+       .content, .home-wrap, .path-list and .translate-wrap. Standardising those
+       call sites is phase 2; this only declares the token. */
+    --measure:      680px;       /* content column */
+    --measure-text: 68ch;        /* prose line-length cap */
+    --bar-h:        60px;        /* docked action bar */
+    --tabbar-h:     58px;        /* bottom tab bar */
+    --edge-emph:    3px;         /* the emphasis left rule — §3.2 */
+    --border:       1px solid var(--parchment-border);
+    --border-soft:  1px solid var(--parchment-deep);
   }
 
   * { box-sizing: border-box; margin: 0; padding: 0; }
