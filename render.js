@@ -419,115 +419,118 @@ function renderDashboard() {
   const next = dashboardNextUp();
   const heroHtml = renderDashboardHero(next);
 
-  // Path progress cards — Beginner + Intermediate only for now (Advanced has
-  // no content yet; once it does, this list naturally picks it up because it
+  // Path progress — Beginner + Intermediate only for now (Advanced has no
+  // content yet; this list picks it up automatically once it does, because it
   // walks store.paths rather than a hardcoded pair).
   const progressPaths = (store.paths || []).filter(p => !p.comingSoon && (p.key === 'beginner' || p.key === 'intermediate'));
-  const pathCardsHtml = progressPaths.map(p => renderDashboardPathCard(p)).join('');
+  const pathRowsHtml = progressPaths.map(p => renderDashboardPathRow(p)).join('');
 
   const rc = state.reviewBadge.liveCount;
   const reviewHtml = `
     <div class="section-label">To review</div>
-    <button class="dash-review-pill" id="dash-review-open">
-      <span class="dash-review-icon">📖</span>
-      <span class="dash-review-text">
-        <span class="dash-review-title">Word Review</span>
-        <span class="dash-review-sub">${rc > 0 ? `${rc} word${rc === 1 ? '' : 's'} flagged for practice` : 'Nothing flagged right now'}</span>
-      </span>
-      ${rc > 0 ? `<span class="dash-review-badge">${rc}</span>` : ''}
-    </button>`;
+    <div class="card card--interactive">
+      <button class="dash-row-link" id="dash-review-open">
+        <span class="dash-row-body">
+          <span class="dash-row-title">Word Review</span>
+          <span class="dash-row-sub">${rc > 0 ? `${rc} word${rc === 1 ? '' : 's'} flagged for practice` : 'Nothing flagged right now'}</span>
+        </span>
+        ${rc > 0 ? `<span class="dash-badge">${rc}</span>`
+                 : `<span class="dash-row-chev">${icon('arrowRight', 16)}</span>`}
+      </button>
+    </div>`;
 
   const tilesHtml = `
     <div class="section-label">Jump to</div>
     <div class="dash-tile-grid">
-      <button class="dash-tile dash-tile-topics" id="dash-tile-topics">
-        <span class="dash-tile-arrow">→</span>
-        <span class="dash-tile-icon-badge">📖</span>
+      <button class="card card--interactive dash-tile" id="dash-tile-topics">
         <span class="dash-tile-label">Topics</span>
-        <span class="dash-tile-desc">Vocabulary, sentences & conversations</span>
+        <span class="dash-tile-desc">Vocabulary, sentences and conversations</span>
       </button>
-      <button class="dash-tile dash-tile-translate" id="dash-tile-translate">
-        <span class="dash-tile-arrow">→</span>
-        <span class="dash-tile-icon-badge">🌐</span>
+      <button class="card card--interactive dash-tile" id="dash-tile-translate">
         <span class="dash-tile-label">Translate</span>
-        <span class="dash-tile-desc">AI-powered translation & breakdown</span>
+        <span class="dash-tile-desc">Translation and word breakdown</span>
       </button>
     </div>`;
 
   return `
     <div class="dash-wrap">
       ${heroHtml}
-      ${pathCardsHtml ? `<div class="section-label">Path progress</div><div class="dash-path-stack">${pathCardsHtml}</div>` : ''}
+      ${pathRowsHtml ? `<div class="section-label">Path progress</div><div class="card list">${pathRowsHtml}</div>` : ''}
       ${reviewHtml}
       ${tilesHtml}
     </div>`;
 }
 
+// The watermark character for a lesson hero: the first character of the
+// topic's first word — the word being studied, per the watermark rule. Returns
+// '' when the topic file isn't cached yet, so the hero degrades to no
+// watermark rather than to a placeholder.
+function dashHeroWatermark(topicKey) {
+  const r1 = (typeof store.roundData === 'function' && store.roundData(topicKey, 1)) || null;
+  const first = r1 && r1.words && r1.words[0];
+  const c = first && first.c ? String(first.c).trim() : '';
+  return c ? c[0] : '';
+}
+
 // The hero card. `next` is dashboardNextUp()'s return value (or null when every
 // path is complete, in which case a quiet completion state is shown instead).
+// No colour is passed in or injected: the 3px left rule carries the state, and
+// its colour comes from the modifier class.
 function renderDashboardHero(next) {
   if (!next) {
     return `
-      <div class="dash-hero dash-hero-done">
-        <div class="dash-hero-eyebrow">All caught up</div>
-        <div class="dash-hero-title">Every path is complete 🎉</div>
-        <div class="dash-hero-sub">Check back as new chapters are added, or revisit Review to keep things fresh.</div>
+      <div class="card dash-hero">
+        <div class="eyebrow">All caught up</div>
+        <div class="dash-hero-title">Every path is complete</div>
+        <p class="dash-hero-sub">Check back as new chapters are added, or revisit Review to keep things fresh.</p>
       </div>`;
   }
   const { pathKey, path, item } = next;
-  const pathLabel = `${path.icon} ${path.label}`;
 
   if (item.kind === 'checkpoint') {
     return `
-      <div class="dash-hero" style="--hero-c:${GOLD_HERO};--hero-c-deep:#8a6716" data-dash-hero-cp="${pathKey}" data-dash-hero-stage="${item.stageId}">
-        <div class="dash-hero-bg-char">字</div>
-        <div class="dash-hero-top-row">
-          <div class="dash-hero-eyebrow">Next up</div>
-          <div class="dash-hero-icon-badge">◆</div>
-        </div>
-        <div class="dash-hero-stage">${pathLabel} · Checkpoint</div>
+      <div class="card card--milestone dash-hero dash-hero--cp"
+           data-dash-hero-cp="${pathKey}" data-dash-hero-stage="${item.stageId}">
+        <div class="wm">站</div>
+        <div class="eyebrow eyebrow--milestone">Next up</div>
+        <div class="dash-hero-stage">${path.label} · Checkpoint</div>
         <div class="dash-hero-title">${item.stageName}</div>
-        <button class="dash-hero-cta">▶ Open checkpoint</button>
+        <button class="btn btn--milestone">Open checkpoint ${icon('arrowRight', 15)}</button>
       </div>`;
   }
 
-  // Lesson item — colour the hero from the actual topic's own colour, so the
-  // dashboard previews what's next rather than always looking the same.
   const meta = store.topicMeta(item.topic);
-  const color = (meta && meta.color) || BRAND_HERO;
   const tierLabel = item.tier > 1 ? `Tier ${item.tier}` : null;
+  const wm = dashHeroWatermark(item.topic);
   return `
-    <div class="dash-hero" style="--hero-c:${color};--hero-c-deep:${darkenHex(color, 0.22)}" data-dash-hero-topic="${item.topic}" data-dash-hero-tier="${item.tier}">
-      <div class="dash-hero-bg-char">字</div>
-      <div class="dash-hero-top-row">
-        <div class="dash-hero-eyebrow">Next up</div>
-        <div class="dash-hero-icon-badge">${meta ? meta.icon : '📖'}</div>
-      </div>
-      <div class="dash-hero-stage">${pathLabel}</div>
+    <div class="card card--emph dash-hero"
+         data-dash-hero-topic="${item.topic}" data-dash-hero-tier="${item.tier}">
+      ${wm ? `<div class="wm">${wm}</div>` : ''}
+      <div class="eyebrow">Next up</div>
+      <div class="dash-hero-stage">${path.label}</div>
       <div class="dash-hero-title">${meta ? meta.label : item.topic}${tierLabel ? `<span class="dash-hero-tier">${tierLabel}</span>` : ''}</div>
-      <button class="dash-hero-cta">▶ Resume lesson</button>
+      <button class="btn btn--primary">Resume lesson ${icon('arrowRight', 15)}</button>
     </div>`;
 }
 
-// One path's progress card. Beginner and Intermediate get distinct tinted
-// treatments (jade / gold) so they read as different paths, not duplicated cards.
-function renderDashboardPathCard(p) {
+// One path's progress, as a row of the shared list card. Two paths measured
+// identically are a set, so they share one form rather than getting a tinted
+// card each.
+function renderDashboardPathRow(p) {
   const total = p.lessons.length;
   const done = pathCompleteCount(p.key);
   const pct = total > 0 ? Math.round((done / total) * 100) : 0;
   const complete = total > 0 && done === total;
-  const tint = p.key === 'beginner' ? 'jade' : 'gold';
-  const barColor = p.key === 'beginner' ? 'var(--jade)' : 'var(--gold)';
   const sub = complete
     ? `Complete — all ${countPathChapters(p)} chapters`
     : `${total - done} lesson${(total - done) === 1 ? '' : 's'} to go`;
   return `
-    <div class="dash-path-card dash-path-card-${tint}" data-dash-path-open="${p.key}">
+    <div class="list-row" data-dash-path-open="${p.key}">
       <div class="dash-path-row">
-        <div class="dash-path-name">${p.icon} ${p.label} ${complete ? '<span class="dash-path-check">✓</span>' : ''}</div>
-        <div class="dash-path-frac dash-path-frac-${tint}">${done}/${total}</div>
+        <span class="dash-path-name">${p.label}${complete ? ` <span class="dash-path-check">${icon('check', 13)}</span>` : ''}</span>
+        <span class="dash-path-frac">${done}/${total}</span>
       </div>
-      <div class="dash-path-track"><div class="dash-path-fill" style="width:${pct}%;background:${barColor}"></div></div>
+      <div class="track"><i style="width:${pct}%"></i></div>
       <div class="dash-path-sub">${sub}</div>
     </div>`;
 }
@@ -539,9 +542,6 @@ function countPathChapters(p) {
   return stages.length || p.lessons.length;
 }
 
-// Brand-fallback colours for the hero when no topic colour is available.
-const BRAND_HERO = BRAND_ACCENT;
-const GOLD_HERO   = '#B7861E';
 
 // Darkens a #RRGGBB hex colour by `amount` (0-1) for the hero's gradient end —
 // mirrors what a CSS color-mix would do, kept dependency-free.
