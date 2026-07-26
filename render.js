@@ -177,7 +177,7 @@ function renderTranslate() {
 //   choices     - array of option word objects
 //   selected    - chosen choice INDEX, or null/undefined if unanswered
 //   direction   - 'zh-en' | 'en-zh' | 'listen-en'
-//   color       - accent colour (hex)
+//   variant     - optional; 'milestone' for checkpoint chrome (§4)
 //   idx, total  - question number / queue length (for the progress bar)
 //   ariaLabel   - aria-label for the direction toggle
 //   dirAttr     - data-attribute name for direction buttons (e.g. 'data-quiz-dir')
@@ -186,7 +186,7 @@ function renderTranslate() {
 //   replayId    - element id for the wrong-panel replay button
 //   nextId      - element id for the wrong-panel "next" button
 function renderQuizCore(opts) {
-  const { word: cw, choices, selected, direction, color, idx, total,
+  const { word: cw, choices, selected, direction, idx, total,
           ariaLabel, dirAttr, choiceAttr, listenId, replayId, nextId } = opts;
   const answered = selected !== null && selected !== undefined;
   const pct = (idx / total * 100).toFixed(0);
@@ -202,7 +202,7 @@ function renderQuizCore(opts) {
       ${dirs.map(d => {
         const active = direction === d.key;
         return `<button class="quiz-dir-btn${active ? ' active' : ''}" ${dirAttr}="${d.key}" title="${d.title}"
-          style="${active ? `background:${color};color:#fff;border-color:${color}` : `color:${color};border-color:${color}66`}">${d.label}</button>`;
+>${d.label}</button>`;
       }).join('')}
     </div>`;
 
@@ -210,24 +210,24 @@ function renderQuizCore(opts) {
   let promptCard;
   if (direction === 'en-zh') {
     promptCard = `
-      <div class="quiz-card" style="border:2px solid ${color}22">
+      <div class="quiz-card">
         <div class="quiz-label">Pick the Cantonese for:</div>
         <div class="quiz-prompt-en">${cw.e}</div>
       </div>`;
   } else if (direction === 'listen-en') {
     promptCard = `
-      <div class="quiz-card quiz-card-listen" style="border:2px solid ${color}22">
+      <div class="quiz-card quiz-card-listen">
         <div class="quiz-label">Listen — what does it mean?</div>
-        <button class="quiz-listen-big" id="${listenId}" style="background:${color}" aria-label="Play audio">${icon('volume',38)}</button>
-        <div class="quiz-listen-hint" style="color:${color}">Tap to replay</div>
+        <button class="quiz-listen-big" id="${listenId}" aria-label="Play audio">${icon('volume',38)}</button>
+        <div class="quiz-listen-hint">Tap to replay</div>
       </div>`;
   } else {
     promptCard = `
-      <div class="quiz-card" style="border:2px solid ${color}22">
+      <div class="quiz-card">
         <div class="quiz-label">What does this mean?</div>
         <div class="quiz-chinese">${cw.c}</div>
         <div class="quiz-jyutping">${colorJyutping(cw.j)}</div>
-        <button class="quiz-listen" id="${listenId}" style="border:1.5px solid ${color};color:${color}"><span class="icon-label">${iconPlay(13)} Listen</span></button>
+        <button class="quiz-listen" id="${listenId}"><span class="icon-label">${iconPlay(13)} Listen</span></button>
       </div>`;
   }
 
@@ -260,19 +260,19 @@ function renderQuizCore(opts) {
         <div class="quiz-wrong-jp">${colorJyutping(cw.j)}</div>
         <div class="quiz-wrong-en">${cw.e}</div>
         <div class="quiz-wrong-actions">
-          <button class="quiz-replay" id="${replayId}" style="border-color:${color};color:${color}"><span class="icon-label">${iconPlay(13)} Hear it again</span></button>
-          <button class="quiz-next" id="${nextId}" style="background:${color}"><span class="icon-label">Got it — next ${icon('arrowRight',14)}</span></button>
+          <button class="quiz-replay" id="${replayId}"><span class="icon-label">${iconPlay(13)} Hear it again</span></button>
+          <button class="quiz-next" id="${nextId}"><span class="icon-label">Got it — next ${icon('arrowRight',14)}</span></button>
         </div>
       </div>`;
   } else if (answered) {
     answerPanel = `<div class="quiz-correct-row">
         <span class="quiz-correct-msg"><span class="quiz-correct-tick">${icon('check',14)}</span>Correct!</span>
-        <button class="quiz-next" id="${nextId}" style="background:${color}"><span class="icon-label">Next ${icon('arrowRight',14)}</span></button>
+        <button class="quiz-next" id="${nextId}"><span class="icon-label">Next ${icon('arrowRight',14)}</span></button>
       </div>`;
   }
 
   return {
-    progressBar: `<div class="progress-bar"><div class="progress-fill" style="background:${color};width:${pct}%"></div></div>`,
+    progressBar: `<div class="track quiz-progress"><i style="width:${pct}%"></i></div>`,
     dirToggle,
     promptCard,
     choiceGrid: `<div class="choices">${choiceBtns}</div>`,
@@ -284,7 +284,7 @@ function renderQuizCore(opts) {
 // graduated / still learning — plus a "review N more" (or all-clear) and a
 // Done button. `still learning = reviewed - graduated`.
 function renderReviewDone(o) {
-  const color = o.color || BRAND_ACCENT;
+
   const stillLearning = Math.max(0, o.reviewed - o.graduated);
   const moreOrClear = o.liveCount > 0
     ? `<button class="review-start-btn" id="${o.againId}">Review ${Math.min(o.liveCount, REVIEW_SESSION_CAP)} more</button>`
@@ -295,7 +295,7 @@ function renderReviewDone(o) {
       <div class="result">
         <div class="result-emoji">${o.graduated > 0 ? '🌟' : '✅'}</div>
         <div class="review-done-stats">
-          <div class="rd-stat"><b style="color:${color}">${o.reviewed}</b><span>reviewed</span></div>
+          <div class="rd-stat"><b>${o.reviewed}</b><span>reviewed</span></div>
           <div class="rd-stat"><b style="color:var(--jade-bright)">${o.graduated}</b><span>graduated</span></div>
           <div class="rd-stat"><b style="color:var(--muted)">${stillLearning}</b><span>still learning</span></div>
         </div>
@@ -305,7 +305,7 @@ function renderReviewDone(o) {
             : `Keep going — get a ${o.noun} right 3 times to clear it.`}
         </div>
         ${moreOrClear}
-        <button class="back-btn" id="${o.exitId}" style="background:${color}"><span class="icon-label">${icon('arrowLeft',15)} Done</span></button>
+        <button class="back-btn" id="${o.exitId}"><span class="icon-label">${icon('arrowLeft',15)} Done</span></button>
       </div>
     </div>`;
 }
@@ -353,12 +353,10 @@ function renderWordReview() {
       </div>`;
   }
 
-  const color = BRAND_ACCENT;   // review uses the brand accent
-
   // --- Done state: session summary (shared stat screen) ---
   if (wr.done) {
     return renderReviewDone({
-      icon: '🗂️', title: 'Word Review', color,
+      icon: '🗂️', title: 'Word Review',
       reviewed: wr.reviewedThisSession,
       graduated: wr.graduatedThisSession,
       liveCount: state.reviewBadge.liveCount,
@@ -378,7 +376,7 @@ function renderWordReview() {
     choices:    wr.choices,
     selected:   wr.selected,
     direction:  wr.direction,
-    color:      color,
+
     idx:        wr.idx,
     total:      wr.queue.length,
     ariaLabel:  'Review direction',
@@ -541,7 +539,6 @@ function countPathChapters(p) {
   const stages = getPathStages(p.key);
   return stages.length || p.lessons.length;
 }
-
 
 // Darkens a #RRGGBB hex colour by `amount` (0-1) for the hero's gradient end —
 // mirrors what a CSS color-mix would do, kept dependency-free.
@@ -819,7 +816,7 @@ function renderCheckpointWords() {
     choices:    q.choices,
     selected:   q.selected,
     direction:  q.direction,
-    color:      CP_GOLD,
+
     idx:        q.idx,
     total:      q.pool.length,
     ariaLabel:  'Checkpoint words',
@@ -830,12 +827,12 @@ function renderCheckpointWords() {
     nextId:     'cpw-next',
   });
   return `
-    <div class="content">
+    <div class="content quiz-ms">
       <button class="back-home-btn" data-cp-act-back><span class="icon-label">${icon('arrowLeft',15)} Checkpoint</span></button>
       <div class="cp-activity-heading">📖 Words review</div>
       <div class="quiz-meta">
-        <span style="color:#888">Word ${q.idx+1} / ${q.pool.length}</span>
-        <span style="color:${CP_GOLD};font-weight:700">Score: ${q.score}</span>
+        <span class="quiz-count">Word ${q.idx+1} / ${q.pool.length}</span>
+        <span class="quiz-score">Score: ${q.score}</span>
       </div>
       ${core.progressBar}
       ${core.dirToggle}
@@ -1008,9 +1005,9 @@ function render() {
       mainContent = `
         <div class="content">
           ${headerEl}
-          ${renderRoundSelector(state.topic, color)}
-          ${renderLessonHeader(lesson, color)}
-          ${state.mode === 'quiz' ? renderQuiz(lesson, color) : state.tab === 'convo' ? renderConversation(color) : renderStudy(lesson, color)}
+          ${renderRoundSelector(state.topic)}
+          ${renderLessonHeader(lesson)}
+          ${state.mode === 'quiz' ? renderQuiz(lesson) : state.tab === 'convo' ? renderConversation(color) : renderStudy(lesson)}
         </div>`;
     }
   } else if (state.nav === 'dashboard') {
@@ -1216,13 +1213,12 @@ function renderHomeScreen() {
     </div>`;
 }
 
-function renderRoundSelector(topicKey, color) {
+function renderRoundSelector(topicKey) {
   const rounds = getAvailableRounds(topicKey);
   if (rounds.length <= 1) return '';   // Hide selector if only one round
   const btns = rounds.map(r => {
     const active = state.currentRound === r;
-    const style = active ? `background:${color};border-color:${color};color:#fff` : `border-color:${color};color:${color}`;
-    return `<button class="round-btn${active?' active':''}" data-round="${r}" style="${style}">Tier ${r}</button>`;
+    return `<button class="round-btn${active?' active':''}" data-round="${r}">Tier ${r}</button>`;
   }).join('');
   return `
     <div class="round-selector">
@@ -1235,15 +1231,12 @@ function renderTopics() {
   const btns = (store.index || []).map(l => {
     const key = l.key;
     const active = state.topic === key;
-    const style = active
-      ? `background:${BRAND_ACCENT};color:#fff;border-color:${BRAND_ACCENT}`
-      : `background:#fff;color:#555;border-color:#ddd`;
-    return `<button class="topic-btn${active?' active':''}" style="${style}" data-topic="${key}">${l.icon} ${l.label}</button>`;
+    return `<button class="topic-btn${active?' active':''}" data-topic="${key}">${l.icon} ${l.label}</button>`;
   }).join('');
   return `<div class="topics">${btns}</div>`;
 }
 
-function renderLessonHeader(lesson, color) {
+function renderLessonHeader(lesson) {
   const isQuiz = state.mode === 'quiz';
   // Three mutually-exclusive views: Words, Conversation, Quiz.
   // 'words' and 'convo' are state.tab values (with mode='study'); 'quiz' is mode='quiz'.
@@ -1251,22 +1244,19 @@ function renderLessonHeader(lesson, color) {
   const convoActive = !isQuiz && state.tab === 'convo';
   const segTabs = `
     <div class="subtabs">
-      <button class="subtab-btn${wordsActive?' active':''}" id="tab-words"
-        style="${wordsActive?'background:'+color:''}">
+      <button class="subtab-btn${wordsActive?' active':''}" id="tab-words">
         <span class="icon-label">${icon('bookOpen',14)} Learn</span>
       </button>
-      <button class="subtab-btn${convoActive?' active':''}" id="tab-convo"
-        style="${convoActive?'background:'+color:''}">
+      <button class="subtab-btn${convoActive?' active':''}" id="tab-convo">
         <span class="icon-label">${icon('messageCircle',14)} Chat</span>
       </button>
-      <button class="subtab-btn${isQuiz?' active':''}" id="tab-quiz"
-        style="${isQuiz?'background:'+color:''}">
+      <button class="subtab-btn${isQuiz?' active':''}" id="tab-quiz">
         <span class="icon-label">${icon('quiz',14)} Quiz</span>
       </button>
     </div>`;
   return `
     <div class="lesson-header lesson-header-stacked">
-      <h2 class="lesson-title" style="color:${color}">${lesson.icon} ${lesson.label}</h2>
+      <h2 class="lesson-title">${lesson.label}</h2>
       <div class="lesson-count">${getRoundWords(state.topic, state.currentRound).length} words</div>
     </div>
     ${segTabs}`;
@@ -1511,7 +1501,7 @@ function renderConversation(color) {
     ${bubbles}`;
 }
 
-function renderSentences(topic, color) {
+function renderSentences(topic) {
   const sentences = getRoundSentences(topic, state.currentRound);
   if (!sentences.length) return '';
   const items = sentences.map((s, i) => {
@@ -1556,7 +1546,6 @@ function renderSentences(topic, color) {
             ${chips}
           </div>
           <button class="sentence-play${speaking ? ' speaking' : ''}" data-sent="${i}"
-            style="border-color:${color};color:${speaking ? THEME.cardInverseText : color};background:${speaking ? color : 'transparent'}"
             title="Listen to sentence">
             ${speaking ? icon('volume',20) : iconPlay(18)}
           </button>
@@ -1572,18 +1561,11 @@ function renderSentences(topic, color) {
     </div>`;
 }
 
-function renderStudy(lesson, color) {
+function renderStudy(lesson) {
   const words = getRoundWords(state.topic, state.currentRound);
   const cards = words.map((w, i) => {
     const flipped = state.flipped[i];
     const speaking = state.speaking === i;
-    const cardBg  = flipped ? color : THEME.cardSurface;
-    const cardShadow = flipped ? `0 4px 20px ${color}44` : '0 2px 6px rgba(0,0,0,0.06)';
-    // Speak button: when playing, it fills with `color` so the icon must be light to stay visible.
-    // When idle, it's a transparent button so the icon takes the topic colour.
-    const btnBg     = speaking ? color : 'transparent';
-    const btnBorder = flipped ? 'rgba(255,255,255,0.6)' : color;
-    const btnColor  = speaking ? THEME.cardInverseText : (flipped ? THEME.cardInverseText : color);
     const inner = flipped
       ? `<div class="card-english">${w.e}</div>`
       : `<div class="card-study-inner">
@@ -1592,11 +1574,9 @@ function renderStudy(lesson, color) {
            <div class="card-hint">tap to reveal</div>
          </div>`;
     return `
-      <div class="word-card${flipped?' flipped':''}" data-card="${i}"
-        style="background:${cardBg};border-color:${color};box-shadow:${cardShadow}">
+      <div class="word-card${flipped?' flipped':''}" data-card="${i}">
         ${inner}
-        <button class="speak-btn${speaking?' speaking':''}" data-speak="${i}"
-          style="background:${btnBg};border:1.5px solid ${btnBorder};color:${btnColor}" title="Listen">
+        <button class="speak-btn${speaking?' speaking':''}" data-speak="${i}" title="Listen">
           ${speaking ? icon('volume',18) : iconPlay(16)}
         </button>
       </div>`;
@@ -1615,14 +1595,14 @@ function renderStudy(lesson, color) {
     ${(() => {
       const note = getRoundNote(state.topic, state.currentRound);
       return note
-        ? `<div class="lesson-note" style="border-left-color:${color}">
-             <div class="lesson-note-title" style="color:${color}">📌 About this lesson</div>
+        ? `<div class="lesson-note">
+             <div class="lesson-note-title">About this lesson</div>
              <div class="lesson-note-body">${note}</div>
            </div>`
         : '';
     })()}
     <div class="word-grid">${cards}</div>
-    ${renderSentences(state.topic, color)}
+    ${renderSentences(state.topic)}
     <div class="tone-guide">
       <h3>📖 Jyutping Tone Guide</h3>
       <div class="tone-grid">${toneRows}</div>
@@ -1630,7 +1610,7 @@ function renderStudy(lesson, color) {
     </div>`;
 }
 
-function renderQuiz(lesson, color) {
+function renderQuiz(lesson) {
   const q = state.quiz;
   if (!q) return '';
 
@@ -1651,25 +1631,25 @@ function renderQuiz(lesson, color) {
               : '—';
             return `
             <div class="quiz-review-item">
-              <button class="quiz-review-play" data-quiz-review-play="${w.word.id}" style="border-color:${color};color:${color}" aria-label="Listen">${iconPlay(15)}</button>
+              <button class="quiz-review-play" data-quiz-review-play="${w.word.id}" aria-label="Listen">${iconPlay(15)}</button>
               <div class="quiz-review-body">
                 <div class="quiz-review-chinese">${w.word.c}</div>
                 <div class="quiz-review-jp">${colorJyutping(w.word.j)}</div>
-                <div class="quiz-review-en"><span style="color:#27AE60">${w.word.e}</span></div>
-                <div class="quiz-review-chose">You chose: <span style="color:#E74C3C">${chosenLabel}</span></div>
+                <div class="quiz-review-en"><span class="qr-correct">${w.word.e}</span></div>
+                <div class="quiz-review-chose">You chose: <span class="qr-chosen">${chosenLabel}</span></div>
               </div>
             </div>`;
           }).join('')}
-          <button class="quiz-retry-btn" id="quiz-retry-missed" style="background:${color}"><span class="icon-label">${icon('refresh',15)} Retry missed words</span></button>
+          <button class="quiz-retry-btn" id="quiz-retry-missed"><span class="icon-label">${icon('refresh',15)} Retry missed words</span></button>
         </div>`
       : '';
 
     return `
       <div class="result">
         <div class="result-emoji">${emoji}</div>
-        <div class="result-score" style="color:${color}">${q.score} / ${q.queue.length} correct</div>
+        <div class="result-score">${q.score} / ${q.queue.length} correct</div>
         <div class="result-msg">${msg}</div>
-        <button class="back-btn" id="quiz-back" style="background:${color}"><span class="icon-label">${icon('arrowLeft',15)} Back to Lesson</span></button>
+        <button class="back-btn" id="quiz-back"><span class="icon-label">${icon('arrowLeft',15)} Back to Lesson</span></button>
         ${reviewList}
       </div>`;
   }
@@ -1682,7 +1662,7 @@ function renderQuiz(lesson, color) {
     choices:    q.choices,
     selected:   q.selected,
     direction:  q.direction,
-    color:      color,
+
     idx:        q.idx,
     total:      q.queue.length,
     ariaLabel:  'Quiz direction',
@@ -1695,8 +1675,8 @@ function renderQuiz(lesson, color) {
 
   return `
     <div class="quiz-meta">
-      <span style="color:#888">Question ${q.idx+1} / ${q.queue.length}</span>
-      <span style="color:${color};font-weight:700">Score: ${q.score}</span>
+      <span class="quiz-count">Question ${q.idx+1} / ${q.queue.length}</span>
+      <span class="quiz-score">Score: ${q.score}</span>
     </div>
     ${core.progressBar}
     ${core.dirToggle}
