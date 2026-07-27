@@ -1270,15 +1270,15 @@ function renderSpeakBreakdown(heard, targetC, targetJ) {
     const m = marks[idx] || { status: 'missing' };
     const bad = m.status !== 'match';
     const tone = jpArr[idx].match(/[1-6]/);
-    const toneColor = tone ? TONES[tone[0]].color : '#777';
-    const charColor = bad ? '#8B3A4E' : '#2A2422';
-    const jpColor   = bad ? '#8B3A4E' : toneColor;
+    const toneColor = tone ? TONES[tone[0]].color : 'var(--muted-dark)';
+    const charColor = bad ? 'var(--feedback-bad)' : 'var(--ink)';
+    const jpColor   = bad ? 'var(--feedback-bad)' : toneColor;
     const mark = m.status === 'match'   ? '✓'
                : m.status === 'wrong'   ? m.heardChar
                : '·';   // missing
-    const markStyle = m.status === 'match' ? 'color:#27AE60;font-weight:700;'
-                    : m.status === 'wrong' ? 'color:#8B3A4E;font-weight:700;font-size:14px;'
-                    : 'color:#E74C3C;font-weight:700;';
+    const markStyle = m.status === 'match' ? 'color:var(--feedback-good-text);font-weight:600;'
+                    : m.status === 'wrong' ? 'color:var(--feedback-bad);font-weight:600;font-size:14px;'
+                    : 'color:var(--muted-dark);font-weight:600;';
     return `<div class="bd-col">
       <div class="bd-char" style="color:${charColor}">${c}</div>
       <div class="bd-status" style="${markStyle}">${mark}</div>

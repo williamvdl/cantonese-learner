@@ -891,8 +891,8 @@ function renderCheckpointConvo() {
   const stage = getStage(cpState.pathKey, cpState.stageId);
   const convo = activeConvoSource();
   const body = convo
-    ? renderConversation(CP_GOLD)
-    : '<p style="color:#aaa;padding:20px 0">No conversation authored for this stage yet.</p>';
+    ? renderConversation()
+    : '<p class="convo-empty">No conversation authored for this stage yet.</p>';
   const doneFlag = checkpointActivityDone(cpState.pathKey, cpState.cpId, 'convo');
   return `
     <div class="content cp-convo">
@@ -1007,7 +1007,7 @@ function render() {
           ${headerEl}
           ${renderRoundSelector(state.topic)}
           ${renderLessonHeader(lesson)}
-          ${state.mode === 'quiz' ? renderQuiz(lesson) : state.tab === 'convo' ? renderConversation(color) : renderStudy(lesson)}
+          ${state.mode === 'quiz' ? renderQuiz(lesson) : state.tab === 'convo' ? renderConversation() : renderStudy(lesson)}
         </div>`;
     }
   } else if (state.nav === 'dashboard') {
@@ -1262,16 +1262,13 @@ function renderLessonHeader(lesson) {
     ${segTabs}`;
 }
 
-function renderConversation(color) {
+function renderConversation() {
   const convo = activeConvoSource();
-  if (!convo) return '<p style="color:#aaa;padding:20px 0">No conversation for this topic yet.</p>';
+  if (!convo) return '<p class="convo-empty">No conversation for this topic yet.</p>';
   const cv = state.convo;
   const lines = convo.lines;
 
   // ── Control bar ──
-  const playAllStyle = cv.playingLine !== null
-    ? `background:${color};color:#fff;border-color:${color}`
-    : '';
   const gapOn    = cv.convMode === 'gap';
   const speakOn  = cv.convMode === 'speak';
   // Checkpoint consolidation convo is read + speak only (no Fill-the-Gap), to
@@ -1282,19 +1279,16 @@ function renderConversation(color) {
   // throws a TypeError that corrupts the event-listener state for the whole page.
   const hasGapLines = lines.some(l => l.u && Array.isArray(l.opts) && l.opts.length > 0);
   const gapBtnHtml = (inCheckpointConvo || !hasGapLines) ? '' : `
-      <button class="convo-ctrl-btn${gapOn?' on':''}" id="gap-mode-btn"
-        style="${gapOn?'background:'+color+';color:#fff;border-color:'+color:''}">
+      <button class="convo-ctrl-btn${gapOn?' on':''}" id="gap-mode-btn">
         🧩 Fill-the-Gap
       </button>`;
   const controls = `
     <div class="convo-controls">
-      <button class="convo-ctrl-btn${cv.playingLine!==null?' on':''}" id="play-all-btn"
-        style="${cv.playingLine!==null?'background:'+color+';color:#fff;border-color:'+color:'border-color:'+color+';color:'+color}">
+      <button class="convo-ctrl-btn${cv.playingLine!==null?' on':''}" id="play-all-btn">
         <span class="icon-label">${cv.playingLine!==null ? icon('stop',15) : iconPlay(14)} ${cv.playingLine!==null ? 'Stop' : 'Play All'}</span>
       </button>
       ${gapBtnHtml}
-      <button class="convo-ctrl-btn${speakOn?' on':''}" id="speak-mode-btn"
-        style="${speakOn?'background:'+color+';color:#fff;border-color:'+color:''}">
+      <button class="convo-ctrl-btn${speakOn?' on':''}" id="speak-mode-btn">
         🎙 Speak
       </button>
     </div>`;
@@ -1304,7 +1298,7 @@ function renderConversation(color) {
     const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
     if (!SpeechRec) {
       return `
-        <div class="convo-scenario">📍 ${convo.title}</div>
+        <div class="convo-scenario">${convo.title}</div>
         ${controls}
         <div class="speak-unsupported">
           <div style="font-size:24px;margin-bottom:8px">🎙</div>
@@ -1343,7 +1337,7 @@ function renderConversation(color) {
             <div>Expected: <strong>${line.c}</strong></div>
             ${breakdown
               ? breakdown
-              : `<div style="font-size:12px;color:#666;margin-top:2px">${colorJyutping(line.j)}</div>`}
+              : `<div class="speak-heard-jp">${colorJyutping(line.j)}</div>`}
           </div>`;
         })()
       : '';
@@ -1354,28 +1348,27 @@ function renderConversation(color) {
 
     const englishEl = cv.speakRevealed[step]
       ? `<div class="speak-target-en">${line.e}</div>`
-      : `<div class="speak-target-en speak-eng-hint" data-speak-reveal="${step}" style="font-style:italic;color:#bbb;cursor:pointer">tap to see English</div>`;
+      : `<div class="speak-target-en speak-eng-hint" data-speak-reveal="${step}">tap to see English</div>`;
 
     return `
-      <div class="convo-scenario">📍 ${convo.title}</div>
+      <div class="convo-scenario">${convo.title}</div>
       ${controls}
       <div class="speak-nav">
         <span>Line ${step+1} of ${lines.length}</span>
-        <span style="color:${color};font-weight:700">${isUser?'🗣 Your turn':'👂 Listen'}</span>
+        <span class="speak-turn">${isUser?'🗣 Your turn':'👂 Listen'}</span>
       </div>
-      <div class="speak-card" style="border-color:${color}">
+      <div class="speak-card">
         <div class="speak-prompt">${spkName}</div>
         <div class="speak-target-zh">${line.c}</div>
         <div class="speak-target-jp">${colorJyutping(line.j)}</div>
         ${englishEl}
         ${isUser ? `
-          <button class="mic-btn ${status==='listening'?'listening':'idle'}" id="mic-btn"
-            style="color:${status==='listening'?BRAND_ACCENT:color};border:3px solid ${status==='listening'?BRAND_ACCENT:color}">
+          <button class="mic-btn ${status==='listening'?'listening':'idle'}" id="mic-btn">
             ${status==='listening'?'🔴':'🎙'}
           </button>
           <div class="speak-status">${statusText}</div>
           ${status==='listening' ? `
-            <button class="speak-action-btn primary" id="speak-stop-btn" style="background:#E74C3C;color:#fff;margin-bottom:14px">
+            <button class="speak-action-btn stop" id="speak-stop-btn">
               ⏹ Stop & Check
             </button>
           ` : ''}
@@ -1383,8 +1376,7 @@ function renderConversation(color) {
           ${result}
         ` : `
           <div class="speak-actions">
-            <button class="speak-action-btn primary" id="speak-listen-btn"
-              style="background:${playing?color+'cc':color};color:#fff">
+            <button class="speak-action-btn primary${playing?' playing':''}" id="speak-listen-btn">
               <span class="icon-label">${playing ? icon('volume',16) : iconPlay(14)} ${playing ? 'Playing…' : 'Listen'}</span>
             </button>
           </div>
@@ -1393,17 +1385,17 @@ function renderConversation(color) {
         <div class="speak-actions">
           ${isUser && status === 'mismatch' ? `
             <button class="speak-action-btn secondary" id="speak-retry"><span class="icon-label">${icon('refresh',14)} Try Again</span></button>
-            <button class="speak-action-btn primary" id="speak-skip"  style="background:${color};color:#fff"><span class="icon-label">Skip ${icon('arrowRight',14)}</span></button>
+            <button class="speak-action-btn primary" id="speak-skip"><span class="icon-label">Skip ${icon('arrowRight',14)}</span></button>
           ` : ''}
           ${(isUser && status === 'matched') || !isUser ? `
-            <button class="speak-action-btn primary" id="speak-next" style="background:${color};color:#fff">
+            <button class="speak-action-btn primary" id="speak-next">
               ${isLast ? "<span class=\"icon-label\">" + icon('refresh',14) + " Restart</span>" : "<span class=\"icon-label\">Next " + icon('arrowRight',14) + "</span>"}
             </button>
           ` : ''}
         </div>
         ` : ''}
       </div>
-      ${isUser && status === 'idle' ? `<p style="font-size:11px;color:#aaa;text-align:center;margin-top:6px">📱 Allow microphone access if prompted</p>` : ''}`;
+      ${isUser && status === 'idle' ? `<p class="speak-mic-note">Allow microphone access if prompted</p>` : ''}`;
   }
 
   // ── Read / Gap mode ──
@@ -1411,9 +1403,7 @@ function renderConversation(color) {
     const isUser   = line.u;
     const side     = isUser ? 'right' : 'left';
     const spkName  = isUser ? convo.speakers[1] : convo.speakers[0];
-    const bubbleBg = isUser ? color : THEME.bubbleBg;
     const playing  = cv.playingLine === i;
-    const playColor = isUser ? 'rgba(255,255,255,0.8)' : color;
 
     // Gap mode: hide user lines until answered. Guard against pre-spec convos
     // where u:true lines have no opts array — those render as normal bubbles.
@@ -1429,7 +1419,7 @@ function renderConversation(color) {
           <div class="bubble-row ${side}">
             <div class="bubble-wrap">
               <div class="bubble-name">${spkName}</div>
-              <div class="bubble" style="background:${bubbleBg}22;border:2px dashed ${color}88">
+              <div class="bubble bubble--gap">
                 <div class="gap-prompt">👆 What would you say?</div>
                 <div class="gap-options">${opts}</div>
               </div>
@@ -1438,16 +1428,14 @@ function renderConversation(color) {
       } else {
         // Show answered line with result highlight
         const correct = answered === line.c;
-        const hlColor = correct ? '#d4edda' : '#f8d7da';
-        const hlBorder = correct ? '#15803D' : BRAND_ACCENT;
         return `
           <div class="bubble-row ${side}">
             <div class="bubble-wrap">
               <div class="bubble-name">${spkName} ${correct?'✓':'✗'}</div>
-              <div class="bubble" style="background:${hlColor};border:2px solid ${hlBorder}">
-                <div class="bubble-chinese" style="color:#2A2422">${line.c}</div>
+              <div class="bubble bubble--${correct?'correct':'wrong'}">
+                <div class="bubble-chinese">${line.c}</div>
                 <div class="bubble-jyutping">${colorJyutping(line.j)}</div>
-                <div class="bubble-english" style="color:#555">${line.e}</div>
+                <div class="bubble-english">${line.e}</div>
               </div>
             </div>
           </div>`;
@@ -1458,8 +1446,8 @@ function renderConversation(color) {
     const revealed = cv.bubbleRevealed[i];
     const bdOpen   = cv.breakdownOpen[i];
     const engHtml  = revealed
-      ? `<div class="bubble-english" style="margin-top:4px">${line.e}</div>`
-      : `<div class="bubble-eng-hint" style="font-size:11px;opacity:0.5;margin-top:4px;font-style:italic">tap to see English</div>`;
+      ? `<div class="bubble-english">${line.e}</div>`
+      : `<div class="bubble-eng-hint">tap to see English</div>`;
     const bdPanel  = (bdOpen && line.bd) ? `
       <div class="breakdown-panel">
         ${line.bd.map(w => `
@@ -1469,23 +1457,21 @@ function renderConversation(color) {
             <span class="breakdown-en">${w.e}</span>
           </div>`).join('')}
       </div>` : '';
-    const bdBtnColor = isUser ? 'rgba(255,255,255,0.7)' : color;
     const bdBtn = line.bd ? `
-      <button class="breakdown-btn" data-breakdown="${i}" style="color:${bdBtnColor}">
+      <button class="breakdown-btn" data-breakdown="${i}">
         ${bdOpen ? '▲ hide breakdown' : '🔍 word breakdown'}
       </button>` : '';
     return `
       <div class="bubble-row ${side}">
         <div class="bubble-wrap">
           <div class="bubble-name">${spkName}</div>
-          <div class="bubble" data-reveal="${i}" style="cursor:pointer;background:${bubbleBg};${playing?'box-shadow:0 0 0 3px '+color+'66':''}">
-            <div class="bubble-chinese" style="${isUser?'color:#fff':''}">${line.c}</div>
+          <div class="bubble bubble--tappable${playing?' is-playing':''}" data-reveal="${i}">
+            <div class="bubble-chinese">${line.c}</div>
             <div class="bubble-jyutping">${colorJyutping(line.j)}</div>
             ${engHtml}
             <div class="bubble-play-row">
               ${bdBtn}
-              <button class="bubble-play" data-bubble="${i}"
-                style="border-color:${playColor};color:${playing?(isUser?color:THEME.bubbleBg):playColor};background:${playing?playColor:'transparent'}">
+              <button class="bubble-play${playing?' is-playing':''}" data-bubble="${i}">
                 ${playing ? icon('volume',20) : iconPlay(18)}
               </button>
             </div>
@@ -1496,7 +1482,7 @@ function renderConversation(color) {
   }).join('');
 
   return `
-    <div class="convo-scenario">📍 ${convo.title}</div>
+    <div class="convo-scenario">${convo.title}</div>
     ${controls}
     ${bubbles}`;
 }

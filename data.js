@@ -1,17 +1,12 @@
 // ===================================================================
-// data.js — THEME, icons, data store, storage module
-// Loaded FIRST. Defines: THEME, ICON_PATHS, icon(), iconPlay(), store, storage.
+// data.js — icons, data store, storage module
+// Loaded FIRST. Defines: ICON_PATHS, icon(), iconPlay(), store, storage.
 // ===================================================================
 
 // Single brand accent used for all topic/lesson UI colouring. Category colours
 // are intentionally dropped (see topicMeta). Keep this in sync with CSS --brand.
 const BRAND_ACCENT = '#C2410C';
 
-const THEME = {
-  cardSurface:    '#FFFFFF',  // card bg (unflipped) — Scholar white surface
-  cardInverseText:'#FFFFFF',  // text colour when card is flipped (on coloured bg)
-  bubbleBg:       '#FFFFFF',  // non-user bubble background
-};
 
 // ── Icon System ──────────────────────────────────────────────────────────────
 // Inline SVG icons (Lucide, MIT licensed) for app chrome — play, back, info, etc.
