@@ -121,8 +121,8 @@ function renderTranslate() {
         <textarea class="translate-input" id="translate-input" placeholder="${placeholder}" rows="3">${tr.inputText.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}</textarea>
         ${listening ? '<div class="translate-listening-hint">🎙 Listening… speak now, then tap mic to stop</div>' : ''}
         <div class="translate-input-actions">
-          <button class="translate-mic ${listening?'listening':''}" id="translate-mic" title="${listening?'Stop listening':'Speak instead of typing'}">
-            ${listening?'🔴':'🎙'}
+          <button class="btn-icon btn-icon--brand translate-mic ${listening?'listening':''}" id="translate-mic" title="${listening?'Stop listening':'Speak instead of typing'}">
+            ${icon('mic', 18)}
           </button>
           ${tr.inputText ? '<button class="translate-clear" id="translate-clear">Clear</button>' : ''}
           <button class="translate-go" id="translate-go" ${tr.loading ? 'disabled' : ''}>
@@ -210,20 +210,20 @@ function renderQuizCore(opts) {
   let promptCard;
   if (direction === 'en-zh') {
     promptCard = `
-      <div class="quiz-card">
+      <div class="card quiz-card">
         <div class="quiz-label">Pick the Cantonese for:</div>
         <div class="quiz-prompt-en">${cw.e}</div>
       </div>`;
   } else if (direction === 'listen-en') {
     promptCard = `
-      <div class="quiz-card quiz-card-listen">
+      <div class="card quiz-card quiz-card-listen">
         <div class="quiz-label">Listen — what does it mean?</div>
         <button class="quiz-listen-big" id="${listenId}" aria-label="Play audio">${icon('volume',38)}</button>
         <div class="quiz-listen-hint">Tap to replay</div>
       </div>`;
   } else {
     promptCard = `
-      <div class="quiz-card">
+      <div class="card quiz-card">
         <div class="quiz-label">What does this mean?</div>
         <div class="quiz-chinese">${cw.c}</div>
         <div class="quiz-jyutping">${colorJyutping(cw.j)}</div>
@@ -237,7 +237,7 @@ function renderQuizCore(opts) {
   const choiceBtns = choices.map((c, i) => {
     const isCorrect = c === cw;                 // object identity — exact option
     const isChosen  = selected === i;
-    let cls = 'choice-btn';
+    let cls = 'card choice-btn';
     if (direction === 'en-zh') cls += ' choice-btn-zh';
     if (answered) {
       if (isCorrect) cls += ' correct'; else if (isChosen) cls += ' wrong';
@@ -540,17 +540,6 @@ function countPathChapters(p) {
   return stages.length || p.lessons.length;
 }
 
-// Darkens a #RRGGBB hex colour by `amount` (0-1) for the hero's gradient end —
-// mirrors what a CSS color-mix would do, kept dependency-free.
-function darkenHex(hex, amount) {
-  const h = hex.replace('#', '');
-  if (h.length !== 6) return hex;
-  const r = Math.round(parseInt(h.slice(0,2),16) * (1 - amount));
-  const g = Math.round(parseInt(h.slice(2,4),16) * (1 - amount));
-  const b = Math.round(parseInt(h.slice(4,6),16) * (1 - amount));
-  const toHex = n => Math.max(0, Math.min(255, n)).toString(16).padStart(2, '0');
-  return `#${toHex(r)}${toHex(g)}${toHex(b)}`;
-}
 
 function renderLearningPath() {
   if (state.pathView === 'timeline') {
@@ -573,7 +562,7 @@ function renderPathList() {
       const done = pathCompleteCount(p.key);
       const pct = total > 0 ? Math.round((done / total) * 100) : 0;
       const locked = !!p.comingSoon;
-      const cardCls = 'path-card' + (locked ? ' locked' : '');
+      const cardCls = 'card path-card' + (locked ? ' locked' : '');
       const dataAttr = locked ? '' : `data-path-open="${p.key}"`;
       const badge = locked
         ? `<span class="path-card-badge coming">Coming Soon</span>`
@@ -625,7 +614,7 @@ function renderPathStep(pathKey, l, displayNum, nextPos) {
         <div class="path-step-line"></div>
       </div>
       <div class="path-step-body">
-        <div class="path-step-card" data-path-lesson="${l.topic}" data-path-tier="${tier}">
+        <div class="card path-step-card" data-path-lesson="${l.topic}" data-path-tier="${tier}">
           ${nextBadge}
           <div class="path-step-row">
             <span class="path-step-icon">${lesson.icon}</span>
@@ -656,7 +645,7 @@ function renderCheckpointNode(pathKey, stage, nextPos) {
         <div class="path-step-line"></div>
       </div>
       <div class="path-step-body">
-        <div class="path-step-card cp-card" data-cp-open="${stage.id}">
+        <div class="card card--milestone path-step-card cp-card" data-cp-open="${stage.id}">
           ${nextBadge}
           <div class="path-step-row">
             <span class="path-step-icon">◆</span>
@@ -756,7 +745,7 @@ function renderCheckpointHub() {
       ? `<span class="cp-act-done">✓ Done</span>`
       : `<span class="cp-act-go">›</span>`;
     return `
-      <button class="cp-act-card" data-cp-act="${act}">
+      <button class="card cp-act-card" data-cp-act="${act}">
         <span class="cp-act-icon">${m.icon}</span>
         <span class="cp-act-body">
           <span class="cp-act-name">${m.name} <span class="cp-act-tag">${m.tag}</span></span>
@@ -856,11 +845,11 @@ function renderCheckpointDone(opts) {
     </div>` : '';
 
   const missedBlock = missedItems.length ? `
-    <div class="cp-missed">
+    <div class="card cp-missed">
       <div class="cp-missed-lbl">Worth another look</div>
       ${missedItems.map(m => `
         <div class="cp-missed-item">
-          <button class="play-mini" data-cp-say="${m.id}">${iconPlay(12)}</button>
+          <button class="btn-icon btn-icon--brand btn-icon--compact" data-cp-say="${m.id}" aria-label="Listen">${iconPlay(14)}</button>
           <div><div class="cp-missed-c">${m.c}</div><div class="cp-missed-j">${colorJyutping(m.j)}</div></div>
           <span class="cp-missed-e">${m.e}</span>
         </div>`).join('')}
@@ -928,7 +917,7 @@ function render() {
       <div class="content"><div style="padding:40px 20px;text-align:center;color:#888;font-size:14px;">Loading topic…</div></div>
       ${renderDrawer()}
     `;
-    attachEvents(null, null);
+    attachEvents(null);
     store.loadTopic(state.topic).then(render).catch(err => {
       console.error('[topic load]', err);
       app.innerHTML = `
@@ -936,7 +925,7 @@ function render() {
         <div class="content"><div class="fatal-msg">Couldn't load topic. Check console.</div></div>
         ${renderDrawer()}
       `;
-      attachEvents(null, null);
+      attachEvents(null);
     });
     return;
   }
@@ -952,7 +941,7 @@ function render() {
           <div class="content"><div style="padding:40px 20px;text-align:center;color:#888;font-size:14px;">Loading path…</div></div>
           ${renderDrawer()}
         `;
-        attachEvents(null, null);
+        attachEvents(null);
         store.loadTopics(missing).then(render).catch(err => {
           console.error('[path load]', err);
         });
@@ -974,7 +963,7 @@ function render() {
           <div class="content"><div style="padding:40px 20px;text-align:center;color:#888;font-size:14px;">Loading checkpoint…</div></div>
           ${renderDrawer()}
         `;
-        attachEvents(null, null);
+        attachEvents(null);
         store.loadTopics(missing).then(render).catch(err => console.error('[checkpoint load]', err));
         return;
       }
@@ -982,7 +971,6 @@ function render() {
   }
 
   const lesson = needsTopic ? lessonShape(state.topic) : null;
-  const color  = lesson ? lesson.color : null;
 
   let mainContent = '';
   // A checkpoint hub or activity takes over the screen (launched from the path
@@ -995,7 +983,7 @@ function render() {
     mainContent = renderCheckpointHub();
   } else if (state.nav === 'topics') {
     if (state.homeView) {
-      mainContent = `${renderHomeScreen()}`;
+      mainContent = `${renderTopicsScreen()}`;
     } else {
       const ctx = getPathContext();
       const headerEl = ctx
@@ -1026,7 +1014,7 @@ function render() {
     ${renderDrawer()}
   `;
 
-  attachEvents(lesson, color);
+  attachEvents(lesson);
 }
 
 // Unified page-section header — used by Topics, Learning Path, Review, Translate
@@ -1052,7 +1040,7 @@ function renderHeader() {
           <span class="en">Cantonese Learner</span>
         </div>
         <div class="header-actions">
-          <button class="header-info-btn${detailsOpen ? ' open' : ''}" id="header-info-toggle" aria-label="Show tone reference" aria-expanded="${detailsOpen}">
+          <button class="btn-icon btn-icon--header header-info-btn${detailsOpen ? ' open' : ''}" id="header-info-toggle" aria-label="Show tone reference" aria-expanded="${detailsOpen}">
             <span class="header-info-icon">${detailsOpen ? icon('close', 17) : icon('info', 17)}</span>
           </button>
           <button class="hamburger" id="hamburger-btn" aria-label="Menu">
@@ -1128,7 +1116,7 @@ function renderPathBanner(ctx) {
   }
 
   return `
-    <div class="path-banner">
+    <div class="card path-banner">
       <div class="path-banner-row">
         <button class="path-banner-back" id="back-home-btn" aria-label="Back to Learning Path">${icon('arrowLeft',20)}</button>
         <div class="path-banner-text">
@@ -1178,7 +1166,7 @@ function renderTopicCard(topicKey) {
   const pips = rounds.map(r => `<span class="topic-card-pip"></span>`).join('') +
                (rounds.length < 3 ? `<span class="topic-card-pip empty"></span>`.repeat(3 - rounds.length) : '');
   return `
-    <div class="topic-card" data-topic-card="${topicKey}" tabindex="0">
+    <div class="card topic-card" data-topic-card="${topicKey}" tabindex="0">
       <div class="topic-card-icon">${lesson.icon}</div>
       <div class="topic-card-label">${lesson.label}</div>
       <div class="topic-card-meta">${rounds.length} tier${rounds.length>1?'s':''} · ${wordCount} words</div>
@@ -1186,7 +1174,7 @@ function renderTopicCard(topicKey) {
     </div>`;
 }
 
-function renderHomeScreen() {
+function renderTopicsScreen() {
   const filter = state.selectedCategory;
   const sections = store.categoryList
     .filter(cat => filter === 'all' || filter === cat.key)
@@ -1205,7 +1193,7 @@ function renderHomeScreen() {
     }).join('');
 
   return `
-    <div class="home-wrap">
+    <div class="topics-wrap">
       ${renderPageHeader('📖', 'Topics', 'Choose a category and topic to start learning')}
       ${renderCategoryFilter()}
       ${sections}
@@ -1470,8 +1458,8 @@ function renderConversation() {
             ${engHtml}
             <div class="bubble-play-row">
               ${bdBtn}
-              <button class="bubble-play${playing?' is-playing':''}" data-bubble="${i}">
-                ${playing ? icon('volume',20) : iconPlay(18)}
+              <button class="btn-icon btn-icon--brand btn-icon--compact bubble-play${playing?' is-playing':''}" data-bubble="${i}">
+                ${playing ? icon('volume',16) : iconPlay(14)}
               </button>
             </div>
           </div>
@@ -1523,14 +1511,14 @@ function renderSentences(topic) {
 
     return `
       <div class="sentence-wrap">
-        <div class="sentence-card" style="margin-bottom:0">
+        <div class="card sentence-card" style="margin-bottom:0">
           <div class="sentence-body">
             <div class="sentence-chinese">${s.c}</div>
             <div class="sentence-jyutping">${colorJyutping(s.j)}</div>
             <div class="sentence-reveal-line" data-sent-reveal="${i}" style="cursor:pointer">${englishEl}</div>
             ${chips}
           </div>
-          <button class="sentence-play${speaking ? ' speaking' : ''}" data-sent="${i}"
+          <button class="btn-icon btn-icon--brand sentence-play${speaking ? ' speaking' : ''}" data-sent="${i}"
             title="Listen to sentence">
             ${speaking ? icon('volume',20) : iconPlay(18)}
           </button>
@@ -1559,10 +1547,10 @@ function renderStudy(lesson) {
            <div class="card-hint">tap to reveal</div>
          </div>`;
     return `
-      <div class="word-card${flipped?' flipped':''}" data-card="${i}">
+      <div class="card word-card${flipped?' flipped':''}" data-card="${i}">
         ${inner}
-        <button class="speak-btn${speaking?' speaking':''}" data-speak="${i}" title="Listen">
-          ${speaking ? icon('volume',18) : iconPlay(16)}
+        <button class="btn-icon btn-icon--brand speak-btn${speaking?' speaking':''}" data-speak="${i}" title="Listen">
+          ${speaking ? icon('volume',20) : iconPlay(18)}
         </button>
       </div>`;
   }).join('');
@@ -1615,8 +1603,8 @@ function renderQuiz(lesson) {
               ? (q.direction === 'en-zh' ? w.chosen.c : w.chosen.e)
               : '—';
             return `
-            <div class="quiz-review-item">
-              <button class="quiz-review-play" data-quiz-review-play="${w.word.id}" aria-label="Listen">${iconPlay(15)}</button>
+            <div class="card quiz-review-item">
+              <button class="btn-icon btn-icon--brand quiz-review-play" data-quiz-review-play="${w.word.id}" aria-label="Listen">${iconPlay(18)}</button>
               <div class="quiz-review-body">
                 <div class="quiz-review-chinese">${w.word.c}</div>
                 <div class="quiz-review-jp">${colorJyutping(w.word.j)}</div>
@@ -1671,7 +1659,7 @@ function renderQuiz(lesson) {
 }
 
 // ── Events ────────────────────────────────────────────────────────────────────
-function attachEvents(lesson, color) {
+function attachEvents(lesson) {
   // Hamburger open — pushes history so the BACK button closes the drawer first
   const hamburger = document.getElementById('hamburger-btn');
   if (hamburger) hamburger.addEventListener('click', () => { state.drawerOpen = true; pushNav(); render(); });
