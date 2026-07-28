@@ -60,6 +60,18 @@ Last updated: 2026-07-28
   (`speakItem`/`speakConvoLine` as the single audio-path resolvers) was kept
   simple specifically to make this cheap to add later. Lands in the new **settings
   sheet** behind the header cog, not in the tab bar.
+- **Immersion/Pimsleur-style audio dialogues.** Early ideation, direction not
+  chosen. Two candidate shapes: (a) pure immersion — native-speed scripted
+  Cantonese, 2–4 distinct character voices, audio-drama register; (b)
+  Pimsleur-style structured drill — alternates English narration/cues with
+  Cantonese, response pauses, phrases likely revisited at spaced intervals. These
+  need different script formats, so pick a direction before authoring starts.
+  Technically unblocked either way: fixed scripts fit the existing offline
+  `generate-audio.js`/Chirp3-HD pipeline exactly like checkpoint conversations
+  do — no live API, no new architecture. Playback leans continuous/podcast-style
+  with pause + skip-forward/back by line (cheap, since audio is already per-line
+  files); read-along transcript still on the table. Nav placement (nested in a
+  stage vs. standalone episode list) undecided.
 
 ## Quality
 
