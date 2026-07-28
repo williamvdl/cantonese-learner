@@ -146,7 +146,7 @@ function renderTranslate() {
             </button>
           </div>
           ${bdHtml ? `
-            <div style="margin-top:14px;padding-top:12px;border-top:1px solid #f4f0eb">
+            <div class="tone-guide-foot">
               <div style="font-size:11px;color:#888;font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:8px">Word-by-word breakdown</div>
               ${bdHtml}
             </div>` : ''}
@@ -577,7 +577,7 @@ function renderPathList() {
       const dataAttr = locked ? '' : `data-path-open="${p.key}"`;
       const badge = locked
         ? `<span class="path-card-badge coming">Coming Soon</span>`
-        : (total > 0 && done === total ? `<span class="path-card-badge" style="background:#2D5040;color:#fff">Complete</span>` : '');
+        : (total > 0 && done === total ? `<span class="path-card-badge done">Complete</span>` : '');
       const progress = locked ? '' : `
         <div class="path-card-progress">
           <div class="path-progress-bar"><div class="path-progress-fill" style="width:${pct}%"></div></div>
@@ -734,7 +734,6 @@ function renderPathTimeline(pathKey) {
 }
 
 // ── Checkpoint screens (Stage 3) ──────────────────────────────────────────────
-const CP_GOLD = '#B7861E';
 
 // The hub: two independent activities. Reuses no learning engine itself — it
 // routes into the Words / Conversation activities.
@@ -871,7 +870,7 @@ function renderCheckpointDone(opts) {
     <div class="content cp-done">
       <button class="back-home-btn" data-cp-act-back><span class="icon-label">${icon('arrowLeft',15)} Checkpoint</span></button>
       <div class="cp-done-wrap">
-        <div class="cp-done-ring" style="background:conic-gradient(${CP_GOLD} ${pct}%, #e4d4ad 0)">
+        <div class="cp-done-ring" style="background:conic-gradient(var(--milestone) ${pct}%, var(--milestone-edge) 0)">
           <div class="cp-done-inner"><div class="cp-done-pct">${pct}%</div><div class="cp-done-cap">${activityLabel.toUpperCase()}</div></div>
         </div>
         <div class="cp-done-h">${activityLabel} done ${emoji}</div>
@@ -910,7 +909,7 @@ function renderPlaceholder(icon, title, subtitle) {
   return `
     <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;padding:60px 30px;text-align:center;min-height:300px;">
       <div style="font-size:52px;margin-bottom:16px;">${icon}</div>
-      <div style="font-size:20px;font-weight:700;color:#2A2422;margin-bottom:8px;">${title}</div>
+      <div class="ph-title">${title}</div>
       <div style="font-size:13px;color:#aaa;line-height:1.6;max-width:260px;">${subtitle}</div>
     </div>`;
 }
@@ -925,7 +924,7 @@ function render() {
   const needsTopic = state.nav === 'topics' && !state.homeView;
   if (needsTopic && !store.isTopicLoaded(state.topic)) {
     app.innerHTML = `
-      ${renderHeader(null)}
+      ${renderHeader()}
       <div class="content"><div style="padding:40px 20px;text-align:center;color:#888;font-size:14px;">Loading topic…</div></div>
       ${renderDrawer()}
     `;
@@ -933,8 +932,8 @@ function render() {
     store.loadTopic(state.topic).then(render).catch(err => {
       console.error('[topic load]', err);
       app.innerHTML = `
-        ${renderHeader(null)}
-        <div class="content"><div style="padding:40px 20px;text-align:center;color:#922B21;font-size:14px;">Couldn't load topic. Check console.</div></div>
+        ${renderHeader()}
+        <div class="content"><div class="fatal-msg">Couldn't load topic. Check console.</div></div>
         ${renderDrawer()}
       `;
       attachEvents(null, null);
@@ -949,7 +948,7 @@ function render() {
       const missing = path.lessons.map(l => l.topic).filter(k => !store.isTopicLoaded(k));
       if (missing.length) {
         app.innerHTML = `
-          ${renderHeader(null)}
+          ${renderHeader()}
           <div class="content"><div style="padding:40px 20px;text-align:center;color:#888;font-size:14px;">Loading path…</div></div>
           ${renderDrawer()}
         `;
@@ -971,7 +970,7 @@ function render() {
       const missing = (stage.topics || []).filter(k => !store.isTopicLoaded(k));
       if (missing.length) {
         app.innerHTML = `
-          ${renderHeader(null)}
+          ${renderHeader()}
           <div class="content"><div style="padding:40px 20px;text-align:center;color:#888;font-size:14px;">Loading checkpoint…</div></div>
           ${renderDrawer()}
         `;
@@ -1000,7 +999,7 @@ function render() {
     } else {
       const ctx = getPathContext();
       const headerEl = ctx
-        ? renderPathBanner(ctx, color)
+        ? renderPathBanner(ctx)
         : `<button class="back-home-btn" id="back-home-btn"><span class="icon-label">${icon('arrowLeft',15)} Back to topics</span></button>`;
       mainContent = `
         <div class="content">
@@ -1021,7 +1020,7 @@ function render() {
   }
 
   app.innerHTML = `
-    ${renderHeader(color)}
+    ${renderHeader()}
     ${mainContent}
     ${state.toast ? renderToast(state.toast) : ''}
     ${renderDrawer()}
@@ -1040,7 +1039,7 @@ function renderPageHeader(emoji, title, subtitle) {
     </div>`;
 }
 
-function renderHeader(color) {
+function renderHeader() {
   const toneKeys = Object.entries(TONES).map(([t,d]) =>
     `<span style="color:${d.color}">● T${t}</span>`
   ).join('');
@@ -1075,7 +1074,7 @@ function renderHeader(color) {
 // Combined banner shown at the top of a topic page when the user entered via a
 // Learning Path. One card containing the path context AND the primary action
 // (mark complete / next step / path complete).
-function renderPathBanner(ctx, color) {
+function renderPathBanner(ctx) {
   // Progress: how many steps in this path are complete (for the bar fill)
   const prog = state.pathProgress[state.activePath] || {};
   const doneCount = ctx.path.lessons.filter(l => prog[lessonKey(l.topic, l.round)]).length;
@@ -1129,7 +1128,7 @@ function renderPathBanner(ctx, color) {
   }
 
   return `
-    <div class="path-banner" style="border-color:${color}55">
+    <div class="path-banner">
       <div class="path-banner-row">
         <button class="path-banner-back" id="back-home-btn" aria-label="Back to Learning Path">${icon('arrowLeft',20)}</button>
         <div class="path-banner-text">
@@ -1176,10 +1175,10 @@ function renderTopicCard(topicKey) {
   const entry = store.indexEntry(topicKey);
   // Word count for Round 1, pulled from the index so we don't need to load the topic file.
   const wordCount = entry?.wordCounts?.['1'] ?? lesson.words.length;
-  const pips = rounds.map(r => `<span class="topic-card-pip" style="background:${lesson.color}"></span>`).join('') +
-               (rounds.length < 3 ? `<span class="topic-card-pip" style="background:${lesson.color}33"></span>`.repeat(3 - rounds.length) : '');
+  const pips = rounds.map(r => `<span class="topic-card-pip"></span>`).join('') +
+               (rounds.length < 3 ? `<span class="topic-card-pip empty"></span>`.repeat(3 - rounds.length) : '');
   return `
-    <div class="topic-card" data-topic-card="${topicKey}" tabindex="0" style="--topic-accent:${lesson.color}">
+    <div class="topic-card" data-topic-card="${topicKey}" tabindex="0">
       <div class="topic-card-icon">${lesson.icon}</div>
       <div class="topic-card-label">${lesson.label}</div>
       <div class="topic-card-meta">${rounds.length} tier${rounds.length>1?'s':''} · ${wordCount} words</div>
@@ -1255,7 +1254,7 @@ function renderLessonHeader(lesson) {
       </button>
     </div>`;
   return `
-    <div class="lesson-header lesson-header-stacked">
+    <div class="lesson-header">
       <h2 class="lesson-title">${lesson.label}</h2>
       <div class="lesson-count">${getRoundWords(state.topic, state.currentRound).length} words</div>
     </div>
@@ -1523,7 +1522,7 @@ function renderSentences(topic) {
       </div>`;
 
     return `
-      <div class="sentence-wrap" style="margin-bottom:10px">
+      <div class="sentence-wrap">
         <div class="sentence-card" style="margin-bottom:0">
           <div class="sentence-body">
             <div class="sentence-chinese">${s.c}</div>
@@ -2713,7 +2712,7 @@ function attachEvents(lesson, color) {
 
   // Boot-loading shell while reference data fetches
   const app = document.getElementById('app');
-  app.innerHTML = `<div style="padding:60px 20px;text-align:center;color:#888;font-family:'Helvetica Neue',Arial,sans-serif;font-size:14px;">Loading…</div>`;
+  app.innerHTML = `<div class="boot-msg">Loading…</div>`;
 
   try {
     await Promise.all([
@@ -2724,7 +2723,7 @@ function attachEvents(lesson, color) {
     ]);
   } catch (err) {
     console.error('[init] reference data load failed', err);
-    app.innerHTML = `<div style="padding:60px 20px;text-align:center;color:#922B21;font-family:'Helvetica Neue',Arial,sans-serif;font-size:14px;">Couldn't load app data. Check console and reload.</div>`;
+    app.innerHTML = `<div class="boot-msg error">Couldn't load app data. Check console and reload.</div>`;
     return;
   }
 
