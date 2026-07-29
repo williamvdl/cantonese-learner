@@ -212,7 +212,7 @@ code{ background:#DAD4CA; padding:1px 5px; border-radius:4px; font-size:11.5px; 
 .note-body{ font:var(--fw-regular) 14px/1.65 var(--font-ui); color:var(--ink-soft); max-width:var(--measure-text); }
 
 /* pills */
-.pill{ display:inline-flex; align-items:center; gap:5px; font:var(--fw-medium) var(--fs-small)/1 var(--font-ui); padding:9px 18px; border-radius:var(--r-pill); border:var(--border); background:transparent; color:var(--muted-dark); cursor:pointer; }
+.pill{ display:inline-flex; align-items:center; justify-content:center; gap:5px; min-height:var(--tap-min); font:var(--fw-medium) var(--fs-small)/1 var(--font-ui); padding:9px 18px; border-radius:var(--r-pill); border:var(--border); background:transparent; color:var(--muted-dark); cursor:pointer; }
 .pill--on{ border-color:var(--brand); color:var(--brand); }
 .tag{ display:inline-block; font:var(--fw-medium) 9.5px/1 var(--font-ui); letter-spacing:.14em; text-transform:uppercase; color:var(--muted); border:var(--border); padding:4px 8px; border-radius:var(--r-pill); }
 .tag--brand{ color:var(--brand); border-color:var(--brand-edge); }
@@ -228,8 +228,14 @@ code{ background:#DAD4CA; padding:1px 5px; border-radius:4px; font-size:11.5px; 
 .btn--milestone{ background:var(--milestone); border-color:var(--milestone); color:#fff; }
 .btn--good{ border-color:var(--jade-edge); color:var(--jade); }
 .btn--disabled{ color:var(--muted); cursor:not-allowed; }
-.btn-icon{ width:var(--tap-min); height:var(--tap-min); padding:0; border-radius:var(--r-pill); border:var(--border); background:transparent; color:var(--muted-dark); display:inline-flex; align-items:center; justify-content:center; cursor:pointer; }
+.btn-icon{ position:relative; flex:0 0 auto; width:var(--tap-min); height:var(--tap-min); padding:0; border-radius:var(--r-pill); border:var(--border); background:transparent; color:var(--muted-dark); display:inline-flex; align-items:center; justify-content:center; cursor:pointer; }
 .btn-icon svg{ width:15px; height:15px; }
+.btn-icon--compact{ width:32px; height:32px; }
+.btn-icon--compact::after{ content:''; position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); width:var(--tap-min); height:var(--tap-min); border-radius:var(--r-pill); }
+.btn-icon--compact svg{ width:14px; height:14px; }
+.btn-icon--brand{ border-color:var(--brand-edge); color:var(--brand); }
+.btn-icon--brand svg{ width:18px; height:18px; }
+.btn-icon--header{ border-color:transparent; color:var(--header-text); opacity:.72; }
 .btn-listen{ display:inline-flex; align-items:center; gap:7px; font:var(--fw-medium) var(--fs-meta)/1 var(--font-ui); color:var(--brand); border:1px solid var(--brand-edge); background:transparent; padding:9px 15px; border-radius:var(--r-pill); cursor:pointer; min-height:var(--tap-min); }
 .btn-listen svg{ width:12px; height:12px; }
 .btn-listen--big{ width:76px; height:76px; border-radius:var(--r-pill); border:1px solid var(--brand-edge); background:var(--brand-tint); color:var(--brand); display:flex; align-items:center; justify-content:center; padding:0; }
@@ -324,6 +330,11 @@ table{ border-collapse:collapse; width:100%; font:var(--fw-regular) 12.5px/1.5 v
 th,td{ text-align:left; padding:9px 10px; border-bottom:var(--border); vertical-align:top; }
 th{ font-weight:var(--fw-semi); color:var(--ink); font-size:10px; letter-spacing:.08em; text-transform:uppercase; }
 td code{ white-space:nowrap; }
+
+table.spec{ border-collapse:collapse; width:100%; max-width:760px; margin:var(--sp-4) 0; font:400 12.5px/1.5 'Inter',sans-serif; }
+table.spec th, table.spec td{ text-align:left; padding:7px 10px; border-bottom:var(--border); vertical-align:top; }
+table.spec th{ font-weight:600; font-size:10px; letter-spacing:.08em; text-transform:uppercase; color:var(--muted-dark); }
+table.spec tr:last-child td{ border-bottom:none; }
 </style>
 </head>
 <body>
@@ -418,7 +429,15 @@ td code{ white-space:nowrap; }
   <p class="note">Transitions use <code>--dur-fast</code> (120ms) for state flips and <code>--dur-base</code> (200ms) for anything entering or leaving, both on <code>--ease</code>. Every interactive element is at least <code>--tap-min</code> (44px) in its smaller dimension — including header icons, which is a rule my earlier mockups broke.</p>
   <div class="row" style="align-items:center">
     <button class="btn-icon" id="dm1"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 6h18M3 12h18M3 18h18"/></svg></button>
-    <span class="cls">44 × 44 minimum, 15px glyph</span>
+    <span class="cls">.btn-icon — 44 × 44, 15px glyph</span>
+  </div>
+  <p class="note"><b>Painted size and touch target are separate things.</b> <code>--tap-min</code> governs what responds to a thumb, not what is drawn. A control may paint smaller and still carry a full-size hit area, via a centred pseudo-element that takes no part in layout. That is what <code>.btn-icon--compact</code> does: 32px painted, 44px tappable.</p>
+  <p class="note"><b>Two painted sizes for circular controls, and no more.</b> Before this rule the play/mic control existed at seven sizes across the app — 28, 32, 34, 38, 38, 40 and 44px — six of them below the minimum. Settled in <code>docs/design/15-control-vocabulary.html</code>.</p>
+  <div class="row" style="align-items:center">
+    <button class="btn-icon btn-icon--brand"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></button>
+    <span class="cls">.btn-icon--brand — 44px standard</span>
+    <button class="btn-icon btn-icon--brand btn-icon--compact"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></button>
+    <span class="cls">+ --compact — 32px painted, 44px target</span>
   </div>
 </section>
 
@@ -454,6 +473,18 @@ td code{ white-space:nowrap; }
   <p class="note">Progress strokes the diamond itself rather than a borrowed circle, so shape and indicator are one object. 3px corner radius keeps the stroke ends clean. Rail widens to 32px to clear it.</p>
   <div class="row" id="diamonddemo" style="align-items:center;gap:var(--sp-6)"></div>
   <div class="cls">.mk (32px host) › svg path + .glyph &nbsp;·&nbsp; dash length from getTotalLength()</div>
+
+  <h3>Checkpoint step states <span class="tag-new">new</span></h3>
+  <p class="note"><b>Milestone colour means "this is ahead of you". Once a checkpoint is done it stops competing</b> — the row drops the Oxblood entirely and goes quiet white with a green mark. Settled in <code>mockups/05-path-and-checkpoint.html</code>; transcribed here because the omission let the built version drift.</p>
+  <table class="spec">
+    <tr><th>Element</th><th>Pending</th><th>Complete</th></tr>
+    <tr><td>Rail node</td><td><code>--milestone-tint</code> fill, <code>--milestone-edge</code>, diamond</td><td><code>--jade</code> tint + edge, diamond kept</td></tr>
+    <tr><td>Card</td><td>white + 3px <code>--milestone</code> left edge (K2)</td><td>white, plain hairline — no left edge</td></tr>
+    <tr><td>Title</td><td><code>--milestone</code></td><td><code>--muted-dark</code> — quiet, not jade</td></tr>
+    <tr><td>Badge</td><td>outline, <code>--milestone</code></td><td>outline, <code>--jade</code> — never filled</td></tr>
+    <tr><td>Glyph in card</td><td colspan="2"><b>none.</b> The diamond lives in the rail only; a text glyph in the card is not part of this design</td></tr>
+  </table>
+  <p class="note">The diamond keeps its shape in every state — it is the landmark you scan for, and a completed checkpoint is still a milestone even once it stops being coloured like one.</p>
 </section>
 
 <section id="card">
