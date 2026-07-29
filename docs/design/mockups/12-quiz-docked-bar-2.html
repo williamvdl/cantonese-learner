@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Docked bar on the Quiz tab</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Noto+Serif+TC:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#1C1917; --ink-soft:#292524;
+    --parchment:#FFFFFF; --parchment-warm:#FAF8F5;
+    --parchment-border:#EAE4DC; --hairline-soft:#F0EBE4;
+    --border:1px solid var(--parchment-border);
+    --border-soft:1px solid var(--hairline-soft);
+    --brand:#C2410C; --brand-tint:#FEF0E9; --brand-edge:#F5D9C9;
+    --jade:#15803D; --jade-tint:#F0FAF3; --jade-edge:#C9E7D3;
+    --header-bg:#6E2639; --header-text:#F7EEE8;
+    --milestone:#6E2639; --milestone-tint:#FBF0F2; --milestone-edge:#EBD3D9;
+    --err:#B42318; --err-tint:#FEF3F2; --err-edge:#F5CFCB;
+    --muted:#A8A29E; --muted-dark:#78716C;
+    --r-sm:8px; --r-md:12px; --r-pill:999px;
+    --elev-1:0 1px 2px rgba(58,42,30,.04), 0 1px 3px rgba(58,42,30,.06);
+    --bar-lift:0 -2px 12px rgba(58,42,30,.09);
+    --sp-1:4px; --sp-2:8px; --sp-3:12px; --sp-4:16px; --sp-5:24px; --sp-6:32px;
+    --tap-min:44px; --bar-h:60px;
+    --ease:cubic-bezier(0.4,0,0.2,1); --dur-base:200ms;
+    --tone-1:#E74C3C; --tone-2:#E67E22; --tone-3:#c8a200;
+    --tone-4:#27AE60; --tone-5:#2980B9; --tone-6:#8E44AD;
+  }
+  *{box-sizing:border-box;}
+  body{ margin:0; background:#E6E1D9; font-family:'Inter',sans-serif; color:var(--ink-soft); padding:34px 18px 90px; }
+  .wrap{ max-width:1300px; margin:0 auto; }
+  h1{ font:600 13px/1 'Inter',sans-serif; letter-spacing:.1em; text-transform:uppercase; color:var(--muted-dark); margin:0 0 8px; }
+  .lede{ font:400 13.5px/1.65 'Inter',sans-serif; max-width:68ch; margin:0 0 24px; }
+  .lede b{ color:var(--ink); font-weight:600; }
+  .rack{ display:flex; gap:22px; flex-wrap:wrap; }
+  .col{ display:flex; flex-direction:column; gap:8px; width:296px; }
+  .col-tag{ font:600 10.5px/1 'Inter',sans-serif; letter-spacing:.1em; text-transform:uppercase; color:var(--muted-dark); }
+  .col-note{ font:400 11.5px/1.5 'Inter',sans-serif; color:var(--muted-dark); min-height:64px; margin:0; }
+
+  .phone{
+    position:relative; background:var(--parchment-warm); border:7px solid var(--ink);
+    border-radius:26px; overflow:hidden; box-shadow:0 14px 34px rgba(28,25,23,.2);
+    display:flex; flex-direction:column; height:590px;
+  }
+  .scroll{ flex:1; overflow-y:auto; }
+  .scroll::-webkit-scrollbar{ width:0; }
+
+  .hd{ background:var(--header-bg); color:var(--header-text); padding:11px var(--sp-3) 10px; position:relative; flex:none; }
+  .hd .ic{ position:absolute; top:5px; width:40px; height:40px; border-radius:var(--r-pill); border:none; background:transparent; color:var(--header-text); opacity:.72; display:flex; align-items:center; justify-content:center; padding:0; }
+  .hd .ic.l{ left:5px; } .hd .ic.r{ right:5px; }
+  .hd .ic svg{ width:16px; height:16px; }
+  .plate{ display:flex; flex-direction:column; align-items:center; gap:4px; }
+  .plate .zh{ font:500 15px/1 'Noto Serif TC',serif; letter-spacing:.04em; }
+  .plate .en{ font:500 8px/1 'Inter',sans-serif; letter-spacing:.24em; text-transform:uppercase; opacity:.72; }
+
+  .ctx{ background:var(--parchment-warm); flex:none; }
+  .ctx-row{ display:flex; align-items:center; justify-content:space-between; padding:10px var(--sp-4) 9px; }
+  .ctx-back{ display:flex; align-items:center; gap:6px; font:500 12px/1.2 'Inter',sans-serif; color:var(--ink); background:none; border:none; padding:0; }
+  .ctx-back svg{ width:15px; height:15px; }
+  .ctx-meta{ font:500 10.5px/1 'Inter',sans-serif; color:var(--muted-dark); }
+  .ctx-track{ height:2px; background:var(--hairline-soft); }
+  .ctx-fill{ height:2px; background:var(--brand); width:40%; }
+
+  .stepper{ display:flex; align-items:center; padding:12px var(--sp-4) 11px; background:var(--parchment-warm); border-bottom:var(--border-soft); flex:none; }
+  .sx{ display:flex; align-items:center; flex:1; }
+  .sx:last-child{ flex:0 0 auto; }
+  .sdot{ width:20px; height:20px; border-radius:var(--r-pill); border:var(--border); background:var(--parchment); flex:none; display:flex; align-items:center; justify-content:center; font:500 9px/1 'Inter',sans-serif; color:var(--muted); }
+  .sdot svg{ width:9px; height:9px; }
+  .sdot.done{ border-color:var(--jade-edge); background:var(--jade-tint); color:var(--jade); }
+  .sdot.here{ border-color:var(--brand); background:var(--brand); color:#fff; width:22px; height:22px; font-size:10px; }
+  .sdot.cp{ border-radius:var(--r-sm); transform:rotate(45deg); border-color:var(--milestone-edge); background:var(--milestone-tint); color:var(--milestone); }
+  .sdot.cp span{ transform:rotate(-45deg); display:block; font-size:8px; }
+  .sline{ flex:1; height:1px; background:var(--parchment-border); }
+  .sline.done{ background:var(--jade-edge); }
+
+  .tabs{ display:flex; gap:var(--sp-5); padding:var(--sp-4) var(--sp-4) 0; border-bottom:var(--border-soft); }
+  .tab{ padding:0 0 10px; font:500 12.5px/1 'Inter',sans-serif; border:none; background:none; color:var(--muted); position:relative; }
+  .tab.on{ color:var(--brand); }
+  .tab.on::after{ content:''; position:absolute; left:0; right:0; bottom:-1px; height:2px; background:var(--brand); border-radius:var(--r-pill); }
+
+  .qmeta{ display:flex; justify-content:space-between; padding:var(--sp-4) var(--sp-4) 0; font:500 10.5px/1 'Inter',sans-serif; color:var(--muted-dark); }
+  .qwrap{ padding:var(--sp-4) var(--sp-4) 0; }
+  .qprompt{ background:var(--parchment); border:var(--border); border-radius:var(--r-md); box-shadow:var(--elev-1); padding:var(--sp-5) var(--sp-4); text-align:center; }
+  .qlabel{ font:500 9.5px/1 'Inter',sans-serif; letter-spacing:.12em; text-transform:uppercase; color:var(--muted); margin-bottom:var(--sp-4); }
+  .qzh{ font:500 40px/1.1 'Noto Serif TC',serif; color:var(--ink); }
+  .qjp{ font:500 12px/1 'Inter',sans-serif; margin-top:var(--sp-3); }
+  .qchoices{ display:flex; flex-direction:column; gap:6px; margin-top:var(--sp-4); }
+  .qc{ background:var(--parchment); border:var(--border); border-radius:var(--r-md); box-shadow:var(--elev-1); padding:var(--sp-3) var(--sp-4); font:500 13.5px/1.3 'Inter',sans-serif; color:var(--ink); display:flex; align-items:center; gap:var(--sp-3); }
+  .qmark{ width:20px; height:20px; border-radius:var(--r-pill); border:var(--border); flex:none; display:flex; align-items:center; justify-content:center; font:500 10px/1 'Inter',sans-serif; color:var(--muted); }
+  .qmark svg{ width:10px; height:10px; }
+  .qc.correct{ border-color:var(--jade-edge); background:var(--jade-tint); }
+  .qc.correct .qmark{ border-color:var(--jade-edge); background:var(--jade); color:#fff; }
+  .qc.correct .lbl{ color:var(--jade); }
+  .qc.wrong{ border-color:var(--err-edge); background:var(--err-tint); }
+  .qc.wrong .qmark{ border-color:var(--err); background:var(--err); color:#fff; }
+  .qc.wrong .lbl{ color:var(--err); }
+  .qc.missed{ opacity:.45; }
+  .qnext{
+    margin:var(--sp-4) var(--sp-4) 0; width:calc(100% - 32px); height:var(--tap-min);
+    border-radius:var(--r-pill); background:var(--brand); border:1px solid var(--brand); color:#fff;
+    font:500 13px/1 'Inter',sans-serif; display:flex; align-items:center; justify-content:center; gap:7px;
+  }
+  .qnext svg{ width:14px; height:14px; }
+  .qsec{ margin:var(--sp-3) var(--sp-4) 0; width:calc(100% - 32px); height:var(--tap-min); border-radius:var(--r-pill); background:transparent; border:var(--border); color:var(--ink-soft); font:500 13px/1 'Inter',sans-serif; display:flex; align-items:center; justify-content:center; gap:7px; }
+  .qsec svg{ width:13px; height:13px; }
+
+  .ring{ width:100px; height:100px; margin:0 auto var(--sp-4); position:relative; }
+  .ring svg{ width:100px; height:100px; transform:rotate(-90deg); }
+  .ringv{ position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; }
+  .ringv b{ font:500 28px/1 'Fraunces',serif; color:var(--ink); }
+  .ringv span{ font:500 9px/1 'Inter',sans-serif; letter-spacing:.12em; text-transform:uppercase; color:var(--muted); margin-top:3px; }
+  .qres{ padding:var(--sp-5) var(--sp-4) 0; text-align:center; }
+  .qres h2{ font:500 20px/1.2 'Fraunces',serif; color:var(--ink); margin:0 0 6px; }
+  .qres p{ font:400 12.5px/1.5 'Inter',sans-serif; color:var(--muted-dark); margin:0; }
+  .clear{ height:calc(var(--bar-h) + var(--sp-4)); }
+
+  /* docked bar */
+  .bar{
+    position:absolute; left:0; right:0; bottom:0; height:var(--bar-h); z-index:20;
+    background:rgba(250,248,245,.92); backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px);
+    border-top:var(--border); box-shadow:var(--bar-lift);
+    display:flex; align-items:center; padding:0 var(--sp-3);
+  }
+  .bar-mark{
+    flex:1; display:flex; align-items:center; justify-content:center; gap:8px;
+    height:var(--tap-min); border-radius:var(--r-pill);
+    font:500 13px/1 'Inter',sans-serif;
+    border:1px solid var(--jade-edge); background:transparent; color:var(--jade);
+  }
+  .bar-mark svg{ width:14px; height:14px; }
+  .bar-static{
+    flex:1; display:flex; align-items:center; justify-content:center; gap:9px;
+    font:500 12.5px/1 'Inter',sans-serif; color:var(--jade);
+  }
+  .bar-static .tick{ width:22px; height:22px; border-radius:var(--r-pill); background:var(--jade); color:#fff; display:flex; align-items:center; justify-content:center; flex:none; }
+  .bar-static .tick svg{ width:11px; height:11px; }
+  .bar-split{ flex:1; display:flex; align-items:center; gap:var(--sp-2); }
+  .bar-done{ display:flex; align-items:center; padding-left:var(--sp-2); flex:none; }
+  .bar-done .tick{ width:22px; height:22px; border-radius:var(--r-pill); background:var(--jade); color:#fff; display:flex; align-items:center; justify-content:center; }
+  .bar-done .tick svg{ width:11px; height:11px; }
+  .bar-next{
+    flex:1; display:flex; align-items:center; gap:var(--sp-2); justify-content:flex-end;
+    height:var(--tap-min); padding:0 var(--sp-3) 0 var(--sp-4); border-radius:var(--r-pill);
+    background:var(--brand); border:1px solid var(--brand); color:#fff;
+    font:500 12.5px/1.2 'Inter',sans-serif; min-width:0;
+  }
+  .bar-next-t{ text-align:right; min-width:0; overflow:hidden; }
+  .bar-next-t b{ display:block; font-weight:500; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .bar-next-t i{ display:block; font-style:normal; font-size:9px; letter-spacing:.1em; text-transform:uppercase; opacity:.75; margin-bottom:2px; }
+  .bar-next svg{ width:15px; height:15px; flex:none; }
+
+  .notes{ max-width:680px; margin:44px auto 0; }
+  .notes h3{ font:600 15px/1 'Inter',sans-serif; color:var(--ink); margin:22px 0 12px; }
+  .notes h3:first-child{ margin-top:0; }
+  .notes p{ font:400 13.5px/1.65 'Inter',sans-serif; margin:0 0 12px; }
+  .notes code{ background:#DED8CE; padding:1px 5px; border-radius:4px; font-size:12px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <h1>Docked bar on the Quiz tab</h1>
+  <p class="lede">The bar is now on every tab. The rule holding it together: <b>exactly one filled button on screen at a time</b>. In the "Mark complete" state the bar is a ghost, so it never competes with the quiz's own action — which is where the earlier conflict actually was.</p>
+
+  <div class="rack" id="rack"></div>
+
+  <div class="notes">
+    <h3>The one exception</h3>
+    <p>Frame 3 is the case worth checking. Once the lesson is marked complete <i>and</i> a question is answered, the bar would otherwise show a filled orange <b>"Next · Days &amp; Time"</b> directly below a filled orange <b>"Next question"</b> — two identical-looking buttons, a thumb apart, meaning completely different things. So while a quiz question is live the bar drops its continuation and shows the completion confirmation only. On the result screen (frame 4) there's no competing fill, so continuation returns.</p>
+    <p>Stated as one line: <b>the bar carries continuation everywhere except during an active quiz question.</b></p>
+
+    <h3>Two labels changed</h3>
+    <p>The quiz's per-question button is now <b>"Next question"</b> rather than "Next" — cheap disambiguation, and it makes the bar's "Next · Days &amp; Time" unmistakably a different kind of forward. The result screen keeps its own <b>"Back to lesson"</b> and <b>"Retry missed"</b>; it no longer absorbs completion, per your point that a quiz run isn't a completion event.</p>
+
+    <h3>Dropped</h3>
+    <p>Auto-complete on quiz pass. Your reasoning kills it — if the quiz is something you might run twice before the conversation and once after, then passing it can't mean the lesson is done. Completion stays a deliberate act, which is also the honest thing for a tool where you're the one judging whether you've learned it.</p>
+  </div>
+</div>
+
+<script>
+  const I={
+    info:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>',
+    menu:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M3 6h18M3 12h18M3 18h18"/></svg>',
+    back:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M15 18l-6-6 6-6"/></svg>',
+    check:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M20 6L9 17l-5-5"/></svg>',
+    x:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg>',
+    arrow:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>',
+    refresh:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><path d="M21 12a9 9 0 1 1-3-6.7"/><path d="M21 3v6h-6"/></svg>',
+  };
+  const T={1:'var(--tone-1)',2:'var(--tone-2)',3:'var(--tone-3)',4:'var(--tone-4)',5:'var(--tone-5)',6:'var(--tone-6)'};
+  const jp=t=>t.split(' ').map(s=>{const m=s.match(/[1-6]/);return `<span style="color:${m?T[m[0]]:'var(--muted-dark)'}">${s}</span>`}).join(' ');
+
+  const shell = `
+    <div class="hd"><button class="ic l">${I.info}</button>
+      <div class="plate"><span class="zh">廣東話</span><span class="en">Cantonese Learner</span></div>
+      <button class="ic r">${I.menu}</button></div>
+    <div class="ctx"><div class="ctx-row">
+      <button class="ctx-back">${I.back} Building Sentences</button>
+      <span class="ctx-meta">3 of 5</span>
+    </div><div class="ctx-track"><div class="ctx-fill"></div></div></div>
+    <div class="stepper">
+      <div class="sx"><span class="sdot done">${I.check}</span><span class="sline done"></span></div>
+      <div class="sx"><span class="sdot done">${I.check}</span><span class="sline done"></span></div>
+      <div class="sx"><span class="sdot here">3</span><span class="sline"></span></div>
+      <div class="sx"><span class="sdot">4</span><span class="sline"></span></div>
+      <div class="sx"><span class="sdot">5</span><span class="sline"></span></div>
+      <div class="sx"><span class="sdot cp"><span>◆</span></span></div>
+    </div>`;
+
+  const tabs = `<div class="tabs"><button class="tab">Learn</button><button class="tab">Chat</button><button class="tab on">Quiz</button></div>`;
+  const qmeta = (n,score)=>`<div class="qmeta"><span>Question ${n} / 10</span><span>Score ${score}</span></div>`;
+
+  const prompt = `
+    <div class="qwrap"><div class="qprompt">
+      <div class="qlabel">What does this mean?</div>
+      <div class="qzh">咗</div><div class="qjp">${jp('zo2')}</div>
+    </div></div>`;
+
+  const CH=['Ongoing action','Completed action','Future action'];
+  function choices(answered){
+    return `<div class="qwrap"><div class="qchoices">` + CH.map((c,i)=>{
+      let cls='qc', mark=String.fromCharCode(65+i), lbl=`<span class="lbl">${c}</span>`;
+      if(answered){
+        if(i===1){ cls+=' correct'; mark=I.check; }
+        else if(i===0){ cls+=' wrong'; mark=I.x; }
+        else cls+=' missed';
+      }
+      return `<div class="${cls}"><span class="qmark">${mark}</span>${lbl}</div>`;
+    }).join('') + `</div></div>`;
+  }
+
+  const nextQ = `<button class="qnext">Next question ${I.arrow}</button>`;
+
+  const C=2*Math.PI*43;
+  const result = `
+    <div class="qres">
+      <div class="ring"><svg viewBox="0 0 100 100">
+        <circle cx="50" cy="50" r="43" fill="none" stroke="var(--parchment-border)" stroke-width="5"/>
+        <circle cx="50" cy="50" r="43" fill="none" stroke="var(--jade)" stroke-width="5" stroke-linecap="round"
+                stroke-dasharray="${C}" stroke-dashoffset="${C*0.2}"/></svg>
+        <div class="ringv"><b>8/10</b><span>correct</span></div></div>
+      <h2>Nicely done</h2><p>Two to look at again.</p>
+    </div>
+    <button class="qsec">${I.refresh} Retry missed</button>
+    <button class="qsec">${I.back} Back to lesson</button>`;
+
+  const BAR={
+    mark:`<div class="bar"><button class="bar-mark">${I.check} Mark lesson complete</button></div>`,
+    static:`<div class="bar"><span class="bar-static"><span class="tick">${I.check}</span> Lesson complete</span></div>`,
+    next:`<div class="bar"><div class="bar-split">
+        <span class="bar-done"><span class="tick">${I.check}</span></span>
+        <button class="bar-next"><span class="bar-next-t"><i>Next</i><b>Days &amp; Time</b></span>${I.arrow}</button>
+      </div></div>`,
+  };
+
+  const FRAMES=[
+    {t:'1 · Question live · not complete',
+     n:'Bar is a ghost. The quiz has no filled button yet, so nothing competes.',
+     body:qmeta(4,3)+prompt+choices(false)+`<div class="clear"></div>`, bar:BAR.mark},
+    {t:'2 · Answered · not complete',
+     n:'Quiz owns the fill. The bar stays ghost — one fill on screen, and the two actions read as different kinds.',
+     body:qmeta(4,3)+prompt+choices(true)+nextQ+`<div class="clear"></div>`, bar:BAR.mark},
+    {t:'3 · Answered · already complete',
+     n:'Continuation suppressed. A filled "Next · Days & Time" under a filled "Next question" would be two near-identical buttons meaning different things.',
+     body:qmeta(4,3)+prompt+choices(true)+nextQ+`<div class="clear"></div>`, bar:BAR.static},
+    {t:'4 · Result · already complete',
+     n:'No competing fill — the result screen\'s own actions are both ghosts. Continuation returns.',
+     body:result+`<div class="clear"></div>`, bar:BAR.next},
+  ];
+
+  document.getElementById('rack').innerHTML = FRAMES.map(f=>`
+    <div class="col">
+      <span class="col-tag">${f.t}</span>
+      <p class="col-note">${f.n}</p>
+      <div class="phone">${shell}<div class="scroll">${tabs}${f.body}</div>${f.bar}</div>
+    </div>`).join('');
+</script>
+</body>
+</html>

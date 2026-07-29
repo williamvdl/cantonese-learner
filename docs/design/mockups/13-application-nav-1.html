@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Application nav</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Noto+Serif+TC:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#1C1917; --ink-soft:#292524;
+    --parchment:#FFFFFF; --parchment-warm:#FAF8F5; --parchment-deep:#F0EBE4;
+    --parchment-border:#EAE4DC;
+    --border:1px solid var(--parchment-border);
+    --border-soft:1px solid var(--parchment-deep);
+    --brand:#C2410C; --brand-tint:#FEF0E9; --brand-edge:#F5D9C9;
+    --jade:#15803D; --jade-tint:#DCFCE7; --jade-edge:#C9E7D3;
+    --milestone:#6E2639; --milestone-tint:#FBF0F2; --milestone-edge:#EBD3D9;
+    --header-bg:#6E2639; --header-text:#F7EEE8;
+    --muted:#A8A29E; --muted-dark:#78716C;
+    --r-sm:8px; --r-md:12px; --r-lg:16px; --r-pill:999px;
+    --elev-1:0 1px 2px rgba(58,42,30,.04), 0 1px 3px rgba(58,42,30,.06);
+    --sp-1:4px; --sp-2:8px; --sp-3:12px; --sp-4:16px; --sp-5:24px; --sp-6:32px;
+    --tap-min:44px; --bar-h:60px; --tabbar-h:58px; --edge-emph:3px;
+    --ease:cubic-bezier(.4,0,.2,1); --dur-base:200ms;
+    --tone-1:#E74C3C; --tone-2:#E67E22; --tone-3:#c8a200;
+    --tone-4:#27AE60; --tone-5:#2980B9; --tone-6:#8E44AD;
+  }
+  *{box-sizing:border-box;}
+  body{ margin:0; background:#E6E1D9; font-family:'Inter',sans-serif; color:var(--ink-soft); padding:34px 18px 90px; }
+  .wrap{ max-width:1260px; margin:0 auto; }
+  h1{ font:600 13px/1 'Inter',sans-serif; letter-spacing:.1em; text-transform:uppercase; color:var(--muted-dark); margin:46px 0 8px; }
+  h1:first-of-type{ margin-top:0; }
+  .lede{ font:400 13.5px/1.65 'Inter',sans-serif; max-width:68ch; margin:0 0 24px; }
+  .lede b{ color:var(--ink); font-weight:600; }
+  .lede code{ background:#DED8CE; padding:1px 5px; border-radius:4px; font-size:12px; }
+  .rack{ display:flex; gap:24px; flex-wrap:wrap; }
+  .col{ display:flex; flex-direction:column; gap:8px; width:300px; }
+  .col-tag{ font:600 10.5px/1 'Inter',sans-serif; letter-spacing:.1em; text-transform:uppercase; color:var(--muted-dark); }
+  .col-note{ font:400 11.5px/1.5 'Inter',sans-serif; color:var(--muted-dark); min-height:62px; margin:0; }
+
+  .phone{
+    position:relative; background:var(--parchment-warm); border:7px solid var(--ink);
+    border-radius:26px; overflow:hidden; box-shadow:0 14px 34px rgba(28,25,23,.2);
+    display:flex; flex-direction:column; height:600px;
+  }
+  .scroll{ flex:1; overflow-y:auto; }
+  .scroll::-webkit-scrollbar{ width:0; }
+
+  /* header */
+  .hd{ background:var(--header-bg); color:var(--header-text); padding:11px var(--sp-3) 10px; position:relative; flex:none; z-index:2; }
+  .hd .ic{ position:absolute; top:3px; width:var(--tap-min); height:var(--tap-min); border-radius:var(--r-pill); border:none; background:transparent; color:var(--header-text); opacity:.72; display:flex; align-items:center; justify-content:center; padding:0; cursor:pointer; }
+  .hd .ic.l{ left:3px; } .hd .ic.r{ right:3px; }
+  .hd .ic svg{ width:17px; height:17px; }
+  .plate{ display:flex; flex-direction:column; align-items:center; gap:4px; }
+  .plate .zh{ font:500 16px/1 'Noto Serif TC',serif; letter-spacing:.04em; }
+  .plate .en{ font:500 8.5px/1 'Inter',sans-serif; letter-spacing:.24em; text-transform:uppercase; opacity:.72; }
+
+  /* page stub */
+  .stub{ padding:var(--sp-5) var(--sp-4); }
+  .stub-eyebrow{ font:500 10px/1 'Inter',sans-serif; letter-spacing:.12em; text-transform:uppercase; color:var(--brand); margin-bottom:10px; }
+  .stub-h{ font:500 26px/1.15 'Fraunces',serif; color:var(--ink); margin:0 0 var(--sp-4); letter-spacing:-.01em; }
+  .stub-card{ background:var(--parchment); border:var(--border); border-radius:var(--r-md); box-shadow:var(--elev-1); padding:var(--sp-4); margin-bottom:var(--sp-3); }
+  .stub-line{ height:9px; border-radius:var(--r-pill); background:var(--parchment-deep); margin-bottom:8px; }
+  .stub-line:last-child{ width:60%; margin-bottom:0; }
+
+  /* ══════════ A / B — DRAWER ══════════ */
+  .drawer{ position:absolute; inset:0; z-index:30; display:flex; justify-content:flex-end; }
+  .backdrop{ position:absolute; inset:0; background:rgba(28,25,23,.42); }
+  .panel{ position:relative; width:82%; height:100%; display:flex; flex-direction:column; box-shadow:-8px 0 28px rgba(28,25,23,.22); }
+  .panel-hd{ display:flex; align-items:center; justify-content:space-between; padding:var(--sp-4) var(--sp-3) var(--sp-4) var(--sp-4); flex:none; }
+  .panel-title{ font:500 10.5px/1 'Inter',sans-serif; letter-spacing:.14em; text-transform:uppercase; }
+  .panel-close{ width:var(--tap-min); height:var(--tap-min); border-radius:var(--r-pill); border:none; background:transparent; display:flex; align-items:center; justify-content:center; cursor:pointer; padding:0; }
+  .panel-close svg{ width:15px; height:15px; }
+  .panel-body{ flex:1; overflow-y:auto; }
+  .panel-body::-webkit-scrollbar{ width:0; }
+
+  .ni{
+    width:100%; display:flex; align-items:center; gap:var(--sp-3); text-align:left;
+    padding:var(--sp-4); border:none; background:transparent; cursor:pointer;
+    border-top:var(--border-soft); position:relative;
+  }
+  .ni:first-child{ border-top:none; }
+  .ni-icon{ width:22px; height:22px; flex:none; display:flex; align-items:center; justify-content:center; }
+  .ni-icon svg{ width:19px; height:19px; }
+  .ni-text{ flex:1; min-width:0; }
+  .ni-label{ display:block; font:500 14.5px/1.2 'Inter',sans-serif; }
+  .ni-desc{ display:block; font:400 11.5px/1.4 'Inter',sans-serif; margin-top:4px; }
+  .ni-badge{ font:600 10px/1 'Inter',sans-serif; padding:4px 7px; border-radius:var(--r-pill); flex:none; }
+
+  /* A — parchment panel */
+  .a .panel{ background:var(--parchment-warm); }
+  .a .panel-hd{ background:var(--header-bg); color:var(--header-text); }
+  .a .panel-close{ color:var(--header-text); }
+  .a .ni-label{ color:var(--ink); }
+  .a .ni-desc{ color:var(--muted-dark); }
+  .a .ni-icon{ color:var(--muted-dark); }
+  .a .ni.active{ background:var(--brand-tint); border-left:var(--edge-emph) solid var(--brand); padding-left:calc(var(--sp-4) - 3px); }
+  .a .ni.active .ni-label, .a .ni.active .ni-icon{ color:var(--brand); }
+  .a .ni-badge{ background:var(--brand); color:#fff; }
+  .a .settings{ border-top:var(--border); padding:var(--sp-4); margin-top:var(--sp-3); }
+  .a .set-title{ font:500 10px/1 'Inter',sans-serif; letter-spacing:.14em; text-transform:uppercase; color:var(--muted); margin-bottom:var(--sp-3); }
+  .a .set-label{ font:400 12.5px/1 'Inter',sans-serif; color:var(--ink-soft); margin-bottom:var(--sp-2); }
+  .a .speeds{ display:flex; gap:6px; }
+  .a .speeds button{ flex:1; font:500 11.5px/1 'Inter',sans-serif; padding:10px 4px; border-radius:var(--r-pill); border:var(--border); background:transparent; color:var(--muted-dark); cursor:pointer; }
+  .a .speeds button.on{ border-color:var(--brand); color:var(--brand); }
+
+  /* B — Oxblood panel (as currently wired) */
+  .b .panel{ background:var(--header-bg); }
+  .b .panel-hd{ color:var(--header-text); border-bottom:1px solid rgba(247,238,232,.16); }
+  .b .panel-close{ color:var(--header-text); }
+  .b .ni{ border-top-color:rgba(247,238,232,.12); }
+  .b .ni-label{ color:var(--header-text); }
+  .b .ni-desc{ color:rgba(247,238,232,.6); }
+  .b .ni-icon{ color:rgba(247,238,232,.72); }
+  .b .ni.active{ background:rgba(0,0,0,.16); border-left:var(--edge-emph) solid #F0C9A8; padding-left:calc(var(--sp-4) - 3px); }
+  .b .ni.active .ni-label, .b .ni.active .ni-icon{ color:#F5D9C9; }
+  .b .ni-badge{ background:#F0C9A8; color:var(--milestone); }
+  .b .settings{ border-top:1px solid rgba(247,238,232,.16); padding:var(--sp-4); margin-top:var(--sp-3); }
+  .b .set-title{ font:500 10px/1 'Inter',sans-serif; letter-spacing:.14em; text-transform:uppercase; color:rgba(247,238,232,.5); margin-bottom:var(--sp-3); }
+  .b .set-label{ font:400 12.5px/1 'Inter',sans-serif; color:rgba(247,238,232,.8); margin-bottom:var(--sp-2); }
+  .b .speeds{ display:flex; gap:6px; }
+  .b .speeds button{ flex:1; font:500 11.5px/1 'Inter',sans-serif; padding:10px 4px; border-radius:var(--r-pill); border:1px solid rgba(247,238,232,.28); background:transparent; color:rgba(247,238,232,.75); cursor:pointer; }
+  .b .speeds button.on{ border-color:#F0C9A8; color:#F0C9A8; }
+
+  /* ══════════ C — BOTTOM TAB BAR ══════════ */
+  .tabbar{
+    flex:none; height:var(--tabbar-h); background:rgba(250,248,245,.94);
+    backdrop-filter:blur(10px); border-top:var(--border);
+    display:flex; align-items:stretch; z-index:20;
+  }
+  .tb{
+    flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:4px;
+    border:none; background:transparent; cursor:pointer; color:var(--muted); position:relative; padding:0;
+  }
+  .tb svg{ width:19px; height:19px; }
+  .tb span{ font:500 9.5px/1 'Inter',sans-serif; letter-spacing:.02em; }
+  .tb.on{ color:var(--brand); }
+  .tb.on::before{ content:''; position:absolute; top:0; left:22%; right:22%; height:2px; background:var(--brand); border-radius:var(--r-pill); }
+  .tb-badge{
+    position:absolute; top:7px; right:50%; margin-right:-20px;
+    min-width:16px; height:16px; border-radius:var(--r-pill); background:var(--brand); color:#fff;
+    font:600 9px/16px 'Inter',sans-serif; text-align:center; padding:0 4px;
+  }
+
+  /* docked action bar */
+  .bar{
+    flex:none; height:var(--bar-h); background:rgba(250,248,245,.94); backdrop-filter:blur(10px);
+    border-top:var(--border); box-shadow:0 -2px 12px rgba(58,42,30,.09);
+    display:flex; align-items:center; padding:0 var(--sp-3); z-index:20;
+  }
+  .bar-inner{ display:flex; align-items:center; gap:var(--sp-2); flex:1; }
+  .bar-mark{ flex:1; display:flex; align-items:center; justify-content:center; gap:8px; min-height:var(--tap-min); border-radius:var(--r-pill); font:500 13px/1 'Inter',sans-serif; border:1px solid var(--jade-edge); background:transparent; color:var(--jade); cursor:pointer; }
+  .bar-mark svg{ width:14px; height:14px; }
+  .bar-next{ flex:1; display:flex; align-items:center; justify-content:flex-end; gap:var(--sp-2); min-height:var(--tap-min); padding:0 var(--sp-3) 0 var(--sp-4); border-radius:var(--r-pill); background:var(--brand); border:1px solid var(--brand); color:#fff; font:500 12.5px/1.2 'Inter',sans-serif; cursor:pointer; }
+  .bar-next-t{ text-align:right; min-width:0; overflow:hidden; }
+  .bar-next-t i{ display:block; font-style:normal; font-size:9px; letter-spacing:.1em; text-transform:uppercase; opacity:.75; margin-bottom:2px; }
+  .bar-next-t b{ display:block; font-weight:500; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .bar-next svg{ width:15px; height:15px; flex:none; }
+  .tick{ width:22px; height:22px; border-radius:var(--r-pill); background:var(--jade); color:#fff; display:flex; align-items:center; justify-content:center; flex:none; }
+  .tick svg{ width:11px; height:11px; }
+
+  .bad{ outline:2px solid var(--brand); outline-offset:-2px; }
+  .flag{ position:absolute; right:8px; bottom:calc(var(--bar-h) + var(--tabbar-h) + 6px); background:var(--brand); color:#fff; font:600 9px/1 'Inter',sans-serif; letter-spacing:.08em; text-transform:uppercase; padding:5px 8px; border-radius:var(--r-sm); z-index:40; }
+
+  .notes{ max-width:700px; margin:48px auto 0; }
+  .notes h3{ font:600 15px/1 'Inter',sans-serif; color:var(--ink); margin:24px 0 12px; }
+  .notes h3:first-child{ margin-top:0; }
+  .notes p{ font:400 13.5px/1.65 'Inter',sans-serif; margin:0 0 12px; }
+  .notes ul{ margin:0; padding-left:18px; font:400 13.5px/1.65 'Inter',sans-serif; }
+  .notes li{ margin-bottom:9px; }
+  .notes code{ background:#DED8CE; padding:1px 5px; border-radius:4px; font-size:12px; }
+  table{ border-collapse:collapse; width:100%; font:400 13px/1.5 'Inter',sans-serif; margin-top:6px; }
+  th,td{ text-align:left; padding:9px 10px; border-bottom:var(--border); vertical-align:top; }
+  th{ font-weight:600; color:var(--ink); font-size:10.5px; letter-spacing:.07em; text-transform:uppercase; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <h1>1 · Drawer — the current pattern, restyled</h1>
+  <p class="lede">Same five destinations, same settings section. <b>Emoji icons replaced with stroke icons</b> to match the rest of the system — a fixed set of five is exactly where real icons beat emoji. Active state uses the 3px edge rule, the same emphasis device as everywhere else.</p>
+  <div class="rack" id="drawers"></div>
+
+  <h1>2 · Bottom tab bar — the alternative</h1>
+  <p class="lede">Five destinations is right at the limit for a tab bar, and it's the standard mobile pattern: always visible, thumb-reachable, no hidden menu. The descriptions ("Curated curriculum, ordered &amp; tracked") don't survive the move — they'd live on each destination's own screen instead.</p>
+  <div class="rack" id="tabs"></div>
+
+  <h1>3 · The collision, and the fix</h1>
+  <p class="lede">A tab bar plus the docked action bar is 118px of permanent bottom chrome. On an 812px phone that's 15% of the screen gone before any content — and two competing "what do I do now" zones stacked on each other.</p>
+  <div class="rack" id="collision"></div>
+
+  <div class="notes">
+    <h3>The fix stated plainly</h3>
+    <p><b>The action bar replaces the tab bar; they never coexist.</b> Global nav belongs at top-level destinations. Once you're inside a lesson, the useful action isn't "go to Translate" — it's finish this and continue. Swapping one 58px bar for one 60px bar costs nothing and removes the competing-zones problem entirely.</p>
+    <p>Getting out is already handled: the contextual row's back target sits at the top, labelled with its destination. So a topic screen has exactly one way out (top) and one way forward (bottom), which is cleaner than having both plus a tab bar.</p>
+
+    <h3>Where the bar shows, by screen</h3>
+    <table>
+      <tr><th>Screen</th><th>Bottom</th></tr>
+      <tr><td>Home, Learning Path, Topics, Review, Translate</td><td>Tab bar</td></tr>
+      <tr><td>Topic (Learn / Chat / Quiz)</td><td>Action bar — tab bar hidden</td></tr>
+      <tr><td>Checkpoint hub and activities</td><td>Action bar — tab bar hidden</td></tr>
+      <tr><td>Path timeline (inside a path)</td><td>Tab bar — it <i>is</i> a top-level destination</td></tr>
+    </table>
+
+    <h3>Drawer or tabs?</h3>
+    <p>I'd take <b>tabs</b>. Five destinations behind a hamburger means Review and Translate are effectively invisible — Review in particular is the feature that brings someone back, and it currently carries a badge nobody sees unless they open the menu. A tab bar puts that badge permanently in view, which is worth more than the 58px it costs.</p>
+    <p>The counter-argument is real though: the drawer's descriptions do genuine teaching work for a five-destination app where "Topics" and "Learning Path" aren't obviously different things. If you keep the drawer, <b>A</b> over <b>B</b> — the Oxblood panel in B is what your tokens currently produce, and it's a lot of deep red at full height, with the nested tint-on-tint active state fighting the ground.</p>
+    <p><b>Not either/or:</b> tabs for the five destinations, and the header's menu icon becomes a settings sheet for audio speed and anything later (voice toggle, account, subscription). That keeps the header's right corner useful and gives settings somewhere to grow — which matters if this becomes a paid product with an account to manage.</p>
+
+    <h3>Deferred deliberately</h3>
+    <p>The drawer currently resolves its own active state with <code>(state.checkpoint || state.fromPath) ? 'path' : state.nav</code> — so a topic opened from a path lights "Learning Path" rather than "Topics". That logic is correct and carries over to tabs unchanged; worth not losing it in a rewrite.</p>
+  </div>
+</div>
+
+<script>
+const I={
+  info:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>',
+  menu:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M3 6h18M3 12h18M3 18h18"/></svg>',
+  cog:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.9-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1A1.7 1.7 0 0 0 8.9 19a1.7 1.7 0 0 0-1.9.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.9 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1A1.7 1.7 0 0 0 5 8.9a1.7 1.7 0 0 0-.3-1.9l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.9.3H10a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.9-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.9V10a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>',
+  close:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg>',
+  check:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M20 6L9 17l-5-5"/></svg>',
+  arrow:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>',
+  home:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M3 10.5L12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/></svg>',
+  path:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><circle cx="6" cy="19" r="2.4"/><circle cx="18" cy="5" r="2.4"/><path d="M8.4 19h4.1a3.5 3.5 0 0 0 0-7h-1a3.5 3.5 0 0 1 0-7h4.1"/></svg>',
+  topics:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20V3H6.5A2.5 2.5 0 0 0 4 5.5v14z"/><path d="M4 19.5V21h16v-4"/></svg>',
+  review:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><rect x="3" y="7" width="14" height="14" rx="2"/><path d="M7 4h11a2 2 0 0 1 2 2v11"/></svg>',
+  translate:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18"/><path d="M12 3a14 14 0 0 1 0 18 14 14 0 0 1 0-18z"/></svg>',
+};
+
+const ITEMS=[
+  {k:'dashboard', i:'home',      l:'Home',          d:'Your next step at a glance'},
+  {k:'path',      i:'path',      l:'Learning Path', d:'Curated curriculum, ordered & tracked', on:true},
+  {k:'topics',    i:'topics',    l:'Topics',        d:'Vocabulary, sentences & conversations'},
+  {k:'review',    i:'review',    l:'Review',        d:'Words you got wrong in quizzes', badge:12},
+  {k:'translate', i:'translate', l:'Translate',     d:'AI-powered translation & breakdown'},
+];
+
+const hd=(right)=>`<div class="hd">
+  <button class="ic l">${I.info}</button>
+  <div class="plate"><span class="zh">廣東話</span><span class="en">Cantonese Learner</span></div>
+  <button class="ic r">${right||I.menu}</button></div>`;
+
+const page=`<div class="scroll"><div class="stub">
+  <div class="stub-eyebrow">Learning path</div>
+  <h2 class="stub-h">Beginner</h2>
+  <div class="stub-card"><div class="stub-line"></div><div class="stub-line"></div></div>
+  <div class="stub-card"><div class="stub-line"></div><div class="stub-line"></div></div>
+  <div class="stub-card"><div class="stub-line"></div><div class="stub-line"></div></div>
+</div></div>`;
+
+const drawerHTML=(cls)=>`
+  <div class="drawer ${cls}">
+    <div class="backdrop"></div>
+    <div class="panel">
+      <div class="panel-hd">
+        <span class="panel-title">Menu</span>
+        <button class="panel-close">${I.close}</button>
+      </div>
+      <div class="panel-body">
+        ${ITEMS.map(it=>`
+          <button class="ni ${it.on?'active':''}">
+            <span class="ni-icon">${I[it.i]}</span>
+            <span class="ni-text"><span class="ni-label">${it.l}</span><span class="ni-desc">${it.d}</span></span>
+            ${it.badge?`<span class="ni-badge">${it.badge}</span>`:''}
+          </button>`).join('')}
+        <div class="settings">
+          <div class="set-title">Settings</div>
+          <div class="set-label">Audio speed</div>
+          <div class="speeds"><button>Slow</button><button class="on">Normal</button><button>Fast</button></div>
+        </div>
+      </div>
+    </div>
+  </div>`;
+
+document.getElementById('drawers').innerHTML=[
+  {c:'a', t:'A · Parchment panel', n:'Oxblood only in the panel header. Rows on canvas, active row takes the brand tint plus the 3px edge.'},
+  {c:'b', t:'B · Oxblood panel', n:'What your tokens currently produce — <code>--drawer-bg</code> follows the header block. Full-height deep red, and the active state has to tint on top of it.'},
+].map(o=>`
+  <div class="col">
+    <span class="col-tag">${o.t}</span>
+    <p class="col-note">${o.n}</p>
+    <div class="phone">${hd()}${page}${drawerHTML(o.c)}</div>
+  </div>`).join('');
+
+const tabbar=(active)=>`<div class="tabbar">
+  ${ITEMS.map(it=>`<button class="tb ${it.k===active?'on':''}">
+      ${I[it.i]}<span>${it.l==='Learning Path'?'Path':it.l}</span>
+      ${it.badge?`<span class="tb-badge">${it.badge}</span>`:''}
+    </button>`).join('')}
+</div>`;
+
+document.getElementById('tabs').innerHTML=`
+  <div class="col">
+    <span class="col-tag">C · Bottom tabs</span>
+    <p class="col-note">Always visible. Review's badge is permanently in view instead of hidden behind a hamburger — that badge is the thing that brings someone back.</p>
+    <div class="phone">${hd(I.cog)}${page}${tabbar('path')}</div>
+  </div>
+  <div class="col">
+    <span class="col-tag">C · Menu icon becomes settings</span>
+    <p class="col-note">With destinations in the tab bar, the header's right corner frees up for a settings sheet — audio speed now, and somewhere for a voice toggle, account or subscription later.</p>
+    <div class="phone">${hd(I.cog)}${page}${tabbar('dashboard')}</div>
+  </div>`;
+
+const topicStub=`<div class="scroll"><div class="stub">
+  <div class="stub-eyebrow">Tier 1 · 10 words</div>
+  <h2 class="stub-h">Verb Tense</h2>
+  <div class="stub-card"><div class="stub-line"></div><div class="stub-line"></div></div>
+  <div class="stub-card"><div class="stub-line"></div><div class="stub-line"></div></div>
+  <div class="stub-card"><div class="stub-line"></div><div class="stub-line"></div></div>
+  <div class="stub-card"><div class="stub-line"></div><div class="stub-line"></div></div>
+</div></div>`;
+
+const actionBar=`<div class="bar"><div class="bar-inner">
+  <span class="tick">${I.check}</span>
+  <button class="bar-next"><span class="bar-next-t"><i>Next</i><b>Days &amp; Time</b></span>${I.arrow}</button>
+</div></div>`;
+
+document.getElementById('collision').innerHTML=`
+  <div class="col">
+    <span class="col-tag" style="color:var(--brand)">✗ Both — 118px of chrome</span>
+    <p class="col-note">Two bars, two competing "what now" zones, and the content window shrinks to 70% of the screen.</p>
+    <div class="phone">${hd(I.cog)}${topicStub}
+      <span class="flag">118px</span>
+      ${actionBar.replace('class="bar"','class="bar bad"')}
+      ${tabbar('path').replace('class="tabbar"','class="tabbar bad"')}
+    </div>
+  </div>
+  <div class="col">
+    <span class="col-tag">✓ Top-level destination — tabs</span>
+    <p class="col-note">Nothing to complete here, so the bottom belongs to navigation.</p>
+    <div class="phone">${hd(I.cog)}${page}${tabbar('path')}</div>
+  </div>
+  <div class="col">
+    <span class="col-tag">✓ Inside a topic — action bar</span>
+    <p class="col-note">Tab bar hidden. The way out is the contextual back target at the top; the way forward is the bar at the bottom.</p>
+    <div class="phone">${hd(I.cog)}${topicStub}${actionBar}</div>
+  </div>`;
+</script>
+</body>
+</html>

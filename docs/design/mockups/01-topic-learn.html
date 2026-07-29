@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Topic/Learn — design mockup</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Noto+Serif+TC:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+
+  /* ============================================================
+     TOKENS — same palette as the live app. Additions marked NEW.
+     ============================================================ */
+  :root{
+    --ink:            #1C1917;
+    --ink-soft:       #292524;
+    --parchment:      #FFFFFF;
+    --parchment-warm: #FAF8F5;
+    --parchment-deep: #F0EBE4;
+    --parchment-border:#EAE4DC;
+    --brand:          #C2410C;
+    --brand-dark:     #9A3412;
+    --brand-tint:     #FEF0E9;
+    --jade:           #15803D;
+    --jade-tint:      #DCFCE7;
+    --gold:           #0369A1;   /* secondary blue */
+    --gold-tint:      #E0F2FE;
+    --muted:          #A8A29E;
+    --muted-dark:     #78716C;
+    --header-bg:      #0369A1;
+    --header-text:    #FFE7C2;
+
+    /* NEW — one radius scale replaces the ~15 hardcoded values found
+       scattered across the current CSS (2px through 30px). */
+    --r-sm:   8px;
+    --r-md:   12px;
+    --r-lg:   18px;
+    --r-pill: 999px;
+
+    /* NEW — one border language: hairline at rest, emphasis only for
+       active/selected state. Replaces the mix of 1/1.5/2/3px widths. */
+    --border-hair: 1px solid var(--parchment-border);
+    --border-emph: 1.5px solid var(--brand);
+
+    /* Existing elevation tiers, kept */
+    --elev-1: 0 1px 3px rgba(28,25,23,0.07), 0 1px 2px rgba(28,25,23,0.05);
+    --elev-2: 0 4px 14px rgba(28,25,23,0.10), 0 2px 4px rgba(28,25,23,0.06);
+
+    --sp-1:4px; --sp-2:8px; --sp-3:12px; --sp-4:16px; --sp-5:20px; --sp-6:24px; --sp-7:32px;
+
+    --tone-1:#E74C3C; --tone-2:#E67E22; --tone-3:#c8a200;
+    --tone-4:#27AE60; --tone-5:#2980B9; --tone-6:#8E44AD;
+  }
+
+  *{box-sizing:border-box;}
+  body{
+    margin:0; background:#EDE8E0; min-height:100vh;
+    font-family:'Inter',sans-serif; color:var(--ink-soft);
+    display:flex; flex-direction:column; align-items:center; gap:28px;
+    padding:32px 16px 80px;
+  }
+
+  /* ── review-only chrome, not part of the app ── */
+  .review-tag{
+    font:600 11px/1 'Inter',sans-serif; letter-spacing:.06em; text-transform:uppercase;
+    color:var(--muted-dark); background:var(--parchment); border:var(--border-hair);
+    padding:6px 12px; border-radius:var(--r-pill);
+  }
+  .header-toggle{
+    display:flex; gap:8px; background:var(--parchment); border:var(--border-hair);
+    padding:4px; border-radius:var(--r-pill); box-shadow:var(--elev-1);
+  }
+  .header-toggle button{
+    font:600 12px/1 'Inter',sans-serif; padding:8px 14px; border-radius:var(--r-pill);
+    border:none; background:transparent; color:var(--muted-dark); cursor:pointer;
+  }
+  .header-toggle button.active{background:var(--ink); color:#fff;}
+
+  /* ── phone frame ── */
+  .device{
+    width:390px; max-width:100%; background:var(--parchment-warm);
+    border-radius:32px; box-shadow:0 20px 50px rgba(28,25,23,0.25);
+    overflow:hidden; border:8px solid var(--ink);
+  }
+  .screen{ height:780px; overflow-y:auto; -webkit-overflow-scrolling:touch; }
+  .screen::-webkit-scrollbar{width:0;}
+
+  /* ============================================================
+     APP HEADER — two variants, toggled for comparison
+     ============================================================ */
+  .app-header{ position:sticky; top:0; z-index:5; transition:background .15s,color .15s; }
+  .app-header-row{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:14px var(--sp-4) 12px;
+  }
+  .app-header-mark{ display:flex; align-items:baseline; gap:8px; }
+  .app-header-mark .zh{ font:600 19px/1 'Noto Serif TC',serif; }
+  .app-header-mark .en{ font:500 12px/1 'Inter',sans-serif; opacity:.75; }
+  .app-header-actions{ display:flex; gap:6px; }
+  .app-header-actions button{
+    width:34px; height:34px; border-radius:var(--r-pill); border:none;
+    background:rgba(0,0,0,0.06); display:flex; align-items:center; justify-content:center;
+    cursor:pointer;
+  }
+  .app-header-actions svg{ width:16px; height:16px; }
+
+  /* Variant A — quiet parchment, blends with content */
+  .app-header.variant-warm{ background:var(--parchment-warm); color:var(--ink); border-bottom:var(--border-hair); }
+  .app-header.variant-warm .app-header-mark .zh{ color:var(--ink); }
+  .app-header.variant-warm .app-header-actions button{ color:var(--ink-soft); }
+  .app-header.variant-warm .app-header-mark .zh::after{
+    content:''; display:block; width:22px; height:3px; background:var(--brand);
+    border-radius:var(--r-pill); margin-top:3px;
+  }
+
+  /* Variant B — ink/blue band, existing --header-bg / --header-text tokens */
+  .app-header.variant-ink{ background:var(--header-bg); color:var(--header-text); }
+  .app-header.variant-ink .app-header-mark .zh{ color:var(--header-text); }
+  .app-header.variant-ink .app-header-actions button{ background:rgba(255,255,255,0.14); color:var(--header-text); }
+
+  /* ============================================================
+     LESSON HEADER — signature moment: oversized watermark character
+     grounds the screen in the actual subject (the character being
+     studied), not a decorative shape.
+     ============================================================ */
+  .lesson-band{
+    position:relative; overflow:hidden; padding:22px var(--sp-4) 18px;
+    background:var(--parchment-deep);
+    border-bottom:var(--border-hair);
+  }
+  .lesson-band-watermark{
+    position:absolute; right:-14px; top:-30px; font-family:'Noto Serif TC',serif;
+    font-size:168px; line-height:1; color:var(--ink); opacity:.05; pointer-events:none;
+    user-select:none;
+  }
+  .lesson-eyebrow{
+    font:600 11px/1 'Inter',sans-serif; letter-spacing:.08em; text-transform:uppercase;
+    color:var(--muted-dark); margin-bottom:6px; display:flex; align-items:center; gap:6px;
+  }
+  .lesson-title{
+    font:600 26px/1.15 'Fraunces',serif; color:var(--ink); margin:0 0 4px; position:relative;
+    display:flex; align-items:center; gap:8px;
+  }
+  .lesson-sub{ font:500 13px/1 'Inter',sans-serif; color:var(--muted-dark); position:relative; }
+
+  /* ── round / tier selector ── */
+  .tier-row{ display:flex; gap:8px; padding:14px var(--sp-4) 0; }
+  .tier-btn{
+    font:600 13px/1 'Inter',sans-serif; padding:9px 16px; border-radius:var(--r-pill);
+    border:var(--border-hair); background:var(--parchment); color:var(--ink-soft); cursor:pointer;
+  }
+  .tier-btn.active{ background:var(--brand); border-color:var(--brand); color:#fff; }
+
+  /* ── subtabs ── */
+  .subtabs{ display:flex; gap:6px; padding:12px var(--sp-4) 0; }
+  .subtab{
+    flex:1; display:flex; align-items:center; justify-content:center; gap:6px;
+    font:600 13px/1 'Inter',sans-serif; padding:11px 8px; border-radius:var(--r-md);
+    border:none; background:transparent; color:var(--muted-dark); cursor:pointer;
+  }
+  .subtab.active{ background:var(--parchment); color:var(--brand); box-shadow:var(--elev-1); }
+  .subtab svg{ width:15px; height:15px; }
+
+  /* ============================================================
+     UNIFIED CARD PRIMITIVE
+     One base .card + modifiers. Every surface below — the note,
+     each word, each sentence, the tone guide — is this same class.
+     Compare to the live CSS: 10 independent card definitions with
+     drifting radius (14/16/var(--r-md)), border-width (1/1.5/2/3px)
+     and shadow tier. Here there is exactly one contract.
+     ============================================================ */
+  .card{
+    background:var(--parchment); border-radius:var(--r-md);
+    border:var(--border-hair); box-shadow:var(--elev-1);
+  }
+  .card--interactive{ cursor:pointer; transition:box-shadow .15s, transform .1s; }
+  .card--interactive:active{ transform:scale(0.98); box-shadow:var(--elev-2); }
+
+  .section{ padding:var(--sp-5) var(--sp-4) 0; }
+  .section-label{
+    font:600 11px/1 'Inter',sans-serif; letter-spacing:.07em; text-transform:uppercase;
+    color:var(--muted-dark); margin-bottom:10px; display:block;
+  }
+
+  /* note card */
+  .note-card{ padding:var(--sp-4); position:relative; }
+  .note-card::before{
+    content:''; position:absolute; left:0; top:12px; bottom:12px; width:3px;
+    background:var(--brand); border-radius:var(--r-pill);
+  }
+  .note-card-title{ font:600 13px/1 'Inter',sans-serif; color:var(--brand); margin-bottom:5px; }
+  .note-card-body{ font:400 13.5px/1.55 'Inter',sans-serif; color:var(--ink-soft); }
+
+  /* word grid */
+  .word-grid{ display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:10px; }
+  .word-card{
+    min-height:128px; padding:var(--sp-4) var(--sp-3); display:flex; flex-direction:column;
+    align-items:center; justify-content:center; gap:4px; text-align:center; position:relative;
+  }
+  .word-card .zh{ font:600 27px/1 'Noto Serif TC',serif; color:var(--ink); }
+  .word-card .jp{ font:700 13px/1 'Inter',sans-serif; }
+  .word-card .hint{ font:500 10px/1 'Inter',sans-serif; color:var(--muted); margin-top:2px; }
+  .word-card .en{ font:600 15px/1.3 'Inter',sans-serif; color:var(--ink); }
+  .word-card .speak{
+    position:absolute; bottom:8px; right:8px; width:26px; height:26px; border-radius:var(--r-pill);
+    border:1.5px solid var(--brand-tint); background:transparent; color:var(--brand);
+    display:flex; align-items:center; justify-content:center;
+  }
+  .word-card.flipped{ background:var(--brand); border-color:var(--brand); }
+  .word-card.flipped .en{ color:#fff; }
+  .word-card.flipped .speak{ border-color:rgba(255,255,255,0.5); color:#fff; }
+
+  /* sentence cards */
+  .sentence-card{ padding:var(--sp-4); margin-bottom:10px; }
+  .sentence-zh{ font:500 19px/1.5 'Noto Serif TC',serif; color:var(--ink); margin-bottom:4px; }
+  .sentence-jp{ font:600 13px/1.5 'Inter',sans-serif; margin-bottom:6px; }
+  .sentence-en{ font:400 13.5px/1.5 'Inter',sans-serif; color:var(--muted-dark); }
+
+  /* tone guide */
+  .tone-card{ padding:var(--sp-4); margin-bottom:var(--sp-6); }
+  .tone-card-title{ font:600 13px/1 'Inter',sans-serif; color:var(--ink); margin-bottom:10px; }
+  .tone-row{ display:flex; align-items:center; gap:9px; padding:5px 0; font:500 12.5px/1 'Inter',sans-serif; }
+  .tone-dot{ width:9px; height:9px; border-radius:50%; flex:none; }
+  .tone-desc{ color:var(--ink-soft); flex:1; }
+  .tone-ex{ font:700 12.5px/1 'Inter',sans-serif; }
+
+  /* ── annotation panel outside the frame ── */
+  .notes{ width:390px; max-width:100%; }
+  .notes h3{ font:600 15px/1 'Inter',sans-serif; color:var(--ink); margin:0 0 10px; }
+  .notes ul{ margin:0; padding-left:18px; font:400 13.5px/1.6 'Inter',sans-serif; color:var(--ink-soft); }
+  .notes li{ margin-bottom:6px; }
+</style>
+</head>
+<body>
+
+  <span class="review-tag">Design mockup · Topic/Learn screen · Food &amp; Dishes</span>
+  <div class="header-toggle" id="headerToggle">
+    <button class="active" data-variant="warm">Warm header</button>
+    <button data-variant="ink">Ink header</button>
+  </div>
+
+  <div class="device">
+    <div class="screen">
+
+      <div class="app-header variant-warm" id="appHeader">
+        <div class="app-header-row">
+          <div class="app-header-mark">
+            <span class="zh">廣東話</span>
+            <span class="en">Cantonese Learner</span>
+          </div>
+          <div class="app-header-actions">
+            <button aria-label="Tone reference"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg></button>
+            <button aria-label="Menu"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M3 12h18M3 18h18"/></svg></button>
+          </div>
+        </div>
+      </div>
+
+      <div class="lesson-band">
+        <div class="lesson-band-watermark">飯</div>
+        <div class="lesson-eyebrow">Tier 1 · 11 words</div>
+        <h1 class="lesson-title">🍜 Food &amp; Dishes</h1>
+        <div class="lesson-sub">Everyday dishes, cravings, and how to say something's delicious</div>
+      </div>
+
+      <div class="tier-row">
+        <button class="tier-btn active">Tier 1</button>
+        <button class="tier-btn">Tier 2</button>
+      </div>
+
+      <div class="subtabs">
+        <button class="subtab active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20V2H6.5A2.5 2.5 0 0 0 4 4.5v15Z"/></svg>Learn</button>
+        <button class="subtab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 11.5a8.38 8.38 0 0 1-9 8.4 8.5 8.5 0 0 1-4-1L3 20l1.3-3.9a8.5 8.5 0 1 1 16.7-4.6Z"/></svg>Chat</button>
+        <button class="subtab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>Quiz</button>
+      </div>
+
+      <div class="section">
+        <div class="card note-card">
+          <div class="note-card-title">📌 About this lesson</div>
+          <div class="note-card-body">Cantonese meals are built around a small set of workhorse words — 飯 (faan6) "rice" anchors most meals, while 粥 (zuk1) "congee" is the classic light option. Pair any dish with 好味 (hou2 mei6) to say it's delicious.</div>
+        </div>
+      </div>
+
+      <div class="section">
+        <span class="section-label">Words</span>
+        <div class="word-grid" id="wordGrid">
+          <!-- populated by JS from real topic data -->
+        </div>
+      </div>
+
+      <div class="section">
+        <span class="section-label">Sentences</span>
+        <div id="sentenceList"></div>
+      </div>
+
+      <div class="section">
+        <div class="card tone-card">
+          <div class="tone-card-title">📖 Jyutping tones</div>
+          <div id="toneList"></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="notes">
+    <h3>What's different from the live app</h3>
+    <ul>
+      <li>One <code>.card</code> primitive for every surface (note, word, sentence, tone guide) instead of 10 independently defined card classes with drifting radius/border/shadow.</li>
+      <li>One radius scale (8 / 12 / 18 / pill) replacing the ~15 hardcoded values currently scattered through the CSS.</li>
+      <li>Per-topic accent colours (the old <code>lesson.color</code> per category) dropped in favour of the single brand accent — matches the "Category accent colours switched off" decision already made but not yet fully carried through.</li>
+      <li>The header is toggleable above so you can compare both directions live rather than judging them from swatches.</li>
+      <li>Signature element: the oversized low-opacity character in the lesson band uses the actual word being studied, not a generic decorative shape — ties the visual identity directly to the content.</li>
+    </ul>
+  </div>
+
+<script>
+  const words = [
+    {c:'飯', j:'faan6', e:'Rice / Meal'},
+    {c:'麵', j:'min6', e:'Noodles'},
+    {c:'好味', j:'hou2 mei6', e:'Delicious'},
+    {c:'餓', j:'ngo6', e:'Hungry'},
+    {c:'粥', j:'zuk1', e:'Congee'},
+    {c:'麵包', j:'min6 baau1', e:'Bread'},
+    {c:'餃子', j:'gaau2 zi2', e:'Dumpling'},
+    {c:'點心', j:'dim2 sam1', e:'Dim sum'},
+    {c:'湯', j:'tong1', e:'Soup'},
+    {c:'小食', j:'siu2 sik6', e:'Snack'},
+    {c:'甜品', j:'tim4 ban2', e:'Dessert'},
+  ];
+  const sentences = [
+    {c:'佢食粥，我食麵。', j:'keoi5 sik6 zuk1, ngo5 sik6 min6.', e:"She's having congee, I'm having noodles."},
+    {c:'呢個飯好味！', j:'ni1 go3 faan6 hou2 mei6!', e:'This rice is delicious!'},
+    {c:'我好餓，想食點心同餃子。', j:'ngo5 hou2 ngo6, soeng2 sik6 dim2 sam1 tung4 gaau2 zi2.', e:"I'm hungry — I want dim sum and dumplings."},
+  ];
+  const TONES = {
+    1:{color:'var(--tone-1)', desc:'High level', ex:'詩 si1'},
+    2:{color:'var(--tone-2)', desc:'High rising', ex:'史 si2'},
+    3:{color:'var(--tone-3)', desc:'Mid level', ex:'試 si3'},
+    4:{color:'var(--tone-4)', desc:'Low falling', ex:'時 si4'},
+    5:{color:'var(--tone-5)', desc:'Low rising', ex:'市 si5'},
+    6:{color:'var(--tone-6)', desc:'Low level', ex:'事 si6'},
+  };
+  function colorJyutping(text){
+    return text.split(' ').map(syl=>{
+      const m = syl.match(/[1-6]/);
+      const color = m ? TONES[m[0]].color : '#777';
+      return `<span style="color:${color}">${syl}</span>`;
+    }).join(' ');
+  }
+
+  const grid = document.getElementById('wordGrid');
+  words.forEach((w,i)=>{
+    const el = document.createElement('div');
+    el.className = 'card card--interactive word-card' + (i===2 ? ' flipped' : '');
+    el.innerHTML = i===2
+      ? `<div class="en">${w.e}</div><button class="speak">▶</button>`
+      : `<div class="zh">${w.c}</div><div class="jp">${colorJyutping(w.j)}</div><div class="hint">tap to reveal</div><button class="speak">▶</button>`;
+    el.addEventListener('click', ()=> el.classList.toggle('flipped'));
+    grid.appendChild(el);
+  });
+
+  const sList = document.getElementById('sentenceList');
+  sentences.forEach(s=>{
+    const el = document.createElement('div');
+    el.className = 'card sentence-card';
+    el.innerHTML = `<div class="sentence-zh">${s.c}</div><div class="sentence-jp">${colorJyutping(s.j)}</div><div class="sentence-en">${s.e}</div>`;
+    sList.appendChild(el);
+  });
+
+  const tList = document.getElementById('toneList');
+  Object.entries(TONES).forEach(([t,d])=>{
+    const el = document.createElement('div');
+    el.className = 'tone-row';
+    el.innerHTML = `<span class="tone-dot" style="background:${d.color}"></span><span class="tone-desc">Tone ${t} — ${d.desc}</span><span class="tone-ex" style="color:${d.color}">${d.ex}</span>`;
+    tList.appendChild(el);
+  });
+
+  document.getElementById('headerToggle').addEventListener('click', e=>{
+    const btn = e.target.closest('button');
+    if(!btn) return;
+    document.querySelectorAll('#headerToggle button').forEach(b=>b.classList.toggle('active', b===btn));
+    const header = document.getElementById('appHeader');
+    header.classList.remove('variant-warm','variant-ink');
+    header.classList.add('variant-' + btn.dataset.variant);
+  });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Topic/Learn — design mockup v2 (restraint pass)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Noto+Serif+TC:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+
+  /* ============================================================
+     TOKENS
+     Palette and type unchanged from the live app. What changed in
+     this pass is how they're APPLIED, not what they are.
+     ============================================================ */
+  :root{
+    --ink:            #1C1917;
+    --ink-soft:       #44403C;
+    --surface:        #FFFFFF;
+    --canvas:         #FAF8F5;
+    --canvas-deep:    #F5F1EB;
+    --hairline:       #E8E2DA;
+    --hairline-soft:  #F0EBE4;
+
+    --brand:          #C2410C;
+    --brand-tint:     #FDF2EC;
+    --secondary:      #0369A1;
+    --jade:           #15803D;
+
+    --muted:          #A8A29E;
+    --muted-dark:     #78716C;
+
+    /* Radius scale — 4 values, replacing the ~15 hardcoded ones
+       currently scattered through styles.css */
+    --r-sm:   8px;
+    --r-md:   12px;
+    --r-lg:   16px;
+    --r-pill: 999px;
+
+    /* ONE border language. Hairline is the default everywhere;
+       brand borders are reserved for the selected/active thing. */
+    --border:      1px solid var(--hairline);
+    --border-soft: 1px solid var(--hairline-soft);
+
+    /* Elevation is now near-flat. The old --elev-1/--elev-2 pair is
+       replaced by a single whisper-shadow used sparingly, and most
+       surfaces use a hairline border instead of any shadow at all. */
+    --shadow: 0 1px 2px rgba(28,25,23,0.04);
+
+    --sp-1:4px;  --sp-2:8px;  --sp-3:12px; --sp-4:16px;
+    --sp-5:20px; --sp-6:28px; --sp-7:36px; --sp-8:48px;
+
+    --tone-1:#E74C3C; --tone-2:#E67E22; --tone-3:#c8a200;
+    --tone-4:#27AE60; --tone-5:#2980B9; --tone-6:#8E44AD;
+  }
+
+  *{box-sizing:border-box;}
+  body{
+    margin:0; background:#E6E1D9; min-height:100vh;
+    font-family:'Inter',sans-serif; color:var(--ink-soft);
+    display:flex; flex-direction:column; align-items:center; gap:24px;
+    padding:32px 16px 80px;
+  }
+
+  /* ── review-only chrome ── */
+  .review-tag{
+    font:500 11px/1 'Inter',sans-serif; letter-spacing:.08em; text-transform:uppercase;
+    color:var(--muted-dark); background:var(--surface); border:var(--border);
+    padding:7px 14px; border-radius:var(--r-pill);
+  }
+  .toggles{ display:flex; gap:10px; flex-wrap:wrap; justify-content:center; }
+  .toggle-group{
+    display:flex; gap:2px; background:var(--surface); border:var(--border);
+    padding:3px; border-radius:var(--r-pill);
+  }
+  .toggle-group button{
+    font:500 12px/1 'Inter',sans-serif; padding:8px 14px; border-radius:var(--r-pill);
+    border:none; background:transparent; color:var(--muted-dark); cursor:pointer;
+  }
+  .toggle-group button.active{ background:var(--ink); color:#fff; }
+
+  /* ── phone frame ── */
+  .device{
+    width:390px; max-width:100%; background:var(--canvas);
+    border-radius:34px; box-shadow:0 20px 50px rgba(28,25,23,0.22);
+    overflow:hidden; border:8px solid var(--ink);
+  }
+  .screen{ height:800px; overflow-y:auto; -webkit-overflow-scrolling:touch; }
+  .screen::-webkit-scrollbar{ width:0; }
+
+  /* ============================================================
+     APP HEADER — still toggleable, since the treatment is undecided
+     ============================================================ */
+  .app-header{ position:sticky; top:0; z-index:5; }
+  .app-header-row{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:16px var(--sp-5) 14px;
+  }
+  .app-header-mark{ display:flex; align-items:baseline; gap:9px; }
+  .app-header-mark .zh{ font:500 18px/1 'Noto Serif TC',serif; letter-spacing:.02em; }
+  .app-header-mark .en{ font:400 11.5px/1 'Inter',sans-serif; opacity:.6; letter-spacing:.02em; }
+  .app-header-actions{ display:flex; gap:var(--sp-1); }
+  .app-header-actions button{
+    width:32px; height:32px; border-radius:var(--r-pill); border:none;
+    background:transparent; display:flex; align-items:center; justify-content:center;
+    cursor:pointer; opacity:.55;
+  }
+  .app-header-actions svg{ width:17px; height:17px; }
+
+  .app-header.variant-warm{ background:var(--canvas); color:var(--ink); border-bottom:var(--border-soft); }
+  .app-header.variant-warm .app-header-actions button{ color:var(--ink); }
+  .app-header.variant-ink{ background:var(--secondary); color:#FDF6EC; border-bottom:none; }
+  .app-header.variant-ink .app-header-actions button{ color:#FDF6EC; opacity:.75; }
+
+  /* ============================================================
+     LESSON BAND
+     Signature element retained — the oversized character behind the
+     title is the word being studied. Dropped from 5% to 3.5% opacity
+     and pushed further off-edge so it reads as texture, not graphic.
+     ============================================================ */
+  .lesson-band{
+    position:relative; overflow:hidden;
+    padding:var(--sp-7) var(--sp-5) var(--sp-6);
+    border-bottom:var(--border-soft);
+  }
+  .lesson-band-watermark{
+    position:absolute; right:-24px; top:-38px; font-family:'Noto Serif TC',serif;
+    font-size:190px; line-height:1; color:var(--ink); opacity:.035;
+    pointer-events:none; user-select:none;
+  }
+  .eyebrow{
+    font:500 10.5px/1 'Inter',sans-serif; letter-spacing:.12em; text-transform:uppercase;
+    color:var(--brand); margin-bottom:var(--sp-3); position:relative;
+  }
+  .lesson-title{
+    font:500 30px/1.15 'Fraunces',serif; color:var(--ink);
+    margin:0 0 var(--sp-2); position:relative; letter-spacing:-.01em;
+  }
+  .lesson-sub{
+    font:400 14px/1.5 'Inter',sans-serif; color:var(--muted-dark);
+    position:relative; max-width:31ch;
+  }
+
+  /* ── tier selector — ghost pills, never filled ── */
+  .tier-row{ display:flex; gap:var(--sp-2); padding:var(--sp-5) var(--sp-5) 0; }
+  .tier-btn{
+    font:500 13px/1 'Inter',sans-serif; padding:9px 18px; border-radius:var(--r-pill);
+    border:var(--border); background:transparent; color:var(--muted-dark); cursor:pointer;
+    transition:border-color .15s, color .15s;
+  }
+  .tier-btn.active{ border-color:var(--brand); color:var(--brand); }
+
+  /* ── subtabs — underline, not filled tabs ── */
+  .subtabs{
+    display:flex; gap:var(--sp-6); padding:var(--sp-6) var(--sp-5) 0;
+    border-bottom:var(--border-soft); margin-bottom:var(--sp-2);
+  }
+  .subtab{
+    display:flex; align-items:center; gap:7px; padding:0 0 12px;
+    font:500 14px/1 'Inter',sans-serif; border:none; background:transparent;
+    color:var(--muted); cursor:pointer; position:relative;
+  }
+  .subtab svg{ width:15px; height:15px; }
+  .subtab.active{ color:var(--brand); }
+  .subtab.active::after{
+    content:''; position:absolute; left:0; right:0; bottom:-1px;
+    height:2px; background:var(--brand); border-radius:var(--r-pill);
+  }
+
+  /* ============================================================
+     THE CARD PRIMITIVE
+     Still one base class. But the base is now hairline-bordered and
+     flat — elevation is the exception, not the default.
+     ============================================================ */
+  .card{
+    background:var(--surface); border:var(--border);
+    border-radius:var(--r-md); box-shadow:var(--shadow);
+  }
+  .card--quiet{ background:transparent; border:none; box-shadow:none; }
+  .card--interactive{ cursor:pointer; transition:border-color .15s, transform .1s; }
+  .card--interactive:active{ transform:scale(0.985); }
+
+  .section{ padding:var(--sp-7) var(--sp-5) 0; }
+  .section-label{
+    font:500 10.5px/1 'Inter',sans-serif; letter-spacing:.12em; text-transform:uppercase;
+    color:var(--muted); margin-bottom:var(--sp-4); display:block;
+  }
+
+  /* ── note ── */
+  .note{ padding:var(--sp-4) 0 var(--sp-4) var(--sp-4); border-left:2px solid var(--brand); }
+  .note-title{
+    font:500 10.5px/1 'Inter',sans-serif; letter-spacing:.12em; text-transform:uppercase;
+    color:var(--brand); margin-bottom:var(--sp-2);
+  }
+  .note-body{ font:400 14px/1.65 'Inter',sans-serif; color:var(--ink-soft); }
+
+  /* ── word grid ── */
+  .word-grid{ display:grid; grid-template-columns:1fr 1fr; gap:var(--sp-3); }
+  .word-card{
+    min-height:132px; padding:var(--sp-5) var(--sp-3);
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    gap:var(--sp-1); text-align:center; position:relative;
+  }
+  .word-card .zh{ font:500 28px/1.1 'Noto Serif TC',serif; color:var(--ink); }
+  .word-card .jp{ font:500 12.5px/1 'Inter',sans-serif; margin-top:var(--sp-1); }
+  .word-card .hint{
+    font:400 9.5px/1 'Inter',sans-serif; letter-spacing:.08em; text-transform:uppercase;
+    color:var(--muted); margin-top:var(--sp-2);
+  }
+  /* Reveal state: a tint wash and brand text — not a solid fill.
+     English gloss set in the display serif, so the reveal reads as
+     the considered answer rather than a highlighted block. */
+  .word-card .en{ font:500 19px/1.3 'Fraunces',serif; color:var(--brand); }
+  .word-card.flipped{ background:var(--brand-tint); border-color:#F5D9C9; }
+  .word-card .speak{
+    position:absolute; bottom:10px; right:10px; width:24px; height:24px;
+    border-radius:var(--r-pill); border:1px solid var(--hairline);
+    background:transparent; color:var(--muted-dark);
+    display:flex; align-items:center; justify-content:center; font-size:9px;
+  }
+  .word-card.flipped .speak{ border-color:#F0CDB8; color:var(--brand); }
+
+  /* ── sentences: one card, hairline-divided rows (was: stacked cards) ── */
+  .list{ padding:0 var(--sp-4); }
+  .list-row{ padding:var(--sp-5) 0; border-top:var(--border-soft); }
+  .list-row:first-child{ border-top:none; }
+  .sentence-zh{ font:500 19px/1.6 'Noto Serif TC',serif; color:var(--ink); margin-bottom:var(--sp-2); }
+  .sentence-jp{ font:500 12.5px/1.5 'Inter',sans-serif; margin-bottom:var(--sp-2); }
+  .sentence-en{ font:400 14px/1.5 'Inter',sans-serif; color:var(--muted-dark); }
+
+  /* ── tone guide: same list pattern, proving the primitive reuses ── */
+  .tone-row{
+    display:flex; align-items:center; gap:var(--sp-3); padding:11px 0;
+    border-top:var(--border-soft); font:400 13px/1 'Inter',sans-serif;
+  }
+  .tone-row:first-child{ border-top:none; }
+  .tone-dot{ width:7px; height:7px; border-radius:50%; flex:none; }
+  .tone-desc{ color:var(--ink-soft); flex:1; }
+  .tone-ex{ font:500 13px/1 'Inter',sans-serif; }
+
+  .tail{ height:var(--sp-8); }
+
+  /* ── annotations ── */
+  .notes{ width:390px; max-width:100%; }
+  .notes h3{ font:600 15px/1 'Inter',sans-serif; color:var(--ink); margin:0 0 12px; }
+  .notes ul{ margin:0; padding-left:18px; font:400 13.5px/1.65 'Inter',sans-serif; color:var(--ink-soft); }
+  .notes li{ margin-bottom:8px; }
+  .notes code{ background:#DED8CE; padding:1px 5px; border-radius:4px; font-size:12px; }
+</style>
+</head>
+<body>
+
+  <span class="review-tag">Topic/Learn · v2 restraint pass · Food &amp; Dishes</span>
+  <div class="toggles">
+    <div class="toggle-group" id="headerToggle">
+      <button class="active" data-variant="warm">Warm header</button>
+      <button data-variant="ink">Ink header</button>
+    </div>
+  </div>
+
+  <div class="device">
+    <div class="screen">
+
+      <div class="app-header variant-warm" id="appHeader">
+        <div class="app-header-row">
+          <div class="app-header-mark">
+            <span class="zh">廣東話</span>
+            <span class="en">Cantonese Learner</span>
+          </div>
+          <div class="app-header-actions">
+            <button aria-label="Tone reference"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg></button>
+            <button aria-label="Menu"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M3 6h18M3 12h18M3 18h18"/></svg></button>
+          </div>
+        </div>
+      </div>
+
+      <div class="lesson-band">
+        <div class="lesson-band-watermark">飯</div>
+        <div class="eyebrow">Tier 1 · 11 words</div>
+        <h1 class="lesson-title">Food &amp; Dishes</h1>
+        <div class="lesson-sub">Everyday dishes, cravings, and how to say something tastes good</div>
+      </div>
+
+      <div class="tier-row">
+        <button class="tier-btn active">Tier 1</button>
+        <button class="tier-btn">Tier 2</button>
+      </div>
+
+      <div class="subtabs">
+        <button class="subtab active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20V2H6.5A2.5 2.5 0 0 0 4 4.5v15Z"/></svg>Learn</button>
+        <button class="subtab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M21 11.5a8.38 8.38 0 0 1-9 8.4 8.5 8.5 0 0 1-4-1L3 20l1.3-3.9a8.5 8.5 0 1 1 16.7-4.6Z"/></svg>Chat</button>
+        <button class="subtab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>Quiz</button>
+      </div>
+
+      <div class="section">
+        <div class="note">
+          <div class="note-title">About this lesson</div>
+          <div class="note-body">Cantonese meals are built on a small set of workhorse words. 飯 (faan6) anchors most meals, while 粥 (zuk1) is the lighter everyday option. Pair either with 好味 (hou2 mei6) to say it tastes good.</div>
+        </div>
+      </div>
+
+      <div class="section">
+        <span class="section-label">Words</span>
+        <div class="word-grid" id="wordGrid"></div>
+      </div>
+
+      <div class="section">
+        <span class="section-label">Sentences</span>
+        <div class="card list" id="sentenceList"></div>
+      </div>
+
+      <div class="section">
+        <span class="section-label">Jyutping tones</span>
+        <div class="card list" id="toneList"></div>
+      </div>
+
+      <div class="tail"></div>
+
+    </div>
+  </div>
+
+  <div class="notes">
+    <h3>What changed from v1</h3>
+    <ul>
+      <li><strong>Nothing is filled with brand colour any more.</strong> Tier pills, subtabs and the revealed word card were all solid orange blocks; they're now outline, underline, and a pale tint respectively. Orange survives as text, borders and the 2px accent rule.</li>
+      <li><strong>Shadows are effectively gone.</strong> The two elevation tiers are replaced by a hairline border plus a whisper shadow. Surfaces are separated by line and space, not by lift.</li>
+      <li><strong>Sentences and tones became divided lists, not stacks of cards.</strong> Fewer boxes competing for attention — same <code>.card</code> primitive, wrapping rows instead of repeating per item.</li>
+      <li><strong>Spacing scale extended</strong> (added 28/36/48px steps) and applied — section gaps roughly doubled.</li>
+      <li><strong>Emoji dropped from the title and section headers.</strong> Titles now sit in Fraunces at 30px with a letterspaced eyebrow above, which is where the editorial quality in your reference actually comes from.</li>
+      <li><strong>English reveal set in the display serif</strong> rather than UI sans — makes the answer feel like the considered payoff of the card.</li>
+    </ul>
+    <h3 style="margin-top:20px">Still open</h3>
+    <ul>
+      <li>The six tone colours remain untouched and are now the loudest thing on screen. They're functional (consistent app-wide), so changing them is a separate decision — but worth making.</li>
+      <li>Header treatment still toggleable above; no decision assumed.</li>
+    </ul>
+  </div>
+
+<script>
+  const words = [
+    {c:'飯', j:'faan6', e:'Rice / Meal'},
+    {c:'麵', j:'min6', e:'Noodles'},
+    {c:'好味', j:'hou2 mei6', e:'Delicious'},
+    {c:'餓', j:'ngo6', e:'Hungry'},
+    {c:'粥', j:'zuk1', e:'Congee'},
+    {c:'麵包', j:'min6 baau1', e:'Bread'},
+    {c:'餃子', j:'gaau2 zi2', e:'Dumpling'},
+    {c:'點心', j:'dim2 sam1', e:'Dim sum'},
+    {c:'湯', j:'tong1', e:'Soup'},
+    {c:'小食', j:'siu2 sik6', e:'Snack'},
+    {c:'甜品', j:'tim4 ban2', e:'Dessert'},
+  ];
+  const sentences = [
+    {c:'佢食粥，我食麵。', j:'keoi5 sik6 zuk1, ngo5 sik6 min6.', e:"She's having congee, I'm having noodles."},
+    {c:'呢個飯好味！', j:'ni1 go3 faan6 hou2 mei6!', e:'This rice is delicious!'},
+    {c:'我好餓，想食點心同餃子。', j:'ngo5 hou2 ngo6, soeng2 sik6 dim2 sam1 tung4 gaau2 zi2.', e:"I'm hungry — I want dim sum and dumplings."},
+  ];
+  const TONES = {
+    1:{color:'var(--tone-1)', desc:'High level',  ex:'詩 si1'},
+    2:{color:'var(--tone-2)', desc:'High rising', ex:'史 si2'},
+    3:{color:'var(--tone-3)', desc:'Mid level',   ex:'試 si3'},
+    4:{color:'var(--tone-4)', desc:'Low falling', ex:'時 si4'},
+    5:{color:'var(--tone-5)', desc:'Low rising',  ex:'市 si5'},
+    6:{color:'var(--tone-6)', desc:'Low level',   ex:'事 si6'},
+  };
+  function colorJyutping(text){
+    return text.split(' ').map(syl=>{
+      const m = syl.match(/[1-6]/);
+      const color = m ? TONES[m[0]].color : 'var(--muted-dark)';
+      return `<span style="color:${color}">${syl}</span>`;
+    }).join(' ');
+  }
+
+  const grid = document.getElementById('wordGrid');
+  words.forEach((w,i)=>{
+    const el = document.createElement('div');
+    const flipped = i===2;
+    el.className = 'card card--interactive word-card' + (flipped ? ' flipped' : '');
+    el.dataset.zh = w.c; el.dataset.jp = w.j; el.dataset.en = w.e;
+    el.innerHTML = flipped ? faceEn(w) : faceZh(w);
+    el.addEventListener('click', ()=>{
+      const on = el.classList.toggle('flipped');
+      el.innerHTML = on ? faceEn(w) : faceZh(w);
+    });
+    grid.appendChild(el);
+  });
+  function faceZh(w){
+    return `<div class="zh">${w.c}</div><div class="jp">${colorJyutping(w.j)}</div>
+            <div class="hint">tap to reveal</div><button class="speak">▶</button>`;
+  }
+  function faceEn(w){
+    return `<div class="en">${w.e}</div><button class="speak">▶</button>`;
+  }
+
+  const sList = document.getElementById('sentenceList');
+  sentences.forEach(s=>{
+    const el = document.createElement('div');
+    el.className = 'list-row';
+    el.innerHTML = `<div class="sentence-zh">${s.c}</div>
+                    <div class="sentence-jp">${colorJyutping(s.j)}</div>
+                    <div class="sentence-en">${s.e}</div>`;
+    sList.appendChild(el);
+  });
+
+  const tList = document.getElementById('toneList');
+  Object.entries(TONES).forEach(([t,d])=>{
+    const el = document.createElement('div');
+    el.className = 'tone-row';
+    el.innerHTML = `<span class="tone-dot" style="background:${d.color}"></span>
+                    <span class="tone-desc">Tone ${t} — ${d.desc}</span>
+                    <span class="tone-ex" style="color:${d.color}">${d.ex}</span>`;
+    tList.appendChild(el);
+  });
+
+  document.getElementById('headerToggle').addEventListener('click', e=>{
+    const btn = e.target.closest('button');
+    if(!btn) return;
+    document.querySelectorAll('#headerToggle button').forEach(b=>b.classList.toggle('active', b===btn));
+    const h = document.getElementById('appHeader');
+    h.classList.remove('variant-warm','variant-ink');
+    h.classList.add('variant-' + btn.dataset.variant);
+  });
+</script>
+
+</body>
+</html>

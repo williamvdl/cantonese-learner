@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Diamond progress ring — options</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#1C1917; --ink-soft:#44403C;
+    --surface:#FFFFFF; --canvas:#FAF8F5;
+    --hairline:#E8E2DA; --border:1px solid var(--hairline);
+    --brand:#C2410C;
+    --state-done:#15803D; --done-tint:#F0FAF3; --done-edge:#C9E7D3;
+    --milestone:#6E2639; --milestone-tint:#FBF0F2; --milestone-edge:#EBD3D9;
+    --muted:#A8A29E; --muted-dark:#78716C;
+    --r-sm:8px; --r-md:12px; --r-pill:999px;
+    --shadow:0 1px 2px rgba(28,25,23,0.04);
+    --sp-3:12px; --sp-4:16px; --sp-5:20px;
+  }
+  *{box-sizing:border-box;}
+  body{ margin:0; background:#E6E1D9; font-family:'Inter',sans-serif; color:var(--ink-soft); padding:34px 18px 90px; }
+  .wrap{ max-width:1160px; margin:0 auto; }
+  h1{ font:600 13px/1 'Inter',sans-serif; letter-spacing:.1em; text-transform:uppercase; color:var(--muted-dark); margin:40px 0 8px; }
+  h1:first-child{ margin-top:0; }
+  .lede{ font:400 13.5px/1.65 'Inter',sans-serif; color:var(--ink-soft); max-width:64ch; margin:0 0 22px; }
+  .lede b{ color:var(--ink); font-weight:600; }
+  .grid{ display:grid; grid-template-columns:repeat(auto-fit,minmax(330px,1fr)); gap:24px; }
+  .cell-tag{ font:600 10.5px/1 'Inter',sans-serif; letter-spacing:.1em; text-transform:uppercase; color:var(--muted-dark); margin:0 0 4px; }
+  .cell-note{ font:400 12px/1.5 'Inter',sans-serif; color:var(--muted-dark); margin:0 0 11px; min-height:36px; }
+  .frame{ background:var(--canvas); border:1px solid rgba(28,25,23,.12); border-radius:var(--r-md); padding:var(--sp-5) var(--sp-4); }
+
+  /* rail — widened 28 → 32 to clear the ring stroke */
+  .step{ display:flex; gap:var(--sp-4); }
+  .rail{ display:flex; flex-direction:column; align-items:center; flex:none; width:32px; }
+  .rail-line{ flex:1; width:1px; background:var(--hairline); min-height:16px; }
+  .step:last-child .rail-line{ background:transparent; }
+  .step-body{ flex:1; padding-bottom:var(--sp-3); min-width:0; }
+
+  .card{
+    background:var(--surface); border:var(--border); border-radius:var(--r-md);
+    box-shadow:var(--shadow); padding:var(--sp-4);
+    display:flex; align-items:center; gap:var(--sp-3);
+    border-left:3px solid var(--milestone); padding-left:calc(var(--sp-4) - 2px);
+  }
+  .card.is-done{ border-left-color:var(--done-edge); }
+  .txt{ flex:1; min-width:0; }
+  .title{ font:500 14.5px/1.3 'Inter',sans-serif; color:var(--milestone); }
+  .card.is-done .title{ color:var(--muted-dark); }
+  .meta{ font:400 11.5px/1 'Inter',sans-serif; color:var(--muted-dark); margin-top:5px; }
+  .badge{
+    font:500 9.5px/1 'Inter',sans-serif; letter-spacing:.14em; text-transform:uppercase;
+    color:var(--milestone); border:1px solid var(--milestone-edge);
+    padding:5px 9px; border-radius:var(--r-pill); flex:none;
+  }
+  .card.is-done .badge{ color:var(--state-done); border-color:var(--done-edge); }
+
+  .pips{ display:flex; gap:5px; margin-top:8px; }
+  .pips i{ width:22px; height:3px; border-radius:var(--r-pill); background:var(--milestone-edge); display:block; }
+  .pips i.on{ background:var(--milestone); }
+  .pips.is-done i{ background:var(--done-edge); }
+  .pips.is-done i.on{ background:var(--state-done); }
+
+  /* ring host */
+  .mk{ position:relative; width:32px; height:32px; flex:none; display:flex; align-items:center; justify-content:center; }
+  .mk svg{ position:absolute; inset:0; width:32px; height:32px; }
+  .mk .glyph{
+    position:relative; z-index:2; font-size:10px; color:var(--milestone);
+    display:flex; align-items:center; justify-content:center;
+  }
+  .mk .glyph svg{ position:static; width:12px; height:12px; }
+  .mk.is-done .glyph{ color:var(--state-done); }
+
+  /* B: circular track, diamond glyph inside */
+  .mk .plate-d{
+    position:absolute; width:19px; height:19px; border-radius:5px; transform:rotate(45deg);
+    background:var(--milestone-tint); border:1px solid var(--milestone-edge); z-index:1;
+  }
+  .mk.is-done .plate-d{ background:var(--done-tint); border-color:var(--done-edge); }
+
+  .sizes{ display:flex; align-items:center; gap:26px; padding:6px 0 0; }
+  .sizes .lbl{ font:400 11px/1 'Inter',sans-serif; color:var(--muted); }
+
+  .foot{ font:400 13.5px/1.65 'Inter',sans-serif; color:var(--ink-soft); max-width:64ch; margin:30px 0 0; }
+  .foot b{ color:var(--ink); font-weight:600; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <h1>Diamond + progress ring · three geometries</h1>
+  <p class="lede">Each option shown across all three states — <b>not started</b>, <b>1 of 2</b>, <b>complete</b> — with segments and the count kept in the card, as agreed. Rail widened from 28px to 32px to clear the ring stroke; that shifts every step card 4px right, which is the one knock-on worth knowing about.</p>
+
+  <div class="grid" id="grid"></div>
+
+  <h1>Scaling to three activities</h1>
+  <p class="lede">The Stage&nbsp;3 sentence exercise makes checkpoints three activities. Shown here at <b>1 of 3</b> and <b>2 of 3</b> in the preferred geometry.</p>
+  <div class="grid" id="scale"></div>
+
+  <p class="foot">My read: <b>A</b> is the honest answer — the progress track <i>is</i> the diamond, so the milestone shape and the progress indicator are the same object rather than two shapes stacked. The sharp vertices do read slightly chunky at this size, which <b>A-soft</b> fixes with a 3px corner radius at almost no cost to the shape's identity. <b>B</b> is the safest geometry but puts a circle and a diamond in a 32px box, which is busier than either alone.</p>
+
+</div>
+
+<script>
+  const CHECK = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M20 6L9 17l-5-5"/></svg>';
+
+  // geometry defs — all drawn in a 32×32 viewBox
+  const GEOM = {
+    A:     '<path d="M16 5 L27 16 L16 27 L5 16 Z" fill="none"/>',
+    Asoft: '<path d="M13.9 6.9 a3 3 0 0 1 4.2 0 l7 7 a3 3 0 0 1 0 4.2 l-7 7 a3 3 0 0 1 -4.2 0 l-7 -7 a3 3 0 0 1 0 -4.2 Z" fill="none"/>',
+    B:     '<circle cx="16" cy="16" r="12" fill="none"/>',
+  };
+
+  function marker(kind, pct, done){
+    const inner = GEOM[kind];
+    const plate = kind === 'B'
+      ? `<span class="plate-d"></span>`
+      : '';
+    const fillShape = kind === 'B'
+      ? ''
+      : `<g class="fillshape">${inner.replace('fill="none"','fill="var(--milestone-tint)"').replace('<path','<path stroke="none"')}</g>`;
+    return `
+      <div class="mk ${done ? 'is-done' : ''}" data-pct="${pct}" data-kind="${kind}">
+        <svg viewBox="0 0 32 32" aria-hidden="true">
+          ${fillShape}
+          <g class="track" stroke="${done ? 'var(--done-edge)' : 'var(--milestone-edge)'}" stroke-width="2">${inner}</g>
+          <g class="prog" stroke="${done ? 'var(--state-done)' : 'var(--milestone)'}" stroke-width="2" stroke-linecap="round">${inner}</g>
+        </svg>
+        ${plate}
+        <span class="glyph">${done ? CHECK : '◆'}</span>
+      </div>`;
+  }
+
+  function row(kind, label, doneN, totalN){
+    const pct = doneN / totalN;
+    const done = doneN === totalN;
+    const started = doneN > 0;
+    const badge = done ? CHECK : (started ? 'Resume' : 'Checkpoint');
+    const meta  = done ? 'Complete' : (started ? `${doneN} of ${totalN} done` : `${totalN} activities · tap to open`);
+    const pips = `<div class="pips ${done ? 'is-done' : ''}">` +
+      Array.from({length: totalN}, (_,i)=>`<i class="${i < doneN ? 'on' : ''}"></i>`).join('') + '</div>';
+    return `
+      <div class="step">
+        <div class="rail">${marker(kind, pct, done)}<div class="rail-line"></div></div>
+        <div class="step-body">
+          <div class="card ${done ? 'is-done' : ''}">
+            <div class="txt">
+              <div class="title">Checkpoint · Building Sentences</div>
+              <div class="meta">${meta}</div>
+              ${started ? pips : ''}
+            </div>
+            <span class="badge">${badge}</span>
+          </div>
+        </div>
+      </div>`;
+  }
+
+  const OPTS = [
+    {k:'A',     t:'A · Diamond track (sharp)',  n:'The progress arc is the diamond itself. Shape and indicator are one object.'},
+    {k:'Asoft', t:'A-soft · Diamond, 3px radius', n:'Same geometry with softened vertices — reads cleaner where the stroke ends.'},
+    {k:'B',     t:'B · Circular track + diamond', n:'Cleanest arc maths, but two shapes sharing a 32px box.'},
+  ];
+
+  document.getElementById('grid').innerHTML = OPTS.map(o => `
+    <div>
+      <p class="cell-tag">${o.t}</p>
+      <p class="cell-note">${o.n}</p>
+      <div class="frame">
+        ${row(o.k,'',0,2)}
+        ${row(o.k,'',1,2)}
+        ${row(o.k,'',2,2)}
+      </div>
+    </div>`).join('');
+
+  document.getElementById('scale').innerHTML = `
+    <div>
+      <p class="cell-tag">A-soft · three activities</p>
+      <p class="cell-note">Segments divide by count; the arc divides by fraction. Both hold at three.</p>
+      <div class="frame">
+        ${row('Asoft','',1,3)}
+        ${row('Asoft','',2,3)}
+        ${row('Asoft','',3,3)}
+      </div>
+    </div>`;
+
+  // Set dash geometry from the real path length of each shape.
+  document.querySelectorAll('.mk').forEach(mk => {
+    const pct = parseFloat(mk.dataset.pct);
+    const prog = mk.querySelector('.prog > *');
+    if(!prog) return;
+    const len = prog.getTotalLength();
+    prog.setAttribute('stroke-dasharray', len);
+    // start the arc at the bottom vertex and travel clockwise
+    prog.setAttribute('stroke-dashoffset', len * (1 - pct));
+    if(pct === 0) prog.setAttribute('stroke-opacity','0');
+  });
+</script>
+</body>
+</html>

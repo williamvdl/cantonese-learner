@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Path + Checkpoint — design mockup</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Noto+Serif+TC:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#1C1917; --ink-soft:#44403C;
+    --surface:#FFFFFF; --canvas:#FAF8F5; --canvas-deep:#F5F1EB;
+    --hairline:#E8E2DA; --hairline-soft:#F0EBE4;
+    --border:1px solid var(--hairline);
+    --border-soft:1px solid var(--hairline-soft);
+
+    --brand:#C2410C; --brand-tint:#FDF2EC; --brand-edge:#F5D9C9;
+
+    --header-bg:#6E2639; --header-text:#F7EEE8;
+
+    /* ── PROPOSED: three semantic states, replacing the orphaned
+       CP_GOLD (#B7861E) that sits outside the palette entirely ── */
+    --state-current:   #C2410C;  /* the thing to do next   */
+    --state-done:      #15803D;  /* finished               */
+    --state-milestone: #6E2639;  /* checkpoints            */
+    --milestone-tint:  #FBF0F2;
+    --milestone-edge:  #EBD3D9;
+    --done-tint:       #F0FAF3;
+    --done-edge:       #C9E7D3;
+
+    --muted:#A8A29E; --muted-dark:#78716C;
+    --r-sm:8px; --r-md:12px; --r-lg:16px; --r-pill:999px;
+    --shadow:0 1px 2px rgba(28,25,23,0.04);
+    --sp-1:4px; --sp-2:8px; --sp-3:12px; --sp-4:16px;
+    --sp-5:20px; --sp-6:28px; --sp-7:36px; --sp-8:48px;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0; background:#E6E1D9; font-family:'Inter',sans-serif; color:var(--ink-soft);
+    padding:32px 16px 80px;
+  }
+  .wrap{ max-width:900px; margin:0 auto; }
+  .review-tag{
+    display:inline-block; font:500 11px/1 'Inter',sans-serif; letter-spacing:.08em;
+    text-transform:uppercase; color:var(--muted-dark); background:var(--surface);
+    border:var(--border); padding:7px 14px; border-radius:var(--r-pill); margin-bottom:22px;
+  }
+  .rack{ display:flex; gap:30px; flex-wrap:wrap; justify-content:center; }
+  .col{ display:flex; flex-direction:column; gap:9px; }
+  .col-tag{
+    font:600 10.5px/1 'Inter',sans-serif; letter-spacing:.1em; text-transform:uppercase;
+    color:var(--muted-dark);
+  }
+  .device{
+    width:390px; max-width:100%; background:var(--canvas);
+    border-radius:34px; box-shadow:0 18px 44px rgba(28,25,23,0.2);
+    overflow:hidden; border:8px solid var(--ink);
+  }
+  .screen{ height:820px; overflow-y:auto; }
+  .screen::-webkit-scrollbar{ width:0; }
+
+  /* ── shared header ── */
+  .app-header{
+    position:sticky; top:0; z-index:6; background:var(--header-bg); color:var(--header-text);
+    padding:13px var(--sp-3) 12px;
+  }
+  .app-header .icon{
+    position:absolute; top:12px; width:30px; height:30px; border-radius:var(--r-pill);
+    border:none; background:transparent; color:var(--header-text); opacity:.72;
+    display:flex; align-items:center; justify-content:center; cursor:pointer; padding:0;
+  }
+  .app-header .icon.left{ left:12px; } .app-header .icon.right{ right:12px; }
+  .app-header .icon svg{ width:17px; height:17px; }
+  .plate{ display:flex; flex-direction:column; align-items:center; gap:5px; }
+  .plate .zh{ font:500 17px/1 'Noto Serif TC',serif; letter-spacing:.04em; }
+  .plate .en{ font:500 9px/1 'Inter',sans-serif; letter-spacing:.24em; text-transform:uppercase; opacity:.72; }
+
+  .ctx{ background:var(--canvas); }
+  .ctx-row{ display:flex; align-items:center; justify-content:space-between; padding:12px var(--sp-5) 11px; }
+  .ctx-back{
+    display:flex; align-items:center; gap:7px; font:500 13px/1 'Inter',sans-serif;
+    color:var(--ink); background:none; border:none; cursor:pointer; padding:0;
+  }
+  .ctx-back svg{ width:16px; height:16px; }
+  .ctx-meta{ font:500 11.5px/1 'Inter',sans-serif; color:var(--muted-dark); }
+  .ctx-track{ height:2px; background:var(--hairline-soft); }
+  .ctx-fill{ height:2px; background:var(--header-bg); }
+
+  /* ── hero band ── */
+  .hero{ position:relative; overflow:hidden; padding:var(--sp-7) var(--sp-5) var(--sp-6); border-bottom:var(--border-soft); }
+  .hero-wm{
+    position:absolute; right:-24px; top:-38px; font-family:'Noto Serif TC',serif;
+    font-size:190px; line-height:1; color:var(--ink); opacity:.035; user-select:none;
+  }
+  .eyebrow{
+    font:500 10.5px/1 'Inter',sans-serif; letter-spacing:.12em; text-transform:uppercase;
+    margin-bottom:var(--sp-3); position:relative;
+  }
+  .eyebrow.brand{ color:var(--brand); }
+  .eyebrow.milestone{ color:var(--state-milestone); }
+  .hero-title{
+    font:500 30px/1.15 'Fraunces',serif; color:var(--ink); margin:0 0 var(--sp-2);
+    position:relative; letter-spacing:-.01em;
+  }
+  .hero-sub{ font:400 14px/1.55 'Inter',sans-serif; color:var(--muted-dark); position:relative; max-width:32ch; }
+
+  .hero-prog{ margin-top:var(--sp-5); position:relative; }
+  .prog-track{ height:3px; background:var(--hairline); border-radius:var(--r-pill); overflow:hidden; }
+  .prog-fill{ height:3px; background:var(--brand); border-radius:var(--r-pill); }
+  .prog-legend{
+    display:flex; justify-content:space-between; margin-top:9px;
+    font:500 11.5px/1 'Inter',sans-serif; color:var(--muted-dark);
+  }
+
+  /* ============================================================
+     STAGE BAND
+     ============================================================ */
+  .stage-band{
+    display:flex; align-items:center; gap:var(--sp-3);
+    padding:var(--sp-7) var(--sp-5) var(--sp-4);
+  }
+  .stage-num{
+    font:500 10.5px/1 'Inter',sans-serif; letter-spacing:.1em; color:var(--muted);
+  }
+  .stage-name{
+    font:500 12px/1 'Inter',sans-serif; letter-spacing:.1em; text-transform:uppercase; color:var(--ink);
+  }
+  .stage-rule{ flex:1; height:1px; background:var(--hairline); }
+  .stage-meta{ font:400 11px/1 'Inter',sans-serif; color:var(--muted); }
+
+  /* ============================================================
+     STEP RAIL
+     ============================================================ */
+  .step{ display:flex; gap:var(--sp-4); padding:0 var(--sp-5); }
+  .rail{ display:flex; flex-direction:column; align-items:center; flex:none; width:28px; }
+  .node{
+    width:28px; height:28px; border-radius:var(--r-pill); border:var(--border);
+    background:var(--surface); display:flex; align-items:center; justify-content:center;
+    font:500 12px/1 'Inter',sans-serif; color:var(--muted-dark); flex:none;
+  }
+  .node svg{ width:13px; height:13px; }
+  .rail-line{ flex:1; width:1px; background:var(--hairline); min-height:14px; }
+  .step:last-child .rail-line{ background:transparent; }
+
+  .step-body{ flex:1; padding-bottom:var(--sp-3); }
+  .step-card{
+    background:var(--surface); border:var(--border); border-radius:var(--r-md);
+    box-shadow:var(--shadow); padding:var(--sp-4);
+    display:flex; align-items:center; gap:var(--sp-3); cursor:pointer;
+    transition:border-color .15s, transform .1s;
+  }
+  .step-card:active{ transform:scale(0.99); }
+  .step-text{ flex:1; min-width:0; }
+  .step-title{ font:500 14.5px/1.3 'Inter',sans-serif; color:var(--ink); }
+  .step-meta{ font:400 11.5px/1 'Inter',sans-serif; color:var(--muted); margin-top:5px; }
+  .step-toggle{
+    width:26px; height:26px; border-radius:var(--r-pill); border:var(--border);
+    background:transparent; color:var(--muted); flex:none; cursor:pointer;
+    display:flex; align-items:center; justify-content:center; padding:0;
+  }
+  .step-toggle svg{ width:12px; height:12px; }
+
+  /* state: done */
+  .step.done .node{ border-color:var(--done-edge); background:var(--done-tint); color:var(--state-done); }
+  .step.done .step-title{ color:var(--muted-dark); }
+  .step.done .step-toggle{ border-color:var(--done-edge); color:var(--state-done); background:var(--done-tint); }
+
+  /* state: current */
+  .step.current .node{ border-color:var(--brand); color:var(--brand); }
+  .step.current .step-card{ border-color:var(--brand-edge); }
+  .badge-next{
+    display:inline-block; font:500 9.5px/1 'Inter',sans-serif; letter-spacing:.14em;
+    text-transform:uppercase; color:var(--brand); border:1px solid var(--brand-edge);
+    padding:4px 8px; border-radius:var(--r-pill); margin-bottom:9px;
+  }
+
+  /* ── checkpoint node ── */
+  .step.cp .node{
+    border-radius:var(--r-sm); transform:rotate(45deg);
+    border-color:var(--milestone-edge); background:var(--milestone-tint);
+    color:var(--state-milestone); width:24px; height:24px;
+  }
+  .step.cp .node span{ transform:rotate(-45deg); display:block; font-size:10px; }
+  .step.cp .step-card{ background:var(--milestone-tint); border-color:var(--milestone-edge); }
+  .step.cp .step-title{ color:var(--state-milestone); }
+  .step.cp .step-meta{ color:#9A6474; }
+  .badge-cp{
+    font:500 9.5px/1 'Inter',sans-serif; letter-spacing:.14em; text-transform:uppercase;
+    color:var(--state-milestone); border:1px solid var(--milestone-edge);
+    padding:5px 9px; border-radius:var(--r-pill); flex:none;
+  }
+  .step.cp.done .node{ background:var(--done-tint); border-color:var(--done-edge); color:var(--state-done); }
+  .step.cp.done .step-card{ background:var(--surface); border-color:var(--hairline); }
+  .step.cp.done .step-title{ color:var(--muted-dark); }
+  .step.cp.done .badge-cp{ color:var(--state-done); border-color:var(--done-edge); }
+
+  /* ============================================================
+     CHECKPOINT HUB
+     ============================================================ */
+  .cp-hero{ padding:var(--sp-7) var(--sp-5) var(--sp-6); text-align:center; position:relative; }
+  .cp-diamond{
+    width:44px; height:44px; margin:0 auto var(--sp-5); border-radius:var(--r-md);
+    transform:rotate(45deg); border:1px solid var(--milestone-edge);
+    background:var(--milestone-tint); display:flex; align-items:center; justify-content:center;
+  }
+  .cp-diamond span{ transform:rotate(-45deg); color:var(--state-milestone); font-size:15px; }
+  .cp-hero .eyebrow{ margin-bottom:var(--sp-2); }
+  .cp-hero-title{ font:500 29px/1.15 'Fraunces',serif; color:var(--ink); margin:0 0 var(--sp-3); letter-spacing:-.01em; }
+  .cp-hero-prog{ font:400 13.5px/1 'Inter',sans-serif; color:var(--muted-dark); }
+  .cp-note{
+    display:inline-flex; align-items:center; gap:6px; margin-top:var(--sp-4);
+    font:400 11.5px/1 'Inter',sans-serif; color:var(--muted-dark);
+    border:var(--border); border-radius:var(--r-pill); padding:7px 13px; background:var(--surface);
+  }
+  .cp-note svg{ width:12px; height:12px; }
+
+  .cp-flow{
+    font:500 10.5px/1 'Inter',sans-serif; letter-spacing:.12em; text-transform:uppercase;
+    color:var(--muted); padding:0 var(--sp-5) var(--sp-4);
+  }
+  .act{
+    margin:0 var(--sp-5) var(--sp-3); background:var(--surface); border:var(--border);
+    border-radius:var(--r-md); box-shadow:var(--shadow); padding:var(--sp-5) var(--sp-4);
+    display:flex; align-items:center; gap:var(--sp-4); cursor:pointer; width:calc(100% - 40px);
+    text-align:left; transition:border-color .15s, transform .1s;
+  }
+  .act:active{ transform:scale(0.99); }
+  .act-step{
+    width:26px; height:26px; border-radius:var(--r-pill); border:var(--border);
+    display:flex; align-items:center; justify-content:center; flex:none;
+    font:500 11.5px/1 'Inter',sans-serif; color:var(--muted-dark);
+  }
+  .act-body{ flex:1; min-width:0; }
+  .act-name{ font:500 15px/1.2 'Inter',sans-serif; color:var(--ink); display:flex; align-items:center; gap:8px; }
+  .act-tag{
+    font:500 9px/1 'Inter',sans-serif; letter-spacing:.14em; text-transform:uppercase;
+    color:var(--muted); border:var(--border); padding:3px 7px; border-radius:var(--r-pill);
+  }
+  .act-desc{ font:400 12.5px/1.45 'Inter',sans-serif; color:var(--muted-dark); margin-top:6px; }
+  .act-right{ flex:none; color:var(--muted); display:flex; align-items:center; }
+  .act-right svg{ width:16px; height:16px; }
+  .act.done .act-step{ border-color:var(--done-edge); background:var(--done-tint); color:var(--state-done); }
+  .act.done .act-name{ color:var(--muted-dark); }
+  .act.done .act-right{ color:var(--state-done); }
+  .act.next{ border-color:var(--brand-edge); }
+  .act.next .act-step{ border-color:var(--brand); color:var(--brand); }
+  .act.next .act-right{ color:var(--brand); }
+
+  .cp-slot{
+    margin:0 var(--sp-5) var(--sp-3); border:1px dashed var(--hairline); border-radius:var(--r-md);
+    padding:var(--sp-5) var(--sp-4); font:400 12px/1.4 'Inter',sans-serif; color:var(--muted);
+    text-align:center;
+  }
+  .cp-finish{
+    display:block; margin:var(--sp-5) var(--sp-5) 0; width:calc(100% - 40px);
+    font:500 13.5px/1 'Inter',sans-serif; padding:14px; border-radius:var(--r-pill);
+    border:var(--border); background:transparent; color:var(--muted); cursor:not-allowed;
+  }
+  .tail{ height:var(--sp-8); }
+
+  /* ── annotations ── */
+  .notes{ max-width:640px; margin:38px auto 0; }
+  .notes h3{ font:600 15px/1 'Inter',sans-serif; color:var(--ink); margin:0 0 12px; }
+  .notes h3+h3{ margin-top:22px; }
+  .notes ul{ margin:0; padding-left:18px; font:400 13.5px/1.65 'Inter',sans-serif; color:var(--ink-soft); }
+  .notes li{ margin-bottom:8px; }
+  .notes code{ background:#DED8CE; padding:1px 5px; border-radius:4px; font-size:12px; }
+  .legend{ display:flex; gap:18px; flex-wrap:wrap; margin:14px 0 0; }
+  .legend div{ display:flex; align-items:center; gap:8px; font:400 12.5px/1 'Inter',sans-serif; }
+  .legend i{ width:11px; height:11px; border-radius:3px; display:block; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <span class="review-tag">Path timeline + Checkpoint hub · Oxblood</span>
+
+  <div class="rack">
+
+    <!-- ══════════ PATH TIMELINE ══════════ -->
+    <div class="col">
+      <span class="col-tag">Path timeline</span>
+      <div class="device"><div class="screen">
+
+        <div class="app-header">
+          <button class="icon left"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg></button>
+          <div class="plate"><span class="zh">廣東話</span><span class="en">Cantonese Learner</span></div>
+          <button class="icon right"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M3 6h18M3 12h18M3 18h18"/></svg></button>
+        </div>
+
+        <div class="ctx">
+          <div class="ctx-row">
+            <button class="ctx-back"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M15 18l-6-6 6-6"/></svg> Learning Paths</button>
+            <span class="ctx-meta">7 / 41</span>
+          </div>
+          <div class="ctx-track"><div class="ctx-fill" style="width:17%"></div></div>
+        </div>
+
+        <div class="hero">
+          <div class="hero-wm">路</div>
+          <div class="eyebrow brand">Learning path</div>
+          <h1 class="hero-title">Beginner</h1>
+          <div class="hero-sub">Everything you need to function in Cantonese — greetings to emergencies — across 11 themed chapters.</div>
+          <div class="hero-prog">
+            <div class="prog-track"><div class="prog-fill" style="width:17%"></div></div>
+            <div class="prog-legend"><span>7 of 41 lessons</span><span>Stage 2 of 11</span></div>
+          </div>
+        </div>
+
+        <div id="timeline"></div>
+        <div class="tail"></div>
+
+      </div></div>
+    </div>
+
+    <!-- ══════════ CHECKPOINT HUB ══════════ -->
+    <div class="col">
+      <span class="col-tag">Checkpoint hub</span>
+      <div class="device"><div class="screen">
+
+        <div class="app-header">
+          <button class="icon left"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg></button>
+          <div class="plate"><span class="zh">廣東話</span><span class="en">Cantonese Learner</span></div>
+          <button class="icon right"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M3 6h18M3 12h18M3 18h18"/></svg></button>
+        </div>
+
+        <div class="ctx">
+          <div class="ctx-row">
+            <button class="ctx-back"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M15 18l-6-6 6-6"/></svg> Building Sentences</button>
+            <span class="ctx-meta">1 / 2 done</span>
+          </div>
+          <div class="ctx-track"><div class="ctx-fill" style="width:50%"></div></div>
+        </div>
+
+        <div class="cp-hero">
+          <div class="cp-diamond"><span>◆</span></div>
+          <div class="eyebrow milestone">Checkpoint</div>
+          <h1 class="cp-hero-title">Building Sentences</h1>
+          <div class="cp-hero-prog">1 of 2 activities reviewed</div>
+          <div class="cp-note">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 9.9-1"/></svg>
+            Optional — do any, in any order
+          </div>
+        </div>
+
+        <div class="cp-flow">Suggested flow · recall then produce</div>
+
+        <button class="act done">
+          <span class="act-step"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M20 6L9 17l-5-5"/></svg></span>
+          <span class="act-body">
+            <span class="act-name">Words <span class="act-tag">Recall</span></span>
+            <span class="act-desc">Vocabulary from all five topics in this stage</span>
+          </span>
+          <span class="act-right"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M9 18l6-6-6-6"/></svg></span>
+        </button>
+
+        <button class="act next">
+          <span class="act-step">2</span>
+          <span class="act-body">
+            <span class="act-name">Conversation <span class="act-tag">Produce</span></span>
+            <span class="act-desc">A longer scene — read it through, then speak it</span>
+          </span>
+          <span class="act-right"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M9 18l6-6-6-6"/></svg></span>
+        </button>
+
+        <div class="cp-slot">Layout leaves room for a third activity — the Stage&nbsp;3 sentence exercise slots in here</div>
+
+        <button class="cp-finish">Finish 1 more to complete</button>
+        <div class="tail"></div>
+
+      </div></div>
+    </div>
+
+  </div>
+
+  <div class="notes">
+    <h3>The structural change: one state system, three colours</h3>
+    <p style="font:400 13.5px/1.65 'Inter',sans-serif; margin:0 0 12px;">Checkpoints currently use <code>CP_GOLD = '#B7861E'</code>, hardcoded in <code>render.js</code> and sitting outside the palette entirely — a fourth accent alongside brand orange, the blue, and the completion green. It's retired here in favour of three states that mean something and are reused everywhere:</p>
+    <div class="legend">
+      <div><i style="background:var(--state-current)"></i> Current — the thing to do next</div>
+      <div><i style="background:var(--state-done)"></i> Done</div>
+      <div><i style="background:var(--state-milestone)"></i> Milestone — checkpoints</div>
+    </div>
+    <p style="font:400 13.5px/1.65 'Inter',sans-serif; margin:12px 0 0;">Milestone reuses the Oxblood header colour, which is what makes a checkpoint read as an event rather than just another card: it's the only place in the body of the app where the header colour reappears.</p>
+
+    <h3>Other decisions</h3>
+    <ul>
+      <li><strong>Checkpoints keep the diamond</strong>, but as a rotated square with the border language rather than a text glyph — crisper at small sizes, and it scales to the 44px hero mark without going fuzzy.</li>
+      <li><strong>Topic emoji dropped from the step rows.</strong> The numbered rail already does the wayfinding, and 41 emoji down a scrolling list was a lot of noise. They're still fine on the dashboard topic grid, where they genuinely aid scanning.</li>
+      <li><strong>Stage bands are now a labelled rule</strong> rather than a filled band — same treatment as the section labels on Topic/Learn, so the two screens share a language.</li>
+      <li><strong>The hub's activities are numbered</strong>, which makes the "suggested flow: recall → produce" hint redundant as prose but still useful as a label. Numbering also makes the third Stage 3 activity slot in without redesign.</li>
+      <li><strong>Finish button is a disabled ghost</strong> until the checkpoint completes — the old <code>dim</code> class did this by opacity, which muddied the text colour.</li>
+    </ul>
+
+    <h3>Worth your eye</h3>
+    <ul>
+      <li>Completed <em>checkpoints</em> drop the Oxblood tint and go quiet white with a green mark. Milestone colour signals "this is ahead of you"; once done, it stops competing. Scroll the left screen to Stage 1 to see both.</li>
+      <li>The dashed third-activity slot is annotation, not a proposed UI element — it's there to show the layout accommodates Stage 3.</li>
+    </ul>
+  </div>
+</div>
+
+<script>
+  const CHECK = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M20 6L9 17l-5-5"/></svg>';
+
+  const STAGES = [
+    { n:1, name:'First Words', topics:[
+        {t:'Me, You & Them',      w:14, done:true},
+        {t:'Greetings',           w:10, done:true},
+        {t:'Yes/No & Politeness', w:10, done:true},
+        {t:'Numbers',             w:11, done:true},
+        {t:'Useful Phrases',      w:10, done:true},
+      ], cp:{ state:'done', text:'Complete' } },
+    { n:2, name:'Building Sentences', topics:[
+        {t:'Asking Questions',            w:10, done:true},
+        {t:'Sentence Particles',          w:10, done:true},
+        {t:'Verb Tense',                  w:10, done:false, current:true},
+        {t:'Days & Time',                 w:18, done:false},
+        {t:'Classifiers & Demonstratives',w:12, done:false},
+      ], cp:{ state:'open', text:'1 of 2 reviewed · tap to open' } },
+    { n:3, name:'Food & Drink', topics:[
+        {t:'Food & Dishes',       w:11, done:false},
+        {t:'Meat & Seafood',      w:11, done:false},
+        {t:'Fruit & Vegetables',  w:12, done:false},
+        {t:'Drinks',              w:12, done:false},
+      ], cp:{ state:'locked', text:'Opens when the stage is done' } },
+  ];
+
+  let stepNo = 0;
+  document.getElementById('timeline').innerHTML = STAGES.map(s => {
+    const rows = s.topics.map(o => {
+      stepNo += 1;
+      const cls = 'step' + (o.done ? ' done' : '') + (o.current ? ' current' : '');
+      return `
+        <div class="${cls}">
+          <div class="rail">
+            <div class="node">${o.done ? CHECK : stepNo}</div>
+            <div class="rail-line"></div>
+          </div>
+          <div class="step-body">
+            <div class="step-card">
+              <div class="step-text">
+                ${o.current ? '<span class="badge-next">Next up</span>' : ''}
+                <div class="step-title">${o.t}</div>
+                <div class="step-meta">${o.w} words</div>
+              </div>
+              <button class="step-toggle">${CHECK}</button>
+            </div>
+          </div>
+        </div>`;
+    }).join('');
+
+    const cpCls = 'step cp' + (s.cp.state === 'done' ? ' done' : '');
+    const cpBadge = s.cp.state === 'done' ? CHECK : 'Checkpoint';
+    const cpRow = `
+      <div class="${cpCls}">
+        <div class="rail">
+          <div class="node"><span>${s.cp.state === 'done' ? '✓' : '◆'}</span></div>
+          <div class="rail-line"></div>
+        </div>
+        <div class="step-body">
+          <div class="step-card">
+            <div class="step-text">
+              <div class="step-title">Checkpoint · ${s.name}</div>
+              <div class="step-meta">${s.cp.text}</div>
+            </div>
+            <span class="badge-cp">${cpBadge}</span>
+          </div>
+        </div>
+      </div>`;
+
+    return `
+      <div class="stage-band">
+        <span class="stage-num">${String(s.n).padStart(2,'0')}</span>
+        <span class="stage-name">${s.name}</span>
+        <span class="stage-rule"></span>
+        <span class="stage-meta">${s.topics.length} topics</span>
+      </div>
+      ${rows}${cpRow}`;
+  }).join('');
+</script>
+</body>
+</html>

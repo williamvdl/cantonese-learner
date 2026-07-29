@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quiz — design mockup</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Noto+Serif+TC:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#1C1917; --ink-soft:#44403C;
+    --surface:#FFFFFF; --canvas:#FAF8F5; --canvas-deep:#F5F1EB;
+    --hairline:#E8E2DA; --hairline-soft:#F0EBE4;
+    --border:1px solid var(--hairline);
+    --border-soft:1px solid var(--hairline-soft);
+
+    --brand:#C2410C; --brand-tint:#FDF2EC; --brand-edge:#F5D9C9;
+    --header-bg:#6E2639; --header-text:#F7EEE8;
+
+    --state-current:#C2410C;
+    --state-done:#15803D; --done-tint:#F0FAF3; --done-edge:#C9E7D3;
+    --state-milestone:#6E2639;
+
+    --muted:#A8A29E; --muted-dark:#78716C;
+    --r-sm:8px; --r-md:12px; --r-lg:16px; --r-pill:999px;
+    --shadow:0 1px 2px rgba(28,25,23,0.04);
+    --sp-1:4px; --sp-2:8px; --sp-3:12px; --sp-4:16px;
+    --sp-5:20px; --sp-6:28px; --sp-7:36px; --sp-8:48px;
+
+    --tone-1:#E74C3C; --tone-2:#E67E22; --tone-3:#c8a200;
+    --tone-4:#27AE60; --tone-5:#2980B9; --tone-6:#8E44AD;
+  }
+  *{box-sizing:border-box;}
+  body{ margin:0; background:#E6E1D9; font-family:'Inter',sans-serif; color:var(--ink-soft); padding:34px 16px 90px; }
+  .wrap{ max-width:1300px; margin:0 auto; }
+  .review-tag{
+    display:inline-block; font:500 11px/1 'Inter',sans-serif; letter-spacing:.08em; text-transform:uppercase;
+    color:var(--muted-dark); background:var(--surface); border:var(--border);
+    padding:7px 14px; border-radius:var(--r-pill); margin-bottom:24px;
+  }
+  .rack{ display:flex; gap:26px; flex-wrap:wrap; justify-content:center; }
+  .col{ display:flex; flex-direction:column; gap:9px; }
+  .col-tag{ font:600 10.5px/1 'Inter',sans-serif; letter-spacing:.1em; text-transform:uppercase; color:var(--muted-dark); }
+  .device{
+    width:360px; max-width:100%; background:var(--canvas);
+    border-radius:32px; box-shadow:0 16px 40px rgba(28,25,23,0.2);
+    overflow:hidden; border:8px solid var(--ink);
+  }
+  .screen{ height:760px; overflow-y:auto; }
+  .screen::-webkit-scrollbar{ width:0; }
+
+  /* ── header + context ── */
+  .app-header{
+    position:sticky; top:0; z-index:6; background:var(--header-bg); color:var(--header-text);
+    padding:13px var(--sp-3) 12px;
+  }
+  .app-header .icon{
+    position:absolute; top:12px; width:30px; height:30px; border-radius:var(--r-pill);
+    border:none; background:transparent; color:var(--header-text); opacity:.72;
+    display:flex; align-items:center; justify-content:center; cursor:pointer; padding:0;
+  }
+  .app-header .icon.left{ left:12px; } .app-header .icon.right{ right:12px; }
+  .app-header .icon svg{ width:17px; height:17px; }
+  .plate{ display:flex; flex-direction:column; align-items:center; gap:5px; }
+  .plate .zh{ font:500 17px/1 'Noto Serif TC',serif; letter-spacing:.04em; }
+  .plate .en{ font:500 9px/1 'Inter',sans-serif; letter-spacing:.24em; text-transform:uppercase; opacity:.72; }
+
+  .ctx{ background:var(--canvas); }
+  .ctx-row{ display:flex; align-items:center; justify-content:space-between; padding:12px var(--sp-5) 11px; }
+  .ctx-back{
+    display:flex; align-items:center; gap:7px; font:500 13px/1 'Inter',sans-serif;
+    color:var(--ink); background:none; border:none; cursor:pointer; padding:0;
+  }
+  .ctx-back svg{ width:16px; height:16px; }
+  .ctx-meta{ font:500 11.5px/1 'Inter',sans-serif; color:var(--muted-dark); }
+  .ctx-track{ height:2px; background:var(--hairline-soft); }
+  .ctx-fill{ height:2px; background:var(--brand); }
+
+  /* ── direction toggle ── */
+  .dirs{ display:flex; gap:var(--sp-2); padding:var(--sp-5) var(--sp-5) 0; }
+  .dir{
+    flex:1; font:500 12.5px/1 'Inter',sans-serif; padding:9px 6px; border-radius:var(--r-pill);
+    border:var(--border); background:transparent; color:var(--muted-dark); cursor:pointer;
+    display:flex; align-items:center; justify-content:center; gap:5px;
+  }
+  .dir svg{ width:13px; height:13px; }
+  .dir.active{ border-color:var(--brand); color:var(--brand); }
+
+  /* ── prompt ── */
+  .prompt{
+    margin:var(--sp-6) var(--sp-5) 0; background:var(--surface); border:var(--border);
+    border-radius:var(--r-md); box-shadow:var(--shadow);
+    padding:var(--sp-7) var(--sp-5); text-align:center;
+  }
+  .prompt-label{
+    font:500 10.5px/1 'Inter',sans-serif; letter-spacing:.12em; text-transform:uppercase;
+    color:var(--muted); margin-bottom:var(--sp-5);
+  }
+  .prompt-zh{ font:500 46px/1.1 'Noto Serif TC',serif; color:var(--ink); }
+  .prompt-jp{ font:500 14px/1 'Inter',sans-serif; margin-top:var(--sp-3); }
+  .prompt-en{ font:500 28px/1.25 'Fraunces',serif; color:var(--ink); }
+  .listen{
+    margin-top:var(--sp-5); display:inline-flex; align-items:center; gap:7px;
+    font:500 12px/1 'Inter',sans-serif; color:var(--brand);
+    border:1px solid var(--brand-edge); background:transparent;
+    padding:9px 15px; border-radius:var(--r-pill); cursor:pointer;
+  }
+  .listen svg{ width:12px; height:12px; }
+  .listen-big{
+    width:76px; height:76px; border-radius:var(--r-pill); border:1px solid var(--brand-edge);
+    background:var(--brand-tint); color:var(--brand); cursor:pointer;
+    display:flex; align-items:center; justify-content:center; margin:0 auto;
+  }
+  .listen-big svg{ width:28px; height:28px; }
+  .listen-hint{ font:400 11.5px/1 'Inter',sans-serif; color:var(--muted); margin-top:var(--sp-4); }
+
+  /* ── choices ── */
+  .choices{ padding:var(--sp-6) var(--sp-5) 0; display:flex; flex-direction:column; gap:var(--sp-2); }
+  .choice{
+    width:100%; text-align:left; background:var(--surface); border:var(--border);
+    border-radius:var(--r-md); box-shadow:var(--shadow); padding:var(--sp-4) var(--sp-4);
+    font:500 15px/1.35 'Inter',sans-serif; color:var(--ink); cursor:pointer;
+    display:flex; align-items:center; gap:var(--sp-3); transition:border-color .15s, transform .1s;
+  }
+  .choice:active{ transform:scale(0.99); }
+  .choice-mark{
+    width:22px; height:22px; border-radius:var(--r-pill); border:var(--border);
+    flex:none; display:flex; align-items:center; justify-content:center; color:var(--muted);
+    font:500 11px/1 'Inter',sans-serif;
+  }
+  .choice-mark svg{ width:11px; height:11px; }
+  .choice-body{ flex:1; min-width:0; }
+  .choice-zh{ font:500 21px/1.3 'Noto Serif TC',serif; color:var(--ink); }
+  .choice-jp{ font:500 11.5px/1 'Inter',sans-serif; margin-top:5px; }
+
+  /* answered states */
+  .choice.correct{ border-color:var(--done-edge); background:var(--done-tint); }
+  .choice.correct .choice-mark{ border-color:var(--done-edge); background:var(--state-done); color:#fff; }
+  .choice.correct .choice-body{ color:var(--state-done); }
+  .choice.missed{ opacity:.5; }
+  .choice.chosen-wrong{ border-color:var(--hairline); background:var(--canvas-deep); }
+  .choice.chosen-wrong .choice-body{ color:var(--muted-dark); text-decoration:line-through; text-decoration-color:var(--muted); }
+  .choice.chosen-wrong .choice-mark{ border-color:var(--muted); color:var(--muted-dark); }
+
+  /* ── answer panel ── */
+  .panel{ padding:var(--sp-6) var(--sp-5) 0; }
+  .panel-correct{
+    display:flex; align-items:center; justify-content:space-between; gap:var(--sp-3);
+  }
+  .correct-msg{
+    display:inline-flex; align-items:center; gap:8px;
+    font:500 14px/1 'Inter',sans-serif; color:var(--state-done);
+  }
+  .correct-msg .tick{
+    width:22px; height:22px; border-radius:var(--r-pill); background:var(--state-done); color:#fff;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .correct-msg .tick svg{ width:12px; height:12px; }
+
+  .teach{
+    background:var(--surface); border:var(--border); border-left:3px solid var(--muted);
+    border-radius:var(--r-md); padding:var(--sp-5) var(--sp-4); box-shadow:var(--shadow);
+  }
+  .teach-h{
+    font:500 10.5px/1 'Inter',sans-serif; letter-spacing:.12em; text-transform:uppercase;
+    color:var(--muted-dark); margin-bottom:var(--sp-4);
+  }
+  .teach-zh{ font:500 32px/1.15 'Noto Serif TC',serif; color:var(--ink); }
+  .teach-jp{ font:500 13px/1 'Inter',sans-serif; margin-top:var(--sp-2); }
+  .teach-en{ font:500 17px/1.3 'Fraunces',serif; color:var(--state-done); margin-top:var(--sp-3); }
+  .teach-chose{ font:400 12px/1 'Inter',sans-serif; color:var(--muted-dark); margin-top:var(--sp-4); }
+  .teach-chose s{ color:var(--muted); }
+
+  .btn-row{ display:flex; gap:var(--sp-2); margin-top:var(--sp-5); }
+  .btn{
+    flex:1; font:500 13px/1 'Inter',sans-serif; padding:13px; border-radius:var(--r-pill);
+    border:var(--border); background:transparent; color:var(--ink-soft); cursor:pointer;
+    display:inline-flex; align-items:center; justify-content:center; gap:7px;
+  }
+  .btn svg{ width:13px; height:13px; }
+  .btn-primary{
+    background:var(--brand); border-color:var(--brand); color:#fff;
+  }
+
+  /* ── result ── */
+  .result{ padding:var(--sp-8) var(--sp-5) 0; text-align:center; }
+  .score-ring{ width:132px; height:132px; margin:0 auto var(--sp-6); position:relative; }
+  .score-ring svg{ width:132px; height:132px; transform:rotate(-90deg); }
+  .score-val{
+    position:absolute; inset:0; display:flex; flex-direction:column;
+    align-items:center; justify-content:center; gap:2px;
+  }
+  .score-val b{ font:500 38px/1 'Fraunces',serif; color:var(--ink); }
+  .score-val span{ font:500 10.5px/1 'Inter',sans-serif; letter-spacing:.12em; text-transform:uppercase; color:var(--muted); }
+  .result-h{ font:500 24px/1.2 'Fraunces',serif; color:var(--ink); margin:0 0 var(--sp-3); }
+  .result-msg{ font:400 14px/1.55 'Inter',sans-serif; color:var(--muted-dark); max-width:28ch; margin:0 auto; }
+
+  .rev-label{
+    font:500 10.5px/1 'Inter',sans-serif; letter-spacing:.12em; text-transform:uppercase;
+    color:var(--muted); margin:var(--sp-8) 0 var(--sp-4); display:block; text-align:left;
+  }
+  .rev-card{ background:var(--surface); border:var(--border); border-radius:var(--r-md); box-shadow:var(--shadow); padding:0 var(--sp-4); text-align:left; }
+  .rev-row{ display:flex; align-items:center; gap:var(--sp-3); padding:var(--sp-4) 0; border-top:var(--border-soft); }
+  .rev-row:first-child{ border-top:none; }
+  .rev-play{
+    width:30px; height:30px; border-radius:var(--r-pill); border:1px solid var(--brand-edge);
+    background:transparent; color:var(--brand); flex:none; cursor:pointer;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .rev-play svg{ width:12px; height:12px; }
+  .rev-body{ flex:1; min-width:0; }
+  .rev-zh{ font:500 18px/1.3 'Noto Serif TC',serif; color:var(--ink); }
+  .rev-jp{ font:500 11.5px/1 'Inter',sans-serif; margin-top:4px; }
+  .rev-en{ font:400 13px/1 'Inter',sans-serif; color:var(--state-done); margin-top:6px; }
+  .rev-chose{ font:400 11.5px/1 'Inter',sans-serif; color:var(--muted); margin-top:4px; }
+  .tail{ height:var(--sp-8); }
+
+  /* ── variants strip ── */
+  .variants{ display:flex; gap:20px; flex-wrap:wrap; margin-top:44px; }
+  .variant{ width:340px; }
+  .variant .prompt{ margin:0; }
+
+  .notes{ max-width:660px; margin:44px auto 0; }
+  .notes h3{ font:600 15px/1 'Inter',sans-serif; color:var(--ink); margin:0 0 12px; }
+  .notes h3+h3{ margin-top:24px; }
+  .notes p{ font:400 13.5px/1.65 'Inter',sans-serif; margin:0 0 12px; }
+  .notes ul{ margin:0; padding-left:18px; font:400 13.5px/1.65 'Inter',sans-serif; color:var(--ink-soft); }
+  .notes li{ margin-bottom:8px; }
+  .notes code{ background:#DED8CE; padding:1px 5px; border-radius:4px; font-size:12px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <span class="review-tag">Quiz · four states · Oxblood</span>
+
+  <div class="rack" id="rack"></div>
+
+  <h3 style="font:600 13px/1 'Inter',sans-serif; letter-spacing:.1em; text-transform:uppercase; color:#78716C; margin:48px 0 14px;">Prompt card · the other two directions</h3>
+  <div class="variants" id="variants"></div>
+
+  <div class="notes">
+    <h3>What this screen needed most</h3>
+    <p>Quiz is the most inline-styled screen in the app — <b>20 <code>style="…"</code> injections</b> across the two render paths, mostly threading a per-topic <code>color</code> through buttons, borders and toggles. That's the category-accent system you'd already decided to switch off, still fully wired here. Everything below is class-driven; no colour is passed in as an argument.</p>
+    <p>It also had two colours doing double duty: <code>#27AE60</code> and <code>#E74C3C</code> were hardcoded for correct/wrong in the review list — but those are <i>tone 4</i> and <i>tone 1</i>, and they appear as tone colours in the jyutping <i>inside the same card</i>. Same colour, two unrelated meanings, inches apart.</p>
+
+    <h3>The one decision I'd flag</h3>
+    <p><b>There's no red.</b> Correct is jade; the wrong choice greys out, strikes through and takes an ✕, while the right answer lights green beside it. Adding a proper error red would make it a fourth semantic colour in a palette that already carries brand orange, Oxblood and jade — and any red close enough to read as "error" sits uncomfortably near both of the first two. The miss is still unmistakable, and it's less punitive. If you'd rather have the red, it's one token and I'll add it.</p>
+
+    <h3>Other changes</h3>
+    <ul>
+      <li><strong>Result screen loses the emoji</strong> (🏆 / ⭐ / 💪) for a score ring — the ring reuses the same arc mechanic as the checkpoint diamond, so the two "progress" ideas in the app share one visual language.</li>
+      <li><strong>Score moved into the context row</strong> alongside question count, so the quiz body holds only the question.</li>
+      <li><strong>The teaching panel is neutral-bordered, not red</strong>, and leads with the correct answer rather than the error — the point of the panel is the thing to learn.</li>
+      <li><strong>Choices are one card style</strong> — the same primitive as everywhere else, with the mark circle carrying state rather than the whole card changing shape.</li>
+      <li><strong>"Next" is the only filled button in the flow.</strong> Same reasoning as "Next up" on the path: one clear action gets the fill, everything else is a ghost.</li>
+    </ul>
+
+    <h3>Worth your eye</h3>
+    <ul>
+      <li>The direction toggle labels (漢→EN, EN→漢, 🔊→EN) are inherited as-is. They're compact but cryptic; worth deciding whether they should be words on a settings row instead of a permanent three-way toggle above every question.</li>
+    </ul>
+  </div>
+</div>
+
+<script>
+  const I = {
+    info:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>',
+    menu:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M3 6h18M3 12h18M3 18h18"/></svg>',
+    back:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M15 18l-6-6 6-6"/></svg>',
+    play:'<svg viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M8 5v14l11-7z"/></svg>',
+    vol: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M11 5L6 9H2v6h4l5 4V5z"/><path d="M19.1 4.9a10 10 0 0 1 0 14.2M15.5 8.5a5 5 0 0 1 0 7"/></svg>',
+    check:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M20 6L9 17l-5-5"/></svg>',
+    x:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg>',
+    arrow:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>',
+    refresh:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><path d="M21 12a9 9 0 1 1-3-6.7"/><path d="M21 3v6h-6"/></svg>',
+  };
+  const TONE = {1:'var(--tone-1)',2:'var(--tone-2)',3:'var(--tone-3)',4:'var(--tone-4)',5:'var(--tone-5)',6:'var(--tone-6)'};
+  const jp = t => t.split(' ').map(s=>{
+    const m=s.match(/[1-6]/); return `<span style="color:${m?TONE[m[0]]:'var(--muted-dark)'}">${s}</span>`;
+  }).join(' ');
+
+  const header = `
+    <div class="app-header">
+      <button class="icon left">${I.info}</button>
+      <div class="plate"><span class="zh">廣東話</span><span class="en">Cantonese Learner</span></div>
+      <button class="icon right">${I.menu}</button>
+    </div>`;
+
+  const ctx = (q,total,score) => `
+    <div class="ctx">
+      <div class="ctx-row">
+        <button class="ctx-back">${I.back} Food &amp; Dishes</button>
+        <span class="ctx-meta">Q ${q}/${total} · Score ${score}</span>
+      </div>
+      <div class="ctx-track"><div class="ctx-fill" style="width:${(q-1)/total*100}%"></div></div>
+    </div>`;
+
+  const dirs = `
+    <div class="dirs">
+      <button class="dir active">漢→EN</button>
+      <button class="dir">EN→漢</button>
+      <button class="dir">${I.vol}EN</button>
+    </div>`;
+
+  const promptZh = `
+    <div class="prompt">
+      <div class="prompt-label">What does this mean?</div>
+      <div class="prompt-zh">粥</div>
+      <div class="prompt-jp">${jp('zuk1')}</div>
+      <button class="listen">${I.play} Listen</button>
+    </div>`;
+
+  const CHOICES = ['Noodles','Congee','Soup','Dessert'];
+  const CORRECT = 1;
+
+  function choices(state){
+    return `<div class="choices">` + CHOICES.map((c,i)=>{
+      let cls='choice', mark=String.fromCharCode(65+i);
+      if(state==='correct'){
+        if(i===CORRECT){ cls+=' correct'; mark=I.check; }
+        else cls+=' missed';
+      } else if(state==='wrong'){
+        if(i===CORRECT){ cls+=' correct'; mark=I.check; }
+        else if(i===2){ cls+=' chosen-wrong'; mark=I.x; }
+        else cls+=' missed';
+      }
+      return `<button class="${cls}"><span class="choice-mark">${mark}</span><span class="choice-body">${c}</span></button>`;
+    }).join('') + `</div>`;
+  }
+
+  const panelCorrect = `
+    <div class="panel">
+      <div class="panel-correct">
+        <span class="correct-msg"><span class="tick">${I.check}</span> Correct</span>
+        <button class="btn btn-primary" style="flex:0 0 auto; padding:13px 22px;">Next ${I.arrow}</button>
+      </div>
+    </div>`;
+
+  const panelWrong = `
+    <div class="panel">
+      <div class="teach">
+        <div class="teach-h">The answer was</div>
+        <div class="teach-zh">粥</div>
+        <div class="teach-jp">${jp('zuk1')}</div>
+        <div class="teach-en">Congee</div>
+        <div class="teach-chose">You chose <s>Soup</s></div>
+      </div>
+      <div class="btn-row">
+        <button class="btn">${I.play} Hear it again</button>
+        <button class="btn btn-primary">Got it ${I.arrow}</button>
+      </div>
+    </div>`;
+
+  const MISSED = [
+    {c:'粥', j:'zuk1', e:'Congee', chose:'Soup'},
+    {c:'甜品', j:'tim4 ban2', e:'Dessert', chose:'Snack'},
+  ];
+  const result = (() => {
+    const pct = 8/10, C = 2*Math.PI*58;
+    return `
+    <div class="result">
+      <div class="score-ring">
+        <svg viewBox="0 0 132 132">
+          <circle cx="66" cy="66" r="58" fill="none" stroke="var(--hairline)" stroke-width="6"/>
+          <circle cx="66" cy="66" r="58" fill="none" stroke="var(--state-done)" stroke-width="6"
+                  stroke-linecap="round" stroke-dasharray="${C}" stroke-dashoffset="${C*(1-pct)}"/>
+        </svg>
+        <div class="score-val"><b>8/10</b><span>correct</span></div>
+      </div>
+      <h1 class="result-h">Nicely done</h1>
+      <p class="result-msg">Two to look at again — both were dishes you've only met once.</p>
+
+      <span class="rev-label">Words to review</span>
+      <div class="rev-card">
+        ${MISSED.map(m=>`
+          <div class="rev-row">
+            <button class="rev-play">${I.play}</button>
+            <div class="rev-body">
+              <div class="rev-zh">${m.c}</div>
+              <div class="rev-jp">${jp(m.j)}</div>
+              <div class="rev-en">${m.e}</div>
+              <div class="rev-chose">You chose ${m.chose}</div>
+            </div>
+          </div>`).join('')}
+      </div>
+      <div class="btn-row">
+        <button class="btn">${I.back} Lesson</button>
+        <button class="btn btn-primary">${I.refresh} Retry missed</button>
+      </div>
+    </div>`;
+  })();
+
+  const FRAMES = [
+    {t:'In play', body: ctx(3,10,2)+dirs+promptZh+choices('idle')},
+    {t:'Answered · correct', body: ctx(3,10,2)+dirs+promptZh+choices('correct')+panelCorrect},
+    {t:'Answered · wrong', body: ctx(3,10,2)+dirs+promptZh+choices('wrong')+panelWrong},
+    {t:'Result', body: ctx(10,10,8)+result},
+  ];
+  document.getElementById('rack').innerHTML = FRAMES.map(f=>`
+    <div class="col">
+      <span class="col-tag">${f.t}</span>
+      <div class="device"><div class="screen">${header}${f.body}<div class="tail"></div></div></div>
+    </div>`).join('');
+
+  document.getElementById('variants').innerHTML = `
+    <div class="variant">
+      <p class="col-tag" style="margin:0 0 9px">EN → 漢</p>
+      <div class="prompt">
+        <div class="prompt-label">Pick the Cantonese for</div>
+        <div class="prompt-en">Congee</div>
+      </div>
+      <div class="choices" style="padding-left:0;padding-right:0">
+        <button class="choice"><span class="choice-mark">A</span><span class="choice-body"><span class="choice-zh">麵</span><span class="choice-jp" style="display:block">${jp('min6')}</span></span></button>
+        <button class="choice correct"><span class="choice-mark">${I.check}</span><span class="choice-body"><span class="choice-zh">粥</span><span class="choice-jp" style="display:block">${jp('zuk1')}</span></span></button>
+      </div>
+    </div>
+    <div class="variant">
+      <p class="col-tag" style="margin:0 0 9px">Listen → EN</p>
+      <div class="prompt">
+        <div class="prompt-label">Listen — what does it mean?</div>
+        <button class="listen-big">${I.vol}</button>
+        <div class="listen-hint">Tap to replay</div>
+      </div>
+    </div>`;
+</script>
+</body>
+</html>

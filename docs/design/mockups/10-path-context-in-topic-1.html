@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Path context inside a topic</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Noto+Serif+TC:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    /* aligned to the repo's existing token values */
+    --ink:#1C1917; --ink-soft:#292524;
+    --parchment:#FFFFFF; --parchment-warm:#FAF8F5; --parchment-deep:#F0EBE4;
+    --parchment-border:#EAE4DC;
+    --hairline-soft:#F0EBE4;
+    --border:1px solid var(--parchment-border);
+    --border-soft:1px solid var(--hairline-soft);
+
+    --brand:#C2410C; --brand-tint:#FEF0E9; --brand-edge:#F5D9C9;
+    --jade:#15803D; --jade-tint:#F0FAF3; --jade-edge:#C9E7D3;
+    --header-bg:#6E2639; --header-text:#F7EEE8;
+    --milestone:#6E2639; --milestone-tint:#FBF0F2; --milestone-edge:#EBD3D9;
+
+    --muted:#A8A29E; --muted-dark:#78716C;
+
+    --r-sm:8px; --r-md:12px; --r-lg:16px; --r-pill:999px;
+    --elev-1:0 1px 2px rgba(58,42,30,0.04), 0 1px 3px rgba(58,42,30,0.06);
+    --sp-1:4px; --sp-2:8px; --sp-3:12px; --sp-4:16px;
+    --sp-5:24px; --sp-6:32px; --sp-7:48px; --sp-8:64px;
+    --tap-min:44px;
+    --ease:cubic-bezier(0.4,0,0.2,1); --dur-fast:120ms; --dur-base:200ms;
+  }
+  *{box-sizing:border-box;}
+  body{ margin:0; background:#E6E1D9; font-family:'Inter',sans-serif; color:var(--ink-soft); padding:34px 18px 90px; }
+  .wrap{ max-width:1240px; margin:0 auto; }
+  h1{ font:600 13px/1 'Inter',sans-serif; letter-spacing:.1em; text-transform:uppercase; color:var(--muted-dark); margin:46px 0 8px; }
+  h1:first-of-type{ margin-top:0; }
+  .lede{ font:400 13.5px/1.65 'Inter',sans-serif; max-width:66ch; margin:0 0 24px; }
+  .lede b{ color:var(--ink); font-weight:600; }
+  .lede code{ background:#DED8CE; padding:1px 5px; border-radius:4px; font-size:12px; }
+  .rack{ display:flex; gap:24px; flex-wrap:wrap; }
+  .col{ display:flex; flex-direction:column; gap:8px; width:300px; }
+  .col-tag{ font:600 10.5px/1 'Inter',sans-serif; letter-spacing:.1em; text-transform:uppercase; color:var(--muted-dark); }
+  .col-note{ font:400 11.5px/1.5 'Inter',sans-serif; color:var(--muted-dark); min-height:58px; margin:0; }
+  .phone{
+    background:var(--parchment-warm); border:7px solid var(--ink); border-radius:26px;
+    overflow:hidden; box-shadow:0 14px 34px rgba(28,25,23,.2);
+  }
+
+  /* ── header ── */
+  .hd{ background:var(--header-bg); color:var(--header-text); padding:11px var(--sp-3) 10px; position:relative; }
+  .hd .ic{
+    position:absolute; top:6px; width:40px; height:40px; border-radius:var(--r-pill);
+    border:none; background:transparent; color:var(--header-text); opacity:.72; cursor:pointer;
+    display:flex; align-items:center; justify-content:center; padding:0;
+  }
+  .hd .ic.l{ left:6px; } .hd .ic.r{ right:6px; }
+  .hd .ic svg{ width:16px; height:16px; }
+  .plate{ display:flex; flex-direction:column; align-items:center; gap:4px; }
+  .plate .zh{ font:500 15px/1 'Noto Serif TC',serif; letter-spacing:.04em; }
+  .plate .en{ font:500 8px/1 'Inter',sans-serif; letter-spacing:.24em; text-transform:uppercase; opacity:.72; }
+
+  /* ── contextual row ── */
+  .ctx{ background:var(--parchment-warm); }
+  .ctx-row{ display:flex; align-items:center; justify-content:space-between; gap:var(--sp-2); padding:10px var(--sp-4) 9px; }
+  .ctx-back{
+    display:flex; align-items:center; gap:6px; font:500 12px/1.2 'Inter',sans-serif;
+    color:var(--ink); background:none; border:none; cursor:pointer; padding:0; text-align:left;
+  }
+  .ctx-back svg{ width:15px; height:15px; flex:none; }
+  .ctx-meta{ font:500 10.5px/1 'Inter',sans-serif; color:var(--muted-dark); white-space:nowrap; }
+  .ctx-track{ height:2px; background:var(--hairline-soft); }
+  .ctx-fill{ height:2px; background:var(--brand); }
+
+  /* ── B: stage stepper ── */
+  .stepper{
+    display:flex; align-items:center; gap:0; padding:12px var(--sp-4) 11px;
+    background:var(--parchment-warm); border-bottom:var(--border-soft);
+  }
+  .sx{ display:flex; align-items:center; flex:1; }
+  .sx:last-child{ flex:0 0 auto; }
+  .sdot{
+    width:20px; height:20px; border-radius:var(--r-pill); border:var(--border);
+    background:var(--parchment); flex:none; display:flex; align-items:center; justify-content:center;
+    font:500 9px/1 'Inter',sans-serif; color:var(--muted); cursor:pointer;
+  }
+  .sdot svg{ width:9px; height:9px; }
+  .sdot.done{ border-color:var(--jade-edge); background:var(--jade-tint); color:var(--jade); }
+  .sdot.here{ border-color:var(--brand); background:var(--brand); color:#fff; width:22px; height:22px; font-size:10px; }
+  .sdot.cp{ border-radius:var(--r-sm); transform:rotate(45deg); border-color:var(--milestone-edge); background:var(--milestone-tint); color:var(--milestone); }
+  .sdot.cp span{ transform:rotate(-45deg); display:block; font-size:8px; }
+  .sline{ flex:1; height:1px; background:var(--parchment-border); }
+  .sline.done{ background:var(--jade-edge); }
+
+  /* ── C: stage ribbon ── */
+  .ribbon{
+    padding:11px var(--sp-4) 12px; background:var(--parchment-warm); border-bottom:var(--border-soft);
+  }
+  .ribbon-top{ display:flex; align-items:baseline; justify-content:space-between; margin-bottom:8px; }
+  .ribbon-name{ font:500 10.5px/1 'Inter',sans-serif; letter-spacing:.1em; text-transform:uppercase; color:var(--ink); }
+  .ribbon-pos{ font:400 10.5px/1 'Inter',sans-serif; color:var(--muted-dark); }
+  .segs{ display:flex; gap:4px; }
+  .segs i{ flex:1; height:3px; border-radius:var(--r-pill); background:var(--parchment-border); display:block; }
+  .segs i.done{ background:var(--jade); }
+  .segs i.here{ background:var(--brand); }
+
+  /* ── lesson band ── */
+  .band{ position:relative; overflow:hidden; padding:var(--sp-6) var(--sp-4) var(--sp-5); border-bottom:var(--border-soft); }
+  .band-wm{
+    position:absolute; right:-20px; top:-30px; font-family:'Noto Serif TC',serif;
+    font-size:150px; line-height:1; color:var(--ink); opacity:.035; user-select:none;
+  }
+  .eyebrow{
+    font:500 9.5px/1.4 'Inter',sans-serif; letter-spacing:.12em; text-transform:uppercase;
+    color:var(--brand); margin-bottom:10px; position:relative;
+  }
+  .eyebrow .sep{ color:var(--muted); }
+  .btitle{ font:500 24px/1.15 'Fraunces',serif; color:var(--ink); margin:0 0 6px; position:relative; letter-spacing:-.01em; }
+  .bsub{ font:400 12.5px/1.5 'Inter',sans-serif; color:var(--muted-dark); position:relative; max-width:30ch; }
+
+  /* ── subtab stub ── */
+  .tabs{ display:flex; gap:var(--sp-5); padding:var(--sp-5) var(--sp-4) 0; border-bottom:var(--border-soft); }
+  .tab{
+    padding:0 0 10px; font:500 12.5px/1 'Inter',sans-serif; border:none; background:none;
+    color:var(--muted); cursor:pointer; position:relative;
+  }
+  .tab.on{ color:var(--brand); }
+  .tab.on::after{ content:''; position:absolute; left:0; right:0; bottom:-1px; height:2px; background:var(--brand); border-radius:var(--r-pill); }
+  .stub{ padding:var(--sp-4); font:400 11.5px/1 'Inter',sans-serif; color:var(--muted); text-align:center; }
+
+  /* ══════════ continuation card ══════════ */
+  .cont{
+    margin:var(--sp-5) var(--sp-4) var(--sp-5); background:var(--parchment);
+    border:var(--border); border-radius:var(--r-md); box-shadow:var(--elev-1); overflow:hidden;
+  }
+  .cont-h{
+    font:500 9.5px/1 'Inter',sans-serif; letter-spacing:.12em; text-transform:uppercase;
+    color:var(--muted); padding:var(--sp-4) var(--sp-4) 0;
+  }
+  .cont-mark{
+    display:flex; align-items:center; justify-content:center; gap:8px; width:calc(100% - 32px);
+    margin:12px var(--sp-4) var(--sp-4); padding:13px; border-radius:var(--r-pill);
+    font:500 13px/1 'Inter',sans-serif; cursor:pointer;
+    border:1px solid var(--jade-edge); background:transparent; color:var(--jade);
+  }
+  .cont-mark svg{ width:14px; height:14px; }
+  .cont-done{
+    display:flex; align-items:center; gap:8px; padding:var(--sp-4);
+    font:500 12.5px/1 'Inter',sans-serif; color:var(--jade); border-bottom:var(--border-soft);
+  }
+  .cont-done .tick{
+    width:20px; height:20px; border-radius:var(--r-pill); background:var(--jade); color:#fff;
+    display:flex; align-items:center; justify-content:center; flex:none;
+  }
+  .cont-done .tick svg{ width:11px; height:11px; }
+  .cont-next{
+    display:flex; align-items:center; gap:var(--sp-3); padding:var(--sp-4); cursor:pointer;
+    background:transparent; border:none; width:100%; text-align:left;
+    border-left:3px solid var(--brand);
+  }
+  .cont-next.cp{ border-left-color:var(--milestone); }
+  .cont-next-node{
+    width:28px; height:28px; border-radius:var(--r-pill); border:1px solid var(--brand-edge);
+    background:var(--brand-tint); color:var(--brand); flex:none;
+    display:flex; align-items:center; justify-content:center; font:500 11px/1 'Inter',sans-serif;
+  }
+  .cont-next.cp .cont-next-node{
+    border-radius:var(--r-sm); transform:rotate(45deg); width:24px; height:24px;
+    border-color:var(--milestone-edge); background:var(--milestone-tint); color:var(--milestone);
+  }
+  .cont-next.cp .cont-next-node span{ transform:rotate(-45deg); display:block; font-size:9px; }
+  .cont-next-body{ flex:1; min-width:0; }
+  .cont-next-lbl{ font:500 9.5px/1 'Inter',sans-serif; letter-spacing:.12em; text-transform:uppercase; color:var(--muted); }
+  .cont-next-name{ font:500 14px/1.3 'Inter',sans-serif; color:var(--ink); margin-top:5px; }
+  .cont-next.cp .cont-next-name{ color:var(--milestone); }
+  .cont-next-go{ flex:none; color:var(--brand); display:flex; }
+  .cont-next.cp .cont-next-go{ color:var(--milestone); }
+  .cont-next-go svg{ width:16px; height:16px; }
+  .cont-end{ padding:var(--sp-5) var(--sp-4); text-align:center; }
+  .cont-end-t{ font:500 17px/1.25 'Fraunces',serif; color:var(--ink); margin-bottom:6px; }
+  .cont-end-s{ font:400 12.5px/1.5 'Inter',sans-serif; color:var(--muted-dark); }
+
+  .notes{ max-width:680px; margin:48px auto 0; }
+  .notes h3{ font:600 15px/1 'Inter',sans-serif; color:var(--ink); margin:24px 0 12px; }
+  .notes h3:first-child{ margin-top:0; }
+  .notes p{ font:400 13.5px/1.65 'Inter',sans-serif; margin:0 0 12px; }
+  .notes ul{ margin:0; padding-left:18px; font:400 13.5px/1.65 'Inter',sans-serif; }
+  .notes li{ margin-bottom:8px; }
+  .notes code{ background:#DED8CE; padding:1px 5px; border-radius:4px; font-size:12px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <h1>1 · Orientation — four ways to carry path context into a topic</h1>
+  <p class="lede">Same topic in all four: <b>Verb Tense</b>, reached from the Beginner path, 3rd of 5 topics in the <b>Building Sentences</b> stage (step 8 of 41 overall). Note what each does with the back target, and whether it adds chrome above the lesson band.</p>
+  <div class="rack" id="orient"></div>
+
+  <h1>2 · Continuation — moved to the foot of the lesson</h1>
+  <p class="lede">The current <code>renderPathBanner</code> puts "Next step →" at the <b>top</b> of the screen, before the lesson has been done. These four states go at the bottom instead, where a lesson actually ends. The next target correctly reads a checkpoint when one is next — that logic already exists in <code>getPathContext()</code>.</p>
+  <div class="rack" id="cont"></div>
+
+  <h1>3 · Standalone entry — the same shell, degraded</h1>
+  <p class="lede">A topic opened from the dashboard grid has no path. <code>getPathContext()</code> already returns <code>null</code> there, so the difference is purely presentational — and the shell should not change shape.</p>
+  <div class="rack" id="alone"></div>
+
+  <div class="notes">
+    <h3>The rule that makes this work</h3>
+    <p><b>One progress indicator per screen.</b> The contextual hairline shows <i>stage</i> progress, not whole-path progress — so it moves visibly as you work through five topics rather than creeping 2% per lesson across 41. The old banner's separate <code>.path-bar</code> is retired; two bars measuring different things a centimetre apart is the single biggest reason the current screen feels incoherent.</p>
+
+    <h3>Framing: stage, not path</h3>
+    <p><code>getPathContext()</code> currently returns <code>step: 8, total: 41</code> and no stage. "Step 8 of 41" is technically true and motivationally awful. Every option here uses <b>3 of 5 in Building Sentences</b> instead, with the path name demoted to the eyebrow. Stages are already in <code>learning_paths.json</code> and <code>getStage()</code> exists, so this is a few lines added to the context builder, not new data.</p>
+
+    <h3>Back target</h3>
+    <p>Back goes to the <b>path timeline</b> and is labelled with the <b>stage</b> name — because that's the part of the timeline you came from and want to land on again. Labelling it "Beginner Path" is accurate but drops you somewhere you have to re-find your place in.</p>
+
+    <h3>Where I'd land</h3>
+    <p><b>B (stage stepper)</b>. It's the only option that answers "where am I" and "what else is in this stage" in the same 44px, and the nodes are real navigation — tap to jump between sibling topics without going back to the timeline. It also makes the checkpoint visible <i>from inside the topic</i> as the diamond at the end of the strip, which is the thing that makes a stage feel like a unit with an end.</p>
+    <p><b>C (ribbon)</b> is the safer pick if the stepper feels busy — same information, no tap targets, less to build. <b>A</b> is the minimum that still works. <b>D</b> costs nothing but loses the word count, and the eyebrow gets long enough to wrap on a narrow phone.</p>
+
+    <h3>Corrections to my earlier mockups, applied here</h3>
+    <ul>
+      <li>Header icon buttons were 30px, below the <code>--tap-min: 44px</code> token that already exists in your CSS. Now 40px hit area with a 16px glyph.</li>
+      <li>Spacing now uses the repo's actual scale (<code>--sp-5: 24px</code>, <code>--sp-6: 32px</code>…). My earlier files invented 20/28/36, which would have quietly forked the scale.</li>
+      <li>Transitions reference <code>--ease</code> / <code>--dur-*</code> rather than ad-hoc values.</li>
+    </ul>
+  </div>
+</div>
+
+<script>
+  const I={
+    info:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>',
+    menu:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M3 6h18M3 12h18M3 18h18"/></svg>',
+    back:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M15 18l-6-6 6-6"/></svg>',
+    check:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M20 6L9 17l-5-5"/></svg>',
+    arrow:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>',
+  };
+
+  const hd = `
+    <div class="hd">
+      <button class="ic l">${I.info}</button>
+      <div class="plate"><span class="zh">廣東話</span><span class="en">Cantonese Learner</span></div>
+      <button class="ic r">${I.menu}</button>
+    </div>`;
+
+  const ctxRow = (back, meta, pct) => `
+    <div class="ctx">
+      <div class="ctx-row">
+        <button class="ctx-back">${I.back} ${back}</button>
+        <span class="ctx-meta">${meta}</span>
+      </div>
+      <div class="ctx-track"><div class="ctx-fill" style="width:${pct}%"></div></div>
+    </div>`;
+
+  // stage: 5 topics, 2 done, current = 3rd, then checkpoint
+  const stepper = `
+    <div class="stepper">
+      <div class="sx"><span class="sdot done">${I.check}</span><span class="sline done"></span></div>
+      <div class="sx"><span class="sdot done">${I.check}</span><span class="sline done"></span></div>
+      <div class="sx"><span class="sdot here">3</span><span class="sline"></span></div>
+      <div class="sx"><span class="sdot">4</span><span class="sline"></span></div>
+      <div class="sx"><span class="sdot">5</span><span class="sline"></span></div>
+      <div class="sx"><span class="sdot cp"><span>◆</span></span></div>
+    </div>`;
+
+  const ribbon = `
+    <div class="ribbon">
+      <div class="ribbon-top">
+        <span class="ribbon-name">Building Sentences</span>
+        <span class="ribbon-pos">3 of 5 · then checkpoint</span>
+      </div>
+      <div class="segs"><i class="done"></i><i class="done"></i><i class="here"></i><i></i><i></i></div>
+    </div>`;
+
+  const band = (eyebrow) => `
+    <div class="band">
+      <div class="band-wm">時</div>
+      <div class="eyebrow">${eyebrow}</div>
+      <h1 class="btitle">Verb Tense</h1>
+      <div class="bsub">Marking past, ongoing and completed actions</div>
+    </div>`;
+
+  const tabs = `
+    <div class="tabs">
+      <button class="tab on">Learn</button>
+      <button class="tab">Chat</button>
+      <button class="tab">Quiz</button>
+    </div>
+    <div class="stub">— lesson content —</div>`;
+
+  const ORIENT=[
+    {t:'A · Row only',
+     n:'Contextual row carries everything. No extra band. Lightest possible chrome.',
+     body: ctxRow('Building Sentences','3 of 5 · Beginner',40) + band('Tier 1 <span class="sep">·</span> 10 words') + tabs},
+    {t:'B · Row + stage stepper',
+     n:'Adds a tappable 6-node strip: the five sibling topics plus the stage checkpoint.',
+     body: ctxRow('Building Sentences','Step 8 of 41',40) + stepper + band('Tier 1 <span class="sep">·</span> 10 words') + tabs},
+    {t:'C · Row + stage ribbon',
+     n:'Same information as B in text and segments. No tap targets, less to build.',
+     body: ctxRow('Building Sentences','Step 8 of 41',40) + ribbon + band('Tier 1 <span class="sep">·</span> 10 words') + tabs},
+    {t:'D · Folded into the band',
+     n:'No extra chrome at all — the eyebrow carries path, stage and position.',
+     body: ctxRow('Building Sentences','Step 8 of 41',40) + band('Beginner <span class="sep">·</span> Building Sentences <span class="sep">·</span> 3 of 5') + tabs},
+  ];
+  document.getElementById('orient').innerHTML = ORIENT.map(o=>`
+    <div class="col">
+      <span class="col-tag">${o.t}</span>
+      <p class="col-note">${o.n}</p>
+      <div class="phone">${hd}${o.body}</div>
+    </div>`).join('');
+
+  const CONT=[
+    {t:'Not yet complete', n:'A ghost action, not a filled one — nothing has happened yet.',
+     body:`<div class="cont">
+        <div class="cont-h">When you're done</div>
+        <button class="cont-mark">${I.check} Mark this lesson complete</button>
+      </div>`},
+    {t:'Complete → next topic', n:'Confirmation, then the forward step. The 3px edge is the same emphasis device as "Next up".',
+     body:`<div class="cont">
+        <div class="cont-done"><span class="tick">${I.check}</span> Lesson complete</div>
+        <button class="cont-next">
+          <span class="cont-next-node">4</span>
+          <span class="cont-next-body">
+            <span class="cont-next-lbl">Next in Building Sentences</span>
+            <span class="cont-next-name">Days &amp; Time</span>
+          </span>
+          <span class="cont-next-go">${I.arrow}</span>
+        </button>
+      </div>`},
+    {t:'Complete → checkpoint', n:'Last topic in the stage. Milestone colour and diamond, so it reads as an event.',
+     body:`<div class="cont">
+        <div class="cont-done"><span class="tick">${I.check}</span> Lesson complete</div>
+        <button class="cont-next cp">
+          <span class="cont-next-node"><span>◆</span></span>
+          <span class="cont-next-body">
+            <span class="cont-next-lbl">Stage complete</span>
+            <span class="cont-next-name">Checkpoint · Building Sentences</span>
+          </span>
+          <span class="cont-next-go">${I.arrow}</span>
+        </button>
+      </div>`},
+    {t:'End of path', n:'Replaces the 🎉 badge. Typographic, and it still offers somewhere to go.',
+     body:`<div class="cont">
+        <div class="cont-done"><span class="tick">${I.check}</span> Lesson complete</div>
+        <div class="cont-end">
+          <div class="cont-end-t">Beginner path complete</div>
+          <div class="cont-end-s">All 41 lessons and 11 checkpoints done. Intermediate is open.</div>
+        </div>
+      </div>`},
+  ];
+  document.getElementById('cont').innerHTML = CONT.map(o=>`
+    <div class="col">
+      <span class="col-tag">${o.t}</span>
+      <p class="col-note">${o.n}</p>
+      <div class="phone">${hd}${ctxRow('Building Sentences','3 of 5 · Beginner',40)}${stepper}<div class="stub">— lesson content —</div>${o.body}</div>
+    </div>`).join('');
+
+  document.getElementById('alone').innerHTML = `
+    <div class="col">
+      <span class="col-tag">From a path</span>
+      <p class="col-note">Stage stepper present; back returns to the stage; hairline tracks stage progress.</p>
+      <div class="phone">${hd}${ctxRow('Building Sentences','3 of 5 · Beginner',40)}${stepper}${band('Tier 1 <span class="sep">·</span> 10 words')}${tabs}</div>
+    </div>
+    <div class="col">
+      <span class="col-tag">Standalone</span>
+      <p class="col-note">No stepper, no hairline, back goes to Topics. Same header, same band, same tabs — the shell doesn't move.</p>
+      <div class="phone">${hd}
+        <div class="ctx"><div class="ctx-row">
+          <button class="ctx-back">${I.back} Topics</button>
+          <span class="ctx-meta">Grammar</span>
+        </div></div>
+        ${band('Tier 1 <span class="sep">·</span> 10 words')}${tabs}</div>
+    </div>
+    <div class="col">
+      <span class="col-tag">Standalone · with an invitation</span>
+      <p class="col-note">Optional: if the topic belongs to a path the user hasn't started here, offer the connection rather than hiding it.</p>
+      <div class="phone">${hd}
+        <div class="ctx"><div class="ctx-row">
+          <button class="ctx-back">${I.back} Topics</button>
+          <span class="ctx-meta">Grammar</span>
+        </div></div>
+        ${band('Tier 1 <span class="sep">·</span> 10 words')}
+        <div class="cont" style="margin-top:var(--sp-4)">
+          <button class="cont-next">
+            <span class="cont-next-node">8</span>
+            <span class="cont-next-body">
+              <span class="cont-next-lbl">Part of a path</span>
+              <span class="cont-next-name">Beginner · Building Sentences</span>
+            </span>
+            <span class="cont-next-go">${I.arrow}</span>
+          </button>
+        </div>
+        ${tabs}</div>
+    </div>`;
+</script>
+</body>
+</html>

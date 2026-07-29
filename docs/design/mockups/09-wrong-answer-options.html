@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Wrong-answer state — options</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Noto+Serif+TC:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#1C1917; --ink-soft:#44403C;
+    --surface:#FFFFFF; --canvas:#FAF8F5; --canvas-deep:#F5F1EB;
+    --hairline:#E8E2DA; --hairline-soft:#F0EBE4;
+    --border:1px solid var(--hairline);
+
+    --brand:#C2410C; --brand-tint:#FDF2EC; --brand-edge:#F5D9C9;
+    --state-done:#15803D; --done-tint:#F0FAF3; --done-edge:#C9E7D3;
+    --milestone:#6E2639; --milestone-tint:#FBF0F2; --milestone-edge:#EBD3D9;
+
+    /* candidate error reds */
+    --err-warm:#B42318;  --err-warm-tint:#FEF3F2;  --err-warm-edge:#F5CFCB;
+    --err-cool:#A8161F;  --err-cool-tint:#FDF1F2;  --err-cool-edge:#F2CBCF;
+
+    --muted:#A8A29E; --muted-dark:#78716C;
+    --r-md:12px; --r-pill:999px;
+    --shadow:0 1px 2px rgba(28,25,23,0.04);
+    --sp-2:8px; --sp-3:12px; --sp-4:16px; --sp-5:20px;
+  }
+  *{box-sizing:border-box;}
+  body{ margin:0; background:#E6E1D9; font-family:'Inter',sans-serif; color:var(--ink-soft); padding:34px 18px 90px; }
+  .wrap{ max-width:1200px; margin:0 auto; }
+  h1{ font:600 13px/1 'Inter',sans-serif; letter-spacing:.1em; text-transform:uppercase; color:var(--muted-dark); margin:0 0 8px; }
+  .lede{ font:400 13.5px/1.65 'Inter',sans-serif; max-width:66ch; margin:0 0 26px; }
+  .lede b{ color:var(--ink); font-weight:600; }
+  .grid{ display:grid; grid-template-columns:repeat(auto-fit,minmax(340px,1fr)); gap:26px; }
+  .cell-tag{ font:600 10.5px/1 'Inter',sans-serif; letter-spacing:.1em; text-transform:uppercase; color:var(--muted-dark); margin:0 0 4px; }
+  .cell-note{ font:400 12px/1.5 'Inter',sans-serif; color:var(--muted-dark); margin:0 0 12px; min-height:52px; }
+  .frame{ background:var(--canvas); border:1px solid rgba(28,25,23,.12); border-radius:var(--r-md); padding:var(--sp-5) var(--sp-4); }
+
+  .choices{ display:flex; flex-direction:column; gap:var(--sp-2); }
+  .choice{
+    width:100%; text-align:left; background:var(--surface); border:var(--border);
+    border-radius:var(--r-md); box-shadow:var(--shadow); padding:var(--sp-4);
+    font:500 15px/1.35 'Inter',sans-serif; color:var(--ink);
+    display:flex; align-items:center; gap:var(--sp-3);
+  }
+  .mark{
+    width:22px; height:22px; border-radius:var(--r-pill); border:var(--border);
+    flex:none; display:flex; align-items:center; justify-content:center; color:var(--muted);
+    font:500 11px/1 'Inter',sans-serif;
+  }
+  .mark svg{ width:11px; height:11px; }
+  .body{ flex:1; min-width:0; }
+
+  /* correct — constant across all options */
+  .choice.correct{ border-color:var(--done-edge); background:var(--done-tint); }
+  .choice.correct .mark{ border-color:var(--done-edge); background:var(--state-done); color:#fff; }
+  .choice.correct .body{ color:var(--state-done); }
+  .choice.missed{ opacity:.45; }
+
+  /* ── W1 neutral (current) ── */
+  .w1 .choice.wrong{ border-color:var(--hairline); background:var(--canvas-deep); }
+  .w1 .choice.wrong .body{ color:var(--muted-dark); text-decoration:line-through; text-decoration-color:var(--muted); }
+  .w1 .choice.wrong .mark{ border-color:var(--muted); color:var(--muted-dark); }
+
+  /* ── W2 warm red ── */
+  .w2 .choice.wrong{ border-color:var(--err-warm-edge); background:var(--err-warm-tint); }
+  .w2 .choice.wrong .body{ color:var(--err-warm); }
+  .w2 .choice.wrong .mark{ border-color:var(--err-warm); background:var(--err-warm); color:#fff; }
+
+  /* ── W3 cool crimson ── */
+  .w3 .choice.wrong{ border-color:var(--err-cool-edge); background:var(--err-cool-tint); }
+  .w3 .choice.wrong .body{ color:var(--err-cool); }
+  .w3 .choice.wrong .mark{ border-color:var(--err-cool); background:var(--err-cool); color:#fff; }
+
+  /* ── W4 oxblood ── */
+  .w4 .choice.wrong{ border-color:var(--milestone-edge); background:var(--milestone-tint); }
+  .w4 .choice.wrong .body{ color:var(--milestone); }
+  .w4 .choice.wrong .mark{ border-color:var(--milestone); background:var(--milestone); color:#fff; }
+
+  /* ── W5 red mark only ── */
+  .w5 .choice.wrong{ border-color:var(--hairline); background:var(--canvas-deep); }
+  .w5 .choice.wrong .body{ color:var(--muted-dark); text-decoration:line-through; text-decoration-color:var(--muted); }
+  .w5 .choice.wrong .mark{ border-color:var(--err-warm); background:var(--err-warm); color:#fff; }
+
+  /* ── W6 red + solid left edge ── */
+  .w6 .choice.wrong{
+    border-color:var(--err-warm-edge); background:var(--err-warm-tint);
+    border-left:3px solid var(--err-warm); padding-left:calc(var(--sp-4) - 2px);
+  }
+  .w6 .choice.wrong .body{ color:var(--err-warm); }
+  .w6 .choice.wrong .mark{ border-color:var(--err-warm); background:var(--err-warm); color:#fff; }
+
+  /* teach panel */
+  .teach{
+    margin-top:var(--sp-5); background:var(--surface); border:var(--border);
+    border-left:3px solid var(--muted); border-radius:var(--r-md);
+    padding:var(--sp-4); box-shadow:var(--shadow);
+  }
+  .teach-h{ font:500 10.5px/1 'Inter',sans-serif; letter-spacing:.12em; text-transform:uppercase; color:var(--muted-dark); margin-bottom:var(--sp-3); }
+  .teach-zh{ font:500 26px/1.15 'Noto Serif TC',serif; color:var(--ink); }
+  .teach-en{ font:500 15px/1.3 'Fraunces',serif; color:var(--state-done); margin-top:var(--sp-2); }
+  .teach-chose{ font:400 11.5px/1 'Inter',sans-serif; color:var(--muted-dark); margin-top:var(--sp-3); }
+  .w2 .teach, .w5 .teach, .w6 .teach{ border-left-color:var(--err-warm); }
+  .w3 .teach{ border-left-color:var(--err-cool); }
+  .w4 .teach{ border-left-color:var(--milestone); }
+  .teach-chose s{ color:var(--muted); }
+  .w2 .teach-chose s, .w5 .teach-chose s, .w6 .teach-chose s{ color:var(--err-warm); text-decoration-color:var(--err-warm); }
+  .w3 .teach-chose s{ color:var(--err-cool); text-decoration-color:var(--err-cool); }
+  .w4 .teach-chose s{ color:var(--milestone); text-decoration-color:var(--milestone); }
+
+  /* collision demo */
+  .demo{ margin-top:44px; }
+  .cpbar{
+    background:var(--milestone); color:#F7EEE8; border-radius:var(--r-md) var(--r-md) 0 0;
+    padding:11px var(--sp-4); font:500 12px/1 'Inter',sans-serif;
+    display:flex; justify-content:space-between; align-items:center;
+  }
+  .cpbar span:last-child{ opacity:.8; }
+  .demo-frame{ background:var(--canvas); border:1px solid rgba(28,25,23,.12); border-top:none; border-radius:0 0 var(--r-md) var(--r-md); padding:var(--sp-5) var(--sp-4); }
+
+  .foot{ font:400 13.5px/1.65 'Inter',sans-serif; max-width:66ch; margin:30px 0 0; }
+  .foot b{ color:var(--ink); font-weight:600; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <h1>Wrong-answer state · six treatments</h1>
+  <p class="lede">All six keep the correct answer identical — jade tint, green tick — so you're only judging how loudly the <b>miss</b> registers beside it. Each cell also shows the teaching panel below, since its left rule picks up the same colour.</p>
+
+  <div class="grid" id="grid"></div>
+
+  <div class="demo">
+    <h1>Why oxblood is risky</h1>
+    <p class="lede">The checkpoint Words activity isn't a separate screen — <code>renderCheckpointWords</code> calls the same <code>renderQuizCore</code> and passes the checkpoint chrome colour through it. So in a checkpoint quiz, oxblood is already on the furniture. Here's W4 in that context:</p>
+    <div style="max-width:420px">
+      <div class="cpbar"><span>◆ Checkpoint · Words review</span><span>Word 4 / 12</span></div>
+      <div class="demo-frame w4" id="demo"></div>
+    </div>
+  </div>
+
+  <p class="foot">My read: <b>W2</b>. Red is the one convention users don't have to learn, and at <code>#B42318</code> it sits far enough below brand orange in both lightness and saturation that the two never read as the same colour — helped by the fact that orange appears nowhere in the answer area except the Next button. <b>W6</b> if you want it louder still; the 3px edge mirrors the "next up" treatment, so emphasis is expressed the same way in both places. <b>W5</b> is the middle road — the miss is unmistakable but the card stays quiet, which keeps a four-choice stack calmer when three are greyed.</p>
+
+</div>
+
+<script>
+  const CHECK='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M20 6L9 17l-5-5"/></svg>';
+  const X='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg>';
+
+  const ITEMS=[
+    {label:'Noodles', state:'missed', mark:'A'},
+    {label:'Congee',  state:'correct',mark:CHECK},
+    {label:'Soup',    state:'wrong',  mark:X},
+    {label:'Dessert', state:'missed', mark:'D'},
+  ];
+
+  const stack = () => `<div class="choices">` + ITEMS.map(i=>`
+      <div class="choice ${i.state}">
+        <span class="mark">${i.mark}</span>
+        <span class="body">${i.label}</span>
+      </div>`).join('') + `</div>`;
+
+  const teach = `
+    <div class="teach">
+      <div class="teach-h">The answer was</div>
+      <div class="teach-zh">粥</div>
+      <div class="teach-en">Congee</div>
+      <div class="teach-chose">You chose <s>Soup</s></div>
+    </div>`;
+
+  const OPTS=[
+    {c:'w1', t:'W1 · Neutral (current)', n:'Grey card, strikethrough, outlined ✕. No error colour at all.'},
+    {c:'w2', t:'W2 · Warm red #B42318',  n:'Classic error red. Tinted card, filled ✕, red teaching rule.'},
+    {c:'w3', t:'W3 · Cool crimson #A8161F', n:'Same weight, hue pushed toward crimson to sit further from brand orange.'},
+    {c:'w4', t:'W4 · Oxblood #6E2639',   n:'Your suggestion — reuses the milestone colour rather than adding a token.'},
+    {c:'w5', t:'W5 · Red mark only',     n:'Card stays quiet and struck through; only the ✕ badge carries red.'},
+    {c:'w6', t:'W6 · Red + 3px edge',    n:'W2 plus a solid left rule — same emphasis device as "Next up" on the path.'},
+  ];
+
+  document.getElementById('grid').innerHTML = OPTS.map(o=>`
+    <div>
+      <p class="cell-tag">${o.t}</p>
+      <p class="cell-note">${o.n}</p>
+      <div class="frame ${o.c}">${stack()}${teach}</div>
+    </div>`).join('');
+
+  document.getElementById('demo').innerHTML = stack() + teach;
+</script>
+</body>
+</html>
