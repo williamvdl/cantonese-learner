@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Header options — solid centred nameplate</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Noto+Serif+TC:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#1C1917; --ink-soft:#44403C;
+    --surface:#FFFFFF; --canvas:#FAF8F5;
+    --hairline:#E8E2DA; --hairline-soft:#F0EBE4;
+    --brand:#C2410C; --muted:#A8A29E; --muted-dark:#78716C;
+    --r-sm:8px; --r-md:12px; --r-pill:999px;
+    --border:1px solid var(--hairline);
+    --border-soft:1px solid var(--hairline-soft);
+    --cream:#F7F1E8;
+
+    /* The eight candidate band colours */
+    --c-ink:#1C1917;      /* 1 · Ink            */
+    --c-brand:#C2410C;    /* 2 · Brand orange   */
+    --c-sienna:#9A3412;   /* 3 · Brand deep     */
+    --c-navy:#1B3A5B;     /* 4 · Ink navy       */
+    --c-forest:#14532D;   /* 5 · Forest         */
+    --c-espresso:#3B2A21; /* 6 · Espresso       */
+    --c-teal:#115E59;     /* 7 · Deep teal      */
+    --c-oxblood:#6E2639;  /* 8 · Oxblood        */
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0; background:#E6E1D9; font-family:'Inter',sans-serif; color:var(--ink-soft);
+    padding:36px 20px 90px;
+  }
+  .wrap{ max-width:1180px; margin:0 auto; }
+  h1{
+    font:600 13px/1 'Inter',sans-serif; letter-spacing:.1em; text-transform:uppercase;
+    color:var(--muted-dark); margin:0 0 12px;
+  }
+  .intro{ font:400 13px/1.65 'Inter',sans-serif; color:var(--ink-soft); max-width:62ch; margin:0 0 22px; }
+  .intro b{ color:var(--ink); font-weight:600; }
+
+  /* quick side-by-side colour strip */
+  .strip{ display:flex; gap:6px; margin:0 0 30px; }
+  .strip div{ flex:1; height:44px; border-radius:var(--r-sm); position:relative; }
+  .strip span{
+    position:absolute; bottom:-19px; left:0; right:0; text-align:center;
+    font:500 10px/1 'Inter',sans-serif; letter-spacing:.06em; text-transform:uppercase; color:var(--muted-dark);
+  }
+
+  .grid{
+    display:grid; grid-template-columns:repeat(auto-fit, minmax(340px, 1fr));
+    gap:26px; margin-top:34px;
+  }
+
+  .spec-tag{
+    font:600 10.5px/1 'Inter',sans-serif; letter-spacing:.1em; text-transform:uppercase;
+    color:var(--muted-dark); margin:0 0 8px;
+  }
+  .spec-tag em{ font-style:normal; color:var(--muted); letter-spacing:.04em; text-transform:none; font-weight:400; }
+  .spec{
+    background:var(--canvas); border-radius:18px 18px var(--r-md) var(--r-md); overflow:hidden;
+    border:1px solid rgba(28,25,23,.13); box-shadow:0 8px 22px rgba(28,25,23,.12);
+  }
+
+  /* ── the header band: solid, centred nameplate, icons both corners ── */
+  .band-top{ position:relative; padding:13px 14px 12px; color:var(--cream); }
+  .band-top .icon{
+    position:absolute; top:12px; width:30px; height:30px; border-radius:var(--r-pill);
+    border:none; background:transparent; color:var(--cream); opacity:.72;
+    display:flex; align-items:center; justify-content:center; cursor:pointer; padding:0;
+  }
+  .band-top .icon.left{ left:12px; }
+  .band-top .icon.right{ right:12px; }
+  .band-top .icon svg{ width:17px; height:17px; }
+  .plate{ display:flex; flex-direction:column; align-items:center; gap:5px; }
+  .plate .zh{ font:500 17px/1 'Noto Serif TC',serif; letter-spacing:.04em; }
+  .plate .en{
+    font:500 9px/1 'Inter',sans-serif; letter-spacing:.24em; text-transform:uppercase; opacity:.72;
+  }
+
+  /* ── contextual row, now UNDER a real header rather than replacing it ── */
+  .ctx{ background:var(--canvas); }
+  .ctx-row{ display:flex; align-items:center; justify-content:space-between; padding:11px 16px 10px; }
+  .ctx-back{
+    display:flex; align-items:center; gap:7px; font:500 13px/1 'Inter',sans-serif;
+    color:var(--ink); background:none; border:none; cursor:pointer; padding:0;
+  }
+  .ctx-back svg{ width:16px; height:16px; }
+  .ctx-meta{ font:500 11px/1 'Inter',sans-serif; color:var(--muted-dark); }
+  .ctx-track{ height:2px; background:var(--hairline-soft); }
+  .ctx-fill{ height:2px; width:38%; }
+
+  /* ── lesson band for context ── */
+  .lesson{ position:relative; overflow:hidden; padding:26px 18px 22px; border-top:var(--border-soft); }
+  .lesson-wm{
+    position:absolute; right:-22px; top:-34px; font-family:'Noto Serif TC',serif;
+    font-size:164px; line-height:1; color:var(--ink); opacity:.035; user-select:none;
+  }
+  .eyebrow{
+    font:500 10px/1 'Inter',sans-serif; letter-spacing:.12em; text-transform:uppercase;
+    color:var(--brand); margin-bottom:10px; position:relative;
+  }
+  .ltitle{ font:500 26px/1.15 'Fraunces',serif; color:var(--ink); margin:0; position:relative; letter-spacing:-.01em; }
+  .stub{ padding:15px 18px 20px; display:flex; gap:8px; }
+  .stub span{
+    font:500 12px/1 'Inter',sans-serif; padding:8px 16px; border-radius:var(--r-pill);
+    border:var(--border); color:var(--muted-dark);
+  }
+  .stub span.on{ border-color:var(--brand); color:var(--brand); }
+
+  .foot{ font:400 13px/1.65 'Inter',sans-serif; color:var(--ink-soft); max-width:62ch; margin:38px 0 0; }
+  .foot b{ color:var(--ink); font-weight:600; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <h1>Header options · solid band, centred nameplate</h1>
+  <p class="intro">All eight share one structure: <b>solid colour band, centred nameplate, an icon in each corner</b> so the bar never reads as empty — with the contextual back/progress row moved <b>underneath</b> the header rather than replacing it. Only the band colour varies. Nameplate text is still a placeholder pending the naming decision.</p>
+
+  <div class="strip">
+    <div style="background:var(--c-ink)"><span>Ink</span></div>
+    <div style="background:var(--c-brand)"><span>Brand</span></div>
+    <div style="background:var(--c-sienna)"><span>Sienna</span></div>
+    <div style="background:var(--c-navy)"><span>Navy</span></div>
+    <div style="background:var(--c-forest)"><span>Forest</span></div>
+    <div style="background:var(--c-espresso)"><span>Espresso</span></div>
+    <div style="background:var(--c-teal)"><span>Teal</span></div>
+    <div style="background:var(--c-oxblood)"><span>Oxblood</span></div>
+  </div>
+
+  <div class="grid" id="grid"></div>
+
+  <p class="foot">A note on the two orange options: <b>Brand</b> (#C2410C) commits the identity colour to the whole band, which then forces the in-page accents — the eyebrow, the active tier pill — to become something else, since orange-on-orange won't read. <b>Sienna</b> (#9A3412) is the same hue a step deeper, which lets the brighter orange stay as the accent. Every other option keeps the accent system exactly as it is now.</p>
+
+</div>
+
+<script>
+  const OPTIONS = [
+    {n:1, name:'Ink',      hex:'#1C1917', note:'neutral, premium, zero conflict'},
+    {n:2, name:'Brand',    hex:'#C2410C', note:'full commitment to the identity colour'},
+    {n:3, name:'Sienna',   hex:'#9A3412', note:'brand hue, one step deeper'},
+    {n:4, name:'Navy',     hex:'#1B3A5B', note:'the old ink-navy direction, revisited'},
+    {n:5, name:'Forest',   hex:'#14532D', note:'ties to the existing completion green'},
+    {n:6, name:'Espresso', hex:'#3B2A21', note:'warm dark neutral, tea-house register'},
+    {n:7, name:'Teal',     hex:'#115E59', note:'cool, distinct from the completion green'},
+    {n:8, name:'Oxblood',  hex:'#6E2639', note:'editorial deep red, closest to your reference'},
+  ];
+
+  const ICON_INFO = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>';
+  const ICON_MENU = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M3 6h18M3 12h18M3 18h18"/></svg>';
+  const ICON_BACK = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M15 18l-6-6 6-6"/></svg>';
+
+  document.getElementById('grid').innerHTML = OPTIONS.map(o => `
+    <div>
+      <p class="spec-tag">${o.n} · ${o.name} <em>${o.hex} — ${o.note}</em></p>
+      <div class="spec">
+        <div class="band-top" style="background:${o.hex}">
+          <button class="icon left" aria-label="Tone reference">${ICON_INFO}</button>
+          <div class="plate">
+            <span class="zh">廣東話</span>
+            <span class="en">Cantonese Learner</span>
+          </div>
+          <button class="icon right" aria-label="Menu">${ICON_MENU}</button>
+        </div>
+        <div class="ctx">
+          <div class="ctx-row">
+            <button class="ctx-back">${ICON_BACK} Chapter 4 · Eating Out</button>
+            <span class="ctx-meta">4 / 11</span>
+          </div>
+          <div class="ctx-track"><div class="ctx-fill" style="background:${o.hex}"></div></div>
+        </div>
+        <div class="lesson">
+          <div class="lesson-wm">飯</div>
+          <div class="eyebrow">Tier 1 · 11 words</div>
+          <h2 class="ltitle">Food &amp; Dishes</h2>
+        </div>
+        <div class="stub"><span class="on">Tier 1</span><span>Tier 2</span></div>
+      </div>
+    </div>
+  `).join('');
+</script>
+
+</body>
+</html>
