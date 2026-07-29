@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Control vocabulary — circular controls and labelled controls</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Noto+Serif+TC:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    /* aligned to the repo's existing token values */
+    --ink:#1C1917; --ink-soft:#292524;
+    --parchment:#FFFFFF; --parchment-warm:#FAF8F5; --parchment-deep:#F0EBE4;
+    --parchment-border:#EAE4DC;
+    --border:1px solid var(--parchment-border);
+
+    --brand:#C2410C; --brand-dark:#9A3412; --brand-tint:#FEF0E9; --brand-edge:#F5D9C9;
+    --jade:#15803D; --jade-edge:#C9E7D3;
+    --feedback-good-tint:#DCFCE7; --feedback-good-text:#15803D;
+    --feedback-bad:#B42318;
+    --header-bg:#6E2639; --header-text:#F7EEE8;
+    --milestone:#6E2639; --milestone-tint:#FBF0F2; --milestone-edge:#EBD3D9;
+
+    --muted:#A8A29E; --muted-dark:#78716C;
+
+    --font-serif:'Noto Serif TC','Fraunces',Georgia,serif;
+    --font-ui:'Inter','Noto Serif TC',-apple-system,system-ui,sans-serif;
+    --font-display:'Fraunces','Noto Serif TC',Georgia,serif;
+    --fs-micro:11px; --fs-meta:12px; --fs-small:13px; --fs-body:15px;
+
+    --r-sm:8px; --r-md:12px; --r-lg:16px; --r-pill:999px;
+    --elev-1:0 1px 2px rgba(58,42,30,0.04), 0 1px 3px rgba(58,42,30,0.06);
+    --sp-1:4px; --sp-2:8px; --sp-3:12px; --sp-4:16px;
+    --sp-5:24px; --sp-6:32px; --sp-7:48px;
+    --tap-min:44px;
+    --ease:cubic-bezier(0.4,0,0.2,1); --dur-fast:120ms;
+  }
+  *{box-sizing:border-box;}
+  body{ margin:0; background:#E6E1D9; font-family:var(--font-ui); color:var(--ink-soft); padding:34px 18px 90px; }
+  .wrap{ max-width:1240px; margin:0 auto; }
+
+  h1{ font:600 13px/1 var(--font-ui); letter-spacing:.1em; text-transform:uppercase; color:var(--muted-dark); margin:52px 0 8px; }
+  h1:first-of-type{ margin-top:0; }
+  .lede{ font:400 13.5px/1.65 var(--font-ui); max-width:70ch; margin:0 0 24px; }
+  .lede b{ color:var(--ink); font-weight:600; }
+  .lede code{ background:#DED8CE; padding:1px 5px; border-radius:4px; font-size:12px; font-family:ui-monospace,Menlo,monospace; }
+  .lede + .lede{ margin-top:-14px; }
+
+  .rack{ display:flex; gap:20px; flex-wrap:wrap; align-items:flex-start; }
+  .col{ display:flex; flex-direction:column; gap:8px; width:266px; }
+  .col-tag{ font:600 10.5px/1 var(--font-ui); letter-spacing:.1em; text-transform:uppercase; color:var(--muted-dark); }
+  .col-tag.rec{ color:var(--brand); }
+  .col-note{ font:400 11.5px/1.55 var(--font-ui); color:var(--muted-dark); min-height:52px; margin:0; }
+  .panel{ background:var(--parchment-warm); border:var(--border); border-radius:var(--r-md); padding:var(--sp-4); }
+  .panel.deep{ background:var(--parchment-deep); }
+
+  /* ══ toolbar ══ */
+  .bar{
+    position:sticky; top:0; z-index:40; background:rgba(230,225,217,.93);
+    backdrop-filter:blur(8px); border-bottom:1px solid #CFC8BE;
+    margin:-34px -18px 30px; padding:13px 18px; display:flex; gap:20px; align-items:center; flex-wrap:wrap;
+  }
+  .bar .ttl{ font:600 12px/1 var(--font-ui); letter-spacing:.08em; text-transform:uppercase; color:var(--ink); }
+  .sw{ display:flex; align-items:center; gap:7px; font:500 12px/1 var(--font-ui); color:var(--ink-soft); cursor:pointer; user-select:none; }
+  .sw input{ width:15px; height:15px; accent-color:var(--brand); cursor:pointer; margin:0; }
+
+  /* ══ tap-target overlay ══
+     A dashed 44px ring centred on any control, so undersized targets are
+     visible rather than argued about. Purely diagnostic — never ships. */
+  .t{ position:relative; display:inline-flex; flex:0 0 auto; }
+  .t::before{
+    content:''; position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);
+    width:var(--tap-min); height:var(--tap-min); border-radius:var(--r-pill);
+    border:1px dashed var(--feedback-bad); opacity:0; pointer-events:none; z-index:3;
+    transition:opacity var(--dur-fast) var(--ease);
+  }
+  .t.ok::before{ border-color:var(--jade); }
+  body.show-t .t::before{ opacity:.85; }
+  .px{
+    position:absolute; left:50%; transform:translateX(-50%); bottom:-15px;
+    font:600 9px/1 ui-monospace,Menlo,monospace; color:var(--feedback-bad);
+    opacity:0; transition:opacity var(--dur-fast) var(--ease); white-space:nowrap; z-index:4;
+  }
+  .t.ok .px{ color:var(--jade); }
+  body.show-t .px{ opacity:1; }
+  body.show-t .row-lift{ padding-bottom:20px; }
+
+  /* ══ the circular control ══
+     `pc` paints the circle. `pc--hit` adds an invisible 44px hit area centred
+     on it, so visual weight and touch target are decoupled. */
+  .pc{
+    border-radius:var(--r-pill); border:1px solid var(--brand-edge);
+    background:transparent; color:var(--brand); cursor:pointer; padding:0;
+    display:inline-flex; align-items:center; justify-content:center; flex:0 0 auto;
+    position:relative; transition:background var(--dur-fast) var(--ease);
+  }
+  .pc:hover{ background:var(--brand-tint); }
+  .pc--hit::after{
+    content:''; position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);
+    width:var(--tap-min); height:var(--tap-min); border-radius:var(--r-pill);
+  }
+  .pc svg{ display:block; }
+
+  /* ══ app fragments ══ */
+  .card{ background:var(--parchment); border:var(--border); border-radius:var(--r-md); box-shadow:var(--elev-1); }
+  .zh{ font-family:var(--font-serif); color:var(--ink); }
+  .jp{ font:500 var(--fs-meta)/1.4 var(--font-ui); }
+  .en{ font:400 12.5px/1.45 var(--font-ui); color:var(--muted-dark); }
+
+  /* conversation bubble */
+  .brow{ display:flex; gap:var(--sp-2); margin-bottom:var(--sp-2); }
+  .brow.r{ justify-content:flex-end; }
+  .bub{ max-width:84%; border-radius:var(--r-lg); padding:10px 12px; background:var(--parchment); border:var(--border); }
+  .bub.me{ background:var(--brand); border-color:var(--brand); }
+  .bub.me .zh, .bub.me .en{ color:#fff; }
+  .bub.me .jp span{ color:rgba(255,255,255,.82) !important; }
+  .bub .zh{ font-size:17px; line-height:1.5; }
+  .bub .btm{ display:flex; align-items:center; gap:var(--sp-2); margin-top:6px; }
+  .bub.me .pc{ border-color:rgba(255,255,255,.5); color:#fff; }
+  .bub.me .pc:hover{ background:rgba(255,255,255,.16); }
+
+  /* checkpoint "worth another look" */
+  .miss-row{ display:flex; align-items:center; gap:var(--sp-3); padding:9px 0; border-top:1px solid var(--parchment-deep); }
+  .miss-row:first-of-type{ border-top:none; }
+  .miss-b{ flex:1; min-width:0; }
+  .miss-e{ font:400 12px/1.3 var(--font-ui); color:var(--muted-dark); text-align:right; flex:0 0 auto; }
+
+  /* word card */
+  .wcard{ position:relative; min-height:126px; padding:var(--sp-5) var(--sp-3) var(--sp-6); display:flex; flex-direction:column; align-items:center; justify-content:center; gap:2px; text-align:center; }
+  .wcard .zh{ font-size:27px; line-height:1.15; }
+  .wcard .hint{ font:400 9.5px/1 var(--font-ui); letter-spacing:.07em; text-transform:uppercase; color:var(--muted); margin-top:7px; }
+  .wcard .t{ position:absolute; bottom:8px; right:8px; }
+
+  /* sentence card */
+  .srow{ display:flex; align-items:flex-start; gap:var(--sp-3); padding:var(--sp-3) var(--sp-4); }
+  .srow .sb{ flex:1; min-width:0; }
+  .srow .zh{ font-size:17px; line-height:1.5; }
+
+  /* header */
+  .hd{ background:var(--header-bg); color:var(--header-text); padding:11px var(--sp-3) 10px; position:relative; display:flex; align-items:center; justify-content:center; min-height:56px; }
+  .hd .plate{ display:flex; flex-direction:column; align-items:center; gap:3px; }
+  .hd .plate .z{ font:500 16px/1 var(--font-serif); letter-spacing:.04em; }
+  .hd .plate .e{ font:500 8.5px/1 var(--font-ui); letter-spacing:.24em; text-transform:uppercase; opacity:.72; }
+  .hic{
+    position:absolute; top:50%; transform:translateY(-50%); border-radius:var(--r-pill);
+    background:transparent; color:var(--header-text); cursor:pointer; padding:0;
+    display:inline-flex; align-items:center; justify-content:center;
+  }
+  .hic.l{ left:8px; } .hic.r{ right:8px; }
+  .hic.ring{ border:1px solid var(--header-text); }
+  .hic.bare{ border:none; opacity:.78; }
+
+  /* labelled controls */
+  .pill{ display:inline-flex; align-items:center; gap:5px; font:500 var(--fs-small)/1 var(--font-ui); padding:9px 18px; border-radius:var(--r-pill); border:var(--border); background:transparent; color:var(--muted-dark); cursor:pointer; min-height:var(--tap-min); }
+  .pill--on{ border-color:var(--brand); color:var(--brand); }
+  .tag{ display:inline-block; font:500 9.5px/1 var(--font-ui); letter-spacing:.14em; text-transform:uppercase; color:var(--muted); border:var(--border); padding:4px 8px; border-radius:var(--r-pill); }
+  .tag--done{ color:var(--jade); border-color:var(--jade-edge); }
+  .btn-listen{ display:inline-flex; align-items:center; gap:7px; font:500 var(--fs-meta)/1 var(--font-ui); color:var(--brand); border:1px solid var(--brand-edge); background:transparent; padding:9px 15px; border-radius:var(--r-pill); cursor:pointer; min-height:var(--tap-min); }
+  .btn{ display:inline-flex; align-items:center; justify-content:center; gap:7px; min-height:var(--tap-min); padding:0 var(--sp-5); border-radius:var(--r-pill); border:var(--border); background:transparent; color:var(--ink-soft); font:500 var(--fs-small)/1 var(--font-ui); cursor:pointer; }
+  .btn--primary{ background:var(--brand); border-color:var(--brand); color:#fff; }
+
+  /* legacy renders, for the before column */
+  .lg-round{ padding:4px 12px; border-radius:var(--r-pill); min-height:32px; border:var(--border); background:var(--parchment); color:var(--muted-dark); font:500 12px/1 var(--font-ui); cursor:pointer; }
+  .lg-dir{ padding:6px 12px; border-radius:var(--r-pill); background:transparent; border:var(--border); color:var(--muted-dark); font:500 var(--fs-meta)/1 var(--font-ui); cursor:pointer; }
+  .lg-listen{ background:transparent; border:1px solid var(--brand-edge); color:var(--brand); border-radius:var(--r-pill); padding:4px 14px; min-height:var(--tap-min); font:500 var(--fs-meta)/1 var(--font-ui); cursor:pointer; display:inline-flex; align-items:center; gap:6px; }
+  .lg-badge{ font:700 10px/1 var(--font-ui); padding:3px 8px; border-radius:var(--r-sm); letter-spacing:.5px; text-transform:uppercase; background:var(--feedback-good-tint); color:var(--feedback-good-text); display:inline-block; }
+  .lg-start{ background:var(--brand); color:#fff; border:none; border-radius:var(--r-pill); padding:12px 28px; font:700 14px/1 var(--font-ui); cursor:pointer; }
+  .lg-opt{ display:inline-flex; align-items:center; gap:6px; background:var(--feedback-good-tint); border:1px solid var(--feedback-good-tint); color:var(--jade); border-radius:var(--r-pill); padding:4px 10px; font:500 11px/1 var(--font-ui); }
+
+  /* size ruler */
+  .ruler{ display:flex; gap:var(--sp-5); flex-wrap:wrap; align-items:flex-end; }
+  .ruler .u{ display:flex; flex-direction:column; align-items:center; gap:9px; }
+  .ruler .lbl{ font:400 10px/1.5 ui-monospace,Menlo,monospace; color:var(--muted-dark); text-align:center; }
+  .ruler .lbl b{ display:block; color:var(--ink); font-weight:600; font-size:11px; }
+
+  table{ border-collapse:collapse; width:100%; max-width:900px; font:400 12.5px/1.5 var(--font-ui); background:var(--parchment); border-radius:var(--r-md); overflow:hidden; box-shadow:var(--elev-1); }
+  th,td{ text-align:left; padding:9px 12px; border-bottom:var(--border); vertical-align:top; }
+  th{ font-weight:600; color:var(--ink); font-size:10px; letter-spacing:.08em; text-transform:uppercase; background:var(--parchment-warm); }
+  tr:last-child td{ border-bottom:none; }
+  td code{ font-family:ui-monospace,Menlo,monospace; font-size:11.5px; background:#F2EEE8; padding:1px 5px; border-radius:4px; }
+  .yes{ color:var(--jade); font-weight:600; }
+  .no{ color:var(--feedback-bad); font-weight:600; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="bar">
+    <span class="ttl">15 · Control vocabulary</span>
+    <label class="sw"><input type="checkbox" id="tt"> Show 44px tap targets</label>
+    <span style="font:400 11.5px/1 var(--font-ui);color:var(--muted-dark)">Dashed ring = the <code style="font-family:ui-monospace,Menlo,monospace">--tap-min</code> area. Red where the control is smaller than it.</span>
+  </div>
+
+  <!-- ═══════════════ 1 ═══════════════ -->
+  <h1>1 · Where we are — one control, seven sizes</h1>
+  <p class="lede">
+    The circular play/mic control appears in seven places and is a different size in each. Nothing decided this;
+    each screen picked a number. <b>Six of the seven are smaller than <code>--tap-min</code></b>, which
+    DESIGN_SYSTEM §1.2 defines as the minimum smaller dimension of anything interactive, <i>including header icons</i>.
+  </p>
+  <div class="panel row-lift"><div class="ruler" id="ruler"></div></div>
+
+  <!-- ═══════════════ 2 ═══════════════ -->
+  <h1>2 · The separate question hiding inside this one</h1>
+  <p class="lede">
+    <b>Painted size and touch target are not the same thing.</b> A 32px circle can carry a 44px hit area — the
+    extra region is invisible and costs no layout. So "must every control be 44px across?" is really two questions:
+    how big should it <i>look</i>, and how big should it <i>respond</i>. The second has one right answer.
+    Only the first is a matter of taste.
+  </p>
+  <div class="rack">
+    <div class="col">
+      <div class="col-tag">Painted 32px, target 32px</div>
+      <p class="col-note">Today's conversation bubble. Compact, but it misses the target rule and is genuinely fiddly next to a thumb.</p>
+      <div class="panel" style="display:flex;justify-content:center;padding:26px 16px"><span class="t" data-px="32"><button class="pc" data-ic="play:14" style="width:32px;height:32px"></button></span></div>
+    </div>
+    <div class="col">
+      <div class="col-tag rec">Painted 32px, target 44px</div>
+      <p class="col-note">Same appearance, compliant target. One extra rule — <code style="font-family:ui-monospace,Menlo,monospace">::after</code> at 44px, centred, invisible.</p>
+      <div class="panel" style="display:flex;justify-content:center;padding:26px 16px"><span class="t ok" data-px="32 → 44"><button class="pc pc--hit" data-ic="play:14" style="width:32px;height:32px"></button></span></div>
+    </div>
+    <div class="col">
+      <div class="col-tag">Painted 44px, target 44px</div>
+      <p class="col-note">Compliant by construction, nothing to explain — but it is a visibly heavier object in a dense row.</p>
+      <div class="panel" style="display:flex;justify-content:center;padding:26px 16px"><span class="t ok" data-px="44"><button class="pc" data-ic="play:17" style="width:44px;height:44px"></button></span></div>
+    </div>
+  </div>
+
+  <!-- ═══════════════ 3 ═══════════════ -->
+  <h1>3 · The four contexts where the choice actually bites</h1>
+  <p class="lede">
+    Each context below is rendered four ways: as it is today, then under three vocabularies.
+    <b>A</b> paints everything at 44px. <b>B</b> allows two painted sizes, 32 and 44, with the target always 44.
+    <b>C</b> allows three, 28 / 36 / 44, target always 44. Turn on the tap-target overlay to compare them honestly.
+  </p>
+  <div id="contexts"></div>
+
+  <!-- ═══════════════ 4 ═══════════════ -->
+  <h1>4 · The header icon is not part of this decision</h1>
+  <p class="lede">
+    Worth separating out: <code>.header-info-btn</code> is 34px with a visible hairline ring, but
+    <code>styleguide.html</code> already specifies header icons as a <b>44px transparent host with a 17px glyph and
+    no ring</b>. So the header is not an open question — the code simply never conformed. Whichever option below wins,
+    this one is a straight fix.
+  </p>
+  <div class="rack">
+    <div class="col" style="width:340px">
+      <div class="col-tag">Today — 34px, ringed</div>
+      <p class="col-note">The ring makes it read as a button in a bar where nothing else is outlined, and it misses the target rule the same section names.</p>
+      <div class="panel deep" style="padding:0;overflow:hidden;border-radius:var(--r-md)">
+        <div class="hd row-lift">
+          <span class="t" data-px="34" style="position:absolute;left:8px;top:50%;transform:translateY(-50%)"><button class="hic ring" style="width:34px;height:34px;position:static;transform:none" data-ic="info:15"></button></span>
+          <div class="plate"><span class="z">廣東話</span><span class="e">Cantonese Learner</span></div>
+          <span class="t" data-px="34" style="position:absolute;right:8px;top:50%;transform:translateY(-50%)"><button class="hic ring" style="width:34px;height:34px;position:static;transform:none" data-ic="menu:15"></button></span>
+        </div>
+      </div>
+    </div>
+    <div class="col" style="width:340px">
+      <div class="col-tag rec">Styleguide — 44px host, 17px glyph, no ring</div>
+      <p class="col-note">The glyph carries the meaning; the host carries the target. Matches the nameplate's weight instead of competing with it.</p>
+      <div class="panel deep" style="padding:0;overflow:hidden;border-radius:var(--r-md)">
+        <div class="hd row-lift">
+          <span class="t ok" data-px="44" style="position:absolute;left:8px;top:50%;transform:translateY(-50%)"><button class="hic bare" style="width:44px;height:44px;position:static;transform:none" data-ic="info:17"></button></span>
+          <div class="plate"><span class="z">廣東話</span><span class="e">Cantonese Learner</span></div>
+          <span class="t ok" data-px="44" style="position:absolute;right:8px;top:50%;transform:translateY(-50%)"><button class="hic bare" style="width:44px;height:44px;position:static;transform:none" data-ic="menu:17"></button></span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <p class="lede" style="margin-top:20px">
+    The nameplate reads 廣東話 (gwong2 dung1 waa2) — still placeholder, per BACKLOG.
+  </p>
+
+  <!-- ═══════════════ 5 ═══════════════ -->
+  <h1>5 · The labelled controls — a mapping, not a choice</h1>
+  <p class="lede">
+    Separately from size, eight labelled controls are hand-rolled versions of primitives that already exist in
+    <code>styleguide.html</code> but were never ported into <code>styles.css</code>. These are not really a design
+    question — they are the same control drawn slightly differently in each place. Shown here so the visual shift
+    is visible before it happens, since a few do change weight.
+  </p>
+  <div id="mapping"></div>
+
+  <!-- ═══════════════ 6 ═══════════════ -->
+  <h1>6 · What each option costs</h1>
+  <table>
+    <tr><th style="width:74px">Option</th><th style="width:112px">Painted sizes</th><th style="width:78px">Meets §1.2</th><th>Consequence</th></tr>
+    <tr>
+      <td><b>A</b></td><td>44 only</td><td class="yes">yes</td>
+      <td>Simplest rule in the system — one number, nothing to remember, no hit-area mechanism. But the conversation
+      view gains a row of heavy circles beside short bubbles, and the checkpoint review list goes from a quiet
+      column of text to a column of buttons. Most likely to need a density fix later.</td>
+    </tr>
+    <tr>
+      <td><b>B</b></td><td>32 · 44</td><td class="yes">yes</td>
+      <td>Keeps today's visual hierarchy where it is doing work — play is secondary inside a bubble, primary beside a
+      sentence — while making every target legal. Costs one mechanism, <code>.pc--hit</code>, which must be
+      understood or it looks like dead CSS. Two sizes is few enough to stay memorable.</td>
+    </tr>
+    <tr>
+      <td><b>C</b></td><td>28 · 36 · 44</td><td class="yes">yes</td>
+      <td>Preserves the most nuance and requires the fewest judgement calls when migrating, since most current sizes
+      round to a neighbour. But three sizes is close enough to today's seven that the next screen will plausibly
+      invent a fourth — it concedes the principle that made the rule worth having.</td>
+    </tr>
+    <tr>
+      <td colspan="4" style="background:var(--parchment-warm)">
+        <b>Not shown as an option:</b> leaving it. Six of seven controls miss a rule the design system already states,
+        and <code>.play-mini</code> at 28px sits in the checkpoint review list — the screen a learner uses while
+        getting things wrong, which is the worst place for a control that is hard to hit.
+      </td>
+    </tr>
+  </table>
+
+  <h1>7 · What this does not settle</h1>
+  <p class="lede">
+    Three things stay open regardless of which option wins, and none of them block it:
+    the <b>speak-mode mic</b> is 76px with a tinted fill and is deliberately a hero control, not part of this family;
+    <b>.translate-mic</b> and <b>.play-mini</b> use <code>--brand</code> rather than <code>--brand-edge</code> for their
+    border, which is a separate inconsistency worth folding in whichever way this goes; and
+    <b>.sentence-note</b> still carries <code>rgba(183,134,30,…)</code>, the retired <code>CP_GOLD</code> hue, which is
+    a colour decision rather than a control one.
+  </p>
+
+</div>
+
+<script>
+/* ── icons ─────────────────────────────────────────────────────────────── */
+const play = s => `<svg viewBox="0 0 24 24" fill="currentColor" style="width:${s}px;height:${s}px"><path d="M8 5v14l11-7z"/></svg>`;
+const info = s => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" style="width:${s}px;height:${s}px"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>`;
+const menu = s => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" style="width:${s}px;height:${s}px"><path d="M3 6h18M3 12h18M3 18h18"/></svg>`;
+const vol  = s => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" style="width:${s}px;height:${s}px"><path d="M11 5L6 9H2v6h4l5 4V5z"/><path d="M19.1 4.9a10 10 0 0 1 0 14.2M15.5 8.5a5 5 0 0 1 0 7"/></svg>`;
+const chk  = s => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="width:${s}px;height:${s}px"><path d="M20 6L9 17l-5-5"/></svg>`;
+
+/* fill statically-authored controls from the icon set */
+const ICONS = { play, info, menu, vol, chk };
+document.querySelectorAll('[data-ic]').forEach(el => {
+  const [name, size] = el.dataset.ic.split(':');
+  el.innerHTML = ICONS[name](Number(size));
+});
+
+/* ── tone colouring — the six TONES values, as in app.js ───────────────── */
+const TONE = {1:'#E74C3C',2:'#E67E22',3:'#c8a200',4:'#27AE60',5:'#2980B9',6:'#8E44AD'};
+const jp = t => t.split(' ').map(s => {
+  const m = s.match(/[1-6]/);
+  return `<span style="color:${m ? TONE[m[0]] : 'var(--muted-dark)'}">${s}</span>`;
+}).join(' ');
+
+/* ── the control, at a given painted size ─────────────────────────────── */
+function pc(px, hit, glyph){
+  const g = glyph || 'play';
+  const ic = g === 'vol' ? vol(Math.round(px*0.42)) : play(Math.round(px*0.42));
+  const ok = (hit || px >= 44) ? ' ok' : '';
+  const lbl = hit && px < 44 ? `${px} → 44` : `${px}`;
+  return `<span class="t${ok}" data-px="${lbl}"><button class="pc${hit ? ' pc--hit' : ''}" style="width:${px}px;height:${px}px">${ic}</button></span>`;
+}
+
+/* ── size ruler (§1) ──────────────────────────────────────────────────── */
+const SIZES = [
+  ['.play-mini',        28, 'checkpoint review'],
+  ['.bubble-play',      32, 'conversation'],
+  ['.header-info-btn',  34, 'header'],
+  ['.speak-btn',        38, 'word card'],
+  ['.translate-mic',    38, 'translate'],
+  ['.quiz-review-play', 40, 'quiz review'],
+  ['.sentence-play',    44, 'sentence list'],
+];
+document.getElementById('ruler').innerHTML = SIZES.map(([sel,px,where]) =>
+  `<div class="u">${pc(px,false)}<div class="lbl"><b>${px}px</b>${sel}<br>${where}</div></div>`).join('');
+
+/* ── contexts (§3) ────────────────────────────────────────────────────── */
+// size chosen per context under each vocabulary
+const VOCAB = [
+  {k:'now', tag:'Today',              hit:false, size:{bubble:32, missed:28, word:38, sentence:44}},
+  {k:'a',   tag:'A · one size',       hit:true,  size:{bubble:44, missed:44, word:44, sentence:44}},
+  {k:'b',   tag:'B · two sizes',      hit:true,  size:{bubble:32, missed:32, word:44, sentence:44}, rec:true},
+  {k:'c',   tag:'C · three sizes',    hit:true,  size:{bubble:28, missed:28, word:36, sentence:44}},
+];
+
+const FRAG = {
+  bubble: (px,hit) => `
+    <div class="brow">
+      <div class="bub">
+        <div class="zh">我食粥。</div>
+        <div class="jp">${jp('ngo5 sik6 zuk1.')}</div>
+        <div class="btm">${pc(px,hit)}<span class="en">I'm having congee.</span></div>
+      </div>
+    </div>
+    <div class="brow r">
+      <div class="bub me">
+        <div class="zh">我食麵。</div>
+        <div class="jp">${jp('ngo5 sik6 min6.')}</div>
+        <div class="btm">${pc(px,hit)}<span class="en">I'm having noodles.</span></div>
+      </div>
+    </div>`,
+  missed: (px,hit) => `
+    <div class="card" style="padding:2px var(--sp-4) 6px">
+      ${[['粥','zuk1','Congee'],['麵','min6','Noodles'],['好味','hou2 mei6','Delicious']].map(([c,j,e]) => `
+        <div class="miss-row row-lift">
+          ${pc(px,hit)}
+          <div class="miss-b"><div class="zh" style="font-size:17px">${c}</div><div class="jp">${jp(j)}</div></div>
+          <span class="miss-e">${e}</span>
+        </div>`).join('')}
+    </div>`,
+  word: (px,hit) => `
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--sp-3)">
+      ${[['飯','faan6'],['粥','zuk1']].map(([c,j]) => `
+        <div class="card wcard">
+          <div class="zh">${c}</div><div class="jp">${jp(j)}</div>
+          <div class="hint">tap to reveal</div>
+          ${pc(px,hit,'vol')}
+        </div>`).join('')}
+    </div>`,
+  sentence: (px,hit) => `
+    <div class="card">
+      ${[['我好餓。','ngo5 hou2 ngo6.',"I'm hungry."],['呢個好味！','ni1 go3 hou2 mei6!','This is delicious!']].map(([c,j,e],i) => `
+        <div class="srow row-lift" style="${i ? 'border-top:1px solid var(--parchment-deep)' : ''}">
+          ${pc(px,hit)}
+          <div class="sb"><div class="zh">${c}</div><div class="jp">${jp(j)}</div><div class="en" style="margin-top:3px">${e}</div></div>
+        </div>`).join('')}
+    </div>`,
+};
+
+const CTX = [
+  {k:'bubble',  ttl:'Conversation bubble', note:'The tightest case. The play control is secondary to the line itself, and there are two of them in view at once.'},
+  {k:'missed',  ttl:'Checkpoint — worth another look', note:'The densest list, and the one a learner reads after getting things wrong. Currently the smallest control in the app at 28px.'},
+  {k:'word',    ttl:'Word card corner', note:'Absolutely positioned in a card corner, so a larger circle eats into the character it sits under.'},
+  {k:'sentence',ttl:'Sentence list', note:'Already 44px and already compliant. Included as the reference — whatever wins should leave this one alone.'},
+];
+
+document.getElementById('contexts').innerHTML = CTX.map(c => `
+  <h1 style="margin:34px 0 6px;font-size:11.5px;color:var(--ink)">${c.ttl}</h1>
+  <p class="lede" style="margin-bottom:16px">${c.note}</p>
+  <div class="rack">
+    ${VOCAB.map(v => `
+      <div class="col">
+        <div class="col-tag${v.rec ? ' rec' : ''}">${v.tag} — ${v.size[c.k]}px</div>
+        <div class="panel">${FRAG[c.k](v.size[c.k], v.hit)}</div>
+      </div>`).join('')}
+  </div>`).join('');
+
+/* ── labelled-control mapping (§5) ────────────────────────────────────── */
+const MAP = [
+  { now:`<button class="lg-round">Tier 1</button> <button class="lg-round">Tier 2</button>`,
+    next:`<button class="pill pill--on">Tier 1</button> <button class="pill">Tier 2</button>`,
+    from:'.round-btn', to:'.pill / .pill--on',
+    note:'Gains 12px of height to reach the tap minimum, and the active state moves from a filled chip to a brand outline.' },
+  { now:`<button class="lg-dir">漢→EN</button> <button class="lg-dir">EN→漢</button>`,
+    next:`<button class="pill pill--on">漢→EN</button> <button class="pill">EN→漢</button>`,
+    from:'.quiz-dir-btn', to:'.pill / .pill--on',
+    note:'Same treatment as the tier selector, which is correct — both are one-of-N choosers. The 漢 (hon3) label means Chinese; the labels themselves are a separate open question in BACKLOG.' },
+  { now:`<button class="lg-listen">${play(11)} Listen</button>`,
+    next:`<button class="btn-listen">${play(12)} Listen</button>`,
+    from:'.quiz-listen', to:'.btn-listen',
+    note:'Near-identical already — padding goes from 4px 14px to 9px 15px. The smallest change in this section.' },
+  { now:`<span class="lg-badge">Complete</span>`,
+    next:`<span class="tag tag--done">Complete</span>`,
+    from:'.path-card-badge', to:'.tag / .tag--done',
+    note:'Loses its filled green ground for an outline. Consistent with tags being metadata, not status lights.' },
+  { now:`<span class="lg-opt">${chk(11)} Optional</span>`,
+    next:`<span class="tag tag--done">${chk(10)} Optional</span>`,
+    from:'.cp-optional', to:'.tag / .tag--done',
+    note:'Same change, same reasoning. These two are the only filled non-button chips left in the app.' },
+  { now:`<button class="lg-start">Start review</button>`,
+    next:`<button class="btn btn--primary">Start review</button>`,
+    from:'.review-start-btn', to:'.btn / .btn--primary',
+    note:'Drops from bold to medium weight and from 14px to 13px. Its chunky offset shadow is the open question already logged for the path buttons.' },
+];
+document.getElementById('mapping').innerHTML = `<div class="rack">` + MAP.map(m => `
+  <div class="col" style="width:298px">
+    <div class="col-tag">${m.from} → ${m.to}</div>
+    <p class="col-note">${m.note}</p>
+    <div class="panel" style="display:flex;flex-direction:column;gap:14px">
+      <div><div style="font:600 9px/1 var(--font-ui);letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:9px">Today</div>${m.now}</div>
+      <div style="border-top:1px solid var(--parchment-border);padding-top:14px"><div style="font:600 9px/1 var(--font-ui);letter-spacing:.12em;text-transform:uppercase;color:var(--brand);margin-bottom:9px">Primitive</div>${m.next}</div>
+    </div>
+  </div>`).join('') + `</div>`;
+
+/* ── tap-target overlay ───────────────────────────────────────────────── */
+document.querySelectorAll('.t').forEach(t => {
+  if (t.querySelector('.px')) return;
+  const s = document.createElement('span');
+  s.className = 'px'; s.textContent = t.dataset.px || '';
+  t.appendChild(s);
+});
+document.getElementById('tt').addEventListener('change', e => {
+  document.body.classList.toggle('show-t', e.target.checked);
+});
+</script>
+</body>
+</html>
