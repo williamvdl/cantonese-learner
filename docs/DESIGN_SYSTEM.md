@@ -6,7 +6,7 @@ the rules; the styleguide is the evidence.*
 
 **Read this before touching `styles.css`, `render.js`, or designing a new screen.**
 
-Established: 2026-07-25 · Phases 1–2 applied as at sw.js v103 (2026-07-28)
+Established: 2026-07-25 · Phases 1–3 applied as at sw.js v107 (2026-07-29)
 
 ---
 
@@ -19,10 +19,13 @@ Established: 2026-07-25 · Phases 1–2 applied as at sw.js v103 (2026-07-28)
    turn out to be one of the four states (§4) wearing a different name.
 3. **Reaching for a colour?** Only the tokens in §1 exist. There is no fifth
    state colour, and no colour is ever passed into a render function (§3.5).
-4. **Changed something here?** Update `styleguide.html` in the same commit, and
-   re-upload this file to the project knowledge base — it does not auto-sync.
-   *(This slipped during phase 2; the styleguide is currently behind. See
-   BACKLOG.md.)*
+4. **Changed something here?** Update `docs/design/styleguide.html` in the same
+   commit — it has drifted behind the code before. Three gaps remain, tracked in
+   BACKLOG.md: the dashboard entry, the 站 (zaam6) watermark rule, and the
+   `.quiz-ms` / `.cp-convo` variant mechanism.
+5. **Settled a design decision?** Add a row to `docs/DESIGN_DECISIONS.md` in the
+   same session. That file is the register of what was approved and whether it
+   was ever built.
 
 ---
 
@@ -487,7 +490,7 @@ pass over the dashboard. The mockup files behind each decision:
 | `04-topic-learn-v3-oxblood.html` | Topic/Learn reference page |
 | `03-header-solid-options.html` | Header colour — Oxblood chosen from 8 |
 | `05-path-and-checkpoint.html` | Path timeline, checkpoint hub, state system |
-| `06-nextup-checkpoint-progress.html` | Next-up emphasis (C), checkpoint card (K2) |
+| `06-nextup-checkpoint-progress.html` | Next-up emphasis (C), checkpoint card (K2), progress (P1 + P2) |
 | `07-diamond-progress.html` | Diamond progress geometry (A-soft) |
 | `08-quiz.html` | Quiz states, result screen |
 | `09-wrong-answer-options.html` | Error colour (W2, `#B42318`) |
@@ -500,12 +503,18 @@ pass over the dashboard. The mockup files behind each decision:
 | `../styleguide.html` | Live reference for everything above |
 
 **Paths:** the mockups live in `docs/design/mockups/`, and `styleguide.html`
-alongside them in `docs/design/`. `03-header-solid-options.html`,
-`14-dashboard.html` and `15-control-vocabulary.html` are not yet committed —
-tracked in BACKLOG.md.
+alongside them in `docs/design/`. All fifteen mockups are committed as at
+2026-07-30.
 
 **A mockup is the argument; the styleguide is the record.** Three approved path
 decisions were lost because they were settled in mockups 05–07 and never
 transcribed, so nothing detected that the code had never implemented them and a
-later session re-opened a closed question. When a mockup settles something,
-write it into `styleguide.html` in the same session.
+later session re-opened a closed question. When a mockup settles something, write
+it into `styleguide.html` **and add a row to `docs/DESIGN_DECISIONS.md`** in the
+same session. The register carries a built/not-built column precisely so this
+failure is visible rather than silent.
+
+**Referencing:** mockup options are `MOCK-NN-X` — the file number plus the option
+label inside that file (`MOCK-06-K2`, `MOCK-07-Asoft`). Five of these mockups each
+have an option labelled "B", so the prefix is what makes a reference unique.
+Decisions settled without a mockup are `DES-NN`.

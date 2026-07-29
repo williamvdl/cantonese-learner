@@ -4,7 +4,7 @@
 IN_PROGRESS.md when it's picked up; delete it from here once it's shipped and
 folded into STATUS.md.*
 
-Last updated: 2026-07-29
+Last updated: 2026-07-30
 
 ## Product
 
@@ -89,10 +89,12 @@ Last updated: 2026-07-29
 *Phases 2 and 3 of the rollout are complete; these are the loose ends they left
 or surfaced.*
 
-- **Audit mockups 01–09 for other untranscribed decisions.** Three approved path
-  decisions turned out never to have been built, because they lived only in the
-  mockups and never reached `styleguide.html`. Mockups 01–04, 08 and 09 have not
-  been checked the same way. *(The three path ones are now in phase 4.)*
+- **Audit mockups 01–04, 08 and 09 for other untranscribed decisions.** Three
+  approved path decisions turned out never to have been built, because they lived
+  only in the mockups and never reached `styleguide.html`. Every mockup now has at
+  least one row in `DESIGN_DECISIONS.md`, but 01–04, 08 and 09 were recorded from
+  their summaries rather than read option-by-option, so a second untranscribed
+  decision could still be hiding in them. *(The path ones are now in phase 4.)*
 - **`.cp-optional` is a sentence dressed as a chip.** "Optional — do any, in any
   order" is styled with `--feedback-good-tint` and a 🔓 emoji. Green reads as
   *done* per §4 but the content is informational, and §3.6 arguably rules out the
@@ -130,21 +132,23 @@ or surfaced.*
 - **Speak diagnostic — the `missing` status** now renders `--muted-dark` rather
   than a red. Reasoning: a syllable you didn't say is absent, not incorrect, and
   §4 has no fifth state. Confirm on device.
-- **`--muted-light`** is a byte-identical duplicate of `--muted` with one call
-  site. Retire it.
+- **Four byte-identical alias tokens.** `--muted-light` = `--muted`,
+  `--feedback-good-text` = `--jade`, `--jade-bright` = `--feedback-good`,
+  `--brand-text-dark` = `--brand-dark`. None appear in DESIGN_SYSTEM §1.4. Retire
+  all four — but check call sites first rather than find/replacing, which is the
+  mistake `--gold` taught. (`--header-icon` = `--header-text` is deliberate; leave it.)
 - **`#fff` × 16 in `styles.css`.** The only raw hex left outside `:root`. All are
   text-on-coloured-ground. `--parchment` is the same value but means *surface*,
   so reusing it would be semantically wrong. Either accept `#fff` as idiomatic or
   add an on-fill text token.
-- **Two mockups still aren't in the repo.** `docs/design/mockups/` now holds
-  `01`, `02`, `04`–`13`. Still missing: `03-header-solid-options.html` and
-  `14-dashboard.html`. `15-control-vocabulary.html` needs adding too, and there
-  is a stray `Test` entry in the folder.
+- **MOCK-13 — settings panel choice was never recorded.** The mockup offers
+  A (parchment panel) and B (oxblood panel); no document says which was picked.
+  Surfaced while building `DESIGN_DECISIONS.md`. **Settle before phase 6 starts.**
 - **Landscape stepper decision.** Header + contextual row + stepper + docked bar
   ≈ 160px of chrome against a 390px-tall landscape viewport — about 40% of the
   screen before any content. Candidate fix: hide the stepper under
   `@media (max-height: 450px)`. Needs a real device to judge, and the stepper
-  doesn't exist until phase 4.
+  doesn't exist until phase 4 (v109).
 - **Quiz direction-toggle labels.** `漢→EN` / `EN→漢` / `🔊→EN` (hon3 = Chinese) inherited unchanged
   and permanently present above every question. Compact but cryptic — may belong
   on a settings row instead of a three-way toggle.

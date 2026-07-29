@@ -1,10 +1,10 @@
 # STATUS — Tea House Cantonese Learner
 
 *Edit this file in place as things ship. It reflects the app as it stands today —
-not a history log (that's what the repo's commit history and dated HANDOVER_*.md
-files are for).*
+not a history log (that's what the repo's commit history is for). Approved design
+decisions and whether they were built live in `DESIGN_DECISIONS.md`.*
 
-Last updated: 2026-07-29 · sw.js at v107
+Last updated: 2026-07-30 · sw.js at v107
 
 ## Confirmed live and working
 - **Patterns/Drills removed** from the app entirely (not soft-hidden). Checkpoints
@@ -21,8 +21,8 @@ Last updated: 2026-07-29 · sw.js at v107
     kept, deliberately, only for the Translate tab (no stable ID to pre-generate).
   - No fallback on missing audio by design — a toast shows instead of a silent
     synthetic-voice substitute.
-- **Stable IDs** fully in place — 585/585 words, 307/307 sentences. Validator
-  passes clean.
+- **Stable IDs** fully in place — 600/600 words, 307/307 sentences, 150/150
+  dialogues. Validator passes clean.
 
 ## Design system — phases 1, 2 and 3 complete
 
@@ -119,11 +119,16 @@ All 379 classes emitted anywhere in `render.js` resolve against `styles.css`.
 - **Tone colours stayed data.** The six `TONES` values are still applied
   per-syllable by `colorJyutping()` and are deliberately outside the token block.
   The only remaining `${...}` colour interpolations in `render.js` are these.
-- `--muted-light` is a byte-identical duplicate of `--muted` with one call site.
-- Nine tokens have no call sites but are deliberately retained: `--sp-8`, and the
-  layout tokens `--measure-text`, `--bar-h`, `--tabbar-h`, `--edge-emph` (phases
-  5–6), plus `--feedback-good`, `--jade-edge`, `--feedback-bad-tint` and
-  `--feedback-bad-edge`, which now do have call sites after 2e.
+- **Four byte-identical alias tokens** sit in `:root`, none of them in
+  DESIGN_SYSTEM §1.4: `--muted-light` = `--muted`, `--feedback-good-text` =
+  `--jade`, `--jade-bright` = `--feedback-good`, and `--brand-text-dark` =
+  `--brand-dark`. Retire all four. (`--header-icon` = `--header-text` is also
+  identical but is deliberate and documented.)
+- **Four tokens have no call sites** and are deliberately retained: `--sp-8`,
+  `--bar-h` and `--tabbar-h` (the last two land in phases 5–6), and
+  `--feedback-good`. Re-measured 2026-07-30 — an earlier count of nine was wrong:
+  `--edge-emph` has 3 call sites, `--measure-text` 1, `--jade-edge` 5,
+  `--feedback-bad-tint` 4 and `--feedback-bad-edge` 5.
 
 ## Architecture worth knowing
 - Persistence routes through an async storage abstraction layer, built ahead of
@@ -151,17 +156,21 @@ All 379 classes emitted anywhere in `render.js` resolve against `styles.css`.
   effect. Colours are tokenised; the geometry is untouched pending a decision.
 - `.nav-item` declares `transition` twice. Harmless, and the drawer retires in
   phase 6.
-- **Three approved path decisions were never built.** Next-up option C, the
-  completed-checkpoint milestone retreat, and the A-soft diamond progress ring
-  were all settled against mockups 05–07 and none reached the code. The
-  completed-checkpoint row is the visible symptom: three colours at once and a
-  black `◆` that the design never included. **All three are assigned to phase 4**
-  — full brief in IN_PROGRESS.md.
+- **Three approved path decisions were never built.** MOCK-06-C (next-up
+  emphasis), MOCK-05-retreat (the completed-checkpoint milestone retreat) and
+  MOCK-07-Asoft (the diamond progress ring) were all settled against mockups 05–07
+  and none reached the code. The completed-checkpoint row is the visible symptom:
+  three colours at once and a black `◆` that the design never included. **All
+  three are assigned to phase 4, shipping across v108–v110** alongside MOCK-10-B
+  (path context) and DES-09 (emoji off the path step rows) — full brief in
+  IN_PROGRESS.md.
 - **The cause is worth remembering: a decision that lives only in a mockup does
   not survive.** None of the three reached `styleguide.html`, so nothing flagged
   the drift, and a later chat re-opened a settled question as if it were new.
-  When a mockup settles something, transcribe it into `styleguide.html` in the
-  same session — the mockup is the argument, the styleguide is the record.
+  `docs/DESIGN_DECISIONS.md` now exists for exactly this — every approved decision
+  gets a row with a built/not-built column, so an unbuilt one is visible instead
+  of silent. Writing it also surfaced a fourth loss: **MOCK-13 offers two settings
+  panel options and no document records which was chosen.**
 - **Three controls remain under `--tap-min`**: `.hamburger` (36px) and
   `.drawer-speed-btn` (36px), both retiring with the drawer in phase 6, and
   `.subtab-btn` at 42px, close enough to leave.
