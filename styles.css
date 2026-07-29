@@ -193,6 +193,22 @@
   .btn--milestone { background: var(--milestone); border-color: var(--milestone); color: #fff; }
   .btn--good { border-color: var(--jade-edge); color: var(--jade); }
   .btn--disabled { color: var(--muted); cursor: not-allowed; }
+
+  /* Pill — an interactive one-of-N chooser (tier, quiz direction). Ghost by
+     default; --on is a brand OUTLINE, not a fill, so a selected pill never
+     competes with the screen's single filled action (§3.1). */
+  .pill { display: inline-flex; align-items: center; justify-content: center; gap: 5px; min-height: var(--tap-min); padding: var(--sp-2) var(--sp-4); border-radius: var(--r-pill); border: var(--border); background: transparent; color: var(--muted-dark); font-family: var(--font-ui); font-size: var(--fs-small); font-weight: var(--fw-medium); line-height: 1; cursor: pointer; transition: transform var(--dur-fast) var(--ease), border-color var(--dur-fast) var(--ease), color var(--dur-fast) var(--ease); }
+  .pill--on { border-color: var(--brand); color: var(--brand); }
+  .pill:active { transform: scale(0.96); }
+
+  /* Tag — metadata or status. Never interactive; no tap target needed. */
+  .tag { display: inline-block; font-family: var(--font-ui); font-size: 9.5px; font-weight: var(--fw-medium); line-height: 1; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); border: var(--border); padding: 4px 8px; border-radius: var(--r-pill); }
+  .tag--brand { color: var(--brand); border-color: var(--brand-edge); }
+  .tag--milestone { color: var(--milestone); border-color: var(--milestone-edge); }
+  .tag--done { color: var(--jade); border-color: var(--jade-edge); }
+
+  /* Labelled listen control. The circular sibling is .btn-icon--brand. */
+  .btn-listen { display: inline-flex; align-items: center; justify-content: center; gap: 7px; min-height: var(--tap-min); padding: 9px 15px; border-radius: var(--r-pill); border: 1px solid var(--brand-edge); background: transparent; color: var(--brand); font-family: var(--font-ui); font-size: var(--fs-meta); font-weight: var(--fw-medium); line-height: 1; cursor: pointer; }
   .btn-icon { position: relative; flex: 0 0 auto; width: var(--tap-min); height: var(--tap-min); padding: 0; border-radius: var(--r-pill); border: var(--border); background: transparent; color: var(--muted-dark); display: inline-flex; align-items: center; justify-content: center; cursor: pointer; transition: transform var(--dur-fast) var(--ease), box-shadow var(--dur-base) var(--ease), background-color var(--dur-base) var(--ease), border-color var(--dur-fast) var(--ease), color var(--dur-fast) var(--ease); }
   /* Two painted sizes exist and no more (docs/design/15-control-vocabulary.html).
      --compact paints at 32px but keeps a --tap-min touch target: the pseudo-element
@@ -302,8 +318,6 @@
   /* Round selector inside topic page */
   .round-selector { display: flex; gap: 6px; margin-bottom: 12px; align-items: center; }
   .round-label { font-size: var(--fs-micro); color: var(--muted-dark); font-weight: var(--fw-bold); letter-spacing: 1px; text-transform: uppercase; margin-right: 4px; }
-  .round-btn { padding: var(--sp-1) var(--sp-3); border-radius: var(--r-pill); min-height: 32px; border: var(--border); background: var(--parchment); color: var(--muted-dark); cursor: pointer; font-size: var(--fs-meta); font-weight: var(--fw-medium); transition: all 0.15s; }
-  .round-btn.active { background: var(--brand); border-color: var(--brand); color: #fff; }
 
   /* Back-to-home button */
   .back-home-btn { display: inline-flex; align-items: center; gap: 5px; background: transparent; border: none; color: var(--muted-dark); font-size: var(--fs-small); cursor: pointer; padding: var(--sp-2) 0; margin-bottom: var(--sp-3); font-weight: var(--fw-semi); }
@@ -574,7 +588,7 @@
   .quiz-label { font-size: var(--fs-micro); color: var(--muted); letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 6px; }
   .quiz-chinese { font-size: 44px; color: var(--ink); line-height: 1.2; }
   .quiz-jyutping { font-size: var(--fs-small); margin-top: 6px; }
-  .quiz-listen { margin-top: 10px; background: transparent; border: 1px solid var(--brand-edge); color: var(--brand); border-radius: var(--r-pill); padding: 4px 14px; min-height: var(--tap-min); cursor: pointer; font-size: var(--fs-meta); }
+  .quiz-listen { margin-top: 10px; }
   .choices { display: flex; flex-direction: column; gap: var(--sp-2); margin-bottom: var(--sp-3); }
   .choice-btn { width: 100%; text-align: left; padding: var(--sp-4); cursor: pointer; font-size: var(--fs-body); font-weight: var(--fw-medium); color: var(--ink); transition: all 0.15s; min-height: var(--tap-min); }
   .choice-btn.correct { background: var(--feedback-good-tint); border-color: var(--jade-edge); color: var(--feedback-good-text); }
@@ -584,9 +598,6 @@
 
   /* Direction toggle — sits above the prompt card */
   .quiz-dir-toggle { display: flex; gap: 6px; justify-content: center; margin-bottom: 12px; }
-  .quiz-dir-btn { padding: 6px 12px; border-radius: var(--r-pill); background: transparent; border: var(--border); color: var(--muted-dark); font-size: var(--fs-meta); font-weight: var(--fw-medium); cursor: pointer; }
-  .quiz-dir-btn.active { background: var(--brand); border-color: var(--brand); color: #fff; }
-  .quiz-dir-btn:active { transform: scale(0.96); }
 
   /* Listen-mode prompt card variant */
   .quiz-card-listen { padding: var(--sp-7) var(--sp-4); display: flex; flex-direction: column; align-items: center; gap: var(--sp-2); }
@@ -626,8 +637,8 @@
         warmer red — milestone and error must never be confused (§4). ── */
   .quiz-ms .track > i,
   .quiz-ms .quiz-next,
-  .quiz-ms .quiz-dir-btn.active,
   .quiz-ms .quiz-retry-btn      { background: var(--milestone); border-color: var(--milestone); }
+  .quiz-ms .pill--on            { border-color: var(--milestone); color: var(--milestone); }
   .quiz-ms .quiz-score          { color: var(--milestone); }
   .quiz-ms .quiz-listen,
   .quiz-ms .quiz-review-play    { border-color: var(--milestone-edge); color: var(--milestone); }
@@ -639,7 +650,6 @@
   .review-landing-count { font-size: var(--fs-display); font-weight: 800; color: var(--brand); line-height: 1; }
   .review-landing-label { font-size: var(--fs-body); color: var(--muted-dark); font-weight: var(--fw-semi); margin-top: 6px; }
   .review-landing-note { font-size: var(--fs-small); color: var(--muted); margin: 14px auto 20px; max-width: 320px; line-height: 1.5; }
-  .review-start-btn { background: var(--brand); color: var(--parchment); border: none; border-radius: var(--r-pill); padding: 12px 28px; font-size: 14px; font-weight: var(--fw-bold); cursor: pointer; box-shadow: 0 2px 8px color-mix(in srgb, var(--milestone) 28%, transparent); }
   .review-empty { text-align: center; padding: 40px 24px; }
   .review-empty-emoji { font-size: 44px; }
   .review-empty-title { font-size: var(--fs-lead); font-weight: var(--fw-bold); color: var(--ink); margin-top: 10px; }
@@ -711,9 +721,6 @@
      stylesheet, which is a separate request from the data that failed. */
   .boot-msg { padding: 60px 20px; text-align: center; color: var(--muted-dark); font-family: var(--font-ui); font-size: var(--fs-small); }
   .boot-msg.error { color: var(--feedback-bad); }
-  .path-card-badge { font-size: 10px; font-weight: var(--fw-bold); padding: 3px 8px; border-radius: var(--r-sm); letter-spacing: 0.5px; text-transform: uppercase; }
-  .path-card-badge.coming { background: var(--parchment-deep); color: var(--muted-dark); }
-  .path-card-badge.done { background: var(--jade); color: #fff; }
   .path-card-desc { font-size: var(--fs-meta); color: var(--muted-dark); margin-bottom: 10px; line-height: 1.4; }
   .path-card-progress { display: flex; align-items: center; gap: 10px; }
   .path-progress-bar { flex: 1; height: 6px; background: var(--parchment-border); border-radius: var(--r-pill); overflow: hidden; }
@@ -816,7 +823,7 @@
   }
 
   /* Button labels — tighten and lift */
-  button, .mode-btn, .topic-btn, .quiz-dir-btn, .round-btn,
+  button, .mode-btn, .topic-btn,
   .nav-item, .path-banner-action, .quiz-retry-btn, .back-btn,
   .speed-btn, .quiz-next {
     font-family: var(--font-ui);
@@ -878,7 +885,7 @@
   .quiz-wrong-chinese { margin-bottom: var(--sp-1); }
   .quiz-wrong-jp { margin-top: var(--sp-1); }
   .quiz-wrong-en { margin-top: var(--sp-1); }
-  .quiz-replay, .quiz-next { padding: var(--sp-2) var(--sp-4); min-height: 36px; }
+  .quiz-replay, .quiz-next { padding: var(--sp-2) var(--sp-4); min-height: var(--tap-min); }
 
   /* Quiz result + review */
   .back-btn { margin-top: var(--sp-5); padding: var(--sp-3) var(--sp-6); min-height: var(--tap-min); }
@@ -966,8 +973,8 @@
 
   /* Universal smooth transitions on interactive elements */
   button, .topic-card, .word-card, .sentence-card, .choice-btn,
-  .path-card, .path-step-card, .nav-item, .mode-btn, .quiz-dir-btn,
-  .round-btn, .conv-mode-pill, .drawer-speed-btn {
+  .path-card, .path-step-card, .nav-item, .mode-btn,
+  .conv-mode-pill, .drawer-speed-btn {
     transition: transform var(--dur-fast) var(--ease),
                 box-shadow var(--dur-base) var(--ease),
                 background-color var(--dur-base) var(--ease),
@@ -1017,8 +1024,8 @@
   }
 
   /* Pill / toggle buttons — refined hover */
-  .quiz-dir-btn:hover, .round-btn:hover, .mode-btn:hover,
-  .conv-mode-pill:hover, .drawer-speed-btn:hover, .topic-btn:hover {
+  .mode-btn:hover, .conv-mode-pill:hover,
+  .drawer-speed-btn:hover, .topic-btn:hover {
     filter: brightness(1.03);
   }
 

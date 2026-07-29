@@ -201,7 +201,7 @@ function renderQuizCore(opts) {
     <div class="quiz-dir-toggle" role="tablist" aria-label="${ariaLabel}">
       ${dirs.map(d => {
         const active = direction === d.key;
-        return `<button class="quiz-dir-btn${active ? ' active' : ''}" ${dirAttr}="${d.key}" title="${d.title}"
+        return `<button class="pill${active ? ' pill--on' : ''}" ${dirAttr}="${d.key}" title="${d.title}"
 >${d.label}</button>`;
       }).join('')}
     </div>`;
@@ -227,7 +227,7 @@ function renderQuizCore(opts) {
         <div class="quiz-label">What does this mean?</div>
         <div class="quiz-chinese">${cw.c}</div>
         <div class="quiz-jyutping">${colorJyutping(cw.j)}</div>
-        <button class="quiz-listen" id="${listenId}"><span class="icon-label">${iconPlay(13)} Listen</span></button>
+        <button class="btn-listen quiz-listen" id="${listenId}"><span class="icon-label">${iconPlay(13)} Listen</span></button>
       </div>`;
   }
 
@@ -287,7 +287,7 @@ function renderReviewDone(o) {
 
   const stillLearning = Math.max(0, o.reviewed - o.graduated);
   const moreOrClear = o.liveCount > 0
-    ? `<button class="review-start-btn" id="${o.againId}">Review ${Math.min(o.liveCount, REVIEW_SESSION_CAP)} more</button>`
+    ? `<button class="btn btn--primary" id="${o.againId}">Review ${Math.min(o.liveCount, REVIEW_SESSION_CAP)} more</button>`
     : `<div class="review-allclear-note">${o.allClearNote}</div>`;
   return `
     <div class="content">
@@ -327,7 +327,7 @@ function renderWordReview() {
               ? `This session will cover the ${REVIEW_SESSION_CAP} oldest. Get a word right 3 times to clear it.`
               : `Get a word right 3 times to clear it from your review list.`}
           </p>
-          <button class="review-start-btn" id="review-start">Start review</button>
+          <button class="btn btn--primary" id="review-start">Start review</button>
         </div>`;
     } else if (everUsed) {
       // All caught up — used before, bin now empty.
@@ -565,8 +565,8 @@ function renderPathList() {
       const cardCls = 'card path-card' + (locked ? ' locked' : '');
       const dataAttr = locked ? '' : `data-path-open="${p.key}"`;
       const badge = locked
-        ? `<span class="path-card-badge coming">Coming Soon</span>`
-        : (total > 0 && done === total ? `<span class="path-card-badge done">Complete</span>` : '');
+        ? `<span class="tag">Coming Soon</span>`
+        : (total > 0 && done === total ? `<span class="tag tag--done">Complete</span>` : '');
       const progress = locked ? '' : `
         <div class="path-card-progress">
           <div class="path-progress-bar"><div class="path-progress-fill" style="width:${pct}%"></div></div>
@@ -1205,7 +1205,7 @@ function renderRoundSelector(topicKey) {
   if (rounds.length <= 1) return '';   // Hide selector if only one round
   const btns = rounds.map(r => {
     const active = state.currentRound === r;
-    return `<button class="round-btn${active?' active':''}" data-round="${r}">Tier ${r}</button>`;
+    return `<button class="pill${active?' pill--on':''}" data-round="${r}">Tier ${r}</button>`;
   }).join('');
   return `
     <div class="round-selector">
