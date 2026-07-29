@@ -4,7 +4,7 @@
 not a history log (that's what the repo's commit history and dated HANDOVER_*.md
 files are for).*
 
-Last updated: 2026-07-28 · sw.js at v103
+Last updated: 2026-07-29 · sw.js at v107
 
 ## Confirmed live and working
 - **Patterns/Drills removed** from the app entirely (not soft-hidden). Checkpoints
@@ -24,13 +24,13 @@ Last updated: 2026-07-28 · sw.js at v103
 - **Stable IDs** fully in place — 585/585 words, 307/307 sentences. Validator
   passes clean.
 
-## Design system — phases 1 and 2 complete
+## Design system — phases 1, 2 and 3 complete
 
 **The app now renders entirely from the token and primitive layers.** No colour
 is injected from JavaScript anywhere. Established 2026-07-25, applying from
-sw.js v95 onward; phase 2 shipped across v96–v103.
+sw.js v95 onward; phase 2 shipped across v96–v103, phase 3 across v104–v107.
 
-`DESIGN_SYSTEM.md` and `styleguide.html` are the source of truth. Read
+`DESIGN_SYSTEM.md` and `docs/design/styleguide.html` are the source of truth. Read
 `DESIGN_SYSTEM.md` before touching `styles.css`, `render.js`, or designing a new
 screen.
 
@@ -46,9 +46,12 @@ screen.
 | Border widths in play | 1 / 1.5 / 2 / 2.5 / 3px | **1px + 2px** |
 | `border-radius` values | 78 raw px + 19 `50%` | **all on the scale** |
 | Competing content columns | 5 | **1 (`--measure`)** |
-| `styles.css` | 1292 lines | **1194 lines** |
+| `styles.css` | 1292 lines | **1160 lines** |
+| Rules redeclaring the card surface | 12 | **0 (`.card` only)** |
+| Painted sizes of the circular play control | 7 (28–44px) | **2 (32 / 44px)** |
+| Interactive controls under `--tap-min` | 9 | **3 (all retire in phase 6)** |
 
-All 378 classes emitted anywhere in `render.js` resolve against `styles.css`.
+All 379 classes emitted anywhere in `render.js` resolve against `styles.css`.
 
 ### Retired
 `CP_GOLD`, `GOLD_HERO`, `BRAND_HERO`, `BRAND_ACCENT` (was in `data.js`), `THEME`
@@ -73,6 +76,10 @@ All 378 classes emitted anywhere in `render.js` resolve against `styles.css`.
 | — | v101 | Fix: duplicate `border` declarations on `.word-card` and `.sentence-play` (see below). |
 | 2e-iv | v102 | Conversation and speak mode. Bubble colour is side-driven. `THEME` retired. |
 | 2e-v/vi | v103 | Path, checkpoint, header, Topics grid, boot screens, border widths, shadow scale. |
+| 3a | v104 | Card-surface collapse. 47 duplicate declarations removed from 12 rules; `.card` is the sole declarer. `.cp-card`'s hand-rolled left edge became `.card--milestone`. Retired `darkenHex()` and the dead `attachEvents(lesson, color)` chain. |
+| 3b-i | v105 | `renderHomeScreen()` → `renderTopicsScreen()`, `.home-wrap` → `.topics-wrap`. |
+| 3b-ii | v106 | Circular control vocabulary. `.btn-icon` gained `--compact` / `--brand` / `--header`; seven controls at seven sizes became two. Translate's mic emoji became an icon. |
+| 3b-iii | v107 | `.pill`, `.tag`, `.btn-listen` ported from `styleguide.html`; five components migrated, four classes retired. Quiz tap-target fix. |
 
 ### Notes worth carrying forward
 
@@ -93,6 +100,22 @@ All 378 classes emitted anywhere in `render.js` resolve against `styles.css`.
   `border: 2px solid;` later; the later won, resolving to `currentColor` and
   painting a near-black frame. Replace whole rules, and run the duplicate-
   declaration audit before shipping (see IN_PROGRESS.md for the snippet).
+- **A "consistent treatment" block can silently disable a primitive.** A rule
+  named *Circular play buttons — consistent treatment* declared `transition` for
+  six controls. Sitting after the primitive layer, it overrode `.btn-icon`'s own
+  transition entirely. Grouping rules by comment heading is not the same as
+  owning the property — check where a shared block sits relative to what it
+  duplicates.
+- **A tap minimum declared in a base rule can be undone by a layout rule.**
+  `.quiz-replay` set `min-height: var(--tap-min)` and a later "more breathing
+  room" rule reset it to 36px; `.quiz-next` never declared one at all. Both are
+  fixed. Audit for `min-height` under 44px on anything with `cursor` before
+  assuming the token is being honoured.
+- **Classify by declaration, not by shape.** A first pass counted 69 rules as
+  "card-like" because they declared background + border + radius. Measured
+  strictly against `.card`'s four declarations, only 12 matched — the rest were
+  buttons and pills. The reverse also bit: `.cp-optional` looked like a chip in
+  CSS and is actually a full sentence, so it was pulled from the migration.
 - **Tone colours stayed data.** The six `TONES` values are still applied
   per-syllable by `colorJyutping()` and are deliberately outside the token block.
   The only remaining `${...}` colour interpolations in `render.js` are these.
@@ -109,8 +132,11 @@ All 378 classes emitted anywhere in `render.js` resolve against `styles.css`.
   Translate; Google Cloud (gcloud CLI auth) for TTS generation.
 - Service worker caches audio automatically via the existing generic runtime
   fetch handler — no dedicated audio-caching code was needed.
-- `renderHomeScreen()` renders the **Topics** screen, not Home. `renderDashboard()`
-  is Home. Renaming is scheduled in phase 3.
+- `renderTopicsScreen()` renders the Topics screen; `renderDashboard()` is Home.
+  Renamed in v105. `state.homeView` is the same trap unrenamed — it is the Topics
+  flag, and it sits in `NAV_FIELDS` feeding `pushNav()`, so renaming it changes
+  back-button behaviour for history entries created before a deploy. Scheduled
+  with phase 6's nav work.
 
 ## Known, deliberately unfixed
 - `intermediate-s3` checkpoint is missing the `id` field the other 14 checkpoints
@@ -125,3 +151,20 @@ All 378 classes emitted anywhere in `render.js` resolve against `styles.css`.
   effect. Colours are tokenised; the geometry is untouched pending a decision.
 - `.nav-item` declares `transition` twice. Harmless, and the drawer retires in
   phase 6.
+- **Three approved path decisions were never built.** Next-up option C, the
+  completed-checkpoint milestone retreat, and the A-soft diamond progress ring
+  were all settled against mockups 05–07 and none reached the code. The
+  completed-checkpoint row is the visible symptom: three colours at once and a
+  black `◆` that the design never included. **All three are assigned to phase 4**
+  — full brief in IN_PROGRESS.md.
+- **The cause is worth remembering: a decision that lives only in a mockup does
+  not survive.** None of the three reached `styleguide.html`, so nothing flagged
+  the drift, and a later chat re-opened a settled question as if it were new.
+  When a mockup settles something, transcribe it into `styleguide.html` in the
+  same session — the mockup is the argument, the styleguide is the record.
+- **Three controls remain under `--tap-min`**: `.hamburger` (36px) and
+  `.drawer-speed-btn` (36px), both retiring with the drawer in phase 6, and
+  `.subtab-btn` at 42px, close enough to leave.
+- `.cp-optional` is a full sentence styled as a green chip, carrying a 🔓 emoji.
+  Green reads as *done* per §4 but the content is informational. Left alone in
+  phase 3 rather than forced into `.tag`.

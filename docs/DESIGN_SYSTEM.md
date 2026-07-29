@@ -491,13 +491,21 @@ pass over the dashboard. The mockup files behind each decision:
 | `07-diamond-progress.html` | Diamond progress geometry (A-soft) |
 | `08-quiz.html` | Quiz states, result screen |
 | `09-wrong-answer-options.html` | Error colour (W2, `#B42318`) |
-| `10-path-context-in-topic.html` | Stage stepper (B), continuation card |
-| `11-sticky-action-bar.html` | Docked bar, tab behaviour matrix |
-| `12-quiz-docked-bar.html` | Bar on quiz, one-fill exception |
-| `13-application-nav.html` | Tab bar and settings sheet |
+| `10-path-context-in-topic-1.html` | Stage stepper (B), continuation card |
+| `11-sticky-action-bar-1.html` | Docked bar, tab behaviour matrix |
+| `12-quiz-docked-bar-2.html` | Bar on quiz, one-fill exception |
+| `13-application-nav-1.html` | Tab bar and settings sheet |
 | `14-dashboard.html` | Dashboard composition, hero option C, 站 (zaam6) watermark |
-| `styleguide.html` | Live reference for everything above |
+| `15-control-vocabulary.html` | Circular control sizes (B), painted size vs touch target |
+| `../styleguide.html` | Live reference for everything above |
 
-**These files are not currently in the repo.** `docs/design/` was deleted in
-commit `b3ed814`; only `styleguide.html` survives, at the repo root. Recreating
-`docs/design/` and committing the mockups is tracked in BACKLOG.md.
+**Paths:** the mockups live in `docs/design/mockups/`, and `styleguide.html`
+alongside them in `docs/design/`. `03-header-solid-options.html`,
+`14-dashboard.html` and `15-control-vocabulary.html` are not yet committed —
+tracked in BACKLOG.md.
+
+**A mockup is the argument; the styleguide is the record.** Three approved path
+decisions were lost because they were settled in mockups 05–07 and never
+transcribed, so nothing detected that the code had never implemented them and a
+later session re-opened a closed question. When a mockup settles something,
+write it into `styleguide.html` in the same session.

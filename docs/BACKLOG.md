@@ -4,7 +4,7 @@
 IN_PROGRESS.md when it's picked up; delete it from here once it's shipped and
 folded into STATUS.md.*
 
-Last updated: 2026-07-28
+Last updated: 2026-07-29
 
 ## Product
 
@@ -86,7 +86,30 @@ Last updated: 2026-07-28
 
 ## Design follow-ups
 
-*Phase 2 of the rollout is complete; these are the loose ends it left or surfaced.*
+*Phases 2 and 3 of the rollout are complete; these are the loose ends they left
+or surfaced.*
+
+- **Audit mockups 01–09 for other untranscribed decisions.** Three approved path
+  decisions turned out never to have been built, because they lived only in the
+  mockups and never reached `styleguide.html`. Mockups 01–04, 08 and 09 have not
+  been checked the same way. *(The three path ones are now in phase 4.)*
+- **`.cp-optional` is a sentence dressed as a chip.** "Optional — do any, in any
+  order" is styled with `--feedback-good-tint` and a 🔓 emoji. Green reads as
+  *done* per §4 but the content is informational, and §3.6 arguably rules out the
+  emoji. Deliberately pulled from the phase 3 migration — forcing it into `.tag`
+  would have set a full sentence in 9.5px uppercase. Needs its own small decision.
+- **`.sentence-note` carries a retired hue.** It uses `rgba(183,134,30,.09)` and
+  `rgba(183,134,30,.25)` — that is `#B7861E`, the retired `CP_GOLD`. It survived
+  every audit because they all grepped for six-digit hex and this is `rgba()`.
+  The last orphan hue in the file, and it sits under sentences app-wide, so
+  changing it is a visible colour decision rather than a swap.
+- **Emoji still in speak mode.** Five sites: the listening hints, the "Speak"
+  label, an empty-state glyph and the 76px hero mic. DESIGN_SYSTEM §3.6 grants
+  its emoji exception to the Topics category grid only. The hero mic was
+  deliberately excluded from the phase 3 control vocabulary as a one-off.
+- **Three controls remain under `--tap-min`.** `.hamburger` and
+  `.drawer-speed-btn` at 36px both retire with the drawer in phase 6.
+  `.subtab-btn` at 42px is close enough to leave unless it annoys in use.
 
 - **Dashboard density.** The converged Home reads quieter than the old one — the
   hero lost its filled per-topic band. Deliberately not adjusted: Home is the only
@@ -97,6 +120,11 @@ Last updated: 2026-07-28
   geometry untouched. It is now the least converged thing left visually. Decide:
   flatten onto the elevation scale, or keep as a deliberate primary-action
   affordance.
+- **`styleguide.html` still lags in three places.** Phase 3 brought its control
+  vocabulary up to date, and the completed-checkpoint state is now transcribed.
+  Still missing: the dashboard entry, the `站 (zaam6)` watermark rule, and the
+  `.quiz-ms` / `.cp-convo` variant mechanism. It now lives at
+  `docs/design/styleguide.html`.
 - **`.bubble--gap` dashed border** kept at 2px where everything else went to 1px,
   as a deliberate "blank to fill" affordance. Confirm or normalise.
 - **Speak diagnostic — the `missing` status** now renders `--muted-dark` rather
@@ -108,15 +136,10 @@ Last updated: 2026-07-28
   text-on-coloured-ground. `--parchment` is the same value but means *surface*,
   so reusing it would be semantically wrong. Either accept `#fff` as idiomatic or
   add an on-fill text token.
-- **`styleguide.html` is behind the code** — it predates the dashboard entry, the
-  watermark checkpoint rule and the `.quiz-ms` / `.cp-convo` variant mechanism.
-  Scheduled in phase 3; noted here so it isn't lost if phase 3 slips.
-- **Mockup files aren't in the repo.** `03-`–`13-*.html` from the original design
-  session plus `14-dashboard.html` from the dashboard pass. DESIGN_SYSTEM §8 cites
-  them as the detail behind each decision. `docs/design/` no longer exists — it was
-  deleted in `b3ed814` — so it needs recreating.
-- **`DESIGN_SYSTEM.md` isn't in the repo either.** It lives only in project
-  knowledge. Commit it beside `styleguide.html`.
+- **Two mockups still aren't in the repo.** `docs/design/mockups/` now holds
+  `01`, `02`, `04`–`13`. Still missing: `03-header-solid-options.html` and
+  `14-dashboard.html`. `15-control-vocabulary.html` needs adding too, and there
+  is a stray `Test` entry in the folder.
 - **Landscape stepper decision.** Header + contextual row + stepper + docked bar
   ≈ 160px of chrome against a 390px-tall landscape viewport — about 40% of the
   screen before any content. Candidate fix: hide the stepper under
