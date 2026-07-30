@@ -282,11 +282,17 @@ code{ background:#DAD4CA; padding:1px 5px; border-radius:4px; font-size:11.5px; 
 .prompt-en{ font:var(--fw-medium) var(--fs-h2)/1.25 var(--font-display); color:var(--ink); }
 .prompt-jp{ font:var(--fw-medium) 13px/1 var(--font-ui); margin-top:var(--sp-3); }
 
-/* docked bar */
-/* Subtabs & tab bar — ONE primitive, two consumers (MOCK-17-fill). NOT BUILT.
-   The only difference between them is which edge carries the 2px rule, which is
-   what --top exists for. An active tab is never a fill (DES-19). */
-.tabs{ display:flex; border-bottom:var(--border-soft); padding:var(--sp-2) 0 0; }
+/* Subtabs & tab bar — ONE primitive, two consumers (MOCK-17-fill).
+   .tabs / .tab / .tab--on BUILT v114 (the topic view switch). .tabs--top NOT
+   BUILT — it lands with the tab bar in phase 6, and is kept here rather than in
+   styles.css until it has a consumer.
+   --top is NOT only an edge swap. It carries the axis (column), the gap, the
+   padding and the type scale as well. The note in this section and §2 of the
+   design system both claimed the edge was the only difference until v114, while
+   the CSS immediately below always said otherwise — a doc can drift against
+   itself, and the prose is what got copied outward.
+   An active tab is never a fill (DES-19). */
+.tabs{ display:flex; border-bottom:var(--border-soft); padding:var(--sp-2) 0 0; margin-bottom:var(--sp-4); }
 .tab{ flex:1; display:flex; align-items:center; justify-content:center; gap:7px; min-height:var(--tap-min); padding:0 0 10px; margin-bottom:-1px; font-family:var(--font-ui); font-size:14px; font-weight:var(--fw-medium); border:none; background:transparent; color:var(--muted-dark); cursor:pointer; border-bottom:2px solid transparent; }
 .tab svg{ width:15px; height:15px; flex:none; }
 .tab--on{ color:var(--brand); border-bottom-color:var(--brand); }
@@ -624,8 +630,9 @@ table.spec tr:last-child td{ border-bottom:none; }
 </section>
 
 <section id="tabs">
-  <h2>Subtabs &amp; tab bar <span class="tag-todo">not built &middot; phase 6</span></h2>
-  <p class="note"><b>One primitive, two consumers.</b> The topic's view switch (Learn / Chat / Quiz) and the bottom tab bar carry the same emphasis language: muted label, brand label when active, and a 2px brand rule on the edge nearest the content &mdash; bottom for the subtabs, top for the bar. That edge is the only difference, and it is <code>--top</code>'s whole job.</p>
+  <h2>Subtabs &amp; tab bar <span class="tag-new">subtabs built &middot; v114</span> <span class="tag-todo">--top not built &middot; phase 6</span></h2>
+  <p class="note"><b>One primitive, two consumers.</b> The topic's view switch (Learn / Chat / Quiz) and the bottom tab bar carry the same emphasis language: muted label, brand label when active, and a 2px brand rule on the edge nearest the content &mdash; bottom for the subtabs, top for the bar.</p>
+  <p class="note"><b>The edge is not the only difference</b>, and this note said it was until v114 while the CSS beside it always disagreed. <code>--top</code> also flips the axis to a column, and changes the gap, the padding, the icon size and the label's whole type scale &mdash; 9.5px uppercase over a 19px glyph, against 14px beside a 15px one. What the two consumers genuinely share is the <i>emphasis language</i>, not the geometry, and that is enough to make them one primitive. The modifier sits on the container (<code>.tabs--top</code>) rather than the tab, so it can reach both.</p>
   <p class="note"><b>An active tab is never a fill</b> (DES-19). A tab is a selector, not an action, and the screen's one filled element belongs to the thing to do next. The pre-system subtabs were three separately bordered boxes with a solid brand fill on the active one, which made the view switch the loudest thing on the Learn screen &mdash; visible in the app through v113.</p>
   <div class="stage" style="max-width:390px" id="tabsdemo"></div>
   <p class="note">Equal widths (MOCK-17-fill), chosen over mockup 04's left-packed geometry: the tab bar has no choice, since it carries five destinations across the viewport, and matching it is what makes these one primitive rather than two that resemble each other. Geometry is where a shared language drifts apart first.</p>
@@ -655,7 +662,8 @@ table.spec tr:last-child td{ border-bottom:none; }
 
 <section id="tabbar">
   <h2>Tab bar <span class="tag-todo">not built &middot; phase 6</span></h2>
-  <p class="note">The five destinations. Active state is brand plus a 2px top rule — the same emphasis language as the topic subtabs, <b>once those are rebuilt</b>. Through v113 that sentence was simply false: the subtabs were bordered boxes with a solid fill, so this section promised a match that did not exist, and phase 6 would have inherited either the wrong treatment or a mismatch one tap away. See Subtabs above — the shared primitive is <code>.tabs</code> / <code>.tab</code>, and the markup below predates it. <b>Review's badge stays permanently in view</b>; it was previously invisible behind a hamburger.</p>
+  <p class="note">The five destinations. Active state is brand plus a 2px top rule — the same emphasis language as the topic subtabs, which are <b>built as of v114</b>, so the match this section promises now exists in the app rather than only on this page. Through v113 the claim was simply false: the subtabs were bordered boxes with a solid fill, and phase 6 would have inherited either the wrong treatment or a mismatch one tap away.</p>
+  <p class="note"><b>Two treatments are drawn on this page and only one can ship.</b> The demo below uses <code>.tabbar</code> / <code>.tb</code>, which predates the shared primitive and differs from it in substance, not just naming: its active rule is a <code>::before</code> inset 22% from each side rather than a full-width border, and its resting colour is <code>--muted</code> rather than <code>--muted-dark</code>. The primitive route is <code>.tabs.tabs--top</code>, demoed under Subtabs above. <b>P6-2 should build <code>.tabs--top</code> and retire this block</b> — but note that <code>.tb-badge</code> (Review's count) and <code>.tabbar--slim</code> (the &sect;3.10 dead-end fallback) have no equivalent on the primitive yet, so both need porting rather than dropping. <b>Review's badge stays permanently in view</b>; it was previously invisible behind a hamburger.</p>
   <div style="max-width:390px;border:var(--border);border-radius:var(--r-md);overflow:hidden" id="tabdemo"></div>
   <h3>Slim variant <span class="tag-new">documented fallback</span></h3>
   <p class="note">Only if the hidden tab bar proves to feel like a dead end in use — see §3.10 of the design system. 34px, icons only, so nav plus action bar totals 94px instead of 118px.</p>
@@ -919,7 +927,7 @@ const SUB=[
   {l:'Quiz',  ic:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>'},
 ];
 document.getElementById('tabsdemo').innerHTML=`<div class="tabs">`+SUB.map(t=>
-  `<button class="tab ${t.on?'tab--on':''}">${t.ic}${t.l}</button>`).join('')+`</div>`;
+  `<button class="tab ${t.on?'tab--on':''}">${t.ic}<span>${t.l}</span></button>`).join('')+`</div>`;
 document.getElementById('tabsdemotop').innerHTML=`<div class="tabs tabs--top">`+NAV.map(n=>
   `<button class="tab ${n.on?'tab--on':''}">${n.ic}<span>${n.l}</span></button>`).join('')+`</div>`;
 
