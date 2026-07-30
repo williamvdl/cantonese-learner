@@ -282,6 +282,28 @@ code{ background:#DAD4CA; padding:1px 5px; border-radius:4px; font-size:11.5px; 
 .prompt-jp{ font:var(--fw-medium) 13px/1 var(--font-ui); margin-top:var(--sp-3); }
 
 /* docked bar */
+/* Continuation — the built component. Mirrors styles.css; only the differences
+   from .card are declared. */
+.cont{ margin:var(--sp-5) 0; overflow:hidden; }
+.cont-h{ padding:var(--sp-4) var(--sp-4) 0; }
+.cont-mark{ width:calc(100% - (var(--sp-4) * 2)); margin:var(--sp-3) var(--sp-4) var(--sp-4); }
+.cont-done{ display:flex; align-items:center; gap:var(--sp-2); padding:var(--sp-4); font-family:var(--font-ui); font-size:12.5px; font-weight:var(--fw-medium); color:var(--jade); border-bottom:var(--border-soft); }
+.cont-done:last-child{ border-bottom:none; }
+.cont-done .tick{ width:20px; height:20px; }
+.cont-next{ display:flex; align-items:center; gap:var(--sp-3); width:100%; min-height:var(--tap-min); padding:var(--sp-4); text-align:left; background:transparent; border:none; border-left:var(--edge-emph) solid var(--brand); cursor:pointer; }
+.cont-next.cp{ border-left-color:var(--milestone); }
+.cont-next-node{ border-color:var(--brand-edge); background:var(--brand-tint); color:var(--brand); font-size:11px; }
+.cont-next-node--cp{ width:24px; height:24px; }
+.cont-next-body{ flex:1; min-width:0; }
+.cont-next-name{ display:block; font-family:var(--font-ui); font-size:14px; font-weight:var(--fw-medium); line-height:1.3; color:var(--ink); margin-top:5px; }
+.cont-next.cp .cont-next-name{ color:var(--milestone); }
+.cont-next-go{ flex:none; color:var(--brand); display:flex; }
+.cont-next.cp .cont-next-go{ color:var(--milestone); }
+.cont-next-go svg{ width:16px; height:16px; }
+.cont-end{ padding:var(--sp-5) var(--sp-4); text-align:center; }
+.cont-end-t{ font-family:var(--font-display); font-size:var(--fs-lead); font-weight:var(--fw-medium); line-height:1.25; color:var(--ink); margin-bottom:6px; }
+.cont-end-s{ font-size:12.5px; line-height:1.5; color:var(--muted-dark); }
+
 .bar{ height:var(--bar-h); background:rgba(250,248,245,.92); backdrop-filter:blur(10px); border-top:var(--border); box-shadow:0 -2px 12px rgba(58,42,30,.09); display:flex; align-items:center; padding:0 var(--sp-3); }
 .bar-inner{ display:flex; align-items:center; gap:var(--sp-2); flex:1; max-width:var(--measure); margin:0 auto; }
 .bar-next{ flex:1; display:flex; align-items:center; justify-content:flex-end; gap:var(--sp-2); min-height:var(--tap-min); padding:0 var(--sp-3) 0 var(--sp-4); border-radius:var(--r-pill); background:var(--brand); border:1px solid var(--brand); color:#fff; font:var(--fw-medium) 12.5px/1.2 var(--font-ui); cursor:pointer; }
@@ -362,6 +384,7 @@ table.spec tr:last-child td{ border-bottom:none; }
   <a href="#wordcard">Word card</a>
   <a href="#choice">Choice</a>
   <a href="#prompt">Prompt</a>
+  <a href="#cont">Continuation</a>
   <a href="#bar">Docked bar</a>
   <a href="#tabbar">Tab bar</a>
   <a href="#watermark">Watermark</a>
@@ -582,6 +605,17 @@ table.spec tr:last-child td{ border-bottom:none; }
   <h2>Prompt</h2>
   <p class="note">Three directions, one card. The subject is always centred and large; the label above states the task.</p>
   <div class="widths" id="promptdemo"></div>
+</section>
+
+<section id="cont">
+  <h2>Continuation <span class="tag-new">built</span></h2>
+  <p class="note"><b>The path action lives at the foot of the lesson, where a lesson ends</b> — not above it, before it has been done. Four states: mark complete, forward to the next topic, forward to the stage checkpoint (milestone edge), and end of path. It contains <b>no filled button</b>: the forward node is a brand <i>tint</i>, because the card already carries the brand left edge and the screen's one fill is spent elsewhere (§3.1).</p>
+  <div class="widths" id="contdemo"></div>
+  <h3>Reduced form — live quiz question</h3>
+  <p class="note">Present on Learn, Chat <b>and</b> Quiz. While a quiz question is on screen the card confirms completion and drops its forward action, because "Next in &lt;stage&gt;" a thumb under the quiz's own "Next question" is two forwards meaning different things. On the quiz <i>result</i> screen nothing competes, so the forward action returns — the result screen keeps its own "Back to Lesson" and "Retry missed words" and does not absorb completion (DES-10).</p>
+  <div class="widths" id="contquizdemo"></div>
+  <div class="cls">.card.cont › .cont-h / .cont-mark / .cont-done / .cont-next (+ .cp) / .cont-end</div>
+  <p class="note"><b>Unresolved:</b> this component and the docked bar below do the same job in two positions — in-flow at the foot, versus fixed to the viewport. Both were approved, at different times. The bar demo below still draws its forward action as a <i>fill</i>, which contradicts the tint above; whichever position wins in phase 6, only one fill treatment can.</p>
 </section>
 
 <section id="bar">
@@ -867,6 +901,50 @@ document.getElementById('setdemo').innerHTML=`
     <div><div class="set-label">Account</div><div class="set-hint">Placeholder — lands here when there's something to manage</div></div>
     <span class="tag">Later</span>
   </div>`;
+
+// Mirrors renderContinuation() in render.js. Four states, then the reduced form.
+const contDone=`<div class="cont-done"><span class="tick">${I.check}</span> Lesson complete</div>`;
+document.getElementById('contdemo').innerHTML=`
+  <div class="card cont" style="width:320px">
+    <div class="section-label cont-h">When you're done</div>
+    <button class="btn btn--good cont-mark">${I.check} Mark this lesson complete</button>
+  </div>
+  <div class="card cont" style="width:320px">
+    ${contDone}
+    <button class="cont-next">
+      <span class="node cont-next-node">4</span>
+      <span class="cont-next-body">
+        <span class="section-label">Next in First Words</span>
+        <span class="cont-next-name">Days &amp; Time</span>
+      </span>
+      <span class="cont-next-go">${I.arrow}</span>
+    </button>
+  </div>
+  <div class="card cont" style="width:320px">
+    ${contDone}
+    <button class="cont-next cp">
+      <span class="node node--cp cont-next-node--cp"><span>&#9670;</span></span>
+      <span class="cont-next-body">
+        <span class="section-label">Stage complete</span>
+        <span class="cont-next-name">Checkpoint &middot; First Words</span>
+      </span>
+      <span class="cont-next-go">${I.arrow}</span>
+    </button>
+  </div>
+  <div class="card cont" style="width:320px">
+    ${contDone}
+    <div class="cont-end">
+      <div class="cont-end-t">Beginner path complete</div>
+      <div class="cont-end-s">Every lesson on this path is done.</div>
+    </div>
+  </div>`;
+
+document.getElementById('contquizdemo').innerHTML=`
+  <div class="card cont" style="width:320px">
+    <div class="section-label cont-h">When you're done</div>
+    <button class="btn btn--good cont-mark">${I.check} Mark this lesson complete</button>
+  </div>
+  <div class="card cont" style="width:320px">${contDone}</div>`;
 
 document.getElementById('bardemo').innerHTML=`
   <div style="display:flex;flex-direction:column;gap:var(--sp-3)">
