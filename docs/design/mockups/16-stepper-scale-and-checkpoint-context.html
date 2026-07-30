@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>16 · Stepper scale &amp; checkpoint context — Tea House</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Noto+Serif+TC:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --font-serif:'Noto Serif TC',Georgia,serif;
+    --font-ui:'Inter',system-ui,sans-serif;
+    --font-display:'Fraunces',Georgia,serif;
+    --fs-micro:11px; --fs-meta:12px; --fs-small:13px; --fs-body:15px; --fs-lead:17px; --fs-h3:22px;
+    --fw-regular:400; --fw-medium:500; --fw-semi:600; --fw-bold:700;
+    --sp-1:4px; --sp-2:8px; --sp-3:12px; --sp-4:16px; --sp-5:24px; --sp-6:32px;
+    --r-sm:8px; --r-md:12px; --r-lg:16px; --r-pill:999px;
+    --tap-min:44px;
+    --elev-1:0 1px 2px rgba(58,42,30,.04),0 1px 3px rgba(58,42,30,.06);
+    --elev-2:0 2px 4px rgba(58,42,30,.05),0 4px 8px rgba(58,42,30,.07);
+    --ink:#1C1917; --ink-soft:#292524;
+    --parchment:#fff; --parchment-warm:#FAF8F5; --parchment-deep:#F0EBE4; --parchment-border:#EAE4DC;
+    --muted:#A8A29E; --muted-dark:#78716C;
+    --brand:#C2410C; --brand-tint:#FEF0E9; --brand-edge:#F5D9C9;
+    --jade:#15803D; --jade-edge:#C9E7D3; --feedback-good-tint:#DCFCE7;
+    --milestone:#6E2639; --milestone-tint:#FBF0F2; --milestone-edge:#EBD3D9;
+    --header-bg:#6E2639; --header-text:#F7EEE8;
+    --border:1px solid var(--parchment-border);
+    --border-soft:1px solid var(--parchment-deep);
+    --edge-emph:3px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:#EFEAE3;font-family:var(--font-ui);color:var(--ink-soft);line-height:1.5;padding:var(--sp-6) var(--sp-4) 80px}
+  main{max-width:1180px;margin:0 auto}
+  h1{font:var(--fw-semi) 30px/1.15 var(--font-display);color:var(--ink);margin-bottom:6px}
+  .sub{font-size:var(--fs-small);color:var(--muted-dark);margin-bottom:var(--sp-6)}
+  section{margin-bottom:var(--sp-6);background:var(--parchment);border:var(--border);border-radius:var(--r-lg);padding:var(--sp-5)}
+  h2{font:var(--fw-semi) var(--fs-h3)/1.2 var(--font-display);color:var(--ink);margin-bottom:var(--sp-2)}
+  h3{font:var(--fw-semi) var(--fs-body)/1.2 var(--font-ui);color:var(--ink);margin:var(--sp-5) 0 var(--sp-2)}
+  .lede{font-size:var(--fs-small);color:var(--muted-dark);max-width:62ch;margin-bottom:var(--sp-4)}
+  .lede b{color:var(--ink)}
+  code{font-family:ui-monospace,Menlo,monospace;font-size:.88em;background:var(--parchment-deep);padding:1px 5px;border-radius:4px}
+  .rack{display:flex;gap:var(--sp-5);flex-wrap:wrap;align-items:flex-start}
+  .col{flex:1 1 300px;min-width:280px;max-width:360px}
+  .col-tag{display:inline-block;font:var(--fw-semi) 10.5px/1 var(--font-ui);letter-spacing:.12em;text-transform:uppercase;color:var(--brand);background:var(--brand-tint);border:1px solid var(--brand-edge);padding:5px 9px;border-radius:var(--r-pill);margin-bottom:var(--sp-2)}
+  .col-tag.no{color:var(--milestone);background:var(--milestone-tint);border-color:var(--milestone-edge)}
+  .col-note{font-size:var(--fs-meta);color:var(--muted-dark);margin-bottom:var(--sp-3);min-height:56px}
+  .phone{background:var(--parchment-warm);border:1px solid var(--parchment-border);border-radius:var(--r-md);overflow:hidden}
+  .verdict{margin-top:var(--sp-4);padding:var(--sp-4);background:var(--parchment-warm);border:var(--border);border-left:var(--edge-emph) solid var(--brand);border-radius:var(--r-sm);font-size:var(--fs-small)}
+  .verdict b{color:var(--ink)}
+  table{width:100%;border-collapse:collapse;font-size:var(--fs-meta);margin-top:var(--sp-3)}
+  th,td{text-align:left;padding:7px 10px;border-bottom:var(--border-soft);vertical-align:top}
+  th{font-weight:var(--fw-semi);color:var(--ink);white-space:nowrap}
+
+  /* ══ app chrome, real tokens ══ */
+  .hd{background:var(--header-bg);color:var(--header-text);padding:11px var(--sp-4);display:flex;align-items:center;justify-content:space-between}
+  .plate{font:var(--fw-medium) 19px/1 var(--font-serif)}
+  .plate small{display:block;font:var(--fw-semi) 7.5px/1 var(--font-ui);letter-spacing:.18em;opacity:.72;margin-top:4px}
+  .hd-i{width:20px;height:20px;border-radius:var(--r-pill);border:1.5px solid var(--header-text);opacity:.85}
+
+  .ctx{background:var(--parchment-warm)}
+  .ctx-row{display:flex;align-items:center;justify-content:space-between;gap:var(--sp-2);padding:10px var(--sp-4) 9px}
+  .ctx-back{display:flex;align-items:center;gap:6px;font:var(--fw-medium) var(--fs-meta)/1.2 var(--font-ui);color:var(--ink);background:none;border:none;cursor:pointer;padding:0}
+  .ctx-back svg{width:15px;height:15px;flex:none}
+  .ctx-meta{font:var(--fw-medium) 10.5px/1 var(--font-ui);color:var(--muted-dark);white-space:nowrap}
+  .ctx-track{height:2px;background:var(--parchment-deep)}
+  .ctx-fill{height:2px;background:var(--brand)}
+  .ctx-fill.ms{background:var(--milestone)}
+
+  .stepper{display:flex;align-items:center;padding:var(--sp-3) var(--sp-4) 11px}
+  .sx{display:flex;align-items:center;flex:1}
+  .sx:last-child{flex:0 0 auto}
+  .sline{flex:1;height:1px;background:var(--parchment-border)}
+  .sline.done{background:var(--jade-edge)}
+  .sx-btn{background:none;border:none;min-height:var(--tap-min);padding:0 4px;cursor:pointer;display:flex;align-items:center}
+
+  .node{width:28px;height:28px;border-radius:var(--r-pill);border:var(--border);background:var(--parchment);display:flex;align-items:center;justify-content:center;font:var(--fw-medium) var(--fs-meta)/1 var(--font-ui);color:var(--muted-dark);flex:none}
+  .node svg{width:13px;height:13px}
+  .node--sm{width:20px;height:20px;font-size:9px}
+  .node--sm svg{width:9px;height:9px}
+  .node--done{border-color:var(--jade-edge);background:var(--feedback-good-tint);color:var(--jade)}
+  .node--current{border-color:var(--brand);background:var(--brand);color:#fff}
+  .node--cp{border-radius:var(--r-sm);transform:rotate(45deg);border-color:var(--milestone-edge);background:var(--milestone-tint);color:var(--milestone)}
+  .node--cp>span{transform:rotate(-45deg);display:block;font-size:10px}
+  .node--cp.node--done{border-color:var(--jade-edge);background:var(--feedback-good-tint);color:var(--jade)}
+  /* proposed, section 2 */
+  .node--cp.node--current{border-color:var(--milestone);background:var(--milestone);color:#fff}
+  .node--cp.node--current>span{color:#fff}
+
+  /* scale variants under test */
+  .s24 .node--sm{width:24px;height:24px;font-size:10px}
+  .s24 .node--sm svg{width:11px;height:11px}
+  .s28 .node--sm{width:28px;height:28px;font-size:var(--fs-meta)}
+  .s28 .node--sm svg{width:13px;height:13px}
+  .s28 .sline,.s24 .sline{height:1px}
+
+  .stub{padding:var(--sp-5) var(--sp-4);border-top:var(--border-soft);border-bottom:var(--border-soft);font-size:var(--fs-meta);color:var(--muted);text-align:center;font-style:italic;background:var(--parchment)}
+
+  /* tier row + title, for proportion against the stepper */
+  .tierrow{display:flex;align-items:center;gap:var(--sp-2);padding:var(--sp-4) var(--sp-4) 0}
+  .tierlbl{font:var(--fw-semi) 10px/1 var(--font-ui);letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+  .pill{min-height:34px;padding:0 var(--sp-4);border-radius:var(--r-pill);border:var(--border);background:transparent;color:var(--muted-dark);font:var(--fw-medium) var(--fs-small)/1 var(--font-ui);display:inline-flex;align-items:center}
+  .pill.on{border-color:var(--brand);color:var(--brand)}
+  .ttl{font:var(--fw-semi) 26px/1.15 var(--font-display);color:var(--ink);padding:var(--sp-3) var(--sp-4) var(--sp-4)}
+
+  /* checkpoint hub */
+  .cp-hub{padding:var(--sp-4) var(--sp-4) var(--sp-5)}
+  .cp-hero{text-align:center;padding:var(--sp-3) 0 2px}
+  .cp-diamond{width:56px;height:56px;margin:0 auto var(--sp-3);background:var(--milestone);border-radius:var(--r-md);transform:rotate(45deg);display:flex;align-items:center;justify-content:center;box-shadow:var(--elev-2)}
+  .cp-diamond span{transform:rotate(-45deg);font-size:25px;color:#fff}
+  .cp-hero-h{font:var(--fw-semi) var(--fs-h3)/1.2 var(--font-display);color:var(--ink)}
+  .cp-hero-stage{font:var(--fw-semi) var(--fs-small)/1.3 var(--font-ui);color:var(--brand);margin-top:2px}
+  .cp-hero-prog{font-size:var(--fs-meta);color:var(--muted-dark);margin-top:5px}
+  .cp-card{display:flex;align-items:center;gap:var(--sp-3);background:var(--parchment);border:var(--border);border-radius:var(--r-md);box-shadow:var(--elev-1);padding:var(--sp-3);margin-top:var(--sp-3)}
+  .cp-ic{width:38px;height:38px;border-radius:var(--r-sm);background:var(--milestone-tint);display:flex;align-items:center;justify-content:center;font-size:17px;flex:none}
+  .cp-ct{flex:1;min-width:0}
+  .cp-cn{font:var(--fw-semi) var(--fs-small)/1.2 var(--font-ui);color:var(--ink)}
+  .cp-cd{font-size:var(--fs-micro);color:var(--muted-dark);margin-top:2px}
+  .tag{font:var(--fw-semi) 8.5px/1 var(--font-ui);letter-spacing:.1em;text-transform:uppercase;color:var(--muted-dark);border:var(--border);border-radius:var(--r-pill);padding:3px 6px}
+  .tag--done{color:var(--jade);border-color:var(--jade-edge)}
+  .segs{display:flex;gap:5px;margin-top:var(--sp-4)}
+  .segs i{flex:1;height:3px;border-radius:var(--r-pill);background:var(--milestone-edge);display:block}
+  .segs i.on{background:var(--milestone)}
+</style>
+</head>
+<body>
+<main>
+  <h1>16 · Stepper scale &amp; checkpoint context</h1>
+  <p class="sub">Two questions raised on device against v109. Section 1 settles the stepper's painted size; section 2 settles whether the stage strip belongs on the checkpoint hub.</p>
+
+  <!-- ═══════════ 1 ═══════════ -->
+  <section>
+    <h2>1 · Stepper painted scale</h2>
+    <p class="lede">v109 built the stepper at <code>.node--sm</code> = <b>20px</b>, which is what <code>styleguide.html</code> specifies. On a real phone it reads spindly — the nodes are the smallest thing on a screen where they are also the primary lateral navigation. Note the timeline's own rail nodes are <b>32px</b>, so the same marker is currently two very different sizes depending on which screen you are on.</p>
+    <p class="lede">All three below have a correct 44px touch target; only the painted circle changes. Compare each against the tier pills and title beneath it, which are unchanged.</p>
+
+    <div class="rack">
+      <div class="col">
+        <span class="col-tag">S20 — as built</span>
+        <p class="col-note">The styleguide value. Smallest thing on screen; the 1px connectors dominate it.</p>
+        <div class="phone" id="p20"></div>
+      </div>
+      <div class="col">
+        <span class="col-tag">S24</span>
+        <p class="col-note">Splits the difference. Still clearly subordinate to the 32px rail node, but the digits are legible and the row has weight.</p>
+        <div class="phone s24" id="p24"></div>
+      </div>
+      <div class="col">
+        <span class="col-tag">S28</span>
+        <p class="col-note">The base <code>.node</code> size, so <code>--sm</code> would go unused here. Closest to the timeline's 32px; risks competing with the tier pills.</p>
+        <div class="phone s28" id="p28"></div>
+      </div>
+    </div>
+
+    <div class="verdict">
+      <b>Where I'd land: S24.</b> It fixes the complaint without making the strip compete with the tier row directly beneath it, and it keeps <code>--sm</code> meaning "smaller than a rail node", which is the distinction the primitive exists to carry. S28 makes the stepper the loudest element in the chrome stack and leaves <code>--sm</code> with no call sites. Scoped as <code>.stepper .node</code>, so the primitive itself is untouched and any future <code>--sm</code> user is unaffected.
+    </div>
+  </section>
+
+  <!-- ═══════════ 2 ═══════════ -->
+  <section>
+    <h2>2 · Stage context on the checkpoint hub</h2>
+    <p class="lede">The hub is the <b>last member of its stage</b>, but it currently has no stage context and no lateral navigation — only a back arrow. You cannot go from a half-finished checkpoint to the topic you want to revise without returning to the timeline. Adding the contextual row and stepper closes that, and makes the strip's end diamond mean "you are here" rather than only "there is an end".</p>
+    <p class="lede"><b>The real question is the hairline.</b> The row's track measures <i>stage topic</i> progress everywhere else. On the hub, the page also reports checkpoint activity progress ("1 of 2 reviewed"). Two indicators of different quantities on one screen is the §3.4 defect by name, so the two must be told apart by <i>form</i>, not just position.</p>
+
+    <div class="rack">
+      <div class="col">
+        <span class="col-tag no">H1 — reject</span>
+        <p class="col-note">Hairline switched to measure checkpoint activities. Same element means stage progress on one screen and activity progress on the next — 50% here is a different fact from 50% one tap earlier.</p>
+        <div class="phone" id="h1"></div>
+      </div>
+      <div class="col">
+        <span class="col-tag">H2</span>
+        <p class="col-note">Hairline keeps measuring stage topics (full, because every topic is done). Activity progress moves to <code>.segs</code> — a countable set, one pip per activity. Different fact, different form.</p>
+        <div class="phone" id="h2"></div>
+      </div>
+      <div class="col">
+        <span class="col-tag">H3</span>
+        <p class="col-note">H2, plus the hero trimmed: the stage name is dropped from the hero because the row and strip already carry it twice over. Leaves the diamond and the count.</p>
+        <div class="phone" id="h3"></div>
+      </div>
+    </div>
+
+    <div class="verdict">
+      <b>Where I'd land: H3</b>, but it should ship <i>after</i> the diamond progress ring, not before. Once <code>.mk</code> exists, the hub's hero diamond carries activity progress as a ring and the <code>.segs</code> strip in H2/H3 becomes redundant — so building <code>.segs</code> here first means building something the next deploy deletes. H3's hero trim and the context row are independent of that and could ship either side.
+      <table>
+        <tr><th>Element</th><th>Fact it carries</th><th>Form</th></tr>
+        <tr><td>Contextual hairline</td><td>Stage topics complete</td><td>Continuous hairline</td></tr>
+        <tr><td>Stepper</td><td>Position within the stage</td><td>Discrete nodes</td></tr>
+        <tr><td>Hero diamond ring <i>(after P4-5)</i></td><td>Checkpoint activities done</td><td>Ring on the diamond</td></tr>
+      </table>
+    </div>
+
+    <h3>The one new state this needs</h3>
+    <p class="lede">The strip's end diamond has to read as <b>current</b> while staying a diamond. <code>.node--cp</code> and <code>.node--current</code> collide today: <code>--cp</code> is declared later, so milestone wins and the diamond looks unvisited. The proposal is an explicit <code>.node--cp.node--current</code> — a milestone <i>fill</i> with a white glyph, matching how <code>.node--cp.node--done</code> was resolved in v108. It keeps §4 intact: the shape says checkpoint, the fill says you are here, and no fifth colour is introduced.</p>
+    <div class="rack" style="align-items:center">
+      <div style="text-align:center"><span class="node node--cp"><span>◆</span></span><div class="col-note" style="min-height:0;margin-top:6px">ahead</div></div>
+      <div style="text-align:center"><span class="node node--cp node--current"><span>◆</span></span><div class="col-note" style="min-height:0;margin-top:6px">current — proposed</div></div>
+      <div style="text-align:center"><span class="node node--cp node--done"><span>◆</span></span><div class="col-note" style="min-height:0;margin-top:6px">done</div></div>
+    </div>
+  </section>
+</main>
+
+<script>
+const I={
+  back:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M15 18l-6-6 6-6"/></svg>',
+  check:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M20 6L9 17l-5-5"/></svg>',
+};
+const hd = `<div class="hd"><div class="plate">廣東話<small>CANTONESE LEARNER</small></div><div class="hd-i"></div></div>`;
+
+function ctxRow(back, meta, pct, ms){
+  return `<div class="ctx"><div class="ctx-row">
+    <button class="ctx-back">${I.back} ${back}</button>
+    <span class="ctx-meta">${meta}</span>
+  </div><div class="ctx-track"><div class="ctx-fill${ms?' ms':''}" style="width:${pct}%"></div></div></div>`;
+}
+// cells: array of {n, state} where state = done | current | '' ; cp = end diamond state
+function stepper(cells, cpState){
+  const body = cells.map(c=>{
+    const cls = 'node node--sm' + (c.state==='done'?' node--done':'') + (c.state==='current'?' node--current':'');
+    const inner = c.state==='done' ? I.check : c.n;
+    const marker = c.state==='current'
+      ? `<span class="${cls}">${inner}</span>`
+      : `<button class="sx-btn"><span class="${cls}">${inner}</span></button>`;
+    return `<div class="sx">${marker}<span class="sline${c.state==='done'?' done':''}"></span></div>`;
+  }).join('');
+  const cp = cpState===null ? '' :
+    `<div class="sx"><button class="sx-btn"><span class="node node--sm node--cp${cpState?' node--'+cpState:''}"><span>◆</span></span></button></div>`;
+  return `<div class="stepper">${body}${cp}</div>`;
+}
+
+// ── section 1: a topic screen at three stepper scales ──
+const topicCells=[{n:1,state:'current'},{n:2,state:''},{n:3,state:''}];
+const topicBody = ctxRow('Eating Out &amp; Shopping','1 of 3 · Beginner',0)
+  + '§STEP§'
+  + `<div class="tierrow"><span class="tierlbl">Tier:</span><span class="pill on">Tier 1</span><span class="pill">Tier 2</span></div>`
+  + `<div class="ttl">Restaurant &amp; Ordering</div>`
+  + `<div class="stub">— lesson content —</div>`;
+['p20','p24','p28'].forEach(id=>{
+  document.getElementById(id).innerHTML = hd + topicBody.replace('§STEP§', stepper(topicCells,''));
+});
+
+// ── section 2: the checkpoint hub, three ways ──
+const hubCells=[{n:1,state:'done'},{n:2,state:'done'},{n:3,state:'done'},{n:4,state:'done'}];
+function cards(withSegs){
+  return `
+    <div class="cp-card"><div class="cp-ic">📖</div><div class="cp-ct"><div class="cp-cn">Words</div><div class="cp-cd">Vocabulary from all topics in this stage</div></div><span class="tag">Recall</span></div>
+    <div class="cp-card"><div class="cp-ic">💬</div><div class="cp-ct"><div class="cp-cn">Conversation</div><div class="cp-cd">A longer scene — read &amp; speak</div></div><span class="tag tag--done">Done</span></div>
+    ${withSegs?`<div class="segs"><i class="on"></i><i></i></div>`:''}`;
+}
+function hub(opts){
+  return hd
+    + ctxRow('Food &amp; Drink', opts.meta, opts.pct, opts.ms)
+    + stepper(hubCells,'current')
+    + `<div class="cp-hub"><div class="cp-hero">
+        <div class="cp-diamond"><span>◆</span></div>
+        <div class="cp-hero-h">Checkpoint</div>
+        ${opts.stageLine?`<div class="cp-hero-stage">Food &amp; Drink</div>`:''}
+        <div class="cp-hero-prog">1 of 2 reviewed</div>
+      </div>${cards(opts.segs)}</div>`;
+}
+document.getElementById('h1').innerHTML = hub({meta:'Checkpoint · Beginner', pct:50, ms:true,  stageLine:true,  segs:false});
+document.getElementById('h2').innerHTML = hub({meta:'Checkpoint · Beginner', pct:100, ms:false, stageLine:true,  segs:true});
+document.getElementById('h3').innerHTML = hub({meta:'Checkpoint · Beginner', pct:100, ms:false, stageLine:false, segs:true});
+</script>
+</body>
+</html>
