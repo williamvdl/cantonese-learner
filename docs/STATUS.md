@@ -4,7 +4,7 @@
 not a history log (that's what the repo's commit history is for). Approved design
 decisions and whether they were built live in `DESIGN_DECISIONS.md`.*
 
-Last updated: 2026-07-30 · sw.js at v112
+Last updated: 2026-07-30 · sw.js at v113
 
 ## Confirmed live and working
 - **Patterns/Drills removed** from the app entirely (not soft-hidden). Checkpoints
@@ -24,15 +24,16 @@ Last updated: 2026-07-30 · sw.js at v112
 - **Stable IDs** fully in place — 600/600 words, 307/307 sentences, 150/150
   dialogues. Validator passes clean.
 
-## Design system — phases 1–4 complete
+## Design system — phases 1–5 complete
 
 **The app now renders entirely from the token and primitive layers.** No colour
 is injected from JavaScript anywhere. Established 2026-07-25, applying from
 sw.js v95 onward; phase 2 shipped across v96–v103, phase 3 across v104–v107,
-phase 4 across v108–v112.
+phase 4 across v108–v112, phase 5 at v113.
 
-**Every approved design decision is now built.** `DESIGN_DECISIONS.md` has no
-*Not built* rows left except the two belonging to phase 5.
+**Three approved decisions remain unbuilt, all phase 6:** MOCK-11-bar (docking the
+completion action), MOCK-17-fill (the subtab treatment) and DES-18 (the nameplate as
+a route home). Phase 6 is the last phase of the rollout.
 
 `DESIGN_SYSTEM.md` and `docs/design/styleguide.html` are the source of truth. Read
 `DESIGN_SYSTEM.md` before touching `styles.css`, `render.js`, or designing a new
@@ -50,7 +51,7 @@ screen.
 | Border widths in play | 1 / 1.5 / 2 / 2.5 / 3px | **1px + 2px** |
 | `border-radius` values | 78 raw px + 19 `50%` | **all on the scale** |
 | Competing content columns | 5 | **1 (`--measure`)** |
-| `styles.css` | 1292 lines | **1297 lines** (1160 after phase 3; phase 4 added the path-context components) |
+| `styles.css` | 1292 lines | **1300 lines** (1160 after phase 3; phase 4 added the path-context components, phase 5 three) |
 | Rules redeclaring the card surface | 12 | **0 (`.card` only)** |
 | Painted sizes of the circular play control | 7 (28–44px) | **2 (32 / 44px)** |
 | Interactive controls declaring `min-height` under `--tap-min` | 9 | **3** |
@@ -101,6 +102,7 @@ orphan hues `#B7861E`, `#e4d4ad`, `#8a6716`,
 | 4 · 3 | v110 | Fixes off device QA: the stepper's 42px tap target, and the checkpoint hub's hero `◆`, which declared no `color` and so painted near-black on oxblood. |
 | 4 · 4 | v111 | Diamond progress (MOCK-07-Asoft) — the `.mk` and `.segs` primitives, ring on the rail diamond, pips, the three-state count line and three-state badge. |
 | 4 · 5 | v112 | Stepper to the base 28px node (MOCK-16-S28) and stage context on the checkpoint hub (MOCK-16-H2), with `.node--cp.node--current` for the current diamond. `buildStageInfo()` extracted so the topic screen and hub share one path. `styleguide.html` updated in the same deploy. |
+| 5 | v113 | Completion on the Quiz subtab. The continuation card is now present on all three subtabs; while a question is live it takes a reduced form (completion confirmed, forward action dropped) and on the result screen the forward action returns. `isQuizQuestionLive()` is the single source of that distinction. Per-question button relabelled "Next question" (MOCK-12). `.cont-done:last-child` added — the reduced form exposed a divider with nothing under it. Mark-complete's final-step auto-return gated so it can't fire mid-question. `styleguide.html` gained the Continuation section it never had. |
 
 ### Notes worth carrying forward
 
@@ -175,8 +177,43 @@ orphan hues `#B7861E`, `#e4d4ad`, `#8a6716`,
   `--jade`, `--jade-bright` = `--feedback-good`, and `--brand-text-dark` =
   `--brand-dark`. Retire all four. (`--header-icon` = `--header-text` is also
   identical but is deliberate and documented.)
+- **A styleguide can drift *ahead* of the code, not just behind it.** The usual
+  assumption is that `styleguide.html` lags. It also ran ahead: it documented the
+  unbuilt docked bar and tab bar in full sections while the `.cont` continuation card
+  — shipped in v109 — had no entry at all. A reader would have concluded the bar was
+  built and the card wasn't. Every section now carries a built / not-built tag, and
+  the check is *bidirectional*: does each built component have an entry, **and** does
+  each entry describe something that exists?
+- **A component can survive a whole convergence by not being on anyone's list.** The
+  topic subtabs kept their pre-system treatment — three bordered boxes with a solid
+  brand fill on the active one — through four phases. They had no §2 primitive entry,
+  no styleguide section and no register row; the only trace anywhere was the words
+  "active subtab" in §4's state table. Nothing was ever *wrong*, so nothing flagged.
+  When auditing, enumerate from the **screen** as rendered, not from the docs, or the
+  gaps in the docs are invisible to the audit.
+- **A register row can be wrong rather than missing, which is worse.** MOCK-11-bar's
+  row described two separate decisions as one — mockup 11's *subtab* matrix and
+  §3.10's *tab bar* matrix — and cited DES-12 for the wrong one. That mis-scoped
+  phase 5 as blocked on a tab bar it never needed, and hid two genuinely unbuilt
+  rows. A row that reads plausibly gets trusted; name which artefact a row means.
+- **A later mockup can revise an earlier one silently.** Mockup 12 changed two rows of
+  mockup 11's matrix — *Quiz · mid-question* from "hidden" to completion-only, and
+  *Quiz · result* from "merged" to continuation-returns — and neither revision was
+  recorded anywhere, so both read as built when neither was. When a mockup supersedes
+  part of an earlier one, say which rows.
+- **A mockup's stated rationale can expire while its conclusion stays right.** Mockup
+  12 justified dropping the forward action mid-question by pointing at two competing
+  *fills*. MOCK-10-cont later made the forward action a tint, so the fills no longer
+  compete — but the exception is still correct, now on **label** ambiguity, which also
+  makes the "Next question" relabel load-bearing rather than cosmetic. Re-derive the
+  reason before deciding a decision has lapsed.
+- **Expected-output checks decay; deltas don't.** Standing check 2's documented figure
+  drifted from "around fourteen" padding-built targets to a real 15, and an ad-hoc
+  rewrite of the snippet briefly reported 20. Run the check against
+  `git show HEAD:styles.css` as well as the working copy and compare the two counts —
+  the delta is what the rule ("the list should not grow") actually asserts.
 - **Four tokens have no call sites** and are deliberately retained: `--sp-8`,
-  `--bar-h` and `--tabbar-h` (the last two land in phases 5–6), and
+  `--bar-h` and `--tabbar-h` (both land in phase 6), and
   `--feedback-good`. Re-measured 2026-07-30 — an earlier count of nine was wrong:
   `--edge-emph` has 3 call sites, `--measure-text` 1, `--jade-edge` 5,
   `--feedback-bad-tint` 4 and `--feedback-bad-edge` 5.

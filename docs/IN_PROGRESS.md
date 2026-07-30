@@ -4,17 +4,20 @@
 questions behind it. Meant to be short-lived — when a piece ships, fold its
 outcome into STATUS.md and clear this file back down for the next thing.*
 
-Last updated: 2026-07-30 · sw.js at v112
+Last updated: 2026-07-30 · sw.js at v113
 
 ## Nothing actively in progress
 
-Phase 4 shipped across v108–v112 and is folded into STATUS.md. Every approved
-design decision is now built — `DESIGN_DECISIONS.md` has no *Not built* rows left
-except the two belonging to phase 5.
+Phase 5 shipped at v113 and is folded into STATUS.md. Phase 6 is the last phase of
+the rollout and has not started.
 
-QA on phase 4 was an initial pass rather than exhaustive, by choice: the app is
-being used organically from here, and anything the rollout left will surface that
-way. Findings go to BACKLOG.md.
+`DESIGN_DECISIONS.md` has three *Not built* rows, all phase 6: MOCK-11-bar (docking
+the completion action), MOCK-17-fill (the subtab treatment) and DES-18 (the nameplate
+as a route home).
+
+QA is organic from here rather than exhaustive, by choice — the app is being used and
+anything the rollout left will surface that way. Findings go to BACKLOG.md. Phase 5's
+own QA was done on device and passed.
 
 ### Remaining rollout
 
@@ -28,18 +31,42 @@ assigned when each is cut.
 | ~~2~~ | ~~Convergence.~~ | ~~v96–v103~~ · done 2026-07-28 |
 | ~~3~~ | ~~Primitive adoption.~~ | ~~v104–v107~~ · done 2026-07-29 |
 | ~~4~~ | ~~The unbuilt path decisions, path context, diamond progress.~~ | ~~v108–v112~~ · done 2026-07-30 |
-| **5** | **Docked action bar.** Tab suppression and the active-quiz-question exception. | Builds DES-12, via MOCK-11-bar and MOCK-12-quizbar. `--bar-h` is declared and unused, waiting for it. **Settle first:** the continuation card (MOCK-10-cont) now occupies the foot of a lesson, so decide how it and the bar relate before building — DES-12 forbids two competing "what now" zones just as firmly as it forbids bar-plus-tabs. |
-| 6 | **Nav.** Tab bar replacing `renderDrawer()`, settings sheet behind the cog, nameplate-as-home. | Needs `pushNav()` care so tab switches behave with browser back. Keep the `activeNav` resolution logic. Rename `state.homeView` → `state.topicsView` here. **MOCK-13 has two panel options and no record of which was chosen — settle before starting.** Retires `.hamburger` and `.drawer-speed-btn`, the two remaining sub-44px controls waiting on it. |
+| ~~5~~ | ~~Completion on the Quiz subtab (MOCK-11-matrix, MOCK-12-quizbar).~~ | ~~v113~~ · done 2026-07-30 |
+| **6** | **The bottom edge, and the last of the chrome.** | The final phase. Named work items below — no A/B/C, which is what made the phase 4 brief unreadable. |
 
-**Read before starting either:** `DESIGN_SYSTEM.md` §2 for the primitives and
-§3.9–3.10 for the nav rules, and `DESIGN_DECISIONS.md` for what is already settled.
+### Phase 6 — work items
+
+Everything that touches the bottom edge of the viewport, plus the chrome that
+depends on it. These are one phase because the open questions inside it answer each
+other and nothing else: whether hiding the tabs feels like a dead end cannot be
+judged without both the tabs and the bar, and the subtabs and the tab bar are meant
+to be one primitive.
+
+| ID | Item | Notes |
+|---|---|---|
+| P6-1 | **Subtab + tab bar primitive** (MOCK-17-fill) | Do this first. One primitive, two consumers: `--top` is the only difference. Building the subtabs alone would write the emphasis language twice. Retires `.subtab-btn`'s border, background, radius and solid-fill active state. Declare `min-height: var(--tap-min)` explicitly — mockup 04's own drawing computes to ~27px and would pass standing check 2 unseen. |
+| P6-2 | **Tab bar replacing `renderDrawer()`** | Needs `pushNav()` care so tab switches behave with browser back. Keep the `activeNav` resolution logic. Retires `.hamburger` and `.drawer-speed-btn` — the two remaining sub-44px controls waiting on it. `.bottom-nav` / `.nav-btn` / `.placeholder-screen` already sit in `styles.css` with **zero call sites** — dead CSS from an earlier era; retire or reuse deliberately, don't inherit. |
+| P6-3 | **Nameplate as a route home** (DES-18) | A handler plus a tap target; `renderHeader()` already renders the nameplate on every screen and it is inert. Structurally part of P6-2: with tabs hidden in a topic this is the only visible route to a top-level destination. |
+| P6-4 | **Settings sheet behind the cog** | **Blocked:** MOCK-13's panel colour was never recorded (A parchment / B oxblood). Settle before starting. |
+| P6-5 | **Docked bar, or not** (MOCK-11-bar) | The decision, then the build. The bar and the continuation card do the same job in two positions and only one can ship. Judge with the tab bar present, since DES-12's collision is the whole reason the bar has a suppression rule. `--bar-h` and `--tabbar-h` are declared and unused, waiting on this. Whichever wins also settles fill-versus-tint for the forward action. |
+| P6-6 | **`state.homeView` → `state.topicsView`** | It sits in `NAV_FIELDS`, so the rename touches history snapshots. `renderTopicsScreen()` renders Topics; `renderDashboard()` is Home. Do it last — it is a pure rename and shouldn't be entangled with behaviour changes. |
+
+**Judge after shipping, not before:** whether the hidden tab bar reads as a dead end.
+The documented fallback is the ~34px icons-only strip (§3.10). Recorded as a
+post-deploy judgement precisely because it has no answer on paper.
+
+**Read before starting:** `DESIGN_SYSTEM.md` §2 for the primitives — including the
+new Subtabs & tab bar entry — and §3.9–3.10 for the nav rules, plus
+`DESIGN_DECISIONS.md` for what is already settled and what is approved-but-unbuilt.
 
 ---
 
 ## Standing checks for any CSS work
 
 All five have caught real bugs. Run before shipping. Baseline verified clean at
-v112 on 2026-07-30.
+v113 on 2026-07-30 — check 1 gives `.nav-item -> ['transition']` only, check 3 gives
+`['--token']` only, and check 2 gives five declared misses plus 15 padding-built
+targets.
 
 **1 · Duplicate declarations inside one rule** — this is how `.word-card` acquired
 a near-black border:
@@ -90,8 +117,15 @@ for m in re.finditer(r'\n\s*([^{}\n]+)\{([^{}]*)\}', s):
 ```
 Expected: three `min-height` misses (`.hamburger`, `.drawer-speed-btn`,
 `.subtab-btn`), two declared-height misses (`.path-complete-btn` at 28px and
-`.translate-dir-swap` at 38px), and around fourteen padding-built targets to judge
-individually. All are logged in BACKLOG.md; **the list should not grow.**
+`.translate-dir-swap` at 38px), and 15 padding-built targets to judge individually.
+All are logged in BACKLOG.md; **the list should not grow.** Phase 6 clears three of
+the five declared misses: `.subtab-btn` via P6-1, `.hamburger` and
+`.drawer-speed-btn` via P6-2.
+
+**Compare against the previous commit rather than against this list.** The
+authoritative test is that the count did not *change* — run the check against
+`git show HEAD:styles.css` as well as the working copy and diff the two. A remembered
+expected figure drifts; the delta does not.
 
 The lesson generalises: declare `min-height: var(--tap-min)` explicitly even where
 padding would already reach 44px, so the check can see it.
@@ -136,6 +170,8 @@ phase 4 left directly.
 - **Row-type icons on the path timeline.** Now judgeable — deferred until MOCK-06-C
   and MOCK-07-Asoft landed, and they have. Does a lesson row want a `bookOpen`
   glyph and a checkpoint the diamond, or does the rail carry enough weight already?
+  **Related:** MOCK-17-fill keeps mockup 04's per-tab subtab glyphs, so phase 6 will
+  settle a near-identical judgement one screen along. Worth deciding together.
 - **Landscape stepper.** More chrome than when this was raised: the stepper is 28px
   rather than 20px and now appears on the checkpoint hub as well as in topics.
   Candidate is hiding it under `(max-height: 450px)`. Needs a real device.
@@ -150,5 +186,14 @@ phase 4 left directly.
 - **Quiz direction-toggle labels** (`漢→EN` / `EN→漢` / `🔊→EN`, where 漢 (hon3)
   means Chinese) inherited unchanged — compact but cryptic, and permanently above
   every question.
+- **"Got it — next" was left unchanged** when the correct-answer button became "Next
+  question" in v113. Mockup 12 specified only the one relabel; "Got it" already marks
+  it as an acknowledgement rather than a plain forward, and it shares a row with
+  "Hear it again" that would wrap at 360px. Confirm or match.
+- **The mark-complete auto-return is now gated on not being mid-question.** Marking
+  the *final* lesson of a path complete auto-returns to the timeline after 3s; from
+  the Quiz subtab that would have discarded a half-finished quiz. Added in v113
+  because the change made that path newly reachable. Worth a look on device — it is
+  a one-line revert.
 - **Dashboard density.** The converged Home reads quieter than its predecessor.
   Deliberately not adjusted. **Revisit after phase 6.**
