@@ -823,30 +823,9 @@ function getPathContext() {
   // (§3.4). `step`/`total` below stay whole-path because other callers read
   // them — the stage figures are additive, on `stage`.
   const stage = getStageForTopic(state.activePath, state.topic);
-  let stageInfo = null;
-  if (stage) {
-    const siblings = (stage.topics || []).map(topicKey => {
-      const entry = path.lessons.find(x => x.topic === topicKey);
-      const sibTier = entry ? entry.round : 1;
-      const meta = store.topicMeta(topicKey);
-      return {
-        topic: topicKey,
-        tier: sibTier,
-        label: meta ? meta.label : topicKey,
-        complete: isLessonComplete(state.activePath, topicKey, sibTier),
-        isCurrent: topicKey === state.topic,
-      };
-    });
-    stageInfo = {
-      id: stage.id,
-      name: stage.name,
-      topics: siblings,
-      step: siblings.findIndex(t => t.isCurrent) + 1, // position WITHIN the stage
-      total: siblings.length,
-      done: siblings.filter(t => t.complete).length,
-      checkpoint: stage.checkpoint ? checkpointProgress(state.activePath, stage.id) : null,
-    };
-  }
+  const stageInfo = stage
+    ? buildStageInfo(state.activePath, path, stage, state.topic)
+    : null;
 
   return {
     path,
@@ -886,6 +865,47 @@ function getPathStages(pathKey) {
   const path = (store.paths || []).find(p => p.key === pathKey);
   return (path && Array.isArray(path.stages)) ? path.stages : [];
 }
+// Stage framing shared by the topic screen and the checkpoint hub. `currentTopic`
+// is null on the hub, where no topic is current — the checkpoint is.
+// "Step 8 of 41" is technically true and motivationally awful; everything here
+// works in stage terms instead (§3.4).
+function buildStageInfo(pathKey, path, stage, currentTopic) {
+  const siblings = (stage.topics || []).map(topicKey => {
+    const entry = (path.lessons || []).find(x => x.topic === topicKey);
+    const sibTier = entry ? entry.round : 1;
+    const meta = store.topicMeta(topicKey);
+    return {
+      topic: topicKey,
+      tier: sibTier,
+      label: meta ? meta.label : topicKey,
+      complete: isLessonComplete(pathKey, topicKey, sibTier),
+      isCurrent: topicKey === currentTopic,
+    };
+  });
+  const idx = siblings.findIndex(t => t.isCurrent);
+  return {
+    id: stage.id,
+    name: stage.name,
+    topics: siblings,
+    step: idx >= 0 ? idx + 1 : siblings.length, // position WITHIN the stage
+    total: siblings.length,
+    done: siblings.filter(t => t.complete).length,
+    checkpoint: stage.checkpoint ? checkpointProgress(pathKey, stage.id) : null,
+  };
+}
+
+// Stage context for the checkpoint hub. The hub is the last member of its stage,
+// so it earns the same contextual row and stepper as any topic in that stage —
+// which is also the only lateral navigation it has.
+function getCheckpointStageContext() {
+  const cp = state.checkpoint;
+  if (!cp) return null;
+  const path = (store.paths || []).find(p => p.key === cp.pathKey);
+  const stage = getStage(cp.pathKey, cp.stageId);
+  if (!path || !stage) return null;
+  return { path, stage: buildStageInfo(cp.pathKey, path, stage, null) };
+}
+
 // Which stage of a path contains a topic, or null. Stage membership is by topic
 // key, and a path lists each topic at most once, so there is no tier ambiguity.
 // Returns null for a topic that sits in path.lessons but in no stage — the

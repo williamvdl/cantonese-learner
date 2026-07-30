@@ -628,20 +628,79 @@ function renderPathStep(pathKey, l, displayNum, nextPos) {
     </div>`;
 }
 
+// The diamond path every .mk instance draws. 3px corner radius keeps the stroke
+// ends clean at small sizes (MOCK-07-Asoft). Drawn in a 0 0 32 32 viewBox and
+// scaled by the host, so one path serves every size.
+const MK_DIAMOND = 'M13.9 6.9 a3 3 0 0 1 4.2 0 l7 7 a3 3 0 0 1 0 4.2 l-7 7 a3 3 0 0 1 -4.2 0 l-7 -7 a3 3 0 0 1 0 -4.2 Z';
+
+// A diamond carrying its own progress: the shape IS the track. `pct` is 0–1; the
+// dash length is resolved from getTotalLength() by paintDiamondRings() after
+// render, never hardcoded. Carries no colour — .mk / .mk.is-done own that, so
+// this stays inside §3.5 (the styleguide's demo inlines fill/stroke attributes,
+// which would have put colour back into a render function).
+function renderDiamondProgress(pct, done, glyph) {
+  const cls = 'mk' + (done ? ' is-done' : '') + (pct <= 0 ? ' is-empty' : '');
+  // Rounded so the attribute doesn't carry a 17-digit float into the DOM.
+  const p = Math.round(Math.min(Math.max(pct, 0), 1) * 1e4) / 1e4;
+  return `
+    <div class="${cls}" data-pct="${p}">
+      <svg viewBox="0 0 32 32" aria-hidden="true">
+        <path class="mk-fill"  d="${MK_DIAMOND}"/>
+        <path class="mk-track" d="${MK_DIAMOND}"/>
+        <path class="mk-prog"  d="${MK_DIAMOND}"/>
+      </svg>
+      <span class="glyph">${glyph}</span>
+    </div>`;
+}
+
+// Resolve every ring's dash length from its own geometry. Runs after each render
+// because the paths only exist once the markup is in the DOM. getTotalLength()
+// reads the path data, so it does not depend on layout having settled.
+function paintDiamondRings() {
+  document.querySelectorAll('.mk[data-pct]').forEach(mk => {
+    const el = mk.querySelector('.mk-prog');
+    if (!el) return;
+    const pct = parseFloat(mk.dataset.pct) || 0;
+    const L = el.getTotalLength();
+    el.setAttribute('stroke-dasharray', L);
+    el.setAttribute('stroke-dashoffset', L * (1 - pct));
+  });
+}
+
 // The checkpoint node + card for a stage. The rail diamond and the card's
 // milestone edge both retreat once complete (MOCK-05-retreat).
 function renderCheckpointNode(pathKey, stage, nextPos) {
   const prog = checkpointProgress(pathKey, stage.id);
   if (!prog.total) return '';  // no offerable activities → no node
   const isNext = !prog.complete && nextPos && nextPos.kind === 'checkpoint' && nextPos.stageId === stage.id;
+  const started = prog.done > 0 && !prog.complete;
+
+  // Three states, where the code had two and no partial at all (MOCK-07-Asoft).
   const progText = prog.complete
     ? 'Complete'
-    : `${prog.done} of ${prog.total} reviewed · tap to open`;
+    : started
+      ? `${prog.done} of ${prog.total} done`
+      : `${prog.total} activit${prog.total === 1 ? 'y' : 'ies'} · tap to open`;
+  const badgeText = prog.complete ? '✓' : started ? 'Resume' : 'Checkpoint';
+
+  // Pips only once started, and never on a completed row: .segs is a milestone
+  // form, and a completed checkpoint has dropped milestone colour entirely.
+  const cpId = stage.checkpoint && stage.checkpoint.id;
+  const pips = (started && cpId)
+    ? `<div class="segs">${prog.available.map(a =>
+        `<i class="${checkpointActivityDone(pathKey, cpId, a) ? 'on' : ''}"></i>`).join('')}</div>`
+    : '';
+
   const nextBadge = isNext ? `<span class="path-next-badge">Next up</span>` : '';
+  const ring = renderDiamondProgress(
+    prog.total ? prog.done / prog.total : 0,
+    prog.complete,
+    prog.complete ? icon('check', 12) : '◆'
+  );
   return `
     <div class="path-step path-step-cp${prog.complete ? ' cp-done' : ''}${isNext ? ' next' : ''}">
       <div class="path-step-rail">
-        <div class="node node--cp${prog.complete ? ' node--done' : ''}"><span>◆</span></div>
+        ${ring}
         <div class="path-step-line"></div>
       </div>
       <div class="path-step-body">
@@ -651,8 +710,9 @@ function renderCheckpointNode(pathKey, stage, nextPos) {
             <div class="path-step-text">
               <div class="path-step-title">Checkpoint · ${stage.name}</div>
               <div class="path-step-cp-prog">${progText}</div>
+              ${pips}
             </div>
-            <span class="path-cp-badge">${prog.complete ? '✓' : 'CHECKPOINT'}</span>
+            <span class="path-cp-badge">${badgeText}</span>
           </div>
         </div>
       </div>
@@ -759,9 +819,23 @@ function renderCheckpointHub() {
     ? '✓ Checkpoint complete — back to path'
     : (prog.total - prog.done === 1 ? 'Finish 1 more to complete' : `Finish ${prog.total - prog.done} more to complete`);
 
+  // MOCK-16-H2. The hub is the last member of its stage, so it carries the same
+  // contextual row and stepper — which is also its only lateral navigation. The
+  // hairline keeps measuring stage TOPICS everywhere, and activity progress is
+  // carried by .segs: a different fact, told apart by form rather than position
+  // (§3.4). The row's back replaces the standalone button that used to sit here.
+  const stageCtx = getCheckpointStageContext();
+  const aboveEl = stageCtx
+    ? renderContextRow(stageCtx, { meta: `Checkpoint · ${stageCtx.path.label}`, backAttr: 'data-cp-back' })
+      + renderStageStepper(stageCtx, true)
+    : `<button class="back-home-btn" data-cp-back><span class="icon-label">${icon('arrowLeft',15)} ${stage.name}</span></button>`;
+
+  const pips = `<div class="segs cp-segs">${prog.available.map(a =>
+    `<i class="${checkpointActivityDone(pathKey, cpId, a) ? 'on' : ''}"></i>`).join('')}</div>`;
+
   return `
+    ${aboveEl}
     <div class="content cp-hub">
-      <button class="back-home-btn" data-cp-back><span class="icon-label">${icon('arrowLeft',15)} ${stage.name}</span></button>
       <div class="cp-hero">
         <div class="cp-diamond"><span>◆</span></div>
         <div class="cp-hero-h">Checkpoint</div>
@@ -771,6 +845,7 @@ function renderCheckpointHub() {
       </div>
       <div class="cp-flow-hint">Suggested flow: recall → produce</div>
       ${cards}
+      ${pips}
       <button class="${finishCls}" data-cp-back>${finishLabel}</button>
     </div>`;
 }
@@ -1079,25 +1154,29 @@ function renderHeader() {
 
 // Contextual row — back target, stage position, stage progress hairline.
 // Back is labelled with its DESTINATION: the stage you came from, not the path.
-function renderContextRow(ctx) {
+// `opts.meta` overrides the position text (the hub says "Checkpoint · Beginner"
+// rather than a step number) and `opts.backAttr` swaps the back handler.
+function renderContextRow(ctx, opts) {
+  const o = opts || {};
   const st = ctx.stage;
   // No stage (a topic in path.lessons but in no stage) degrades to the path as
   // the back target. Same shell, less information — never a different shape.
   const backLabel = st ? st.name : `${ctx.path.label} Path`;
-  const meta = st
+  const meta = o.meta || (st
     ? `${st.step} of ${st.total} · ${ctx.path.label}`
-    : ctx.path.label;
+    : ctx.path.label);
   const pct = st && st.total ? Math.round((st.done / st.total) * 100) : 0;
   // No stage means no stage progress to report. An empty hairline would read as
   // 0% rather than "not applicable", so the track is omitted entirely.
   const trackEl = st
     ? `<div class="ctx-track"><div class="ctx-fill" style="width:${pct}%"></div></div>`
     : '';
+  const backAttr = o.backAttr || 'id="back-home-btn"';
   return `
     <div class="ctx">
       <div class="ctx-inner">
         <div class="ctx-row">
-          <button class="ctx-back" id="back-home-btn">${icon('arrowLeft',15)} ${backLabel}</button>
+          <button class="ctx-back" ${backAttr}>${icon('arrowLeft',15)} ${backLabel}</button>
           <span class="ctx-meta">${meta}</span>
         </div>
       </div>
@@ -1105,26 +1184,34 @@ function renderContextRow(ctx) {
     </div>`;
 }
 
-// Stage stepper — the sibling topics of this stage, plus the stage checkpoint
-// as a diamond at the end. Tappable, so you can move between siblings without
-// going back to the timeline. Absent entirely when there is no stage.
-function renderStageStepper(ctx) {
+// Stage stepper — the sibling topics of this stage, plus the stage checkpoint as
+// a diamond at the end. Tappable, so you can move between siblings without going
+// back to the timeline. Absent entirely when there is no stage.
+// Nodes run at the base .node size (MOCK-16-S28): the strip is the primary
+// lateral navigation on the screen, and at 20px it read as decoration.
+// `cpCurrent` marks the end diamond as where you are — the hub passes it.
+function renderStageStepper(ctx, cpCurrent) {
   const st = ctx.stage;
   if (!st || !st.topics.length) return '';
   const cells = st.topics.map((t, i) => {
-    const cls = 'node node--sm'
+    const cls = 'node'
       + (t.complete ? ' node--done' : '')
       + (t.isCurrent ? ' node--current' : '');
-    const inner = t.complete ? icon('check', 9) : String(i + 1);
+    const inner = t.complete ? icon('check', 13) : String(i + 1);
     // The current topic is where you already are, so it is not a link.
     const marker = t.isCurrent
       ? `<span class="${cls}">${inner}</span>`
       : `<button class="sx-btn" data-stage-topic="${t.topic}" data-stage-tier="${t.tier}" aria-label="${t.label}"><span class="${cls}">${inner}</span></button>`;
     return `<div class="sx">${marker}<span class="sline${t.complete ? ' done' : ''}"></span></div>`;
   }).join('');
-  const cp = st.checkpoint && st.checkpoint.total
-    ? `<div class="sx"><button class="sx-btn" data-stage-cp="${st.id}" aria-label="Checkpoint · ${st.name}"><span class="node node--sm node--cp${st.checkpoint.complete ? ' node--done' : ''}"><span>◆</span></span></button></div>`
-    : '';
+  if (!st.checkpoint || !st.checkpoint.total) return `<div class="stepper">${cells}</div>`;
+  const cpCls = 'node node--cp'
+    + (st.checkpoint.complete ? ' node--done' : '')
+    + (cpCurrent ? ' node--current' : '');
+  const cpInner = `<span class="${cpCls}"><span>◆</span></span>`;
+  const cp = cpCurrent
+    ? `<div class="sx"><span class="sx-btn">${cpInner}</span></div>`
+    : `<div class="sx"><button class="sx-btn" data-stage-cp="${st.id}" aria-label="Checkpoint · ${st.name}">${cpInner}</button></div>`;
   return `<div class="stepper">${cells}${cp}</div>`;
 }
 
@@ -1711,6 +1798,12 @@ function renderQuiz(lesson) {
 
 // ── Events ────────────────────────────────────────────────────────────────────
 function attachEvents(lesson) {
+  // Rings resolve their own dash length from path geometry, so they can only be
+  // measured once the markup is in the DOM. Done here rather than in render():
+  // render() has five separate exits and attachEvents() has early returns of its
+  // own, so the top of this function is the single point every path passes.
+  paintDiamondRings();
+
   // Hamburger open — pushes history so the BACK button closes the drawer first
   const hamburger = document.getElementById('hamburger-btn');
   if (hamburger) hamburger.addEventListener('click', () => { state.drawerOpen = true; pushNav(); render(); });

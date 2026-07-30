@@ -190,8 +190,6 @@
         stepper 20px via --sm. Ported from styleguide.html § Nodes. ── */
   .node { width: 28px; height: 28px; border-radius: var(--r-pill); border: var(--border); background: var(--parchment); display: flex; align-items: center; justify-content: center; font-family: var(--font-ui); font-size: var(--fs-meta); font-weight: var(--fw-medium); line-height: 1; color: var(--muted-dark); flex: none; }
   .node svg { width: 13px; height: 13px; }
-  .node--sm { width: 20px; height: 20px; font-size: 9px; }
-  .node--sm svg { width: 9px; height: 9px; }
   .node--done { border-color: var(--jade-edge); background: var(--feedback-good-tint); color: var(--jade); }
   /* Current is a solid brand fill with a white glyph (MOCK-06-C) — not an
      outline with a glow, which is what had shipped. */
@@ -201,10 +199,47 @@
   /* A completed checkpoint keeps the diamond but drops milestone colour
      entirely (MOCK-05-retreat). Two classes, so it wins over .node--cp. */
   .node--cp.node--done { border-color: var(--jade-edge); background: var(--feedback-good-tint); color: var(--jade); }
+  /* A checkpoint you are currently ON (the hub, MOCK-16-H2). The shape says
+     checkpoint, the fill says you are here — so no fifth colour is introduced
+     and §4 holds. Needed explicitly because .node--cp is declared after
+     .node--current and would otherwise win at equal specificity. */
+  .node--cp.node--current { border-color: var(--milestone); background: var(--milestone); color: #fff; }
 
-  /* ── Progress — hairline for continuous position (§3.4) ── */
+  /* ── Progress — four forms, each for a different SHAPE of fact (§3.4):
+        hairline for continuous position, segments for a small countable set,
+        ring for a score, diamond ring for checkpoint activities. ── */
   .track { height: 3px; background: var(--parchment-border); border-radius: var(--r-pill); overflow: hidden; }
   .track > i { display: block; height: 3px; background: var(--brand); border-radius: var(--r-pill); }
+
+  /* Segments — a countable set, one pip per item. Checkpoint activities are the
+     only current user, hence the milestone palette. */
+  .segs { display: flex; gap: 5px; }
+  .segs > i { flex: 1; height: 3px; display: block; border-radius: var(--r-pill); background: var(--milestone-edge); }
+  .segs > i.on { background: var(--milestone); }
+
+  /* ── Diamond progress — .mk (MOCK-07-Asoft). Progress strokes the diamond
+        ITSELF rather than a borrowed circle, so shape and indicator are one
+        object. Dash length is computed from getTotalLength() in
+        paintDiamondRings(), never hardcoded.
+        Size lives on the host and the svg scales to it, so a component can run
+        this bigger without touching the primitive. Colour is driven from here
+        rather than from fill/stroke attributes in the markup, so §3.5 holds —
+        the styleguide's demo inlines them, and that would have put colour back
+        into a render function. ── */
+  .mk { position: relative; width: 32px; height: 32px; flex: none; display: flex; align-items: center; justify-content: center; }
+  .mk svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+  .mk .mk-fill { fill: var(--milestone-tint); }
+  .mk .mk-track { fill: none; stroke: var(--milestone-edge); stroke-width: 2; }
+  .mk .mk-prog { fill: none; stroke: var(--milestone); stroke-width: 2; stroke-linecap: round; }
+  .mk .glyph { position: relative; z-index: 2; display: flex; font-size: 10px; color: var(--milestone); }
+  .mk .glyph svg { position: static; width: 12px; height: 12px; }
+  /* Complete drops milestone colour entirely, same retreat as .node--cp.node--done */
+  .mk.is-done .mk-fill { fill: var(--feedback-good-tint); }
+  .mk.is-done .mk-track { stroke: var(--jade-edge); }
+  .mk.is-done .mk-prog { stroke: var(--jade); }
+  .mk.is-done .glyph { color: var(--jade); }
+  /* Not started — the track alone reads as "nothing done yet" */
+  .mk.is-empty .mk-prog { stroke-opacity: 0; }
 
   /* ── Buttons — exactly one filled button on screen at a time (§3.1).
         Disabled uses muted colour, never opacity. ── */
@@ -368,7 +403,10 @@
   .sline.done { background: var(--jade-edge); }
   /* The tappable sibling. Painted size stays 20px (--sm); the touch target is
      grown with padding, per MOCK-15-B's decoupling of the two. */
-  .sx-btn { background: none; border: none; padding: 11px 4px; cursor: pointer; display: flex; align-items: center; }
+  /* min-height is declared explicitly rather than built from padding alone, so
+     the tap-target standing check can actually see it. Built from padding it
+     came to 42px and the check read clean. */
+  .sx-btn { background: none; border: none; min-height: var(--tap-min); padding: 0 4px; cursor: pointer; display: flex; align-items: center; }
 
   /* ── Continuation (MOCK-10) — the path action lives at the FOOT of the
         lesson, where a lesson actually ends, not above it before it has been
@@ -788,7 +826,8 @@
      on .node so the stepper's --sm variant and the base 28px stay untouched.
      All state colour comes from .node--done / --current / --cp; the timeline
      declares none of it. */
-  .path-step-rail .node { width: 32px; height: 32px; z-index: 1; }
+  .path-step-rail .node,
+  .path-step-rail .mk { width: 32px; height: 32px; z-index: 1; }
   .path-step-line { position: absolute; top: 32px; bottom: -4px; left: 50%; width: 2px; background: var(--parchment-border); transform: translateX(-50%); }
   .path-step:last-child .path-step-line { display: none; }
   .path-step.done .path-step-line { background: var(--jade); }
@@ -1142,6 +1181,12 @@
   .cp-card { cursor: pointer; }
   .cp-card .path-step-title { color: var(--milestone); }
   .path-step-cp-prog { font-size: var(--fs-micro); color: var(--milestone); font-weight: var(--fw-semi); margin-top: 2px; }
+  /* Pips sit under the count line, inside the text column so they measure the
+     card's content width rather than the whole row. */
+  .path-step-cp .segs { margin-top: 6px; }
+  /* Hub pips sit between the activity cards and the finish button, measuring the
+     content column (MOCK-16-H2). */
+  .cp-segs { margin: var(--sp-4) 0 var(--sp-2); }
   .cp-done .cp-card .path-step-title,
   .cp-done .path-step-cp-prog { color: var(--muted-dark); }
   /* Outline in both states, never filled (MOCK-05-retreat). A filled oxblood
@@ -1152,7 +1197,7 @@
   .cp-hub { padding-bottom: 30px; }
   .cp-hero { text-align: center; padding: 10px 0 2px; }
   .cp-diamond { width: 56px; height: 56px; margin: 0 auto 12px; background: var(--milestone); border-radius: var(--r-md); transform: rotate(45deg); display: flex; align-items: center; justify-content: center; box-shadow: var(--elev-2); }
-  .cp-diamond span { transform: rotate(-45deg); font-size: 25px; }
+  .cp-diamond span { transform: rotate(-45deg); font-size: 25px; color: #fff; }
   .cp-hero-h { font-family: var(--font-serif); font-size: var(--fs-h3); color: var(--ink); font-weight: var(--fw-bold); }
   .cp-hero-stage { font-size: var(--fs-small); color: var(--brand); font-weight: var(--fw-semi); margin: 3px 0 2px; }
   .cp-hero-prog { font-size: var(--fs-meta); color: var(--muted); margin-bottom: 4px; }
