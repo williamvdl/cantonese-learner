@@ -281,6 +281,25 @@
         spans a whole stage rather than one word, 站 (zaam6). ── */
   .wm { position: absolute; right: -0.06em; top: -0.16em; font-family: var(--font-serif); font-size: clamp(110px, 38vw, 160px); line-height: 1; color: var(--ink); opacity: 0.035; user-select: none; pointer-events: none; }
 
+  /* ── Subtabs & tab bar — ONE primitive, two consumers (§2, MOCK-17-fill).
+        The 2px brand rule sits on the edge nearest the content: bottom here,
+        top for the phase 6 tab bar via `.tabs--top`. That modifier ALSO flips
+        the axis (column), the gap, the padding and the type scale — it is not
+        only an edge swap, despite what §2 and styleguide.html both said until
+        v114. It lives in styleguide.html and is deliberately not ported here
+        while it has no consumer (the `.ring` precedent).
+        An active tab is NEVER a fill (DES-19): a tab is a selector, not an
+        action, and the screen's one filled element belongs to the thing to do
+        next (§3.1). This replaces `.subtab-btn`, three bordered boxes with a
+        solid brand fill on the active one.
+        `min-height` is declared rather than left to padding so standing check 2
+        can see it — mockup 04's own drawing computes to ~27px and would have
+        reported clean. Ported from styleguide.html § Subtabs. ── */
+  .tabs { display: flex; border-bottom: var(--border-soft); padding: var(--sp-2) 0 0; margin-bottom: var(--sp-4); }
+  .tab { flex: 1; display: flex; align-items: center; justify-content: center; gap: 7px; min-height: var(--tap-min); padding: 0 0 10px; margin-bottom: -1px; font-family: var(--font-ui); font-size: 14px; font-weight: var(--fw-medium); border: none; background: transparent; color: var(--muted-dark); cursor: pointer; border-bottom: 2px solid transparent; }
+  .tab svg { width: 15px; height: 15px; flex: none; }
+  .tab--on { color: var(--brand); border-bottom-color: var(--brand); }
+
 
   /* Hamburger menu */
   .hamburger { background: transparent; border: none; cursor: pointer; padding: var(--sp-2); min-width: 36px; min-height: 36px; align-items: center; justify-content: center; display: flex; flex-direction: column; gap: 5px; }
@@ -538,11 +557,8 @@
 
   .bubble-row.right .bubble .bubble-jyutping span { color: rgba(255,255,255,0.88) !important; }
 
-  /* Sub-tabs (Words | Conversation) */
-  .subtabs { display: flex; gap: 6px; margin-bottom: 16px; }
-  .subtab-btn { flex: 1; padding: 8px 6px; border-radius: var(--r-sm); border: var(--border); background: var(--parchment); color: var(--muted-dark); font-size: var(--fs-small); font-weight: var(--fw-semi); cursor: pointer; transition: all 0.15s; text-align: center; display: flex; align-items: center; justify-content: center; min-height: 42px; }
-  .subtab-btn .icon-label { gap: 5px; }
-  .subtab-btn.active { background: var(--brand); border-color: var(--brand); color: #fff; }
+  /* Sub-tabs retired in v114 — the topic view switch is now the `.tabs` / `.tab`
+     primitive in the primitive block above (MOCK-17-fill, DES-19). */
 
   .convo-scenario { font-size: var(--fs-meta); color: var(--muted-dark); margin-bottom: 14px; font-style: italic; }
   .convo-controls { display: flex; gap: 8px; margin-bottom: 18px; flex-wrap: wrap; }

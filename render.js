@@ -1401,17 +1401,17 @@ function renderLessonHeader(lesson) {
   // 'words' and 'convo' are state.tab values (with mode='study'); 'quiz' is mode='quiz'.
   const wordsActive = !isQuiz && state.tab === 'words';
   const convoActive = !isQuiz && state.tab === 'convo';
+  // The `.tabs` / `.tab` primitive (MOCK-17-fill), shared with the phase 6 tab
+  // bar. No `.icon-label` wrapper: `.tab` centres its own icon and label with a
+  // 7px gap, so the wrapper would only re-declare what the primitive already
+  // does. The label is a <span> to match the tab bar's markup shape — one
+  // primitive should not need two markup shapes — and so the gap has a real
+  // element to work against rather than an anonymous text node.
   const segTabs = `
-    <div class="subtabs">
-      <button class="subtab-btn${wordsActive?' active':''}" id="tab-words">
-        <span class="icon-label">${icon('bookOpen',14)} Learn</span>
-      </button>
-      <button class="subtab-btn${convoActive?' active':''}" id="tab-convo">
-        <span class="icon-label">${icon('messageCircle',14)} Chat</span>
-      </button>
-      <button class="subtab-btn${isQuiz?' active':''}" id="tab-quiz">
-        <span class="icon-label">${icon('quiz',14)} Quiz</span>
-      </button>
+    <div class="tabs">
+      <button class="tab${wordsActive?' tab--on':''}" id="tab-words">${icon('bookOpen',15)}<span>Learn</span></button>
+      <button class="tab${convoActive?' tab--on':''}" id="tab-convo">${icon('messageCircle',15)}<span>Chat</span></button>
+      <button class="tab${isQuiz?' tab--on':''}" id="tab-quiz">${icon('quiz',15)}<span>Quiz</span></button>
     </div>`;
   return `
     <div class="lesson-header">
