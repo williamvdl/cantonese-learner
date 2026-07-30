@@ -6,13 +6,22 @@ never transcribed anywhere, and so nothing detected that the code had never
 implemented them. A row saying "approved, not built" is visible in a way that a
 paragraph inside a mockup is not.*
 
+*Two further failure modes have since shown up, both worth guarding against. A row
+can be **wrong** rather than missing: MOCK-11-bar's row described two different
+decisions as one and cited the wrong rule for one of them, which mis-scoped a whole
+phase. And a decision can go unrecorded because the component was never treated as
+part of the system at all: the topic subtabs kept their pre-system treatment through
+four phases of convergence because they had no row here, no §2 primitive entry and no
+styleguide section — the only trace anywhere was the words "active subtab" in §4's
+state table.*
+
 **Scope: UX and visual design only.** Architecture, tooling and data decisions
 are not in here — they don't share this shape, since they have no mockup to point
 at and no built/not-built axis. If they ever need a register they should get their
 own file rather than being forced into this one. For now they live in the *Current
 architecture* section of the project instructions.
 
-Last updated: 2026-07-30 · sw.js at v112
+Last updated: 2026-07-30 · sw.js at v113
 
 ---
 
@@ -90,9 +99,11 @@ several below existed only as an aside in `DESIGN_SYSTEM.md` or a comment in
 
 | ID | Decides | Status | Notes |
 |---|---|---|---|
-| MOCK-11-bar | Docked action bar and the tab-behaviour matrix | Not built | Phase 5. Implements DES-12. |
-| MOCK-12-quizbar | Docked bar on the quiz; the one-fill exception during an active question | Not built | Phase 5. |
-| MOCK-13-? | Settings sheet panel — A parchment, B oxblood | **Choice not recorded** | Both options exist in the mockup; no doc records which was picked. Needs deciding before phase 6. |
+| MOCK-11-matrix | Which **subtabs** carry the completion action — Learn shown, Chat shown, Quiz reduced, standalone none | Built | v113. Mockup 11 §2's table is headed *Tab / state* and means the topic's Learn/Chat/Quiz switch, **not** the bottom tab bar. This row and the one below were a single row citing DES-12 for four phases, which scoped phase 5 as blocked on a tab bar it never needed. Two of the five rows were unbuilt: mockup 12 revised *Quiz · mid-question* from "hidden" to completion-only and *Quiz · result* from "merged" to continuation-returns, and neither revision shipped until v113. |
+| MOCK-11-bar | The completion action is **docked to the viewport** rather than in-flow at the foot of the lesson | Not built | Phase 6. Approved explicitly ("this is good and what I was thinking"), but MOCK-10-cont later shipped the same four states as a card at the foot and DESIGN_SYSTEM §2 codified that position. They do not conflict in principle — mockup 10 moved the action out from *above* the lesson, which docking also satisfies — but only one can be implemented. **Also unresolved: the bar as drawn gives its forward action a fill; the built card deliberately uses a tint.** Merged into phase 6 because DES-12 is the reason the bar has a suppression rule at all, and DES-12 cannot be exercised without tabs. |
+| MOCK-12-quizbar | The continuation is present on the Quiz subtab; it drops its forward action only while a question is live, and the per-question button is relabelled "Next question" | Built | v113. `isQuizQuestionLive()` is the single source of the live-question-versus-result distinction. Mockup 12's stated reason — a filled "Next topic" under a filled "Next question" — no longer applies, since MOCK-10-cont made the forward action a tint; the exception survives on **label** ambiguity instead, which makes the relabel load-bearing rather than cosmetic. The relabel also lands in Word Review and Checkpoint Words, which share `renderQuizCore`. The wrong-answer panel keeps "Got it — next" (see BACKLOG). |
+| MOCK-13-? | Settings sheet panel — A parchment, B oxblood | **Choice not recorded** | Both options exist in the mockup; no doc records which was picked. Needs deciding before phase 6. William's recorded response to mockup 13 addresses tab *count*, not the panel, so it does not settle this. |
+| MOCK-17-fill | Subtab treatment — one hairline rail, muted labels, brand label plus a 2px brand rule when active, **equal widths** | Not built | Phase 6, as one primitive shared with the tab bar. Chosen over MOCK-17-packed (mockup 04's left-packed geometry with an `--sp-6` gap) because the tab bar must be full-width across five destinations, and matching geometry is what makes them one primitive rather than two that resemble each other. Retires `.subtab-btn`'s border, background, radius and its solid-fill active state, and takes the sub-44px list from three declared misses to two. |
 | MOCK-15-B | Circular control vocabulary — two painted sizes (32 / 44px), painted size decoupled from touch target | Built | Shipped v106. |
 
 ### Dashboard
@@ -129,6 +140,8 @@ restate the rule.*
 | DES-15 | One content measure — `--measure: 680px` | Built | §1.5 | One value; there is no second. `--measure-text: 68ch` caps prose line length separately. |
 | DES-16 | On a node carrying two states, **current outranks done** | Policy | §2 | Settled 2026-07-30 building the checkpoint hub. Orientation beats history: a completed topic you are viewing shows the current fill, and so does a completed checkpoint. Composite states are declared explicitly (`.node--cp.node--done`, `.node--cp.node--current`) because relying on declaration order to resolve them is what made the diamond look unvisited in the first place. |
 | DES-17 | A component class layered on a primitive **wins**, because components sit below primitives in the file | Policy | §2 | Settled 2026-07-30. This is the documented "don't edit a primitive for one screen" rule read in the other direction, and it cuts both ways: `.cont-next-node`'s brand tint silently overrode `.node--cp`'s milestone on the checkpoint variant. Scope component colour to the case that needs it, and keep composite primitive states off elements that a component is already colouring. |
+| DES-18 | The header nameplate is a live route **home** | Not built | §2 Header | Phase 6. Settled 2026-07-30. Structurally required rather than a convenience: with the tab bar hidden inside a topic (§3.10), the nameplate is the only visible route to a top-level destination, so it is part of what makes the hidden state not a dead end. `renderHeader()` already renders the nameplate unconditionally on every screen and it is currently inert — no click handler — so this is a handler plus a tap target, not a redesign. Existed only as three words in a phase scope line until now. |
+| DES-19 | An active tab is **never** a fill | Policy | §2 Subtabs | Settled 2026-07-30 with MOCK-17-fill. A tab is a selector, not an action; the screen's one filled element belongs to the thing to do next (§3.1). The pre-system subtabs put a solid brand fill on the active tab, which made the view switch the loudest thing on the Learn screen. Applies to the phase 6 tab bar in advance. |
 
 ---
 
@@ -138,6 +151,10 @@ restate the rule.*
 |---|---|---|
 | Row-type icons on the path timeline | With emoji gone (DES-09), does a lesson row want a line glyph? Not per topic — 42 would be needed and they converge in monochrome at 16px. Candidate is one per *row type*: `bookOpen` for a lesson, the diamond for a checkpoint, both already in the 15-icon set. **Now judgeable** — MOCK-06-C and MOCK-07-Asoft have landed and the rail carries more weight than it did. | Nothing |
 | Settings sheet panel | MOCK-13-A or MOCK-13-B — never recorded. | Phase 6 |
+| Docked bar vs continuation card | MOCK-11-bar (fixed to the viewport) or MOCK-10-cont (in-flow at the foot). Both approved, at different times. Whichever wins also settles whether the forward action is a fill or a tint. | Phase 6 |
+| The fifth tab slot | Translate today; §3.9 once said "You", which contradicts DES-11 unless it means progress and stats — a destination that does not exist. Needs the tab bar in use to judge. | Nothing |
+| Subtab icons | MOCK-17-fill keeps mockup 04's per-tab glyphs (`bookOpen`, chat, quiz). Unexamined against the row-type-icon question below, which is the same judgement one screen along. | Nothing |
+| "Got it — next" | The wrong-answer panel's forward button was left unchanged when the correct-answer one became "Next question". Already lexically distinct, and it shares a row with "Hear it again" that would wrap at 360px. Confirm or match. | Nothing |
 | `.cp-optional` | A full sentence styled as a green chip with a 🔓 emoji. Green reads as *done* per §4, but the content is informational. | — |
 | Direction-toggle labels | `漢→EN` / `EN→漢` / `🔊→EN` (漢 = hon3, Chinese) — compact but cryptic, and permanently above every question. | — |
 | Landscape stepper | ~160px of chrome on a 390px-tall viewport, and the stepper is now 28px rather than 20px, so slightly more. Candidate: hide the stepper under `(max-height: 450px)`. The stepper now exists on two screens, so this is judgeable on a real device. | Nothing |

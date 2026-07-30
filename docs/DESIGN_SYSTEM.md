@@ -6,7 +6,7 @@ the rules; the styleguide is the evidence.*
 
 **Read this before touching `styles.css`, `render.js`, or designing a new screen.**
 
-Established: 2026-07-25 · Phases 1–4 applied as at sw.js v112 (2026-07-30)
+Established: 2026-07-25 · Phases 1–5 applied as at sw.js v113 (2026-07-30)
 
 ---
 
@@ -20,9 +20,12 @@ Established: 2026-07-25 · Phases 1–4 applied as at sw.js v112 (2026-07-30)
 3. **Reaching for a colour?** Only the tokens in §1 exist. There is no fifth
    state colour, and no colour is ever passed into a render function (§3.5).
 4. **Changed something here?** Update `docs/design/styleguide.html` in the same
-   commit — it has drifted behind the code before. Three gaps remain, tracked in
+   commit — it drifts in *both* directions. Three gaps remain, tracked in
    BACKLOG.md: the dashboard entry, the 站 (zaam6) watermark rule, and the
-   `.quiz-ms` / `.cp-convo` variant mechanism.
+   `.quiz-ms` / `.cp-convo` variant mechanism. It has also drifted *ahead* of the
+   code — documenting the unbuilt docked bar and tab bar in full while omitting
+   the continuation card that shipped in v109. Every section now carries a
+   built/not-built tag for that reason.
 5. **Settled a design decision?** Add a row to `docs/DESIGN_DECISIONS.md` in the
    same session. That file is the register of what was approved and whether it
    was ever built.
@@ -202,9 +205,21 @@ function against §3.5.
 **The path action lives at the foot of the lesson, where a lesson ends** — not
 above it, before it has been done. Four states: mark complete, forward to the next
 topic, forward to the stage checkpoint (`.cont-next.cp`, milestone edge), and end
-of path. Suppressed during an active quiz, which owns its own next action.
-Contains no filled button: the forward node is a brand *tint*, since the card
-already carries the brand edge (§3.1).
+of path. Contains no filled button: the forward node is a brand *tint*, since the
+card already carries the brand edge (§3.1).
+
+Present on **all three subtabs**, including Quiz. While a quiz question is live it
+takes a **reduced form** — completion confirmed, forward action dropped — because
+"Next in \<stage\>" a thumb under the quiz's own "Next question" is two forwards
+meaning different things. It is not suppressed: the mark button is a ghost and so
+never competed. On the quiz *result* screen nothing competes and the forward action
+returns; the result screen keeps its own "Back to Lesson" / "Retry missed words"
+and does not absorb completion (DES-10). Standalone topics have no path context and
+so no continuation at all — continuation is a path concept.
+
+`.cont-done` carries a `border-bottom` for the row beneath it, so the reduced form
+needs `.cont-done:last-child` to drop it. A divider with nothing under it is what
+the reduced form exposes.
 
 ### Card — `.card` + `--interactive` `--emph` `--milestone`
 **One base for every surface in the app.** Modifiers add interaction and
@@ -261,9 +276,35 @@ states the task.
 inverted controls; the other speaker is parchment with a hairline. No colour is
 computed per line.
 
+### Subtabs & tab bar — `.tabs` › `.tab` (+ `--on`, `--top`) *(phase 6)*
+**One primitive, two consumers.** The topic's view switch (Learn / Chat / Quiz) and
+the bottom tab bar carry the same emphasis language: muted label, brand label when
+active, and a **2px brand rule** on the edge nearest the content — bottom for the
+subtabs, top for the tab bar, which is the only difference and is the `--top`
+modifier's whole job.
+
+Equal widths in both (MOCK-17-fill). The tab bar has no choice — five destinations
+across the viewport — and matching it is what makes these one primitive rather than
+two that happen to resemble each other. Geometry is where a shared language drifts
+apart first.
+
+**An active tab is never a fill.** It is a selector, not an action, and the screen's
+one filled element belongs to the thing to do next (§3.1). The pre-system subtabs
+were three bordered boxes with a solid brand fill on the active one, which made the
+view switch the loudest element on the Learn screen; that is the defect MOCK-17-fill
+corrects.
+
+Declare `min-height: var(--tap-min)` explicitly. Mockup 04's original drawing
+computes to about 27px — a 14px line box plus 12px of bottom padding — and because
+the height came from padding it would have passed standing check 2 unseen.
+
 ### Docked bar — `.bar` › `.bar-inner`
-Fixed to the viewport bottom, contents capped to `--measure`. One slot, three
-states. **Drops its continuation during an active quiz question.** *(Phase 5.)*
+Fixed to the viewport bottom, contents capped to `--measure`. **Not built.** It and
+the Continuation card above do the same job in two positions — in-flow at the foot,
+versus fixed to the viewport — and both were approved, at different times. Phase 6
+picks one; see `DESIGN_DECISIONS.md`. The bar as drawn also gives its forward action
+a **fill**, which the built card deliberately does not; whichever position wins,
+only one fill treatment can.
 
 ### Watermark — `.wm`
 The oversized character behind a band is **the word being studied, not
@@ -385,9 +426,17 @@ the app grows. Most new features also land *inside* an existing destination
 rather than beside it. **Feature count and tab count are not the same axis.**
 
 If genuine pressure comes, the headroom is **Translate** — a utility, not a
-learning destination; you don't study in it. The likely future shape is
-Home / Path / Topics / Review / You. **Never add a "More" tab** — that
+learning destination; you don't study in it. **Never add a "More" tab** — that
 reinstates the hidden-menu problem the tab bar exists to solve.
+
+**The fifth slot is undecided.** An earlier draft of this section gave the likely
+future shape as Home / Path / Topics / Review / **You**, which contradicts the
+paragraph above: if account, profile and subscription live behind the header corner
+regardless of feature count, a "You" tab has nothing to hold unless it means
+*progress and stats* — a destination that does not exist yet. Meanwhile Translate
+occupies slot five today. So the shape is Home / Path / Topics / Review / Translate
+until a stats destination exists and earns the swap. Recorded rather than resolved,
+because it needs the tab bar in use to judge.
 
 ### 3.10 Bottom chrome is exclusive
 The tab bar and the docked action bar never coexist. Tab bar at top-level
@@ -513,7 +562,13 @@ scheduled as phase 4, a few lines in the context builder rather than new data
   least converged thing left visually.
 - **Direction toggle labels** (`漢→EN` / `EN→漢` / `🔊→EN` (hon3 = Chinese)) inherited unchanged.
 - **Landscape stepper** — see §5.
-- **Tab bar, on trial.** Shipping to be lived with. Fallbacks in §3.10 and §3.9.
+- **Tab bar — not yet built.** Phase 6. To be shipped and lived with; fallbacks
+  in §3.10 and §3.9.
+- **The fifth tab slot** — Translate today, a stats destination later. See §3.9.
+- **Docked bar versus continuation card.** The same job in two positions, both
+  approved. Phase 6 picks one. See §2 Docked bar.
+- **Settings sheet panel** — MOCK-13-A parchment or MOCK-13-B oxblood; the choice
+  was never recorded. Needed before phase 6 builds the sheet.
 - **Per-stage checkpoint watermark** — see BACKLOG.md. The fixed 站 (zaam6) is
   the deliberate default.
 
@@ -535,16 +590,17 @@ pass over the dashboard. The mockup files behind each decision:
 | `08-quiz.html` | Quiz states, result screen |
 | `09-wrong-answer-options.html` | Error colour (W2, `#B42318`) |
 | `10-path-context-in-topic-1.html` | Stage stepper (B), continuation card |
-| `11-sticky-action-bar-1.html` | Docked bar, tab behaviour matrix |
-| `12-quiz-docked-bar-2.html` | Bar on quiz, one-fill exception |
+| `11-sticky-action-bar-1.html` | Docked bar; **subtab** behaviour matrix (not the tab bar's — see DESIGN_DECISIONS) |
+| `12-quiz-docked-bar-2.html` | Continuation on the quiz, one-fill exception, "Next question" relabel |
 | `13-application-nav-1.html` | Tab bar and settings sheet |
 | `14-dashboard.html` | Dashboard composition, hero option C, 站 (zaam6) watermark |
 | `15-control-vocabulary.html` | Circular control sizes (B), painted size vs touch target |
 | `16-stepper-scale-and-checkpoint-context.html` | Stepper painted scale (S28), stage context on the checkpoint hub (H2) |
+| `17-subtabs.html` | Subtab treatment — hairline rail, 2px active rule, equal widths (fill) |
 | `../styleguide.html` | Live reference for everything above |
 
 **Paths:** the mockups live in `docs/design/mockups/`, and `styleguide.html`
-alongside them in `docs/design/`. All fifteen mockups are committed as at
+alongside them in `docs/design/`. All seventeen mockups are committed as at
 2026-07-30.
 
 **A mockup is the argument; the styleguide is the record.** Three approved path
@@ -559,3 +615,9 @@ failure is visible rather than silent.
 label inside that file (`MOCK-06-K2`, `MOCK-07-Asoft`). Five of these mockups each
 have an option labelled "B", so the prefix is what makes a reference unique.
 Decisions settled without a mockup are `DES-NN`.
+
+**A mockup's own matrix is not necessarily the matrix you think it is.** Mockup 11's
+table is headed *Tab / state* and describes the topic's **subtabs**; §3.10's table is
+headed *Screen / Bottom* and describes the **tab bar**. The register row for
+MOCK-11-bar conflated the two for four phases, which scoped phase 5 as blocked on a
+tab bar it never needed. Name which matrix a row means.

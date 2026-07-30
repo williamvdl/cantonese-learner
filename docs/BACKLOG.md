@@ -4,7 +4,7 @@
 IN_PROGRESS.md when it's picked up; delete it from here once it's shipped and
 folded into STATUS.md.*
 
-Last updated: 2026-07-30 · sw.js at v112
+Last updated: 2026-07-30 · sw.js at v113
 
 ## Product
 
@@ -141,20 +141,43 @@ or surfaced.*
   label, an empty-state glyph and the 76px hero mic. DESIGN_SYSTEM §3.6 grants
   its emoji exception to the Topics category grid only. The hero mic was
   deliberately excluded from the phase 3 control vocabulary as a one-off.
-- **Three controls remain under `--tap-min`.** `.hamburger` and
-  `.drawer-speed-btn` at 36px both retire with the drawer in phase 6.
-  `.subtab-btn` at 42px is close enough to leave unless it annoys in use.
+- **Three controls remain under `--tap-min`, and phase 6 clears all three.**
+  `.hamburger` and `.drawer-speed-btn` at 36px retire with the drawer (P6-2).
+  `.subtab-btn` at 42px retires with the subtab primitive (P6-1) — the earlier note
+  here said it was "close enough to leave unless it annoys in use", which is now
+  superseded: MOCK-17-fill rebuilds the control anyway, so the tap minimum comes free.
 
+- **Dead nav CSS with zero call sites.** `.bottom-nav`, `.nav-btn` and
+  `.placeholder-screen` sit in `styles.css` and are referenced from nowhere in
+  `render.js` or `app.js` — leftovers from an earlier era, *not* phase 6's tab bar.
+  Retire or deliberately reuse them in P6-2; the risk is inheriting them by accident
+  and assuming they are the tab bar's starting point.
+- **`"Got it — next"` was left unchanged** in v113 when the correct-answer button
+  became "Next question". Mockup 12 specified only the one relabel, "Got it" already
+  reads as an acknowledgement rather than a plain forward, and it shares
+  `.quiz-wrong-actions` with "Hear it again" — the row wraps rather than overflows,
+  but it would wrap at 360px. Confirm or match.
+- **Subtab icons versus path row-type icons are the same judgement twice.**
+  MOCK-17-fill keeps mockup 04's per-tab glyphs; the path timeline's row-type icons
+  are still open above. Both are "does a line glyph earn its place on a row of text
+  labels" — worth deciding together rather than reaching opposite answers two screens
+  apart.
 - **Dashboard density.** The converged Home reads quieter than the old one — the
   hero lost its filled per-topic band. Deliberately not adjusted: Home is the only
   fully converged screen in a half-converged app, so the comparison is unfair.
   **Revisit after phase 6**, when everything else has caught up.
-- **`styleguide.html` still lags in four places.** Phase 3 brought its control
+- **`styleguide.html` still lags in three places.** Phase 3 brought its control
   vocabulary up to date; phase 4 corrected the node and stepper sections in the same
-  deploy as the code. Still missing: the dashboard entry, the `站 (zaam6)` watermark
-  rule, the `.quiz-ms` / `.cp-convo` variant mechanism, and **the `.cont`
-  continuation card**, which has no entry at all — it was ported from mockup 10
-  directly. It lives at `docs/design/styleguide.html`.
+  deploy as the code; **v113 added the `.cont` continuation section**, which had no
+  entry at all. Still missing: the dashboard entry, the `站 (zaam6)` watermark rule,
+  and the `.quiz-ms` / `.cp-convo` variant mechanism. It lives at
+  `docs/design/styleguide.html`.
+- **The styleguide also drifted *ahead* of the code**, which no check was looking for.
+  It carried full sections for the unbuilt docked bar and tab bar while omitting the
+  continuation card that shipped in v109. Every section now carries a built /
+  not-built tag. Worth one pass confirming each tag is honest — the audit that matters
+  is bidirectional: does every built component have an entry, and does every entry
+  describe something that exists?
 - **`.bubble--gap` dashed border** kept at 2px where everything else went to 1px,
   as a deliberate "blank to fill" affordance. Confirm or normalise.
 - **Speak diagnostic — the `missing` status** now renders `--muted-dark` rather
