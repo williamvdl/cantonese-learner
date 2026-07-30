@@ -171,8 +171,6 @@ code{ background:#DAD4CA; padding:1px 5px; border-radius:4px; font-size:11.5px; 
   font:var(--fw-medium) var(--fs-meta)/1 var(--font-ui); color:var(--muted-dark); flex:none;
 }
 .node svg{ width:13px; height:13px; }
-.node--sm{ width:20px; height:20px; font-size:9px; }
-.node--sm svg{ width:9px; height:9px; }
 .node--done{ border-color:var(--jade-edge); background:var(--feedback-good-tint); color:var(--jade); }
 .node--current{ border-color:var(--brand); background:var(--brand); color:#fff; }
 .node--cp{
@@ -180,6 +178,8 @@ code{ background:#DAD4CA; padding:1px 5px; border-radius:4px; font-size:11.5px; 
   border-color:var(--milestone-edge); background:var(--milestone-tint); color:var(--milestone);
 }
 .node--cp > span{ transform:rotate(-45deg); display:block; font-size:10px; }
+.node--cp.node--done{ border-color:var(--jade-edge); background:var(--feedback-good-tint); color:var(--jade); }
+.node--cp.node--current{ border-color:var(--milestone); background:var(--milestone); color:#fff; }
 
 /* diamond progress marker (A-soft) */
 .mk{ position:relative; width:32px; height:32px; flex:none; display:flex; align-items:center; justify-content:center; }
@@ -462,7 +462,7 @@ table.spec tr:last-child td{ border-bottom:none; }
   <h2>Stage stepper</h2>
   <p class="note">The sibling topics of the current stage plus the stage checkpoint. Tappable — jump between siblings without returning to the timeline. Making the checkpoint visible from inside a topic is what makes a stage feel like a unit with an end.</p>
   <div class="stage deep" style="padding:0;overflow:hidden;border-radius:var(--r-md)" id="stepdemo"></div>
-  <div class="cls">.stepper › .sx › .node--sm + .sline</div>
+  <div class="cls">.stepper › .sx › .node + .sline &nbsp;·&nbsp; base 28px (MOCK-16-S28)</div>
 </section>
 
 <section id="nodes">
@@ -729,12 +729,12 @@ document.getElementById('ctxdemo').innerHTML=`
 
 document.getElementById('stepdemo').innerHTML=`
   <div class="stepper">
-    <div class="sx"><span class="node node--sm node--done">${I.check}</span><span class="sline done"></span></div>
-    <div class="sx"><span class="node node--sm node--done">${I.check}</span><span class="sline done"></span></div>
-    <div class="sx"><span class="node node--sm node--current">3</span><span class="sline"></span></div>
-    <div class="sx"><span class="node node--sm">4</span><span class="sline"></span></div>
-    <div class="sx"><span class="node node--sm">5</span><span class="sline"></span></div>
-    <div class="sx"><span class="node node--sm node--cp"><span>◆</span></span></div>
+    <div class="sx"><span class="node node--done">${I.check}</span><span class="sline done"></span></div>
+    <div class="sx"><span class="node node--done">${I.check}</span><span class="sline done"></span></div>
+    <div class="sx"><span class="node node--current">3</span><span class="sline"></span></div>
+    <div class="sx"><span class="node">4</span><span class="sline"></span></div>
+    <div class="sx"><span class="node">5</span><span class="sline"></span></div>
+    <div class="sx"><span class="node node--cp"><span>◆</span></span></div>
   </div>`;
 
 document.getElementById('nodedemo').innerHTML=[
@@ -742,6 +742,8 @@ document.getElementById('nodedemo').innerHTML=[
   [`<span class="node node--done">${I.check}</span>`,'.node--done'],
   ['<span class="node node--current">3</span>','.node--current'],
   ['<span class="node node--cp"><span>◆</span></span>','.node--cp'],
+  [`<span class="node node--cp node--done"><span>◆</span></span>`,'.node--cp.node--done'],
+  ['<span class="node node--cp node--current"><span>◆</span></span>','.node--cp.node--current'],
 ].map(([h,c])=>`<div style="text-align:center">${h}<div class="cls">${c}</div></div>`).join('');
 
 const DIA='M13.9 6.9 a3 3 0 0 1 4.2 0 l7 7 a3 3 0 0 1 0 4.2 l-7 7 a3 3 0 0 1 -4.2 0 l-7 -7 a3 3 0 0 1 0 -4.2 Z';
