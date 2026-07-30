@@ -4,7 +4,7 @@
 IN_PROGRESS.md when it's picked up; delete it from here once it's shipped and
 folded into STATUS.md.*
 
-Last updated: 2026-07-30
+Last updated: 2026-07-30 · sw.js at v112
 
 ## Product
 
@@ -86,15 +86,47 @@ Last updated: 2026-07-30
 
 ## Design follow-ups
 
-*Phases 2 and 3 of the rollout are complete; these are the loose ends they left
+*Phases 2, 3 and 4 of the rollout are complete; these are the loose ends they left
 or surfaced.*
 
+- **Row-type icons on the path timeline — now judgeable.** With emoji gone (DES-09)
+  the lesson rows have no glyph at all. Not per topic: 42 would be needed and they
+  converge in monochrome at 16px. Candidate is one per *row type* — `bookOpen` for a
+  lesson, the diamond for a checkpoint, both already in the 15-icon `ICON_PATHS`
+  set. This was deferred until MOCK-06-C and MOCK-07-Asoft landed, on the grounds
+  that both add weight to the rail; they have, so the row can now be judged as it
+  actually reads.
+- **Two definite tap-target misses, found by the stricter check.**
+  `.path-complete-btn` — the tick toggle on every path step row — is 28px, and
+  `.translate-dir-swap` is 38px. Neither was in phase 4's scope. The fix for the
+  first should follow MOCK-15-B and grow the touch target while keeping the painted
+  28px, which makes it an invisible change.
+- **Around fourteen padding-built tap targets need judging individually.** Listed by
+  standing check 2 in IN_PROGRESS.md. Most are probably fine — 12px padding around a
+  20px line reaches 44px — but none declares `min-height`, so none is verified and
+  none is visible to the check. Worth one pass that either confirms each or adds the
+  token.
+- **The dashboard hero keeps its own copy of the path-lesson state reset.**
+  `openPathLesson()` was extracted in v109 and now serves the path timeline, the
+  stage stepper and the continuation card; the dashboard hero handler still has the
+  fourth copy. Consolidating it is a dashboard change, so it was left out of phase 4
+  rather than widening that deploy's QA. Behaviour-identical when done.
+- **`.node--sm` was retired in v112** when MOCK-16-S28 left it with zero call sites.
+  If a genuinely compact node is ever wanted, it is one line to restore — but check
+  `styleguide.html` first, which no longer documents it either.
+- **`.ring` is specified in DESIGN_SYSTEM §2 and does not exist in `styles.css`.**
+  It is the score form of the four progress shapes. Deliberately not pre-built —
+  build it when a score needs it, and remember `.ring` and `.ring-val` do exist in
+  `styleguide.html` to port from.
 - **Audit mockups 01–04, 08 and 09 for other untranscribed decisions.** Three
   approved path decisions turned out never to have been built, because they lived
   only in the mockups and never reached `styleguide.html`. Every mockup now has at
   least one row in `DESIGN_DECISIONS.md`, but 01–04, 08 and 09 were recorded from
   their summaries rather than read option-by-option, so a second untranscribed
-  decision could still be hiding in them. *(The path ones are now in phase 4.)*
+  decision could still be hiding in them. *(The path ones were phase 4 and are
+  built. Phase 4 also turned up a fifth loss that this kind of audit would have
+  caught — mockup 10's continuation card, which had no register row and no line in
+  the phase brief.)*
 - **`.cp-optional` is a sentence dressed as a chip.** "Optional — do any, in any
   order" is styled with `--feedback-good-tint` and a 🔓 emoji. Green reads as
   *done* per §4 but the content is informational, and §3.6 arguably rules out the
@@ -117,16 +149,12 @@ or surfaced.*
   hero lost its filled per-topic band. Deliberately not adjusted: Home is the only
   fully converged screen in a half-converged app, so the comparison is unfair.
   **Revisit after phase 6**, when everything else has caught up.
-- **Path button press effect.** `.path-btn-mark` / `.path-btn-next` keep a chunky
-  `0 3px 0` solid-offset shadow with a coloured blur. Colours are tokenised;
-  geometry untouched. It is now the least converged thing left visually. Decide:
-  flatten onto the elevation scale, or keep as a deliberate primary-action
-  affordance.
-- **`styleguide.html` still lags in three places.** Phase 3 brought its control
-  vocabulary up to date, and the completed-checkpoint state is now transcribed.
-  Still missing: the dashboard entry, the `站 (zaam6)` watermark rule, and the
-  `.quiz-ms` / `.cp-convo` variant mechanism. It now lives at
-  `docs/design/styleguide.html`.
+- **`styleguide.html` still lags in four places.** Phase 3 brought its control
+  vocabulary up to date; phase 4 corrected the node and stepper sections in the same
+  deploy as the code. Still missing: the dashboard entry, the `站 (zaam6)` watermark
+  rule, the `.quiz-ms` / `.cp-convo` variant mechanism, and **the `.cont`
+  continuation card**, which has no entry at all — it was ported from mockup 10
+  directly. It lives at `docs/design/styleguide.html`.
 - **`.bubble--gap` dashed border** kept at 2px where everything else went to 1px,
   as a deliberate "blank to fill" affordance. Confirm or normalise.
 - **Speak diagnostic — the `missing` status** now renders `--muted-dark` rather
@@ -146,9 +174,10 @@ or surfaced.*
   Surfaced while building `DESIGN_DECISIONS.md`. **Settle before phase 6 starts.**
 - **Landscape stepper decision.** Header + contextual row + stepper + docked bar
   ≈ 160px of chrome against a 390px-tall landscape viewport — about 40% of the
-  screen before any content. Candidate fix: hide the stepper under
-  `@media (max-height: 450px)`. Needs a real device to judge, and the stepper
-  doesn't exist until phase 4 (v109).
+  screen before any content, and slightly more now the stepper runs at 28px rather
+  than 20px. Candidate fix: hide it under `@media (max-height: 450px)`. The stepper
+  exists as of v109 and appears on two screens, so this is now judgeable on a real
+  device.
 - **Quiz direction-toggle labels.** `漢→EN` / `EN→漢` / `🔊→EN` (hon3 = Chinese) inherited unchanged
   and permanently present above every question. Compact but cryptic — may belong
   on a settings row instead of a three-way toggle.

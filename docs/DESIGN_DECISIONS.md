@@ -12,7 +12,7 @@ at and no built/not-built axis. If they ever need a register they should get the
 own file rather than being forced into this one. For now they live in the *Current
 architecture* section of the project instructions.
 
-Last updated: 2026-07-30 · sw.js at v107
+Last updated: 2026-07-30 · sw.js at v112
 
 ---
 
@@ -68,12 +68,12 @@ several below existed only as an aside in `DESIGN_SYSTEM.md` or a comment in
 | ID | Decides | Status | Notes |
 |---|---|---|---|
 | MOCK-05-path | Path timeline, checkpoint hub and the four-state system | Reference | The base design the 06/07 options refine. |
-| MOCK-05-retreat | A completed checkpoint drops milestone colour and goes quiet white with a green mark | **Not built** | Title is jade not muted, badge stays filled oxblood in both states, rail node is a solid jade fill, card keeps its oxblood edge. Phase 4. |
-| MOCK-06-C | Next-up emphasis — solid `--brand` node with white glyph; card gets `--brand-edge` border plus a 3px `--brand` left edge | **Not built** | A 4px glow and a 12px tinted drop shadow shipped instead, which also contradicts DESIGN_SYSTEM §3.2 (emphasis is an edge, not a shadow). Phase 4. |
-| MOCK-06-K2 | Checkpoint card — white with a 3px oxblood left edge, not a tint wash | Partial | Open state built via `.card--milestone`. Completed state not built — see MOCK-05-retreat. |
-| MOCK-06-P1 | Checkpoint progress — segment pips in the card, one per activity | **Not built** | Approved together with P2. Shown only once started. Superseded in placement by MOCK-07-Asoft, which is the build target. |
-| MOCK-06-P2 | Checkpoint progress — a progress ring wrapping the rail diamond | **Not built** | Superseded in geometry only by MOCK-07-Asoft; the decision to put the ring on the diamond stands. |
-| MOCK-07-Asoft | Diamond progress geometry — the diamond itself is the progress track, 3px corner radius | **Not built** | **This is the build target for checkpoint progress, exactly as drawn, all three states.** Gives ring on the diamond, pips in the card once started, the count line, and a three-state badge (`Checkpoint` → `Resume` → ✓; the code has only two today). Confirmed to scale to three activities. `.mk` and the `getTotalLength()` dash technique exist in `styleguide.html` and nowhere in `styles.css` or `render.js`. Phase 4. |
+| MOCK-05-retreat | A completed checkpoint drops milestone colour and goes quiet white with a green mark | Built | v108. Title and count line muted, badge outline jade, rail node jade tint, card drops `card--milestone`, in-card `◆` deleted. A stale `.cp-done .cp-card .path-step-title { color: var(--jade) }` sat *after* the new rule at equal specificity and would have silently kept the old colour. |
+| MOCK-06-C | Next-up emphasis — solid `--brand` node with white glyph; card gets `--brand-edge` border plus a 3px `--brand` left edge | Built | v108, as `.node--current` plus the card edge. The glow and drop shadow are gone. Padding is trimmed 2px so text stays aligned with neighbouring rows. A next-up checkpoint takes the brand edge over the oxblood one, since `.path-step.next .path-step-card` outranks `.card--milestone`. |
+| MOCK-06-K2 | Checkpoint card — white with a 3px oxblood left edge, not a tint wash | Built | Open state via `.card--milestone`; completed state completed in v108 (see MOCK-05-retreat). |
+| MOCK-06-P1 | Checkpoint progress — segment pips in the card, one per activity | Built | v111, as the `.segs` primitive. Shown once started and **hidden again when complete** — `.segs` is a milestone form, and a completed checkpoint has dropped milestone colour, so filled pips would have quietly undone MOCK-05-retreat. |
+| MOCK-06-P2 | Checkpoint progress — a progress ring wrapping the rail diamond | Built | v111, in MOCK-07-Asoft's geometry. The decision to put the ring on the diamond is what shipped. |
+| MOCK-07-Asoft | Diamond progress geometry — the diamond itself is the progress track, 3px corner radius | Built | v111, all three states, as the `.mk` primitive. Ring, pips, the three-state count line and the three-state badge (`Checkpoint` → `Resume` → ✓). Verified against one, two and three activities. Mockup 07's stated knock-on — the rail widening 28→32px and shifting every card — did not apply: the rail was already 32px. |
 
 ### Topic, quiz and path context
 
@@ -81,7 +81,10 @@ several below existed only as an aside in `DESIGN_SYSTEM.md` or a comment in
 |---|---|---|---|
 | MOCK-04-topiclearn | Topic/Learn reference page | Reference | The page the design system was derived from. |
 | MOCK-08-quiz | Quiz states and result screen | Reference | |
-| MOCK-10-B | Path context in a topic — contextual row plus stage stepper | **Not built** | Needs `getPathContext()` to return stage name and position-within-stage; it currently returns position against the flat 41-lesson list. Phase 4. |
+| MOCK-10-B | Path context in a topic — contextual row plus stage stepper | Built | v109. `getPathContext()` now returns stage name, position-within-stage, siblings and stage completion via `buildStageInfo()`. Retired `renderPathBanner` and its second progress bar. |
+| MOCK-10-cont | The path action moves to a continuation card at the **foot** of the lesson, in four states | Built | v109. Recorded late: mockup 10 decided this alongside the stepper, DESIGN_SYSTEM §8's provenance table listed it, and it reached no register row, no styleguide entry and no phase brief — so retiring the top action zone was briefed with nothing replacing the only in-topic route to "mark complete". **A fifth instance of the failure this file exists to catch, and the first caught before shipping rather than after.** |
+| MOCK-16-S28 | Stage stepper painted scale — the base 28px node, not the 20px `--sm` variant | Built | v112. Chosen on device after the strip read as decoration at 20px. Left `.node--sm` with zero call sites, so it was retired. |
+| MOCK-16-H2 | Stage context on the checkpoint hub — contextual row and stepper, hairline keeps measuring stage topics, activity progress moves to `.segs` | Built | v112. Gives the hub the lateral navigation it had none of. Needed `.node--cp.node--current` (milestone fill, white glyph) so the end diamond reads as where you are while staying a diamond. The rejected option repointed the hairline at activities, which would have made one element mean two different things one tap apart. |
 
 ### Navigation and chrome
 
@@ -117,13 +120,15 @@ restate the rule.*
 | DES-06 | Elevation is the exception; surfaces separate by hairline and space | Built | §1.3 | `--elev-1` covers nearly everything; 2/3/4 are modals and drawer only. Coloured shadows only where a control has a deliberate press affordance, expressed as `color-mix()`, never raw rgba. See open items — the path button is the last holdout. |
 | DES-07 | One progress indicator *per fact*; sibling facts share one form | Built | §3.4 | Clarified 2026-07-28. The dashboard's `.track` per path is two instances of one fact, not two competing indicators. What stays forbidden is two bars measuring different quantities on one screen. |
 | DES-08 | The emoji exception belongs to Topics, not the dashboard | Built | §3.6 | Corrected 2026-07-28. `renderHomeScreen()` renders Topics and `renderDashboard()` renders Home; the misleading name is a phase 6 rename. The dashboard's own emoji were removed. |
-| DES-09 | Emoji removed from path step rows | **Not built** | §3.6 | Settled 2026-07-30. Lesson steps still render the category icon (🌟, 🍜, 🛍️ …) from `categories.json`; mockup 05 drew those rows with no icon slot at all. The Topics grid keeps its icons. Phase 4. |
+| DES-09 | Emoji removed from path step rows | Built | §3.6 | v108. `.path-step-icon` deleted along with the rule, which was left dead once both call sites went. The Topics grid keeps its icons. |
 | DES-10 | Passing a quiz does not mark a lesson complete | Built | §3.8 | A learner may run the quiz twice before the conversation and once after. A quiz run is not a completion event; the user decides. |
 | DES-11 | Tabs hold destinations, not features | Policy | §3.9 | Settings, account, profile, subscription live behind the header corner regardless of feature count. Headroom if pressure comes is **Translate** (a utility — you don't study in it). **Never a "More" tab.** |
 | DES-12 | Tab bar and docked action bar never coexist | Policy | §3.10 | Together they are 118px on an 812px screen and two competing "what now" zones. Fallback if the hidden state feels like a dead end: collapse tabs to a ~34px icons-only strip. Built by MOCK-11-bar. |
 | DES-13 | The error red is a separate, warmer, brighter red — never a reuse of milestone | Built | §4 | `renderCheckpointWords` reuses `renderQuizCore` with checkpoint chrome, so `--milestone` is already on the furniture during a checkpoint quiz. The two deep reds must never meet. |
 | DES-14 | Destructive controls are ghosts, not filled reds | Built | §4 | Speak mode's Stop is a ghost with `--feedback-bad` text. A filled red would read as an error and break §3.1's one-filled-button rule. |
 | DES-15 | One content measure — `--measure: 680px` | Built | §1.5 | One value; there is no second. `--measure-text: 68ch` caps prose line length separately. |
+| DES-16 | On a node carrying two states, **current outranks done** | Policy | §2 | Settled 2026-07-30 building the checkpoint hub. Orientation beats history: a completed topic you are viewing shows the current fill, and so does a completed checkpoint. Composite states are declared explicitly (`.node--cp.node--done`, `.node--cp.node--current`) because relying on declaration order to resolve them is what made the diamond look unvisited in the first place. |
+| DES-17 | A component class layered on a primitive **wins**, because components sit below primitives in the file | Policy | §2 | Settled 2026-07-30. This is the documented "don't edit a primitive for one screen" rule read in the other direction, and it cuts both ways: `.cont-next-node`'s brand tint silently overrode `.node--cp`'s milestone on the checkpoint variant. Scope component colour to the case that needs it, and keep composite primitive states off elements that a component is already colouring. |
 
 ---
 
@@ -131,11 +136,10 @@ restate the rule.*
 
 | Subject | Question | Blocks |
 |---|---|---|
-| Row-type icons on the path timeline | With emoji gone (DES-09), does a lesson row want a line glyph? Not per topic — 42 would be needed and they converge in monochrome at 16px. Candidate is one per *row type*: `bookOpen` for a lesson, the diamond for a checkpoint, both already in the 15-icon set. **Deferred until MOCK-06-C and MOCK-07-Asoft land**, since both add weight to the rail and the row will read differently. | After phase 4 |
+| Row-type icons on the path timeline | With emoji gone (DES-09), does a lesson row want a line glyph? Not per topic — 42 would be needed and they converge in monochrome at 16px. Candidate is one per *row type*: `bookOpen` for a lesson, the diamond for a checkpoint, both already in the 15-icon set. **Now judgeable** — MOCK-06-C and MOCK-07-Asoft have landed and the rail carries more weight than it did. | Nothing |
 | Settings sheet panel | MOCK-13-A or MOCK-13-B — never recorded. | Phase 6 |
-| Path button press effect | `.path-btn-mark` / `.path-btn-next` keep a chunky `0 3px 0` solid-offset shadow — the last thing not converged with DES-06. Flatten, or keep as a deliberate affordance? | — |
 | `.cp-optional` | A full sentence styled as a green chip with a 🔓 emoji. Green reads as *done* per §4, but the content is informational. | — |
 | Direction-toggle labels | `漢→EN` / `EN→漢` / `🔊→EN` (漢 = hon3, Chinese) — compact but cryptic, and permanently above every question. | — |
-| Landscape stepper | ~160px of chrome on a 390px-tall viewport. Candidate: hide the stepper under `(max-height: 450px)`. Needs a real device. | After phase 4 |
+| Landscape stepper | ~160px of chrome on a 390px-tall viewport, and the stepper is now 28px rather than 20px, so slightly more. Candidate: hide the stepper under `(max-height: 450px)`. The stepper now exists on two screens, so this is judgeable on a real device. | Nothing |
 | Dashboard density | The converged Home reads quieter than its predecessor. Deliberately not adjusted. | After phase 6 |
 | Product name and logo | `廣東話 (gwong2 dung1 waa2) / Cantonese Learner` is placeholder. The name gates the logo, which gates the final header treatment. | — |

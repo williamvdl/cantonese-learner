@@ -6,7 +6,7 @@ the rules; the styleguide is the evidence.*
 
 **Read this before touching `styles.css`, `render.js`, or designing a new screen.**
 
-Established: 2026-07-25 · Phases 1–3 applied as at sw.js v107 (2026-07-29)
+Established: 2026-07-25 · Phases 1–4 applied as at sw.js v112 (2026-07-30)
 
 ---
 
@@ -158,20 +158,53 @@ body state colour.
 Sits under the header, on canvas. Carries back target, position, progress
 hairline. **Back is labelled with its destination** — the stage you came from,
 not the path. **Meta carries stage position ("3 of 5"), never whole-path
-position.** Scrolls away; only the header band stays pinned. *(Phase 4.)*
+position.** Scrolls away; only the header band stays pinned.
 
-### Stage stepper — `.stepper` › `.sx` › `.node--sm` + `.sline`
+Two degradations, both the same shell with less in it — never a different shape.
+A topic in `path.lessons` but in **no stage** (Intermediate's `numbers`) falls back
+to the path as its back target and drops the hairline entirely, because an empty
+track reads as 0% rather than "not applicable". The **checkpoint hub** overrides
+the meta to `Checkpoint · <path>` and reuses the hub's own back handler.
+
+### Stage stepper — `.stepper` › `.sx` › `.node` + `.sline`
 The sibling topics of the current stage, plus the stage checkpoint as a diamond
-at the end. Tappable. Present only when a topic was entered from a path. *(Phase 4.)*
+at the end. Tappable — you can move between siblings without returning to the
+timeline. Present wherever a screen sits inside a stage: a topic entered from a
+path, and the checkpoint hub, where the end diamond is the current node.
 
-### Nodes — `.node` + `--sm` `--done` `--current` `--cp`
+Nodes run at the **base 28px** (MOCK-16-S28). At 20px the strip read as decoration
+while being the screen's primary lateral navigation. The widest strip in the data
+is six nodes, which leaves 22px per connector on a 360px viewport — a stage of
+more than five topics would need this re-checked.
+
+### Nodes — `.node` + `--done` `--current` `--cp`
 One shape family for all position markers. Circles for lessons, rotated rounded
 square for checkpoints. **The diamond keeps its shape when complete** — it is
 the landmark you scan for when reviewing a finished stage.
 
+Composite states are declared explicitly, because a modifier declared later in the
+block would otherwise win on a node carrying both: `.node--cp.node--done` (jade,
+the milestone retreat) and `.node--cp.node--current` (milestone fill, white glyph).
+**Where a node is both current and done, current wins** — orientation outranks
+history, and the same precedence already applied to circles.
+
 ### Diamond progress — `.mk`
 Progress strokes the diamond itself rather than a borrowed circle, so shape and
-indicator are one object. Dash length from `getTotalLength()`, never hardcoded.
+indicator are one object. Dash length from `getTotalLength()`, never hardcoded —
+resolved by `paintDiamondRings()`, which runs at the top of `attachEvents()`
+because `render()` has five separate exits. Size lives on the host and the svg
+scales to it, so a component can run it larger without touching the primitive.
+**Colour is driven from CSS, not from `fill`/`stroke` attributes in the markup** —
+the styleguide's demo inlines them, which would put colour back inside a render
+function against §3.5.
+
+### Continuation — `.cont` (on `.card`) › `.cont-h` / `.cont-mark` / `.cont-done` / `.cont-next` / `.cont-end`
+**The path action lives at the foot of the lesson, where a lesson ends** — not
+above it, before it has been done. Four states: mark complete, forward to the next
+topic, forward to the stage checkpoint (`.cont-next.cp`, milestone edge), and end
+of path. Suppressed during an active quiz, which owns its own next action.
+Contains no filled button: the forward node is a brand *tint*, since the card
+already carries the brand edge (§3.1).
 
 ### Card — `.card` + `--interactive` `--emph` `--milestone`
 **One base for every surface in the app.** Modifiers add interaction and
@@ -200,7 +233,14 @@ See §3.1. Disabled state uses muted colour, never opacity.
 ### Progress — `.track` / `.segs` / `.ring` / `.mk`
 Four forms, each for a different shape of fact: hairline for continuous
 position, segments for a small countable set, ring for a score, diamond ring for
-checkpoint activities.
+checkpoint activities. `.track`, `.segs` and `.mk` are built; **`.ring` is
+specified here and does not exist in `styles.css`** — build it when a score
+actually needs it rather than pre-emptively.
+
+Two forms may sit on one screen only when they carry **different facts**. The
+checkpoint hub is the case that proves it: the hairline measures stage *topics*,
+the pips measure checkpoint *activities*. A numeric text line beside a gauge of
+the same fact is a label, not a second indicator, and is allowed.
 
 ### Word card — `.word-grid` › `.word-card` (+ `.flipped`)
 Grid is `repeat(auto-fill, minmax(145px, 1fr))` — two up on a phone, more as the
@@ -500,6 +540,7 @@ pass over the dashboard. The mockup files behind each decision:
 | `13-application-nav-1.html` | Tab bar and settings sheet |
 | `14-dashboard.html` | Dashboard composition, hero option C, 站 (zaam6) watermark |
 | `15-control-vocabulary.html` | Circular control sizes (B), painted size vs touch target |
+| `16-stepper-scale-and-checkpoint-context.html` | Stepper painted scale (S28), stage context on the checkpoint hub (H2) |
 | `../styleguide.html` | Live reference for everything above |
 
 **Paths:** the mockups live in `docs/design/mockups/`, and `styleguide.html`

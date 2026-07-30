@@ -4,7 +4,7 @@
 not a history log (that's what the repo's commit history is for). Approved design
 decisions and whether they were built live in `DESIGN_DECISIONS.md`.*
 
-Last updated: 2026-07-30 · sw.js at v107
+Last updated: 2026-07-30 · sw.js at v112
 
 ## Confirmed live and working
 - **Patterns/Drills removed** from the app entirely (not soft-hidden). Checkpoints
@@ -24,11 +24,15 @@ Last updated: 2026-07-30 · sw.js at v107
 - **Stable IDs** fully in place — 600/600 words, 307/307 sentences, 150/150
   dialogues. Validator passes clean.
 
-## Design system — phases 1, 2 and 3 complete
+## Design system — phases 1–4 complete
 
 **The app now renders entirely from the token and primitive layers.** No colour
 is injected from JavaScript anywhere. Established 2026-07-25, applying from
-sw.js v95 onward; phase 2 shipped across v96–v103, phase 3 across v104–v107.
+sw.js v95 onward; phase 2 shipped across v96–v103, phase 3 across v104–v107,
+phase 4 across v108–v112.
+
+**Every approved design decision is now built.** `DESIGN_DECISIONS.md` has no
+*Not built* rows left except the two belonging to phase 5.
 
 `DESIGN_SYSTEM.md` and `docs/design/styleguide.html` are the source of truth. Read
 `DESIGN_SYSTEM.md` before touching `styles.css`, `render.js`, or designing a new
@@ -46,18 +50,30 @@ screen.
 | Border widths in play | 1 / 1.5 / 2 / 2.5 / 3px | **1px + 2px** |
 | `border-radius` values | 78 raw px + 19 `50%` | **all on the scale** |
 | Competing content columns | 5 | **1 (`--measure`)** |
-| `styles.css` | 1292 lines | **1160 lines** |
+| `styles.css` | 1292 lines | **1297 lines** (1160 after phase 3; phase 4 added the path-context components) |
 | Rules redeclaring the card surface | 12 | **0 (`.card` only)** |
 | Painted sizes of the circular play control | 7 (28–44px) | **2 (32 / 44px)** |
-| Interactive controls under `--tap-min` | 9 | **3 (all retire in phase 6)** |
+| Interactive controls declaring `min-height` under `--tap-min` | 9 | **3** |
 
-All 379 classes emitted anywhere in `render.js` resolve against `styles.css`.
+All 390 classes emitted anywhere in `render.js` resolve against `styles.css`.
+
+**The tap-target figure above is narrower than it looks.** It counts rules that
+*declare* `min-height` below 44px. A target built from padding alone is invisible
+to that check — which is how the stage stepper shipped at 42px in v109 and read
+clean. A stricter check (in IN_PROGRESS.md) finds two further definite misses,
+`.path-complete-btn` at 28px and `.translate-dir-swap` at 38px, plus around
+fourteen padding-built targets that need judging individually. All are in
+BACKLOG.md.
 
 ### Retired
 `CP_GOLD`, `GOLD_HERO`, `BRAND_HERO`, `BRAND_ACCENT` (was in `data.js`), `THEME`
 (was in `data.js`), `--gold`, `--gold-tint`, `--gold-text`, `--topic-accent`,
 `--font-cjk` (never existed), `.progress-bar` / `.progress-fill`,
-`.lesson-header-stacked`, and the orphan hues `#B7861E`, `#e4d4ad`, `#8a6716`,
+`.lesson-header-stacked`, `--jade-shadow`, `.node--sm`, and the whole path banner —
+`renderPathBanner()`, `.path-banner*`, `.path-bar*`, `.path-btn*`,
+`.path-action-zone`, `.path-next-row`, `.path-tick-badge`, `.path-final-*`,
+`.path-step-node`, `.cp-node`, `.path-step-icon`, `.path-banner-action` — and the
+orphan hues `#B7861E`, `#e4d4ad`, `#8a6716`,
 `#2D5040`, `#8B3A4E`, `#922B21`, `#2A2422`, `#f4f0eb`, `#f8d7da`, `#d4edda`,
 `rgba(201,191,160,.6)`, `rgba(231,76,60,.6)`.
 
@@ -80,6 +96,11 @@ All 379 classes emitted anywhere in `render.js` resolve against `styles.css`.
 | 3b-i | v105 | `renderHomeScreen()` → `renderTopicsScreen()`, `.home-wrap` → `.topics-wrap`. |
 | 3b-ii | v106 | Circular control vocabulary. `.btn-icon` gained `--compact` / `--brand` / `--header`; seven controls at seven sizes became two. Translate's mic emoji became an icon. |
 | 3b-iii | v107 | `.pill`, `.tag`, `.btn-listen` ported from `styleguide.html`; five components migrated, four classes retired. Quiz tap-target fix. |
+| 4 · 1 | v108 | The `.node` primitive, then the three path fixes expressed on it: the completed-checkpoint retreat (MOCK-05-retreat), next-up emphasis (MOCK-06-C), emoji off the step rows (DES-09). Completed lesson nodes went from a solid jade fill to the primitive's tint + edge, which is what mockup 05 always drew. |
+| 4 · 2 | v109 | Path context split by job (MOCK-10-B + MOCK-10-cont). Contextual row and stage stepper above the lesson; the action moved to a continuation card at the foot. `renderPathBanner` and its second progress bar retired — 30 rules. `openPathLesson()` extracted from three copies of one state reset. |
+| 4 · 3 | v110 | Fixes off device QA: the stepper's 42px tap target, and the checkpoint hub's hero `◆`, which declared no `color` and so painted near-black on oxblood. |
+| 4 · 4 | v111 | Diamond progress (MOCK-07-Asoft) — the `.mk` and `.segs` primitives, ring on the rail diamond, pips, the three-state count line and three-state badge. |
+| 4 · 5 | v112 | Stepper to the base 28px node (MOCK-16-S28) and stage context on the checkpoint hub (MOCK-16-H2), with `.node--cp.node--current` for the current diamond. `buildStageInfo()` extracted so the topic screen and hub share one path. `styleguide.html` updated in the same deploy. |
 
 ### Notes worth carrying forward
 
@@ -111,6 +132,36 @@ All 379 classes emitted anywhere in `render.js` resolve against `styles.css`.
   room" rule reset it to 36px; `.quiz-next` never declared one at all. Both are
   fixed. Audit for `min-height` under 44px on anything with `cursor` before
   assuming the token is being honoured.
+- **A tap target built from padding is invisible to a check that reads
+  `min-height`.** The stage stepper shipped at 42px — 20px node plus 11px padding
+  each side — and the standing check reported clean because no `min-height` was
+  declared. Declare `min-height: var(--tap-min)` explicitly even when padding
+  would already reach it, so the check can see it. The stricter version of the
+  check is in IN_PROGRESS.md.
+- **The same rule can exist twice in one *file*, not just twice in one block.**
+  `.cp-done .cp-card .path-step-title` was declared with the new muted colour and
+  again forty lines later with the old jade, at equal specificity — so the later
+  one won and the change would have appeared not to work. The duplicate-declaration
+  check only looks inside a single rule. Grep for the selector, not just the block.
+- **Components sit below primitives, so a component class beats a primitive
+  modifier.** `.cont-next-node`'s brand tint silently overrode `.node--cp`'s
+  milestone. This is the "don't edit a primitive for one screen" rule read in the
+  other direction, and it is easier to trip: the component looks like the narrower,
+  safer thing to write. See DES-17.
+- **A post-render hook belongs where every render path passes.** `paintDiamondRings()`
+  was first called at the end of `render()`, which has five separate exits — a ring
+  on any screen reached by another exit would silently never paint. It now runs at
+  the top of `attachEvents()`.
+- **A mockup carries its own bugs; it is an argument, not an implementation.**
+  Mockup 10's continuation card had the label and topic name as inline spans with a
+  `margin-top` that could not apply, so they would have collapsed onto one line, and
+  its mark button computed to a 39px tap target. Re-derive metrics when porting
+  rather than transcribing.
+- **Executing a render function catches what reading it does not.** Running the new
+  path functions against the real `learning_paths.json` with stubs caught a
+  reference to a `cp` variable that does not exist in that scope, a forward node
+  numbering by whole-path instead of stage position, and the specificity collision
+  above. `node --check` passed all three.
 - **Classify by declaration, not by shape.** A first pass counted 69 rules as
   "card-like" because they declared background + border + radius. Measured
   strictly against `.card`'s four declarations, only 12 matched — the rest were
@@ -130,6 +181,19 @@ All 379 classes emitted anywhere in `render.js` resolve against `styles.css`.
   `--edge-emph` has 3 call sites, `--measure-text` 1, `--jade-edge` 5,
   `--feedback-bad-tint` 4 and `--feedback-bad-edge` 5.
 
+## Deploy labelling
+
+Future work is **not** given `sw.js` numbers in advance. A phase lists its deploys
+ordinally (*phase 4 deploy 1, 2, 3*) with the reason they group; the absolute
+version is assigned when a deploy is actually cut and recorded in the table above.
+Adopted 2026-07-30 after phase 4 ran to five deploys against three planned, which
+under the old scheme would have left stale numbers across four documents. The
+forward numbers were never a safeguard — what carries the weight is the grouping
+and its rationale, and the start-of-chat check needs only the *current* version,
+which is still recorded in every doc header. *(This is a process convention, not a
+design decision, so it is deliberately not in `DESIGN_DECISIONS.md`, whose scope is
+UX and visual design. It may be worth a line in the project instructions.)*
+
 ## Architecture worth knowing
 - Persistence routes through an async storage abstraction layer, built ahead of
   an eventual Supabase migration.
@@ -148,29 +212,23 @@ All 379 classes emitted anywhere in `render.js` resolve against `styles.css`.
   have (checkpoint-completion tracking for it would save under a malformed key).
   Low priority — Intermediate checkpoints aren't in active use yet. Bundle the fix
   into the Intermediate checkpoint hub expansion when that's picked up.
-- `getPathContext()` returns `step`/`total` against the flat 41-lesson list with no
-  stage, which is why the UI can only say "step 8 of 41". Stage name and
-  position-within-stage are needed for the redesigned contextual row — scheduled as
-  rollout phase 4.
-- The path screen's primary buttons keep a chunky `0 3px 0` solid-offset press
-  effect. Colours are tokenised; the geometry is untouched pending a decision.
 - `.nav-item` declares `transition` twice. Harmless, and the drawer retires in
   phase 6.
-- **Three approved path decisions were never built.** MOCK-06-C (next-up
-  emphasis), MOCK-05-retreat (the completed-checkpoint milestone retreat) and
-  MOCK-07-Asoft (the diamond progress ring) were all settled against mockups 05–07
-  and none reached the code. The completed-checkpoint row is the visible symptom:
-  three colours at once and a black `◆` that the design never included. **All
-  three are assigned to phase 4, shipping across v108–v110** alongside MOCK-10-B
-  (path context) and DES-09 (emoji off the path step rows) — full brief in
-  IN_PROGRESS.md.
-- **The cause is worth remembering: a decision that lives only in a mockup does
-  not survive.** None of the three reached `styleguide.html`, so nothing flagged
+- **The cause of phase 4 is worth remembering: a decision that lives only in a
+  mockup does not survive.** MOCK-06-C, MOCK-05-retreat and MOCK-07-Asoft were all
+  settled against mockups 05–07 and none reached the code; the completed-checkpoint
+  row was the visible symptom, showing three colours at once and a black `◆` the
+  design never included. All are built as of v112. None of the three reached `styleguide.html`, so nothing flagged
   the drift, and a later chat re-opened a settled question as if it were new.
   `docs/DESIGN_DECISIONS.md` now exists for exactly this — every approved decision
   gets a row with a built/not-built column, so an unbuilt one is visible instead
-  of silent. Writing it also surfaced a fourth loss: **MOCK-13 offers two settings
-  panel options and no document records which was chosen.**
+  of silent. Writing it surfaced a fourth loss (**MOCK-13 offers two settings panel
+  options and no document records which was chosen**) and phase 4 surfaced a fifth:
+  mockup 10's continuation card, which had no register row, no styleguide entry and
+  no line in the phase brief, so the brief retired the top action zone with nothing
+  replacing the only in-topic route to "mark complete". That one was caught before
+  shipping rather than after — the first time the register has paid for itself
+  prospectively.
 - **Three controls remain under `--tap-min`**: `.hamburger` (36px) and
   `.drawer-speed-btn` (36px), both retiring with the drawer in phase 6, and
   `.subtab-btn` at 42px, close enough to leave.
