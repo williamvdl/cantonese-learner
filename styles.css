@@ -410,12 +410,17 @@
 
   /* ── Continuation (MOCK-10) — the path action lives at the FOOT of the
         lesson, where a lesson actually ends, not above it before it has been
-        done. Four states: mark / next topic / next checkpoint / end of path.
+        done. Four states: mark / next topic / next checkpoint / end of path,
+        plus a reduced form while a quiz question is live (completion confirmed,
+        forward action dropped — MOCK-12).
         Built on .card, so only the differences are declared here. ── */
   .cont { margin: var(--sp-5) 0; overflow: hidden; }
   .cont-h { padding: var(--sp-4) var(--sp-4) 0; }
   .cont-mark { width: calc(100% - (var(--sp-4) * 2)); margin: var(--sp-3) var(--sp-4) var(--sp-4); }
   .cont-done { display: flex; align-items: center; gap: var(--sp-2); padding: var(--sp-4); font-family: var(--font-ui); font-size: 12.5px; font-weight: var(--fw-medium); color: var(--jade); border-bottom: var(--border-soft); }
+  /* Completion-only form (live quiz question): the row is the card's sole child,
+     so the divider would have nothing under it. */
+  .cont-done:last-child { border-bottom: none; }
   .cont-done .tick { width: 20px; height: 20px; border-radius: var(--r-pill); background: var(--jade); color: #fff; display: flex; align-items: center; justify-content: center; flex: none; }
   .cont-done .tick svg { width: 11px; height: 11px; }
   /* Forward step. The 3px left edge is the same emphasis device as next-up on

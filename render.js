@@ -250,7 +250,10 @@ function renderQuizCore(opts) {
 
   // --- Answer panel (shown once answered) ---
   // Wrong → the "Not quite…" teaching panel. Correct → a light "Correct!" line.
-  // Either way the question now STOPS and waits for a Next tap (no auto-advance).
+  // Either way the question now STOPS and waits for a tap (no auto-advance).
+  // The label is "Next question", not "Next" (MOCK-12): the continuation card is
+  // on screen during the quiz and carries its own forward action, so a bare
+  // "Next" would read as two forwards a thumb apart meaning different things.
   const wasWrong = answered && choices[selected] !== cw;
   let answerPanel = '';
   if (answered && wasWrong) {
@@ -267,7 +270,7 @@ function renderQuizCore(opts) {
   } else if (answered) {
     answerPanel = `<div class="quiz-correct-row">
         <span class="quiz-correct-msg"><span class="quiz-correct-tick">${icon('check',14)}</span>Correct!</span>
-        <button class="quiz-next" id="${nextId}"><span class="icon-label">Next ${icon('arrowRight',14)}</span></button>
+        <button class="quiz-next" id="${nextId}"><span class="icon-label">Next question ${icon('arrowRight',14)}</span></button>
       </div>`;
   }
 
@@ -1070,9 +1073,17 @@ function render() {
       const backEl = ctx
         ? ''
         : `<button class="back-home-btn" id="back-home-btn"><span class="icon-label">${icon('arrowLeft',15)} Back to topics</span></button>`;
-      // Suppressed during a quiz: the quiz owns the next action there, and a
-      // "mark complete" under a live question is a second competing one (§3.1).
-      const contEl = (ctx && state.mode !== 'quiz') ? renderContinuation(ctx) : '';
+      // MOCK-11's subtab matrix as MOCK-12 revised it: the continuation is
+      // present on Learn, Chat AND Quiz. While a quiz question is live it drops
+      // its forward action only — "Next in <stage>" a thumb under the quiz's own
+      // "Next question" is two forwards meaning different things. On the result
+      // screen nothing competes, so the forward action returns; the result screen
+      // keeps its own "Back to Lesson" / "Retry missed words" and does not absorb
+      // completion (DES-10 — a quiz run is not a completion event).
+      // Standalone topics have no `ctx` and so no continuation: it is a path concept.
+      const contEl = ctx
+        ? renderContinuation(ctx, { completionOnly: isQuizQuestionLive() })
+        : '';
       mainContent = `
         ${aboveEl}
         <div class="content">
@@ -1218,8 +1229,25 @@ function renderStageStepper(ctx, cpCurrent) {
 // Continuation — the foot of the lesson. Four states: not yet complete (mark),
 // complete with another topic ahead, complete with the stage checkpoint ahead,
 // and the end of the path.
-function renderContinuation(ctx) {
+// True only while a quiz QUESTION is on screen — the result screen is not a live
+// question. Mockup 12's exception hinges on this distinction and two callers need
+// it (the continuation, and the mark-complete handler's auto-return), so it lives
+// in one place rather than being re-derived.
+function isQuizQuestionLive() {
+  return state.mode === 'quiz' && !!state.quiz && !state.quiz.done;
+}
+
+// `opts.completionOnly` renders the card's completion state and stops there —
+// no forward action, no end-of-path block. Used while a quiz question is live.
+// This is a structural reduction, not a variant: no colour or theme is passed in
+// (§3.5), and the treatment of every state that does render is unchanged.
+function renderContinuation(ctx, opts) {
+  const o = opts || {};
+
   if (!ctx.isComplete) {
+    // The mark button IS the completion confirmation, so it renders in both
+    // forms. It is a ghost (`btn--good`), so it never competes with the quiz's
+    // own filled action — which is what made mockup 12's exception workable.
     return `
       <div class="card cont">
         <div class="section-label cont-h">When you're done</div>
@@ -1228,6 +1256,12 @@ function renderContinuation(ctx) {
   }
 
   const doneRow = `<div class="cont-done"><span class="tick">${icon('check',11)}</span> Lesson complete</div>`;
+
+  if (o.completionOnly) {
+    // `.cont-done:last-child` drops its hairline so the card can't end on a
+    // divider with nothing beneath it.
+    return `<div class="card cont">${doneRow}</div>`;
+  }
 
   if (ctx.isLast) {
     return `
@@ -2510,6 +2544,10 @@ function attachEvents(lesson) {
     pathMark.addEventListener('click', () => {
       const ctx = getPathContext();
       if (!ctx) return;
+      // The mark button is now reachable from the Quiz subtab (MOCK-12), so the
+      // final-step auto-return below can fire mid-question and discard quiz
+      // progress. Captured at click time because the 3s timer resolves later.
+      const midQuestion = isQuizQuestionLive();
       const tier = state.fromPathTier || state.currentRound;
       // Only act if it's not already complete (defensive — the button shouldn't be visible otherwise)
       if (!isLessonComplete(state.activePath, state.topic, tier)) {
@@ -2522,7 +2560,7 @@ function attachEvents(lesson) {
       // Dissolve the toast after a beat. If it was the final step, also auto-return to the timeline.
       setTimeout(() => {
         state.toast = null;
-        if (ctx.isLast) {
+        if (ctx.isLast && !midQuestion) {
           state.nav         = 'path';
           state.pathView    = 'timeline';
           state.fromPath    = false;
