@@ -818,8 +818,39 @@ function getPathContext() {
     nextTopicLabel = m ? m.label : null;
     nextTopicIcon  = m ? m.icon  : null;
   }
+  // ── Stage framing. "Step 8 of 41" is technically true and motivationally
+  // awful; the contextual row and the stepper both work in stage terms instead
+  // (§3.4). `step`/`total` below stay whole-path because other callers read
+  // them — the stage figures are additive, on `stage`.
+  const stage = getStageForTopic(state.activePath, state.topic);
+  let stageInfo = null;
+  if (stage) {
+    const siblings = (stage.topics || []).map(topicKey => {
+      const entry = path.lessons.find(x => x.topic === topicKey);
+      const sibTier = entry ? entry.round : 1;
+      const meta = store.topicMeta(topicKey);
+      return {
+        topic: topicKey,
+        tier: sibTier,
+        label: meta ? meta.label : topicKey,
+        complete: isLessonComplete(state.activePath, topicKey, sibTier),
+        isCurrent: topicKey === state.topic,
+      };
+    });
+    stageInfo = {
+      id: stage.id,
+      name: stage.name,
+      topics: siblings,
+      step: siblings.findIndex(t => t.isCurrent) + 1, // position WITHIN the stage
+      total: siblings.length,
+      done: siblings.filter(t => t.complete).length,
+      checkpoint: stage.checkpoint ? checkpointProgress(state.activePath, stage.id) : null,
+    };
+  }
+
   return {
     path,
+    stage: stageInfo,                              // null for a topic in no stage
     step: stepIdx + 1,
     total,
     isLast,
@@ -854,6 +885,14 @@ const CHECKPOINT_ACTIVITIES = ['words', 'convo'];
 function getPathStages(pathKey) {
   const path = (store.paths || []).find(p => p.key === pathKey);
   return (path && Array.isArray(path.stages)) ? path.stages : [];
+}
+// Which stage of a path contains a topic, or null. Stage membership is by topic
+// key, and a path lists each topic at most once, so there is no tier ambiguity.
+// Returns null for a topic that sits in path.lessons but in no stage — the
+// Intermediate path's `numbers` is exactly that, so this is a real case and the
+// callers degrade rather than treat it as an error.
+function getStageForTopic(pathKey, topicKey) {
+  return getPathStages(pathKey).find(s => (s.topics || []).includes(topicKey)) || null;
 }
 // Find a stage object by id within a path.
 function getStage(pathKey, stageId) {
@@ -923,6 +962,31 @@ function getCheckpointWords(pathKey, stage) {
     }
   }
   return out;
+}
+
+// ── Path lesson navigation ────────────────────────────────────────────────────
+// Open a topic as a path lesson, resetting the per-lesson view state. Shared by
+// the timeline's step cards and the stage stepper's sibling taps, so the two can
+// never drift in what they reset. Pushes a nav entry: BACK steps back through
+// the lessons you opened, the same as any other lesson transition.
+function openPathLesson(topicKey, tier) {
+  state.topic        = topicKey;
+  state.currentRound = tier;
+  state.nav          = 'topics';
+  state.homeView     = false;
+  state.fromPath     = true;
+  state.fromPathTier = tier;
+  state.mode         = 'study';
+  state.tab          = 'words';
+  state.flipped      = {};
+  state.speaking     = null;
+  state.sentenceBreakdownOpen = {};
+  state.sentenceRevealed = {};
+  state.sentenceNoteClosed = {};
+  state.convo        = { convMode:'read', playingLine:null, gapAnswers:{}, bubbleRevealed:{}, breakdownOpen:{}, speakStep:0, speakStatus:'idle', speakHeard:'', speakAutoPlayed:false, speakRevealed:{} };
+  pushNav();
+  window.scrollTo(0, 0);
+  render();
 }
 
 // ── Checkpoint navigation ─────────────────────────────────────────────────────

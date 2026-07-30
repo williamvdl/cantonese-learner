@@ -610,26 +610,26 @@ function renderPathStep(pathKey, l, displayNum, nextPos) {
   return `
     <div class="${stepCls}">
       <div class="path-step-rail">
-        <div class="path-step-node">${complete ? '✓' : displayNum}</div>
+        <div class="node${complete ? ' node--done' : ''}${isNext ? ' node--current' : ''}">${complete ? icon('check', 13) : displayNum}</div>
         <div class="path-step-line"></div>
       </div>
       <div class="path-step-body">
         <div class="card path-step-card" data-path-lesson="${l.topic}" data-path-tier="${tier}">
           ${nextBadge}
           <div class="path-step-row">
-            <span class="path-step-icon">${lesson.icon}</span>
             <div class="path-step-text">
               <div class="path-step-title">${lesson.label}</div>
               <div class="path-step-meta">${tierLabel}${wordCount} word${wordCount !== 1 ? 's' : ''}</div>
             </div>
-            <button class="path-complete-btn" data-path-toggle="${l.topic}" data-path-tier="${tier}" aria-label="${complete ? 'Mark incomplete' : 'Mark complete'}">${complete ? '✓' : '✓'}</button>
+            <button class="path-complete-btn" data-path-toggle="${l.topic}" data-path-tier="${tier}" aria-label="${complete ? 'Mark incomplete' : 'Mark complete'}">✓</button>
           </div>
         </div>
       </div>
     </div>`;
 }
 
-// The checkpoint node + card for a stage (gold diamond, distinct from topic steps).
+// The checkpoint node + card for a stage. The rail diamond and the card's
+// milestone edge both retreat once complete (MOCK-05-retreat).
 function renderCheckpointNode(pathKey, stage, nextPos) {
   const prog = checkpointProgress(pathKey, stage.id);
   if (!prog.total) return '';  // no offerable activities → no node
@@ -641,14 +641,13 @@ function renderCheckpointNode(pathKey, stage, nextPos) {
   return `
     <div class="path-step path-step-cp${prog.complete ? ' cp-done' : ''}${isNext ? ' next' : ''}">
       <div class="path-step-rail">
-        <div class="path-step-node cp-node"><span>◆</span></div>
+        <div class="node node--cp${prog.complete ? ' node--done' : ''}"><span>◆</span></div>
         <div class="path-step-line"></div>
       </div>
       <div class="path-step-body">
-        <div class="card card--milestone path-step-card cp-card" data-cp-open="${stage.id}">
+        <div class="card ${prog.complete ? '' : 'card--milestone '}path-step-card cp-card" data-cp-open="${stage.id}">
           ${nextBadge}
           <div class="path-step-row">
-            <span class="path-step-icon">◆</span>
             <div class="path-step-text">
               <div class="path-step-title">Checkpoint · ${stage.name}</div>
               <div class="path-step-cp-prog">${progText}</div>
@@ -986,15 +985,27 @@ function render() {
       mainContent = `${renderTopicsScreen()}`;
     } else {
       const ctx = getPathContext();
-      const headerEl = ctx
-        ? renderPathBanner(ctx)
+      // Path context is orientation and belongs above the lesson; the path
+      // ACTION belongs at the foot, where a lesson actually ends (MOCK-10).
+      // The contextual row is full-bleed with its inner content capped, so it
+      // sits outside .content.
+      const aboveEl = ctx
+        ? `${renderContextRow(ctx)}${renderStageStepper(ctx)}`
+        : '';
+      const backEl = ctx
+        ? ''
         : `<button class="back-home-btn" id="back-home-btn"><span class="icon-label">${icon('arrowLeft',15)} Back to topics</span></button>`;
+      // Suppressed during a quiz: the quiz owns the next action there, and a
+      // "mark complete" under a live question is a second competing one (§3.1).
+      const contEl = (ctx && state.mode !== 'quiz') ? renderContinuation(ctx) : '';
       mainContent = `
+        ${aboveEl}
         <div class="content">
-          ${headerEl}
+          ${backEl}
           ${renderRoundSelector(state.topic)}
           ${renderLessonHeader(lesson)}
           ${state.mode === 'quiz' ? renderQuiz(lesson) : state.tab === 'convo' ? renderConversation() : renderStudy(lesson)}
+          ${contEl}
         </div>`;
     }
   } else if (state.nav === 'dashboard') {
@@ -1059,75 +1070,115 @@ function renderHeader() {
 }
 
 // ── PATH-MODE UI ─────────────────────────────────────────────────────────────
-// Combined banner shown at the top of a topic page when the user entered via a
-// Learning Path. One card containing the path context AND the primary action
-// (mark complete / next step / path complete).
-function renderPathBanner(ctx) {
-  // Progress: how many steps in this path are complete (for the bar fill)
-  const prog = state.pathProgress[state.activePath] || {};
-  const doneCount = ctx.path.lessons.filter(l => prog[lessonKey(l.topic, l.round)]).length;
-  const pct = Math.round((doneCount / ctx.total) * 100);
+// Path context is split by job (MOCK-10). Orientation goes above the lesson as
+// a contextual row plus a stage stepper; the ACTION goes to the foot of the
+// lesson as a continuation card, because that is where a lesson ends. This
+// replaces renderPathBanner, which put "Next step" at the top of the screen
+// before the lesson had been done, and carried a second progress bar measuring
+// whole-path progress a centimetre from the stage one (§3.4).
 
-  // Step count line — gets a green tick prefix once this step is complete
-  const tickSmall = `<span class="path-banner-tick">${icon('check',13)}</span>`;
-  let countLine;
-  if (ctx.isComplete && ctx.isLast) {
-    countLine = `${tickSmall}${ctx.total} / ${ctx.total}`;
-  } else if (ctx.isComplete) {
-    countLine = `${tickSmall}Step ${ctx.step} / ${ctx.total}`;
-  } else {
-    countLine = `Step ${ctx.step} / ${ctx.total}`;
-  }
-
-  // Progress bar turns green once the current step is done
-  const barFillCls = ctx.isComplete ? 'path-bar-fill path-bar-fill-done' : 'path-bar-fill';
-
-  // Action zone — depends on completion state
-  let actionZone;
-  if (ctx.isComplete && ctx.isLast) {
-    // Whole path finished — celebratory message instead of an action
-    actionZone = `
-      <div class="path-final-msg">
-        <div class="path-final-badge">🎉</div>
-        <div class="path-final-text">
-          <div class="path-final-title">Path complete!</div>
-          <div class="path-final-sub">You've finished every step of ${ctx.path.label} Path.</div>
-        </div>
-      </div>`;
-  } else if (ctx.isComplete) {
-    // Step done — green tick badge + raised "Next step" button
-    actionZone = `
-      <div class="path-action-zone">
-        <div class="path-next-row">
-          <div class="path-tick-badge" aria-label="Step complete">${icon('check',19)}</div>
-          <button class="path-btn path-btn-next" id="path-next-step">
-            <span class="icon-label">Next step ${icon('arrowRight',16)} ${ctx.nextTopicIcon || ''} ${ctx.nextTopicLabel || 'continue'}</span>
-          </button>
-        </div>
-      </div>`;
-  } else {
-    // Incomplete — raised green "Mark step complete" button
-    actionZone = `
-      <div class="path-action-zone">
-        <button class="path-btn path-btn-mark" id="path-mark-complete">
-          <span class="icon-label">${icon('check',18)} Mark step complete</span>
-        </button>
-      </div>`;
-  }
-
+// Contextual row — back target, stage position, stage progress hairline.
+// Back is labelled with its DESTINATION: the stage you came from, not the path.
+function renderContextRow(ctx) {
+  const st = ctx.stage;
+  // No stage (a topic in path.lessons but in no stage) degrades to the path as
+  // the back target. Same shell, less information — never a different shape.
+  const backLabel = st ? st.name : `${ctx.path.label} Path`;
+  const meta = st
+    ? `${st.step} of ${st.total} · ${ctx.path.label}`
+    : ctx.path.label;
+  const pct = st && st.total ? Math.round((st.done / st.total) * 100) : 0;
+  // No stage means no stage progress to report. An empty hairline would read as
+  // 0% rather than "not applicable", so the track is omitted entirely.
+  const trackEl = st
+    ? `<div class="ctx-track"><div class="ctx-fill" style="width:${pct}%"></div></div>`
+    : '';
   return `
-    <div class="card path-banner">
-      <div class="path-banner-row">
-        <button class="path-banner-back" id="back-home-btn" aria-label="Back to Learning Path">${icon('arrowLeft',20)}</button>
-        <div class="path-banner-text">
-          <div class="path-banner-top">
-            <span class="path-banner-name">${ctx.path.icon || '🛤️'} ${ctx.path.label} Path</span>
-            <span class="path-banner-count">${countLine}</span>
-          </div>
-          <div class="path-bar"><div class="${barFillCls}" style="width:${Math.max(pct,3)}%"></div></div>
+    <div class="ctx">
+      <div class="ctx-inner">
+        <div class="ctx-row">
+          <button class="ctx-back" id="back-home-btn">${icon('arrowLeft',15)} ${backLabel}</button>
+          <span class="ctx-meta">${meta}</span>
         </div>
       </div>
-      ${actionZone}
+      ${trackEl}
+    </div>`;
+}
+
+// Stage stepper — the sibling topics of this stage, plus the stage checkpoint
+// as a diamond at the end. Tappable, so you can move between siblings without
+// going back to the timeline. Absent entirely when there is no stage.
+function renderStageStepper(ctx) {
+  const st = ctx.stage;
+  if (!st || !st.topics.length) return '';
+  const cells = st.topics.map((t, i) => {
+    const cls = 'node node--sm'
+      + (t.complete ? ' node--done' : '')
+      + (t.isCurrent ? ' node--current' : '');
+    const inner = t.complete ? icon('check', 9) : String(i + 1);
+    // The current topic is where you already are, so it is not a link.
+    const marker = t.isCurrent
+      ? `<span class="${cls}">${inner}</span>`
+      : `<button class="sx-btn" data-stage-topic="${t.topic}" data-stage-tier="${t.tier}" aria-label="${t.label}"><span class="${cls}">${inner}</span></button>`;
+    return `<div class="sx">${marker}<span class="sline${t.complete ? ' done' : ''}"></span></div>`;
+  }).join('');
+  const cp = st.checkpoint && st.checkpoint.total
+    ? `<div class="sx"><button class="sx-btn" data-stage-cp="${st.id}" aria-label="Checkpoint · ${st.name}"><span class="node node--sm node--cp${st.checkpoint.complete ? ' node--done' : ''}"><span>◆</span></span></button></div>`
+    : '';
+  return `<div class="stepper">${cells}${cp}</div>`;
+}
+
+// Continuation — the foot of the lesson. Four states: not yet complete (mark),
+// complete with another topic ahead, complete with the stage checkpoint ahead,
+// and the end of the path.
+function renderContinuation(ctx) {
+  if (!ctx.isComplete) {
+    return `
+      <div class="card cont">
+        <div class="section-label cont-h">When you're done</div>
+        <button class="btn btn--good cont-mark" id="path-mark-complete">${icon('check',14)} Mark this lesson complete</button>
+      </div>`;
+  }
+
+  const doneRow = `<div class="cont-done"><span class="tick">${icon('check',11)}</span> Lesson complete</div>`;
+
+  if (ctx.isLast) {
+    return `
+      <div class="card cont">
+        ${doneRow}
+        <div class="cont-end">
+          <div class="cont-end-t">${ctx.path.label} path complete</div>
+          <div class="cont-end-s">Every lesson on this path is done.</div>
+        </div>
+      </div>`;
+  }
+
+  const toCp = ctx.nextStep && ctx.nextStep.kind === 'checkpoint';
+  // Number and label the forward step by ITS stage, not the current one — the
+  // next lesson can be the first topic of the following stage.
+  const nextStage = (!toCp && ctx.nextStep)
+    ? getStageForTopic(state.activePath, ctx.nextStep.topic)
+    : null;
+  const nextNum = nextStage
+    ? (nextStage.topics || []).indexOf(ctx.nextStep.topic) + 1
+    : ctx.step + 1;
+  const nodeMarkup = toCp
+    ? `<span class="node node--cp cont-next-node--cp"><span>◆</span></span>`
+    : `<span class="node cont-next-node">${nextNum}</span>`;
+  const label = toCp
+    ? 'Stage complete'
+    : (nextStage ? `Next in ${nextStage.name}` : 'Next step');
+  return `
+    <div class="card cont">
+      ${doneRow}
+      <button class="cont-next${toCp ? ' cp' : ''}" id="path-next-step">
+        ${nodeMarkup}
+        <span class="cont-next-body">
+          <span class="section-label">${label}</span>
+          <span class="cont-next-name">${ctx.nextTopicLabel || 'Continue'}</span>
+        </span>
+        <span class="cont-next-go">${icon('arrowRight',16)}</span>
+      </button>
     </div>`;
 }
 
@@ -2407,27 +2458,15 @@ function attachEvents(lesson) {
         window.scrollTo(0, 0);
         return;
       }
-      state.topic        = ctx.nextStep.topic;
-      state.currentRound = ctx.nextStep.tier;
       state.fromPathTier = ctx.nextStep.tier;
-      state.mode         = 'study';
-      state.tab          = 'words';
-      state.flipped      = {};
-      state.speaking     = null;
-      state.sentenceBreakdownOpen = {};
-      state.sentenceRevealed = {};
-      state.sentenceNoteClosed = {};
-      state.convo        = { convMode:'read', playingLine:null, gapAnswers:{}, bubbleRevealed:{}, breakdownOpen:{}, speakStep:0, speakStatus:'idle', speakHeard:'', speakAutoPlayed:false, speakRevealed:{} };
-      pushNav();                 // path next-step → next lesson: BACK returns to previous lesson
-      window.scrollTo(0, 0);
-      render();
+      openPathLesson(ctx.nextStep.topic, ctx.nextStep.tier);
     });
   }
 
   // ── Dashboard events ──────────────────────────────────────────────
-  // Hero CTA / card → opens the actual next-up item. Mirrors data-path-lesson's
-  // full state reset (so no stale flipped/speaking/sentence state leaks in from
-  // wherever the user was before), and openCheckpoint() for the checkpoint case.
+  // Hero CTA / card → opens the actual next-up item. Still carries its own copy
+  // of the state reset that openPathLesson() now owns; consolidating it is a
+  // dashboard change, so it is logged in BACKLOG.md rather than done here.
   document.querySelectorAll('[data-dash-hero-topic]').forEach(card => {
     card.addEventListener('click', () => {
       const topicKey = card.dataset.dashHeroTopic;
@@ -2539,25 +2578,27 @@ function attachEvents(lesson) {
     card.addEventListener('click', (e) => {
       // Ignore taps on the mark-complete button (handled separately)
       if (e.target.closest('[data-path-toggle]')) return;
-      const topicKey = card.dataset.pathLesson;
-      const tier     = parseInt(card.dataset.pathTier, 10) || 1;
-      state.topic        = topicKey;
-      state.currentRound = tier;
-      state.nav          = 'topics';
-      state.homeView     = false;
-      state.fromPath     = true;
-      state.fromPathTier = tier;
-      state.mode         = 'study';
-      state.tab          = 'words';
-      state.flipped      = {};
-      state.speaking     = null;
-      state.sentenceBreakdownOpen = {};
-      state.sentenceRevealed = {};
-      state.sentenceNoteClosed = {};
-      state.convo        = { convMode:'read', playingLine:null, gapAnswers:{}, bubbleRevealed:{}, breakdownOpen:{}, speakStep:0, speakStatus:'idle', speakHeard:'', speakAutoPlayed:false, speakRevealed:{} };
-      pushNav();                 // path timeline → lesson: BACK returns to timeline
+      openPathLesson(card.dataset.pathLesson, parseInt(card.dataset.pathTier, 10) || 1);
+    });
+  });
+
+  // Stage stepper — jump to a sibling topic of this stage without going back to
+  // the timeline. Same opener as the timeline card, so nothing can drift.
+  document.querySelectorAll('[data-stage-topic]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      window.speechSynthesis.cancel();
+      stopAudioFile();
+      openPathLesson(btn.dataset.stageTopic, parseInt(btn.dataset.stageTier, 10) || 1);
+    });
+  });
+
+  // Stage stepper — the checkpoint diamond at the end of the strip.
+  document.querySelectorAll('[data-stage-cp]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      window.speechSynthesis.cancel();
+      stopAudioFile();
+      openCheckpoint(state.activePath, btn.dataset.stageCp);
       window.scrollTo(0, 0);
-      render();
     });
   });
 
