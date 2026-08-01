@@ -4,57 +4,78 @@
 // and the init() bootstrap.
 // ===================================================================
 
+// The persistent chrome below the content, mounted identically by all five of
+// render()'s exit points — the main one and the four loading/error shells.
+// One helper rather than five copies of the pair, so a screen can never end up
+// with the tab bar but no settings sheet (the drawer had this shape and got away
+// with it only because it was a single call).
+// The tab bar shows on the loading shells deliberately: a stuck load is exactly
+// when you want a route out.
+function renderChrome() {
+  return renderTabBar() + renderSettingsSheet();
+}
+
 // ── Render ────────────────────────────────────────────────────────────────────
-function renderDrawer() {
+// The five top-level destinations. Fixed to the viewport bottom and shown on
+// EVERY screen — including topics and checkpoints. §3.10 originally hid it in
+// detail screens to avoid colliding with a docked action bar; that bar was never
+// built (MOCK-11-bar is still unbuilt, and MOCK-10-cont's continuation card is
+// in-flow), so there was nothing to collide with, and hiding the main menu would
+// only have made detail screens feel like dead ends. Amended 2026-08-01 — see
+// DESIGN_SYSTEM §3.10.
+function renderTabBar() {
   const rc = state.reviewBadge.liveCount;
   const items = [
-    { key:'dashboard', icon:'🏠', label:'Home',            desc:'Your next step at a glance'             },
-    { key:'path',      icon:'🛤️', label:'Learning Path',  desc:'Curated curriculum, ordered & tracked'  },
-    { key:'topics',    icon:'📖', label:'Topics',         desc:'Vocabulary, sentences & conversations' },
-    { key:'review',    icon:'🗂️', label:'Review',          desc:'Words you got wrong in quizzes',       badge: rc },
-    { key:'translate', icon:'🌐', label:'Translate',       desc:'AI-powered translation & breakdown'    },
+    { key:'dashboard', icon:'home',      label:'Home'      },
+    { key:'path',      icon:'path',      label:'Path'      },
+    { key:'topics',    icon:'topics',    label:'Topics'    },
+    { key:'review',    icon:'review',    label:'Review',   badge: rc },
+    { key:'translate', icon:'translate', label:'Translate' },
   ];
-  const open = state.drawerOpen ? 'open' : '';
-  // Active highlight: a topic opened via the path, or an open checkpoint, both
-  // belong to "Learning Path" — otherwise a path lesson wrongly lights "Topics".
+  // A topic opened via the path, or an open checkpoint, both belong to "Path" —
+  // otherwise a path lesson wrongly lights "Topics". Carried over unchanged from
+  // the drawer; it was correct there and the same reasoning holds here.
   const activeNav = (state.checkpoint || state.fromPath) ? 'path' : state.nav;
-  const speeds = [
-    { key:'slow',   label:'🐢 Slow'   },
-    { key:'normal', label:'🚶 Normal' },
-    { key:'fast',   label:'🏃 Fast'   },
-  ];
-  const speedBtnsDrawer = speeds.map(s => {
-    const active = state.speed === s.key;
-    return `<button class="drawer-speed-btn${active ? ' active' : ''}" data-drawer-speed="${s.key}">${s.label}</button>`;
-  }).join('');
-  const settingsSection = `
-    <div class="nav-settings">
-      <div class="nav-settings-title">Settings</div>
-      <div class="nav-settings-row">
-        <div class="nav-settings-label">Audio speed</div>
-        <div class="drawer-speed-btns">${speedBtnsDrawer}</div>
-      </div>
-    </div>`;
   return `
-    <div class="nav-drawer ${open}" id="nav-drawer">
-      <div class="nav-backdrop" id="nav-backdrop"></div>
-      <div class="nav-panel">
-        <div class="nav-panel-header">
-          <span class="nav-panel-title">Menu</span>
-          <button class="nav-close" id="nav-close">✕</button>
+    <nav class="tabs tabs--top" id="tabbar" aria-label="Main">
+      ${items.map(item => {
+        const on = activeNav === item.key;
+        return `
+        <button class="tab${on ? ' tab--on' : ''}" data-nav="${item.key}"${on ? ' aria-current="page"' : ''}>
+          <span class="tab-ic">${icon(item.icon, 19)}${item.badge > 0 ? `<span class="tab-badge">${item.badge}</span>` : ''}</span>
+          <span>${item.label}</span>
+        </button>`;
+      }).join('')}
+    </nav>`;
+}
+
+// Settings, behind the header cog (DES-11: settings live in the header corner,
+// never as a tab — a tab is a destination and settings is not one). MOCK-19-sheet:
+// a bottom sheet sized to its contents rather than a fixed height, so two rows do
+// not sit in a half-empty full-height surface.
+function renderSettingsSheet() {
+  if (!state.settingsOpen) return '';
+  const speeds = [
+    { key:'slow',   label:'Slow'   },
+    { key:'normal', label:'Normal' },
+    { key:'fast',   label:'Fast'   },
+  ];
+  const speedBtns = speeds.map(s =>
+    `<button class="seg-btn${state.speed === s.key ? ' on' : ''}" data-speed="${s.key}"${state.speed === s.key ? ' aria-current="true"' : ''}>${s.label}</button>`
+  ).join('');
+  return `
+    <div class="sheet-wrap" id="settings-sheet">
+      <div class="sheet-scrim" id="settings-scrim"></div>
+      <div class="sheet" role="dialog" aria-modal="true" aria-label="Settings">
+        <div class="sheet-grab"></div>
+        <div class="sheet-head">
+          <h2 class="sheet-title">Settings</h2>
+          <button class="btn-icon sheet-close" id="settings-close" aria-label="Close settings">${icon('close', 17)}</button>
         </div>
-        <div class="nav-panel-body">
-          ${items.map(item => `
-            <button class="nav-item${activeNav===item.key?' active':''}" data-nav="${item.key}">
-              <span class="ni-icon">${item.icon}</span>
-              <span class="ni-text">
-                <span class="ni-label">${item.label}</span>
-                <span class="ni-desc">${item.desc}</span>
-              </span>
-              ${item.badge > 0 ? `<span class="ni-badge">${item.badge}</span>` : ''}
-              <span class="ni-tick">✓</span>
-            </button>`).join('')}
-          ${settingsSection}
+        <div class="set-row">
+          <div class="set-label">Audio speed</div>
+          <div class="set-help">Applies to every word and sentence.</div>
+          <div class="seg">${speedBtns}</div>
         </div>
       </div>
     </div>`;
@@ -992,7 +1013,7 @@ function render() {
     app.innerHTML = `
       ${renderHeader()}
       <div class="content"><div style="padding:40px 20px;text-align:center;color:#888;font-size:14px;">Loading topic…</div></div>
-      ${renderDrawer()}
+      ${renderChrome()}
     `;
     attachEvents(null);
     store.loadTopic(state.topic).then(render).catch(err => {
@@ -1000,7 +1021,7 @@ function render() {
       app.innerHTML = `
         ${renderHeader()}
         <div class="content"><div class="fatal-msg">Couldn't load topic. Check console.</div></div>
-        ${renderDrawer()}
+        ${renderChrome()}
       `;
       attachEvents(null);
     });
@@ -1016,7 +1037,7 @@ function render() {
         app.innerHTML = `
           ${renderHeader()}
           <div class="content"><div style="padding:40px 20px;text-align:center;color:#888;font-size:14px;">Loading path…</div></div>
-          ${renderDrawer()}
+          ${renderChrome()}
         `;
         attachEvents(null);
         store.loadTopics(missing).then(render).catch(err => {
@@ -1038,7 +1059,7 @@ function render() {
         app.innerHTML = `
           ${renderHeader()}
           <div class="content"><div style="padding:40px 20px;text-align:center;color:#888;font-size:14px;">Loading checkpoint…</div></div>
-          ${renderDrawer()}
+          ${renderChrome()}
         `;
         attachEvents(null);
         store.loadTopics(missing).then(render).catch(err => console.error('[checkpoint load]', err));
@@ -1108,7 +1129,7 @@ function render() {
     ${renderHeader()}
     ${mainContent}
     ${state.toast ? renderToast(state.toast) : ''}
-    ${renderDrawer()}
+    ${renderChrome()}
   `;
 
   attachEvents(lesson);
@@ -1144,9 +1165,7 @@ function renderHeader() {
           </button>
         </div>
         <div class="header-slot">
-          <button class="hamburger" id="hamburger-btn" aria-label="Menu">
-            <span></span><span></span><span></span>
-          </button>
+          <button class="btn-icon btn-icon--header" id="settings-btn" aria-label="Settings" aria-expanded="${!!state.settingsOpen}">${icon('cog', 17)}</button>
         </div>
       </div>
       ${detailsOpen ? `
@@ -1842,10 +1861,6 @@ function attachEvents(lesson) {
   // own, so the top of this function is the single point every path passes.
   paintDiamondRings();
 
-  // Hamburger open — pushes history so the BACK button closes the drawer first
-  const hamburger = document.getElementById('hamburger-btn');
-  if (hamburger) hamburger.addEventListener('click', () => { state.drawerOpen = true; pushNav(); render(); });
-
   // Nameplate → Home (DES-18). The header's only route to a top-level destination
   // when the tab bar is hidden inside a topic (§3.10), which is why it is
   // structural rather than a convenience. `replace` is false: this is a genuine
@@ -1861,28 +1876,35 @@ function attachEvents(lesson) {
   const headerInfo = document.getElementById('header-info-toggle');
   if (headerInfo) headerInfo.addEventListener('click', () => { state.headerDetailsOpen = !state.headerDetailsOpen; render(); });
 
-  // Drawer close (X button and backdrop). The drawer-open pushed a history entry,
-  // so closing steps back through history — keeping the stack consistent and
-  // letting the popstate handler perform the actual close.
-  const navClose    = document.getElementById('nav-close');
-  const navBackdrop = document.getElementById('nav-backdrop');
-  if (navClose)    navClose.addEventListener('click',    () => { closeDrawer(); });
-  if (navBackdrop) navBackdrop.addEventListener('click', () => { closeDrawer(); });
+  // Settings cog → sheet. Pushes a history entry so phone BACK closes the sheet
+  // rather than leaving the screen underneath — the pattern the drawer used, and
+  // the reason closing routes through history rather than setting state directly.
+  const settingsBtn = document.getElementById('settings-btn');
+  if (settingsBtn) settingsBtn.addEventListener('click', () => {
+    state.settingsOpen = true; pushNav(); render();
+  });
+  const settingsClose = document.getElementById('settings-close');
+  const settingsScrim = document.getElementById('settings-scrim');
+  if (settingsClose) settingsClose.addEventListener('click', () => closeSettings());
+  if (settingsScrim) settingsScrim.addEventListener('click', () => closeSettings());
 
-  // Nav items
-  // The drawer's five destinations. The reset lives in goToDestination() so this
-  // and the header nameplate cannot drift; `replace` is true because the open
-  // drawer is its own history entry and the destination overwrites it, so BACK
-  // returns to the pre-drawer screen rather than reopening the drawer.
+  // Audio speed — the sheet is now the only route to it, so this is the sole
+  // writer of state.speed.
+  document.querySelectorAll('[data-speed]').forEach(btn => {
+    btn.addEventListener('click', () => { state.speed = btn.dataset.speed; render(); });
+  });
+
+  // Tab bar — the five top-level destinations. The reset lives in
+  // goToDestination() so this and the header nameplate cannot drift.
+  // `replace` is FALSE here, unlike the drawer it replaces: the drawer had its
+  // own history entry to overwrite, a tab tap has nothing to overwrite and is a
+  // genuine forward move, so BACK steps back through the tabs you visited.
   document.querySelectorAll('[data-nav]').forEach(btn => {
     btn.addEventListener('click', () => {
-      // Tapping the destination you are already on still closes the drawer, and
-      // the drawer-open history entry must still be overwritten or BACK reopens
-      // it. goToDestination() makes no history call in that case, so make it here.
-      const moved = goToDestination(btn.dataset.nav, { replace: true });
-      state.drawerOpen = false;
-      if (!moved) navReplace();
-      render();
+      // Tapping the tab you are already on is a no-op — no re-render, no history
+      // entry. goToDestination() reports that so repeat taps cannot stack
+      // identical entries and make BACK look broken.
+      if (goToDestination(btn.dataset.nav)) { window.scrollTo(0, 0); render(); }
     });
   });
 
@@ -1893,8 +1915,7 @@ function attachEvents(lesson) {
       state.selectedCategory = btn.dataset.catJump;
       state.fromPath = false;
       state.fromPathTier = null;
-      state.drawerOpen = false;
-      navReplace();              // see nav-items above — replace the drawer entry
+      pushNav();                 // a forward move, same as a tab tap
       window.scrollTo(0, 0);
       render();
     });
@@ -2914,7 +2935,7 @@ function attachEvents(lesson) {
       state.nav = 'dashboard';
       state.pathView = 'list';
       state.homeView = true;
-      state.drawerOpen = false;
+      state.settingsOpen = false;
     }
 
     // A review session is not part of the nav snapshot, so backing out of a

@@ -360,7 +360,7 @@ function colorJyutping(text) {
 let state = {
   speed: 'normal',
   nav: 'dashboard',               // app opens on the new Dashboard homepage
-  drawerOpen: false,
+  settingsOpen: false,           // the settings sheet (header cog), v117
   homeView: true,                 // true = show home screen, false = inside a topic
   selectedCategory: 'all',        // 'all' or a category key
   currentRound: 1,
@@ -432,7 +432,7 @@ let state = {
 // pushNav() only OBSERVES the resulting state and records it — it does not change
 // how navigation works, only makes the browser aware of it. Low-risk by design.
 const NAV_FIELDS = [
-  'nav', 'drawerOpen', 'homeView', 'pathView', 'activePath',
+  'nav', 'settingsOpen', 'homeView', 'pathView', 'activePath',
   'topic', 'currentRound', 'fromPath', 'fromPathTier',
   'mode', 'tab', 'selectedCategory',
   'checkpoint', 'checkpointAct',
@@ -489,14 +489,15 @@ function navReplace() {
   } catch (e) { /* see pushNav */ }
 }
 
-// Close the drawer. If the drawer-open pushed a history entry we step back
-// through it (keeps the stack honest); otherwise just close directly.
-function closeDrawer() {
-  if (!state.drawerOpen) return;
+// Close the settings sheet. If opening pushed a history entry we step back
+// through it (keeps the stack honest, and means phone BACK and the ✕ do exactly
+// the same thing); otherwise just close directly.
+function closeSettings() {
+  if (!state.settingsOpen) return;
   if (_navReady) {
-    history.back();          // triggers popstate → restores pre-drawer snapshot
+    history.back();          // triggers popstate → restores the pre-sheet snapshot
   } else {
-    state.drawerOpen = false;
+    state.settingsOpen = false;
     render();
   }
 }
@@ -1011,28 +1012,26 @@ function openPathLesson(topicKey, tier) {
 
 // ── Top-level destination navigation ──────────────────────────────────────────
 // Go to one of the five top-level destinations, resetting the state that must
-// not survive the move. Shared by the drawer's menu items and the header
-// nameplate, so the two can never drift in what they reset — the same reason
-// openPathLesson() above was extracted from its three call sites.
+// not survive the move. Shared by the tab bar and the header nameplate, so the
+// two can never drift in what they reset — the same reason openPathLesson()
+// above was extracted from its three call sites.
 //
-// The history call is the ONLY difference between callers, so it is a parameter
-// rather than something the function decides:
-//   • from the drawer, `replace` is true — the drawer-open state is its own
-//     history entry, and the destination must overwrite it so BACK returns to
-//     the pre-drawer screen rather than reopening the drawer.
-//   • from the nameplate, `replace` is false — nothing is being overwritten,
-//     this is a genuine forward move and BACK should return to where you were.
+// Always pushes. It took a `replace` option at v116, because its caller then was
+// the drawer, whose open state was its own history entry that the destination
+// had to overwrite. The tab bar has no such entry — a tab tap is a plain forward
+// move — so at v117 the option had exactly zero call sites and was removed
+// rather than left as a parameter nobody passes.
 //
 // Returns false when already on the destination with nothing to reset, so
 // callers can no-op instead of stacking identical history entries (which makes
 // BACK look broken: it appears to do nothing until the duplicates are consumed).
-function goToDestination(target, { replace = false } = {}) {
+function goToDestination(target) {
   // Leaving must exit any open checkpoint session first. render() checks
   // state.checkpoint BEFORE state.nav, so without this the chosen destination
   // never shows — the checkpoint hub just redraws.
   const inCheckpoint = !!state.checkpoint;
   const alreadyThere =
-    state.nav === target && !inCheckpoint && !state.fromPath &&
+    state.nav === target && !inCheckpoint && !state.fromPath && !state.settingsOpen &&
     (target !== 'topics' || state.homeView) &&
     (target !== 'path'   || state.pathView === 'list');
   if (alreadyThere) return false;
@@ -1051,8 +1050,8 @@ function goToDestination(target, { replace = false } = {}) {
   state.nav = target;
   state.fromPath = false;          // any top-level navigation clears the path-return flag
   state.fromPathTier = null;
-  state.drawerOpen = false;
-  if (replace) navReplace(); else pushNav();
+  state.settingsOpen = false;      // the sheet never survives a destination change
+  pushNav();
   return true;
 }
 

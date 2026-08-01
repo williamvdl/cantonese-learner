@@ -30,6 +30,19 @@ const ICON_PATHS = {
   brain:   '<path d="M12 5a3 3 0 1 0-5.997.142M12 5a3 3 0 1 1 5.997.142M12 5v13a3 3 0 0 0 5.997.142M12 18a3 3 0 0 1-5.997.142M6.003 5.142A4 4 0 0 0 4 9a4 4 0 0 0 .064 4M18 5.142A4 4 0 0 1 20 9a4 4 0 0 1-.064 4"/>',
   // Quiz tab icon — graduation cap reads clearly at small sizes (the brain icon was too intricate)
   quiz:    '<path d="M21.42 10.922a1 1 0 0 0-.019-1.838L12.83 5.18a2 2 0 0 0-1.66 0L2.6 9.08a1 1 0 0 0 0 1.832l8.57 3.908a2 2 0 0 0 1.66 0z"/><path d="M22 10v6"/><path d="M6 12.5V16a6 3 0 0 0 12 0v-3.5"/>',
+  // ── Tab bar + settings (v117). Transcribed from mockup 13, which drew all six.
+  // The drawer used emoji for the five destinations; emoji are content, not
+  // chrome (see the note above), and at 19px they render inconsistently across
+  // platforms and cannot take currentColor — so an active tab could not turn
+  // brand. These are stroke paths for that reason, not for tidiness.
+  home:      '<path d="M3 10.5 12 3l9 7.5"/><path d="M5.5 9.5V20h13V9.5"/>',
+  path:      '<path d="M4 19c4-1 4-7 8-7s4-6 8-7"/><circle cx="4" cy="19" r="1.6"/><circle cx="20" cy="5" r="1.6"/>',
+  topics:    '<path d="M4 5.5A2 2 0 0 1 6 4h5v16H6a2 2 0 0 1-2-1.5z"/><path d="M20 5.5A2 2 0 0 0 18 4h-5v16h5a2 2 0 0 0 2-1.5z"/>',
+  review:    '<path d="M4 7h6l2 2h8v10H4z"/>',
+  translate: '<circle cx="12" cy="12" r="9"/><path d="M3 12h18"/><path d="M12 3c2.5 2.7 2.5 15.3 0 18"/><path d="M12 3c-2.5 2.7-2.5 15.3 0 18"/>',
+  // Settings cog. Drawn at a lighter weight than the Lucide original: at 17px in
+  // the header corner the full-detail version turns to mush.
+  cog:       '<circle cx="12" cy="12" r="3.2"/><path d="M19.1 14.5a1.6 1.6 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.6 1.6 0 0 0-1.8-.3 1.6 1.6 0 0 0-1 1.5v.2a2 2 0 1 1-4 0v-.1a1.6 1.6 0 0 0-1-1.5 1.6 1.6 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.6 1.6 0 0 0 .3-1.8 1.6 1.6 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.6 1.6 0 0 0 1.5-1 1.6 1.6 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.6 1.6 0 0 0 1.8.3h.1a1.6 1.6 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.6 1.6 0 0 0 1 1.5 1.6 1.6 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.6 1.6 0 0 0-.3 1.8v.1a1.6 1.6 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.6 1.6 0 0 0-1.5 1z"/>',
 };
 // Render an icon as an inline SVG string. size in px, optional className.
 function icon(name, size, cls) {
