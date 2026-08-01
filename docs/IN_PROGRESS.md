@@ -4,16 +4,26 @@
 questions behind it. Meant to be short-lived — when a piece ships, fold its
 outcome into STATUS.md and clear this file back down for the next thing.*
 
-Last updated: 2026-07-30 · sw.js at v113
+Last updated: 2026-08-01 · sw.js at v116
 
-## Nothing actively in progress
+## Phase 6 under way — P6-1 at v114, the centred header at v115, P6-3 at v116
 
-Phase 5 shipped at v113 and is folded into STATUS.md. Phase 6 is the last phase of
-the rollout and has not started.
+Phase 5 shipped at v113 and phase 6 deploy 1 at v114; both are folded into STATUS.md.
+Phase 6 is the last phase of the rollout.
 
-`DESIGN_DECISIONS.md` has three *Not built* rows, all phase 6: MOCK-11-bar (docking
-the completion action), MOCK-17-fill (the subtab treatment) and DES-18 (the nameplate
-as a route home).
+`DESIGN_DECISIONS.md` has two *Not built* rows, both phase 6: MOCK-11-bar (docking
+the completion action) and DES-18 (the nameplate as a route home). MOCK-17-fill, the
+subtab treatment, flipped to *Built* at v114.
+
+**P6-3 shipped at v116**, ahead of P6-2, because it is independent of the drawer
+question and it builds the escape hatch that the hidden tab bar depends on — so
+§3.10's dead-end judgement can now be made with the escape hatch actually present
+rather than imagined.
+
+**Next decision needed:** the settings sheet has no design. Mockup 13 draws the cog
+in the header corner but never the sheet, so P6-4 needs a mockup rather than a choice
+between recorded options — and P6-2 cannot ship before it, because `renderDrawer()`
+holds the only live audio-speed control in the app.
 
 QA is organic from here rather than exhaustive, by choice — the app is being used and
 anything the rollout left will surface that way. Findings go to BACKLOG.md. Phase 5's
@@ -44,10 +54,10 @@ to be one primitive.
 
 | ID | Item | Notes |
 |---|---|---|
-| P6-1 | **Subtab + tab bar primitive** (MOCK-17-fill) | Do this first. One primitive, two consumers: `--top` is the only difference. Building the subtabs alone would write the emphasis language twice. Retires `.subtab-btn`'s border, background, radius and solid-fill active state. Declare `min-height: var(--tap-min)` explicitly — mockup 04's own drawing computes to ~27px and would pass standing check 2 unseen. |
-| P6-2 | **Tab bar replacing `renderDrawer()`** | Needs `pushNav()` care so tab switches behave with browser back. Keep the `activeNav` resolution logic. Retires `.hamburger` and `.drawer-speed-btn` — the two remaining sub-44px controls waiting on it. `.bottom-nav` / `.nav-btn` / `.placeholder-screen` already sit in `styles.css` with **zero call sites** — dead CSS from an earlier era; retire or reuse deliberately, don't inherit. |
-| P6-3 | **Nameplate as a route home** (DES-18) | A handler plus a tap target; `renderHeader()` already renders the nameplate on every screen and it is inert. Structurally part of P6-2: with tabs hidden in a topic this is the only visible route to a top-level destination. |
-| P6-4 | **Settings sheet behind the cog** | **Blocked:** MOCK-13's panel colour was never recorded (A parchment / B oxblood). Settle before starting. |
+| ~~P6-1~~ | ~~**Subtab + tab bar primitive** (MOCK-17-fill)~~ | ~~v114~~ · done 2026-07-31. `.tabs` / `.tab` / `.tab--on` ported from `styleguide.html` into the primitive block; four `.subtabs` / `.subtab-btn` rules retired. `.tabs--top` deliberately left in the styleguide until P6-2 consumes it. **The brief's premise was wrong** and is corrected in DESIGN_SYSTEM §2: `--top` is not only an edge swap, it carries the axis and type scale too. That did not change the size of the work — the styleguide's CSS had it right all along; only its prose was wrong. |
+| P6-2 | **Tab bar replacing `renderDrawer()`** | **Gated on P6-4** — the drawer holds the only live audio-speed control, so retiring it first leaves a live setting unreachable. Needs `pushNav()` care so tab switches behave with browser back; removing `drawerOpen` from `NAV_FIELDS` has the same stale-snapshot shape as P6-6's rename. Keep the `activeNav` resolution logic. Retires `.hamburger` and `.drawer-speed-btn` — the two remaining sub-44px controls. **Build `.tabs--top`, not `.tabbar` / `.tb`:** `styleguide.html` draws two tab bars and they differ in substance, not just naming (the older one's active rule is a `::before` inset 22% each side, not a full-width border; its resting colour is `--muted`, not `--muted-dark`). `.tb-badge` and `.tabbar--slim` have no primitive equivalent and need porting rather than dropping. Also needs **six icons that do not exist** — home, path, topics, review, translate, cog — all already drawn in mockup 13, so transcription into `ICON_PATHS` rather than design. Dead CSS to retire in the same pass: `.bottom-nav` / `.nav-btn` / `.placeholder-screen`, and `.speed-btn` / `.speed-btns`, never emitted since the header speed control went (`.speed-btn` shares a rule with the live `.quiz-next`, so edit the selector rather than deleting the rule). |
+| P6-3 | **Nameplate as a route home** (DES-18) | A handler plus a tap target; `renderHeader()` already renders the nameplate on every screen and it is inert. Structurally part of P6-2: with tabs hidden in a topic this is the only visible route to a top-level destination. **The affordance is still open** — mockup 18 drew four options against the *old* left-aligned header and must be redrawn on the centred one (v115), where a wordmark flanked by two corner icons reads as a logo slot and the case for no persistent affordance is stronger. **Do not reuse the `[data-nav]` handler wholesale:** its state reset is right but it ends in `navReplace()`, correct only when overwriting a drawer-open history entry. From the nameplate this is a genuine forward navigation and needs `pushNav()`, plus a no-op guard when already on Home or it stacks identical history entries. Extract the shared reset the way `openPathLesson()` was. |
+| P6-4 | **Settings sheet behind the cog** | **Not blocked — needs a mockup.** The recorded blocker was wrong: mockup 13's A and B are *drawer* panel variants offered only if the drawer is kept, so they retire with the drawer rather than gating anything. The sheet itself is never drawn in mockup 13, only the cog in the header corner, so there is no approved design to build from. Must ship with or before P6-2 (see above). Contents at minimum: audio speed, currently the drawer's only setting. |
 | P6-5 | **Docked bar, or not** (MOCK-11-bar) | The decision, then the build. The bar and the continuation card do the same job in two positions and only one can ship. Judge with the tab bar present, since DES-12's collision is the whole reason the bar has a suppression rule. `--bar-h` and `--tabbar-h` are declared and unused, waiting on this. Whichever wins also settles fill-versus-tint for the forward action. |
 | P6-6 | **`state.homeView` → `state.topicsView`** | It sits in `NAV_FIELDS`, so the rename touches history snapshots. `renderTopicsScreen()` renders Topics; `renderDashboard()` is Home. Do it last — it is a pure rename and shouldn't be entangled with behaviour changes. |
 
@@ -64,8 +74,8 @@ new Subtabs & tab bar entry — and §3.9–3.10 for the nav rules, plus
 ## Standing checks for any CSS work
 
 All five have caught real bugs. Run before shipping. Baseline verified clean at
-v113 on 2026-07-30 — check 1 gives `.nav-item -> ['transition']` only, check 3 gives
-`['--token']` only, and check 2 gives five declared misses plus 15 padding-built
+v114 on 2026-07-31 — check 1 gives `.nav-item -> ['transition']` only, check 3 gives
+`['--token']` only, and check 2 gives **four** declared misses plus 15 padding-built
 targets.
 
 **1 · Duplicate declarations inside one rule** — this is how `.word-card` acquired
@@ -115,12 +125,11 @@ for m in re.finditer(r'\n\s*([^{}\n]+)\{([^{}]*)\}', s):
     elif pad and not h:
         print(f'{sel}: padding-built target ({pad.group(1)}px each side) — VERIFY')
 ```
-Expected: three `min-height` misses (`.hamburger`, `.drawer-speed-btn`,
-`.subtab-btn`), two declared-height misses (`.path-complete-btn` at 28px and
-`.translate-dir-swap` at 38px), and 15 padding-built targets to judge individually.
-All are logged in BACKLOG.md; **the list should not grow.** Phase 6 clears three of
-the five declared misses: `.subtab-btn` via P6-1, `.hamburger` and
-`.drawer-speed-btn` via P6-2.
+Expected: two `min-height` misses (`.hamburger`, `.drawer-speed-btn`), two
+declared-height misses (`.path-complete-btn` at 28px and `.translate-dir-swap` at
+38px), and 15 padding-built targets to judge individually. All are logged in
+BACKLOG.md; **the list should not grow.** `.subtab-btn` left the list at v114 via
+P6-1; the two remaining `min-height` misses go with the drawer in P6-2.
 
 **Compare against the previous commit rather than against this list.** The
 authoritative test is that the count did not *change* — run the check against
@@ -170,8 +179,9 @@ phase 4 left directly.
 - **Row-type icons on the path timeline.** Now judgeable — deferred until MOCK-06-C
   and MOCK-07-Asoft landed, and they have. Does a lesson row want a `bookOpen`
   glyph and a checkpoint the diamond, or does the rail carry enough weight already?
-  **Related:** MOCK-17-fill keeps mockup 04's per-tab subtab glyphs, so phase 6 will
-  settle a near-identical judgement one screen along. Worth deciding together.
+  **The paired question has since answered itself:** the subtabs shipped at v114
+  keeping mockup 04's per-tab glyphs, so the precedent is set — a row of text labels
+  one screen along does carry icons. Treat that as evidence rather than as binding.
 - **Landscape stepper.** More chrome than when this was raised: the stepper is 28px
   rather than 20px and now appears on the checkpoint hub as well as in topics.
   Candidate is hiding it under `(max-height: 450px)`. Needs a real device.

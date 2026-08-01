@@ -4,7 +4,7 @@
 IN_PROGRESS.md when it's picked up; delete it from here once it's shipped and
 folded into STATUS.md.*
 
-Last updated: 2026-07-30 · sw.js at v113
+Last updated: 2026-08-01 · sw.js at v116
 
 ## Product
 
@@ -101,7 +101,7 @@ or surfaced.*
   `.translate-dir-swap` is 38px. Neither was in phase 4's scope. The fix for the
   first should follow MOCK-15-B and grow the touch target while keeping the painted
   28px, which makes it an invisible change.
-- **Around fourteen padding-built tap targets need judging individually.** Listed by
+- **15 padding-built tap targets need judging individually.** Listed by
   standing check 2 in IN_PROGRESS.md. Most are probably fine — 12px padding around a
   20px line reaches 44px — but none declares `min-height`, so none is verified and
   none is visible to the check. Worth one pass that either confirms each or adds the
@@ -141,11 +141,10 @@ or surfaced.*
   label, an empty-state glyph and the 76px hero mic. DESIGN_SYSTEM §3.6 grants
   its emoji exception to the Topics category grid only. The hero mic was
   deliberately excluded from the phase 3 control vocabulary as a one-off.
-- **Three controls remain under `--tap-min`, and phase 6 clears all three.**
-  `.hamburger` and `.drawer-speed-btn` at 36px retire with the drawer (P6-2).
-  `.subtab-btn` at 42px retires with the subtab primitive (P6-1) — the earlier note
-  here said it was "close enough to leave unless it annoys in use", which is now
-  superseded: MOCK-17-fill rebuilds the control anyway, so the tap minimum comes free.
+- **Two controls remain under `--tap-min`, and P6-2 clears both.** `.hamburger` and
+  `.drawer-speed-btn` at 36px retire with the drawer. The third, `.subtab-btn` at
+  42px, went at v114 with the subtab rebuild — as predicted, the tap minimum came
+  free with MOCK-17-fill rather than needing its own fix.
 
 - **Dead nav CSS with zero call sites.** `.bottom-nav`, `.nav-btn` and
   `.placeholder-screen` sit in `styles.css` and are referenced from nowhere in
@@ -157,11 +156,47 @@ or surfaced.*
   reads as an acknowledgement rather than a plain forward, and it shares
   `.quiz-wrong-actions` with "Hear it again" — the row wraps rather than overflows,
   but it would wrap at 360px. Confirm or match.
-- **Subtab icons versus path row-type icons are the same judgement twice.**
-  MOCK-17-fill keeps mockup 04's per-tab glyphs; the path timeline's row-type icons
-  are still open above. Both are "does a line glyph earn its place on a row of text
-  labels" — worth deciding together rather than reaching opposite answers two screens
-  apart.
+- **Judge the hidden tab bar's dead-end risk on device, once P6-2 ships.** §3.10
+  defers this deliberately, and both remaining phase 6 design questions hang off it:
+  whether MOCK-11-bar's docked bar is needed, and whether the nameplate's no-affordance
+  resting state (MOCK-18-N1) is enough to make the escape hatch findable. If it is not,
+  MOCK-18-N3's home glyph is the honest answer — but it costs the centred plate, so it
+  would need the glyph placed somewhere that does not fight it. One device session
+  answers both.
+- **82 selectors are redeclared across `styles.css` with overlapping properties.**
+  Found while removing one confirmed-dead declaration in the header at v115
+  (`letter-spacing` on `.header-title .en`, overridden 586 lines later by the grouped
+  meta-label rule). **Most of the 82 are almost certainly deliberate** — the grouped
+  "consistent treatment" blocks that set a shared font-size or transition across a
+  family after the individual rules. Some are dead. The raw count is not the finding;
+  classifying it is, and per the standing lesson that has to be done by declaration
+  rather than by shape. Worth one pass with the cross-file audit before the rollout
+  closes, since a dead declaration reads as a live one to anyone editing later.
+- **Path row-type icons — the paired question has resolved itself.** The subtabs
+  shipped at v114 keeping mockup 04's per-tab glyphs, so "does a line glyph earn its
+  place on a row of text labels" now has one answer in the app. The path timeline's
+  row-type icons are still open above; the subtab precedent is evidence, not a
+  binding answer, since a three-item switch and a long scrolling rail are not the
+  same problem.
+- **`styleguide.html` draws two different tab bars and only one can ship.** The
+  `.tabbar` / `.tb` block predates the shared primitive and differs from
+  `.tabs--top` in substance: its active rule is a `::before` inset 22% from each
+  side rather than a full-width border, and its resting colour is `--muted` rather
+  than `--muted-dark`. P6-2 should build `.tabs--top` and retire the older block —
+  but `.tb-badge` (Review's count) and `.tabbar--slim` (the §3.10 dead-end fallback)
+  have no primitive equivalent yet and need porting rather than dropping. Warning is
+  written into the styleguide's Tab bar section as of v114.
+- **Six icons the tab bar needs do not exist.** `ICON_PATHS` in `data.js` has 16
+  entries; home, path, topics, review, translate and cog are absent, and the drawer
+  uses emoji for the five destinations today. All six are already drawn in mockup 13,
+  so this is transcription rather than design — but it is unnamed work inside P6-2
+  and it touches a cached shell asset.
+- **`.speed-btn` and `.speed-btns` are dead CSS.** Seven rules for a header audio-speed
+  control that `render.js` no longer emits; the `#speed-slow` handler is a no-op
+  guarded by `if (btn)`. The drawer's `.drawer-speed-btn` is the only live speed
+  control, which is why P6-2 is gated on the settings sheet. Retire in the same pass —
+  note `.speed-btn` shares a grouped rule with the live `.quiz-next`, so the selector
+  needs editing rather than the rule deleting.
 - **Dashboard density.** The converged Home reads quieter than the old one — the
   hero lost its filled per-topic band. Deliberately not adjusted: Home is the only
   fully converged screen in a half-converged app, so the comparison is unfair.

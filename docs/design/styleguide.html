@@ -144,9 +144,9 @@ code{ background:#DAD4CA; padding:1px 5px; border-radius:4px; font-size:11.5px; 
 }
 .sg-header .icon.left{ left:4px; } .sg-header .icon.right{ right:4px; }
 .sg-header .icon svg{ width:17px; height:17px; }
-.nameplate{ display:flex; flex-direction:column; align-items:center; gap:4px; max-width:var(--measure); margin:0 auto; }
-.nameplate .zh{ font:var(--fw-medium) 16px/1 var(--font-serif); letter-spacing:.04em; }
-.nameplate .en{ font:var(--fw-medium) 8.5px/1 var(--font-ui); letter-spacing:.24em; text-transform:uppercase; opacity:.72; }
+.sg-plate{ display:flex; flex-direction:column; align-items:center; gap:4px; max-width:var(--measure); margin:0 auto; }
+.sg-plate .zh{ font:var(--fw-medium) 16px/1 var(--font-serif); letter-spacing:.04em; }
+.sg-plate .en{ font:var(--fw-medium) 8.5px/1 var(--font-ui); letter-spacing:.24em; text-transform:uppercase; opacity:.72; }
 
 /* contextual row */
 .ctx{ background:var(--parchment-warm); }
@@ -488,12 +488,15 @@ table.spec tr:last-child td{ border-bottom:none; }
 
 <!-- ══════════ PRIMITIVES ══════════ -->
 <section id="header">
-  <h2>Header</h2>
+  <h2>Header <span class="tag-new">built &middot; v115</span></h2>
   <p class="note">Solid Oxblood band, centred nameplate, an icon in each corner so the bar never reads as empty. Retheming means swapping the <code>--header-*</code> block only.</p>
   <div class="stage deep" style="padding:0;overflow:hidden;border-radius:var(--r-md)">
     <div class="sg-header" id="hdr"></div>
   </div>
-  <div class="cls">.sg-header › .nameplate + .icon.left / .icon.right</div>
+  <div class="cls">.header › .header-row › .header-slot + .header-title › .nameplate (+ .header-slot)</div>
+  <p class="note"><b>This section was right and unbuildable for four phases.</b> It described the centred plate correctly while the app shipped it left-aligned with both icons sharing the right corner — and nothing caught the gap, because the demo below is drawn with styleguide-local classes (<code>.sg-header</code>, <code>.icon.left</code> — and a <code>.nameplate</code> that meant something else entirely) that appear nowhere in <code>styles.css</code>. A section written in private vocabulary cannot be diffed against the code it documents. The class line above now names the real thing.</p>
+  <p class="note"><b>The two corner controls are not the same width</b> — the info button is 44px, the hamburger 36px — so each sits in a fixed <code>--tap-min</code> slot and the plate centres on the <i>row</i> rather than on the space the icons happen to leave. Without the fixed slots the plate drifts off-centre by half the difference, and would drift again when the hamburger becomes the settings cog. <b>Nameplate type is deliberately untouched:</b> size, weight and face wait on the product-naming decision, which gates the logo.</p>
+  <p class="note"><b>The nameplate is a route Home</b> (DES-18, built v116). It is a <code>&lt;button&gt;</code> that <i>hugs its text</i> rather than filling the centre slot — ~128px of wordmark, not ~238px of mostly-blank band, because an invisible full-width target on a sticky header catches stray thumbs mid-scroll. Nothing marks it at rest: a wordmark centred between two corner icons reads as a logo slot, and a logo goes home. Pressing drops its opacity, the same language the corner icons already use. <b>This page previously used <code>.nameplate</code> as a local demo class</b> meaning something unrelated; it is now <code>.sg-plate</code>, since the name belongs to a real component.</p>
 </section>
 
 <section id="context">
@@ -789,7 +792,7 @@ document.getElementById('radii').innerHTML=[['sm','8px'],['md','12px'],['lg','16
 
 document.getElementById('hdr').innerHTML=`
   <button class="icon left">${I.info}</button>
-  <div class="nameplate"><span class="zh">廣東話</span><span class="en">Cantonese Learner</span></div>
+  <div class="sg-plate"><span class="zh">廣東話</span><span class="en">Cantonese Learner</span></div>
   <button class="icon right">${I.menu}</button>`;
 
 document.getElementById('ctxdemo').innerHTML=`

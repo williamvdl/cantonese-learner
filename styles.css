@@ -324,9 +324,43 @@
 
   /* Header */
   .header { background: var(--header-bg); padding: var(--sp-3) var(--sp-5); box-shadow: var(--elev-2); position: sticky; top: 0; z-index: 10; border-bottom: 1px solid var(--header-border); }
-  .header-title { display: flex; align-items: flex-start; gap: 0; flex-direction: column; }
+  /* Centred nameplate, one icon in each corner — DESIGN_SYSTEM §2 Header, built
+     at v115. The band read as lopsided until then: the plate was left-aligned
+     and both icons shared the right corner, leaving the left empty, which is
+     precisely what §2's "an icon in each corner" exists to prevent.
+     Both slots are a fixed --tap-min wide so the plate centres on the ROW rather
+     than on whatever space the icons happen to leave — unequal slots would drift
+     the plate off-centre as soon as the two controls differ in width, which they
+     do today (44px info, 36px hamburger) and will again when the hamburger
+     becomes the settings cog in phase 6.
+     Nameplate TYPE is deliberately untouched: size, weight and face are gated on
+     the product-naming decision, which gates the logo (see BACKLOG). This deploy
+     moves the plate; it does not restyle it. */
+  .header-slot { flex: 0 0 var(--tap-min); display: flex; align-items: center; justify-content: center; }
+  .header-title { flex: 1 1 auto; min-width: 0; display: flex; align-items: center; gap: 0; flex-direction: column; }
   .header-title .zh { font-size: 24px; color: var(--header-text); font-family: var(--font-display); font-weight: var(--fw-bold); letter-spacing: 0.06em; line-height: 1.1; }
-  .header-title .en { font-size: 9px; color: var(--header-sub); letter-spacing: 0.22em; text-transform: uppercase; margin-top: 1px; }
+  /* No letter-spacing here: the grouped "meta + UI labels" rule further down sets
+     0.16em on this same selector and wins on source order. A 0.22em declaration
+     sat here dead until v115. */
+  .header-title .en { font-size: 9px; color: var(--header-sub); text-transform: uppercase; margin-top: 1px; }
+
+  /* The nameplate is a route Home (DES-18, MOCK-18-Thug + N1/N2, built v116).
+     A <button>, not a div with a click handler, so it is keyboard-reachable and
+     announced as a control — which brings a UA font, background, border and
+     padding, all cleared here.
+     T-hug: the button hugs its text rather than filling the centre slot.
+     `.header-title` stays the centring container and this sits inside it, so the
+     live area is ~128px of wordmark rather than ~238px of mostly-blank band. An
+     invisible full-width target on a sticky header catches stray thumbs mid-scroll
+     and navigates away from the lesson.
+     N1: nothing marks it at rest — a wordmark centred between two corner icons
+     reads as a logo slot, and a logo goes home. N2: an opacity drop on press,
+     which is the language .btn-icon--header already speaks, so no new one is
+     introduced. No hover rule — this is a touch-first surface and hover would
+     assert an affordance that N1 deliberately withholds. */
+  .nameplate { display: flex; flex-direction: column; align-items: center; gap: 0; min-height: var(--tap-min); justify-content: center; font-family: inherit; background: transparent; border: none; padding: 0; margin: 0; cursor: pointer; -webkit-tap-highlight-color: transparent; transition: opacity 0.12s ease; }
+  .nameplate:active { opacity: 0.55; }
+  .nameplate:focus-visible { outline: 2px solid var(--header-text); outline-offset: 3px; border-radius: var(--r-sm); }
   .tone-key { display: flex; gap: var(--sp-3) var(--sp-3); flex-wrap: wrap; margin-top: 8px; align-items: center; padding-bottom: var(--sp-2); }
   .tone-key span { font-size: var(--fs-micro); font-weight: var(--fw-bold); }
   .tone-key .label { color: var(--muted-dark); font-weight: var(--fw-regular); }
@@ -875,8 +909,12 @@
 
   /* ── Chrome refinements (added with theme) ────────────────────────────────── */
   /* Header — compact by default, ⓘ expands */
-  .header-row { display: flex; align-items: center; justify-content: space-between; }
-  .header-actions { display: flex; align-items: center; gap: 14px; }
+  /* Three slots: corner, plate, corner. No justify-content — the plate takes the
+     remaining space via flex:1 and centres its own contents, so the row needs no
+     distribution rule. space-between here would fight the fixed slot widths. */
+  .header-row { display: flex; align-items: center; gap: var(--sp-2); }
+  /* .header-actions retired at v115 — it grouped two buttons in the right corner.
+     The header now has one control per corner, each in a .header-slot. */
   .header-info-icon { line-height: 1; }
   .header-details { margin-top: var(--sp-3); padding-top: var(--sp-3); border-top: 1px solid rgba(255,255,255,0.10); }
   .speed-row { display: flex; align-items: center; gap: 10px; margin-top: 10px; }

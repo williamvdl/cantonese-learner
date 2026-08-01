@@ -1132,14 +1132,18 @@ function renderHeader() {
   return `
     <div class="header">
       <div class="header-row">
-        <div class="header-title">
-          <span class="zh">廣東話</span>
-          <span class="en">Cantonese Learner</span>
-        </div>
-        <div class="header-actions">
+        <div class="header-slot">
           <button class="btn-icon btn-icon--header header-info-btn${detailsOpen ? ' open' : ''}" id="header-info-toggle" aria-label="Show tone reference" aria-expanded="${detailsOpen}">
             <span class="header-info-icon">${detailsOpen ? icon('close', 17) : icon('info', 17)}</span>
           </button>
+        </div>
+        <div class="header-title">
+          <button class="nameplate" id="nameplate-home" aria-label="Go to Home">
+            <span class="zh">廣東話</span>
+            <span class="en">Cantonese Learner</span>
+          </button>
+        </div>
+        <div class="header-slot">
           <button class="hamburger" id="hamburger-btn" aria-label="Menu">
             <span></span><span></span><span></span>
           </button>
@@ -1842,6 +1846,17 @@ function attachEvents(lesson) {
   const hamburger = document.getElementById('hamburger-btn');
   if (hamburger) hamburger.addEventListener('click', () => { state.drawerOpen = true; pushNav(); render(); });
 
+  // Nameplate → Home (DES-18). The header's only route to a top-level destination
+  // when the tab bar is hidden inside a topic (§3.10), which is why it is
+  // structural rather than a convenience. `replace` is false: this is a genuine
+  // forward move, not an overwrite of an open drawer, so BACK returns to where
+  // you were. goToDestination() no-ops when already on Home, so repeat taps
+  // cannot stack identical history entries.
+  const nameplate = document.getElementById('nameplate-home');
+  if (nameplate) nameplate.addEventListener('click', () => {
+    if (goToDestination('dashboard')) { window.scrollTo(0, 0); render(); }
+  });
+
   // Header info ⓘ toggle — expands/collapses tone legend + speed settings
   const headerInfo = document.getElementById('header-info-toggle');
   if (headerInfo) headerInfo.addEventListener('click', () => { state.headerDetailsOpen = !state.headerDetailsOpen; render(); });
@@ -1855,31 +1870,18 @@ function attachEvents(lesson) {
   if (navBackdrop) navBackdrop.addEventListener('click', () => { closeDrawer(); });
 
   // Nav items
+  // The drawer's five destinations. The reset lives in goToDestination() so this
+  // and the header nameplate cannot drift; `replace` is true because the open
+  // drawer is its own history entry and the destination overwrites it, so BACK
+  // returns to the pre-drawer screen rather than reopening the drawer.
   document.querySelectorAll('[data-nav]').forEach(btn => {
     btn.addEventListener('click', () => {
-      const target = btn.dataset.nav;
-      // Leaving via the menu must exit any open checkpoint session first. render()
-      // checks state.checkpoint BEFORE state.nav, so without this the chosen
-      // destination never shows — the checkpoint hub just redraws.
-      state.checkpoint = null;
-      state.checkpointAct = null;
-      state.checkpointQuiz = null;
-      // Tapping Topics from the drawer always returns to home view
-      if (target === 'topics') state.homeView = true;
-      // Tapping Learning Path from the drawer always returns to the path list
-      if (target === 'path') state.pathView = 'list';
-      // Entering Review always shows Words directly (no session, always fresh)
-      if (target === 'review') {
-        state.wordReview = null;
-        refreshReviewBadge().then(render);
-      }
-      state.nav = target;
-      state.fromPath = false;          // any drawer navigation clears the path-return flag
-      state.fromPathTier = null;
+      // Tapping the destination you are already on still closes the drawer, and
+      // the drawer-open history entry must still be overwritten or BACK reopens
+      // it. goToDestination() makes no history call in that case, so make it here.
+      const moved = goToDestination(btn.dataset.nav, { replace: true });
       state.drawerOpen = false;
-      // Navigated from the (open) drawer: overwrite the drawer-open history entry
-      // with this destination, so BACK goes to the pre-drawer screen, not the drawer.
-      navReplace();
+      if (!moved) navReplace();
       render();
     });
   });

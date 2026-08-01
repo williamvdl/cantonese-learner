@@ -151,11 +151,33 @@ screen's benefit — scope the adjustment to a component class instead. A
 `margin-bottom` briefly added to `.track` for the quiz applied to the dashboard
 too, which is how this rule was earned.
 
-### Header — `.header` › `.header-title` + `.header-actions`
+### Header — `.header` › `.header-row` › `.header-slot` + `.header-title`
 Solid `--header-bg` band, centred nameplate, an icon in each corner so the bar
 never reads as empty. Sticky. Inner content capped to `--measure`; background
 spans full width. Header controls use `--header-text` / `--header-bg`, never a
 body state colour.
+
+**Built at v115** (DES-20). This paragraph was correct and unbuilt for four
+phases: the app shipped the plate left-aligned with both icons sharing the right
+corner, leaving the left empty — the exact condition "an icon in each corner"
+exists to prevent. Each corner control sits in a `.header-slot` of fixed
+`--tap-min` width so the plate centres on the **row**, not on the space the icons
+leave; unequal slots drift the plate by half the difference, and the two controls
+are 44px and 36px today. `.header-actions`, which grouped two right-corner
+buttons, is retired.
+
+**Nameplate type is out of scope here.** Size, weight and face are gated on the
+product-naming decision, which gates the logo (BACKLOG). §2 governs the plate's
+*position*; what it is made of is not settled.
+
+**The nameplate is a route Home** (`.nameplate`, DES-18, built v116). A
+`<button>` — keyboard-reachable and announced as a control — that **hugs its
+text** rather than filling the centre slot: about 128px of wordmark against the
+238px the slot would give it. A full-width invisible target on a header that is
+sticky on every screen catches stray thumbs mid-scroll and navigates out of the
+lesson. Nothing marks it at rest; pressing drops its opacity, the language
+`.btn-icon--header` already uses. No hover rule — hover would assert an
+affordance the resting state deliberately withholds on a touch-first surface.
 
 ### Contextual row — `.ctx` › `.ctx-inner` › `.ctx-row` + `.ctx-track`
 Sits under the header, on canvas. Carries back target, position, progress
@@ -276,12 +298,20 @@ states the task.
 inverted controls; the other speaker is parchment with a hairline. No colour is
 computed per line.
 
-### Subtabs & tab bar — `.tabs` › `.tab` (+ `--on`, `--top`) *(phase 6)*
+### Subtabs & tab bar — `.tabs` › `.tab` (+ `--on`) · `.tabs--top` *(subtabs built v114; `--top` phase 6)*
 **One primitive, two consumers.** The topic's view switch (Learn / Chat / Quiz) and
 the bottom tab bar carry the same emphasis language: muted label, brand label when
 active, and a **2px brand rule** on the edge nearest the content — bottom for the
-subtabs, top for the tab bar, which is the only difference and is the `--top`
-modifier's whole job.
+subtabs, top for the tab bar.
+
+**The edge is not the only difference**, and this section said it was until v114.
+`--top` also flips the axis to a column and changes the gap, the padding, the icon
+size and the label's type scale — 9.5px uppercase over a 19px glyph, against 14px
+beside a 15px one. What the two consumers share is the *emphasis language*, not the
+geometry, and that is enough to make them one primitive. The modifier sits on the
+**container** (`.tabs--top`) rather than the tab, so it can reach both. It lives in
+`styleguide.html` and is deliberately not in `styles.css` until the tab bar consumes
+it — the same call made for `.ring`.
 
 Equal widths in both (MOCK-17-fill). The tab bar has no choice — five destinations
 across the viewport — and matching it is what makes these one primitive rather than

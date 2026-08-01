@@ -4,7 +4,7 @@
 not a history log (that's what the repo's commit history is for). Approved design
 decisions and whether they were built live in `DESIGN_DECISIONS.md`.*
 
-Last updated: 2026-07-30 · sw.js at v113
+Last updated: 2026-08-01 · sw.js at v116
 
 ## Confirmed live and working
 - **Patterns/Drills removed** from the app entirely (not soft-hidden). Checkpoints
@@ -24,16 +24,19 @@ Last updated: 2026-07-30 · sw.js at v113
 - **Stable IDs** fully in place — 600/600 words, 307/307 sentences, 150/150
   dialogues. Validator passes clean.
 
-## Design system — phases 1–5 complete
+## Design system — phases 1–5 complete, phase 6 under way
 
 **The app now renders entirely from the token and primitive layers.** No colour
 is injected from JavaScript anywhere. Established 2026-07-25, applying from
 sw.js v95 onward; phase 2 shipped across v96–v103, phase 3 across v104–v107,
-phase 4 across v108–v112, phase 5 at v113.
+phase 4 across v108–v112, phase 5 at v113, phase 6 from v114.
 
-**Three approved decisions remain unbuilt, all phase 6:** MOCK-11-bar (docking the
-completion action), MOCK-17-fill (the subtab treatment) and DES-18 (the nameplate as
-a route home). Phase 6 is the last phase of the rollout.
+**One approved decision remains unbuilt:** MOCK-11-bar, docking the completion
+action, which §3.10 says to judge only once the tab bar exists. DES-18 (the
+nameplate as a route home) shipped at v116, and DES-20 (the centred header) — a
+third that nobody had noticed was unbuilt at all — at v115. MOCK-17-fill, the
+subtab treatment, was the third and shipped at v114. Phase 6 is the last phase of
+the rollout.
 
 `DESIGN_SYSTEM.md` and `docs/design/styleguide.html` are the source of truth. Read
 `DESIGN_SYSTEM.md` before touching `styles.css`, `render.js`, or designing a new
@@ -51,10 +54,10 @@ screen.
 | Border widths in play | 1 / 1.5 / 2 / 2.5 / 3px | **1px + 2px** |
 | `border-radius` values | 78 raw px + 19 `50%` | **all on the scale** |
 | Competing content columns | 5 | **1 (`--measure`)** |
-| `styles.css` | 1292 lines | **1300 lines** (1160 after phase 3; phase 4 added the path-context components, phase 5 three) |
+| `styles.css` | 1292 lines | **1318 lines** (1160 after phase 3; phase 4 added the path-context components, phase 5 three, phase 6 the subtab primitive and its rationale comment) |
 | Rules redeclaring the card surface | 12 | **0 (`.card` only)** |
 | Painted sizes of the circular play control | 7 (28–44px) | **2 (32 / 44px)** |
-| Interactive controls declaring `min-height` under `--tap-min` | 9 | **3** |
+| Interactive controls declaring `min-height` under `--tap-min` | 9 | **2** |
 
 All 390 classes emitted anywhere in `render.js` resolve against `styles.css`.
 
@@ -62,8 +65,8 @@ All 390 classes emitted anywhere in `render.js` resolve against `styles.css`.
 *declare* `min-height` below 44px. A target built from padding alone is invisible
 to that check — which is how the stage stepper shipped at 42px in v109 and read
 clean. A stricter check (in IN_PROGRESS.md) finds two further definite misses,
-`.path-complete-btn` at 28px and `.translate-dir-swap` at 38px, plus around
-fourteen padding-built targets that need judging individually. All are in
+`.path-complete-btn` at 28px and `.translate-dir-swap` at 38px, plus 15
+padding-built targets that need judging individually. All are in
 BACKLOG.md.
 
 ### Retired
@@ -103,6 +106,9 @@ orphan hues `#B7861E`, `#e4d4ad`, `#8a6716`,
 | 4 · 4 | v111 | Diamond progress (MOCK-07-Asoft) — the `.mk` and `.segs` primitives, ring on the rail diamond, pips, the three-state count line and three-state badge. |
 | 4 · 5 | v112 | Stepper to the base 28px node (MOCK-16-S28) and stage context on the checkpoint hub (MOCK-16-H2), with `.node--cp.node--current` for the current diamond. `buildStageInfo()` extracted so the topic screen and hub share one path. `styleguide.html` updated in the same deploy. |
 | 5 | v113 | Completion on the Quiz subtab. The continuation card is now present on all three subtabs; while a question is live it takes a reduced form (completion confirmed, forward action dropped) and on the result screen the forward action returns. `isQuizQuestionLive()` is the single source of that distinction. Per-question button relabelled "Next question" (MOCK-12). `.cont-done:last-child` added — the reduced form exposed a divider with nothing under it. Mark-complete's final-step auto-return gated so it can't fire mid-question. `styleguide.html` gained the Continuation section it never had. |
+| 6 · 1 | v114 | The subtab treatment (MOCK-17-fill) as the `.tabs` / `.tab` primitive, shared in design with the phase 6 tab bar. Three bordered boxes with a solid brand fill on the active one became one hairline rail with muted labels and a 2px brand underline (DES-19). Retired the four `.subtabs` / `.subtab-btn` rules; `.subtab-btn`'s 42px tap target went with them. `.tabs--top` deliberately **not** ported while it has no consumer. The build corrected a claim that had propagated through three documents — see the note on docs drifting against themselves below. |
+| 6 · 2 | v115 | The centred header (DES-20). Nameplate to the centre, info button to the left corner, hamburger stays right, each corner control in a fixed `--tap-min` slot. `.header-actions` retired. Builds a §2 paragraph that had been specified and unbuilt since the design system was written — found because a mockup frame in conversation did not match the app. A dead `letter-spacing: 0.22em` on `.header-title .en` went in the same rule; the grouped meta-label block 586 lines later sets 0.16em and had been winning on source order. |
+| 6 · 3 | v116 | The nameplate as a route Home (DES-18, MOCK-18-Thug + N1/N2). `.header-title` gains a `.nameplate` button that hugs its text; nothing marks it at rest, pressing drops its opacity. The state reset behind it is extracted to `goToDestination()` in `app.js`, now shared with the drawer's five menu items so the two cannot drift — the same consolidation `openPathLesson()` got. The history call is the only difference between callers and is a parameter: the drawer replaces (overwriting its own open entry), the nameplate pushes. Repeat taps on Home no-op rather than stacking identical history entries. |
 
 ### Notes worth carrying forward
 
@@ -190,7 +196,32 @@ orphan hues `#B7861E`, `#e4d4ad`, `#8a6716`,
   no styleguide section and no register row; the only trace anywhere was the words
   "active subtab" in §4's state table. Nothing was ever *wrong*, so nothing flagged.
   When auditing, enumerate from the **screen** as rendered, not from the docs, or the
-  gaps in the docs are invisible to the audit.
+  gaps in the docs are invisible to the audit. *Closed at v114 — the subtabs now have
+  all three: a primitive, a styleguide section and a register row.*
+- **A private demo class can quietly squat on a real component's name.**
+  `styleguide.html` used `.nameplate` for a local page demo. When the app's own
+  nameplate became a real component at v116, the name was already taken by
+  something unrelated in the one document meant to describe the app's components —
+  so a reader comparing the two would have found a match that meant nothing. Renamed
+  to `.sg-plate`. Styleguide-local classes should carry the `sg-` prefix precisely
+  so they cannot collide with names the design system may later want.
+- **A styleguide section written in private vocabulary cannot be diffed against
+  the code.** The Header section described the centred nameplate correctly for four
+  phases while the app shipped it left-aligned — and the reason nothing caught it is
+  that the section's demo used `.sg-header`, `.nameplate` and `.icon.left`, none of
+  which exist in `styles.css`. There was no shared name to compare on, so the
+  bidirectional check ("does each entry describe something that exists?") had nothing
+  to bite on: the entry described a *design*, not a *component*. Every styleguide
+  section should name the real classes, and the class line is the part to trust.
+- **A document can drift against *itself*, and the prose is what travels.** The
+  styleguide's Subtabs note said the edge carrying the 2px rule was the only
+  difference between the subtabs and the tab bar. The CSS four lines below it had
+  always said otherwise — `.tabs--top` flips the axis, gap, padding, icon size and
+  type scale as well. The sentence, not the code, was copied into DESIGN_SYSTEM §2
+  and from there into the phase 6 brief, so one wrong clause reached three documents
+  while the correct version sat untouched in the same file. Drift is usually assumed
+  to be *between* artefacts; check a doc against its own examples too, and prefer
+  copying the code.
 - **A register row can be wrong rather than missing, which is worse.** MOCK-11-bar's
   row described two separate decisions as one — mockup 11's *subtab* matrix and
   §3.10's *tab bar* matrix — and cited DES-12 for the wrong one. That mis-scoped
@@ -265,10 +296,15 @@ UX and visual design. It may be worth a line in the project instructions.)*
   no line in the phase brief, so the brief retired the top action zone with nothing
   replacing the only in-topic route to "mark complete". That one was caught before
   shipping rather than after — the first time the register has paid for itself
-  prospectively.
-- **Three controls remain under `--tap-min`**: `.hamburger` (36px) and
-  `.drawer-speed-btn` (36px), both retiring with the drawer in phase 6, and
-  `.subtab-btn` at 42px, close enough to leave.
+  prospectively. *(The MOCK-13 half of that sentence was itself wrong, and is
+  corrected in `DESIGN_DECISIONS.md` as of 2026-07-31: mockup 13's A and B are
+  **drawer** panel variants offered only if the drawer is kept, not settings-sheet
+  options, so no choice was ever lost. The settings sheet has no design at all —
+  the mockup draws the cog and never the sheet. A row that reads plausibly gets
+  trusted, including by the note warning about rows that read plausibly.)*
+- **Two controls remain under `--tap-min`**: `.hamburger` (36px) and
+  `.drawer-speed-btn` (36px), both retiring with the drawer in P6-2. The third,
+  `.subtab-btn` at 42px, went with the subtab rebuild at v114.
 - `.cp-optional` is a full sentence styled as a green chip, carrying a 🔓 emoji.
   Green reads as *done* per §4 but the content is informational. Left alone in
   phase 3 rather than forced into `.tag`.

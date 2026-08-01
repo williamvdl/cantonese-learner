@@ -1009,6 +1009,53 @@ function openPathLesson(topicKey, tier) {
   render();
 }
 
+// ── Top-level destination navigation ──────────────────────────────────────────
+// Go to one of the five top-level destinations, resetting the state that must
+// not survive the move. Shared by the drawer's menu items and the header
+// nameplate, so the two can never drift in what they reset — the same reason
+// openPathLesson() above was extracted from its three call sites.
+//
+// The history call is the ONLY difference between callers, so it is a parameter
+// rather than something the function decides:
+//   • from the drawer, `replace` is true — the drawer-open state is its own
+//     history entry, and the destination must overwrite it so BACK returns to
+//     the pre-drawer screen rather than reopening the drawer.
+//   • from the nameplate, `replace` is false — nothing is being overwritten,
+//     this is a genuine forward move and BACK should return to where you were.
+//
+// Returns false when already on the destination with nothing to reset, so
+// callers can no-op instead of stacking identical history entries (which makes
+// BACK look broken: it appears to do nothing until the duplicates are consumed).
+function goToDestination(target, { replace = false } = {}) {
+  // Leaving must exit any open checkpoint session first. render() checks
+  // state.checkpoint BEFORE state.nav, so without this the chosen destination
+  // never shows — the checkpoint hub just redraws.
+  const inCheckpoint = !!state.checkpoint;
+  const alreadyThere =
+    state.nav === target && !inCheckpoint && !state.fromPath &&
+    (target !== 'topics' || state.homeView) &&
+    (target !== 'path'   || state.pathView === 'list');
+  if (alreadyThere) return false;
+
+  state.checkpoint = null;
+  state.checkpointAct = null;
+  state.checkpointQuiz = null;
+  // Topics always returns to its home view, the Learning Path to the path list.
+  if (target === 'topics') state.homeView = true;
+  if (target === 'path') state.pathView = 'list';
+  // Entering Review always shows Words directly (no session, always fresh).
+  if (target === 'review') {
+    state.wordReview = null;
+    refreshReviewBadge().then(render);
+  }
+  state.nav = target;
+  state.fromPath = false;          // any top-level navigation clears the path-return flag
+  state.fromPathTier = null;
+  state.drawerOpen = false;
+  if (replace) navReplace(); else pushNav();
+  return true;
+}
+
 // ── Checkpoint navigation ─────────────────────────────────────────────────────
 // Open a checkpoint hub. Records which checkpoint, clears any activity.
 function openCheckpoint(pathKey, stageId) {
