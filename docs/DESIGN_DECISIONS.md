@@ -21,7 +21,7 @@ at and no built/not-built axis. If they ever need a register they should get the
 own file rather than being forced into this one. For now they live in the *Current
 architecture* section of the project instructions.
 
-Last updated: 2026-08-01 · sw.js at v118
+Last updated: 2026-08-01 · sw.js at v119
 
 ---
 

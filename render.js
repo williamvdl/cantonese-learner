@@ -1008,7 +1008,7 @@ function render() {
   // If the current view requires content that hasn't been fetched yet,
   // show a loading shell and trigger a fetch. render() will be called
   // again once the fetch resolves.
-  const needsTopic = state.nav === 'topics' && !state.homeView;
+  const needsTopic = state.nav === 'topics' && !state.topicsView;
   if (needsTopic && !store.isTopicLoaded(state.topic)) {
     app.innerHTML = `
       ${renderHeader()}
@@ -1080,7 +1080,7 @@ function render() {
   } else if (state.checkpoint) {
     mainContent = renderCheckpointHub();
   } else if (state.nav === 'topics') {
-    if (state.homeView) {
+    if (state.topicsView) {
       mainContent = `${renderTopicsScreen()}`;
     } else {
       const ctx = getPathContext();
@@ -1945,7 +1945,7 @@ function attachEvents(lesson) {
   document.querySelectorAll('[data-cat-jump]').forEach(btn => {
     btn.addEventListener('click', () => {
       state.nav = 'topics';
-      state.homeView = true;
+      state.topicsView = true;
       state.selectedCategory = btn.dataset.catJump;
       state.fromPath = false;
       state.fromPathTier = null;
@@ -2093,7 +2093,7 @@ function attachEvents(lesson) {
   document.querySelectorAll('[data-topic-card]').forEach(card => {
     card.addEventListener('click', () => {
       state.topic        = card.dataset.topicCard;
-      state.homeView     = false;
+      state.topicsView     = false;
       state.currentRound = 1;
       state.mode         = 'study';
       state.tab          = 'words';
@@ -2122,7 +2122,7 @@ function attachEvents(lesson) {
       state.fromPath = false; state.fromPathTier = null;
       state.mode = 'study'; state.tab = 'words';
     } else {
-      state.homeView = true; state.mode = 'study'; state.tab = 'words';
+      state.topicsView = true; state.mode = 'study'; state.tab = 'words';
     }
     window.scrollTo(0, 0);
     render();
@@ -2662,7 +2662,7 @@ function attachEvents(lesson) {
       state.topic        = topicKey;
       state.currentRound = tier;
       state.nav          = 'topics';
-      state.homeView     = false;
+      state.topicsView     = false;
       state.fromPath      = true;
       state.fromPathTier  = tier;
       state.mode          = 'study';
@@ -2720,7 +2720,7 @@ function attachEvents(lesson) {
   if (dashTileTopics) {
     dashTileTopics.addEventListener('click', () => {
       state.nav = 'topics';
-      state.homeView = true;
+      state.topicsView = true;
       state.fromPath = false;
       state.fromPathTier = null;
       pushNav();                 // dashboard → topics: BACK returns to dashboard
@@ -2872,7 +2872,7 @@ function attachEvents(lesson) {
       state.topic = topicKey;
       state.currentRound = 1;
       state.nav = 'topics';
-      state.homeView = false;
+      state.topicsView = false;
       state.fromPath = false; state.fromPathTier = null;
       state.mode = 'study'; state.tab = 'words';
       state.flipped = {}; state.sentenceRevealed = {};
@@ -2968,7 +2968,7 @@ function attachEvents(lesson) {
       // which is now the Dashboard.
       state.nav = 'dashboard';
       state.pathView = 'list';
-      state.homeView = true;
+      state.topicsView = true;
       state.settingsOpen = false;
     }
 
@@ -2990,7 +2990,7 @@ function attachEvents(lesson) {
 
     // A quiz in progress is likewise not a nav screen. If back has moved us out
     // of the in-topic view, discard any running quiz.
-    if (state.quiz && (state.homeView || state.nav !== 'topics')) {
+    if (state.quiz && (state.topicsView || state.nav !== 'topics')) {
       state.quiz = null;
     }
 

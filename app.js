@@ -361,7 +361,11 @@ let state = {
   speed: 'normal',
   nav: 'dashboard',               // app opens on the new Dashboard homepage
   settingsOpen: false,           // the settings sheet (header cog), v117
-  homeView: true,                 // true = show home screen, false = inside a topic
+  // Renamed from `homeView` at v119. The old name predated the Dashboard: when
+  // Topics WAS the home screen, "home view" meant its landing list. Since the
+  // Dashboard became Home the name pointed at the wrong screen — this flag has
+  // never had anything to do with Home.
+  topicsView: true,               // true = the Topics landing list, false = inside a topic
   selectedCategory: 'all',        // 'all' or a category key
   currentRound: 1,
   pathView: 'list',               // 'list' = paths list, 'timeline' = inside a path
@@ -432,7 +436,7 @@ let state = {
 // pushNav() only OBSERVES the resulting state and records it — it does not change
 // how navigation works, only makes the browser aware of it. Low-risk by design.
 const NAV_FIELDS = [
-  'nav', 'settingsOpen', 'homeView', 'pathView', 'activePath',
+  'nav', 'settingsOpen', 'topicsView', 'pathView', 'activePath',
   'topic', 'currentRound', 'fromPath', 'fromPathTier',
   'mode', 'tab', 'selectedCategory',
   'checkpoint', 'checkpointAct',
@@ -446,8 +450,32 @@ function navSnapshot() {
 }
 
 // Apply a snapshot back onto state (used by the popstate/back handler).
+//
+// Snapshots outlive deploys. history.state persists across a refresh and across
+// a new version being installed, so entries written by an EARLIER build of the
+// app arrive here after an update — and they carry that build's field names.
+// `f in snap` skips anything absent, which fails silently rather than loudly:
+// the field simply keeps whatever value the current screen left it with.
+//
+// v119 renamed homeView → topicsView, so a snapshot written by v118 or earlier
+// has the old key. Left unmigrated the bug is specific and confusing: back out
+// of a topic into a pre-deploy entry and `nav` restores to 'topics' while
+// `topicsView` stays false, so the app shows the topic you just left and BACK
+// appears not to work. Map the old key forward before applying.
+//
+// Keep this until pre-v119 history is unreachable in practice — a browser can
+// hold an entry for as long as its tab lives.
+function migrateNavSnapshot(snap) {
+  if (!snap) return snap;
+  if (!('topicsView' in snap) && ('homeView' in snap)) {
+    snap.topicsView = snap.homeView;
+  }
+  return snap;
+}
+
 function applyNavSnapshot(snap) {
   if (!snap) return;
+  migrateNavSnapshot(snap);
   NAV_FIELDS.forEach(f => {
     if (f in snap) state[f] = snap[f];
   });
@@ -994,7 +1022,7 @@ function openPathLesson(topicKey, tier) {
   state.topic        = topicKey;
   state.currentRound = tier;
   state.nav          = 'topics';
-  state.homeView     = false;
+  state.topicsView     = false;
   state.fromPath     = true;
   state.fromPathTier = tier;
   state.mode         = 'study';
@@ -1032,7 +1060,7 @@ function goToDestination(target) {
   const inCheckpoint = !!state.checkpoint;
   const alreadyThere =
     state.nav === target && !inCheckpoint && !state.fromPath && !state.settingsOpen &&
-    (target !== 'topics' || state.homeView) &&
+    (target !== 'topics' || state.topicsView) &&
     (target !== 'path'   || state.pathView === 'list');
   if (alreadyThere) return false;
 
@@ -1040,7 +1068,7 @@ function goToDestination(target) {
   state.checkpointAct = null;
   state.checkpointQuiz = null;
   // Topics always returns to its home view, the Learning Path to the path list.
-  if (target === 'topics') state.homeView = true;
+  if (target === 'topics') state.topicsView = true;
   if (target === 'path') state.pathView = 'list';
   // Entering Review always shows Words directly (no session, always fresh).
   if (target === 'review') {

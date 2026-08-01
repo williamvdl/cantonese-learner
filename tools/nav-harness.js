@@ -11,7 +11,7 @@ global.navReplace = () => { history_.pop(); history_.push('REPL:' + snap()); };
 global.window = { scrollTo: () => {} };
 
 function snap() {
-  return [state.nav, state.homeView, state.pathView, state.fromPath, !!state.checkpoint].join('|');
+  return [state.nav, state.topicsView, state.pathView, state.fromPath, !!state.checkpoint].join('|');
 }
 
 // pull goToDestination out of app.js
@@ -21,7 +21,7 @@ eval(src.slice(start, end));
 
 function fresh(over) {
   global.state = Object.assign({
-    nav: 'dashboard', homeView: true, pathView: 'list', topic: null,
+    nav: 'dashboard', topicsView: true, pathView: 'list', topic: null,
     fromPath: false, fromPathTier: null, checkpoint: null, checkpointAct: null,
     checkpointQuiz: null, wordReview: null, drawerOpen: false,
   }, over);
@@ -36,7 +36,7 @@ function check(label, cond, detail) {
 
 console.log('\n═══ nameplate → Home (replace:false) ═══');
 
-fresh({ nav: 'topics', homeView: false, topic: 'greetings', fromPath: true, fromPathTier: 2 });
+fresh({ nav: 'topics', topicsView: false, topic: 'greetings', fromPath: true, fromPathTier: 2 });
 let moved = goToDestination('dashboard');
 check('from a path lesson: moves', moved === true);
 check('  nav is dashboard', state.nav === 'dashboard');
@@ -60,21 +60,21 @@ check('three repeat taps on Home: still no entries', history_.length === 0, hist
 
 console.log('\n═══ tab bar → destination (always pushes) ═══');
 
-fresh({ nav: 'topics', homeView: false, settingsOpen: false });
+fresh({ nav: 'topics', topicsView: false, settingsOpen: false });
 moved = goToDestination('review');
 check('tab → Review: moves', moved === true);
 check('  wordReview reset', state.wordReview === null);
 check('  pushed, not replaced', history_.length === 1 && history_[0].startsWith('PUSH'), history_.join());
 
-fresh({ nav: 'topics', homeView: true, settingsOpen: false });
+fresh({ nav: 'topics', topicsView: true, settingsOpen: false });
 moved = goToDestination('topics');
 check('tab → Topics while already on Topics home: no-ops', moved === false);
 check('  no history entry stacked', history_.length === 0, history_.join());
 
-fresh({ nav: 'topics', homeView: false, topic: 'greetings', settingsOpen: false });
+fresh({ nav: 'topics', topicsView: false, topic: 'greetings', settingsOpen: false });
 moved = goToDestination('topics');
 check('tab → Topics from INSIDE a topic: moves', moved === true);
-check('  homeView restored to true', state.homeView === true);
+check('  homeView restored to true', state.topicsView === true);
 
 fresh({ nav: 'path', pathView: 'timeline', settingsOpen: false });
 moved = goToDestination('path');
@@ -109,5 +109,16 @@ moved = goToDestination('dashboard');
 check('sheet open on Home + Home tap: MOVES (must close the sheet)', moved === true);
 check('  sheet closed', state.settingsOpen === false);
 
-console.log(fails ? '\n' + fails + ' FAILURES' : '\nall settings scenarios pass');
+// ── appended v119: the rename must not change navigation behaviour ──
+console.log('\n═══ topicsView (renamed from homeView at v119) ═══');
+fresh({ nav: 'topics', topicsView: false, topic: 'greetings' });
+moved = goToDestination('topics');
+check('tab → Topics from inside a topic: moves', moved === true);
+check('  topicsView restored to true', state.topicsView === true);
+
+fresh({ nav: 'topics', topicsView: true });
+moved = goToDestination('topics');
+check('tab → Topics while on the list: no-ops', moved === false);
+
+console.log(fails ? '\n' + fails + ' FAILURES' : '\nall rename scenarios pass');
 process.exit(fails ? 1 : 0);

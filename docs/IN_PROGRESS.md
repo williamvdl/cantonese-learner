@@ -4,7 +4,7 @@
 questions behind it. Meant to be short-lived — when a piece ships, fold its
 outcome into STATUS.md and clear this file back down for the next thing.*
 
-Last updated: 2026-08-01 · sw.js at v118
+Last updated: 2026-08-01 · sw.js at v119
 
 ## Phase 6 under way — v114 subtabs, v115 centred header, v116 nameplate, v117 tab bar + settings
 
@@ -20,10 +20,14 @@ in, and settings sits behind the header cog. §3.10 was reversed in the same pas
 (DES-21): the bar is visible on every screen, so there is no hidden state and the
 dead-end question that had been deferred to a device session no longer arises.
 
-**No decisions are outstanding.** P6-5 shipped at v118. What remains in phase 6 is
-**P6-6 alone**, the `state.homeView` → `state.topicsView` rename — a pure refactor
-with no visible change, whose risk is the stale-snapshot shape in `NAV_FIELDS`:
-a snapshot taken before the rename would restore an undefined field after it.
+**Phase 6 is complete.** P6-6 shipped at v119 and no decisions are outstanding.
+The design-system rollout that began at v95 has run its course: every approved
+decision in `DESIGN_DECISIONS.md` is now built, and there are no *Not built* rows
+left.
+
+The rename's risk was real and is handled: a snapshot written before the rename
+restores through `migrateNavSnapshot()`, which maps `homeView` forward. That
+function stays until pre-v119 history is unreachable.
 
 **Held for a device session, not a decision:** MOCK-20-D drops the tab bar's
 labels for a 34px icons-only strip while the docked bar is present, taking bottom
@@ -70,7 +74,7 @@ to be one primitive.
 | P6-3 | **Nameplate as a route home** (DES-18) | A handler plus a tap target; `renderHeader()` already renders the nameplate on every screen and it is inert. Structurally part of P6-2: with tabs hidden in a topic this is the only visible route to a top-level destination. **The affordance is still open** — mockup 18 drew four options against the *old* left-aligned header and must be redrawn on the centred one (v115), where a wordmark flanked by two corner icons reads as a logo slot and the case for no persistent affordance is stronger. **Do not reuse the `[data-nav]` handler wholesale:** its state reset is right but it ends in `navReplace()`, correct only when overwriting a drawer-open history entry. From the nameplate this is a genuine forward navigation and needs `pushNav()`, plus a no-op guard when already on Home or it stacks identical history entries. Extract the shared reset the way `openPathLesson()` was. |
 | ~~P6-4~~ | ~~**Settings sheet behind the cog**~~ | **Not blocked — needs a mockup.** The recorded blocker was wrong: mockup 13's A and B are *drawer* panel variants offered only if the drawer is kept, so they retire with the drawer rather than gating anything. The sheet itself is never drawn in mockup 13, only the cog in the header corner, so there is no approved design to build from. Must ship with or before P6-2 (see above). Contents at minimum: audio speed, currently the drawer's only setting. |
 | ~~P6-5~~ | **Docked bar, or not** (MOCK-11-bar) | The decision, then the build. The bar and the continuation card do the same job in two positions and only one can ship. Judge with the tab bar present, since DES-12's collision is the whole reason the bar has a suppression rule. `--bar-h` and `--tabbar-h` are declared and unused, waiting on this. Whichever wins also settles fill-versus-tint for the forward action. |
-| P6-6 | **`state.homeView` → `state.topicsView`** | It sits in `NAV_FIELDS`, so the rename touches history snapshots. `renderTopicsScreen()` renders Topics; `renderDashboard()` is Home. Do it last — it is a pure rename and shouldn't be entangled with behaviour changes. |
+| ~~P6-6~~ | ~~**`state.homeView` → `state.topicsView`**~~ | ~~v119~~ · done 2026-08-01. 16 call sites renamed; behaviour identical, confirmed by the nav harness. **It was not a pure rename** — the brief called it one, and the field's presence in `NAV_FIELDS` made it a data migration: `history.state` outlives a deploy, so pre-v119 entries arrive with the old key and are mapped forward by `migrateNavSnapshot()`. |
 
 **Judge after shipping, not before:** whether the hidden tab bar reads as a dead end.
 The documented fallback is the ~34px icons-only strip (§3.10). Recorded as a

@@ -4,7 +4,7 @@
 not a history log (that's what the repo's commit history is for). Approved design
 decisions and whether they were built live in `DESIGN_DECISIONS.md`.*
 
-Last updated: 2026-08-01 · sw.js at v118
+Last updated: 2026-08-01 · sw.js at v119
 
 ## Confirmed live and working
 - **Patterns/Drills removed** from the app entirely (not soft-hidden). Checkpoints
@@ -114,6 +114,7 @@ orphan hues `#B7861E`, `#e4d4ad`, `#8a6716`,
 | 6 · 3 | v116 | The nameplate as a route Home (DES-18, MOCK-18-Thug + N1/N2). `.header-title` gains a `.nameplate` button that hugs its text; nothing marks it at rest, pressing drops its opacity. The state reset behind it is extracted to `goToDestination()` in `app.js`, now shared with the drawer's five menu items so the two cannot drift — the same consolidation `openPathLesson()` got. The history call is the only difference between callers and is a parameter: the drawer replaces (overwriting its own open entry), the nameplate pushes. Repeat taps on Home no-op rather than stacking identical history entries. |
 | 6 · 4 | v117 | **The tab bar replaces the drawer** (MOCK-13-tabs), and settings moves behind the header cog as a bottom sheet (MOCK-19-sheet). `renderDrawer()` is gone; `renderTabBar()` and `renderSettingsSheet()` replace it, mounted through one `renderChrome()` helper rather than five copies of the pair. Six navigation icons transcribed into `ICON_PATHS` — the drawer's emoji could not take `currentColor`, so an active destination could not have turned brand. §3.10 reversed: the bar shows on every screen (DES-21). Five dead-CSS pockets and the six `--drawer-*` tokens retired. `goToDestination()`'s `replace` option dropped to zero call sites with the drawer and was removed. |
 | 6 · 5 | v118 | **The docked completion bar** (DES-22, MOCK-20-B2, and MOCK-11-bar built at last — approved in phase 4, unbuilt for four phases). `.bar` / `.bar-inner` existed as a §2 entry marked *Not built* since the design system was written; it now exists. Three of the continuation's four states dock; path-complete stays in flow. `--bar-h` gets its first call site since being declared. **`--tabbar-h` corrected from 58px to 46px** — it was taken from a mockup, while the built bar computes to `--tap-min` plus a 2px rule, so all four wrapper clearances had been over-reserving by 12px. |
+| 6 · 6 | v119 | **`state.homeView` → `state.topicsView`** — the last item in phase 6, and invisible: no screen changes. The name predated the Dashboard, when Topics *was* Home; since v105 it has pointed at the wrong screen. 16 call sites. The real work was the migration: `history.state` outlives a deploy, so entries written by v118 arrive carrying the old key, and `applyNavSnapshot()`'s `f in snap` guard skips absent fields **silently** — backing out of a topic into a pre-deploy entry would have restored `nav: 'topics'` while leaving `topicsView` false, showing the topic you just left and making BACK look broken. `migrateNavSnapshot()` maps the old key forward at the read boundary. |
 
 ### Notes worth carrying forward
 
@@ -203,6 +204,16 @@ orphan hues `#B7861E`, `#e4d4ad`, `#8a6716`,
   When auditing, enumerate from the **screen** as rendered, not from the docs, or the
   gaps in the docs are invisible to the audit. *Closed at v114 — the subtabs now have
   all three: a primitive, a styleguide section and a register row.*
+- **Renaming a field that persists outside the app is a data migration, not a
+  refactor.** `state.homeView` lived in `NAV_FIELDS`, so it was serialised into
+  `history.state` — which survives a deploy. After the rename, entries written by
+  the previous build still carried the old key, and `applyNavSnapshot()`'s
+  `if (f in snap)` guard skips anything absent **without complaint**, so the field
+  would have kept whatever the current screen left it with rather than erroring.
+  The symptom would have been a back button that appears not to work, on a subset
+  of users, only for entries created before they updated — nearly impossible to
+  reproduce deliberately. **Before renaming any field, ask what has already
+  written it to storage or history**, and migrate at the read boundary.
 - **A dimension token copied from a mockup will not match the component built
   from it, and the error is silent.** `--tabbar-h` said 58px because that is what
   the mockup drew; the built bar computes to 46px — `--tap-min` plus a 2px rule.
@@ -299,10 +310,12 @@ UX and visual design. It may be worth a line in the project instructions.)*
 - Service worker caches audio automatically via the existing generic runtime
   fetch handler — no dedicated audio-caching code was needed.
 - `renderTopicsScreen()` renders the Topics screen; `renderDashboard()` is Home.
-  Renamed in v105. `state.homeView` is the same trap unrenamed — it is the Topics
-  flag, and it sits in `NAV_FIELDS` feeding `pushNav()`, so renaming it changes
-  back-button behaviour for history entries created before a deploy. Scheduled
-  with phase 6's nav work.
+  Renamed in v105, and `state.homeView` — the same trap, one layer down — was
+  renamed to `state.topicsView` at v119. Both names dated from when Topics was the
+  home screen. **`migrateNavSnapshot()` in `app.js` must stay** until pre-v119
+  history is unreachable in practice: a browser tab can hold a history entry
+  indefinitely, and without the mapping those entries restore a field that no
+  longer exists.
 
 ## Known, deliberately unfixed
 - `intermediate-s3` checkpoint is missing the `id` field the other 14 checkpoints

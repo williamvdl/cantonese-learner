@@ -4,7 +4,7 @@
 IN_PROGRESS.md when it's picked up; delete it from here once it's shipped and
 folded into STATUS.md.*
 
-Last updated: 2026-08-01 · sw.js at v118
+Last updated: 2026-08-01 · sw.js at v119
 
 ## Product
 
@@ -162,6 +162,11 @@ or surfaced.*
   state (MOCK-18-N1) is now a convenience rather than the only escape hatch, which
   weakens the case for ever revisiting it — the tab bar is the route home now. Judge
   it on device anyway, but the stakes are lower than when it was written.
+- **Remove `migrateNavSnapshot()` eventually.** It maps the pre-v119 `homeView`
+  key forward and is dead weight once no browser holds a pre-v119 history entry.
+  There is no way to know when that is — a tab can live for months — so this is a
+  "next time you are in `app.js` and it has been a good while" item, not a task.
+  Removing it early is a silent back-button bug for anyone with an old tab.
 - **`--elev-4` is down to two call sites** — the toast and the quiz listen button's
   hover. The drawer panel was its third. Not a problem, but a token serving two
   incidental uses is worth a look when the elevation scale is next revisited.
