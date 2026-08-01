@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Docked completion bar — P6-5, re-mocked on v117</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Fraunces:wght@400;500;600&family=Noto+Serif+TC:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+    /* Font stacks — Chinese face listed FIRST so CJK chars render in Noto Serif TC; English fallback follows */
+    --font-serif:   'Noto Serif TC', 'Fraunces', Georgia, 'Times New Roman', serif;
+    --font-ui:      'Inter', 'Noto Serif TC', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+    --font-display: 'Fraunces', 'Noto Serif TC', Georgia, serif;
+
+    /* Size scale */
+    --fs-micro:   11px;
+    --fs-meta:    12px;
+    --fs-small:   13px;
+    --fs-body:    15px;
+    --fs-lead:    17px;
+    --fs-h3:      22px;
+    --fs-h2:      28px;
+    --fs-h1:      36px;
+    --fs-display: 56px;
+
+    /* Line heights */
+    --lh-display: 1.1;
+    --lh-heading: 1.25;
+    --lh-body:    1.5;
+
+    /* Weights */
+    --fw-regular: 400;
+    --fw-medium:  500;
+    --fw-semi:    600;
+    --fw-bold:    700;
+
+    /* Spacing scale — based on 4px grid. Use these instead of arbitrary px values */
+    --sp-1:  4px;
+    --sp-2:  8px;
+    --sp-3:  12px;
+    --sp-4:  16px;
+    --sp-5:  24px;
+    --sp-6:  32px;
+    --sp-7:  48px;
+    --sp-8:  64px;
+
+    /* Radii — consistent corner system */
+    --r-sm:   8px;
+    --r-md:   12px;
+    --r-lg:   16px;
+    --r-pill: 999px;
+
+    /* Touch target minimums — Apple HIG / Material both recommend 44px */
+    --tap-min: 44px;
+
+    /* Elevation system — soft, warm-tinted shadows (Tea House) */
+    --elev-1: 0 1px 2px rgba(58, 42, 30, 0.04), 0 1px 3px rgba(58, 42, 30, 0.06);
+    --elev-2: 0 2px 4px rgba(58, 42, 30, 0.05), 0 4px 8px rgba(58, 42, 30, 0.07);
+    --elev-3: 0 4px 8px rgba(58, 42, 30, 0.06), 0 8px 20px rgba(58, 42, 30, 0.10);
+    --elev-4: 0 8px 16px rgba(58, 42, 30, 0.10), 0 16px 40px rgba(58, 42, 30, 0.16);
+
+    /* Interaction timing — one easing curve everywhere */
+    --ease:        cubic-bezier(0.4, 0.0, 0.2, 1);
+    --dur-fast:    120ms;
+    --dur-base:    200ms;
+
+    /* ── Tea House colour palette ──────────────────────────────────────────
+       Named tokens for the app's theme colours. Use var(--token) instead of
+       raw hex so the palette can be adjusted in one place. NOTE: the 7
+       per-category colours and the 6 tone colours are DATA (in JSON / the
+       TONES object), not theme — they are intentionally not tokenised here. */
+    --ink:            #1C1917;   /* primary text / darkest */
+    --ink-soft:       #292524;   /* body text on parchment */
+    --parchment:      #FFFFFF;   /* card / surface background */
+    --parchment-warm: #FAF8F5;   /* app background, warm panels */
+    --parchment-deep: #F0EBE4;   /* deeper parchment — header bands, tracks */
+    --brand:          #C2410C;   /* burnt orange — brand / primary accent */
+    --jade:           #15803D;   /* forest green — success / completion */
+    --jade-bright:    #16A34A;   /* lighter green — secondary success */
+    --muted:          #A8A29E;   /* muted text / borders */
+    --feedback-good:  #16A34A;   /* quiz "correct" — semantic green */
+    --feedback-bad:   #B42318;   /* quiz "wrong" / stop — warm red, W2. Must stay
+                                    distinct from --milestone: both are deep reds
+                                    and they meet during a checkpoint quiz. */
+
+    /* ── Derived / semantic tokens (Phase 1 cleanup) ───────────────────────────
+       Tints, shades and state colours used throughout the app but previously
+       hardcoded as raw hex. Centralised here so a palette swap touches one place.
+       Values are derived from the primary palette above — do not introduce new
+       hues here without updating the visual identity exploration notes. */
+    --brand-dark:          #9A3412;   /* brand pressed state / 3D shadow */
+    --brand-tint:          #FEF0E9;   /* BRAND surface bg — NOT error. See below. */
+    --brand-text-dark:     #9A3412;   /* brand text on --brand-tint surfaces */
+    --feedback-good-tint:  #DCFCE7;   /* correct-answer surface bg */
+    --feedback-good-text:  #15803D;   /* correct-answer text */
+
+    /* ── State edges + tints (DESIGN_SYSTEM §1.4) ──────────────────────────────
+       Hairline border colours, one per state, so a tinted surface and its border
+       always come from the same family. --feedback-bad-tint exists because
+       --brand-tint was previously doing duty as the wrong-answer background:
+       brand tint should mean brand. Re-pointing those 8 call sites is phase 2. */
+    --brand-edge:          #F5D9C9;   /* border on brand-tinted surfaces */
+    --jade-edge:           #C9E7D3;   /* border on jade / correct surfaces */
+    --feedback-bad-tint:   #FEF3F2;   /* wrong-answer surface bg */
+    --feedback-bad-edge:   #F5CFCB;   /* border on wrong-answer surfaces */
+    --parchment-border:    #EAE4DC;   /* standard card / divider border */
+    --ink-drawer:          #2A2520;   /* dark surface used in nav drawer (legacy) */
+    --muted-dark:          #78716C;   /* darker muted — secondary body text */
+    --muted-light:         #A8A29E;   /* lighter muted — tertiary / meta text */
+
+    /* ── Header + drawer tokens (visual identity: independent of body palette) ──
+       Set to OXBLOOD #6E2639, chosen from 8 solid options.
+       Swap this block to retheme the top bar + slide-out menu as a unit.
+       The drawer now derives from the header rather than repeating its hex, so
+       the two can't drift apart while the drawer waits to be retired (phase 6). */
+    --header-bg:      #6E2639;   /* oxblood */
+    --header-text:    #F7EEE8;   /* warm off-white on oxblood */
+    --header-sub:     rgba(255,255,255,0.6);
+    --header-icon:    #F7EEE8;
+    --header-border:  transparent;
+    --drawer-bg:      var(--header-bg);
+    --drawer-text:    var(--header-text);
+    --drawer-sub:     rgba(255,255,255,0.55);
+    --drawer-accent:  #FFD9C2;         /* warm active label / ticks */
+    --drawer-active-bg: rgba(255,255,255,0.14);   /* neutral wash — brand orange
+                                    at 32% went muddy against oxblood */
+    --drawer-border:  rgba(255,255,255,0.12);
+
+    /* ── Milestone (DESIGN_SYSTEM §4) ──────────────────────────────────────────
+       A checkpoint is an event, not a lesson. --milestone deliberately derives
+       from --header-bg: it is the only place the header colour reappears in the
+       body of the app, and that shared value is what makes a checkpoint read as
+       an event. If the header is rethemed, milestone follows it on purpose —
+       but re-derive the tint and edge below by hand, they can't follow a var(). */
+    --milestone:       var(--header-bg);
+    --milestone-tint:  #FBF0F2;
+    --milestone-edge:  #EBD3D9;
+
+    /* ── Layout (DESIGN_SYSTEM §1.5) ───────────────────────────────────────────
+       --measure replaces the current 680 / 760 / 680 / 680 disagreement between
+       .content, .topics-wrap, .path-list and .translate-wrap. Standardising those
+       call sites is phase 2; this only declares the token. */
+    --measure:      680px;       /* content column */
+    --measure-text: 68ch;        /* prose line-length cap */
+    --bar-h:        60px;        /* docked action bar */
+    --tabbar-h:     58px;        /* bottom tab bar */
+    --edge-emph:    3px;         /* the emphasis left rule — §3.2 */
+    --border:       1px solid var(--parchment-border);
+    --border-soft:  1px solid var(--parchment-deep);
+  }
+
+  /* ── page chrome (mockup only) ── */
+  body { margin:0; background:var(--parchment-deep); font-family:var(--font-ui); color:var(--ink); padding:24px 16px 64px; }
+  .wrap { max-width:1180px; margin:0 auto; }
+  h1 { font-family:var(--font-display); font-size:var(--fs-h2); font-weight:var(--fw-medium); margin:0 0 6px; }
+  h2 { font-family:var(--font-display); font-size:var(--fs-lead); font-weight:var(--fw-medium); margin:40px 0 4px; }
+  h3 { font-family:var(--font-ui); font-size:var(--fs-small); font-weight:var(--fw-semi); margin:24px 0 4px; }
+  .lede { font-size:var(--fs-small); line-height:var(--lh-body); color:var(--muted-dark); margin:0 0 8px; max-width:68ch; }
+  .note { font-size:var(--fs-meta); line-height:1.6; color:var(--muted-dark); margin:8px 0 0; max-width:68ch; }
+  .note b { color:var(--ink-soft); }
+  .frames { display:flex; gap:20px; flex-wrap:wrap; align-items:flex-start; margin-top:16px; }
+  .frame { width:275px; }
+  .frame > .cap { font-size:var(--fs-micro); font-weight:var(--fw-semi); letter-spacing:.1em; text-transform:uppercase; color:var(--muted-dark); margin:0 0 8px; }
+  .frame > .cap em { font-style:normal; color:var(--brand); }
+  .frame > .sub { font-size:var(--fs-meta); line-height:1.55; color:var(--muted-dark); margin:9px 0 0; }
+  table { border-collapse:collapse; font-size:var(--fs-meta); margin-top:12px; width:100%; }
+  th,td { text-align:left; padding:7px 10px; border-bottom:var(--border-soft); vertical-align:top; }
+  th { font-size:var(--fs-micro); letter-spacing:.08em; text-transform:uppercase; color:var(--muted-dark); font-weight:var(--fw-semi); }
+  code { font-family:ui-monospace,Menlo,monospace; font-size:11px; background:var(--parchment-deep); padding:1px 5px; border-radius:4px; }
+  .rec { display:inline-block; background:var(--feedback-good-tint); color:var(--feedback-good-text); font-size:9px; font-weight:var(--fw-semi); letter-spacing:.1em; text-transform:uppercase; padding:3px 6px; border-radius:4px; vertical-align:2px; }
+  .no { display:inline-block; background:#EDE7DE; color:var(--muted-dark); font-size:9px; font-weight:var(--fw-semi); letter-spacing:.1em; text-transform:uppercase; padding:3px 6px; border-radius:4px; vertical-align:2px; }
+  .ruler { margin:14px 0 0; font-size:var(--fs-micro); color:var(--muted-dark); }
+
+  /* ── phone frame ── */
+  .phone { position:relative; background:var(--parchment); border:6px solid var(--ink); border-radius:22px; overflow:hidden; height:440px; display:flex; flex-direction:column; }
+  .scroll { flex:1; overflow:hidden; position:relative; }
+
+  /* ── header, styles.css v117 ── */
+  .header { background:var(--header-bg); padding:10px var(--sp-4); flex:none; }
+  .header-row { display:flex; align-items:center; gap:var(--sp-2); }
+  .header-slot { flex:0 0 34px; display:flex; align-items:center; justify-content:center; }
+  .header-title { flex:1; display:flex; align-items:center; flex-direction:column; }
+  .header-title .zh { font-size:18px; color:var(--header-text); font-family:var(--font-display); font-weight:var(--fw-bold); letter-spacing:.06em; line-height:1.1; }
+  .header-title .en { font-size:7px; color:var(--header-sub); text-transform:uppercase; margin-top:1px; font-weight:var(--fw-bold); letter-spacing:.16em; }
+  .ic { width:30px; height:30px; border:none; background:transparent; color:var(--header-icon); opacity:.72; display:inline-flex; align-items:center; justify-content:center; }
+
+  /* ── tab bar, styles.css v117 ── */
+  .tabs--top { display:flex; background:var(--parchment); border-top:var(--border-soft); flex:none; box-shadow:var(--elev-2); }
+  .tabs--top .tab { flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:3px; padding:6px 0 5px; border:none; border-top:2px solid transparent; background:transparent; color:var(--muted-dark); font-family:var(--font-ui); font-weight:var(--fw-medium); }
+  .tabs--top .tab svg { width:17px; height:17px; }
+  .tabs--top .tab span:last-child { font-size:8.5px; letter-spacing:.06em; text-transform:uppercase; }
+  .tabs--top .tab--on { color:var(--brand); border-top-color:var(--brand); }
+
+  /* ── lesson body stub ── */
+  .stub { padding:12px var(--sp-4); }
+  .stub .sub { display:flex; border-bottom:var(--border-soft); margin-bottom:10px; }
+  .stub .sub b { flex:1; text-align:center; font-size:9px; text-transform:uppercase; letter-spacing:.05em; padding:0 0 7px; color:var(--muted-dark); font-weight:var(--fw-medium); }
+  .stub .sub b.on { color:var(--brand); box-shadow:inset 0 -2px 0 var(--brand); }
+  .wcard { background:var(--parchment-warm); border:var(--border); border-radius:var(--r-md); padding:10px 12px; margin-bottom:8px; }
+  .wcard .zh { font-family:var(--font-serif); font-size:17px; color:var(--ink); }
+  .wcard .jy { font-size:10px; color:var(--brand); margin-top:2px; }
+  .wcard .en { font-size:10.5px; color:var(--muted-dark); margin-top:2px; }
+
+  /* ── A: the built in-flow card (MOCK-10-cont) ── */
+  .cont { background:var(--parchment-warm); border:var(--border); border-radius:var(--r-md); margin:var(--sp-5) var(--sp-4) 0; overflow:hidden; }
+  .cont-h { padding:var(--sp-4) var(--sp-4) 0; font-size:9px; text-transform:uppercase; letter-spacing:.14em; color:var(--muted-dark); font-weight:var(--fw-bold); }
+  .cont-mark { display:flex; align-items:center; justify-content:center; gap:6px; width:calc(100% - 32px); margin:12px 16px 16px; min-height:40px; border-radius:var(--r-pill); border:1px solid var(--jade-edge); color:var(--jade); background:transparent; font:var(--fw-semi) 12px var(--font-ui); }
+
+  /* ── the docked bar ── */
+  .bar { position:absolute; left:0; right:0; bottom:0; background:var(--parchment); border-top:var(--border-soft); box-shadow:0 -2px 10px rgba(28,25,23,.06); z-index:5; }
+  .bar-inner { max-width:var(--measure); margin:0 auto; padding:8px var(--sp-4); }
+  .bar-btn { display:flex; align-items:center; justify-content:center; gap:7px; width:100%; min-height:var(--tap-min); border-radius:var(--r-pill); border:1px solid var(--jade-edge); color:var(--jade); background:transparent; font:var(--fw-semi) 12.5px var(--font-ui); }
+  .bar-btn svg { width:14px; height:14px; }
+
+  /* B2 — slim row: done state + forward step on one line */
+  .bar-row { display:flex; align-items:center; gap:10px; width:100%; min-height:var(--tap-min); }
+  .bar-done { display:flex; align-items:center; gap:5px; font:var(--fw-semi) 10px var(--font-ui); text-transform:uppercase; letter-spacing:.08em; color:var(--jade); flex:none; }
+  .bar-done svg { width:11px; height:11px; }
+  .bar-next { display:flex; align-items:center; gap:8px; flex:1; min-width:0; justify-content:flex-end; border:none; background:transparent; }
+  .bar-next .node { width:22px; height:22px; border-radius:var(--r-pill); border:1px solid var(--brand-edge); background:var(--brand-tint); color:var(--brand); display:flex; align-items:center; justify-content:center; font:var(--fw-semi) 10px var(--font-ui); flex:none; }
+  .bar-next .txt { min-width:0; text-align:right; }
+  .bar-next .lb { display:block; font-size:8.5px; text-transform:uppercase; letter-spacing:.1em; color:var(--muted-dark); font-weight:var(--fw-bold); }
+  .bar-next .nm { display:block; font:var(--fw-medium) 12px var(--font-ui); color:var(--ink); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .bar-next .go { color:var(--brand); display:flex; flex:none; }
+  .bar-next .go svg { width:14px; height:14px; }
+
+  /* B3 — merged into the tab bar's rail */
+  .rail { display:flex; align-items:center; gap:8px; padding:6px var(--sp-4); background:var(--brand-tint); border-top:var(--border-soft); }
+  .rail .t { flex:1; font:var(--fw-medium) 11px var(--font-ui); color:var(--ink); }
+  .rail .b { border:1px solid var(--jade-edge); color:var(--jade); background:var(--parchment); border-radius:var(--r-pill); padding:6px 12px; font:var(--fw-semi) 10.5px var(--font-ui); min-height:32px; }
+
+  /* D — slim tabs: labels dropped, min-height overridden below --tap-min */
+  .tabs--slim .tab { padding:7px 0 6px; min-height:0; }
+  .tabs--slim .tab span:last-child { display:none; }
+  .tabs--slim .tab { gap:0; }
+
+  .measure { position:absolute; right:4px; background:rgba(180,35,24,.9); color:#fff; font:var(--fw-bold) 8px var(--font-ui); padding:1px 4px; border-radius:3px; z-index:9; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<h1>Docked completion bar</h1>
+<p class="lede">P6-5, re-mocked on the v117 app — the nameplate reads 廣東話 (gwong2 dung1 waa2). MOCK-11-bar
+was approved before the tab bar existed. Now that the bar is permanent and 58px of the screen bottom is
+already spoken for, the question is not just <i>docked or in-flow</i> but <b>how much more of the bottom
+edge the completion action can reasonably take.</b></p>
+<p class="note"><b>The scope is narrower than it looks.</b> The continuation only renders when a topic is
+opened <i>from the learning path</i> — <code>getPathContext()</code> returns null for a standalone topic and
+the whole element is omitted. So nothing below appears on Topics, Review, Translate, the dashboard, or a
+topic opened directly. It is a path-lesson-only surface, which is what makes spending bottom-edge space on it
+defensible.</p>
+
+<h2>The problem, drawn</h2>
+<div class="frames">
+  <div class="frame">
+    <p class="cap">A &middot; <em>in-flow card, built today</em></p>
+    <div class="phone">
+      <div class="header"><div class="header-row">
+        <div class="header-slot"><button class="ic"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 16v-4M12 8h.01"/></svg></button></div>
+        <div class="header-title"><span class="zh">廣東話</span><span class="en">Cantonese Learner</span></div>
+        <div class="header-slot"><button class="ic"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3.2"/></svg></button></div>
+      </div></div>
+      <div class="scroll">
+        <div class="stub">
+          <div class="sub"><b class="on">Learn</b><b>Chat</b><b>Quiz</b></div>
+          <div class="wcard"><div class="zh">早晨</div><div class="jy">zou2 san4</div><div class="en">Good morning</div></div>
+          <div class="wcard"><div class="zh">你好</div><div class="jy">nei5 hou2</div><div class="en">Hello</div></div>
+          <div class="wcard"><div class="zh">多謝</div><div class="jy">do1 ze6</div><div class="en">Thank you</div></div>
+          <div class="wcard"><div class="zh">再見</div><div class="jy">zoi3 gin3</div><div class="en">Goodbye</div></div>
+        </div>
+      </div>
+      <div class="tabs--top">
+        <button class="tab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5"/><path d="M5.5 9.5V20h13V9.5"/></svg><span>Home</span></button>
+        <button class="tab tab--on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M4 19c4-1 4-7 8-7s4-6 8-7"/><circle cx="4" cy="19" r="1.6"/><circle cx="20" cy="5" r="1.6"/></svg><span>Path</span></button>
+        <button class="tab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"><path d="M4 5.5A2 2 0 0 1 6 4h5v16H6a2 2 0 0 1-2-1.5z"/><path d="M20 5.5A2 2 0 0 0 18 4h-5v16h5a2 2 0 0 0 2-1.5z"/></svg><span>Topics</span></button>
+        <button class="tab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"><path d="M4 7h6l2 2h8v10H4z"/></svg><span>Review</span></button>
+        <button class="tab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.7 2.5 15.3 0 18M12 3c-2.5 2.7-2.5 15.3 0 18"/></svg><span>Translate</span></button>
+      </div>
+    </div>
+    <p class="sub"><b>The completion action is not on this screen at all.</b> It is below four more word
+    cards, at the foot of a scroll that runs to twenty on a real lesson. This is the complaint, and it is
+    fair: the one action that advances the path is the one thing you cannot see.</p>
+  </div>
+
+  <div class="frame">
+    <p class="cap">B1 &middot; <em>docked, full button</em> <span class="no">too heavy</span></p>
+    <div class="phone">
+      <div class="header"><div class="header-row">
+        <div class="header-slot"><button class="ic"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 16v-4M12 8h.01"/></svg></button></div>
+        <div class="header-title"><span class="zh">廣東話</span><span class="en">Cantonese Learner</span></div>
+        <div class="header-slot"><button class="ic"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3.2"/></svg></button></div>
+      </div></div>
+      <div class="scroll">
+        <div class="stub">
+          <div class="sub"><b class="on">Learn</b><b>Chat</b><b>Quiz</b></div>
+          <div class="wcard"><div class="zh">早晨</div><div class="jy">zou2 san4</div><div class="en">Good morning</div></div>
+          <div class="wcard"><div class="zh">你好</div><div class="jy">nei5 hou2</div><div class="en">Hello</div></div>
+          <div class="wcard"><div class="zh">多謝</div><div class="jy">do1 ze6</div><div class="en">Thank you</div></div>
+        </div>
+        <div class="bar">
+          <div class="bar-inner">
+            <button class="bar-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M20 6 9 17l-5-5"/></svg>Mark this lesson complete</button>
+          </div>
+        </div>
+      </div>
+      <div class="tabs--top">
+        <button class="tab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5"/><path d="M5.5 9.5V20h13V9.5"/></svg><span>Home</span></button>
+        <button class="tab tab--on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M4 19c4-1 4-7 8-7s4-6 8-7"/><circle cx="4" cy="19" r="1.6"/><circle cx="20" cy="5" r="1.6"/></svg><span>Path</span></button>
+        <button class="tab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"><path d="M4 5.5A2 2 0 0 1 6 4h5v16H6a2 2 0 0 1-2-1.5z"/><path d="M20 5.5A2 2 0 0 0 18 4h-5v16h5a2 2 0 0 0 2-1.5z"/></svg><span>Topics</span></button>
+        <button class="tab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"><path d="M4 7h6l2 2h8v10H4z"/></svg><span>Review</span></button>
+        <button class="tab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.7 2.5 15.3 0 18M12 3c-2.5 2.7-2.5 15.3 0 18"/></svg><span>Translate</span></button>
+      </div>
+    </div>
+    <p class="sub">MOCK-11-bar as originally drawn, at 60px. Stacked on the tab bar that is <b>118px of
+    chrome</b> — the number DES-12 warned about, and it is as much as it sounded. The lesson gets barely
+    half the screen.</p>
+  </div>
+
+  <div class="frame">
+    <p class="cap">B2 &middot; <em>docked, slim</em> <span class="rec">recommended</span></p>
+    <div class="phone">
+      <div class="header"><div class="header-row">
+        <div class="header-slot"><button class="ic"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 16v-4M12 8h.01"/></svg></button></div>
+        <div class="header-title"><span class="zh">廣東話</span><span class="en">Cantonese Learner</span></div>
+        <div class="header-slot"><button class="ic"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3.2"/></svg></button></div>
+      </div></div>
+      <div class="scroll">
+        <div class="stub">
+          <div class="sub"><b class="on">Learn</b><b>Chat</b><b>Quiz</b></div>
+          <div class="wcard"><div class="zh">早晨</div><div class="jy">zou2 san4</div><div class="en">Good morning</div></div>
+          <div class="wcard"><div class="zh">你好</div><div class="jy">nei5 hou2</div><div class="en">Hello</div></div>
+          <div class="wcard"><div class="zh">多謝</div><div class="jy">do1 ze6</div><div class="en">Thank you</div></div>
+          <div class="wcard"><div class="zh">再見</div><div class="jy">zoi3 gin3</div><div class="en">Goodbye</div></div>
+        </div>
+        <div class="bar">
+          <div class="bar-inner">
+            <button class="bar-btn" style="min-height:36px;font-size:12px"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M20 6 9 17l-5-5"/></svg>Mark complete</button>
+          </div>
+        </div>
+      </div>
+      <div class="tabs--top">
+        <button class="tab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5"/><path d="M5.5 9.5V20h13V9.5"/></svg><span>Home</span></button>
+        <button class="tab tab--on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M4 19c4-1 4-7 8-7s4-6 8-7"/><circle cx="4" cy="19" r="1.6"/><circle cx="20" cy="5" r="1.6"/></svg><span>Path</span></button>
+        <button class="tab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"><path d="M4 5.5A2 2 0 0 1 6 4h5v16H6a2 2 0 0 1-2-1.5z"/><path d="M20 5.5A2 2 0 0 0 18 4h-5v16h5a2 2 0 0 0 2-1.5z"/></svg><span>Topics</span></button>
+        <button class="tab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"><path d="M4 7h6l2 2h8v10H4z"/></svg><span>Review</span></button>
+        <button class="tab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.7 2.5 15.3 0 18M12 3c-2.5 2.7-2.5 15.3 0 18"/></svg><span>Translate</span></button>
+      </div>
+    </div>
+    <p class="sub"><b>52px, not 60.</b> A 36px pill with 8px of padding — the button drops under
+    <code>--tap-min</code> but the <i>bar</i> is the target, so the effective hit area is the full 52px.
+    Shortened to &ldquo;Mark complete&rdquo;: the word <i>lesson</i> was doing no work in a bar that only
+    ever appears inside one.</p>
+  </div>
+</div>
+
+<h2>The four states, docked and slim</h2>
+<p class="note">The continuation has four states today and the docked bar must carry all of them, not just
+the first. This is where the slim form earns itself — three of the four are <b>not</b> a button at all.</p>
+
+<div class="frames">
+  <div class="frame">
+    <p class="cap">1 &middot; <em>not complete</em></p>
+    <div style="border:var(--border);border-radius:var(--r-md);overflow:hidden">
+      <div class="bar" style="position:relative"><div class="bar-inner">
+        <button class="bar-btn" style="min-height:36px;font-size:12px"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M20 6 9 17l-5-5"/></svg>Mark complete</button>
+      </div></div>
+    </div>
+    <p class="sub">Ghost, not filled — a jade outline. The quiz has its own filled action, and §3.1 allows
+    exactly one; this is the same reasoning that already makes the built card's button a ghost.</p>
+  </div>
+
+  <div class="frame">
+    <p class="cap">2 &middot; <em>complete, next step</em></p>
+    <div style="border:var(--border);border-radius:var(--r-md);overflow:hidden">
+      <div class="bar" style="position:relative"><div class="bar-inner">
+        <div class="bar-row">
+          <span class="bar-done"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M20 6 9 17l-5-5"/></svg>Done</span>
+          <button class="bar-next"><span class="txt"><span class="lb">Next in Greetings</span><span class="nm">Numbers 1–10</span></span><span class="node">3</span><span class="go"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span></button>
+        </div>
+      </div></div>
+    </div>
+    <p class="sub">Done state collapses to one word and a tick on the left; the forward step takes the rest.
+    The card spends a full row on &ldquo;Lesson complete&rdquo; — at 52px that row has to earn its place, and
+    it does not.</p>
+  </div>
+
+  <div class="frame">
+    <p class="cap">3 &middot; <em>complete, next is a checkpoint</em></p>
+    <div style="border:var(--border);border-radius:var(--r-md);overflow:hidden">
+      <div class="bar" style="position:relative"><div class="bar-inner">
+        <div class="bar-row">
+          <span class="bar-done"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M20 6 9 17l-5-5"/></svg>Done</span>
+          <button class="bar-next"><span class="txt"><span class="lb">Stage complete</span><span class="nm">Checkpoint</span></span><span class="node" style="border-color:var(--milestone-edge);background:var(--milestone-tint);color:var(--milestone)">&#9670;</span><span class="go"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span></button>
+        </div>
+      </div></div>
+    </div>
+    <p class="sub">Same row, milestone diamond instead of a numbered node — the substitution the built card
+    already makes, carried over unchanged.</p>
+  </div>
+
+  <div class="frame">
+    <p class="cap">4 &middot; <em>complete, path finished</em></p>
+    <div style="border:var(--border);border-radius:var(--r-md);overflow:hidden">
+      <div class="bar" style="position:relative"><div class="bar-inner">
+        <div class="bar-row" style="justify-content:center">
+          <span class="bar-done" style="color:var(--jade)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M20 6 9 17l-5-5"/></svg>Beginner path complete</span>
+        </div>
+      </div></div>
+    </div>
+    <p class="sub">No forward action exists, so the bar is a statement rather than a control. <b>The card's
+    two-line celebration does not fit and should not try</b> — a path ending is worth more than a 52px strip,
+    so the fuller treatment stays at the foot of the lesson and the bar just states the fact.</p>
+  </div>
+</div>
+
+<h2>A different use of the space</h2>
+<div class="frames">
+  <div class="frame" style="width:275px">
+    <p class="cap">C &middot; <em>merged rail above the tabs</em> <span class="no">rejected</span></p>
+    <div style="border:var(--border);border-radius:var(--r-md);overflow:hidden">
+      <div class="rail">
+        <span class="t">Greetings &middot; 3 of 5</span>
+        <button class="b">Mark complete</button>
+      </div>
+      <div class="tabs--top">
+        <button class="tab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5"/><path d="M5.5 9.5V20h13V9.5"/></svg><span>Home</span></button>
+        <button class="tab tab--on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M4 19c4-1 4-7 8-7s4-6 8-7"/><circle cx="4" cy="19" r="1.6"/><circle cx="20" cy="5" r="1.6"/></svg><span>Path</span></button>
+        <button class="tab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"><path d="M4 5.5A2 2 0 0 1 6 4h5v16H6a2 2 0 0 1-2-1.5z"/><path d="M20 5.5A2 2 0 0 0 18 4h-5v16h5a2 2 0 0 0 2-1.5z"/></svg><span>Topics</span></button>
+        <button class="tab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"><path d="M4 7h6l2 2h8v10H4z"/></svg><span>Review</span></button>
+        <button class="tab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.7 2.5 15.3 0 18M12 3c-2.5 2.7-2.5 15.3 0 18"/></svg><span>Translate</span></button>
+      </div>
+    </div>
+    <p class="sub">Tinted rail fused to the tab bar, carrying position and action in 38px. Cheapest in pixels
+    — but it <b>duplicates the context row already at the top of the lesson</b> (§3.4: one indicator per
+    fact), and fusing them means a temporary strip and permanent navigation read as one component. Rejected
+    on both counts, but worth having drawn: it is the only option that costs under 40px.</p>
+  </div>
+
+
+  <div class="frame">
+    <p class="cap">D &middot; <em>docked slim + labels dropped</em> <span class="no">see tap targets</span></p>
+    <div class="phone">
+      <div class="header"><div class="header-row">
+        <div class="header-slot"><button class="ic"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 16v-4M12 8h.01"/></svg></button></div>
+        <div class="header-title"><span class="zh">廣東話</span><span class="en">Cantonese Learner</span></div>
+        <div class="header-slot"><button class="ic"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3.2"/></svg></button></div>
+      </div></div>
+      <div class="scroll">
+        <div class="stub">
+          <div class="sub"><b class="on">Learn</b><b>Chat</b><b>Quiz</b></div>
+          <div class="wcard"><div class="zh">早晨</div><div class="jy">zou2 san4</div><div class="en">Good morning</div></div>
+          <div class="wcard"><div class="zh">你好</div><div class="jy">nei5 hou2</div><div class="en">Hello</div></div>
+          <div class="wcard"><div class="zh">多謝</div><div class="jy">do1 ze6</div><div class="en">Thank you</div></div>
+          <div class="wcard"><div class="zh">再見</div><div class="jy">zoi3 gin3</div><div class="en">Goodbye</div></div>
+          <div class="wcard"><div class="zh">唔該</div><div class="jy">m4 goi1</div><div class="en">Excuse me / please</div></div>
+        </div>
+        <div class="bar">
+          <div class="bar-inner">
+            <button class="bar-btn" style="min-height:36px;font-size:12px"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M20 6 9 17l-5-5"/></svg>Mark complete</button>
+          </div>
+        </div>
+      </div>
+      <div class="tabs--top tabs--slim">
+        <button class="tab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5"/><path d="M5.5 9.5V20h13V9.5"/></svg><span>Home</span></button>
+        <button class="tab tab--on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M4 19c4-1 4-7 8-7s4-6 8-7"/><circle cx="4" cy="19" r="1.6"/><circle cx="20" cy="5" r="1.6"/></svg><span>Path</span></button>
+        <button class="tab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"><path d="M4 5.5A2 2 0 0 1 6 4h5v16H6a2 2 0 0 1-2-1.5z"/><path d="M20 5.5A2 2 0 0 0 18 4h-5v16h5a2 2 0 0 0 2-1.5z"/></svg><span>Topics</span></button>
+        <button class="tab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"><path d="M4 7h6l2 2h8v10H4z"/></svg><span>Review</span></button>
+        <button class="tab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.7 2.5 15.3 0 18M12 3c-2.5 2.7-2.5 15.3 0 18"/></svg><span>Translate</span></button>
+      </div>
+    </div>
+    <p class="sub"><b>86px — the cheapest option that keeps both.</b> Only 28px more bottom chrome than
+    today. This is &sect;3.10's documented fallback, drawn at last. But see the tap-target note below before
+    choosing it: the five icons are 34px, and the app currently has <b>zero</b> controls under the minimum.</p>
+  </div>
+
+  <div class="frame" style="width:560px">
+    <p class="cap">Space, measured</p>
+    <table>
+      <tr><th>Option</th><th>Bottom chrome</th><th>Of an 812px screen</th><th>Completion visible without scrolling?</th></tr>
+      <tr><td><b>A</b> in-flow card (built)</td><td>58px</td><td>7.1%</td><td><b>No</b> — this is the complaint</td></tr>
+      <tr><td><b>B1</b> docked, 60px</td><td>118px</td><td>14.5%</td><td>Yes</td></tr>
+      <tr><td><b>B2</b> docked, slim 52px</td><td>110px</td><td>13.5%</td><td>Yes</td></tr>
+      <tr><td><b>C</b> merged rail</td><td>96px</td><td>11.8%</td><td>Yes</td></tr>
+      <tr><td><b>D</b> docked slim + tabs slim</td><td><b>86px</b></td><td>10.6%</td><td>Yes</td></tr>
+    </table>
+    <p class="note" style="margin-top:14px"><b>B2 saves 8px against the original, not 20.</b> Worth saying
+    plainly: the slim form helps, but it does not make the stack cheap. The honest comparison is 110px against
+    58px — the docked bar nearly doubles the bottom chrome inside path lessons, and the reason to accept that
+    is that the completion action is currently invisible, which is a worse problem than a shorter lesson
+    viewport.</p>
+    <p class="note"><b>D's 34px is below the tap minimum, and that is the whole objection.</b>
+    <code>.tab</code> sets <code>min-height: var(--tap-min)</code>; reaching 34px means overriding it
+    downward on the app's five primary navigation targets. This project has spent four phases removing
+    sub-44px controls and standing check 2 reported <b>zero</b> min-height misses for the first time at v117
+    — D reintroduces five, at the bottom edge of the screen where thumbs are least precise. The 24px it
+    saves is real; so is that.</p>
+    <p class="note"><b>The second cost is that navigation changes shape.</b> The tab bar would be 58px with
+    labels everywhere in the app and 34px without them inside path lessons — the surface you rely on to be
+    constant becomes the one that moves. Icon-only tabs are also the state in which a learner has to already
+    know what the five glyphs mean, and Path, Topics and Review are not self-evident icons.</p>
+    <p class="note"><b>What the bar does not carry:</b> path progress. It only ever appears in a path lesson,
+    and the context row plus stage stepper at the top of that same screen already show position — putting it
+    in the bar too would be the same fact twice on one screen, which §3.4 exists to prevent.</p>
+  </div>
+</div>
+
+<h2>Recommendation</h2>
+<p class="note"><b>B2 over D, though D is closer than I expected.</b> Dropping the labels is the single
+biggest saving available — 24px, more than slimming the bar itself gave — and if the stack proves too heavy
+in use, D is the first thing to reach for. But it buys that by putting five primary navigation targets under
+the tap minimum and by making the main menu change shape depending on where you are, and I would not spend
+either of those before knowing the 110px stack is actually a problem. <b>Ship B2, judge it, and hold D as the
+known lever</b> — which is what &sect;3.10 said all along, just for a collision that had not happened yet.</p>
+<p class="note"><b>B2 — docked, slim, 52px, all four states.</b> The in-flow card is retired rather than kept
+alongside: two routes to the same action in the same screen is how the old top action zone and the card came
+to coexist in the first place. State 4 is the one exception, and deliberately so — the path-complete
+celebration stays in-flow, because a path ending deserves more than a strip and the bar has no forward action
+to offer there anyway.</p>
+<p class="note"><b>Reversibility is the argument for building rather than deciding.</b> The bar is one fixed
+element and a wrapper class; if 110px proves too much in use, removing it restores the card exactly, since
+both render from the same four states. That is a genuinely cheap experiment, which is the case for doing it
+your way rather than settling it on paper.</p>
+
+</div>
+</body>
+</html>

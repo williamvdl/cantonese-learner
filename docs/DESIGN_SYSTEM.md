@@ -369,12 +369,30 @@ and a brand edge, never a fill — the same reasoning as DES-19 for tabs: a
 selector is not the screen's next action (§3.1).
 
 ### Docked bar — `.bar` › `.bar-inner`
-Fixed to the viewport bottom, contents capped to `--measure`. **Not built.** It and
-the Continuation card above do the same job in two positions — in-flow at the foot,
-versus fixed to the viewport — and both were approved, at different times. Phase 6
-picks one; see `DESIGN_DECISIONS.md`. The bar as drawn also gives its forward action
-a **fill**, which the built card deliberately does not; whichever position wins,
-only one fill treatment can.
+Fixed above the tab bar, contents capped to `--measure`. **Built v118** (DES-22,
+MOCK-20-B2), resolving a two-position question that had been open since the design
+system was written: the continuation card and the docked bar did the same job in
+flow versus fixed, and both had been approved at different times. The bar won,
+because in flow the completion action sat below a twenty-card scroll — the one
+action that advances the path was the one action you could not see.
+
+**52px, not the 60px mockup 11 drew.** The button inside is 36px, under
+`--tap-min`, but the *bar* is the tap target and it is 52px, so the effective hit
+area clears the minimum. The forward action is a **ghost with a tinted node**, not
+the fill mockup 11 drew — the quiz has its own filled action and §3.1 allows one
+per screen.
+
+**Path lessons only.** `getPathContext()` returns null for a standalone topic, so
+the bar never appears on Topics, Review, Translate or the dashboard. It carries
+**no path progress**: the context row and stage stepper at the top of the same
+screen already show position (§3.4).
+
+Three of the continuation's four states live here. The fourth, path complete,
+stays in flow at the foot of the lesson — a path ending is worth more than a 52px
+strip, and there is no forward action to dock.
+
+`.content--docked` adds `--bar-h` to the bottom clearance, applied by `render()`
+only when the bar is actually present.
 
 ### Watermark — `.wm`
 The oversized character behind a band is **the word being studied, not
@@ -655,8 +673,9 @@ scheduled as phase 4, a few lines in the context builder rather than new data
 - **Tab bar — not yet built.** Phase 6. To be shipped and lived with; fallbacks
   in §3.10 and §3.9.
 - **The fifth tab slot** — Translate today, a stats destination later. See §3.9.
-- **Docked bar versus continuation card.** The same job in two positions, both
-  approved. Phase 6 picks one. See §2 Docked bar.
+- ~~**Docked bar versus continuation card.**~~ Settled v118 (DES-22): the bar. The
+  card is reduced to the path-complete state alone. The fill-versus-tint question
+  that rode along with it is settled the same way — tint, per §3.1.
 - **Settings sheet panel** — MOCK-13-A parchment or MOCK-13-B oxblood; the choice
   was never recorded. Needed before phase 6 builds the sheet.
 - **Per-stage checkpoint watermark** — see BACKLOG.md. The fixed 站 (zaam6) is

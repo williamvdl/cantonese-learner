@@ -139,8 +139,13 @@
        call sites is phase 2; this only declares the token. */
     --measure:      680px;       /* content column */
     --measure-text: 68ch;        /* prose line-length cap */
-    --bar-h:        60px;        /* docked action bar */
-    --tabbar-h:     58px;        /* bottom tab bar */
+    /* Both measured from the built components at v118, not estimated. A wrong
+       value here is invisible: it over- or under-reserves scroll clearance, and
+       over-reserving just looks like generous spacing. --tabbar-h said 58px from
+       the mockup while the bar computes to 46px (44px --tap-min + 2px top rule),
+       so every wrapper was over-clearing by 12px. */
+    --bar-h:        52px;        /* docked action bar: 36px button + 2×--sp-2 */
+    --tabbar-h:     46px;        /* bottom tab bar: --tap-min + 2px top rule */
     --edge-emph:    3px;         /* the emphasis left rule — §3.2 */
     --border:       1px solid var(--parchment-border);
     --border-soft:  1px solid var(--parchment-deep);
@@ -300,6 +305,43 @@
   .tab--on { color: var(--brand); border-bottom-color: var(--brand); }
 
 
+  /* ── Docked action bar — `.bar` › `.bar-inner` (§2, MOCK-20-B2, DES-22, v118).
+        Fixed above the tab bar. Path lessons ONLY: getPathContext() returns null
+        for a standalone topic, so this never appears on Topics, Review,
+        Translate or the dashboard — which is what makes spending bottom-edge
+        space on it defensible.
+        52px, not the 60px mockup 11 drew. The button inside is 36px, under
+        --tap-min, but the BAR is the tap target and it is 52px, so the effective
+        hit area clears the minimum — this is one of the padding-built targets
+        standing check 2 counts rather than flags, and it is deliberate.
+        Sits at z-index 19, one below the tab bar: where they meet, navigation
+        wins. It carries NO path progress — the context row and stage stepper at
+        the top of the same screen already show position (§3.4, one indicator per
+        fact). ── */
+  .bar { position: fixed; left: 0; right: 0; bottom: calc(var(--tabbar-h) + env(safe-area-inset-bottom, 0px)); z-index: 19; background: var(--parchment); border-top: var(--border-soft); box-shadow: 0 -2px 10px rgba(28,25,23,0.06); }
+  .bar-inner { max-width: var(--measure); margin: 0 auto; padding: var(--sp-2) var(--sp-4); }
+  .bar-btn { width: 100%; min-height: 36px; }
+  .bar-row { display: flex; align-items: center; gap: var(--sp-3); width: 100%; min-height: 36px; }
+  .bar-row--solo { justify-content: center; }
+  .bar-done { display: flex; align-items: center; gap: 5px; flex: none; font-family: var(--font-ui); font-size: 10px; font-weight: var(--fw-semi); text-transform: uppercase; letter-spacing: 0.08em; color: var(--jade); }
+  .bar-done svg { width: 11px; height: 11px; }
+  /* Forward step. Right-aligned so the tappable half sits under the thumb, and
+     the done state anchors the left — the card stacked these vertically, which
+     52px has no room for. */
+  .bar-next { display: flex; align-items: center; gap: var(--sp-2); flex: 1; min-width: 0; justify-content: flex-end; border: none; background: transparent; cursor: pointer; padding: 0; }
+  .bar-next-txt { min-width: 0; text-align: right; }
+  .bar-next-lb { display: block; font-family: var(--font-ui); font-size: 8.5px; font-weight: var(--fw-bold); text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted-dark); }
+  .bar-next-nm { display: block; font-family: var(--font-ui); font-size: 12px; font-weight: var(--fw-medium); color: var(--ink); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .bar-next.cp .bar-next-nm { color: var(--milestone); }
+  /* Brand TINT, not a fill — same reasoning as the card's node it replaces. */
+  .bar-node { width: 22px; height: 22px; border-color: var(--brand-edge); background: var(--brand-tint); color: var(--brand); font-size: 10px; }
+  /* Geometry only: the checkpoint variant must NOT take .bar-node, or its brand
+     tint overrides .node--cp's milestone colour. */
+  .bar-node--cp { width: 22px; height: 22px; }
+  .bar-next-go { flex: none; color: var(--brand); display: flex; }
+  .bar-next.cp .bar-next-go { color: var(--milestone); }
+  .bar-next-go svg { width: 14px; height: 14px; }
+
   /* The hamburger was retired at v117 — the header's right corner is now the
      settings cog, which is a plain .btn-icon--header like the info button on the
      left. Both corner controls are finally the same 44px component. */
@@ -379,6 +421,11 @@
      iOS home-indicator inset which the bar itself also carries. Without this the
      final element of every scrolling screen is unreachable. */
   .content { padding: var(--sp-4) var(--sp-5) calc(var(--tabbar-h) + var(--sp-5) + env(safe-area-inset-bottom, 0px)); max-width: var(--measure); margin: 0 auto; }
+  /* A path lesson carries the docked bar as well, so it needs --bar-h on top of
+     the tab bar's clearance or the last word card sits under the bar. Applied by
+     render() only when the bar is actually present — a standalone topic has no
+     continuation and must not reserve space for one. */
+  .content--docked { padding-bottom: calc(var(--tabbar-h) + var(--bar-h) + var(--sp-5) + env(safe-area-inset-bottom, 0px)); }
   .lesson-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
   .lesson-title { font-family: var(--font-display); font-size: var(--fs-h2); font-weight: var(--fw-medium); color: var(--ink); margin: 0; letter-spacing: -0.01em; }
   .lesson-count { font-size: var(--fs-meta); color: var(--muted); margin-top: 2px; }
@@ -474,35 +521,12 @@
         forward action dropped — MOCK-12).
         Built on .card, so only the differences are declared here. ── */
   .cont { margin: var(--sp-5) 0; overflow: hidden; }
-  .cont-h { padding: var(--sp-4) var(--sp-4) 0; }
-  .cont-mark { width: calc(100% - (var(--sp-4) * 2)); margin: var(--sp-3) var(--sp-4) var(--sp-4); }
-  .cont-done { display: flex; align-items: center; gap: var(--sp-2); padding: var(--sp-4); font-family: var(--font-ui); font-size: 12.5px; font-weight: var(--fw-medium); color: var(--jade); border-bottom: var(--border-soft); }
-  /* Completion-only form (live quiz question): the row is the card's sole child,
-     so the divider would have nothing under it. */
-  .cont-done:last-child { border-bottom: none; }
-  .cont-done .tick { width: 20px; height: 20px; border-radius: var(--r-pill); background: var(--jade); color: #fff; display: flex; align-items: center; justify-content: center; flex: none; }
-  .cont-done .tick svg { width: 11px; height: 11px; }
-  /* Forward step. The 3px left edge is the same emphasis device as next-up on
-     the timeline (§3.2) — one language for "this is the way on". */
-  .cont-next { display: flex; align-items: center; gap: var(--sp-3); width: 100%; min-height: var(--tap-min); padding: var(--sp-4); text-align: left; background: transparent; border: none; border-left: var(--edge-emph) solid var(--brand); cursor: pointer; }
-  .cont-next.cp { border-left-color: var(--milestone); }
-  /* The forward node is a brand TINT, not a fill: the card already carries the
-     brand edge, and a filled circle here would compete with the screen's one
-     filled action (§3.1). */
-  .cont-next-node { border-color: var(--brand-edge); background: var(--brand-tint); color: var(--brand); font-size: 11px; }
-  /* Geometry only. The checkpoint variant deliberately does NOT carry
-     .cont-next-node: components sit below primitives, so its brand tint would
-     override .node--cp's milestone colour. */
-  .cont-next-node--cp { width: 24px; height: 24px; }
-  .cont-next-body { flex: 1; min-width: 0; }
-  /* Both children must be block: the mockup left them inline, where the label
-     and the name collapse onto one line and margin-top silently does nothing.
-     .section-label is already block, so only the name needs it. */
-  .cont-next-name { display: block; font-family: var(--font-ui); font-size: 14px; font-weight: var(--fw-medium); line-height: 1.3; color: var(--ink); margin-top: 5px; }
-  .cont-next.cp .cont-next-name { color: var(--milestone); }
-  .cont-next-go { flex: none; color: var(--brand); display: flex; }
-  .cont-next.cp .cont-next-go { color: var(--milestone); }
-  .cont-next-go svg { width: 16px; height: 16px; }
+  /* Continuation card — REDUCED at v118 to the path-complete state alone.
+     Its other three states (mark complete, done, forward step) moved to the
+     docked bar: in flow they sat under a twenty-card scroll, which made the one
+     action that advances the path the one action you could not see.
+     `.cont-h`, `.cont-mark`, `.cont-done`, `.cont-next*` retired with them — a
+     card that only ever shows a celebration needs none of them. */
   .cont-end { padding: var(--sp-5) var(--sp-4); text-align: center; }
   .cont-end-t { font-family: var(--font-display); font-size: var(--fs-lead); font-weight: var(--fw-medium); line-height: 1.25; color: var(--ink); margin-bottom: 6px; }
   .cont-end-s { font-size: 12.5px; line-height: 1.5; color: var(--muted-dark); }

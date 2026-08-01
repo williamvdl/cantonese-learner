@@ -654,14 +654,14 @@ table.spec tr:last-child td{ border-bottom:none; }
   <h3>Reduced form — live quiz question</h3>
   <p class="note">Present on Learn, Chat <b>and</b> Quiz. While a quiz question is on screen the card confirms completion and drops its forward action, because "Next in &lt;stage&gt;" a thumb under the quiz's own "Next question" is two forwards meaning different things. On the quiz <i>result</i> screen nothing competes, so the forward action returns — the result screen keeps its own "Back to Lesson" and "Retry missed words" and does not absorb completion (DES-10).</p>
   <div class="widths" id="contquizdemo"></div>
-  <div class="cls">.card.cont › .cont-h / .cont-mark / .cont-done / .cont-next (+ .cp) / .cont-end</div>
-  <p class="note"><b>Unresolved:</b> this component and the docked bar below do the same job in two positions — in-flow at the foot, versus fixed to the viewport. Both were approved, at different times. The bar demo below still draws its forward action as a <i>fill</i>, which contradicts the tint above; whichever position wins in phase 6, only one fill treatment can.</p>
+  <div class="cls">.card.cont › .cont-end &nbsp;<i>(v118: the other four subclasses moved to the docked bar)</i></div>
+  <p class="note"><b>Resolved at v118 (DES-22):</b> the docked bar won, and this card is reduced to the path-complete state alone. It is not kept alongside — two routes to the same action on one screen is how the old top action zone and this card came to coexist in the first place.</p>
 </section>
 
 <section id="bar">
-  <h2>Docked bar <span class="tag-todo">not built &middot; phase 6</span></h2>
+  <h2>Docked bar <span class="tag-new">built &middot; v118</span></h2>
   <p class="note">Fixed to the bottom of the viewport, contents capped to <code>--measure</code> so it doesn't stretch on a wide screen. <b>This and the Continuation card above do the same job in two positions</b> — fixed to the viewport, versus in-flow at the foot of the lesson. Both were approved, at different times; phase 6 picks one. The quiz behaviour this section describes <i>did</i> ship in v113, on the card rather than the bar.</p>
-  <p class="note"><b>Note the disagreement:</b> the demo below gives its forward action a solid <i>fill</i>, while the built card uses a brand <i>tint</i> on the grounds that the card already carries the brand edge (&sect;3.1). Whichever position wins, only one fill treatment can.</p>
+  <p class="note"><b>Settled at v118:</b> the demo below drew a solid fill for the forward action; the built bar uses a ghost with a brand-tinted node. The quiz has its own filled action and &sect;3.1 allows one per screen, so tint won — the same reasoning that already governed the card this replaces.</p>
   <div id="bardemo"></div>
 </section>
 

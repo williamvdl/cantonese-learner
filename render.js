@@ -1101,19 +1101,27 @@ function render() {
       // screen nothing competes, so the forward action returns; the result screen
       // keeps its own "Back to Lesson" / "Retry missed words" and does not absorb
       // completion (DES-10 — a quiz run is not a completion event).
+      // The continuation splits at v118 (MOCK-20-B2). Three of its four states
+      // dock to the viewport bottom, because the in-flow card put the one action
+      // that advances the path below a twenty-card scroll — it was the only
+      // action you could not see. The fourth, path complete, deliberately stays
+      // in flow: a path ending is worth more than a 52px strip and there is no
+      // forward action to dock there anyway.
       // Standalone topics have no `ctx` and so no continuation: it is a path concept.
-      const contEl = ctx
+      const contEl    = ctx ? renderPathComplete(ctx) : '';
+      const dockedEl  = ctx
         ? renderContinuation(ctx, { completionOnly: isQuizQuestionLive() })
         : '';
       mainContent = `
         ${aboveEl}
-        <div class="content">
+        <div class="content${dockedEl ? ' content--docked' : ''}">
           ${backEl}
           ${renderRoundSelector(state.topic)}
           ${renderLessonHeader(lesson)}
           ${state.mode === 'quiz' ? renderQuiz(lesson) : state.tab === 'convo' ? renderConversation() : renderStudy(lesson)}
           ${contEl}
-        </div>`;
+        </div>
+        ${dockedEl}`;
     }
   } else if (state.nav === 'dashboard') {
     mainContent = `${renderDashboard()}`;
@@ -1264,35 +1272,57 @@ function isQuizQuestionLive() {
 // no forward action, no end-of-path block. Used while a quiz question is live.
 // This is a structural reduction, not a variant: no colour or theme is passed in
 // (§3.5), and the treatment of every state that does render is unchanged.
+// State 4 only — the path is finished. Stays IN FLOW at the foot of the lesson
+// (MOCK-20-B2): there is no forward action to dock, and a path ending deserves
+// more than a 52px strip. Returns '' in every other state, so the docked bar
+// below is the sole route to completion.
+function renderPathComplete(ctx) {
+  if (!ctx.isComplete || !ctx.isLast) return '';
+  return `
+    <div class="card cont">
+      <div class="cont-end">
+        <div class="cont-end-t">${ctx.path.label} path complete</div>
+        <div class="cont-end-s">Every lesson on this path is done.</div>
+      </div>
+    </div>`;
+}
+
+// The docked completion bar (MOCK-20-B2, DES-22). Fixed above the tab bar, 52px,
+// path lessons only — `getPathContext()` returns null for a standalone topic, so
+// this never appears on Topics, Review, Translate or the dashboard.
+//
+// Deliberately carries NO path progress: the context row and stage stepper at the
+// top of this same screen already show position, and §3.4 allows one indicator
+// per fact.
 function renderContinuation(ctx, opts) {
   const o = opts || {};
 
   if (!ctx.isComplete) {
-    // The mark button IS the completion confirmation, so it renders in both
-    // forms. It is a ghost (`btn--good`), so it never competes with the quiz's
-    // own filled action — which is what made mockup 12's exception workable.
+    // A ghost, not a fill — the quiz has its own filled action and §3.1 allows
+    // exactly one per screen. "Mark complete" rather than "Mark this lesson
+    // complete": the word `lesson` did no work in a bar that only ever appears
+    // inside one.
     return `
-      <div class="card cont">
-        <div class="section-label cont-h">When you're done</div>
-        <button class="btn btn--good cont-mark" id="path-mark-complete">${icon('check',14)} Mark this lesson complete</button>
+      <div class="bar">
+        <div class="bar-inner">
+          <button class="btn btn--good bar-btn" id="path-mark-complete">${icon('check',14)} Mark complete</button>
+        </div>
       </div>`;
   }
 
-  const doneRow = `<div class="cont-done"><span class="tick">${icon('check',11)}</span> Lesson complete</div>`;
+  const doneEl = `<span class="bar-done">${icon('check',11)} Done</span>`;
 
-  if (o.completionOnly) {
-    // `.cont-done:last-child` drops its hairline so the card can't end on a
-    // divider with nothing beneath it.
-    return `<div class="card cont">${doneRow}</div>`;
-  }
-
-  if (ctx.isLast) {
+  // While a quiz question is live the forward action drops — "Next in <stage>"
+  // under the quiz's own "Next question" is two forwards meaning different
+  // things (MOCK-12-quizbar). The done state alone remains.
+  if (o.completionOnly || ctx.isLast) {
+    // isLast: the path-complete celebration is in flow, so the bar states the
+    // fact and offers nothing.
+    const label = ctx.isLast ? `${ctx.path.label} path complete` : 'Lesson complete';
     return `
-      <div class="card cont">
-        ${doneRow}
-        <div class="cont-end">
-          <div class="cont-end-t">${ctx.path.label} path complete</div>
-          <div class="cont-end-s">Every lesson on this path is done.</div>
+      <div class="bar">
+        <div class="bar-inner">
+          <div class="bar-row bar-row--solo"><span class="bar-done">${icon('check',11)} ${label}</span></div>
         </div>
       </div>`;
   }
@@ -1307,22 +1337,26 @@ function renderContinuation(ctx, opts) {
     ? (nextStage.topics || []).indexOf(ctx.nextStep.topic) + 1
     : ctx.step + 1;
   const nodeMarkup = toCp
-    ? `<span class="node node--cp cont-next-node--cp"><span>◆</span></span>`
-    : `<span class="node cont-next-node">${nextNum}</span>`;
+    ? `<span class="node node--cp bar-node--cp"><span>◆</span></span>`
+    : `<span class="node bar-node">${nextNum}</span>`;
   const label = toCp
     ? 'Stage complete'
     : (nextStage ? `Next in ${nextStage.name}` : 'Next step');
   return `
-    <div class="card cont">
-      ${doneRow}
-      <button class="cont-next${toCp ? ' cp' : ''}" id="path-next-step">
-        ${nodeMarkup}
-        <span class="cont-next-body">
-          <span class="section-label">${label}</span>
-          <span class="cont-next-name">${ctx.nextTopicLabel || 'Continue'}</span>
-        </span>
-        <span class="cont-next-go">${icon('arrowRight',16)}</span>
-      </button>
+    <div class="bar">
+      <div class="bar-inner">
+        <div class="bar-row">
+          ${doneEl}
+          <button class="bar-next${toCp ? ' cp' : ''}" id="path-next-step">
+            <span class="bar-next-txt">
+              <span class="bar-next-lb">${label}</span>
+              <span class="bar-next-nm">${ctx.nextTopicLabel || 'Continue'}</span>
+            </span>
+            ${nodeMarkup}
+            <span class="bar-next-go">${icon('arrowRight',14)}</span>
+          </button>
+        </div>
+      </div>
     </div>`;
 }
 
