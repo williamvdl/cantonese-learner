@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Nameplate as a route home — DES-18, on the v115 centred header</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Fraunces:wght@400;500;600&family=Noto+Serif+TC:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+    /* Font stacks — Chinese face listed FIRST so CJK chars render in Noto Serif TC; English fallback follows */
+    --font-serif:   'Noto Serif TC', 'Fraunces', Georgia, 'Times New Roman', serif;
+    --font-ui:      'Inter', 'Noto Serif TC', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+    --font-display: 'Fraunces', 'Noto Serif TC', Georgia, serif;
+
+    /* Size scale */
+    --fs-micro:   11px;
+    --fs-meta:    12px;
+    --fs-small:   13px;
+    --fs-body:    15px;
+    --fs-lead:    17px;
+    --fs-h3:      22px;
+    --fs-h2:      28px;
+    --fs-h1:      36px;
+    --fs-display: 56px;
+
+    /* Line heights */
+    --lh-display: 1.1;
+    --lh-heading: 1.25;
+    --lh-body:    1.5;
+
+    /* Weights */
+    --fw-regular: 400;
+    --fw-medium:  500;
+    --fw-semi:    600;
+    --fw-bold:    700;
+
+    /* Spacing scale — based on 4px grid. Use these instead of arbitrary px values */
+    --sp-1:  4px;
+    --sp-2:  8px;
+    --sp-3:  12px;
+    --sp-4:  16px;
+    --sp-5:  24px;
+    --sp-6:  32px;
+    --sp-7:  48px;
+    --sp-8:  64px;
+
+    /* Radii — consistent corner system */
+    --r-sm:   8px;
+    --r-md:   12px;
+    --r-lg:   16px;
+    --r-pill: 999px;
+
+    /* Touch target minimums — Apple HIG / Material both recommend 44px */
+    --tap-min: 44px;
+
+    /* Elevation system — soft, warm-tinted shadows (Tea House) */
+    --elev-1: 0 1px 2px rgba(58, 42, 30, 0.04), 0 1px 3px rgba(58, 42, 30, 0.06);
+    --elev-2: 0 2px 4px rgba(58, 42, 30, 0.05), 0 4px 8px rgba(58, 42, 30, 0.07);
+    --elev-3: 0 4px 8px rgba(58, 42, 30, 0.06), 0 8px 20px rgba(58, 42, 30, 0.10);
+    --elev-4: 0 8px 16px rgba(58, 42, 30, 0.10), 0 16px 40px rgba(58, 42, 30, 0.16);
+
+    /* Interaction timing — one easing curve everywhere */
+    --ease:        cubic-bezier(0.4, 0.0, 0.2, 1);
+    --dur-fast:    120ms;
+    --dur-base:    200ms;
+
+    /* ── Tea House colour palette ──────────────────────────────────────────
+       Named tokens for the app's theme colours. Use var(--token) instead of
+       raw hex so the palette can be adjusted in one place. NOTE: the 7
+       per-category colours and the 6 tone colours are DATA (in JSON / the
+       TONES object), not theme — they are intentionally not tokenised here. */
+    --ink:            #1C1917;   /* primary text / darkest */
+    --ink-soft:       #292524;   /* body text on parchment */
+    --parchment:      #FFFFFF;   /* card / surface background */
+    --parchment-warm: #FAF8F5;   /* app background, warm panels */
+    --parchment-deep: #F0EBE4;   /* deeper parchment — header bands, tracks */
+    --brand:          #C2410C;   /* burnt orange — brand / primary accent */
+    --jade:           #15803D;   /* forest green — success / completion */
+    --jade-bright:    #16A34A;   /* lighter green — secondary success */
+    --muted:          #A8A29E;   /* muted text / borders */
+    --feedback-good:  #16A34A;   /* quiz "correct" — semantic green */
+    --feedback-bad:   #B42318;   /* quiz "wrong" / stop — warm red, W2. Must stay
+                                    distinct from --milestone: both are deep reds
+                                    and they meet during a checkpoint quiz. */
+
+    /* ── Derived / semantic tokens (Phase 1 cleanup) ───────────────────────────
+       Tints, shades and state colours used throughout the app but previously
+       hardcoded as raw hex. Centralised here so a palette swap touches one place.
+       Values are derived from the primary palette above — do not introduce new
+       hues here without updating the visual identity exploration notes. */
+    --brand-dark:          #9A3412;   /* brand pressed state / 3D shadow */
+    --brand-tint:          #FEF0E9;   /* BRAND surface bg — NOT error. See below. */
+    --brand-text-dark:     #9A3412;   /* brand text on --brand-tint surfaces */
+    --feedback-good-tint:  #DCFCE7;   /* correct-answer surface bg */
+    --feedback-good-text:  #15803D;   /* correct-answer text */
+
+    /* ── State edges + tints (DESIGN_SYSTEM §1.4) ──────────────────────────────
+       Hairline border colours, one per state, so a tinted surface and its border
+       always come from the same family. --feedback-bad-tint exists because
+       --brand-tint was previously doing duty as the wrong-answer background:
+       brand tint should mean brand. Re-pointing those 8 call sites is phase 2. */
+    --brand-edge:          #F5D9C9;   /* border on brand-tinted surfaces */
+    --jade-edge:           #C9E7D3;   /* border on jade / correct surfaces */
+    --feedback-bad-tint:   #FEF3F2;   /* wrong-answer surface bg */
+    --feedback-bad-edge:   #F5CFCB;   /* border on wrong-answer surfaces */
+    --parchment-border:    #EAE4DC;   /* standard card / divider border */
+    --ink-drawer:          #2A2520;   /* dark surface used in nav drawer (legacy) */
+    --muted-dark:          #78716C;   /* darker muted — secondary body text */
+    --muted-light:         #A8A29E;   /* lighter muted — tertiary / meta text */
+
+    /* ── Header + drawer tokens (visual identity: independent of body palette) ──
+       Set to OXBLOOD #6E2639, chosen from 8 solid options.
+       Swap this block to retheme the top bar + slide-out menu as a unit.
+       The drawer now derives from the header rather than repeating its hex, so
+       the two can't drift apart while the drawer waits to be retired (phase 6). */
+    --header-bg:      #6E2639;   /* oxblood */
+    --header-text:    #F7EEE8;   /* warm off-white on oxblood */
+    --header-sub:     rgba(255,255,255,0.6);
+    --header-icon:    #F7EEE8;
+    --header-border:  transparent;
+    --drawer-bg:      var(--header-bg);
+    --drawer-text:    var(--header-text);
+    --drawer-sub:     rgba(255,255,255,0.55);
+    --drawer-accent:  #FFD9C2;         /* warm active label / ticks */
+    --drawer-active-bg: rgba(255,255,255,0.14);   /* neutral wash — brand orange
+                                    at 32% went muddy against oxblood */
+    --drawer-border:  rgba(255,255,255,0.12);
+
+    /* ── Milestone (DESIGN_SYSTEM §4) ──────────────────────────────────────────
+       A checkpoint is an event, not a lesson. --milestone deliberately derives
+       from --header-bg: it is the only place the header colour reappears in the
+       body of the app, and that shared value is what makes a checkpoint read as
+       an event. If the header is rethemed, milestone follows it on purpose —
+       but re-derive the tint and edge below by hand, they can't follow a var(). */
+    --milestone:       var(--header-bg);
+    --milestone-tint:  #FBF0F2;
+    --milestone-edge:  #EBD3D9;
+
+    /* ── Layout (DESIGN_SYSTEM §1.5) ───────────────────────────────────────────
+       --measure replaces the current 680 / 760 / 680 / 680 disagreement between
+       .content, .topics-wrap, .path-list and .translate-wrap. Standardising those
+       call sites is phase 2; this only declares the token. */
+    --measure:      680px;       /* content column */
+    --measure-text: 68ch;        /* prose line-length cap */
+    --bar-h:        60px;        /* docked action bar */
+    --tabbar-h:     58px;        /* bottom tab bar */
+    --edge-emph:    3px;         /* the emphasis left rule — §3.2 */
+    --border:       1px solid var(--parchment-border);
+    --border-soft:  1px solid var(--parchment-deep);
+  }
+
+  /* ── page chrome (mockup only) ── */
+  body { margin:0; background:var(--parchment-deep); font-family:var(--font-ui); color:var(--ink); padding:24px 16px 64px; }
+  .wrap { max-width:860px; margin:0 auto; }
+  h1 { font-family:var(--font-display); font-size:var(--fs-h2); font-weight:var(--fw-medium); margin:0 0 6px; }
+  h2 { font-family:var(--font-display); font-size:var(--fs-lead); font-weight:var(--fw-medium); margin:40px 0 4px; }
+  h3 { font-family:var(--font-ui); font-size:var(--fs-small); font-weight:var(--fw-semi); margin:24px 0 4px; }
+  .lede { font-size:var(--fs-small); line-height:var(--lh-body); color:var(--muted-dark); margin:0 0 8px; max-width:66ch; }
+  .note { font-size:var(--fs-meta); line-height:1.6; color:var(--muted-dark); margin:8px 0 0; max-width:66ch; }
+  .note b { color:var(--ink-soft); }
+  .frames { display:flex; gap:22px; flex-wrap:wrap; align-items:flex-start; margin-top:14px; }
+  .frame { width:390px; max-width:100%; }
+  .frame > .cap { font-size:var(--fs-micro); font-weight:var(--fw-semi); letter-spacing:.1em; text-transform:uppercase; color:var(--muted-dark); margin:0 0 8px; }
+  .frame > .cap em { font-style:normal; color:var(--brand); }
+  .frame > .sub { font-size:var(--fs-meta); line-height:1.55; color:var(--muted-dark); margin:8px 0 0; }
+  table { border-collapse:collapse; font-size:var(--fs-meta); margin-top:12px; width:100%; }
+  th,td { text-align:left; padding:7px 10px; border-bottom:var(--border-soft); vertical-align:top; }
+  th { font-size:var(--fs-micro); letter-spacing:.08em; text-transform:uppercase; color:var(--muted-dark); font-weight:var(--fw-semi); }
+  code { font-family:ui-monospace,Menlo,monospace; font-size:11px; background:var(--parchment-deep); padding:1px 5px; border-radius:4px; }
+  .rec { display:inline-block; background:var(--feedback-good-tint); color:var(--feedback-good-text); font-size:9px; font-weight:var(--fw-semi); letter-spacing:.1em; text-transform:uppercase; padding:3px 6px; border-radius:4px; vertical-align:2px; }
+  .no { display:inline-block; background:#EDE7DE; color:var(--muted-dark); font-size:9px; font-weight:var(--fw-semi); letter-spacing:.1em; text-transform:uppercase; padding:3px 6px; border-radius:4px; vertical-align:2px; }
+  .toolbar { margin:18px 0 0; font-size:var(--fs-meta); color:var(--muted-dark); display:flex; align-items:center; gap:10px; flex-wrap:wrap; }
+  .toolbar button { font:inherit; font-weight:var(--fw-semi); color:var(--brand); background:transparent; border:1px solid var(--brand-edge); border-radius:var(--r-pill); padding:5px 12px; cursor:pointer; }
+
+  /* ══ the real header, transcribed from styles.css v115 ══ */
+  .header { background:var(--header-bg); padding:var(--sp-3) var(--sp-5); border-bottom:1px solid var(--header-border); }
+  .header-row { display:flex; align-items:center; gap:var(--sp-2); }
+  .header-slot { flex:0 0 var(--tap-min); display:flex; align-items:center; justify-content:center; }
+  .header-title { flex:1 1 auto; min-width:0; display:flex; align-items:center; gap:0; flex-direction:column; }
+  .header-title .zh { font-size:24px; color:var(--header-text); font-family:var(--font-display); font-weight:var(--fw-bold); letter-spacing:0.06em; line-height:1.1; }
+  /* .en picks up font-ui / fw-bold / 0.16em from the grouped meta-label rule */
+  .header-title .en { font-size:9px; color:var(--header-sub); text-transform:uppercase; margin-top:1px; font-family:var(--font-ui); font-weight:var(--fw-bold); letter-spacing:0.16em; }
+  .btn-icon { flex:0 0 auto; width:var(--tap-min); height:var(--tap-min); padding:0; border-radius:var(--r-pill); border:1px solid transparent; background:transparent; color:var(--header-icon); opacity:.72; display:inline-flex; align-items:center; justify-content:center; cursor:pointer; }
+  .hamb { width:36px; height:36px; padding:0; border:none; background:transparent; display:flex; flex-direction:column; justify-content:center; gap:5px; cursor:pointer; }
+  .hamb span { display:block; height:2px; background:var(--header-text); opacity:.72; border-radius:2px; }
+
+  /* ══ the control itself ══ */
+  /* Shared reset. A <button> brings a UA font, background, border and padding;
+     all four cleared. Not a difference between any option below. */
+  .np { font-family:inherit; background:transparent; border:none; padding:0; margin:0; cursor:pointer;
+        display:flex; flex-direction:column; align-items:center; gap:0; min-height:var(--tap-min); justify-content:center; }
+
+  /* T-band — the button IS .header-title, so it inherits flex:1 and spans the
+     whole middle region. */
+  .np--band { flex:1 1 auto; min-width:0; }
+  /* T-hug — .header-title stays a plain centring container; the button shrinks
+     to its text inside it. */
+  .np--hug { align-self:center; }
+
+  .np--press.is-held .zh, .np--press.is-held .en { opacity:.55; }
+  .np--glyph { flex-direction:row; align-items:center; gap:var(--sp-2); }
+  .np--glyph .stack { display:flex; flex-direction:column; align-items:center; }
+  .np--glyph svg { width:15px; height:15px; color:var(--header-sub); flex:none; }
+  .np--rule .en { border-bottom:1px solid rgba(255,255,255,0.32); padding-bottom:2px; }
+
+  /* tap-target overlay */
+  .showtap .np { outline:1.5px dashed rgba(255,255,255,.7); }
+  .showtap .btn-icon, .showtap .header-slot { outline:1px dashed rgba(255,255,255,.3); }
+  /* centre-line overlay */
+  .showmid .header { position:relative; }
+  .showmid .header::after { content:''; position:absolute; left:50%; top:0; bottom:0; width:1px; background:rgba(255,220,120,.85); }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<h1>Nameplate as a route home — v2</h1>
+<p class="lede">DES-18 is settled and unbuilt: the header nameplate becomes a live route to Home.
+This redraws mockup 18 on the <b>v115 centred header</b>. The first version drew all four options on
+the old left-aligned plate with both icons in the right corner — a layout no mockup had endorsed
+since 04, and one the app no longer has.</p>
+<p class="note">The nameplate is 廣東話 (gwong2 dung1 waa2) over <i>Cantonese Learner</i>, still a
+placeholder pending the naming decision. Type is not in scope here; position and behaviour are.</p>
+
+<p class="note"><b>Centring changed the question, and added a second one.</b> The plate now sits in a
+<code>flex:1</code> slot between two fixed corners, so it no longer hugs its own text — which means
+<i>where the tap zone ends</i> is now a real decision, and a more consequential one than the
+decoration. That is part 1 below. The affordance question follows in part 2, and centring has moved
+its answer too.</p>
+
+<div class="toolbar">
+  <button id="tapbtn" type="button">Show tap targets</button>
+  <button id="midbtn" type="button">Show centre line</button>
+  <span>Dashed = hit areas. The gold line is the true centre of the band.</span>
+</div>
+
+<h2>Part 1 · Where the tap zone ends</h2>
+<p class="note">Both frames behave identically and look identical at rest. They differ only in how much
+of the band is live. Turn the tap outlines on.</p>
+
+<div class="frames">
+  <div class="frame">
+    <p class="cap">T-band &middot; <em>the button is the whole centre slot</em> <span class="no">not recommended</span></p>
+    <div class="header">
+      <div class="header-row">
+        <div class="header-slot">
+          <button class="btn-icon"><svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 16v-4M12 8h.01"/></svg></button>
+        </div>
+        <button class="np np--band">
+          <span class="zh">廣東話</span>
+          <span class="en">Cantonese Learner</span>
+        </button>
+        <div class="header-slot">
+          <button class="hamb"><span></span><span></span><span></span></button>
+        </div>
+      </div>
+    </div>
+    <p class="sub">Simplest markup — <code>.header-title</code> just becomes a <code>&lt;button&gt;</code>.
+    But the live area is about <b>238&times;44px</b>, and most of it is blank oxblood. On a sticky header
+    present on every screen, a stray thumb on empty space during a scroll yanks you out of the lesson.
+    An invisible target that large is a trap, not a convenience.</p>
+  </div>
+
+  <div class="frame">
+    <p class="cap">T-hug &middot; <em>the button hugs its text</em> <span class="rec">recommended</span></p>
+    <div class="header">
+      <div class="header-row">
+        <div class="header-slot">
+          <button class="btn-icon"><svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 16v-4M12 8h.01"/></svg></button>
+        </div>
+        <div class="header-title">
+          <button class="np np--hug">
+            <span class="zh">廣東話</span>
+            <span class="en">Cantonese Learner</span>
+          </button>
+        </div>
+        <div class="header-slot">
+          <button class="hamb"><span></span><span></span><span></span></button>
+        </div>
+      </div>
+    </div>
+    <p class="sub"><code>.header-title</code> stays the centring container and the control shrinks to
+    its text inside it — about <b>128&times;44px</b>, still comfortably over the minimum in both
+    directions. The bounds match what the eye thinks is tappable, which is also what makes a press
+    state legible: it highlights the wordmark, not a band of empty colour.</p>
+  </div>
+</div>
+
+<p class="note"><b>This is the decision that actually matters here</b>, and it did not exist before
+v115 — with a left-aligned shrink-to-fit plate, the button hugged its text whether you thought about
+it or not. Centring created the choice by giving the plate a slot wider than its contents.</p>
+
+<h2>Part 2 · The affordance</h2>
+<p class="note">All four are T-hug, so the tap zone is identical across them. They differ only in how
+much the header admits the wordmark is a control.</p>
+
+<div class="frames">
+  <div class="frame">
+    <p class="cap">N1 &middot; <em>No affordance</em> <span class="rec">recommended</span></p>
+    <div class="header">
+      <div class="header-row">
+        <div class="header-slot"><button class="btn-icon"><svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 16v-4M12 8h.01"/></svg></button></div>
+        <div class="header-title"><button class="np np--hug"><span class="zh">廣東話</span><span class="en">Cantonese Learner</span></button></div>
+        <div class="header-slot"><button class="hamb"><span></span><span></span><span></span></button></div>
+      </div>
+    </div>
+    <p class="sub">Pixel-identical to v115 today. A centred wordmark flanked by two corner icons is a
+    <b>logo slot</b> — the most established tap-to-go-home pattern there is. The left-aligned version
+    read as a page heading, which is a much weaker cue; centring is what earns this option.</p>
+  </div>
+
+  <div class="frame">
+    <p class="cap">N2 &middot; <em>Press state only</em> <span class="rec">recommended with N1</span></p>
+    <div class="header">
+      <div class="header-row">
+        <div class="header-slot"><button class="btn-icon"><svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 16v-4M12 8h.01"/></svg></button></div>
+        <div class="header-title"><button class="np np--hug np--press is-held"><span class="zh">廣東話</span><span class="en">Cantonese Learner</span></button></div>
+        <div class="header-slot"><button class="hamb"><span></span><span></span><span></span></button></div>
+      </div>
+    </div>
+    <p class="sub"><b>Shown held down</b> — at rest identical to N1. An opacity drop, which is exactly
+    what <code>.btn-icon--header</code> already does for the two corner icons, so it introduces no new
+    language. Confirms the tap on contact rather than advertising it beforehand.</p>
+  </div>
+
+  <div class="frame">
+    <p class="cap">N3 &middot; <em>Home glyph</em> <span class="no">worse than in v1</span></p>
+    <div class="header">
+      <div class="header-row">
+        <div class="header-slot"><button class="btn-icon"><svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 16v-4M12 8h.01"/></svg></button></div>
+        <div class="header-title"><button class="np np--hug np--glyph">
+          <span class="stack"><span class="zh">廣東話</span><span class="en">Cantonese Learner</span></span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5"/><path d="M5.5 9.5V20h13V9.5"/></svg>
+        </button></div>
+        <div class="header-slot"><button class="hamb"><span></span><span></span><span></span></button></div>
+      </div>
+    </div>
+    <p class="sub"><b>Turn on the centre line.</b> The glyph joins the plate, so the <i>group</i>
+    centres and the wordmark itself sits left of true centre — the option defeats the change it is
+    drawn on. It also puts a third icon in a band that already has two, and the nameplate stops being
+    a nameplate and becomes a button with a label.</p>
+  </div>
+
+  <div class="frame">
+    <p class="cap">N4 &middot; <em>Underlined subtitle</em> <span class="no">not recommended</span></p>
+    <div class="header">
+      <div class="header-row">
+        <div class="header-slot"><button class="btn-icon"><svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 16v-4M12 8h.01"/></svg></button></div>
+        <div class="header-title"><button class="np np--hug np--rule"><span class="zh">廣東話</span><span class="en">Cantonese Learner</span></button></div>
+        <div class="header-slot"><button class="hamb"><span></span><span></span><span></span></button></div>
+      </div>
+    </div>
+    <p class="sub">An underline reads as a <i>link</i>, and this is the one element on screen that is
+    not part of a document. It also lands under a 9px line tracked at 0.16em, where a hairline is
+    closer to noise than signal.</p>
+  </div>
+</div>
+
+<h2>Why there is no fifth option</h2>
+<p class="note"><b>There is no corner left for a home icon.</b> The centred header has exactly two
+corner slots. The left holds the tone reference; the right holds the menu today and the settings cog
+after P6-2 and P6-4, per DES-11 — settings live behind the header corner regardless of feature count.
+So a dedicated home control has nowhere to go, and the nameplate is not one candidate among several:
+it is the only one. That is DES-18's own argument, and centring makes it structural rather than
+merely reasonable.</p>
+
+<table>
+  <tr><th></th><th>At rest</th><th>Live area</th><th>Cost</th><th>Reads correctly first time?</th></tr>
+  <tr><td><b>T-band</b></td><td>Unchanged</td><td>~238&times;44px, mostly blank</td><td>Mis-taps on a sticky header</td><td>—</td></tr>
+  <tr><td><b>T-hug</b></td><td>Unchanged</td><td>~128&times;44px, matches the text</td><td>One extra element</td><td>—</td></tr>
+  <tr><td><b>N1</b> no affordance</td><td>Identical to v115</td><td>—</td><td>None</td><td>Logo-slot convention carries it</td></tr>
+  <tr><td><b>N2</b> press state</td><td>Identical to v115</td><td>—</td><td>None — existing opacity language</td><td>Confirms on contact</td></tr>
+  <tr><td><b>N3</b> home glyph</td><td>Third icon; plate off-centre</td><td>—</td><td>Defeats the centring</td><td>Yes</td></tr>
+  <tr><td><b>N4</b> underline</td><td>Hairline under tracked caps</td><td>—</td><td>Reads as a link</td><td>Partly</td></tr>
+</table>
+
+<h2>Recommendation</h2>
+<p class="note"><b>T-hug, N1 with N2's press state.</b> The control hugs its text; nothing marks it at
+rest; an opacity drop confirms the tap. Centring is what makes N1 defensible where it was marginal
+before — a wordmark centred between two icons is read as a logo, and a logo goes home.</p>
+<p class="note"><b>The argument against, unchanged and still worth holding:</b> DES-18 exists because
+the nameplate is the escape hatch when the tab bar is hidden inside a topic (&sect;3.10). An escape
+hatch that only works if you already know it is there is arguably not doing its job — and that is
+exactly the case it was approved to serve. &sect;3.10 already says to judge the hidden state on device
+after shipping rather than on paper. If it reads as a dead end, N3 is the honest answer and this
+should be reopened rather than defended — accepting that N3 costs the centring and would need the
+glyph placed somewhere that does not.</p>
+
+</div>
+<script>
+document.getElementById('tapbtn').addEventListener('click', function () {
+  var on = document.body.classList.toggle('showtap');
+  this.textContent = on ? 'Hide tap targets' : 'Show tap targets';
+});
+document.getElementById('midbtn').addEventListener('click', function () {
+  var on = document.body.classList.toggle('showmid');
+  this.textContent = on ? 'Hide centre line' : 'Show centre line';
+});
+</script>
+</body>
+</html>
