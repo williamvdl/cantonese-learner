@@ -1,8 +1,17 @@
 # STATUS — Tea House Cantonese Learner
 
 *Edit this file in place as things ship. It reflects the app as it stands today —
-not a history log (that's what the repo's commit history is for). Approved design
-decisions and whether they were built live in `DESIGN_DECISIONS.md`.*
+not a history log. Approved design decisions and whether they were built live in
+`DESIGN_DECISIONS.md`.*
+
+> **This file used to say the commit history was the history log. It isn't.**
+> Checked 2026-08-01: 22 of the last 25 commits are titled *"Add files via
+> upload"*, GitHub Desktop's default. The **diffs** are intact, so *what* changed
+> between any two deploys is fully recoverable — but nothing in the repo says
+> *why*, which means the deploy table below is the only changelog there is. That
+> raises the stakes on it being right, and it is worth adopting a one-line commit
+> convention (`v121 — <what changed>`) so this file stops being load-bearing on
+> its own.
 
 Last updated: 2026-08-01 · sw.js at v120
 
@@ -24,22 +33,25 @@ Last updated: 2026-08-01 · sw.js at v120
 - **Stable IDs** fully in place — 600/600 words, 307/307 sentences, 150/150
   dialogues. Validator passes clean.
 
-## Design system — phases 1–5 complete, phase 6 under way
+## Design system — phases 1–6 complete, rollout closed
 
 **The app now renders entirely from the token and primitive layers.** No colour
 is injected from JavaScript anywhere. Established 2026-07-25, applying from
 sw.js v95 onward; phase 2 shipped across v96–v103, phase 3 across v104–v107,
-phase 4 across v108–v112, phase 5 at v113, phase 6 from v114.
+phase 4 across v108–v112, phase 5 at v113, phase 6 across v114–v120.
 
-**Every approved decision in the register is now built.** MOCK-11-bar, the last
-one, shipped at v118 after four phases — and building it brought DES-12's
-collision into existence for the first time, answered by slimming the bar rather
-than hiding the tabs. The remaining phase 6 work is P6-6, the `state.homeView`
-rename, which is a refactor rather than a decision. DES-18 (the
-nameplate as a route home) shipped at v116, and DES-20 (the centred header) — a
-third that nobody had noticed was unbuilt at all — at v115. MOCK-17-fill, the
-subtab treatment, was the third and shipped at v114. Phase 6 is the last phase of
-the rollout.
+**The rollout is complete.** Phase 6 was the last, and it closed at v119 with the
+`state.homeView` → `state.topicsView` rename (P6-6), followed by the v120
+dead-CSS sweep. Every approved decision in `DESIGN_DECISIONS.md` is built and
+there are no *Not built* rows left.
+
+Phase 6 shipped four things that had been approved and silently never
+implemented, which is more than any other phase: MOCK-17-fill, the subtab
+treatment, at v114; DES-20, the centred header, at v115 — nobody had noticed it
+was unbuilt at all; DES-18, the nameplate as a route home, at v116; and
+MOCK-11-bar, the docked completion bar, at v118 after four phases of waiting.
+Building the bar brought DES-12's collision into existence for the first time,
+answered by slimming the bar rather than hiding the tabs (DES-21 stands).
 
 `DESIGN_SYSTEM.md` and `docs/design/styleguide.html` are the source of truth. Read
 `DESIGN_SYSTEM.md` before touching `styles.css`, `render.js`, or designing a new
@@ -57,19 +69,24 @@ screen.
 | Border widths in play | 1 / 1.5 / 2 / 2.5 / 3px | **1px + 2px** |
 | `border-radius` values | 78 raw px + 19 `50%` | **all on the scale** |
 | Competing content columns | 5 | **1 (`--measure`)** |
-| `styles.css` | 1292 lines | **1318 lines** (1160 after phase 3; phase 4 added the path-context components, phase 5 three, phase 6 the subtab primitive and its rationale comment) |
+| `styles.css` | 1292 lines | **1327 lines** (1160 after phase 3; phase 4 added the path-context components, phase 5 three, phase 6 the subtab primitive, the tab bar, the settings sheet and the docked bar, less the v120 sweep) |
 | Rules redeclaring the card surface | 12 | **0 (`.card` only)** |
 | Painted sizes of the circular play control | 7 (28–44px) | **2 (32 / 44px)** |
-| Interactive controls declaring `min-height` under `--tap-min` | 9 | **2** |
+| Interactive controls declaring `min-height` under `--tap-min` | 9 | **0** |
 
-All 390 classes emitted anywhere in `render.js` resolve against `styles.css`.
+`styles.css` declares 428 classes and `tools/dead-css.js` finds an emitter for
+every one bar the two known interpolation artefacts. *(This line used to assert
+"all 390 classes emitted in `render.js` resolve" — a figure in the direction
+nothing measures. `dead-css.js` checks declared → emitter, so that is the
+direction the claim is now made in.)*
 
 **The tap-target figure above is narrower than it looks.** It counts rules that
-*declare* `min-height` below 44px. A target built from padding alone is invisible
-to that check — which is how the stage stepper shipped at 42px in v109 and read
-clean. A stricter check (in IN_PROGRESS.md) finds two further definite misses,
-`.path-complete-btn` at 28px and `.translate-dir-swap` at 38px, plus 15
-padding-built targets that need judging individually. All are in
+*declare* `min-height` below 44px, and it reached zero at v117 when the drawer
+took `.hamburger` and `.drawer-speed-btn` with it. A target built from padding
+alone is invisible to that check — which is how the stage stepper shipped at 42px
+in v109 and read clean. The stricter check (in IN_PROGRESS.md) still finds two
+definite misses, `.path-complete-btn` at 28px and `.translate-dir-swap` at 38px,
+plus **11** padding-built targets that need judging individually. Both are in
 BACKLOG.md.
 
 ### Retired
@@ -114,8 +131,8 @@ orphan hues `#B7861E`, `#e4d4ad`, `#8a6716`,
 | 6 · 3 | v116 | The nameplate as a route Home (DES-18, MOCK-18-Thug + N1/N2). `.header-title` gains a `.nameplate` button that hugs its text; nothing marks it at rest, pressing drops its opacity. The state reset behind it is extracted to `goToDestination()` in `app.js`, now shared with the drawer's five menu items so the two cannot drift — the same consolidation `openPathLesson()` got. The history call is the only difference between callers and is a parameter: the drawer replaces (overwriting its own open entry), the nameplate pushes. Repeat taps on Home no-op rather than stacking identical history entries. |
 | 6 · 4 | v117 | **The tab bar replaces the drawer** (MOCK-13-tabs), and settings moves behind the header cog as a bottom sheet (MOCK-19-sheet). `renderDrawer()` is gone; `renderTabBar()` and `renderSettingsSheet()` replace it, mounted through one `renderChrome()` helper rather than five copies of the pair. Six navigation icons transcribed into `ICON_PATHS` — the drawer's emoji could not take `currentColor`, so an active destination could not have turned brand. §3.10 reversed: the bar shows on every screen (DES-21). Five dead-CSS pockets and the six `--drawer-*` tokens retired. `goToDestination()`'s `replace` option dropped to zero call sites with the drawer and was removed. |
 | 6 · 5 | v118 | **The docked completion bar** (DES-22, MOCK-20-B2, and MOCK-11-bar built at last — approved in phase 4, unbuilt for four phases). `.bar` / `.bar-inner` existed as a §2 entry marked *Not built* since the design system was written; it now exists. Three of the continuation's four states dock; path-complete stays in flow. `--bar-h` gets its first call site since being declared. **`--tabbar-h` corrected from 58px to 46px** — it was taken from a mockup, while the built bar computes to `--tap-min` plus a 2px rule, so all four wrapper clearances had been over-reserving by 12px. |
-| — | v120 | **Dead-CSS sweep, driven by measurement rather than memory.** Removed 16 classes with no emitter (`.mode-btn`, `.conv-mode-pill(s)`, `.mode-row`, `.home-header/title/subtitle`, `.translate-header` + descendants, `.translate-dir-label.muted`, `.speed-row`, `.speed-label`, `.choices-zh`, `.convo-meta`, `.nav-subitem`, `.btn--disabled`, `.tag--brand`, `.tag--milestone`) and the `--ink-drawer` token, whose own comment said *legacy*. Nine hardcoded greys in `render.js` replaced: four by existing primitives (`.section-label`, `.boot-msg` ×3), five by tokens. **No hardcoded colour remains in the JS.** Invisible except one loading state, which gains 20px of padding by adopting `.boot-msg`. |
 | 6 · 6 | v119 | **`state.homeView` → `state.topicsView`** — the last item in phase 6, and invisible: no screen changes. The name predated the Dashboard, when Topics *was* Home; since v105 it has pointed at the wrong screen. 16 call sites. The real work was the migration: `history.state` outlives a deploy, so entries written by v118 arrive carrying the old key, and `applyNavSnapshot()`'s `f in snap` guard skips absent fields **silently** — backing out of a topic into a pre-deploy entry would have restored `nav: 'topics'` while leaving `topicsView` false, showing the topic you just left and making BACK look broken. `migrateNavSnapshot()` maps the old key forward at the read boundary. |
+| — | v120 | **Dead-CSS sweep, driven by measurement rather than memory.** Removed 16 classes with no emitter (`.mode-btn`, `.conv-mode-pill(s)`, `.mode-row`, `.home-header/title/subtitle`, `.translate-header` + descendants, `.translate-dir-label.muted`, `.speed-row`, `.speed-label`, `.choices-zh`, `.convo-meta`, `.nav-subitem`, `.btn--disabled`, `.tag--brand`, `.tag--milestone`) and the `--ink-drawer` token, whose own comment said *legacy*. Nine hardcoded greys in `render.js` replaced: four by existing primitives (`.section-label`, `.boot-msg` ×3), five by tokens. **No hardcoded colour remains in the JS.** Invisible except one loading state, which gains 20px of padding by adopting `.boot-msg`. The sweep enumerated CSS classes only, so two dead JS handlers survived it — see the note on sweeps below. |
 
 ### Notes worth carrying forward
 
@@ -210,11 +227,22 @@ orphan hues `#B7861E`, `#e4d4ad`, `#8a6716`,
   sweep — which enumerated every declared class and asked whether any emitter
   existed — found a further eight drawer- and Home-era remnants, including
   `.nav-subitem` and the `--ink-drawer` token, plus `.speed-row` / `.speed-label`,
-  siblings of the `.speed-btn` pocket retired in that very deploy. **Twice** now
-  the second half of a pocket has survived the first. Retire by sweep, not by
-  recall — and note that grouped selectors hide the survivors: four of the
-  remnants sat inside comma-separated rules whose other members were live, so
-  deleting whole rules would have taken working code with them.
+  siblings of the `.speed-btn` pocket retired in that very deploy. Retire by
+  sweep, not by recall — and note that grouped selectors hide the survivors: four
+  of the remnants sat inside comma-separated rules whose other members were live,
+  so deleting whole rules would have taken working code with them.
+- **A sweep only covers the language it enumerates.** `dead-css.js` closed the
+  recall problem for CSS and immediately created a blind spot: it reads declared
+  classes, so **dead JavaScript is invisible to it**. The 2026-08-01 doc audit
+  found two `state.speed` writers in `render.js` (~line 2066) with no emitter
+  anywhere — a `getElementById('speed-' + s)` loop for the retired header speed
+  control, and a `[data-drawer-speed]` handler for the retired drawer. They sit
+  140 lines below a comment correctly stating the settings sheet is the sole
+  writer of `state.speed`. **Three times** now the second half of a pocket has
+  survived the first, and this one survived the sweep built to stop it happening.
+  The equivalent check for JS is *handler binds to a selector nothing emits*;
+  `dead-css.js` should grow that direction, or a sibling tool should. Logged in
+  BACKLOG.md.
 - **Renaming a field that persists outside the app is a data migration, not a
   refactor.** `state.homeView` lived in `NAV_FIELDS`, so it was serialised into
   `history.state` — which survives a deploy. After the rename, entries written by
@@ -294,11 +322,14 @@ orphan hues `#B7861E`, `#e4d4ad`, `#8a6716`,
   rewrite of the snippet briefly reported 20. Run the check against
   `git show HEAD:styles.css` as well as the working copy and compare the two counts —
   the delta is what the rule ("the list should not grow") actually asserts.
-- **Four tokens have no call sites** and are deliberately retained: `--sp-8`,
-  `--bar-h` and `--tabbar-h` (both land in phase 6), and
-  `--feedback-good`. Re-measured 2026-07-30 — an earlier count of nine was wrong:
-  `--edge-emph` has 3 call sites, `--measure-text` 1, `--jade-edge` 5,
-  `--feedback-bad-tint` 4 and `--feedback-bad-edge` 5.
+- **Two tokens have no call sites** and are deliberately retained: `--sp-8`,
+  which completes the spacing scale, and `--feedback-good`, whose `-tint` and
+  `-text` siblings are in use. A scale with a gap is worse than a scale with an
+  unused step. Re-measured 2026-08-01: `--bar-h` has 1 call site and `--tabbar-h`
+  has 6, both acquired when the docked bar and tab bar were built at v118 and
+  v117 — this note said four tokens for as long as it took those two to land,
+  which is the shape of every other stale figure in these documents. `--edge-emph`
+  has 4, `--measure-text` 1, `--jade-edge` 10, `--feedback-bad` 9.
 
 ## Deploy labelling
 
@@ -333,8 +364,6 @@ UX and visual design. It may be worth a line in the project instructions.)*
   have (checkpoint-completion tracking for it would save under a malformed key).
   Low priority — Intermediate checkpoints aren't in active use yet. Bundle the fix
   into the Intermediate checkpoint hub expansion when that's picked up.
-- `.nav-item` declares `transition` twice. Harmless, and the drawer retires in
-  phase 6.
 - **The cause of phase 4 is worth remembering: a decision that lives only in a
   mockup does not survive.** MOCK-06-C, MOCK-05-retreat and MOCK-07-Asoft were all
   settled against mockups 05–07 and none reached the code; the completed-checkpoint
@@ -355,9 +384,11 @@ UX and visual design. It may be worth a line in the project instructions.)*
   options, so no choice was ever lost. The settings sheet has no design at all —
   the mockup draws the cog and never the sheet. A row that reads plausibly gets
   trusted, including by the note warning about rows that read plausibly.)*
-- **Two controls remain under `--tap-min`**: `.hamburger` (36px) and
-  `.drawer-speed-btn` (36px), both retiring with the drawer in P6-2. The third,
-  `.subtab-btn` at 42px, went with the subtab rebuild at v114.
+- **No control now declares `min-height` under `--tap-min`.** `.hamburger` and
+  `.drawer-speed-btn` at 36px went with the drawer at v117; `.subtab-btn` at 42px
+  went with the subtab rebuild at v114. What remains is two *declared-height*
+  misses — `.path-complete-btn` at 28px and `.translate-dir-swap` at 38px — plus
+  11 padding-built targets that no check can judge. Both in BACKLOG.md.
 - `.cp-optional` is a full sentence styled as a green chip, carrying a 🔓 emoji.
   Green reads as *done* per §4 but the content is informational. Left alone in
   phase 3 rather than forced into `.tag`.

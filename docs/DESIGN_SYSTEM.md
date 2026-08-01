@@ -6,7 +6,9 @@ the rules; the styleguide is the evidence.*
 
 **Read this before touching `styles.css`, `render.js`, or designing a new screen.**
 
-Established: 2026-07-25 · Phases 1–5 applied as at sw.js v113 (2026-07-30)
+Established: 2026-07-25 · **Phases 1–6 complete as at sw.js v120 (2026-08-01).**
+The rollout is closed; this file now describes the app as built rather than as
+planned.
 
 ---
 
@@ -302,7 +304,7 @@ states the task.
 inverted controls; the other speaker is parchment with a hairline. No colour is
 computed per line.
 
-### Subtabs & tab bar — `.tabs` › `.tab` (+ `--on`) · `.tabs--top` *(subtabs built v114; `--top` phase 6)*
+### Subtabs & tab bar — `.tabs` › `.tab` (+ `--on`) · `.tabs--top` *(subtabs built v114; `.tabs--top` built v117 with the tab bar)*
 **One primitive, two consumers.** The topic's view switch (Learn / Chat / Quiz) and
 the bottom tab bar carry the same emphasis language: muted label, brand label when
 active, and a **2px brand rule** on the edge nearest the content — bottom for the
@@ -313,9 +315,9 @@ subtabs, top for the tab bar.
 size and the label's type scale — 9.5px uppercase over a 19px glyph, against 14px
 beside a 15px one. What the two consumers share is the *emphasis language*, not the
 geometry, and that is enough to make them one primitive. The modifier sits on the
-**container** (`.tabs--top`) rather than the tab, so it can reach both. It lives in
-`styleguide.html` and is deliberately not in `styles.css` until the tab bar consumes
-it — the same call made for `.ring`.
+**container** (`.tabs--top`) rather than the tab, so it can reach both. **Built into
+`styles.css` at v117** when the tab bar became its consumer — until then it lived
+only in `styleguide.html`, the same call still in force for `.ring`.
 
 Equal widths in both (MOCK-17-fill). The tab bar has no choice — five destinations
 across the viewport — and matching it is what makes these one primitive rather than
@@ -491,11 +493,13 @@ they are genuine wayfinding — **the Topics category grid**, where one icon per
 topic aids scanning a large set. Everywhere else they undercut the typography.
 
 > **Corrected 2026-07-28.** This previously read "the dashboard topic grid".
-> There is no topic grid on the dashboard: `renderHomeScreen()` renders the
-> **Topics** destination, and `renderDashboard()` renders Home. The exception
-> belongs to Topics. The dashboard's own emoji — two tile badges, the review
-> icon, the path icons and a 🎉 in a title — fell outside it and were removed.
-> The misleading function name is scheduled for rename in phase 3.
+> There is no topic grid on the dashboard: the function then called
+> `renderHomeScreen()` renders the **Topics** destination, and `renderDashboard()`
+> renders Home. The exception belongs to Topics. The dashboard's own emoji — two
+> tile badges, the review icon, the path icons and a 🎉 in a title — fell outside
+> it and were removed. **The misleading name was fixed at v105**
+> (`renderTopicsScreen()`), and `state.homeView` — the same trap one layer down —
+> at v119 (`state.topicsView`).
 
 ### 3.7 Jyutping
 Every Chinese string is immediately followed by jyutping in brackets. Tone
@@ -543,20 +547,27 @@ top-level destination.
 > previously read *"bottom chrome is exclusive"*: tab bar at top-level
 > destinations, docked action bar inside topics and checkpoints, tab bar hidden,
 > because together they are 118px on an 812px screen and two competing "what now"
-> zones stacked. That reasoning is sound — **but the docked action bar was never
-> built.** MOCK-11-bar is still unbuilt; what shipped instead was MOCK-10-cont,
-> the continuation card, which is in-flow (`margin: var(--sp-5) 0`) and scrolls
-> with the content. Nothing in the app is fixed to the viewport bottom except the
-> tab bar. So implementing the old rule at v117 would have hidden the main menu to
-> avoid colliding with something that does not exist — paying the dead-end cost
-> for none of the benefit. The exclusivity reasoning was never wrong; it was
-> written for a layout that never arrived.
+> zones stacked. That reasoning is sound — **but at v117 the docked action bar did
+> not yet exist.** What had shipped was MOCK-10-cont, the continuation card, which
+> is in-flow (`margin: var(--sp-5) 0`) and scrolls with the content, so nothing was
+> fixed to the viewport bottom except the tab bar. Implementing the old rule at v117
+> would have hidden the main menu to avoid colliding with something that did not
+> exist. The exclusivity reasoning was never wrong; it was written for a layout that
+> had not arrived.
 >
-> **If MOCK-11-bar is ever built, this rule comes back into force** and the
-> collision is real again. The documented fallback stands for that case: collapse
-> the tab bar to a slim icons-only strip (~34px, no labels) when the action bar
-> appears, totalling 94px rather than 118px. Until then there is no hidden state
-> and nothing to rescue.
+> **MOCK-11-bar was then built at v118, and the collision is real.** The rule did
+> not come back into force, because DES-22 answered it the other way: the bar was
+> slimmed to 52px rather than the tab bar being hidden, so both are present and
+> bottom chrome totals 98px inside path lessons. The icons-only fallback (MOCK-20-D,
+> ~34px, no labels, 86px total) is **held as a known lever, not rejected** — it
+> costs five primary nav targets under `--tap-min` and makes the main menu change
+> shape by screen, which is not worth spending before knowing the stack is a
+> problem in use.
+>
+> **The sequence is the lesson.** For four phases this rule governed a collision
+> between one real element and one imaginary one, and nothing flagged it, because a
+> rule about two unbuilt things is not wrong until you build the first. When
+> implementing a rule, check that both sides of it exist.
 
 **Every scrolling wrapper must clear the bar.** `.content`, `.topics-wrap`,
 `.translate-wrap` and `.dash-wrap` each carry
@@ -662,22 +673,30 @@ scheduled as phase 4, a few lines in the context builder rather than new data
   Learner` is placeholder. The name gates the logo, which gates the final header
   treatment.
 - **Logo.** No mark exists.
-- **Dashboard density.** The converged Home reads quieter than its predecessor.
-  Not adjusted: it is the only fully converged screen in a half-converged app.
-  Revisit after phase 6.
+- **Dashboard density — now due.** The converged Home reads quieter than its
+  predecessor. Not adjusted at the time because it was the only fully converged
+  screen in a half-converged app, so the comparison was unfair. **The rest of the
+  app has caught up as of v120**, which is the condition this was waiting on.
 - **Path button press effect.** `.path-btn-mark` / `.path-btn-next` keep a chunky
   `0 3px 0` solid-offset shadow. Colours tokenised, geometry untouched — now the
   least converged thing left visually.
 - **Direction toggle labels** (`漢→EN` / `EN→漢` / `🔊→EN` (hon3 = Chinese)) inherited unchanged.
 - **Landscape stepper** — see §5.
-- **Tab bar — not yet built.** Phase 6. To be shipped and lived with; fallbacks
-  in §3.10 and §3.9.
+- ~~**Tab bar.**~~ Built v117 (MOCK-13-tabs). Visible on every screen per DES-21;
+  §3.10's exclusivity rule was reversed rather than implemented. What remains open
+  is the fifth slot, below.
 - **The fifth tab slot** — Translate today, a stats destination later. See §3.9.
 - ~~**Docked bar versus continuation card.**~~ Settled v118 (DES-22): the bar. The
   card is reduced to the path-complete state alone. The fill-versus-tint question
   that rode along with it is settled the same way — tint, per §3.1.
-- **Settings sheet panel** — MOCK-13-A parchment or MOCK-13-B oxblood; the choice
-  was never recorded. Needed before phase 6 builds the sheet.
+- ~~**Settings sheet panel.**~~ Built v117 (MOCK-19-sheet) — a bottom sheet sized
+  to its contents, in the body palette rather than the header's. **The entry this
+  replaces was wrong in two ways at once**, which is why it is worth keeping the
+  correction visible: mockup 13's A and B are *drawer* panel variants, offered only
+  if the drawer were kept, so no settings-sheet choice was ever lost; and the sheet
+  had already shipped. `DESIGN_DECISIONS.md` corrected the first half on
+  2026-07-31, and this line went on repeating it for a day — the shape STATUS.md
+  warns about, where the prose travels and the correction does not.
 - **Per-stage checkpoint watermark** — see BACKLOG.md. The fixed 站 (zaam6) is
   the deliberate default.
 
