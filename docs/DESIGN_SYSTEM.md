@@ -72,8 +72,10 @@ jyutping (UI) sitting under Chinese (serif).
 
 ### 1.3 Elevation
 
-`--elev-1` covers nearly everything. `--elev-2/3/4` exist for modals and the
-drawer only.
+`--elev-1` covers nearly everything. `--elev-2` lifts the tab bar off the
+content it scrolls over, `--elev-3` the settings sheet, and `--elev-4` the toast
+and the quiz's big listen button on hover — the drawer panel was its fourth
+consumer until v117.
 
 > **Elevation is the exception, not the default.** Surfaces separate by hairline
 > border and space. If a card needs a shadow to be legible, the spacing is wrong.
@@ -111,7 +113,9 @@ they are expressed as `color-mix()` against a state token, never a raw rgba.
 | `--milestone-tint` | `#FBF0F2` |
 | `--milestone-edge` | `#EBD3D9` |
 
-**Header block** — swap as a unit to retheme the top bar and drawer.
+**Header block** — swap as a unit to retheme the top bar. The six `--drawer-*`
+tokens were retired with the drawer at v117; the tab bar and settings sheet sit
+on the parchment canvas and use the body palette.
 `--header-bg` `#6E2639` · `--header-text` `#F7EEE8` · `--header-icon` (= header text)
 
 > `--milestone` deliberately equals `--header-bg`. That shared value is what
@@ -328,6 +332,42 @@ Declare `min-height: var(--tap-min)` explicitly. Mockup 04's original drawing
 computes to about 27px — a 14px line box plus 12px of bottom padding — and because
 the height came from padding it would have passed standing check 2 unseen.
 
+### Tab bar — `.tabs.tabs--top` › `.tab` › `.tab-ic` › `.tab-badge`
+The five top-level destinations, fixed to the viewport bottom, **visible on every
+screen** (§3.10). Built v117; replaced the right-hand nav drawer entirely.
+
+It is the `--top` modifier on the subtabs primitive, not a component of its own —
+same emphasis language (muted label, brand when active, a 2px brand rule on the
+edge nearest the content), with the modifier carrying the edge, the axis and the
+type scale. Icons are `ICON_PATHS` entries, **not emoji**: the drawer used emoji,
+which cannot take `currentColor`, so an active destination could not have turned
+brand.
+
+`.tab-badge` is Review's outstanding count and hangs off `.tab-ic`, the icon's
+positioning context, so it sits on the glyph's shoulder rather than in the corner
+of a 78px cell. **It is now permanently visible**, which is most of the argument
+for the tab bar: behind a closed hamburger, the one number telling you there is
+work waiting was the one number you could not see.
+
+### Settings sheet — `.sheet-wrap` › `.sheet-scrim` + `.sheet` › `.set-row`
+Behind the header cog. Built v117 (MOCK-19-sheet, DES-11: settings live in the
+header corner, never as a tab — a tab is a destination and settings is not one).
+
+A bottom sheet **sized to its contents**, not to the viewport: it holds one
+setting today and a full-height surface would only advertise that. When account
+and subscription arrive it becomes a full screen by changing the wrapper — the
+`.set-row` markup inside is identical either way.
+
+Opening pushes a history entry, so phone BACK closes the sheet rather than
+leaving the screen underneath; the ✕ and the scrim both route through that same
+step-back rather than setting state directly. The cog does **not** take an active
+state — it lights while the sheet is open because it is the sheet's origin, not
+because settings is somewhere you now are.
+
+`.seg` / `.seg-btn` is the segmented control. An active segment takes brand text
+and a brand edge, never a fill — the same reasoning as DES-19 for tabs: a
+selector is not the screen's next action (§3.1).
+
 ### Docked bar — `.bar` › `.bar-inner`
 Fixed to the viewport bottom, contents capped to `--measure`. **Not built.** It and
 the Continuation card above do the same job in two positions — in-flow at the foot,
@@ -468,24 +508,43 @@ occupies slot five today. So the shape is Home / Path / Topics / Review / Transl
 until a stats destination exists and earns the swap. Recorded rather than resolved,
 because it needs the tab bar in use to judge.
 
-### 3.10 Bottom chrome is exclusive
-The tab bar and the docked action bar never coexist. Tab bar at top-level
-destinations; action bar inside topics and checkpoints, with the tab bar hidden.
-Together they are 118px on an 812px screen — 15% of the viewport and two
-competing "what now" zones stacked.
+### 3.10 The tab bar is always visible
+**The tab bar shows on every screen**, including topics and checkpoints. It is the
+app's main menu; hiding the main menu inside the screens where you spend the most
+time makes those screens feel like dead ends, and leaves no visible route to a
+top-level destination.
 
 | Screen | Bottom |
 |---|---|
 | Home, Path, Topics, Review, Translate | Tab bar |
-| Topic (Learn / Chat / Quiz) | Action bar — tab bar hidden |
-| Checkpoint hub and activities | Action bar — tab bar hidden |
-| Path timeline | Tab bar — it *is* a top-level destination |
+| Topic (Learn / Chat / Quiz) | Tab bar |
+| Checkpoint hub and activities | Tab bar |
+| Path timeline | Tab bar |
 
-Hiding tabs in detail screens is an Android/Material habit; iOS convention keeps
-them visible. We hide them for one specific reason — the collision above — not
-because it is universal. **Documented fallback if the hidden state feels like a
-dead end in use:** collapse the tab bar to a slim icons-only strip (~34px, no
-labels) when the action bar appears, totalling 94px.
+> **Amended 2026-08-01, and this reverses what the rule used to say.** It
+> previously read *"bottom chrome is exclusive"*: tab bar at top-level
+> destinations, docked action bar inside topics and checkpoints, tab bar hidden,
+> because together they are 118px on an 812px screen and two competing "what now"
+> zones stacked. That reasoning is sound — **but the docked action bar was never
+> built.** MOCK-11-bar is still unbuilt; what shipped instead was MOCK-10-cont,
+> the continuation card, which is in-flow (`margin: var(--sp-5) 0`) and scrolls
+> with the content. Nothing in the app is fixed to the viewport bottom except the
+> tab bar. So implementing the old rule at v117 would have hidden the main menu to
+> avoid colliding with something that does not exist — paying the dead-end cost
+> for none of the benefit. The exclusivity reasoning was never wrong; it was
+> written for a layout that never arrived.
+>
+> **If MOCK-11-bar is ever built, this rule comes back into force** and the
+> collision is real again. The documented fallback stands for that case: collapse
+> the tab bar to a slim icons-only strip (~34px, no labels) when the action bar
+> appears, totalling 94px rather than 118px. Until then there is no hidden state
+> and nothing to rescue.
+
+**Every scrolling wrapper must clear the bar.** `.content`, `.topics-wrap`,
+`.translate-wrap` and `.dash-wrap` each carry
+`calc(var(--tabbar-h) + var(--sp-5) + env(safe-area-inset-bottom, 0px))` as
+bottom padding. A new full-screen wrapper needs the same, or its last element is
+unreachable — the bar is `position: fixed` and does not reserve its own space.
 
 ---
 
@@ -569,7 +628,8 @@ recognisable if it starts again.
 | `--font-cjk` (never declared) | `--font-serif` |
 | `--brand-tint` as an error background | `--feedback-bad-tint` |
 | `.path-bar` second progress bar, top-of-screen "Next step" | Phases 4–5 |
-| `renderDrawer()`, `--drawer-*`, emoji nav icons | Phase 6 |
+| `renderDrawer()`, `--drawer-*`, emoji nav icons | Phase 6 — **done v117** |
+| `.bottom-nav`, `.nav-btn`, `.placeholder-screen`, `.speed-btn`, `.nav-sub-item` — five dead pockets, zero call sites between them | Phase 6 — **done v117** |
 
 **Still outstanding:** `getPathContext()` returns `step`/`total` against the flat
 41-lesson list with no stage. It needs stage name and position-within-stage —

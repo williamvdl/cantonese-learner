@@ -4,7 +4,7 @@
 IN_PROGRESS.md when it's picked up; delete it from here once it's shipped and
 folded into STATUS.md.*
 
-Last updated: 2026-08-01 · sw.js at v116
+Last updated: 2026-08-01 · sw.js at v117
 
 ## Product
 
@@ -156,13 +156,15 @@ or surfaced.*
   reads as an acknowledgement rather than a plain forward, and it shares
   `.quiz-wrong-actions` with "Hear it again" — the row wraps rather than overflows,
   but it would wrap at 360px. Confirm or match.
-- **Judge the hidden tab bar's dead-end risk on device, once P6-2 ships.** §3.10
-  defers this deliberately, and both remaining phase 6 design questions hang off it:
-  whether MOCK-11-bar's docked bar is needed, and whether the nameplate's no-affordance
-  resting state (MOCK-18-N1) is enough to make the escape hatch findable. If it is not,
-  MOCK-18-N3's home glyph is the honest answer — but it costs the centred plate, so it
-  would need the glyph placed somewhere that does not fight it. One device session
-  answers both.
+- **~~Judge the hidden tab bar's dead-end risk on device~~ — no longer arises.** §3.10
+  was reversed at v117 (DES-21) and the bar is visible everywhere, so there is no
+  hidden state. What survives of this item: the nameplate's no-affordance resting
+  state (MOCK-18-N1) is now a convenience rather than the only escape hatch, which
+  weakens the case for ever revisiting it — the tab bar is the route home now. Judge
+  it on device anyway, but the stakes are lower than when it was written.
+- **`--elev-4` is down to two call sites** — the toast and the quiz listen button's
+  hover. The drawer panel was its third. Not a problem, but a token serving two
+  incidental uses is worth a look when the elevation scale is next revisited.
 - **82 selectors are redeclared across `styles.css` with overlapping properties.**
   Found while removing one confirmed-dead declaration in the header at v115
   (`letter-spacing` on `.header-title .en`, overridden 586 lines later by the grouped

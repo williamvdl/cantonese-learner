@@ -4,7 +4,7 @@
 not a history log (that's what the repo's commit history is for). Approved design
 decisions and whether they were built live in `DESIGN_DECISIONS.md`.*
 
-Last updated: 2026-08-01 · sw.js at v116
+Last updated: 2026-08-01 · sw.js at v117
 
 ## Confirmed live and working
 - **Patterns/Drills removed** from the app entirely (not soft-hidden). Checkpoints
@@ -32,7 +32,9 @@ sw.js v95 onward; phase 2 shipped across v96–v103, phase 3 across v104–v107,
 phase 4 across v108–v112, phase 5 at v113, phase 6 from v114.
 
 **One approved decision remains unbuilt:** MOCK-11-bar, docking the completion
-action, which §3.10 says to judge only once the tab bar exists. DES-18 (the
+action — now the only thing that would bring DES-12's exclusivity rule back into
+force, since §3.10 was reversed at v117 and the tab bar is currently always
+visible. DES-18 (the
 nameplate as a route home) shipped at v116, and DES-20 (the centred header) — a
 third that nobody had noticed was unbuilt at all — at v115. MOCK-17-fill, the
 subtab treatment, was the third and shipped at v114. Phase 6 is the last phase of
@@ -109,6 +111,7 @@ orphan hues `#B7861E`, `#e4d4ad`, `#8a6716`,
 | 6 · 1 | v114 | The subtab treatment (MOCK-17-fill) as the `.tabs` / `.tab` primitive, shared in design with the phase 6 tab bar. Three bordered boxes with a solid brand fill on the active one became one hairline rail with muted labels and a 2px brand underline (DES-19). Retired the four `.subtabs` / `.subtab-btn` rules; `.subtab-btn`'s 42px tap target went with them. `.tabs--top` deliberately **not** ported while it has no consumer. The build corrected a claim that had propagated through three documents — see the note on docs drifting against themselves below. |
 | 6 · 2 | v115 | The centred header (DES-20). Nameplate to the centre, info button to the left corner, hamburger stays right, each corner control in a fixed `--tap-min` slot. `.header-actions` retired. Builds a §2 paragraph that had been specified and unbuilt since the design system was written — found because a mockup frame in conversation did not match the app. A dead `letter-spacing: 0.22em` on `.header-title .en` went in the same rule; the grouped meta-label block 586 lines later sets 0.16em and had been winning on source order. |
 | 6 · 3 | v116 | The nameplate as a route Home (DES-18, MOCK-18-Thug + N1/N2). `.header-title` gains a `.nameplate` button that hugs its text; nothing marks it at rest, pressing drops its opacity. The state reset behind it is extracted to `goToDestination()` in `app.js`, now shared with the drawer's five menu items so the two cannot drift — the same consolidation `openPathLesson()` got. The history call is the only difference between callers and is a parameter: the drawer replaces (overwriting its own open entry), the nameplate pushes. Repeat taps on Home no-op rather than stacking identical history entries. |
+| 6 · 4 | v117 | **The tab bar replaces the drawer** (MOCK-13-tabs), and settings moves behind the header cog as a bottom sheet (MOCK-19-sheet). `renderDrawer()` is gone; `renderTabBar()` and `renderSettingsSheet()` replace it, mounted through one `renderChrome()` helper rather than five copies of the pair. Six navigation icons transcribed into `ICON_PATHS` — the drawer's emoji could not take `currentColor`, so an active destination could not have turned brand. §3.10 reversed: the bar shows on every screen (DES-21). Five dead-CSS pockets and the six `--drawer-*` tokens retired. `goToDestination()`'s `replace` option dropped to zero call sites with the drawer and was removed. |
 
 ### Notes worth carrying forward
 
@@ -198,6 +201,22 @@ orphan hues `#B7861E`, `#e4d4ad`, `#8a6716`,
   When auditing, enumerate from the **screen** as rendered, not from the docs, or the
   gaps in the docs are invisible to the audit. *Closed at v114 — the subtabs now have
   all three: a primitive, a styleguide section and a register row.*
+- **A rule can be sound and still describe a layout that never arrived.** §3.10
+  hid the tab bar inside topics to avoid colliding with the docked action bar. The
+  118px arithmetic was right and the reasoning was right — but the action bar was
+  never built, so for four phases the rule governed a collision between one real
+  element and one imaginary one. Nothing flagged it, because a rule about two
+  unbuilt things is not *wrong* until you build the first one. When implementing a
+  rule, check that **both** sides of it exist; a conditional whose other branch was
+  never built is indistinguishable from a live one in prose.
+- **Dead CSS pockets cluster, and the count keeps rising.** v117 retired five:
+  `.bottom-nav` / `.nav-btn` / `.placeholder-screen`, `.speed-btn` / `.speed-btns`,
+  and `.nav-sub` / `.nav-sub-item` / `.ns-badge` — the last found only because it
+  was the sole remaining consumer of the `--drawer-*` tokens, i.e. found by
+  following tokens rather than selectors. Two of the five had descendants under a
+  stale comment heading that survived the parent's removal. **Grep for the parent,
+  then grep for its descendants separately**, and check token consumers as well as
+  class call sites.
 - **A private demo class can quietly squat on a real component's name.**
   `styleguide.html` used `.nameplate` for a local page demo. When the app's own
   nameplate became a real component at v116, the name was already taken by

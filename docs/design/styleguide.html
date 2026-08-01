@@ -337,16 +337,18 @@ code{ background:#DAD4CA; padding:1px 5px; border-radius:4px; font-size:11.5px; 
 .tick svg{ width:11px; height:11px; }
 
 /* tab bar */
-.tabbar{ height:var(--tabbar-h); background:rgba(250,248,245,.94); backdrop-filter:blur(10px); border-top:var(--border); display:flex; align-items:stretch; }
-.tb{ flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:4px; border:none; background:transparent; cursor:pointer; color:var(--muted); position:relative; padding:0; }
-.tb svg{ width:19px; height:19px; }
-.tb span{ font:var(--fw-medium) 9.5px/1 var(--font-ui); }
-.tb.on{ color:var(--brand); }
-.tb.on::before{ content:''; position:absolute; top:0; left:22%; right:22%; height:2px; background:var(--brand); border-radius:var(--r-pill); }
-.tb-badge{ position:absolute; top:7px; right:50%; margin-right:-20px; min-width:16px; height:16px; border-radius:var(--r-pill); background:var(--brand); color:#fff; font:var(--fw-semi) 9px/16px var(--font-ui); text-align:center; padding:0 4px; }
-.tabbar--slim{ height:34px; }
-.tabbar--slim .tb span{ display:none; }
-.tabbar--slim .tb svg{ width:17px; height:17px; }
+/* Tab bar — the built rules from styles.css v117. `position:fixed` is dropped
+   here ONLY so the demo sits in the page flow; everything else is verbatim.
+   The old .tabbar / .tb block this replaces used a ::before inset 22% each side
+   rather than a full-width border, and --muted rather than --muted-dark — it
+   predated the shared primitive and would have shipped a near-match. */
+.tabs--top{ background:var(--parchment); border-top:var(--border-soft); border-bottom:none; margin:0; padding:0; box-shadow:var(--elev-2); }
+.tabs--top .tab{ flex-direction:column; gap:3px; padding:7px 0 6px; margin:0; border-bottom:none; border-top:2px solid transparent; }
+.tabs--top .tab svg{ width:19px; height:19px; }
+.tabs--top .tab > span:last-child{ font-size:9.5px; letter-spacing:.06em; text-transform:uppercase; }
+.tabs--top .tab--on{ border-bottom-color:transparent; border-top-color:var(--brand); }
+.tab-ic{ position:relative; display:inline-flex; }
+.tab-badge{ position:absolute; top:-5px; left:11px; background:var(--brand); color:var(--parchment); font-family:var(--font-ui); font-size:9px; line-height:1; font-weight:var(--fw-bold); min-width:15px; height:15px; border-radius:var(--r-pill); padding:0 4px; display:inline-flex; align-items:center; justify-content:center; box-shadow:0 0 0 2px var(--parchment); }
 
 /* settings sheet row */
 .set-row{ display:flex; align-items:center; justify-content:space-between; gap:var(--sp-4); padding:var(--sp-4) 0; border-top:var(--border-soft); }
@@ -664,17 +666,18 @@ table.spec tr:last-child td{ border-bottom:none; }
 </section>
 
 <section id="tabbar">
-  <h2>Tab bar <span class="tag-todo">not built &middot; phase 6</span></h2>
+  <h2>Tab bar <span class="tag-new">built &middot; v117</span></h2>
   <p class="note">The five destinations. Active state is brand plus a 2px top rule — the same emphasis language as the topic subtabs, which are <b>built as of v114</b>, so the match this section promises now exists in the app rather than only on this page. Through v113 the claim was simply false: the subtabs were bordered boxes with a solid fill, and phase 6 would have inherited either the wrong treatment or a mismatch one tap away.</p>
-  <p class="note"><b>Two treatments are drawn on this page and only one can ship.</b> The demo below uses <code>.tabbar</code> / <code>.tb</code>, which predates the shared primitive and differs from it in substance, not just naming: its active rule is a <code>::before</code> inset 22% from each side rather than a full-width border, and its resting colour is <code>--muted</code> rather than <code>--muted-dark</code>. The primitive route is <code>.tabs.tabs--top</code>, demoed under Subtabs above. <b>P6-2 should build <code>.tabs--top</code> and retire this block</b> — but note that <code>.tb-badge</code> (Review's count) and <code>.tabbar--slim</code> (the &sect;3.10 dead-end fallback) have no equivalent on the primitive yet, so both need porting rather than dropping. <b>Review's badge stays permanently in view</b>; it was previously invisible behind a hamburger.</p>
+  <p class="note"><b>Resolved at v117.</b> This page carried two different tab bars until then — the <code>.tabbar</code> / <code>.tb</code> block drawn here, and <code>.tabs--top</code> on the shared primitive. They were not the same design: the older one's active rule was a <code>::before</code> inset 22% from each side rather than a full-width border, and its resting colour was <code>--muted</code> rather than <code>--muted-dark</code>. Building it would have shipped a near-match to the subtabs one tap away. The primitive won; the demo below is now the built CSS verbatim.</p>
+  <p class="note"><b>Review's badge is permanently visible</b>, which is most of the argument for the tab bar — it was previously behind a closed hamburger, so the one number telling you there is work waiting was the one number you could not see. It moved from a 20px block at the end of a 240px drawer row to a dot on the glyph's shoulder, and <code>.tab-ic</code> exists to be its positioning context: on the tab itself the dot would land in the corner of a 78px cell.</p>
   <div style="max-width:390px;border:var(--border);border-radius:var(--r-md);overflow:hidden" id="tabdemo"></div>
-  <h3>Slim variant <span class="tag-new">documented fallback</span></h3>
-  <p class="note">Only if the hidden tab bar proves to feel like a dead end in use — see §3.10 of the design system. 34px, icons only, so nav plus action bar totals 94px instead of 118px.</p>
-  <div style="max-width:390px;border:var(--border);border-radius:var(--r-md);overflow:hidden" id="tabslim"></div>
-  <h3>Settings sheet</h3>
-  <p class="note">Behind the header cog, not in the tab bar. <b>Tabs hold destinations, not features</b> — this is where anything occasional lives, and where account and subscription go later.</p>
+  <h3>Slim variant <span class="tag-todo">not built &middot; may never be</span></h3>
+  <p class="note"><b>The condition this existed for no longer arises.</b> It was the fallback for the tab bar feeling like a dead end when hidden inside topics — but &sect;3.10 was amended on 2026-08-01 and the bar is now shown on every screen, so there is no hidden state to rescue. It becomes relevant again only if the docked action bar (MOCK-11-bar) is ever built, since that is the collision the hiding existed to avoid. Kept as a record of the fallback, not as pending work: 34px, icons only, nav plus action bar totalling 94px instead of 118px.</p>
+  <h3>Settings sheet <span class="tag-new">built &middot; v117</span></h3>
+  <p class="note">Behind the header cog, not in the tab bar. <b>Tabs hold destinations, not features</b> (DES-11) — this is where anything occasional lives, and where account and subscription go later. The cog lights while the sheet is open because it is the sheet's origin, <b>not</b> because settings is somewhere you now are; it never takes an active state the way a tab does.</p>
+  <p class="note"><b>Sized to its contents, not to the viewport</b> (MOCK-19-sheet). It holds one setting today — audio speed — and a full-height surface would only advertise that. When account and subscription arrive it becomes a full screen by changing the wrapper: the <code>.set-row</code> markup inside is the same either way, so nothing here has to be rebuilt to get there. Opening pushes a history entry, so phone BACK closes the sheet rather than leaving the screen underneath, and the &times; and the scrim both route through that same step-back.</p>
   <div class="stage" style="max-width:390px" id="setdemo"></div>
-  <div class="cls">.tabbar › .tb (+ .on, .tb-badge) &nbsp;·&nbsp; .tabbar--slim &nbsp;·&nbsp; .set-row</div>
+  <div class="cls">.tabs.tabs--top › .tab (+ .tab--on) › .tab-ic › .tab-badge &nbsp;·&nbsp; .sheet-wrap › .sheet-scrim + .sheet › .set-row › .seg › .seg-btn</div>
 </section>
 
 <section id="watermark">
@@ -921,8 +924,11 @@ const NAV=[
   {k:'review',   l:'Review',   badge:12, ic:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><rect x="3" y="7" width="14" height="14" rx="2"/><path d="M7 4h11a2 2 0 0 1 2 2v11"/></svg>'},
   {k:'translate',l:'Translate',ic:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18"/><path d="M12 3a14 14 0 0 1 0 18 14 14 0 0 1 0-18z"/></svg>'},
 ];
-const tabbar=extra=>`<div class="tabbar ${extra||''}">`+NAV.map(n=>
-  `<button class="tb ${n.on?'on':''}">${n.ic}<span>${n.l}</span>${n.badge?`<span class="tb-badge">${n.badge}</span>`:''}</button>`).join('')+`</div>`;
+// Built markup, v117: .tabs.tabs--top › .tab › .tab-ic › .tab-badge. The badge
+// hangs off the ICON, not the tab — on a 78px cell it would otherwise sit in the
+// corner rather than on the glyph's shoulder.
+const tabbar=()=>`<div class="tabs tabs--top">`+NAV.map(n=>
+  `<button class="tab ${n.on?'tab--on':''}"><span class="tab-ic">${n.ic}${n.badge?`<span class="tab-badge">${n.badge}</span>`:''}</span><span>${n.l}</span></button>`).join('')+`</div>`;
 // MOCK-17-fill. Same primitive twice; only the rule's edge differs.
 const SUB=[
   {l:'Learn', on:true, ic:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20V2H6.5A2.5 2.5 0 0 0 4 4.5v15Z"/></svg>'},
@@ -935,22 +941,19 @@ document.getElementById('tabsdemotop').innerHTML=`<div class="tabs tabs--top">`+
   `<button class="tab ${n.on?'tab--on':''}">${n.ic}<span>${n.l}</span></button>`).join('')+`</div>`;
 
 document.getElementById('tabdemo').innerHTML=tabbar();
-document.getElementById('tabslim').innerHTML=tabbar('tabbar--slim');
 
+// Built markup, v117. The demo previously used .pill and .set-hint, neither of
+// which the sheet uses — .seg-btn and .set-help are the real classes.
 document.getElementById('setdemo').innerHTML=`
+  <div class="sheet-head"><h2 class="sheet-title">Settings</h2></div>
   <div class="set-row">
-    <div><div class="set-label">Audio speed</div><div class="set-hint">Applies to words, sentences and conversations</div></div>
-  </div>
-  <div class="set-row" style="border-top:none;padding-top:0">
-    <div class="row" style="gap:6px;flex:1">
-      <button class="pill" style="flex:1;justify-content:center">Slow</button>
-      <button class="pill pill--on" style="flex:1;justify-content:center">Normal</button>
-      <button class="pill" style="flex:1;justify-content:center">Fast</button>
+    <div class="set-label">Audio speed</div>
+    <div class="set-help">Applies to every word and sentence.</div>
+    <div class="seg">
+      <button class="seg-btn">Slow</button>
+      <button class="seg-btn on">Normal</button>
+      <button class="seg-btn">Fast</button>
     </div>
-  </div>
-  <div class="set-row">
-    <div><div class="set-label">Account</div><div class="set-hint">Placeholder — lands here when there's something to manage</div></div>
-    <span class="tag">Later</span>
   </div>`;
 
 // Mirrors renderContinuation() in render.js. Four states, then the reduced form.
