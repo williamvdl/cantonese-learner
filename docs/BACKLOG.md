@@ -4,7 +4,7 @@
 IN_PROGRESS.md when it's picked up; delete it from here once it's shipped and
 folded into STATUS.md.*
 
-Last updated: 2026-08-01 · sw.js at v119
+Last updated: 2026-08-01 · sw.js at v120
 
 ## Product
 
@@ -162,6 +162,13 @@ or surfaced.*
   state (MOCK-18-N1) is now a convenience rather than the only escape hatch, which
   weakens the case for ever revisiting it — the tab bar is the route home now. Judge
   it on device anyway, but the stakes are lower than when it was written.
+- **`--feedback-good` and `--sp-8` are declared with zero call sites**, found by
+  the v120 sweep and deliberately kept. `--feedback-good` completes a semantic
+  trio whose `-tint` and `-text` siblings have ten uses between them; `--sp-8`
+  completes the spacing scale. A scale with a gap in it is worse than a scale with
+  an unused step, so these are not drift — but they are the same shape as
+  `--feedback-bad`, which has nine uses in CSS and none in JS. Worth one decision
+  about whether unused scale steps stay, rather than three separate ones.
 - **Remove `migrateNavSnapshot()` eventually.** It maps the pre-v119 `homeView`
   key forward and is dead weight once no browser holds a pre-v119 history entry.
   There is no way to know when that is — a tab can live for months — so this is a
@@ -170,6 +177,12 @@ or surfaced.*
 - **`--elev-4` is down to two call sites** — the toast and the quiz listen button's
   hover. The drawer panel was its third. Not a problem, but a token serving two
   incidental uses is worth a look when the elevation scale is next revisited.
+- **Standing check 3 has a false positive and always has.** It reports an
+  undeclared `--token`, which is the literal phrase *"use var(--token) instead of"*
+  inside a comment in the token block. Stripping comments before the scan clears
+  it, and with that fix the check reports **no undeclared tokens at all**. Fix the
+  check rather than the comment — a check that always reports one known-benign hit
+  trains you to skim its output.
 - **82 selectors are redeclared across `styles.css` with overlapping properties.**
   Found while removing one confirmed-dead declaration in the header at v115
   (`letter-spacing` on `.header-title .en`, overridden 586 lines later by the grouped

@@ -98,7 +98,7 @@ function renderTranslate() {
           <div class="apikey-toggle-row">
             <button class="apikey-toggle-btn" id="apikey-toggle">${tr.showApiKey ? 'Hide' : 'Show'} key</button>
           </div>
-          <p style="margin-top:14px;font-size:11px;color:#aaa;line-height:1.5">
+          <p style="margin-top:14px;font-size:11px;color:var(--muted);line-height:1.5">
             Don't have one? Get a free key in 90 seconds at <strong>aistudio.google.com</strong> — no credit card needed.
           </p>
         </div>
@@ -154,13 +154,13 @@ function renderTranslate() {
 
       ${tr.error ? `<div class="translate-error">⚠ ${tr.error}</div>` : ''}
 
-      ${tr.loading ? `<div class="translate-loading">Translating with Gemini… <br><small style="color:#bbb">May retry automatically if the server is busy</small></div>` : ''}
+      ${tr.loading ? `<div class="translate-loading">Translating with Gemini… <br><small style="color:var(--muted)">May retry automatically if the server is busy</small></div>` : ''}
 
       ${result ? `
         <div class="translate-result">
           <div class="translate-zh">${result.zh}</div>
           <div class="translate-jp">${colorJyutping(result.jp)}</div>
-          <div class="bubble-english" style="font-size:12px;color:#888;margin-bottom:6px">${result.en}</div>
+          <div class="bubble-english" style="font-size:12px;color:var(--muted-dark);margin-bottom:6px">${result.en}</div>
           <div class="translate-result-actions">
             <button class="translate-action-btn primary" id="translate-listen" data-tr-text="${result.zh}">
               <span class="icon-label">${speaking ? icon('volume',16) : iconPlay(14)} ${speaking ? 'Playing…' : 'Listen'}</span>
@@ -168,7 +168,7 @@ function renderTranslate() {
           </div>
           ${bdHtml ? `
             <div class="tone-guide-foot">
-              <div style="font-size:11px;color:#888;font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:8px">Word-by-word breakdown</div>
+              <div class="section-label" style="margin-bottom:8px">Word-by-word breakdown</div>
               ${bdHtml}
             </div>` : ''}
         </div>
@@ -426,7 +426,7 @@ function renderWordReview() {
     <div class="content">
       ${renderPageHeader('🗂️', 'Word Review', '')}
       <div class="quiz-meta">
-        <span style="color:#888">Word ${wr.idx+1} / ${wr.queue.length}</span>
+        <span style="color:var(--muted-dark)">Word ${wr.idx+1} / ${wr.queue.length}</span>
         ${progressDots}
       </div>
       ${core.progressBar}
@@ -997,7 +997,7 @@ function renderPlaceholder(icon, title, subtitle) {
     <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;padding:60px 30px;text-align:center;min-height:300px;">
       <div style="font-size:52px;margin-bottom:16px;">${icon}</div>
       <div class="ph-title">${title}</div>
-      <div style="font-size:13px;color:#aaa;line-height:1.6;max-width:260px;">${subtitle}</div>
+      <div style="font-size:13px;color:var(--muted);line-height:1.6;max-width:260px;">${subtitle}</div>
     </div>`;
 }
 
@@ -1012,7 +1012,7 @@ function render() {
   if (needsTopic && !store.isTopicLoaded(state.topic)) {
     app.innerHTML = `
       ${renderHeader()}
-      <div class="content"><div style="padding:40px 20px;text-align:center;color:#888;font-size:14px;">Loading topic…</div></div>
+      <div class="content"><div class="boot-msg">Loading topic…</div></div>
       ${renderChrome()}
     `;
     attachEvents(null);
@@ -1036,7 +1036,7 @@ function render() {
       if (missing.length) {
         app.innerHTML = `
           ${renderHeader()}
-          <div class="content"><div style="padding:40px 20px;text-align:center;color:#888;font-size:14px;">Loading path…</div></div>
+          <div class="content"><div class="boot-msg">Loading path…</div></div>
           ${renderChrome()}
         `;
         attachEvents(null);
@@ -1058,7 +1058,7 @@ function render() {
       if (missing.length) {
         app.innerHTML = `
           ${renderHeader()}
-          <div class="content"><div style="padding:40px 20px;text-align:center;color:#888;font-size:14px;">Loading checkpoint…</div></div>
+          <div class="content"><div class="boot-msg">Loading checkpoint…</div></div>
           ${renderChrome()}
         `;
         attachEvents(null);

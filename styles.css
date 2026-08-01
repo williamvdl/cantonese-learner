@@ -102,7 +102,6 @@
     --feedback-bad-tint:   #FEF3F2;   /* wrong-answer surface bg */
     --feedback-bad-edge:   #F5CFCB;   /* border on wrong-answer surfaces */
     --parchment-border:    #EAE4DC;   /* standard card / divider border */
-    --ink-drawer:          #2A2520;   /* dark surface used in nav drawer (legacy) */
     --muted-dark:          #78716C;   /* darker muted — secondary body text */
     --muted-light:         #A8A29E;   /* lighter muted — tertiary / meta text */
 
@@ -251,7 +250,6 @@
   .btn--primary { background: var(--brand); border-color: var(--brand); color: #fff; }
   .btn--milestone { background: var(--milestone); border-color: var(--milestone); color: #fff; }
   .btn--good { border-color: var(--jade-edge); color: var(--jade); }
-  .btn--disabled { color: var(--muted); cursor: not-allowed; }
 
   /* Pill — an interactive one-of-N chooser (tier, quiz direction). Ghost by
      default; --on is a brand OUTLINE, not a fill, so a selected pill never
@@ -262,8 +260,6 @@
 
   /* Tag — metadata or status. Never interactive; no tap target needed. */
   .tag { display: inline-block; font-family: var(--font-ui); font-size: 9.5px; font-weight: var(--fw-medium); line-height: 1; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); border: var(--border); padding: 4px 8px; border-radius: var(--r-pill); }
-  .tag--brand { color: var(--brand); border-color: var(--brand-edge); }
-  .tag--milestone { color: var(--milestone); border-color: var(--milestone-edge); }
   .tag--done { color: var(--jade); border-color: var(--jade-edge); }
 
   /* Labelled listen control. The circular sibling is .btn-icon--brand. */
@@ -429,7 +425,6 @@
   .lesson-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
   .lesson-title { font-family: var(--font-display); font-size: var(--fs-h2); font-weight: var(--fw-medium); color: var(--ink); margin: 0; letter-spacing: -0.01em; }
   .lesson-count { font-size: var(--fs-meta); color: var(--muted); margin-top: 2px; }
-  .mode-btn { padding: 7px 16px; border-radius: var(--r-pill); cursor: pointer; font-size: var(--fs-small); font-weight: var(--fw-bold); transition: all 0.15s; }
   .hint { font-size: var(--fs-micro); color: var(--muted); margin-bottom: 12px; }
 
   /* Word grid */
@@ -453,9 +448,6 @@
 
   /* Home screen — categorised topic cards */
   .topics-wrap { padding: var(--sp-4) var(--sp-5) calc(var(--tabbar-h) + var(--sp-5) + env(safe-area-inset-bottom, 0px)); max-width: var(--measure); margin: 0 auto; }
-  .home-header { margin-bottom: 14px; }
-  .home-title { font-family: var(--font-serif); font-size: var(--fs-h2); font-weight: var(--fw-bold); color: var(--ink); margin-bottom: var(--sp-1); letter-spacing: -0.01em; }
-  .home-subtitle { font-size: var(--fs-meta); color: var(--muted); }
 
   .cat-filter-wrap { margin-bottom: 14px; }
   .cat-filter-select { width: 100%; padding: 12px 36px 12px 14px; font-size: 14px; font-weight: var(--fw-semi); color: var(--ink); background: var(--parchment); border: 1px solid var(--parchment-border); border-radius: var(--r-md); cursor: pointer; appearance: none; -webkit-appearance: none; -moz-appearance: none; background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%231a1a2e'><path d='M7 10l5 5 5-5z'/></svg>"); background-repeat: no-repeat; background-position: right 10px center; background-size: 22px; font-family: inherit; }
@@ -554,9 +546,6 @@
   /* Same tab-bar clearance as .content — Translate and the dashboard are the two
      screens that build their own wrapper instead of using it. */
   .translate-wrap { padding: var(--sp-4) var(--sp-5) calc(var(--tabbar-h) + var(--sp-5) + env(safe-area-inset-bottom, 0px)); box-shadow: var(--elev-1); max-width: var(--measure); margin: 0 auto; }
-  .translate-header { margin-bottom: var(--sp-4); }
-  .translate-header h2 { font-size: 20px; font-weight: var(--fw-bold); color: var(--brand); margin-bottom: 4px; }
-  .translate-header p { font-size: var(--fs-meta); color: var(--muted); }
   .translate-input-wrap { background: var(--parchment); border-radius: var(--r-md); padding: 14px; border: var(--border); margin-bottom: var(--sp-3); }
   .translate-input { width: 100%; min-height: 60px; border: none; outline: none; font-size: 16px; font-family: inherit; resize: vertical; color: var(--ink); background: transparent; padding: var(--sp-3); }
   .translate-input::placeholder { color: var(--muted); }
@@ -564,7 +553,6 @@
   .translate-mic.listening { background: var(--brand); border-color: var(--brand); color: var(--parchment); animation: micPulse 1s infinite; }
   .translate-direction-row { display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: var(--sp-3); padding: 8px 14px; background: var(--parchment); border-radius: var(--r-pill); border: var(--border); }
   .translate-dir-label { font-size: var(--fs-small); font-weight: var(--fw-bold); color: var(--brand); padding: 4px 10px; border-radius: var(--r-pill); }
-  .translate-dir-label.muted { color: var(--muted); font-weight: var(--fw-medium); }
   .translate-dir-swap { background: var(--brand); border: none; cursor: pointer; font-size: 16px; color: var(--parchment); width: 38px; height: 38px; border-radius: var(--r-pill); display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 6px color-mix(in srgb, var(--milestone) 30%, transparent); transition: all 0.15s; flex-shrink: 0; }
   .translate-dir-swap:active { transform: scale(0.92); }
   .translate-listening-hint { font-size: var(--fs-micro); color: var(--brand); font-weight: var(--fw-bold); margin-top: 6px; text-align: center; animation: pulse 0.6s infinite alternate; }
@@ -766,7 +754,6 @@
   .choice-zh-jp { font-size: var(--fs-micro); line-height: 1.1; font-weight: var(--fw-bold); }
 
   /* Unused: en-zh quiz now uses the default 2-col grid. Kept for optional single-column layout. */
-  .choices.choices-zh { flex-direction: column; }
 
   /* Quiz prompt for en-zh direction */
   .quiz-prompt-en { font-size: var(--fs-h2); line-height: var(--lh-heading); color: var(--ink); font-weight: var(--fw-bold); padding: var(--sp-2) var(--sp-1); }
@@ -930,9 +917,6 @@
      The header now has one control per corner, each in a .header-slot. */
   .header-info-icon { line-height: 1; }
   .header-details { margin-top: var(--sp-3); padding-top: var(--sp-3); border-top: 1px solid rgba(255,255,255,0.10); }
-  .speed-row { display: flex; align-items: center; gap: 10px; margin-top: 10px; }
-  .speed-label { font-size: var(--fs-micro); font-weight: var(--fw-semi); text-transform: uppercase; letter-spacing: 1px; opacity: 0.7; }
-  .header .speed-label { color: var(--muted); }
   .header .tone-key .label { color: var(--muted); }
 
   /* Compact voice banner (when OK) */
@@ -946,7 +930,6 @@
   .speak-target-zh,
   .translate-zh,
   .breakdown-zh,
-  .home-title,
   .lesson-title,
   .quiz-prompt-en {
     font-family: var(--font-display);
@@ -978,7 +961,7 @@
   }
 
   /* Button labels — tighten and lift */
-  button, .mode-btn, .topic-btn,
+  button, .topic-btn,
   .quiz-retry-btn, .back-btn, .quiz-next {
     font-family: var(--font-ui);
     font-weight: var(--fw-semi);
@@ -997,7 +980,7 @@
 
   /* Notes + descriptive prose */
   .lesson-note-body, .path-card-desc, .path-timeline-sub,
-  .home-subtitle, .hint {
+  .hint {
     font-family: var(--font-ui);
     font-weight: var(--fw-regular);
     line-height: 1.55;
@@ -1017,9 +1000,6 @@
   /* Home page — more dignified rhythm */                  /* was sometimes 20px, sometimes 22 */                              /* was 10px */
 
   /* Topic page — better separation between header/tier selector/mode tabs */
-  .mode-row, .conv-mode-pills { gap: var(--sp-2); margin-bottom: var(--sp-4); }
-  .mode-btn { padding: var(--sp-2) var(--sp-4); min-height: var(--tap-min); display: inline-flex; align-items: center; justify-content: center; }
-  .conv-mode-pill { padding: var(--sp-2) var(--sp-4); min-height: var(--tap-min); display: inline-flex; align-items: center; justify-content: center; }
 
   /* Word grid — more breathing room between cards */
 
@@ -1047,7 +1027,6 @@
   .quiz-retry-btn { margin-top: var(--sp-4); padding: var(--sp-3); min-height: var(--tap-min); }
 
   /* Conversation bubbles */
-  .convo-meta { margin-bottom: var(--sp-2); padding: 0 var(--sp-1); }
   .bubble-jyutping { margin-top: var(--sp-1); }
 
   /* Translate page */
@@ -1080,8 +1059,6 @@
   .seg-btn { flex: 1; min-height: var(--tap-min); padding: var(--sp-2) 0; border-radius: var(--r-pill); border: var(--border); background: transparent; color: var(--muted-dark); font-family: var(--font-ui); font-size: var(--fs-meta); font-weight: var(--fw-medium); cursor: pointer; }
   .seg-btn.on { border-color: var(--brand); color: var(--brand); box-shadow: inset 0 0 0 1px var(--brand); }
 
-  /* Drawer nav items — comfortable tap targets */
-  .nav-subitem { padding-top: var(--sp-2); padding-bottom: var(--sp-2); min-height: 40px; }
 
   /* Speak-mode polish */
 
@@ -1117,8 +1094,7 @@
 
   /* Universal smooth transitions on interactive elements */
   button, .topic-card, .word-card, .sentence-card, .choice-btn,
-  .path-card, .path-step-card, .tab, .mode-btn,
-  .conv-mode-pill, .seg-btn {
+  .path-card, .path-step-card, .tab, .seg-btn {
     transition: transform var(--dur-fast) var(--ease),
                 box-shadow var(--dur-base) var(--ease),
                 background-color var(--dur-base) var(--ease),
@@ -1152,7 +1128,7 @@
   }
 
   .quiz-retry-btn, .back-btn, .quiz-next,
-  .translate-go, .mode-btn.active {
+  .translate-go {
     box-shadow: var(--elev-1);
   }
   .quiz-retry-btn:hover, .back-btn:hover,
@@ -1168,7 +1144,6 @@
   }
 
   /* Pill / toggle buttons — refined hover */
-  .mode-btn:hover, .conv-mode-pill:hover,
   .seg-btn:hover, .topic-btn:hover {
     filter: brightness(1.03);
   }

@@ -4,7 +4,7 @@
 not a history log (that's what the repo's commit history is for). Approved design
 decisions and whether they were built live in `DESIGN_DECISIONS.md`.*
 
-Last updated: 2026-08-01 · sw.js at v119
+Last updated: 2026-08-01 · sw.js at v120
 
 ## Confirmed live and working
 - **Patterns/Drills removed** from the app entirely (not soft-hidden). Checkpoints
@@ -114,6 +114,7 @@ orphan hues `#B7861E`, `#e4d4ad`, `#8a6716`,
 | 6 · 3 | v116 | The nameplate as a route Home (DES-18, MOCK-18-Thug + N1/N2). `.header-title` gains a `.nameplate` button that hugs its text; nothing marks it at rest, pressing drops its opacity. The state reset behind it is extracted to `goToDestination()` in `app.js`, now shared with the drawer's five menu items so the two cannot drift — the same consolidation `openPathLesson()` got. The history call is the only difference between callers and is a parameter: the drawer replaces (overwriting its own open entry), the nameplate pushes. Repeat taps on Home no-op rather than stacking identical history entries. |
 | 6 · 4 | v117 | **The tab bar replaces the drawer** (MOCK-13-tabs), and settings moves behind the header cog as a bottom sheet (MOCK-19-sheet). `renderDrawer()` is gone; `renderTabBar()` and `renderSettingsSheet()` replace it, mounted through one `renderChrome()` helper rather than five copies of the pair. Six navigation icons transcribed into `ICON_PATHS` — the drawer's emoji could not take `currentColor`, so an active destination could not have turned brand. §3.10 reversed: the bar shows on every screen (DES-21). Five dead-CSS pockets and the six `--drawer-*` tokens retired. `goToDestination()`'s `replace` option dropped to zero call sites with the drawer and was removed. |
 | 6 · 5 | v118 | **The docked completion bar** (DES-22, MOCK-20-B2, and MOCK-11-bar built at last — approved in phase 4, unbuilt for four phases). `.bar` / `.bar-inner` existed as a §2 entry marked *Not built* since the design system was written; it now exists. Three of the continuation's four states dock; path-complete stays in flow. `--bar-h` gets its first call site since being declared. **`--tabbar-h` corrected from 58px to 46px** — it was taken from a mockup, while the built bar computes to `--tap-min` plus a 2px rule, so all four wrapper clearances had been over-reserving by 12px. |
+| — | v120 | **Dead-CSS sweep, driven by measurement rather than memory.** Removed 16 classes with no emitter (`.mode-btn`, `.conv-mode-pill(s)`, `.mode-row`, `.home-header/title/subtitle`, `.translate-header` + descendants, `.translate-dir-label.muted`, `.speed-row`, `.speed-label`, `.choices-zh`, `.convo-meta`, `.nav-subitem`, `.btn--disabled`, `.tag--brand`, `.tag--milestone`) and the `--ink-drawer` token, whose own comment said *legacy*. Nine hardcoded greys in `render.js` replaced: four by existing primitives (`.section-label`, `.boot-msg` ×3), five by tokens. **No hardcoded colour remains in the JS.** Invisible except one loading state, which gains 20px of padding by adopting `.boot-msg`. |
 | 6 · 6 | v119 | **`state.homeView` → `state.topicsView`** — the last item in phase 6, and invisible: no screen changes. The name predated the Dashboard, when Topics *was* Home; since v105 it has pointed at the wrong screen. 16 call sites. The real work was the migration: `history.state` outlives a deploy, so entries written by v118 arrive carrying the old key, and `applyNavSnapshot()`'s `f in snap` guard skips absent fields **silently** — backing out of a topic into a pre-deploy entry would have restored `nav: 'topics'` while leaving `topicsView` false, showing the topic you just left and making BACK look broken. `migrateNavSnapshot()` maps the old key forward at the read boundary. |
 
 ### Notes worth carrying forward
@@ -204,6 +205,16 @@ orphan hues `#B7861E`, `#e4d4ad`, `#8a6716`,
   When auditing, enumerate from the **screen** as rendered, not from the docs, or the
   gaps in the docs are invisible to the audit. *Closed at v114 — the subtabs now have
   all three: a primitive, a styleguide section and a register row.*
+- **A retirement pass driven by remembered names misses roughly a third of the
+  target.** v117 retired the drawer and searched for the names it knew. The v120
+  sweep — which enumerated every declared class and asked whether any emitter
+  existed — found a further eight drawer- and Home-era remnants, including
+  `.nav-subitem` and the `--ink-drawer` token, plus `.speed-row` / `.speed-label`,
+  siblings of the `.speed-btn` pocket retired in that very deploy. **Twice** now
+  the second half of a pocket has survived the first. Retire by sweep, not by
+  recall — and note that grouped selectors hide the survivors: four of the
+  remnants sat inside comma-separated rules whose other members were live, so
+  deleting whole rules would have taken working code with them.
 - **Renaming a field that persists outside the app is a data migration, not a
   refactor.** `state.homeView` lived in `NAV_FIELDS`, so it was serialised into
   `history.state` — which survives a deploy. After the rename, entries written by

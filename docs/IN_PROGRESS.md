@@ -4,7 +4,7 @@
 questions behind it. Meant to be short-lived — when a piece ships, fold its
 outcome into STATUS.md and clear this file back down for the next thing.*
 
-Last updated: 2026-08-01 · sw.js at v119
+Last updated: 2026-08-01 · sw.js at v120
 
 ## Phase 6 under way — v114 subtabs, v115 centred header, v116 nameplate, v117 tab bar + settings
 
@@ -87,6 +87,13 @@ new Subtabs & tab bar entry — and §3.9–3.10 for the nav rules, plus
 ---
 
 ## Standing checks for any CSS work
+
+**A seventh check exists as of v120:** `tools/dead-css.js` enumerates every class
+declared in `styles.css` and reports any with no emitter in the JS. It exists
+because two retirement passes driven by remembered names each missed about a
+third of their target. Expected output is two known interpolation artefacts
+(`bubble--correct`, `bubble--wrong`) and nothing else; it exits non-zero on
+anything unexpected.
 
 All five have caught real bugs. Run before shipping. Baseline verified clean at
 v117 on 2026-08-01 — **check 1 is clean for the first time** (`.nav-item`'s duplicate
