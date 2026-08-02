@@ -817,8 +817,8 @@ function dashboardNextUp() {
   return null; // every available path is fully complete
 }
 
-// ── Tier ladder (DES-28, v122) ────────────────────────────────────────────────
-// Which path owns a given tier of a given topic. Nothing asked this before v122:
+// ── Tier ladder (DES-28, v121) ────────────────────────────────────────────────
+// Which path owns a given tier of a given topic. Nothing asked this before v121:
 // path lookups all ran topic-first from a known path, never tier-first from a
 // known topic. Measured across all 52 path lessons at build time, EVERY (topic,
 // tier) pair belongs to exactly one path and no topic appears twice in one path
@@ -864,7 +864,7 @@ function getTierLadder(topicKey, tier) {
 }
 
 // Move to another tier of the topic already open. This is the ONLY route a tier
-// change takes as of v122, and it is why the v121 defect closes: the old
+// change takes as of v121, and it is why the v121 defect closes: the old
 // [data-round] handler set state.currentRound alone, leaving state.fromPathTier
 // and state.activePath describing the tier just left — so the chrome kept
 // reporting the old lesson and "mark complete" wrote to it. Because every tier
@@ -1095,7 +1095,7 @@ function getCheckpointWords(pathKey, stage) {
 // never drift in what they reset. Pushes a nav entry: BACK steps back through
 // the lessons you opened, the same as any other lesson transition.
 // The transient view state that must not survive a lesson change. Extracted at
-// v122 so openPathLesson() and the no-path branch of goToTier() cannot drift in
+// v121 so openPathLesson() and the no-path branch of goToTier() cannot drift in
 // what they clear — the same reason openPathLesson() itself was extracted.
 function resetLessonViewState() {
   state.mode         = 'study';

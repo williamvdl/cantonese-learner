@@ -1,4 +1,4 @@
-// tools/tier-harness.js — standing check for the tier ladder (DES-28/29, v122).
+// tools/tier-harness.js — standing check for the tier ladder (DES-28/29, v121).
 //
 // Why this exists: the ladder rests on a premise about the DATA, not the code —
 // that every (topic, tier) pair belongs to exactly one path, and that no topic

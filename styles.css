@@ -422,7 +422,7 @@
      render() only when the bar is actually present — a standalone topic has no
      continuation and must not reserve space for one. */
   .content--docked { padding-bottom: calc(var(--tabbar-h) + var(--bar-h) + var(--sp-5) + env(safe-area-inset-bottom, 0px)); }
-  /* DES-28 (v122): the header STACKS — title, then one tier line carrying the
+  /* DES-28 (v121): the header STACKS — title, then one tier line carrying the
      tier and the word count. It was a flex row (title | count) sitting under a
      44px `.round-selector` pill row: two rows and ~101px of chrome for two
      facts. `.lesson-count` retired; the count lives in `.tier-state`. */
@@ -430,7 +430,7 @@
   .lesson-title { font-family: var(--font-display); font-size: var(--fs-h2); font-weight: var(--fw-medium); color: var(--ink); margin: 0 0 3px; letter-spacing: -0.01em; }
 
   /* ── Tier ladder — `.tierline` › `.tier-state` + `.ladder` › `.rung`
-        (§2, MOCK-24-D, DES-28, v122).
+        (§2, MOCK-24-D, DES-28, v121).
      Deliberately NOT a chooser. A one-of-N chooser here would sit directly on
      top of the `.tabs` row and read as a hierarchy between two axes that are
      unrelated — tier is content scope, the subtabs are view. So there is no
@@ -458,7 +458,7 @@
   .rung:active { transform: scale(0.96); }
 
   /* ── Tier cross-reference — the same move offered at the FOOT of a path lesson
-        (§2, MOCK-22-X, DES-29, v122). Inside a path the inline ladder is absent:
+        (§2, MOCK-22-X, DES-29, v121). Inside a path the inline ladder is absent:
         every tier belongs to a path, so a tier change relocates you between
         paths, and that consequence is too large for a control at the top that
         looks like a filter. One row per adjacent tier, each naming its path.

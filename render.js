@@ -1512,7 +1512,7 @@ function renderLessonHeader(lesson) {
     ${segTabs}`;
 }
 
-// DES-28 (v122): the tier line. Replaces `.round-selector`, which was a 44px pill
+// DES-28 (v121): the tier line. Replaces `.round-selector`, which was a 44px pill
 // row ABOVE the title plus a word count to its right — two rows and ~101px of
 // chrome for two facts. This is one row under the title carrying both.
 //
@@ -1560,7 +1560,7 @@ function renderTierLine() {
     </div>`;
 }
 
-// DES-29 (v122): adjacent tiers as named cross-references at the foot of a path
+// DES-29 (v121): adjacent tiers as named cross-references at the foot of a path
 // lesson. One row per neighbour, each naming the path it belongs to, so the
 // crossing is stated before it is taken. Renders nothing outside a path (the
 // inline ladder covers that) and nothing for a single-tier topic.

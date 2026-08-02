@@ -236,7 +236,7 @@ more than five topics would need this re-checked.
 
 ### Tier ladder — `.tierline`[`--split`] › `.tier-state` + `.ladder` › `.rung`[`.dn`]
 The meta line under a lesson title, carrying the tier and the word count in one
-row. Replaced `.round-selector` at v122 (DES-28), which was a 44px pill row *above*
+row. Replaced `.round-selector` at v121 (DES-28), which was a 44px pill row *above*
 the title plus a count to its right — two rows for two facts.
 
 **It is not a chooser, and that is the point.** See §3.5b for the reasoning. The
@@ -248,7 +248,7 @@ single-tier topic degrades to the word count alone rather than the row vanishing
 so the title never shifts. `min-height` carries the 44px target, not padding.
 
 ### Tier cross-reference — `.xref-card` (on `.card`) › `.xref` › `.xref-node` + `.xref-txt` + `.xref-go`
-The same move offered at the **foot** of a path lesson (v122, DES-29), where the
+The same move offered at the **foot** of a path lesson (v121, DES-29), where the
 inline ladder is absent. One row per adjacent tier, each naming the path it belongs
 to. Built on `.card`; deliberately quieter than `.bar-next` — outline node, muted
 arrow, no brand — so the path's own forward step stays the louder of the two.
@@ -545,7 +545,7 @@ Note that removing a colour parameter can leave a live `${color}` in the body.
 Scan every function body after changing a signature.
 
 ### 3.5b Tier is a position, not a choice
-**Added v122 (DES-28/29).** The tier control is a *ladder*: the meta line under
+**Added v121 (DES-28/29).** The tier control is a *ladder*: the meta line under
 the lesson title states where the learner is standing, and offers the adjacent
 rungs — never the whole set. It is not a one-of-N chooser, and the reason is
 structural rather than aesthetic: a chooser here sits directly on `.tabs` and
