@@ -45,8 +45,22 @@ the scale, and no border width outside 1px/2px/`--edge-emph`.
 | Token | Value | Job |
 |---|---|---|
 | `--font-display` | Fraunces | Page and section titles, score values, English reveals |
-| `--font-serif` | Noto Serif TC | All Chinese text, the nameplate, watermarks |
+| `--font-serif` | Noto Serif TC | All Chinese text, the nameplate, watermarks. **Never a Latin title.** |
 | `--font-ui` | Inter | Everything else — labels, body, buttons, jyutping |
+
+> **`--font-serif` on Latin is a silent failure (DES-26, corrected v121).** Noto
+> Serif TC ships full Latin coverage and is loaded with it, so a Latin string set
+> in `--font-serif` renders in the CJK face rather than falling through to
+> Fraunces. It is valid CSS, passes every standing check, and looks like a
+> deliberate second display face. Ten sites did this until v121 — eight titles and
+> two score values — while `.lesson-title` alone was correct, which is why the
+> mismatch showed: the path landing and the topic it opens are one tap apart. Note
+> this is the *inverse* of the `--font-cjk` bug in the retired-tokens table below;
+> that one referenced an undeclared token and at least looked wrong. **When two
+> declared tokens could both plausibly apply, the rule has to be a prohibition,
+> not an assignment.** Weight moves with the face: Fraunces at `--fw-bold` is
+> heavier than Noto Serif TC at the same weight, so a title crossing over lands at
+> `--fw-semi`.
 
 Scale: `--fs-micro 11` · `--fs-meta 12` · `--fs-small 13` · `--fs-body 15` ·
 `--fs-lead 17` · `--fs-h3 22` · `--fs-h2 28` · `--fs-h1 36` · `--fs-display 56`.
@@ -474,6 +488,18 @@ source of incoherence in the previous build.
 > forbidden is the original defect: two bars measuring different quantities on
 > the same screen.
 
+> **The hairline is retired (DES-24, v121), and the reason sharpens this rule.**
+> The paragraph above defends the hairline against a *whole-path* bar, and that
+> argument was right. It was never an argument for keeping the hairline alongside
+> the **stage stepper**, which sits directly below it and reports the same fact
+> node by node — one indicator per fact, measured twice. The failure only became
+> visible at 100%: the fill spanned the full width and read as a divider rather
+> than as progress, which is how it was reported. **A redundant indicator is not
+> merely redundant — it has states its sibling does not, and those states are
+> unreviewed.** Before adding a second view of one quantity, check whether the
+> first already answers it more precisely. `.segs` was considered as a replacement
+> and rejected: it is `--milestone`, and milestone means checkpoint (§4).
+
 ### 3.5 No colour passed into render functions
 No `render*(…, color)` parameters, no `style="background:${color}"`. Category
 accents were switched off as a decision; the wiring outlived it. Everything is
@@ -487,10 +513,49 @@ Note that removing a colour parameter can leave a live `${color}` in the body.
 `node --check` will pass it — it is valid syntax and a runtime `ReferenceError`.
 Scan every function body after changing a signature.
 
+### 3.5b Tier is a position, not a choice
+**Added v122 (DES-28/29).** The tier control is a *ladder*: the meta line under
+the lesson title states where the learner is standing, and offers the adjacent
+rungs — never the whole set. It is not a one-of-N chooser, and the reason is
+structural rather than aesthetic: a chooser here sits directly on `.tabs` and
+reads as a hierarchy between two axes that are unrelated. **Tier is content
+scope; the subtabs are view.** Neither contains the other.
+
+The useful consequence is that **no new selected-state language enters the
+system**, because there is no selected state. That matters more than it sounds:
+underline, top border, outline and fill are all already spoken for by `.tab--on`,
+`.tabs--top .tab--on`, `.pill--on` and `.node--current`, and three of the four are
+spoken for by a chooser. There was very little room left to invent in.
+
+Inside a path the rungs are absent entirely and the move is offered at the foot
+instead. Every tier of every topic belongs to exactly one path, so **switching
+tier always crosses paths** — a consequence too large for an inline control that
+looks like a filter. `.xref` names the destination path before the move is taken.
+
+> **Reopening condition.** The ladder assumes tiers are **ordered and adjacent** —
+> a depth scale, where the only sensible moves from tier 2 are to 1 and 3. If
+> tiers ever become parallel *variants* rather than depths, a chooser is correct
+> and this decision should be reopened; MOCK-23-A (tinted chips) is the drawn
+> alternative. `tools/tier-harness.js` asserts the data half of the premise, but
+> nothing can assert the semantic half — that is a judgement to revisit, not a
+> check to run.
+
 ### 3.6 Emoji
 Not in titles, section headers, result screens, or path step rows. Kept where
 they are genuine wayfinding — **the Topics category grid**, where one icon per
 topic aids scanning a large set. Everywhere else they undercut the typography.
+
+> **Enforced at v121 (DES-27).** The rule was written at v95 and four of
+> `renderPageHeader()`'s seven call sites still passed an emoji (📖 Topics, 🗂️
+> Word Review ×2, 🌐 Translate ×2, 🛤️ Learning Path), the path cards carried
+> 🌱 🌿 🌳, and the path timeline header repeated the card's icon. **The emoji
+> parameter is now removed from the signature rather than passed as `''`** — a
+> parameter that exists is an invitation to use it, and re-deciding the exception
+> at each call site is how six of them drifted. The Topics *grid* keeps its
+> per-topic icons; that is the exception and it is untouched. Note the path cards
+> failed the wayfinding test twice over: there are three of them, and the level
+> was already named in the section header directly above **and** in the card
+> title, so the sprout decorated a word that was on screen twice already.
 
 > **Corrected 2026-07-28.** This previously read "the dashboard topic grid".
 > There is no topic grid on the dashboard: the function then called

@@ -89,7 +89,7 @@ function renderTranslate() {
   if (!hasKey) {
     return `
       <div class="translate-wrap">
-        ${renderPageHeader('🌐', 'Translate', 'AI-powered translation with word-by-word breakdown')}
+        ${renderPageHeader('Translate', 'AI-powered translation with word-by-word breakdown')}
         <div class="apikey-setup">
           <h3>🔑 One-time setup</h3>
           <p>Paste your <strong>Google Gemini API key</strong> to enable translations. It's saved securely on your device only — never uploaded anywhere.</p>
@@ -130,7 +130,7 @@ function renderTranslate() {
 
   return `
     <div class="translate-wrap">
-      ${renderPageHeader('🌐', 'Translate', 'Type or speak · word-by-word breakdown · powered by Gemini')}
+      ${renderPageHeader('Translate', 'Type or speak · word-by-word breakdown · powered by Gemini')}
 
       <div class="translate-direction-row">
         <span class="translate-dir-label">${fromLabel}</span>
@@ -315,7 +315,7 @@ function renderReviewDone(o) {
     : `<div class="review-allclear-note">${o.allClearNote}</div>`;
   return `
     <div class="content">
-      ${renderPageHeader(o.icon, o.title, '')}
+      ${renderPageHeader(o.title, '')}
       <div class="result">
         <div class="result-emoji">${o.graduated > 0 ? '🌟' : '✅'}</div>
         <div class="review-done-stats">
@@ -372,7 +372,7 @@ function renderWordReview() {
     }
     return `
       <div class="content">
-        ${renderPageHeader('🗂️', 'Word Review', 'Practise the words you\'ve missed — from every topic')}
+        ${renderPageHeader('Word Review', 'Practise the words you\'ve missed — from every topic')}
         ${body}
       </div>`;
   }
@@ -380,7 +380,7 @@ function renderWordReview() {
   // --- Done state: session summary (shared stat screen) ---
   if (wr.done) {
     return renderReviewDone({
-      icon: '🗂️', title: 'Word Review',
+      title: 'Word Review',
       reviewed: wr.reviewedThisSession,
       graduated: wr.graduatedThisSession,
       liveCount: state.reviewBadge.liveCount,
@@ -424,7 +424,7 @@ function renderWordReview() {
 
   return `
     <div class="content">
-      ${renderPageHeader('🗂️', 'Word Review', '')}
+      ${renderPageHeader('Word Review', '')}
       <div class="quiz-meta">
         <span style="color:var(--muted-dark)">Word ${wr.idx+1} / ${wr.queue.length}</span>
         ${progressDots}
@@ -591,17 +591,22 @@ function renderPathList() {
       const badge = locked
         ? `<span class="tag">Coming Soon</span>`
         : (total > 0 && done === total ? `<span class="tag tag--done">Complete</span>` : '');
+      // DES-27: no emoji. The count moves up beside the title so the bar can run
+      // the full card width; it takes --brand once started, so "how far in am I"
+      // is answerable from the top line alone. The badge (Coming Soon /
+      // Complete) is mutually exclusive with the count — a locked path has no
+      // progress and a complete one is better said in words.
+      const countEl = locked ? '' :
+        `<span class="path-card-count${done > 0 ? ' on' : ''}">${done} / ${total}</span>`;
       const progress = locked ? '' : `
         <div class="path-card-progress">
           <div class="path-progress-bar"><div class="path-progress-fill" style="width:${pct}%"></div></div>
-          <span class="path-progress-count">${done} / ${total}</span>
         </div>`;
       return `
         <div class="${cardCls}" ${dataAttr}>
           <div class="path-card-top">
-            <span class="path-card-icon">${p.icon}</span>
             <span class="path-card-title">${p.label}</span>
-            ${badge}
+            ${badge || countEl}
           </div>
           <div class="path-card-desc">${p.desc}</div>
           ${progress}
@@ -614,7 +619,7 @@ function renderPathList() {
 
   return `
     <div class="path-list">
-      ${renderPageHeader('🛤️', 'Learning Path', 'Curated lessons in order. Tap any to jump in — nothing is locked.')}
+      ${renderPageHeader('Learning Path', 'Curated lessons in order. Tap any to jump in — nothing is locked.')}
       ${sections}
     </div>`;
 }
@@ -750,7 +755,7 @@ function renderPathTimeline(pathKey) {
     return `
       <div class="path-timeline-wrap">
         <button class="path-timeline-back" data-path-back><span class="icon-label">${icon('arrowLeft',15)} Back to Learning Paths</span></button>
-        <div class="path-empty-msg">${path.icon} ${path.label} — coming soon.</div>
+        <div class="path-empty-msg">${path.label} — coming soon.</div>
       </div>`;
   }
   const total = path.lessons.length;
@@ -794,7 +799,7 @@ function renderPathTimeline(pathKey) {
     <div class="path-timeline-wrap">
       <button class="path-timeline-back" data-path-back><span class="icon-label">${icon('arrowLeft',15)} Back to Learning Paths</span></button>
       <div class="path-timeline-header">
-        <div class="path-timeline-title">${path.icon} ${path.label}</div>
+        <div class="path-timeline-title">${path.label}</div>
         <div class="path-timeline-sub">${path.desc}</div>
         <div class="path-timeline-progress">
           <div class="path-progress-bar"><div class="path-progress-fill" style="width:${pct}%"></div></div>
@@ -844,14 +849,23 @@ function renderCheckpointHub() {
     : (prog.total - prog.done === 1 ? 'Finish 1 more to complete' : `Finish ${prog.total - prog.done} more to complete`);
 
   // MOCK-16-H2. The hub is the last member of its stage, so it carries the same
-  // contextual row and stepper — which is also its only lateral navigation. The
-  // hairline keeps measuring stage TOPICS everywhere, and activity progress is
-  // carried by .segs: a different fact, told apart by form rather than position
-  // (§3.4). The row's back replaces the standalone button that used to sit here.
+  // contextual row and stepper — which is also its only lateral navigation.
+  // Activity progress is carried by .segs, a different fact told apart by form
+  // rather than position (§3.4). The row's back replaces the standalone button
+  // that used to sit here. The stepper is passed as .ctx's `after` so the band's
+  // bottom edge closes below it rather than between the two (DES-23).
   const stageCtx = getCheckpointStageContext();
+  // `split` follows the stepper's PRESENCE, not the context's. renderStageStepper
+  // returns '' for a stage with no topics, and a separator with nothing under it
+  // would sit 1px above .ctx's own bottom edge.
+  const cpStepper = stageCtx ? renderStageStepper(stageCtx, true) : '';
   const aboveEl = stageCtx
-    ? renderContextRow(stageCtx, { meta: `Checkpoint · ${stageCtx.path.label}`, backAttr: 'data-cp-back' })
-      + renderStageStepper(stageCtx, true)
+    ? renderContextRow(stageCtx, {
+        meta: `Checkpoint · ${stageCtx.path.label}`,
+        backAttr: 'data-cp-back',
+        split: !!cpStepper,
+        after: cpStepper,
+      })
     : `<button class="back-home-btn" data-cp-back><span class="icon-label">${icon('arrowLeft',15)} ${stage.name}</span></button>`;
 
   const pips = `<div class="segs cp-segs">${prog.available.map(a =>
@@ -1088,12 +1102,17 @@ function render() {
       // ACTION belongs at the foot, where a lesson actually ends (MOCK-10).
       // The contextual row is full-bleed with its inner content capped, so it
       // sits outside .content.
+      // DES-25: both entry routes use the SAME shell. Mockup 10 drew the
+      // standalone case this way — "no stepper, no hairline, back goes to
+      // Topics; the shell doesn't move" — but the built version used
+      // .back-home-btn inside .content, at a different indent, size, weight and
+      // colour, so the back control visibly jumped between a path topic and a
+      // standalone one. The meta slot carries the topic's CATEGORY here rather
+      // than a stage position, so the row is never half-empty.
+      const stepperEl = ctx ? renderStageStepper(ctx) : '';
       const aboveEl = ctx
-        ? `${renderContextRow(ctx)}${renderStageStepper(ctx)}`
-        : '';
-      const backEl = ctx
-        ? ''
-        : `<button class="back-home-btn" id="back-home-btn"><span class="icon-label">${icon('arrowLeft',15)} Back to topics</span></button>`;
+        ? renderContextRow(ctx, { split: !!stepperEl, after: stepperEl })
+        : renderStandaloneContextRow(state.topic);
       // MOCK-11's subtab matrix as MOCK-12 revised it: the continuation is
       // present on Learn, Chat AND Quiz. While a quiz question is live it drops
       // its forward action only — "Next in <stage>" a thumb under the quiz's own
@@ -1115,10 +1134,9 @@ function render() {
       mainContent = `
         ${aboveEl}
         <div class="content${dockedEl ? ' content--docked' : ''}">
-          ${backEl}
-          ${renderRoundSelector(state.topic)}
           ${renderLessonHeader(lesson)}
           ${state.mode === 'quiz' ? renderQuiz(lesson) : state.tab === 'convo' ? renderConversation() : renderStudy(lesson)}
+          ${state.mode === 'quiz' ? '' : renderTierXref()}
           ${contEl}
         </div>
         ${dockedEl}`;
@@ -1144,11 +1162,16 @@ function render() {
 }
 
 // Unified page-section header — used by Topics, Learning Path, Review, Translate
-// so they read consistently. icon = emoji string, title + subtitle text.
-function renderPageHeader(emoji, title, subtitle) {
+// so they read consistently.
+// DES-27 (v121): the emoji parameter is GONE, not passed as ''. §3.6 forbids
+// emoji in titles and section headers and keeps them only for the Topics
+// category GRID, where one icon per topic aids scanning a large set — a page
+// title is not that. Dropping the parameter is what stops the exception being
+// re-litigated at each of the five call sites.
+function renderPageHeader(title, subtitle) {
   return `
     <div class="page-header">
-      <h2 class="page-header-title">${emoji ? `<span class="page-header-emoji">${emoji}</span>` : ''}${title}</h2>
+      <h2 class="page-header-title">${title}</h2>
       ${subtitle ? `<p class="page-header-sub">${subtitle}</p>` : ''}
     </div>`;
 }
@@ -1207,22 +1230,47 @@ function renderContextRow(ctx, opts) {
   const meta = o.meta || (st
     ? `${st.step} of ${st.total} · ${ctx.path.label}`
     : ctx.path.label);
-  const pct = st && st.total ? Math.round((st.done / st.total) * 100) : 0;
-  // No stage means no stage progress to report. An empty hairline would read as
-  // 0% rather than "not applicable", so the track is omitted entirely.
-  const trackEl = st
-    ? `<div class="ctx-track"><div class="ctx-fill" style="width:${pct}%"></div></div>`
-    : '';
   const backAttr = o.backAttr || 'id="back-home-btn"';
+  // The row only takes a bottom edge when a stepper follows it, otherwise the
+  // rule would sit 1px above .ctx's own bottom edge. `split` is passed by the
+  // caller rather than inferred from `st`, because the checkpoint hub renders a
+  // stepper from a context whose own stage shape differs.
+  // The separator lives on .ctx-head, not on .ctx-row, so it is full-bleed like
+  // .ctx's own bottom edge. On .ctx-row it would be capped at --measure and the
+  // two rules would disagree in width above 680px.
+  const splitCls = o.split ? ' ctx-head--split' : '';
   return `
     <div class="ctx">
-      <div class="ctx-inner">
-        <div class="ctx-row">
-          <button class="ctx-back" ${backAttr}>${icon('arrowLeft',15)} ${backLabel}</button>
-          <span class="ctx-meta">${meta}</span>
+      <div class="ctx-head${splitCls}">
+        <div class="ctx-inner">
+          <div class="ctx-row">
+            <button class="ctx-back" ${backAttr}>${icon('arrowLeft',15)} ${backLabel}</button>
+            <span class="ctx-meta">${meta}</span>
+          </div>
         </div>
       </div>
-      ${trackEl}
+      ${o.after || ''}
+    </div>`;
+}
+
+// The same shell for a topic opened from Topics rather than from a path (DES-25).
+// No stepper and no split, so .ctx's own bottom edge is the only rule. The meta
+// slot carries the topic's category — the one piece of orientation a standalone
+// topic actually has — and is omitted rather than left blank if the topic is in
+// no category, since an empty slot reads as a rendering fault.
+function renderStandaloneContextRow(topicKey) {
+  const catKey = (store.topicCategories || {})[topicKey];
+  const cat = catKey && (store.categoryList || []).find(c => c.key === catKey);
+  return `
+    <div class="ctx">
+      <div class="ctx-head">
+        <div class="ctx-inner">
+          <div class="ctx-row">
+            <button class="ctx-back" id="back-home-btn">${icon('arrowLeft',15)} Topics</button>
+            ${cat ? `<span class="ctx-meta">${cat.label}</span>` : ''}
+          </div>
+        </div>
+      </div>
     </div>`;
 }
 
@@ -1423,23 +1471,9 @@ function renderTopicsScreen() {
 
   return `
     <div class="topics-wrap">
-      ${renderPageHeader('📖', 'Topics', 'Choose a category and topic to start learning')}
+      ${renderPageHeader('Topics', 'Choose a category and topic to start learning')}
       ${renderCategoryFilter()}
       ${sections}
-    </div>`;
-}
-
-function renderRoundSelector(topicKey) {
-  const rounds = getAvailableRounds(topicKey);
-  if (rounds.length <= 1) return '';   // Hide selector if only one round
-  const btns = rounds.map(r => {
-    const active = state.currentRound === r;
-    return `<button class="pill${active?' pill--on':''}" data-round="${r}">Tier ${r}</button>`;
-  }).join('');
-  return `
-    <div class="round-selector">
-      <span class="round-label">Tier:</span>
-      ${btns}
     </div>`;
 }
 
@@ -1473,9 +1507,85 @@ function renderLessonHeader(lesson) {
   return `
     <div class="lesson-header">
       <h2 class="lesson-title">${lesson.label}</h2>
-      <div class="lesson-count">${getRoundWords(state.topic, state.currentRound).length} words</div>
+      ${renderTierLine()}
     </div>
     ${segTabs}`;
+}
+
+// DES-28 (v122): the tier line. Replaces `.round-selector`, which was a 44px pill
+// row ABOVE the title plus a word count to its right — two rows and ~101px of
+// chrome for two facts. This is one row under the title carrying both.
+//
+// The rungs are LIVE only outside a path. Inside one, tier is stated and the move
+// is offered at the foot instead (DES-29), because every tier belongs to a path
+// and switching tier therefore relocates you between paths — a consequence too
+// large for an inline control that looks like a filter.
+//
+// Labels: a single rung names its destination ("Tier 2"), two rungs shorten to
+// bare numbers. That is affordable only because `state` already reads "Tier 2 of
+// 3" beside them, so a bare "3" is unambiguous. Do not shorten the single-rung
+// case to match — with no "of N" in the state text there is nothing to read the
+// number against.
+function renderTierLine() {
+  const words  = getRoundWords(state.topic, state.currentRound).length;
+  const ladder = getTierLadder(state.topic, state.currentRound);
+
+  // Single-tier topic: no tier to state and no rung to offer, so the line
+  // degrades to the word count alone rather than disappearing. Keeping the row
+  // means the title never shifts between a one-tier and a multi-tier topic.
+  if (ladder.total <= 1) {
+    return `<div class="tierline"><span class="tier-state">${words} words</span></div>`;
+  }
+
+  const ofN  = ladder.total > 2 ? ` of ${ladder.total}` : '';
+  const stateEl = `<span class="tier-state"><b>Tier ${state.currentRound}</b>${ofN} · ${words} words</span>`;
+
+  // In a path the line is a statement, not a control.
+  if (state.fromPath) {
+    return `<div class="tierline">${stateEl}</div>`;
+  }
+
+  const bare  = ladder.rungs.length > 1;
+  const rungs = ladder.rungs.map(r => {
+    const label = bare ? String(r.tier) : `Tier ${r.tier}`;
+    return r.dir === 'down'
+      ? `<button class="rung dn" data-tier="${r.tier}">${icon('arrowLeft',12)} ${label}</button>`
+      : `<button class="rung" data-tier="${r.tier}">${label} ${icon('arrowRight',12)}</button>`;
+  }).join('');
+
+  return `
+    <div class="tierline tierline--split">
+      ${stateEl}
+      <span class="ladder">${rungs}</span>
+    </div>`;
+}
+
+// DES-29 (v122): adjacent tiers as named cross-references at the foot of a path
+// lesson. One row per neighbour, each naming the path it belongs to, so the
+// crossing is stated before it is taken. Renders nothing outside a path (the
+// inline ladder covers that) and nothing for a single-tier topic.
+function renderTierXref() {
+  if (!state.fromPath) return '';
+  const ladder = getTierLadder(state.topic, state.currentRound);
+  if (!ladder.rungs.length) return '';
+
+  const rows = ladder.rungs.map(r => {
+    const where = r.pathLabel
+      ? `${r.dir === 'down' ? 'Earlier, in' : 'Next, in'} the ${r.pathLabel} path`
+      : `${r.dir === 'down' ? 'Earlier' : 'Next'} in this topic`;
+    const words = r.words != null ? ` — ${r.words} words` : '';
+    return `
+      <button class="xref" data-tier="${r.tier}">
+        <span class="xref-node">${r.tier}</span>
+        <span class="xref-txt">
+          <span class="xref-lb">${where}</span>
+          <span class="xref-nm">Tier ${r.tier}${words}</span>
+        </span>
+        <span class="xref-go">${icon('arrowRight',14)}</span>
+      </button>`;
+  }).join('');
+
+  return `<div class="card xref-card">${rows}</div>`;
 }
 
 function renderConversation() {
@@ -2136,21 +2246,18 @@ function attachEvents(lesson) {
     render();
   });
 
-  // Round selector inside topic
-  document.querySelectorAll('[data-round]').forEach(btn => {
+  // Tier ladder rungs and the foot cross-reference — one handler, because they
+  // are the same action offered in two places (DES-28/29). Both go through
+  // goToTier(), which sets state.activePath from the DESTINATION path before
+  // entering the lesson. The v121 handler this replaces set state.currentRound
+  // alone, leaving the chrome describing the tier just left and "mark complete"
+  // writing to it; that defect closes here because a tier change is now real
+  // navigation rather than a content swap.
+  document.querySelectorAll('[data-tier]').forEach(btn => {
     btn.addEventListener('click', () => {
-      const r = parseInt(btn.dataset.round);
-      if (r === state.currentRound) return;
-      state.currentRound = r;
-      // Reset transient state for new round
-      state.flipped  = {};
-      state.speaking = null;
-      state.sentenceBreakdownOpen = {};
-      state.sentenceRevealed = {};
-      state.sentenceNoteClosed = {};
-      state.convo = { convMode:'read', playingLine:null, gapAnswers:{}, bubbleRevealed:{}, breakdownOpen:{}, speakStep:0, speakStatus:'idle', speakHeard:'', speakAutoPlayed:false, speakRevealed:{} };
-      window.scrollTo(0, 0);
-      render();
+      const t = parseInt(btn.dataset.tier);
+      if (!t || t === state.currentRound) return;
+      goToTier(state.topic, t);
     });
   });
 

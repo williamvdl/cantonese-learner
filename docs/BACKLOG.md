@@ -4,7 +4,7 @@
 IN_PROGRESS.md when it's picked up; delete it from here once it's shipped and
 folded into STATUS.md.*
 
-Last updated: 2026-08-01 · sw.js at v120
+Last updated: 2026-08-02 · sw.js at v122
 
 ## Product
 
@@ -109,8 +109,25 @@ Last updated: 2026-08-01 · sw.js at v120
 
 ## Design follow-ups
 
-*The rollout is complete — phases 1–6, v95 to v120. These are the loose ends it
-left or surfaced.*
+*The rollout is complete — phases 1–6, v95 to v120, plus the v121 convergence
+pass. These are the loose ends they left or surfaced.*
+
+- **Cross-rule duplicate declarations — 41 selectors, needs a script and a sweep.**
+  Standing check 1 inspects one rule at a time, so it is structurally blind to the
+  same selector declaring the same property in two *separate* rules at equal
+  specificity, where the later one silently wins. Measured on a fresh v120 clone:
+  **41 selectors**, including `.path-card-title` (`font-size` twice),
+  `.lesson-title` (`font-family`, `font-weight`, `letter-spacing`),
+  `.quiz-chinese`, `.quiz-retry-btn` and 37 more. Nothing is visibly broken — the
+  later declaration is generally the intended one — but **every dead declaration is
+  a place where a future edit lands with no effect**, which is exactly the failure
+  STATUS.md records for `.cp-done .cp-card .path-step-title` at v108. Three of the
+  41 were cleaned at v121 because they sat in rules being edited anyway; the rest
+  were left, because a partial sweep driven by which rules happened to be open is
+  the same mistake as a sweep driven by remembered names. Wants a script (a sibling
+  to `dead-css.js`, reporting selector + property + both line numbers) run once
+  against the whole file, then a single deploy. **The script is the deliverable, not
+  the sweep** — without it this recurs.
 
 - **Row-type icons on the path timeline — now judgeable.** With emoji gone (DES-09)
   the lesson rows have no glyph at all. Not per topic: 42 would be needed and they

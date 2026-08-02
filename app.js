@@ -817,6 +817,82 @@ function dashboardNextUp() {
   return null; // every available path is fully complete
 }
 
+// ── Tier ladder (DES-28, v122) ────────────────────────────────────────────────
+// Which path owns a given tier of a given topic. Nothing asked this before v122:
+// path lookups all ran topic-first from a known path, never tier-first from a
+// known topic. Measured across all 52 path lessons at build time, EVERY (topic,
+// tier) pair belongs to exactly one path and no topic appears twice in one path
+// — so a single find() is correct rather than merely convenient. If that ever
+// stops holding the ladder's premise is broken, not just this function, so it
+// returns the first match and the condition is recorded in DESIGN_DECISIONS.
+function pathOwningTier(topicKey, tier) {
+  for (const p of (store.paths || [])) {
+    if ((p.lessons || []).some(l => l.topic === topicKey && (l.round || 1) === tier)) return p;
+  }
+  return null;
+}
+
+// The rungs above and below where the learner is standing. Returns the ADJACENT
+// tiers only — the ladder is climbed one step at a time (DES-28), so tier 3 is
+// not offered from tier 1 even though it exists. `total` is the full height, so
+// the state text can say "Tier 2 of 3" and make the numbered rungs unambiguous.
+//
+// Deliberately returns a LIST shape rather than {up, down}: the path route
+// renders one cross-reference row per neighbour, and a list means adding a tier
+// never changes the caller. Ordered down-then-up so both routes read low-to-high.
+function getTierLadder(topicKey, tier) {
+  const rounds = getAvailableRounds(topicKey);
+  const idx = rounds.indexOf(tier);
+  const total = rounds.length;
+  if (idx < 0 || total <= 1) return { total, rungs: [] };
+
+  const entry = store.indexEntry(topicKey);
+  const rung = (t, dir) => {
+    const owner = pathOwningTier(topicKey, t);
+    return {
+      tier: t,
+      dir,                                        // 'down' | 'up'
+      words: entry?.wordCounts?.[String(t)] ?? null,
+      pathKey:   owner ? owner.key   : null,
+      pathLabel: owner ? owner.label : null,
+    };
+  };
+  const rungs = [];
+  if (idx > 0)         rungs.push(rung(rounds[idx - 1], 'down'));
+  if (idx < total - 1) rungs.push(rung(rounds[idx + 1], 'up'));
+  return { total, rungs };
+}
+
+// Move to another tier of the topic already open. This is the ONLY route a tier
+// change takes as of v122, and it is why the v121 defect closes: the old
+// [data-round] handler set state.currentRound alone, leaving state.fromPathTier
+// and state.activePath describing the tier just left — so the chrome kept
+// reporting the old lesson and "mark complete" wrote to it. Because every tier
+// belongs to a path, a tier change is always a path change too, and going
+// through openPathLesson() moves all three together by construction.
+function goToTier(topicKey, tier) {
+  const owner = pathOwningTier(topicKey, tier);
+  if (owner) {
+    // Enter as a genuine lesson of whichever path owns this tier. state.activePath
+    // follows the DESTINATION, not the origin — this single line is what stops the
+    // chrome and the completion write disagreeing. openPathLesson() pushes, scrolls
+    // and renders, so nothing further is needed here.
+    state.activePath = owner.key;
+    openPathLesson(topicKey, tier);
+    return;
+  }
+  // No path owns this tier (possible for one authored ahead of its path). Fall
+  // back to the standalone shape rather than leaving stale path chrome on screen.
+  state.topic        = topicKey;
+  state.currentRound = tier;
+  state.fromPath     = false;
+  state.fromPathTier = null;
+  resetLessonViewState();
+  pushNav();
+  window.scrollTo(0, 0);
+  render();
+}
+
 // Return { path, step, total, isLast, nextStep, nextTopic } for the current path-mode state,
 // or null if the user isn't currently studying inside a path. `step` is 1-indexed.
 function getPathContext() {
@@ -1018,13 +1094,10 @@ function getCheckpointWords(pathKey, stage) {
 // the timeline's step cards and the stage stepper's sibling taps, so the two can
 // never drift in what they reset. Pushes a nav entry: BACK steps back through
 // the lessons you opened, the same as any other lesson transition.
-function openPathLesson(topicKey, tier) {
-  state.topic        = topicKey;
-  state.currentRound = tier;
-  state.nav          = 'topics';
-  state.topicsView     = false;
-  state.fromPath     = true;
-  state.fromPathTier = tier;
+// The transient view state that must not survive a lesson change. Extracted at
+// v122 so openPathLesson() and the no-path branch of goToTier() cannot drift in
+// what they clear — the same reason openPathLesson() itself was extracted.
+function resetLessonViewState() {
   state.mode         = 'study';
   state.tab          = 'words';
   state.flipped      = {};
@@ -1033,6 +1106,16 @@ function openPathLesson(topicKey, tier) {
   state.sentenceRevealed = {};
   state.sentenceNoteClosed = {};
   state.convo        = { convMode:'read', playingLine:null, gapAnswers:{}, bubbleRevealed:{}, breakdownOpen:{}, speakStep:0, speakStatus:'idle', speakHeard:'', speakAutoPlayed:false, speakRevealed:{} };
+}
+
+function openPathLesson(topicKey, tier) {
+  state.topic        = topicKey;
+  state.currentRound = tier;
+  state.nav          = 'topics';
+  state.topicsView   = false;
+  state.fromPath     = true;
+  state.fromPathTier = tier;
+  resetLessonViewState();
   pushNav();
   window.scrollTo(0, 0);
   render();

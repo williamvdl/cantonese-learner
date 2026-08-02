@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tier treatment at 2 and 3 tiers — the full state matrix</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Noto+Serif+TC:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+    --font-serif:'Noto Serif TC',Georgia,serif;
+    --font-ui:'Inter','Noto Serif TC',-apple-system,system-ui,sans-serif;
+    --font-display:'Fraunces','Noto Serif TC',Georgia,serif;
+    --fs-micro:11px; --fs-meta:12px; --fs-small:13px; --fs-body:15px; --fs-lead:17px; --fs-h2:28px;
+    --lh-heading:1.25;
+    --fw-regular:400; --fw-medium:500; --fw-semi:600; --fw-bold:700;
+    --sp-1:4px; --sp-2:8px; --sp-3:12px; --sp-4:16px; --sp-5:24px;
+    --r-sm:8px; --r-md:12px; --r-pill:999px; --tap-min:44px;
+    --elev-1:0 1px 2px rgba(58,42,30,.04),0 1px 3px rgba(58,42,30,.06);
+    --ink:#1C1917; --ink-soft:#292524;
+    --parchment:#FFFFFF; --parchment-warm:#FAF8F5; --parchment-deep:#F0EBE4;
+    --brand:#C2410C; --brand-tint:#FEF0E9; --brand-edge:#F5D9C9; --brand-dark:#9A3412;
+    --jade:#15803D; --jade-tint:#DCFCE7;
+    --muted:#A8A29E; --muted-dark:#78716C;
+    --parchment-border:#EAE4DC;
+    --header-bg:#6E2639; --header-text:#F7EEE8; --header-sub:rgba(255,255,255,.6);
+    --milestone:var(--header-bg); --milestone-tint:#FBF0F2; --milestone-edge:#EBD3D9;
+    --measure:680px;
+    --border:1px solid var(--parchment-border);
+    --border-soft:1px solid var(--parchment-deep);
+  }
+  body{margin:0;background:var(--parchment-deep);font-family:var(--font-ui);color:var(--ink);padding:24px 16px 72px}
+  .wrap{max-width:1240px;margin:0 auto}
+  h1{font-family:var(--font-display);font-size:var(--fs-h2);font-weight:var(--fw-medium);margin:0 0 6px}
+  h2{font-family:var(--font-display);font-size:var(--fs-lead);font-weight:var(--fw-medium);margin:46px 0 4px}
+  h3{font-size:var(--fs-small);font-weight:var(--fw-semi);margin:26px 0 6px}
+  .lede{font-size:var(--fs-small);line-height:1.5;color:var(--muted-dark);margin:0 0 8px;max-width:78ch}
+  .note{font-size:var(--fs-meta);line-height:1.65;color:var(--muted-dark);margin:8px 0 0;max-width:78ch}
+  .note b{color:var(--ink-soft)}
+  code{font-family:ui-monospace,Menlo,monospace;font-size:11px;background:var(--parchment-deep);padding:1px 5px;border-radius:4px}
+  table{border-collapse:collapse;font-size:var(--fs-meta);margin-top:12px;width:100%}
+  th,td{text-align:left;padding:7px 10px;border-bottom:var(--border-soft);vertical-align:top}
+  th{font-size:var(--fs-micro);letter-spacing:.08em;text-transform:uppercase;color:var(--muted-dark);font-weight:var(--fw-semi)}
+  .rec{display:inline-block;background:var(--jade-tint);color:var(--jade);font-size:9px;font-weight:var(--fw-semi);letter-spacing:.1em;text-transform:uppercase;padding:3px 6px;border-radius:4px;vertical-align:2px}
+  .no{display:inline-block;background:#EDE7DE;color:var(--muted-dark);font-size:9px;font-weight:var(--fw-semi);letter-spacing:.1em;text-transform:uppercase;padding:3px 6px;border-radius:4px;vertical-align:2px}
+  .warn{display:inline-block;background:#FDF1E3;color:#9A5B10;font-size:9px;font-weight:var(--fw-semi);letter-spacing:.1em;text-transform:uppercase;padding:3px 6px;border-radius:4px;vertical-align:2px}
+
+  /* matrix strips — a 312px content column, the real width on a 360px phone */
+  .matrix{display:grid;grid-template-columns:132px repeat(3,1fr);gap:0;margin-top:14px;background:var(--parchment);border:var(--border);border-radius:var(--r-md);overflow:hidden}
+  .matrix > div{padding:10px 12px;border-bottom:var(--border-soft);border-right:var(--border-soft)}
+  .matrix > div:nth-child(4n){border-right:none}
+  .mh{font-size:var(--fs-micro);letter-spacing:.08em;text-transform:uppercase;color:var(--muted-dark);font-weight:var(--fw-bold);background:var(--parchment-warm)}
+  .mr{font-size:var(--fs-meta);font-weight:var(--fw-semi);color:var(--ink-soft);background:var(--parchment-warm)}
+  .mr span{display:block;font-weight:var(--fw-regular);color:var(--muted-dark);font-size:var(--fs-micro);margin-top:2px}
+  .cell{background:var(--parchment-warm)}
+  .col{width:312px;max-width:100%}
+
+  /* ── shared line shell ── */
+  .tierline{display:flex;align-items:center;gap:var(--sp-2);min-height:var(--tap-min)}
+  .tierline--split{justify-content:space-between}
+  .tier-state{font-size:var(--fs-meta);color:var(--muted-dark);white-space:nowrap}
+  .tier-state b{color:var(--ink-soft);font-weight:var(--fw-semi)}
+
+  /* ── C · state + offer (2 tiers only) ── */
+  .tier-offer{display:inline-flex;align-items:center;gap:5px;min-height:var(--tap-min);padding:0;border:none;background:none;font-size:var(--fs-meta);font-weight:var(--fw-medium);color:var(--brand);white-space:nowrap;cursor:pointer}
+  .tier-offer svg{width:13px;height:13px;flex:none;opacity:.75}
+
+  /* ── D · the ladder — C's shape generalised ── */
+  .ladder{display:flex;align-items:center;gap:2px;flex:none;margin-right:-9px}
+  .rung{display:inline-flex;align-items:center;gap:4px;min-height:var(--tap-min);padding:0 9px;border:none;background:none;font-size:var(--fs-meta);font-weight:var(--fw-medium);color:var(--brand);white-space:nowrap;cursor:pointer}
+  .rung svg{width:12px;height:12px;flex:none;opacity:.7}
+  .rung.dn{color:var(--muted-dark)}
+
+  /* ── A · tinted chips ── */
+  .chips{display:flex;align-items:center;gap:0;margin-left:-10px}
+  .chip{display:inline-flex;align-items:center;min-height:var(--tap-min);padding:0 10px;border:none;background:none;font-size:var(--fs-meta);font-weight:var(--fw-medium);color:var(--muted-dark);cursor:pointer}
+  .chip > i{display:inline-flex;align-items:center;font-style:normal;padding:5px 9px;border-radius:var(--r-sm)}
+  .chip.on{color:var(--brand-dark);font-weight:var(--fw-semi)}
+  .chip.on > i{background:var(--brand-tint)}
+  .chip-count{font-size:var(--fs-meta);color:var(--muted);margin-left:2px}
+
+  /* ── B · marker row ── */
+  .mark{display:inline-flex;align-items:center;gap:6px;min-height:var(--tap-min);padding:0 9px;border:none;background:none;font-size:var(--fs-meta);font-weight:var(--fw-medium);color:var(--muted-dark);cursor:pointer}
+  .mark > i{width:5px;height:5px;border-radius:var(--r-pill);background:transparent;flex:none}
+  .mark.on{color:var(--brand);font-weight:var(--fw-semi)}
+  .mark.on > i{background:var(--brand)}
+
+  /* phones */
+  .frames{display:flex;gap:22px;flex-wrap:wrap;align-items:flex-start;margin-top:16px}
+  .frame{width:268px}
+  .frame > .cap{font-size:var(--fs-micro);font-weight:var(--fw-semi);letter-spacing:.1em;text-transform:uppercase;color:var(--muted-dark);margin:0 0 8px}
+  .frame > .cap em{font-style:normal;color:var(--brand)}
+  .frame > .sub{font-size:var(--fs-meta);line-height:1.55;color:var(--muted-dark);margin:9px 0 0}
+  .phone{position:relative;background:var(--parchment-warm);border:6px solid var(--ink);border-radius:22px;overflow:hidden;height:352px;display:flex;flex-direction:column}
+  .scroll{flex:1;overflow:hidden;position:relative}
+  .header{background:var(--header-bg);padding:9px var(--sp-4);flex:none}
+  .header-row{display:flex;align-items:center;gap:var(--sp-2)}
+  .header-slot{flex:0 0 30px;display:flex;align-items:center;justify-content:center}
+  .header-title{flex:1;display:flex;align-items:center;flex-direction:column}
+  .header-title .zh{font-size:17px;color:var(--header-text);font-family:var(--font-display);font-weight:var(--fw-bold);letter-spacing:.06em;line-height:1.1}
+  .header-title .en{font-size:6.5px;color:var(--header-sub);text-transform:uppercase;margin-top:1px;font-weight:var(--fw-bold);letter-spacing:.16em}
+  .ic{width:28px;height:28px;border:none;background:transparent;color:var(--header-text);opacity:.72;display:inline-flex;align-items:center;justify-content:center}
+  .ic svg{width:15px;height:15px}
+  .ctx{background:var(--parchment-warm);border-bottom:var(--border-soft)}
+  .ctx-inner{max-width:var(--measure);margin:0 auto}
+  .ctx-row{display:flex;align-items:center;justify-content:space-between;gap:var(--sp-2);padding:8px var(--sp-4) 7px}
+  .ctx-back{display:flex;align-items:center;gap:6px;font-size:var(--fs-meta);font-weight:var(--fw-medium);color:var(--ink);background:none;border:none;padding:0}
+  .ctx-back svg{width:14px;height:14px;flex:none}
+  .ctx-meta{font-size:var(--fs-micro);font-weight:var(--fw-medium);color:var(--muted-dark);white-space:nowrap}
+  .content{padding:var(--sp-3) var(--sp-5)}
+  .lesson-title{font-family:var(--font-display);font-size:23px;font-weight:var(--fw-semi);color:var(--ink);margin:0 0 3px;letter-spacing:-.01em;line-height:var(--lh-heading)}
+  .tabs{display:flex;border-bottom:var(--border-soft);padding:var(--sp-2) 0 0;margin-bottom:var(--sp-3)}
+  .tabs .tab{flex:1;display:flex;align-items:center;justify-content:center;gap:6px;padding:0 0 9px;border:none;background:none;color:var(--muted-dark);font-size:var(--fs-meta);font-weight:var(--fw-medium);position:relative}
+  .tabs .tab svg{width:13px;height:13px}
+  .tabs .tab--on{color:var(--brand)}
+  .tabs .tab--on::after{content:'';position:absolute;left:0;right:0;bottom:-1px;height:2px;background:var(--brand)}
+  .wgrid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+  .wcard{background:var(--parchment);border:var(--border);border-radius:var(--r-md);padding:9px 10px;box-shadow:var(--elev-1)}
+  .wcard .zh{font-family:var(--font-serif);font-size:18px;color:var(--ink);text-align:center}
+  .wcard .jy{font-size:9.5px;color:var(--brand);margin-top:3px;text-align:center;font-weight:var(--fw-semi)}
+  .xref-card{background:var(--parchment);border:var(--border);border-radius:var(--r-md);margin:var(--sp-4) 0 0;overflow:hidden}
+  .xref{display:flex;align-items:center;gap:var(--sp-2);width:100%;padding:10px var(--sp-4);border:none;background:transparent;text-align:left;border-top:var(--border-soft)}
+  .xref:first-child{border-top:none}
+  .xref-node{width:22px;height:22px;border-radius:var(--r-pill);border:1px solid var(--parchment-border);background:var(--parchment);color:var(--muted-dark);display:flex;align-items:center;justify-content:center;font-size:9.5px;font-weight:var(--fw-semi);flex:none}
+  .xref-txt{flex:1;min-width:0}
+  .xref-lb{display:block;font-size:8px;font-weight:var(--fw-bold);text-transform:uppercase;letter-spacing:.1em;color:var(--muted-dark)}
+  .xref-nm{display:block;font-size:11.5px;font-weight:var(--fw-medium);color:var(--ink)}
+  .xref-go{color:var(--muted-dark);display:flex;flex:none}
+  .xref-go svg{width:14px;height:14px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<h1>Tier treatment at two tiers and three</h1>
+<p class="lede">Revised on the assumption you gave: <b>tier 2 becomes the norm rather than the exception
+once the intermediate vocabulary lands, and tier 3 arrives with Advanced.</b> That changes the problem.
+Mockup 23 was drawn against 8 multi-tier topics out of 42 and quietly optimised for a control that mostly
+is not there. It should be drawn against a topic that has three tiers and a learner sitting in the middle
+one. The nameplate reads 廣東話 (gwong2 dung1 waa2).</p>
+
+<h2>0 · The five states, and the one that decides it</h2>
+<p class="note">You asked the right question — <b>what does tier 2 look like, with and without a tier 3?</b>
+Writing the matrix out is what settles this, because four of the five states are easy and the fifth breaks
+one of the options outright.</p>
+
+<table>
+  <tr><th>State</th><th>What it must say</th><th>Offers needed</th></tr>
+  <tr><td>Tier 1 of 1</td><td>Word count only</td><td>none — 34 topics today, fewer later</td></tr>
+  <tr><td>Tier 1 of 2</td><td>Where you are</td><td>up</td></tr>
+  <tr><td>Tier 2 of 2</td><td>Where you are</td><td>down</td></tr>
+  <tr><td>Tier 1 of 3</td><td>Where you are, <i>and that there is more than one step above</i></td><td>up</td></tr>
+  <tr><td><b>Tier 2 of 3</b></td><td>Where you are</td><td><b>up and down</b></td></tr>
+  <tr><td>Tier 3 of 3</td><td>Where you are</td><td>down</td></tr>
+</table>
+
+<p class="note"><b>Tier 2 of 3 is the state that decides the design</b>, and it is the state that will be
+most common once Advanced exists — the middle rung is where most learners sit for longest. Your instinct
+about progressing one at a time is right and it is what the ladder should do, but the middle rung needs
+<i>both</i> directions, and the moment a line carries two offers it is a chooser again, which is what
+option C was chosen to avoid.</p>
+
+<p class="note"><b>The way out is that C and a pager are the same control at different sizes.</b> C is not
+really "state plus an offer" — it is a <b>ladder</b> whose two-tier case happens to have only one rung to
+show. Generalise it and the two-tier states come out exactly as drawn in mockup 23, unchanged. That is
+option D below, and it is the same thing you already picked, extended rather than replaced.</p>
+
+<!-- ══════════════════ MATRIX ══════════════════ -->
+<h2>1 · Every state, every option, at true width</h2>
+<p class="note">Each cell is <b>312px</b> — the real content width on a 360px phone. Nothing here is
+scaled down, so if it fits in the cell it fits on the device.</p>
+
+<div class="matrix">
+  <div class="mh">State</div>
+  <div class="mh">D · ladder <span class="rec">pick</span></div>
+  <div class="mh">A · tinted chips</div>
+  <div class="mh">B · marker row</div>
+
+  <div class="mr">Tier 1 of 1 <span>Single-tier topic</span></div>
+  <div class="cell"><div class="col"><div class="tierline" style="min-height:26px"><span class="tier-state">14 words</span></div></div></div>
+  <div class="cell"><div class="col"><div class="tierline" style="min-height:26px"><span class="tier-state">14 words</span></div></div></div>
+  <div class="cell"><div class="col"><div class="tierline" style="min-height:26px"><span class="tier-state">14 words</span></div></div></div>
+
+  <div class="mr">Tier 1 of 2 <span>Today's common case</span></div>
+  <div class="cell"><div class="col"><div class="tierline tierline--split">
+    <span class="tier-state"><b>Tier 1</b> · 10 words</span>
+    <span class="ladder"><button class="rung">Tier 2 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></button></span>
+  </div></div></div>
+  <div class="cell"><div class="col"><div class="tierline"><span class="chips"><button class="chip on"><i>Tier 1</i></button><button class="chip"><i>Tier 2</i></button></span><span class="chip-count">· 10 words</span></div></div></div>
+  <div class="cell"><div class="col"><div class="tierline" style="margin-left:-9px"><button class="mark on"><i></i>Tier 1</button><button class="mark"><i></i>Tier 2</button><span class="chip-count">· 10 words</span></div></div></div>
+
+  <div class="mr">Tier 2 of 2 <span>You asked about this</span></div>
+  <div class="cell"><div class="col"><div class="tierline tierline--split">
+    <span class="tier-state"><b>Tier 2</b> · 10 words</span>
+    <span class="ladder"><button class="rung dn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="m12 19-7-7 7-7"/></svg> Tier 1</button></span>
+  </div></div></div>
+  <div class="cell"><div class="col"><div class="tierline"><span class="chips"><button class="chip"><i>Tier 1</i></button><button class="chip on"><i>Tier 2</i></button></span><span class="chip-count">· 10 words</span></div></div></div>
+  <div class="cell"><div class="col"><div class="tierline" style="margin-left:-9px"><button class="mark"><i></i>Tier 1</button><button class="mark on"><i></i>Tier 2</button><span class="chip-count">· 10 words</span></div></div></div>
+
+  <div class="mr">Tier 1 of 3 <span>Once Advanced lands</span></div>
+  <div class="cell"><div class="col"><div class="tierline tierline--split">
+    <span class="tier-state"><b>Tier 1</b> of 3 · 10 words</span>
+    <span class="ladder"><button class="rung">Tier 2 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></button></span>
+  </div></div></div>
+  <div class="cell"><div class="col"><div class="tierline"><span class="chips"><button class="chip on"><i>Tier 1</i></button><button class="chip"><i>Tier 2</i></button><button class="chip"><i>Tier 3</i></button></span></div><div style="font-size:var(--fs-meta);color:var(--muted);margin-top:-6px">10 words</div></div></div>
+  <div class="cell"><div class="col"><div class="tierline" style="margin-left:-9px"><button class="mark on"><i></i>Tier 1</button><button class="mark"><i></i>Tier 2</button><button class="mark"><i></i>Tier 3</button></span></div><div style="font-size:var(--fs-meta);color:var(--muted);margin-top:-6px">10 words</div></div></div>
+
+  <div class="mr" style="background:var(--brand-tint)">Tier 2 of 3 <span style="color:var(--brand-dark)">The deciding state</span></div>
+  <div class="cell"><div class="col"><div class="tierline tierline--split">
+    <span class="tier-state"><b>Tier 2</b> of 3 · 10 words</span>
+    <span class="ladder">
+      <button class="rung dn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="m12 19-7-7 7-7"/></svg> 1</button>
+      <button class="rung">3 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></button>
+    </span>
+  </div></div></div>
+  <div class="cell"><div class="col"><div class="tierline"><span class="chips"><button class="chip"><i>Tier 1</i></button><button class="chip on"><i>Tier 2</i></button><button class="chip"><i>Tier 3</i></button></span></div><div style="font-size:var(--fs-meta);color:var(--muted);margin-top:-6px">10 words</div></div></div>
+  <div class="cell"><div class="col"><div class="tierline" style="margin-left:-9px"><button class="mark"><i></i>Tier 1</button><button class="mark on"><i></i>Tier 2</button><button class="mark"><i></i>Tier 3</button></div><div style="font-size:var(--fs-meta);color:var(--muted);margin-top:-6px">10 words</div></div></div>
+
+  <div class="mr">Tier 3 of 3 <span>Top of the ladder</span></div>
+  <div class="cell"><div class="col"><div class="tierline tierline--split">
+    <span class="tier-state"><b>Tier 3</b> of 3 · 10 words</span>
+    <span class="ladder"><button class="rung dn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="m12 19-7-7 7-7"/></svg> Tier 2</button></span>
+  </div></div></div>
+  <div class="cell"><div class="col"><div class="tierline"><span class="chips"><button class="chip"><i>Tier 1</i></button><button class="chip"><i>Tier 2</i></button><button class="chip on"><i>Tier 3</i></button></span></div><div style="font-size:var(--fs-meta);color:var(--muted);margin-top:-6px">10 words</div></div></div>
+  <div class="cell"><div class="col"><div class="tierline" style="margin-left:-9px"><button class="mark"><i></i>Tier 1</button><button class="mark"><i></i>Tier 2</button><button class="mark on"><i></i>Tier 3</button></div><div style="font-size:var(--fs-meta);color:var(--muted);margin-top:-6px">10 words</div></div></div>
+</div>
+
+<p class="note"><b>What the matrix shows, reading down.</b> The ladder holds its shape at every state and
+never wraps — at three tiers the two rungs shorten to bare numbers, which they can afford because the
+state text beside them already says "Tier 2 of 3", so the numbers are unambiguous. <b>The chip and marker
+rows both break at three tiers</b>: three chips plus the word count exceed 312px, so the count is forced
+onto its own line and the block grows from one row to two — the single row under the title, which was the
+whole point of the placement, stops being one row exactly when tiers become common.</p>
+
+<p class="note"><b>And the structural objection gets worse, not better, at three.</b> A two-up chooser above
+a three-up chooser reads as a hierarchy that does not exist. A <i>three</i>-up chooser above a three-up
+chooser reads as the same control repeated, which is the strongest possible version of what you flagged.
+A and B were already the weaker options; three tiers is what rules them out rather than merely ranking
+them.</p>
+
+<!-- ══════════════════ THE DECIDING STATE ══════════════════ -->
+<h2>2 · Tier 2 of 3, on the device</h2>
+<p class="note">The middle rung, standalone from Topics — the state that will be most common once Advanced
+exists.</p>
+
+<div class="frames">
+  <div class="frame">
+    <p class="cap">D · <em>ladder</em> <span class="rec">pick</span></p>
+    <div class="phone">
+      <div class="header"><div class="header-row">
+        <div class="header-slot"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg></span></div>
+        <div class="header-title"><span class="zh">廣東話</span><span class="en">Cantonese Learner</span></div>
+        <div class="header-slot"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="12" r="3.2"/></svg></span></div>
+      </div></div>
+      <div class="scroll">
+        <div class="ctx"><div class="ctx-inner"><div class="ctx-row">
+          <button class="ctx-back"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg> Topics</button>
+          <span class="ctx-meta">Everyday Essentials</span>
+        </div></div></div>
+        <div class="content">
+          <h2 class="lesson-title">Greetings</h2>
+          <div class="tierline tierline--split">
+            <span class="tier-state"><b>Tier 2</b> of 3 · 10 words</span>
+            <span class="ladder">
+              <button class="rung dn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="m12 19-7-7 7-7"/></svg> 1</button>
+              <button class="rung">3 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></button>
+            </span>
+          </div>
+          <div class="tabs">
+            <button class="tab tab--on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 7v14"/><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"/></svg><span>Learn</span></button>
+            <button class="tab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22z"/></svg><span>Chat</span></button>
+            <button class="tab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.42 10.922a1 1 0 0 0-.019-1.838L12.83 5.18a2 2 0 0 0-1.66 0L2.6 9.08a1 1 0 0 0 0 1.832l8.57 3.908a2 2 0 0 0 1.66 0z"/><path d="M22 10v6"/><path d="M6 12.5V16a6 3 0 0 0 12 0v-3.5"/></svg><span>Quiz</span></button>
+          </div>
+          <div class="wgrid">
+            <div class="wcard"><div class="zh">早唞</div><div class="jy">zou2 tau2</div></div>
+            <div class="wcard"><div class="zh">好耐冇見</div><div class="jy">hou2 noi6 mou5 gin3</div></div>
+            <div class="wcard"><div class="zh">失陪</div><div class="jy">sat1 pui4</div></div>
+            <div class="wcard"><div class="zh">請多多指教</div><div class="jy">cing2 do1 do1 zi2 gaau3</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <p class="sub">One row, one element, no chooser. <b>Down is muted, up is brand</b> — the ladder has a
+    default direction, and forward is the one being offered. Numbers rather than "Tier 1" / "Tier 3"
+    because the state text has already named the scale.</p>
+  </div>
+
+  <div class="frame">
+    <p class="cap">A · tinted chips <span class="no">breaks</span></p>
+    <div class="phone">
+      <div class="header"><div class="header-row">
+        <div class="header-slot"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg></span></div>
+        <div class="header-title"><span class="zh">廣東話</span><span class="en">Cantonese Learner</span></div>
+        <div class="header-slot"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="12" r="3.2"/></svg></span></div>
+      </div></div>
+      <div class="scroll">
+        <div class="ctx"><div class="ctx-inner"><div class="ctx-row">
+          <button class="ctx-back"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg> Topics</button>
+          <span class="ctx-meta">Everyday Essentials</span>
+        </div></div></div>
+        <div class="content">
+          <h2 class="lesson-title">Greetings</h2>
+          <div class="tierline"><span class="chips"><button class="chip"><i>Tier 1</i></button><button class="chip on"><i>Tier 2</i></button><button class="chip"><i>Tier 3</i></button></span></div>
+          <div style="font-size:var(--fs-meta);color:var(--muted);margin:-8px 0 4px">10 words</div>
+          <div class="tabs">
+            <button class="tab tab--on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 7v14"/><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"/></svg><span>Learn</span></button>
+            <button class="tab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22z"/></svg><span>Chat</span></button>
+            <button class="tab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.42 10.922a1 1 0 0 0-.019-1.838L12.83 5.18a2 2 0 0 0-1.66 0L2.6 9.08a1 1 0 0 0 0 1.832l8.57 3.908a2 2 0 0 0 1.66 0z"/><path d="M22 10v6"/><path d="M6 12.5V16a6 3 0 0 0 12 0v-3.5"/></svg><span>Quiz</span></button>
+          </div>
+          <div class="wgrid">
+            <div class="wcard"><div class="zh">早唞</div><div class="jy">zou2 tau2</div></div>
+            <div class="wcard"><div class="zh">好耐冇見</div><div class="jy">hou2 noi6 mou5 gin3</div></div>
+            <div class="wcard"><div class="zh">失陪</div><div class="jy">sat1 pui4</div></div>
+            <div class="wcard"><div class="zh">請多多指教</div><div class="jy">cing2 do1 do1 zi2 gaau3</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <p class="sub">Three chips fill the width, so the word count drops to its own line and the header block
+    becomes <b>two rows instead of one</b>. Three chips sitting on three subtabs is also the most literal
+    version of the doubling you objected to.</p>
+  </div>
+
+  <div class="frame">
+    <p class="cap">D · from a path, tier 2 of 3</p>
+    <div class="phone">
+      <div class="header"><div class="header-row">
+        <div class="header-slot"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg></span></div>
+        <div class="header-title"><span class="zh">廣東話</span><span class="en">Cantonese Learner</span></div>
+        <div class="header-slot"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="12" r="3.2"/></svg></span></div>
+      </div></div>
+      <div class="scroll">
+        <div class="content" style="padding-top:var(--sp-4)">
+          <h2 class="lesson-title">Greetings</h2>
+          <div class="tierline"><span class="tier-state"><b>Tier 2</b> of 3 · 10 words</span></div>
+          <div class="tabs">
+            <button class="tab tab--on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 7v14"/><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"/></svg><span>Learn</span></button>
+            <button class="tab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22z"/></svg><span>Chat</span></button>
+            <button class="tab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.42 10.922a1 1 0 0 0-.019-1.838L12.83 5.18a2 2 0 0 0-1.66 0L2.6 9.08a1 1 0 0 0 0 1.832l8.57 3.908a2 2 0 0 0 1.66 0z"/><path d="M22 10v6"/><path d="M6 12.5V16a6 3 0 0 0 12 0v-3.5"/></svg><span>Quiz</span></button>
+          </div>
+          <div class="wgrid">
+            <div class="wcard"><div class="zh">早唞</div><div class="jy">zou2 tau2</div></div>
+            <div class="wcard"><div class="zh">好耐冇見</div><div class="jy">hou2 noi6 mou5 gin3</div></div>
+          </div>
+          <div class="xref-card">
+            <button class="xref">
+              <span class="xref-node">1</span>
+              <span class="xref-txt"><span class="xref-lb">Earlier, in the Beginner path</span><span class="xref-nm">Greetings · Tier 1 — 10 words</span></span>
+              <span class="xref-go"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span>
+            </button>
+            <button class="xref">
+              <span class="xref-node">3</span>
+              <span class="xref-txt"><span class="xref-lb">Next, in the Advanced path</span><span class="xref-nm">Greetings · Tier 3 — 12 words</span></span>
+              <span class="xref-go"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <p class="sub"><b>The path route needs no new thinking at three tiers</b> — the cross-reference card
+    just carries two rows instead of one, each naming its own path. Option X was already a list; it was
+    only ever drawn with one entry because only one existed.</p>
+  </div>
+</div>
+
+<!-- ══════════════════ WHY ══════════════════ -->
+<h2>3 · Why the ladder, and what it costs</h2>
+
+<table>
+  <tr><th></th><th>1 of 2</th><th>2 of 2</th><th>2 of 3</th><th>Stays one row</th><th>Stacked chooser</th></tr>
+  <tr><td><b>D · ladder</b> <span class="rec">pick</span></td><td>Named offer</td><td>Named offer</td><td>Two numbered rungs</td><td>Yes, always</td><td>No</td></tr>
+  <tr><td>A · tinted chips</td><td>Fine</td><td>Fine</td><td>Count wraps</td><td><b>No</b></td><td>Yes</td></tr>
+  <tr><td>B · marker row</td><td>Fine</td><td>Fine</td><td>Count wraps</td><td><b>No</b></td><td>Yes</td></tr>
+  <tr><td>C · state + offer</td><td>Fine</td><td>Fine</td><td><b>Cannot express it</b></td><td>—</td><td>No</td></tr>
+</table>
+
+<p class="note"><b>D is C, generalised — not a replacement for it.</b> At two tiers the two produce
+identical markup: state text on the left, one named offer on the right. Everything you liked about C is
+preserved, and the only thing that changes is that the offer becomes a list of up to two rather than
+exactly one. If tier 3 never arrives, D and C are the same screen forever.</p>
+
+<p class="note"><b>The one asymmetry worth deciding deliberately: down is muted, up is brand.</b> The
+ladder has a direction — the learner is climbing it — so the upward rung reads as the offer and the
+downward one as a way back. That also keeps exactly one brand-coloured interactive element above the
+subtabs, which was the open question from mockup 23 and is answered here by the shape rather than by
+picking a colour. <b>If you would rather both rungs were equal weight, say so</b>: it is one declaration,
+but it changes the control from a ladder into a pager, and the middle state then has no default.</p>
+
+<p class="note"><b>What it costs.</b> One new component, <code>.ladder</code> / <code>.rung</code>, in
+place of <code>.round-selector</code> / <code>.round-label</code> — a net reduction. The lookup helper for
+"which path owns this tier of this topic" is needed either way and now returns a small list rather than a
+single answer, which the cross-reference card renders as one row per entry. <b>No new selected-state
+language is invented</b>, because as with C there is no selected state — there is a stated position and
+one or two offers.</p>
+
+<p class="note"><b>The limit, stated rather than buried.</b> The ladder assumes tiers are <i>ordered and
+adjacent</i> — that from tier 2 the only sensible moves are to 1 and 3. That is true of a difficulty
+scale and it is what your description of the roadmap implies. It would stop being true if tiers ever
+became parallel variants rather than depths, in which case a chooser is correct and A returns. Worth a
+line in the register as the condition under which this decision should be reopened.</p>
+
+</div>
+</body>
+</html>

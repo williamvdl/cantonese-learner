@@ -4,7 +4,7 @@
 questions behind it. Meant to be short-lived — when a piece ships, fold its
 outcome into STATUS.md and clear this file back down for the next thing.*
 
-Last updated: 2026-08-01 · sw.js at v120
+Last updated: 2026-08-02 · sw.js at v122
 
 ## Nothing in progress
 
@@ -15,6 +15,15 @@ v120. Every approved decision in `DESIGN_DECISIONS.md` is built and no *Not buil
 rows remain. The phase-by-phase record now lives in STATUS.md, which is where it
 belongs — this file kept a running phase 6 narrative alongside it for six deploys,
 and by the end the two disagreed.
+
+v121 and v122 shipped after this file was cleared and do not reopen it. v121 was a
+convergence deploy off device QA (mockup 21, DES-23 to DES-27); v122 was the tier
+ladder (mockups 22–24, DES-28 to DES-30), which also closed a live defect where a
+tier change wrote completion to the wrong lesson. Both are folded into STATUS.md
+and DESIGN_DECISIONS.md. **`tools/tier-harness.js` joins the standing checks** —
+it asserts the data invariant the ladder rests on, not just the rendering. The one
+item still deliberately parked is the 41 cross-rule duplicate declarations, which
+want a script before a sweep; it is in BACKLOG.md.
 
 Everything not yet done is unsequenced in BACKLOG.md. The standing checks below are
 permanent and stay here regardless of what is in progress.
@@ -74,10 +83,24 @@ anything unexpected.
 > writing a sibling, is a backlog item. Until then, check 7 passing does not mean
 > the dead code is gone; it means the dead *CSS* is gone.
 
-**Baseline re-verified on a fresh clone at v120, 2026-08-01.** All seven pass:
+**8 · `tools/tier-harness.js`** (added v122) lifts `pathOwningTier()`,
+`getTierLadder()`, `renderTierLine()` and `renderTierXref()` out of `app.js` and
+`render.js` **by name rather than by copy**, so it cannot drift from what ships,
+and runs them against the real data files. It checks two different things. First
+the **data invariant** the ladder rests on: every `(topic, tier)` pair must belong
+to exactly one path, and no topic may appear twice in one path. Nothing in the app
+enforces that — it is a property of how the path files happen to be authored, and
+breaking it would not fail any other check; the cross-reference would simply name
+the wrong path. Second the **rendering** across every state, including a
+**simulated three-tier topic**, because none exists yet and the middle rung is the
+state the design was chosen for. Run it after any change to `data/learning_paths.json`
+or `data/topics_index.json`, not just after touching the tier code.
+
+**Baseline re-verified at v122, 2026-08-02.** All eight pass:
 check 1 clean, check 2 gives **zero** `min-height` misses, two declared-height
 misses and **11** padding-built targets, check 3 gives `['--token']` only,
-`dead-css.js` reports 428 declared classes with only the two known artefacts, and
+`dead-css.js` reports **436** declared classes with only the two known artefacts,
+`tier-harness.js` reports 0 unowned and 0 multiply-owned tier pairs, and
 `validate.js`, `nav-harness.js` and `snapshot-harness.js` all pass.
 
 > **Every figure in the previous version of this paragraph was stale**, and it is
@@ -181,7 +204,8 @@ modifier. Worth rebuilding for any non-trivial render change — and worth point
 the awkward data, particularly the Intermediate path's `numbers` topic, which sits
 in `path.lessons` but in no stage.
 
-**And after any data change:** `node tools/validate.js`.
+**And after any data change:** `node tools/validate.js`, plus
+`node tools/tier-harness.js` if the change touched paths or topic tiers.
 
 ---
 

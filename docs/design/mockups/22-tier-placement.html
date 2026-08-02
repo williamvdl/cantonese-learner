@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tier placement, and what a tier switch means — mocked on v121</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Noto+Serif+TC:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+    --font-serif:   'Noto Serif TC', 'Fraunces', Georgia, 'Times New Roman', serif;
+    --font-ui:      'Inter', 'Noto Serif TC', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+    --font-display: 'Fraunces', 'Noto Serif TC', Georgia, serif;
+
+    --fs-micro: 11px; --fs-meta: 12px; --fs-small: 13px; --fs-body: 15px;
+    --fs-lead: 17px;  --fs-h3: 22px;   --fs-h2: 28px;    --fs-h1: 36px;
+
+    --lh-heading: 1.25; --lh-body: 1.5;
+    --fw-regular: 400; --fw-medium: 500; --fw-semi: 600; --fw-bold: 700;
+
+    --sp-1: 4px; --sp-2: 8px; --sp-3: 12px; --sp-4: 16px;
+    --sp-5: 24px; --sp-6: 32px; --sp-7: 48px;
+
+    --r-sm: 8px; --r-md: 12px; --r-lg: 16px; --r-pill: 999px;
+    --tap-min: 44px;
+
+    --elev-1: 0 1px 2px rgba(58,42,30,.04), 0 1px 3px rgba(58,42,30,.06);
+    --elev-2: 0 2px 4px rgba(58,42,30,.05), 0 4px 8px rgba(58,42,30,.07);
+
+    --ink: #1C1917; --ink-soft: #292524;
+    --parchment: #FFFFFF; --parchment-warm: #FAF8F5; --parchment-deep: #F0EBE4;
+    --brand: #C2410C; --brand-tint: #FEF0E9; --brand-edge: #F5D9C9; --brand-dark: #9A3412;
+    --jade: #15803D; --jade-tint: #DCFCE7; --jade-edge: #C9E7D3;
+    --muted: #A8A29E; --muted-dark: #78716C;
+    --parchment-border: #EAE4DC;
+    --feedback-bad: #B42318; --feedback-bad-tint: #FEF3F2; --feedback-bad-edge: #F5CFCB;
+    --header-bg: #6E2639; --header-text: #F7EEE8; --header-sub: rgba(255,255,255,.6); --header-icon: #F7EEE8;
+    --milestone: var(--header-bg); --milestone-tint: #FBF0F2; --milestone-edge: #EBD3D9;
+    --measure: 680px; --tabbar-h: 58px; --edge-emph: 3px;
+    --border: 1px solid var(--parchment-border);
+    --border-soft: 1px solid var(--parchment-deep);
+  }
+
+  /* ══════════ page chrome (mockup only) ══════════ */
+  body { margin:0; background:var(--parchment-deep); font-family:var(--font-ui); color:var(--ink); padding:24px 16px 72px; }
+  .wrap { max-width:1240px; margin:0 auto; }
+  h1 { font-family:var(--font-display); font-size:var(--fs-h2); font-weight:var(--fw-medium); margin:0 0 6px; }
+  h2 { font-family:var(--font-display); font-size:var(--fs-lead); font-weight:var(--fw-medium); margin:46px 0 4px; }
+  h3 { font-family:var(--font-ui); font-size:var(--fs-small); font-weight:var(--fw-semi); margin:26px 0 4px; }
+  .lede { font-size:var(--fs-small); line-height:var(--lh-body); color:var(--muted-dark); margin:0 0 8px; max-width:76ch; }
+  .note { font-size:var(--fs-meta); line-height:1.65; color:var(--muted-dark); margin:8px 0 0; max-width:76ch; }
+  .note b { color:var(--ink-soft); }
+  .alarm { border-left:var(--edge-emph) solid var(--feedback-bad); background:var(--feedback-bad-tint); padding:12px 16px; margin:16px 0 0; border-radius:0 var(--r-sm) var(--r-sm) 0; max-width:76ch; }
+  .alarm .h { font-size:var(--fs-micro); font-weight:var(--fw-bold); letter-spacing:.1em; text-transform:uppercase; color:var(--feedback-bad); margin-bottom:5px; }
+  .alarm p { font-size:var(--fs-meta); line-height:1.65; color:var(--ink-soft); margin:0 0 8px; }
+  .alarm p:last-child { margin-bottom:0; }
+  .frames { display:flex; gap:22px; flex-wrap:wrap; align-items:flex-start; margin-top:16px; }
+  .frame { width:268px; }
+  .frame > .cap { font-size:var(--fs-micro); font-weight:var(--fw-semi); letter-spacing:.1em; text-transform:uppercase; color:var(--muted-dark); margin:0 0 8px; }
+  .frame > .cap em { font-style:normal; color:var(--brand); }
+  .frame > .sub { font-size:var(--fs-meta); line-height:1.55; color:var(--muted-dark); margin:9px 0 0; }
+  table { border-collapse:collapse; font-size:var(--fs-meta); margin-top:12px; width:100%; }
+  th,td { text-align:left; padding:7px 10px; border-bottom:var(--border-soft); vertical-align:top; }
+  th { font-size:var(--fs-micro); letter-spacing:.08em; text-transform:uppercase; color:var(--muted-dark); font-weight:var(--fw-semi); }
+  code { font-family:ui-monospace,Menlo,monospace; font-size:11px; background:var(--parchment-deep); padding:1px 5px; border-radius:4px; }
+  .rec { display:inline-block; background:var(--jade-tint); color:var(--jade); font-size:9px; font-weight:var(--fw-semi); letter-spacing:.1em; text-transform:uppercase; padding:3px 6px; border-radius:4px; vertical-align:2px; }
+  .no { display:inline-block; background:#EDE7DE; color:var(--muted-dark); font-size:9px; font-weight:var(--fw-semi); letter-spacing:.1em; text-transform:uppercase; padding:3px 6px; border-radius:4px; vertical-align:2px; }
+  .bug { display:inline-block; background:var(--feedback-bad-tint); color:var(--feedback-bad); font-size:9px; font-weight:var(--fw-semi); letter-spacing:.1em; text-transform:uppercase; padding:3px 6px; border-radius:4px; vertical-align:2px; }
+
+  .phone { position:relative; background:var(--parchment-warm); border:6px solid var(--ink); border-radius:22px; overflow:hidden; height:415px; display:flex; flex-direction:column; }
+  .scroll { flex:1; overflow:hidden; position:relative; }
+
+  /* ══════════ app chrome, v121 ══════════ */
+  .header { background:var(--header-bg); padding:9px var(--sp-4); flex:none; }
+  .header-row { display:flex; align-items:center; gap:var(--sp-2); }
+  .header-slot { flex:0 0 30px; display:flex; align-items:center; justify-content:center; }
+  .header-title { flex:1; display:flex; align-items:center; flex-direction:column; }
+  .header-title .zh { font-size:17px; color:var(--header-text); font-family:var(--font-display); font-weight:var(--fw-bold); letter-spacing:.06em; line-height:1.1; }
+  .header-title .en { font-size:6.5px; color:var(--header-sub); text-transform:uppercase; margin-top:1px; font-weight:var(--fw-bold); letter-spacing:.16em; }
+  .ic { width:28px; height:28px; border:none; background:transparent; color:var(--header-icon); opacity:.72; display:inline-flex; align-items:center; justify-content:center; }
+  .ic svg { width:15px; height:15px; }
+
+  /* context block, as shipped at v121 */
+  .ctx { background:var(--parchment-warm); border-bottom:var(--border-soft); }
+  .ctx-head--split { border-bottom:var(--border-soft); }
+  .ctx-inner { max-width:var(--measure); margin:0 auto; }
+  .ctx-row { display:flex; align-items:center; justify-content:space-between; gap:var(--sp-2); padding:8px var(--sp-4) 7px; }
+  .ctx-back { display:flex; align-items:center; gap:6px; font-family:var(--font-ui); font-size:var(--fs-meta); font-weight:var(--fw-medium); line-height:1.2; color:var(--ink); background:none; border:none; padding:0; }
+  .ctx-back svg { width:14px; height:14px; flex:none; }
+  .ctx-meta { font-family:var(--font-ui); font-size:var(--fs-micro); font-weight:var(--fw-medium); line-height:1; color:var(--muted-dark); white-space:nowrap; }
+  .stepper { display:flex; align-items:center; padding:8px var(--sp-4) 7px; max-width:var(--measure); margin:0 auto; }
+  .sx { display:flex; align-items:center; flex:1; }
+  .sx:last-child { flex:0 0 auto; }
+  .sx-btn { background:none; border:none; padding:0 4px; display:flex; align-items:center; }
+  .node { width:24px; height:24px; border-radius:var(--r-pill); border:var(--border); background:var(--parchment); display:flex; align-items:center; justify-content:center; font-family:var(--font-ui); font-size:10px; font-weight:var(--fw-medium); line-height:1; color:var(--muted-dark); flex:none; }
+  .node svg { width:11px; height:11px; }
+  .node--done { border-color:var(--jade-edge); background:var(--jade-tint); color:var(--jade); }
+  .node--current { border-color:var(--brand); background:var(--brand); color:#fff; }
+  .node--cp { border-radius:var(--r-sm); transform:rotate(45deg); border-color:var(--milestone-edge); background:var(--milestone-tint); color:var(--milestone); }
+  .node--cp > span { transform:rotate(-45deg); display:block; font-size:9px; }
+  .node--cp.node--done { border-color:var(--jade-edge); background:var(--jade-tint); color:var(--jade); }
+  .sline { flex:1; height:1px; background:var(--parchment-border); }
+  .sline.done { background:var(--jade-edge); }
+
+  .content { padding:var(--sp-3) var(--sp-5); }
+  .round-selector { display:flex; gap:6px; margin-bottom:12px; align-items:center; }
+  .round-label { font-size:var(--fs-micro); color:var(--muted-dark); font-weight:var(--fw-bold); letter-spacing:.16em; text-transform:uppercase; margin-right:4px; }
+  .pill { display:inline-flex; align-items:center; justify-content:center; min-height:38px; padding:7px 14px; border-radius:var(--r-pill); border:var(--border); background:transparent; color:var(--muted-dark); font-family:var(--font-ui); font-size:var(--fs-meta); font-weight:var(--fw-medium); line-height:1; }
+  .pill--on { border-color:var(--brand); color:var(--brand); }
+  .lesson-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; }
+  .lesson-title { font-family:var(--font-display); font-size:23px; font-weight:var(--fw-semi); color:var(--ink); margin:0; letter-spacing:-.01em; line-height:var(--lh-heading); }
+  .lesson-count { font-size:var(--fs-meta); color:var(--muted); }
+  .tabs { display:flex; border-bottom:var(--border-soft); padding:var(--sp-2) 0 0; margin-bottom:var(--sp-3); }
+  .tabs .tab { flex:1; display:flex; align-items:center; justify-content:center; gap:6px; padding:0 0 9px; border:none; background:none; color:var(--muted-dark); font-family:var(--font-ui); font-size:var(--fs-meta); font-weight:var(--fw-medium); position:relative; }
+  .tabs .tab svg { width:13px; height:13px; }
+  .tabs .tab--on { color:var(--brand); }
+  .tabs .tab--on::after { content:''; position:absolute; left:0; right:0; bottom:-1px; height:2px; background:var(--brand); }
+  .hint { font-size:10.5px; color:var(--muted); margin-bottom:8px; }
+  .wgrid { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+  .wcard { background:var(--parchment); border:var(--border); border-radius:var(--r-md); padding:9px 10px; box-shadow:var(--elev-1); }
+  .wcard .zh { font-family:var(--font-serif); font-size:18px; color:var(--ink); text-align:center; }
+  .wcard .jy { font-size:9.5px; color:var(--brand); margin-top:3px; text-align:center; font-weight:var(--fw-semi); }
+
+  /* docked bar, v121 */
+  .bar { position:absolute; left:0; right:0; bottom:0; background:var(--parchment); border-top:var(--border-soft); box-shadow:0 -2px 10px rgba(28,25,23,.06); z-index:5; }
+  .bar-inner { max-width:var(--measure); margin:0 auto; padding:var(--sp-2) var(--sp-4); }
+  .bar-row { display:flex; align-items:center; gap:10px; min-height:40px; }
+  .bar-done { display:flex; align-items:center; gap:5px; flex:none; font-size:9.5px; font-weight:var(--fw-semi); text-transform:uppercase; letter-spacing:.08em; color:var(--jade); }
+  .bar-done svg { width:11px; height:11px; }
+  .bar-next { display:flex; align-items:center; gap:var(--sp-2); flex:1; min-width:0; justify-content:flex-end; border:none; background:transparent; padding:0; }
+  .bar-next .node { width:21px; height:21px; border-color:var(--brand-edge); background:var(--brand-tint); color:var(--brand); font-size:9.5px; }
+  .bar-next-txt { min-width:0; text-align:right; }
+  .bar-next-lb { display:block; font-size:8px; font-weight:var(--fw-bold); text-transform:uppercase; letter-spacing:.1em; color:var(--muted-dark); }
+  .bar-next-nm { display:block; font-size:11.5px; font-weight:var(--fw-medium); color:var(--ink); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .bar-go { color:var(--brand); display:flex; flex:none; }
+  .bar-go svg { width:14px; height:14px; }
+
+  /* ══════════ PROPOSED — tier as a meta line under the title ══════════ */
+  .lesson-head2 { margin-bottom:var(--sp-3); }
+  .lesson-head2 .lesson-title { margin-bottom:3px; }
+  .tierline { display:flex; align-items:center; flex-wrap:wrap; gap:2px; min-height:var(--tap-min); margin-left:-9px; }
+  .tier-btn {
+    display:inline-flex; align-items:center; min-height:var(--tap-min); padding:0 9px;
+    border:none; background:none; font-family:var(--font-ui); font-size:var(--fs-meta);
+    font-weight:var(--fw-medium); line-height:1; color:var(--muted-dark); cursor:pointer;
+  }
+  .tier-btn.on { color:var(--brand); font-weight:var(--fw-semi); box-shadow:inset 0 -2px 0 var(--brand); }
+  .tier-sep { color:var(--parchment-border); font-size:var(--fs-meta); }
+  .tier-static { font-family:var(--font-ui); font-size:var(--fs-meta); font-weight:var(--fw-semi); color:var(--brand); padding:0 9px; }
+  .tier-count { font-family:var(--font-ui); font-size:var(--fs-meta); font-weight:var(--fw-regular); color:var(--muted); padding:0 9px; }
+
+  /* B — trailing ghost pill on the title line */
+  .tier-mini { display:inline-flex; align-items:center; min-height:30px; padding:0 10px; border-radius:var(--r-pill); border:var(--border); background:transparent; font-size:var(--fs-micro); font-weight:var(--fw-semi); color:var(--muted-dark); }
+  .tier-mini.on { border-color:var(--brand); color:var(--brand); }
+
+  /* X — the cross-path reference, built on .bar-next's shape */
+  .xref { display:flex; align-items:center; gap:var(--sp-2); width:100%; padding:10px var(--sp-4); border:none; border-top:var(--border-soft); background:transparent; text-align:left; }
+  .xref-node { width:22px; height:22px; border-radius:var(--r-pill); border:1px solid var(--parchment-border); background:var(--parchment); color:var(--muted-dark); display:flex; align-items:center; justify-content:center; font-size:9.5px; font-weight:var(--fw-semi); flex:none; }
+  .xref-txt { flex:1; min-width:0; }
+  .xref-lb { display:block; font-size:8px; font-weight:var(--fw-bold); text-transform:uppercase; letter-spacing:.1em; color:var(--muted-dark); }
+  .xref-nm { display:block; font-size:11.5px; font-weight:var(--fw-medium); color:var(--ink); }
+  .xref-go { color:var(--muted-dark); display:flex; flex:none; }
+  .xref-go svg { width:14px; height:14px; }
+  .xref-card { background:var(--parchment); border:var(--border); border-radius:var(--r-md); margin:var(--sp-4) 0 0; overflow:hidden; }
+  .xref-card .xref { border-top:none; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<h1>Tier placement, and what a tier switch actually means</h1>
+<p class="lede">Mocked on <b>v121</b>. Two questions that turn out to be one: where the tier control sits,
+and what it <i>does</i> when you arrived from a path. The second answers the first. The nameplate reads
+廣東話 (gwong2 dung1 waa2).</p>
+
+<h2>0 · What the data says — this decides most of it</h2>
+<p class="note">Before drawing anything, I counted. <b>Eight of the 42 topics have more than one tier</b>,
+so for 34 topics this control does not render at all (<code>renderRoundSelector()</code> returns
+<code>''</code> below two rounds) and the screen has a second, shorter shape that has never been mocked.
+More importantly:</p>
+
+<table>
+  <tr><th>Topic</th><th>Tier 1 lives in</th><th>Tier 2 lives in</th></tr>
+  <tr><td>Greetings</td><td>Beginner path</td><td><b>Intermediate path</b></td></tr>
+  <tr><td>Numbers</td><td>Beginner path</td><td><b>Intermediate path</b></td></tr>
+  <tr><td>Food &amp; Dishes</td><td>Beginner path</td><td><b>Intermediate path</b></td></tr>
+  <tr><td>Restaurant &amp; Ordering</td><td>Beginner path</td><td><b>Intermediate path</b></td></tr>
+  <tr><td>Body Parts</td><td>Beginner path</td><td><b>Intermediate path</b></td></tr>
+  <tr><td>Shopping</td><td>Beginner path</td><td><b>Intermediate path</b></td></tr>
+  <tr><td>Feelings &amp; Emotions</td><td>Beginner path</td><td><b>Intermediate path</b></td></tr>
+  <tr><td>Friends &amp; Social</td><td>Beginner path</td><td><b>Intermediate path</b></td></tr>
+</table>
+
+<p class="note"><b>No topic appears twice in one path — not once, in 52 path lessons.</b> Every tier of
+every topic belongs to exactly one path, and for all eight multi-tier topics tier 1 is Beginner and tier 2
+is Intermediate. So your question — "does a tier switch mean they've jumped to the path it's part of, or
+just the topic?" — has a factual answer rather than a design answer: <b>switching tier is always crossing
+paths.</b> There is no same-path tier switch in the data, and nothing in the app creates one. The tier
+pills are not a filter on a topic; they are a doorway between two paths wearing a filter's clothes.</p>
+
+<div class="alarm">
+  <div class="h">Found while measuring — this is a live defect, not a design question</div>
+  <p><b>Switching tier inside a path lesson leaves the chrome describing the tier you left, and the
+  completion action writes to the wrong lesson.</b> The handler at <code>[data-round]</code> sets
+  <code>state.currentRound</code> and nothing else. <code>state.fromPathTier</code> and
+  <code>state.activePath</code> are untouched, and <code>getPathContext()</code> reads
+  <code>state.fromPathTier || state.currentRound</code>.</p>
+  <p>So: open Greetings from Beginner, tap Tier 2. The words on screen are the Intermediate path's
+  tier-2 lesson. The context row still says <i>First Words · 2 of 5 · Beginner</i>. The stepper still
+  highlights Greetings as Beginner step 2. The docked bar still offers <i>Next in First Words →
+  Yes/No &amp; Politeness</i>. And <b>tapping "mark complete" calls
+  <code>toggleLessonComplete('beginner', 'greetings', 1)</code></b> — it marks the tier-1 Beginner lesson
+  you are no longer looking at, while the Intermediate lesson you just read stays unstarted.</p>
+  <p>Every option below fixes this, because every option below stops the two states disagreeing. Doing
+  nothing is the only choice that does not.</p>
+</div>
+
+<!-- ══════════════════ 1 · WHAT A SWITCH MEANS ══════════════════ -->
+<h2>1 · What a tier switch should mean, in path context</h2>
+<p class="note">Taking this first, because the answer changes what the control can be. Four ways to
+resolve it.</p>
+
+<table>
+  <tr><th></th><th>Behaviour</th><th>Chrome after the tap</th><th>Verdict</th></tr>
+  <tr><td><b>Now</b></td><td>Content changes, path state does not</td><td>Describes the tier you left</td><td><span class="bug">defect</span></td></tr>
+  <tr><td><b>F</b></td><td><b>Follow</b> — re-enter as a lesson of the owning path</td><td>Correct: Intermediate stage, Intermediate siblings</td><td><span class="no">honest but abrupt</span></td></tr>
+  <tr><td><b>L</b></td><td><b>Lock</b> — no tier control in path context at all</td><td>Unchanged, nothing to disagree</td><td><span class="no">hides content</span></td></tr>
+  <tr><td><b>X</b></td><td><b>Cross-reference</b> — tier is plain text at the top; the other tier is offered at the <i>foot</i>, named, as a deliberate crossing</td><td>Correct, and the crossing is stated before it happens</td><td><span class="rec">pick</span></td></tr>
+</table>
+
+<p class="note"><b>Why not F.</b> Following is honest — the chrome would be right and the completion write
+would be right — but a segmented pill is the wrong affordance for it. A two-up toggle says <i>these are
+two views of the thing you are looking at</i>. It does not say <i>this one is in a different course, and
+taking it moves your place there.</i> A control that quietly relocates you between paths on a single tap,
+from a position that looks like a filter, is the same class of surprise as the current bug, just with
+correct state behind it.</p>
+
+<p class="note"><b>Why not L.</b> Locking removes the disagreement by removing the door, and for eight
+topics that means the tier-2 content is reachable only via Topics or the Intermediate path. It is
+defensible and it is the cheapest fix — but it answers "is this clear to the user?" by making sure they
+never encounter it, and the connection between a topic's two tiers is genuinely useful information.</p>
+
+<p class="note"><b>X keeps the door and moves it to where doors already are.</b> The foot of the lesson is
+already the path action zone (MOCK-10-cont, DES-22), so a forward move that lands somewhere else belongs
+there, not in the header. The top of the screen goes back to stating one fact — which tier you are in —
+and stops offering a control at all. That also fixes the placement problem for free: <b>with no toggle to
+house, the tier is just text, and text fits under the title.</b></p>
+
+<!-- ══════════════════ 2 · FROM A PATH ══════════════════ -->
+<h2>2 · From a path — the eight multi-tier topics</h2>
+
+<div class="frames">
+
+  <div class="frame">
+    <p class="cap">Now · v121</p>
+    <div class="phone">
+      <div class="header"><div class="header-row">
+        <div class="header-slot"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg></span></div>
+        <div class="header-title"><span class="zh">廣東話</span><span class="en">Cantonese Learner</span></div>
+        <div class="header-slot"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="12" r="3.2"/></svg></span></div>
+      </div></div>
+      <div class="scroll">
+        <div class="ctx"><div class="ctx-head ctx-head--split"><div class="ctx-inner"><div class="ctx-row">
+          <button class="ctx-back"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg> First Words</button>
+          <span class="ctx-meta">2 of 5 · Beginner</span>
+        </div></div></div>
+        <div class="stepper">
+          <div class="sx"><span class="sx-btn"><span class="node node--done"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span></span><span class="sline done"></span></div>
+          <div class="sx"><span class="sx-btn"><span class="node node--current">2</span></span><span class="sline"></span></div>
+          <div class="sx"><span class="sx-btn"><span class="node">3</span></span><span class="sline"></span></div>
+          <div class="sx"><span class="sx-btn"><span class="node">4</span></span><span class="sline"></span></div>
+          <div class="sx"><span class="sx-btn"><span class="node">5</span></span><span class="sline"></span></div>
+          <div class="sx"><span class="sx-btn"><span class="node node--cp"><span>◆</span></span></span></div>
+        </div></div>
+        <div class="content">
+          <div class="round-selector"><span class="round-label">Tier:</span><span class="pill pill--on">Tier 1</span><span class="pill">Tier 2</span></div>
+          <div class="lesson-header"><h2 class="lesson-title">Greetings</h2><span class="lesson-count">10 words</span></div>
+          <div class="tabs">
+            <button class="tab tab--on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 7v14"/><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"/></svg><span>Learn</span></button>
+            <button class="tab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22z"/></svg><span>Chat</span></button>
+            <button class="tab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.42 10.922a1 1 0 0 0-.019-1.838L12.83 5.18a2 2 0 0 0-1.66 0L2.6 9.08a1 1 0 0 0 0 1.832l8.57 3.908a2 2 0 0 0 1.66 0z"/><path d="M22 10v6"/><path d="M6 12.5V16a6 3 0 0 0 12 0v-3.5"/></svg><span>Quiz</span></button>
+          </div>
+          <div class="wgrid"><div class="wcard"><div class="zh">你好</div><div class="jy">nei5 hou2</div></div><div class="wcard"><div class="zh">早晨</div><div class="jy">zou2 san4</div></div></div>
+        </div>
+      </div>
+    </div>
+    <p class="sub"><b>~101px</b> from the context block to the title: a 38px pill row, 12px, then the
+    title row. The pills are the loudest thing above the fold, and they are the one control on the screen
+    that currently misbehaves.</p>
+  </div>
+
+  <div class="frame">
+    <p class="cap">X · <em>tier as text, crossing at the foot</em> <span class="rec">pick</span></p>
+    <div class="phone">
+      <div class="header"><div class="header-row">
+        <div class="header-slot"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg></span></div>
+        <div class="header-title"><span class="zh">廣東話</span><span class="en">Cantonese Learner</span></div>
+        <div class="header-slot"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="12" r="3.2"/></svg></span></div>
+      </div></div>
+      <div class="scroll">
+        <div class="ctx"><div class="ctx-head ctx-head--split"><div class="ctx-inner"><div class="ctx-row">
+          <button class="ctx-back"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg> First Words</button>
+          <span class="ctx-meta">2 of 5 · Beginner</span>
+        </div></div></div>
+        <div class="stepper">
+          <div class="sx"><span class="sx-btn"><span class="node node--done"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span></span><span class="sline done"></span></div>
+          <div class="sx"><span class="sx-btn"><span class="node node--current">2</span></span><span class="sline"></span></div>
+          <div class="sx"><span class="sx-btn"><span class="node">3</span></span><span class="sline"></span></div>
+          <div class="sx"><span class="sx-btn"><span class="node">4</span></span><span class="sline"></span></div>
+          <div class="sx"><span class="sx-btn"><span class="node">5</span></span><span class="sline"></span></div>
+          <div class="sx"><span class="sx-btn"><span class="node node--cp"><span>◆</span></span></span></div>
+        </div></div>
+        <div class="content">
+          <div class="lesson-head2">
+            <h2 class="lesson-title">Greetings</h2>
+            <div class="tierline">
+              <span class="tier-static">Tier 1</span><span class="tier-sep">·</span><span class="tier-count">10 words</span>
+            </div>
+          </div>
+          <div class="tabs">
+            <button class="tab tab--on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 7v14"/><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"/></svg><span>Learn</span></button>
+            <button class="tab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22z"/></svg><span>Chat</span></button>
+            <button class="tab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.42 10.922a1 1 0 0 0-.019-1.838L12.83 5.18a2 2 0 0 0-1.66 0L2.6 9.08a1 1 0 0 0 0 1.832l8.57 3.908a2 2 0 0 0 1.66 0z"/><path d="M22 10v6"/><path d="M6 12.5V16a6 3 0 0 0 12 0v-3.5"/></svg><span>Quiz</span></button>
+          </div>
+          <div class="wgrid">
+            <div class="wcard"><div class="zh">你好</div><div class="jy">nei5 hou2</div></div>
+            <div class="wcard"><div class="zh">早晨</div><div class="jy">zou2 san4</div></div>
+            <div class="wcard"><div class="zh">晚上好</div><div class="jy">maan5 soeng6 hou2</div></div>
+            <div class="wcard"><div class="zh">再見</div><div class="jy">zoi3 gin3</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <p class="sub"><b>~62px</b> to the title — 39px saved, and one full extra row of word cards above the
+    fold. Tier is a fact, not a control. The crossing lives at the foot; see below.</p>
+  </div>
+
+  <div class="frame">
+    <p class="cap">X · the foot of the same lesson</p>
+    <div class="phone">
+      <div class="header"><div class="header-row">
+        <div class="header-slot"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg></span></div>
+        <div class="header-title"><span class="zh">廣東話</span><span class="en">Cantonese Learner</span></div>
+        <div class="header-slot"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="12" r="3.2"/></svg></span></div>
+      </div></div>
+      <div class="scroll">
+        <div class="content" style="padding-top:var(--sp-4)">
+          <div class="wgrid">
+            <div class="wcard"><div class="zh">唔該</div><div class="jy">m4 goi1</div></div>
+            <div class="wcard"><div class="zh">多謝</div><div class="jy">do1 ze6</div></div>
+            <div class="wcard"><div class="zh">對唔住</div><div class="jy">deoi3 m4 zyu6</div></div>
+            <div class="wcard"><div class="zh">唔緊要</div><div class="jy">m4 gan2 jiu3</div></div>
+          </div>
+          <div class="xref-card">
+            <button class="xref">
+              <span class="xref-node">2</span>
+              <span class="xref-txt">
+                <span class="xref-lb">Also in the Intermediate path</span>
+                <span class="xref-nm">Greetings · Tier 2 — 10 more words</span>
+              </span>
+              <span class="xref-go"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span>
+            </button>
+          </div>
+        </div>
+        <div class="bar"><div class="bar-inner"><div class="bar-row">
+          <span class="bar-done"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg> Complete</span>
+          <button class="bar-next"><span class="bar-next-txt"><span class="bar-next-lb">Next in First Words</span><span class="bar-next-nm">Yes/No &amp; Politeness</span></span><span class="node">3</span><span class="bar-go"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span></button>
+        </div></div></div>
+      </div>
+    </div>
+    <p class="sub"><b>The crossing is named before it is taken</b> — which path, which tier, how much. It
+    sits <i>above</i> the docked bar and is deliberately quieter: outline node, muted arrow, no brand fill.
+    The path's own forward step keeps the brand. Only rendered for the eight topics that have a second
+    tier; absent for the other 34.</p>
+  </div>
+</div>
+
+<p class="note"><b>Taking the crossing calls <code>openPathLesson()</code> with the owning path.</b> It is
+the same function the timeline steps and the stepper siblings already use, so nothing new resets state —
+which also means <code>state.activePath</code>, <code>state.fromPathTier</code> and the chrome all move
+together by construction, and the mark-complete write lands on the lesson you are actually reading. The
+defect closes as a side effect of the navigation being real navigation.</p>
+
+<!-- ══════════════════ 3 · FROM TOPICS ══════════════════ -->
+<h2>3 · From Topics — where a real toggle still makes sense</h2>
+<p class="note">Opened from Topics there is no path context to contradict, and no completion write to land
+on the wrong lesson. A tier switch here is what it looks like: two rounds of one topic. <b>So the control
+stays — but as the meta line under the title, not a pill row above it.</b> Same line, same position, same
+type as option X's static version; the difference is that the tiers are live.</p>
+
+<div class="frames">
+  <div class="frame">
+    <p class="cap">A · <em>tiers in the meta line</em> <span class="rec">pick</span></p>
+    <div class="phone">
+      <div class="header"><div class="header-row">
+        <div class="header-slot"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg></span></div>
+        <div class="header-title"><span class="zh">廣東話</span><span class="en">Cantonese Learner</span></div>
+        <div class="header-slot"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="12" r="3.2"/></svg></span></div>
+      </div></div>
+      <div class="scroll">
+        <div class="ctx"><div class="ctx-head"><div class="ctx-inner"><div class="ctx-row">
+          <button class="ctx-back"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg> Topics</button>
+          <span class="ctx-meta">Everyday Essentials</span>
+        </div></div></div></div>
+        <div class="content">
+          <div class="lesson-head2">
+            <h2 class="lesson-title">Greetings</h2>
+            <div class="tierline">
+              <button class="tier-btn on">Tier 1</button><span class="tier-sep">·</span><button class="tier-btn">Tier 2</button><span class="tier-sep">·</span><span class="tier-count">10 words</span>
+            </div>
+          </div>
+          <div class="tabs">
+            <button class="tab tab--on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 7v14"/><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"/></svg><span>Learn</span></button>
+            <button class="tab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22z"/></svg><span>Chat</span></button>
+            <button class="tab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.42 10.922a1 1 0 0 0-.019-1.838L12.83 5.18a2 2 0 0 0-1.66 0L2.6 9.08a1 1 0 0 0 0 1.832l8.57 3.908a2 2 0 0 0 1.66 0z"/><path d="M22 10v6"/><path d="M6 12.5V16a6 3 0 0 0 12 0v-3.5"/></svg><span>Quiz</span></button>
+          </div>
+          <div class="wgrid">
+            <div class="wcard"><div class="zh">你好</div><div class="jy">nei5 hou2</div></div>
+            <div class="wcard"><div class="zh">早晨</div><div class="jy">zou2 san4</div></div>
+            <div class="wcard"><div class="zh">晚上好</div><div class="jy">maan5 soeng6 hou2</div></div>
+            <div class="wcard"><div class="zh">再見</div><div class="jy">zoi3 gin3</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <p class="sub">Underline marks the active tier — the same language the subtabs use one row below, and
+    §3.1-safe because it adds no filled element. Each <code>.tier-btn</code> is a 44px target built from
+    <code>min-height</code>, not padding, so standing check 2 can see it. The row is negatively inset 9px
+    so the text aligns with the title above it despite the tap padding.</p>
+  </div>
+
+  <div class="frame">
+    <p class="cap">B · trailing the title</p>
+    <div class="phone">
+      <div class="header"><div class="header-row">
+        <div class="header-slot"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg></span></div>
+        <div class="header-title"><span class="zh">廣東話</span><span class="en">Cantonese Learner</span></div>
+        <div class="header-slot"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="12" r="3.2"/></svg></span></div>
+      </div></div>
+      <div class="scroll">
+        <div class="ctx"><div class="ctx-head"><div class="ctx-inner"><div class="ctx-row">
+          <button class="ctx-back"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg> Topics</button>
+          <span class="ctx-meta">Everyday Essentials</span>
+        </div></div></div></div>
+        <div class="content">
+          <div class="lesson-header" style="gap:var(--sp-2);margin-bottom:6px">
+            <h2 class="lesson-title">Greetings</h2>
+            <span style="display:flex;gap:5px;flex:none"><span class="tier-mini on">T1</span><span class="tier-mini">T2</span></span>
+          </div>
+          <div class="tierline" style="min-height:0;margin-left:0;margin-bottom:var(--sp-3)"><span class="tier-count" style="padding-left:0">10 words</span></div>
+          <div class="tabs">
+            <button class="tab tab--on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 7v14"/><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"/></svg><span>Learn</span></button>
+            <button class="tab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22z"/></svg><span>Chat</span></button>
+            <button class="tab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.42 10.922a1 1 0 0 0-.019-1.838L12.83 5.18a2 2 0 0 0-1.66 0L2.6 9.08a1 1 0 0 0 0 1.832l8.57 3.908a2 2 0 0 0 1.66 0z"/><path d="M22 10v6"/><path d="M6 12.5V16a6 3 0 0 0 12 0v-3.5"/></svg><span>Quiz</span></button>
+          </div>
+          <div class="wgrid">
+            <div class="wcard"><div class="zh">你好</div><div class="jy">nei5 hou2</div></div>
+            <div class="wcard"><div class="zh">早晨</div><div class="jy">zou2 san4</div></div>
+            <div class="wcard"><div class="zh">晚上好</div><div class="jy">maan5 soeng6 hou2</div></div>
+            <div class="wcard"><div class="zh">再見</div><div class="jy">zoi3 gin3</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <p class="sub">Tighter, but it <b>fails the tap minimum</b> as drawn — 30px pills, and growing them to
+    44px makes the title row 44px tall and pushes the title's baseline off centre. Abbreviating to T1 / T2
+    to fit is a second cost. Shown because it is the obvious alternative, not because I would take it.</p>
+  </div>
+
+  <div class="frame">
+    <p class="cap">Either option · a single-tier topic</p>
+    <div class="phone">
+      <div class="header"><div class="header-row">
+        <div class="header-slot"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg></span></div>
+        <div class="header-title"><span class="zh">廣東話</span><span class="en">Cantonese Learner</span></div>
+        <div class="header-slot"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="12" r="3.2"/></svg></span></div>
+      </div></div>
+      <div class="scroll">
+        <div class="ctx"><div class="ctx-head"><div class="ctx-inner"><div class="ctx-row">
+          <button class="ctx-back"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg> Topics</button>
+          <span class="ctx-meta">People &amp; Relationships</span>
+        </div></div></div></div>
+        <div class="content">
+          <div class="lesson-head2">
+            <h2 class="lesson-title">Me, You &amp; Them</h2>
+            <div class="tierline" style="min-height:26px"><span class="tier-count" style="padding-left:0">14 words</span></div>
+          </div>
+          <div class="tabs">
+            <button class="tab tab--on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 7v14"/><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"/></svg><span>Learn</span></button>
+            <button class="tab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22z"/></svg><span>Chat</span></button>
+            <button class="tab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.42 10.922a1 1 0 0 0-.019-1.838L12.83 5.18a2 2 0 0 0-1.66 0L2.6 9.08a1 1 0 0 0 0 1.832l8.57 3.908a2 2 0 0 0 1.66 0z"/><path d="M22 10v6"/><path d="M6 12.5V16a6 3 0 0 0 12 0v-3.5"/></svg><span>Quiz</span></button>
+          </div>
+          <div class="wgrid">
+            <div class="wcard"><div class="zh">我</div><div class="jy">ngo5</div></div>
+            <div class="wcard"><div class="zh">你</div><div class="jy">nei5</div></div>
+            <div class="wcard"><div class="zh">佢</div><div class="jy">keoi5</div></div>
+            <div class="wcard"><div class="zh">我哋</div><div class="jy">ngo5 dei6</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <p class="sub"><b>34 of 42 topics look like this</b> and the current build has never been drawn in this
+    state. The meta line degrades to the word count alone and the shape does not change — which is the
+    argument for the line existing at all rather than being conditional chrome.</p>
+  </div>
+</div>
+
+<!-- ══════════════════ 4 · SUMMARY ══════════════════ -->
+<h2>4 · What this costs</h2>
+
+<table>
+  <tr><th>Change</th><th>Where</th><th>Size</th></tr>
+  <tr><td><code>.round-selector</code> / <code>.round-label</code> retired; <code>.tierline</code>, <code>.tier-btn</code>, <code>.tier-static</code>, <code>.tier-count</code> added</td><td><code>styles.css</code></td><td>4 rules out, 4 in</td></tr>
+  <tr><td><code>renderRoundSelector()</code> folded into <code>renderLessonHeader()</code> — one function renders the title, tier and count together instead of two functions stacking</td><td><code>render.js</code></td><td>small</td></tr>
+  <tr><td>The <code>[data-round]</code> handler becomes standalone-only</td><td><code>render.js</code></td><td>small</td></tr>
+  <tr><td>A topic→(path, tier) lookup for the cross-reference. <b>Does not exist yet</b> — nothing currently asks "which path owns this tier of this topic"</td><td><code>app.js</code></td><td>one helper</td></tr>
+  <tr><td><code>.xref</code> / <code>.xref-*</code>, reusing <code>.bar-next</code>'s shape at a lower emphasis</td><td><code>styles.css</code></td><td>6 rules</td></tr>
+  <tr><td>The defect closes by construction — the crossing calls <code>openPathLesson()</code></td><td>—</td><td>none</td></tr>
+</table>
+
+<p class="note"><b>One thing I could not settle from the data, and would not guess at.</b> The cross-reference
+assumes a learner on the Beginner path should be <i>able</i> to walk into an Intermediate lesson from
+inside a topic. Nothing in the app is locked ("Tap any to jump in — nothing is locked"), so it is
+consistent — but it is also the only place where one path offers a door into another, and it does so at
+the exact moment someone is mid-way through the first. <b>Option L (no door at all) is the honest
+alternative if that is not wanted</b>, and it is strictly less work. This is the choice worth making
+deliberately rather than inheriting from the mockup.</p>
+
+</div>
+</body>
+</html>

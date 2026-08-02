@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Topic top area + path landing type — mocked on v120</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Noto+Serif+TC:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+    --font-serif:   'Noto Serif TC', 'Fraunces', Georgia, 'Times New Roman', serif;
+    --font-ui:      'Inter', 'Noto Serif TC', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+    --font-display: 'Fraunces', 'Noto Serif TC', Georgia, serif;
+
+    --fs-micro:   11px;  --fs-meta:  12px;  --fs-small: 13px;
+    --fs-body:    15px;  --fs-lead:  17px;  --fs-h3:    22px;
+    --fs-h2:      28px;  --fs-h1:    36px;  --fs-display: 56px;
+
+    --lh-display: 1.1;   --lh-heading: 1.25;  --lh-body: 1.5;
+    --fw-regular: 400;   --fw-medium: 500;    --fw-semi: 600;  --fw-bold: 700;
+
+    --sp-1: 4px;  --sp-2: 8px;  --sp-3: 12px; --sp-4: 16px;
+    --sp-5: 24px; --sp-6: 32px; --sp-7: 48px; --sp-8: 64px;
+
+    --r-sm: 8px; --r-md: 12px; --r-lg: 16px; --r-pill: 999px;
+    --tap-min: 44px;
+
+    --elev-1: 0 1px 2px rgba(58,42,30,.04), 0 1px 3px rgba(58,42,30,.06);
+    --elev-2: 0 2px 4px rgba(58,42,30,.05), 0 4px 8px rgba(58,42,30,.07);
+
+    --ink:            #1C1917;
+    --ink-soft:       #292524;
+    --parchment:      #FFFFFF;
+    --parchment-warm: #FAF8F5;
+    --parchment-deep: #F0EBE4;
+    --brand:          #C2410C;
+    --jade:           #15803D;
+    --muted:          #A8A29E;
+    --muted-dark:     #78716C;
+    --brand-tint:     #FEF0E9;
+    --brand-edge:     #F5D9C9;
+    --jade-tint:      #DCFCE7;
+    --jade-edge:      #C9E7D3;
+    --parchment-border: #EAE4DC;
+    --header-bg:      #6E2639;
+    --header-text:    #F7EEE8;
+    --header-sub:     rgba(255,255,255,.6);
+    --header-icon:    #F7EEE8;
+    --milestone:      var(--header-bg);
+    --milestone-tint: #FBF0F2;
+    --milestone-edge: #EBD3D9;
+    --measure:      680px;
+    --tabbar-h:     58px;
+    --edge-emph:    3px;
+    --border:       1px solid var(--parchment-border);
+    --border-soft:  1px solid var(--parchment-deep);
+  }
+
+  /* ══════════ page chrome (mockup only) ══════════ */
+  body { margin:0; background:var(--parchment-deep); font-family:var(--font-ui); color:var(--ink); padding:24px 16px 72px; }
+  .wrap { max-width:1240px; margin:0 auto; }
+  h1 { font-family:var(--font-display); font-size:var(--fs-h2); font-weight:var(--fw-medium); margin:0 0 6px; }
+  h2 { font-family:var(--font-display); font-size:var(--fs-lead); font-weight:var(--fw-medium); margin:44px 0 4px; }
+  h3 { font-family:var(--font-ui); font-size:var(--fs-small); font-weight:var(--fw-semi); margin:24px 0 4px; }
+  .lede { font-size:var(--fs-small); line-height:var(--lh-body); color:var(--muted-dark); margin:0 0 8px; max-width:74ch; }
+  .note { font-size:var(--fs-meta); line-height:1.65; color:var(--muted-dark); margin:8px 0 0; max-width:74ch; }
+  .note b { color:var(--ink-soft); }
+  .frames { display:flex; gap:22px; flex-wrap:wrap; align-items:flex-start; margin-top:16px; }
+  .frame { width:268px; }
+  .frame > .cap { font-size:var(--fs-micro); font-weight:var(--fw-semi); letter-spacing:.1em; text-transform:uppercase; color:var(--muted-dark); margin:0 0 8px; }
+  .frame > .cap em { font-style:normal; color:var(--brand); }
+  .frame > .sub { font-size:var(--fs-meta); line-height:1.55; color:var(--muted-dark); margin:9px 0 0; }
+  table { border-collapse:collapse; font-size:var(--fs-meta); margin-top:12px; width:100%; }
+  th,td { text-align:left; padding:7px 10px; border-bottom:var(--border-soft); vertical-align:top; }
+  th { font-size:var(--fs-micro); letter-spacing:.08em; text-transform:uppercase; color:var(--muted-dark); font-weight:var(--fw-semi); }
+  code { font-family:ui-monospace,Menlo,monospace; font-size:11px; background:var(--parchment-deep); padding:1px 5px; border-radius:4px; }
+  .rec { display:inline-block; background:var(--jade-tint); color:var(--jade); font-size:9px; font-weight:var(--fw-semi); letter-spacing:.1em; text-transform:uppercase; padding:3px 6px; border-radius:4px; vertical-align:2px; }
+  .no  { display:inline-block; background:#EDE7DE; color:var(--muted-dark); font-size:9px; font-weight:var(--fw-semi); letter-spacing:.1em; text-transform:uppercase; padding:3px 6px; border-radius:4px; vertical-align:2px; }
+
+  .phone { position:relative; background:var(--parchment-warm); border:6px solid var(--ink); border-radius:22px; overflow:hidden; height:430px; display:flex; flex-direction:column; }
+  .scroll { flex:1; overflow:hidden; position:relative; }
+
+  /* ══════════ app chrome, as at v120 ══════════ */
+  .header { background:var(--header-bg); padding:10px var(--sp-4); flex:none; }
+  .header-row { display:flex; align-items:center; gap:var(--sp-2); }
+  .header-slot { flex:0 0 34px; display:flex; align-items:center; justify-content:center; }
+  .header-title { flex:1; display:flex; align-items:center; flex-direction:column; }
+  .header-title .zh { font-size:18px; color:var(--header-text); font-family:var(--font-display); font-weight:var(--fw-bold); letter-spacing:.06em; line-height:1.1; }
+  .header-title .en { font-size:7px; color:var(--header-sub); text-transform:uppercase; margin-top:1px; font-weight:var(--fw-bold); letter-spacing:.16em; }
+  .ic { width:30px; height:30px; border:none; background:transparent; color:var(--header-icon); opacity:.72; display:inline-flex; align-items:center; justify-content:center; }
+  .ic svg { width:16px; height:16px; }
+
+  .tabs--top { display:flex; background:var(--parchment); border-top:var(--border-soft); flex:none; box-shadow:var(--elev-2); }
+  .tabs--top .tab { flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:3px; padding:6px 0 5px; border:none; border-top:2px solid transparent; background:transparent; color:var(--muted-dark); font-family:var(--font-ui); font-weight:var(--fw-medium); }
+  .tabs--top .tab svg { width:16px; height:16px; }
+  .tabs--top .tab span:last-child { font-size:8px; letter-spacing:.06em; text-transform:uppercase; }
+  .tabs--top .tab--on { color:var(--brand); border-top-color:var(--brand); }
+
+  /* ── context row (styles.css v120) ── */
+  .ctx { background:var(--parchment-warm); }
+  .ctx-inner { max-width:var(--measure); margin:0 auto; }
+  .ctx-row { display:flex; align-items:center; justify-content:space-between; gap:var(--sp-2); padding:8px var(--sp-4) 7px; }
+  .ctx-back { display:flex; align-items:center; gap:6px; font-family:var(--font-ui); font-size:var(--fs-meta); font-weight:var(--fw-medium); line-height:1.2; color:var(--ink); background:none; border:none; padding:0; }
+  .ctx-back svg { width:14px; height:14px; flex:none; }
+  .ctx-meta { font-family:var(--font-ui); font-size:10.5px; font-weight:var(--fw-medium); line-height:1; color:var(--muted-dark); white-space:nowrap; }
+  .ctx-track { height:2px; background:var(--parchment-deep); }
+  .ctx-fill { height:2px; background:var(--brand); }
+
+  /* ── stage stepper (styles.css v120) ── */
+  .stepper { display:flex; align-items:center; padding:10px var(--sp-4) 9px; max-width:var(--measure); margin:0 auto; }
+  .sx { display:flex; align-items:center; flex:1; }
+  .sx:last-child { flex:0 0 auto; }
+  .sx-btn { background:none; border:none; padding:0 4px; display:flex; align-items:center; }
+  .node { width:24px; height:24px; border-radius:var(--r-pill); border:var(--border); background:var(--parchment); display:flex; align-items:center; justify-content:center; font-family:var(--font-ui); font-size:10px; font-weight:var(--fw-medium); line-height:1; color:var(--muted-dark); flex:none; }
+  .node svg { width:11px; height:11px; }
+  .node--done { border-color:var(--jade-edge); background:var(--jade-tint); color:var(--jade); }
+  .node--current { border-color:var(--brand); background:var(--brand); color:#fff; }
+  .node--cp { border-radius:var(--r-sm); transform:rotate(45deg); border-color:var(--milestone-edge); background:var(--milestone-tint); color:var(--milestone); }
+  .node--cp > span { transform:rotate(-45deg); display:block; font-size:9px; }
+  .node--cp.node--done { border-color:var(--jade-edge); background:var(--jade-tint); color:var(--jade); }
+  .sline { flex:1; height:1px; background:var(--parchment-border); }
+  .sline.done { background:var(--jade-edge); }
+
+  /* ── content column ── */
+  .content { padding:var(--sp-3) var(--sp-5); }
+  .back-home-btn { display:inline-flex; align-items:center; gap:5px; background:transparent; border:none; color:var(--muted-dark); font-size:var(--fs-small); padding:6px 0; margin-bottom:var(--sp-3); font-weight:var(--fw-semi); }
+  .back-home-btn svg { width:14px; height:14px; }
+  .round-selector { display:flex; gap:6px; margin-bottom:12px; align-items:center; }
+  .round-label { font-size:var(--fs-micro); color:var(--muted-dark); font-weight:var(--fw-bold); letter-spacing:.16em; text-transform:uppercase; margin-right:4px; font-family:var(--font-ui); }
+  .pill { display:inline-flex; align-items:center; justify-content:center; padding:7px 14px; border-radius:var(--r-pill); border:var(--border); background:transparent; color:var(--muted-dark); font-family:var(--font-ui); font-size:var(--fs-meta); font-weight:var(--fw-medium); line-height:1; }
+  .pill--on { border-color:var(--brand); color:var(--brand); }
+  .lesson-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; }
+  .lesson-title { font-family:var(--font-display); font-size:24px; font-weight:var(--fw-semi); color:var(--ink); margin:0; letter-spacing:-.01em; line-height:var(--lh-heading); }
+  .lesson-count { font-size:var(--fs-meta); color:var(--muted); }
+  .tabs { display:flex; border-bottom:var(--border-soft); padding:var(--sp-2) 0 0; margin-bottom:var(--sp-3); }
+  .tabs .tab { flex:1; display:flex; align-items:center; justify-content:center; gap:6px; padding:0 0 9px; border:none; background:none; color:var(--muted-dark); font-family:var(--font-ui); font-size:var(--fs-meta); font-weight:var(--fw-medium); position:relative; }
+  .tabs .tab svg { width:13px; height:13px; }
+  .tabs .tab--on { color:var(--brand); }
+  .tabs .tab--on::after { content:''; position:absolute; left:0; right:0; bottom:-1px; height:2px; background:var(--brand); }
+  .hint { font-size:10.5px; color:var(--muted); margin-bottom:8px; }
+  .wcard { background:var(--parchment); border:var(--border); border-radius:var(--r-md); padding:10px 12px; box-shadow:var(--elev-1); }
+  .wcard .zh { font-family:var(--font-serif); font-size:19px; color:var(--ink); text-align:center; }
+  .wcard .jy { font-size:10px; color:var(--brand); margin-top:3px; text-align:center; font-weight:var(--fw-semi); }
+  .wgrid { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+
+  /* ══════════ PROPOSED: option A — one context band with a real edge ══════════ */
+  .ctxA { background:var(--parchment-warm); border-bottom:var(--border-soft); }
+  .ctxA .ctx-row { padding:9px var(--sp-4) 3px; }
+  .ctxA .stepper { padding:6px var(--sp-4) 10px; }
+  .ctxA .ctx-meta { font-size:var(--fs-micro); }
+
+  /* ══════════ PROPOSED: option B — band tinted, hairline is the edge ══════════ */
+  .ctxB { background:var(--parchment-deep); }
+  .ctxB .ctx-row { padding:9px var(--sp-4) 3px; }
+  .ctxB .stepper { padding:6px var(--sp-4) 10px; }
+  .ctxB .ctx-meta { font-size:var(--fs-micro); }
+  .ctxB .node { background:var(--parchment-warm); }
+  .ctxB .ctx-track { background:rgba(110,38,57,.14); }
+  .ctxB .ctx-fill  { background:var(--milestone); }
+
+  /* ══════════ path landing ══════════ */
+  .path-list { padding:12px 20px; }
+  .page-header { margin-bottom:var(--sp-4); }
+  .page-header-title { font-size:var(--fs-h3); font-weight:var(--fw-bold); color:var(--ink-soft); letter-spacing:-.01em; line-height:var(--lh-heading); display:flex; align-items:center; gap:var(--sp-2); margin:0 0 var(--sp-1); }
+  .page-header-sub { font-family:var(--font-ui); font-size:var(--fs-meta); font-weight:var(--fw-regular); color:var(--muted-dark); line-height:var(--lh-body); margin:0; }
+  .page-header-emoji { font-size:.85em; }
+  .path-level-header { font-size:10px; font-weight:var(--fw-bold); text-transform:uppercase; color:var(--muted-dark); margin:14px 2px 8px; }
+  .card { background:var(--parchment); border:var(--border); border-radius:var(--r-md); box-shadow:var(--elev-1); }
+  .path-card { padding:12px; margin-bottom:10px; }
+  .path-card-top { display:flex; align-items:center; gap:10px; margin-bottom:7px; }
+  .path-card-icon { font-size:20px; line-height:1; }
+  .path-card-title { flex:1; font-weight:var(--fw-bold); color:var(--ink); }
+  .path-card-desc { font-family:var(--font-ui); font-size:11px; color:var(--muted-dark); margin-bottom:8px; line-height:1.45; font-weight:var(--fw-regular); }
+  .path-card-progress { display:flex; align-items:center; gap:8px; }
+  .path-progress-bar { flex:1; height:5px; background:var(--parchment-border); border-radius:var(--r-pill); overflow:hidden; }
+  .path-progress-fill { height:100%; background:var(--brand); }
+  .path-progress-count { font-size:10px; color:var(--muted-dark); font-weight:var(--fw-bold); white-space:nowrap; }
+  .tag { display:inline-flex; align-items:center; padding:3px 8px; border-radius:var(--r-pill); border:var(--border); color:var(--muted); font-size:8px; font-weight:var(--fw-semi); letter-spacing:.1em; text-transform:uppercase; }
+
+  /* NOW — as at v120: --font-serif on Latin titles */
+  .now .page-header-title { font-family:var(--font-serif); }
+  .now .path-card-title   { font-family:var(--font-serif); font-size:var(--fs-lead); }
+  .now .path-level-header { font-family:var(--font-ui); letter-spacing:2px; }
+
+  /* FIX — --font-display on Latin titles, per DESIGN_SYSTEM §1 */
+  .fix .page-header-title { font-family:var(--font-display); font-weight:var(--fw-semi); }
+  .fix .path-card-title   { font-family:var(--font-display); font-size:var(--fs-lead); font-weight:var(--fw-semi); }
+  .fix .path-level-header { font-family:var(--font-ui); letter-spacing:.16em; }
+
+  .type-row { display:flex; gap:28px; flex-wrap:wrap; margin-top:14px; }
+  .type-spec { background:var(--parchment); border:var(--border); border-radius:var(--r-md); padding:14px 18px; }
+  .type-spec .lbl { font-size:9px; letter-spacing:.12em; text-transform:uppercase; color:var(--muted-dark); font-weight:var(--fw-bold); margin-bottom:6px; }
+  .type-spec .smp { font-size:26px; line-height:1.2; color:var(--ink); }
+  .type-spec .whr { font-size:10.5px; color:var(--muted-dark); margin-top:8px; font-family:ui-monospace,Menlo,monospace; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<h1>Topic top area, and type on the learning path</h1>
+<p class="lede">Mocked against <b>v120</b>. Two unrelated problems that happen to sit next to each other in
+the same journey: the stack of chrome above a lesson, and the fact that <b>two different serifs are doing
+the job of one</b> across the path screens. The nameplate reads 廣東話 (gwong2 dung1 waa2).</p>
+
+<p class="note"><b>What is measured, not assumed.</b> Every "now" frame below is transcribed from
+<code>styles.css</code> at v120 rather than drawn from memory. The type finding is a count of
+<code>var(--font-serif)</code> call sites: <b>10 in total</b>, of which <b>2 are correct</b>
+(<code>.wm</code>, the watermark, and <code>.cp-missed-c</code>, which is Chinese) and <b>8 are Latin
+titles or numerals</b> that DESIGN_SYSTEM §1 assigns to <code>--font-display</code>.</p>
+
+<!-- ══════════════════ 1 · CONTEXT BLOCK ══════════════════ -->
+<h2>1 · The context block, arriving from a path</h2>
+<p class="note">Three elements stack under the header with nothing to tell them apart: the context row, a
+2px progress track, and the stage stepper. All three sit on <code>--parchment-warm</code>, which is also
+the page background — so the block has <b>no edges at all</b>, and the only visible boundary in the whole
+region is the track. When a stage is fully complete the track fills to 100% and becomes a
+<b>full-bleed orange rule through the middle of the screen</b>, which is what it is doing on First Words
+in the device screenshot. Mockup 10 gave the lesson band a <code>border-bottom</code>; nothing in the
+built version has one.</p>
+
+<div class="frames">
+
+  <div class="frame">
+    <p class="cap">Now · v120</p>
+    <div class="phone">
+      <div class="header"><div class="header-row">
+        <div class="header-slot"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg></span></div>
+        <div class="header-title"><span class="zh">廣東話</span><span class="en">Cantonese Learner</span></div>
+        <div class="header-slot"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="12" r="3.2"/><path d="M19.1 14.5a1.6 1.6 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.6 1.6 0 0 0-1.8-.3 1.6 1.6 0 0 0-1 1.5v.2a2 2 0 1 1-4 0v-.1a1.6 1.6 0 0 0-1-1.5 1.6 1.6 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.6 1.6 0 0 0 .3-1.8 1.6 1.6 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.6 1.6 0 0 0 1.5-1 1.6 1.6 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.6 1.6 0 0 0 1.8.3h.1a1.6 1.6 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.6 1.6 0 0 0 1 1.5 1.6 1.6 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.6 1.6 0 0 0-.3 1.8v.1a1.6 1.6 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.6 1.6 0 0 0-1.5 1z"/></svg></span></div>
+      </div></div>
+      <div class="scroll">
+        <div class="ctx"><div class="ctx-inner"><div class="ctx-row">
+          <button class="ctx-back"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg> First Words</button>
+          <span class="ctx-meta">2 of 5 · Beginner</span>
+        </div></div><div class="ctx-track"><div class="ctx-fill" style="width:100%"></div></div></div>
+        <div class="stepper">
+          <div class="sx"><span class="sx-btn"><span class="node node--done"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span></span><span class="sline done"></span></div>
+          <div class="sx"><span class="sx-btn"><span class="node node--done node--current"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span></span><span class="sline done"></span></div>
+          <div class="sx"><span class="sx-btn"><span class="node node--done"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span></span><span class="sline done"></span></div>
+          <div class="sx"><span class="sx-btn"><span class="node node--done"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span></span><span class="sline done"></span></div>
+          <div class="sx"><span class="sx-btn"><span class="node node--done"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span></span><span class="sline done"></span></div>
+          <div class="sx"><span class="sx-btn"><span class="node node--cp node--done"><span>◆</span></span></span></div>
+        </div>
+        <div class="content">
+          <div class="round-selector"><span class="round-label">Tier:</span><span class="pill pill--on">Tier 1</span><span class="pill">Tier 2</span></div>
+          <div class="lesson-header"><h2 class="lesson-title">Greetings</h2><span class="lesson-count">10 words</span></div>
+          <div class="tabs">
+            <button class="tab tab--on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 7v14"/><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"/></svg><span>Learn</span></button>
+            <button class="tab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22z"/></svg><span>Chat</span></button>
+            <button class="tab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.42 10.922a1 1 0 0 0-.019-1.838L12.83 5.18a2 2 0 0 0-1.66 0L2.6 9.08a1 1 0 0 0 0 1.832l8.57 3.908a2 2 0 0 0 1.66 0z"/><path d="M22 10v6"/><path d="M6 12.5V16a6 3 0 0 0 12 0v-3.5"/></svg><span>Quiz</span></button>
+          </div>
+          <div class="hint">Tap a card to reveal English</div>
+          <div class="wgrid"><div class="wcard"><div class="zh">你好</div><div class="jy">nei5 hou2</div></div><div class="wcard"><div class="zh">早晨</div><div class="jy">zou2 san4</div></div></div>
+        </div>
+      </div>
+    </div>
+    <p class="sub">The orange rule is <code>.ctx-fill</code> at 100%. From the rule to "Greetings" is
+    <b>~83px</b>, nearly all of it empty.</p>
+  </div>
+
+  <div class="frame">
+    <p class="cap">A · <em>one band, real edge</em> <span class="rec">pick</span></p>
+    <div class="phone">
+      <div class="header"><div class="header-row">
+        <div class="header-slot"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg></span></div>
+        <div class="header-title"><span class="zh">廣東話</span><span class="en">Cantonese Learner</span></div>
+        <div class="header-slot"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="12" r="3.2"/></svg></span></div>
+      </div></div>
+      <div class="scroll">
+        <div class="ctx ctxA"><div class="ctx-inner"><div class="ctx-row">
+          <button class="ctx-back"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg> First Words</button>
+          <span class="ctx-meta">2 of 5 · Beginner</span>
+        </div>
+        <div class="stepper">
+          <div class="sx"><span class="sx-btn"><span class="node node--done"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span></span><span class="sline done"></span></div>
+          <div class="sx"><span class="sx-btn"><span class="node node--done node--current"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span></span><span class="sline done"></span></div>
+          <div class="sx"><span class="sx-btn"><span class="node node--done"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span></span><span class="sline done"></span></div>
+          <div class="sx"><span class="sx-btn"><span class="node node--done"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span></span><span class="sline done"></span></div>
+          <div class="sx"><span class="sx-btn"><span class="node node--done"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span></span><span class="sline done"></span></div>
+          <div class="sx"><span class="sx-btn"><span class="node node--cp node--done"><span>◆</span></span></span></div>
+        </div>
+        </div></div>
+        <div class="content">
+          <div class="round-selector"><span class="round-label">Tier:</span><span class="pill pill--on">Tier 1</span><span class="pill">Tier 2</span></div>
+          <div class="lesson-header"><h2 class="lesson-title">Greetings</h2><span class="lesson-count">10 words</span></div>
+          <div class="tabs">
+            <button class="tab tab--on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 7v14"/><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"/></svg><span>Learn</span></button>
+            <button class="tab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22z"/></svg><span>Chat</span></button>
+            <button class="tab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.42 10.922a1 1 0 0 0-.019-1.838L12.83 5.18a2 2 0 0 0-1.66 0L2.6 9.08a1 1 0 0 0 0 1.832l8.57 3.908a2 2 0 0 0 1.66 0z"/><path d="M22 10v6"/><path d="M6 12.5V16a6 3 0 0 0 12 0v-3.5"/></svg><span>Quiz</span></button>
+          </div>
+          <div class="hint">Tap a card to reveal English</div>
+          <div class="wgrid"><div class="wcard"><div class="zh">你好</div><div class="jy">nei5 hou2</div></div><div class="wcard"><div class="zh">早晨</div><div class="jy">zou2 san4</div></div></div>
+        </div>
+      </div>
+    </div>
+    <p class="sub"><b>The track is retired.</b> The stepper already reports stage progress node by node,
+    more precisely than a hairline can, and it cannot be mistaken for a divider. The band closes with one
+    <code>--border-soft</code>, which is the line mockup 10 drew. <code>.ctx-meta</code> moves off its
+    hardcoded 10.5px onto <code>--fs-micro</code>.</p>
+  </div>
+
+  <div class="frame">
+    <p class="cap">B · keep the hairline, tint the band</p>
+    <div class="phone">
+      <div class="header"><div class="header-row">
+        <div class="header-slot"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg></span></div>
+        <div class="header-title"><span class="zh">廣東話</span><span class="en">Cantonese Learner</span></div>
+        <div class="header-slot"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="12" r="3.2"/></svg></span></div>
+      </div></div>
+      <div class="scroll">
+        <div class="ctx ctxB"><div class="ctx-inner"><div class="ctx-row">
+          <button class="ctx-back"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg> First Words</button>
+          <span class="ctx-meta">2 of 5 · Beginner</span>
+        </div>
+        <div class="stepper">
+          <div class="sx"><span class="sx-btn"><span class="node node--done"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span></span><span class="sline done"></span></div>
+          <div class="sx"><span class="sx-btn"><span class="node node--done node--current"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span></span><span class="sline done"></span></div>
+          <div class="sx"><span class="sx-btn"><span class="node node--done"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span></span><span class="sline done"></span></div>
+          <div class="sx"><span class="sx-btn"><span class="node node--done"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span></span><span class="sline done"></span></div>
+          <div class="sx"><span class="sx-btn"><span class="node node--done"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span></span><span class="sline done"></span></div>
+          <div class="sx"><span class="sx-btn"><span class="node node--cp node--done"><span>◆</span></span></span></div>
+        </div>
+        </div><div class="ctx-track"><div class="ctx-fill" style="width:100%"></div></div></div>
+        <div class="content">
+          <div class="round-selector"><span class="round-label">Tier:</span><span class="pill pill--on">Tier 1</span><span class="pill">Tier 2</span></div>
+          <div class="lesson-header"><h2 class="lesson-title">Greetings</h2><span class="lesson-count">10 words</span></div>
+          <div class="tabs">
+            <button class="tab tab--on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 7v14"/><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"/></svg><span>Learn</span></button>
+            <button class="tab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22z"/></svg><span>Chat</span></button>
+            <button class="tab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.42 10.922a1 1 0 0 0-.019-1.838L12.83 5.18a2 2 0 0 0-1.66 0L2.6 9.08a1 1 0 0 0 0 1.832l8.57 3.908a2 2 0 0 0 1.66 0z"/><path d="M22 10v6"/><path d="M6 12.5V16a6 3 0 0 0 12 0v-3.5"/></svg><span>Quiz</span></button>
+          </div>
+          <div class="hint">Tap a card to reveal English</div>
+          <div class="wgrid"><div class="wcard"><div class="zh">你好</div><div class="jy">nei5 hou2</div></div><div class="wcard"><div class="zh">早晨</div><div class="jy">zou2 san4</div></div></div>
+        </div>
+      </div>
+    </div>
+    <p class="sub">Band on <code>--parchment-deep</code> so it reads as chrome; the hairline becomes its
+    bottom edge and takes <code>--milestone</code>, which is what mockup 4 drew ("a progress hairline in
+    the header colour"). <b>Cost:</b> a deep-red rule under the header is close to DES-02's trap, and the
+    hairline still duplicates what the stepper says.</p>
+  </div>
+</div>
+
+<table>
+  <tr><th>Element</th><th>Now (v120)</th><th>A</th><th>B</th></tr>
+  <tr><td>Band background</td><td><code>--parchment-warm</code> — same as page</td><td>unchanged, but closed with an edge</td><td><code>--parchment-deep</code></td></tr>
+  <tr><td>Bottom edge</td><td>none</td><td><code>--border-soft</code></td><td>the 2px track</td></tr>
+  <tr><td>Progress hairline</td><td><code>--brand</code>, reads as a rule at 100%</td><td><b>retired</b> — stepper carries it</td><td><code>--milestone</code></td></tr>
+  <tr><td><code>.ctx-meta</code></td><td>hardcoded 10.5px</td><td><code>--fs-micro</code></td><td><code>--fs-micro</code></td></tr>
+  <tr><td>Chrome height</td><td>~78px</td><td>~68px</td><td>~70px</td></tr>
+</table>
+
+<p class="note"><b>Why not reuse <code>.segs</code>.</b> The <code>.segs</code> primitive already exists
+and would read unmistakably as segmented progress — but it is coloured <code>--milestone</code> and is
+used for checkpoint activity pips. Per DESIGN_SYSTEM §4, milestone colour <i>means checkpoint</i>, so
+borrowing it for stage progress would make an ordinary lesson read as an event. Rejected on that ground,
+not on effort.</p>
+
+<!-- ══════════════════ 2 · STANDALONE BACK ══════════════════ -->
+<h2>2 · The same screen, opened from Topics</h2>
+<p class="note">Mockup 10 drew the standalone case as <b>the same shell</b> — its own note reads
+"<i>No stepper, no hairline, back goes to Topics. Same header, same band, same tabs — the shell doesn't
+move.</i>" The built version uses a different class entirely: <code>.back-home-btn</code>, inside
+<code>.content</code>. That means a different indent (24px vs 16px), a different size (13px vs 12px), a
+different weight, a different colour (<code>--muted-dark</code> vs <code>--ink</code>) and no category
+context. Switching between a path topic and a standalone topic makes the back control visibly jump.</p>
+
+<div class="frames">
+  <div class="frame">
+    <p class="cap">Now · v120</p>
+    <div class="phone">
+      <div class="header"><div class="header-row">
+        <div class="header-slot"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg></span></div>
+        <div class="header-title"><span class="zh">廣東話</span><span class="en">Cantonese Learner</span></div>
+        <div class="header-slot"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="12" r="3.2"/></svg></span></div>
+      </div></div>
+      <div class="scroll">
+        <div class="content">
+          <button class="back-home-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg> Back to topics</button>
+          <div class="round-selector"><span class="round-label">Tier:</span><span class="pill pill--on">Tier 1</span><span class="pill">Tier 2</span></div>
+          <div class="lesson-header"><h2 class="lesson-title">Greetings</h2><span class="lesson-count">10 words</span></div>
+          <div class="tabs">
+            <button class="tab tab--on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 7v14"/><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"/></svg><span>Learn</span></button>
+            <button class="tab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22z"/></svg><span>Chat</span></button>
+            <button class="tab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.42 10.922a1 1 0 0 0-.019-1.838L12.83 5.18a2 2 0 0 0-1.66 0L2.6 9.08a1 1 0 0 0 0 1.832l8.57 3.908a2 2 0 0 0 1.66 0z"/><path d="M22 10v6"/><path d="M6 12.5V16a6 3 0 0 0 12 0v-3.5"/></svg><span>Quiz</span></button>
+          </div>
+          <div class="hint">Tap a card to reveal English</div>
+          <div class="wgrid"><div class="wcard"><div class="zh">你好</div><div class="jy">nei5 hou2</div></div><div class="wcard"><div class="zh">早晨</div><div class="jy">zou2 san4</div></div></div>
+        </div>
+      </div>
+    </div>
+    <p class="sub">Floats in the content column with nothing anchoring it.</p>
+  </div>
+
+  <div class="frame">
+    <p class="cap">A · <em>same shell, no stepper</em> <span class="rec">pick</span></p>
+    <div class="phone">
+      <div class="header"><div class="header-row">
+        <div class="header-slot"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg></span></div>
+        <div class="header-title"><span class="zh">廣東話</span><span class="en">Cantonese Learner</span></div>
+        <div class="header-slot"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="12" r="3.2"/></svg></span></div>
+      </div></div>
+      <div class="scroll">
+        <div class="ctx ctxA"><div class="ctx-inner"><div class="ctx-row" style="padding:9px var(--sp-4)">
+          <button class="ctx-back"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg> Topics</button>
+          <span class="ctx-meta">Everyday</span>
+        </div></div></div>
+        <div class="content">
+          <div class="round-selector"><span class="round-label">Tier:</span><span class="pill pill--on">Tier 1</span><span class="pill">Tier 2</span></div>
+          <div class="lesson-header"><h2 class="lesson-title">Greetings</h2><span class="lesson-count">10 words</span></div>
+          <div class="tabs">
+            <button class="tab tab--on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 7v14"/><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"/></svg><span>Learn</span></button>
+            <button class="tab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22z"/></svg><span>Chat</span></button>
+            <button class="tab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.42 10.922a1 1 0 0 0-.019-1.838L12.83 5.18a2 2 0 0 0-1.66 0L2.6 9.08a1 1 0 0 0 0 1.832l8.57 3.908a2 2 0 0 0 1.66 0z"/><path d="M22 10v6"/><path d="M6 12.5V16a6 3 0 0 0 12 0v-3.5"/></svg><span>Quiz</span></button>
+          </div>
+          <div class="hint">Tap a card to reveal English</div>
+          <div class="wgrid"><div class="wcard"><div class="zh">你好</div><div class="jy">nei5 hou2</div></div><div class="wcard"><div class="zh">早晨</div><div class="jy">zou2 san4</div></div></div>
+        </div>
+      </div>
+    </div>
+    <p class="sub">One <code>.ctx</code> shell serves both entry routes. The meta slot carries the topic's
+    category instead of the stage position, so the row is never half-empty. <code>.back-home-btn</code>
+    retires from this screen — it still has six other call sites in the checkpoint screens, which are a
+    separate question.</p>
+  </div>
+</div>
+
+<!-- ══════════════════ 3 · TYPE ══════════════════ -->
+<h2>3 · Two serifs are doing the job of one</h2>
+<p class="note">DESIGN_SYSTEM §1 is explicit: <code>--font-display</code> (Fraunces) is for
+"page and section titles, score values, English reveals"; <code>--font-serif</code> (Noto Serif TC) is for
+"all Chinese text, the nameplate, watermarks". Noto Serif TC ships full Latin coverage and is loaded with
+it, so <b>every Latin title set in <code>--font-serif</code> silently renders in the Chinese face</b>
+rather than falling through to Fraunces. That is why "Learning Path" and "Beginner" do not look like
+"Greetings" — and the two are one tap apart.</p>
+
+<div class="type-row">
+  <div class="type-spec">
+    <div class="lbl">Now — <code>--font-serif</code></div>
+    <div class="smp" style="font-family:var(--font-serif); font-weight:700">Beginner · Learning Path</div>
+    <div class="whr">.page-header-title · .path-card-title<br>.path-timeline-title · .path-step-title<br>.path-stage-name · .cp-hero-h<br>.cp-done-h · .cp-convo-title</div>
+  </div>
+  <div class="type-spec">
+    <div class="lbl">Spec — <code>--font-display</code></div>
+    <div class="smp" style="font-family:var(--font-display); font-weight:600">Beginner · Learning Path</div>
+    <div class="whr">.lesson-title (the only title<br>already correct)</div>
+  </div>
+</div>
+
+<table>
+  <tr><th>Call site</th><th>Content</th><th>Verdict</th></tr>
+  <tr><td><code>.wm</code></td><td>CJK watermark</td><td><span class="rec">correct</span></td></tr>
+  <tr><td><code>.cp-missed-c</code></td><td>Chinese</td><td><span class="rec">correct</span></td></tr>
+  <tr><td><code>.page-header-title</code></td><td>Latin page title — 5 screens</td><td><span class="no">→ display</span></td></tr>
+  <tr><td><code>.path-card-title</code></td><td>Latin title</td><td><span class="no">→ display</span></td></tr>
+  <tr><td><code>.path-timeline-title</code></td><td>Latin title</td><td><span class="no">→ display</span></td></tr>
+  <tr><td><code>.path-step-title</code></td><td>Latin title</td><td><span class="no">→ display</span></td></tr>
+  <tr><td><code>.path-stage-name</code></td><td>Latin section header</td><td><span class="no">→ display</span></td></tr>
+  <tr><td><code>.cp-hero-h</code>, <code>.cp-done-h</code>, <code>.cp-convo-title</code></td><td>Latin titles</td><td><span class="no">→ display</span></td></tr>
+  <tr><td><code>.cp-done-pct</code>, <code>.rd-stat b</code></td><td>score values</td><td><span class="no">→ display</span></td></tr>
+</table>
+
+<p class="note"><b>Weight moves with the face.</b> All eight sites are <code>--fw-bold</code> (700).
+Fraunces at 700 is heavier than Noto Serif TC at 700 and would out-shout <code>.lesson-title</code>,
+which sits at <code>--fw-semi</code>. Moving the face without moving the weight would trade one mismatch
+for another, so the proposal is <code>--font-display</code> at <code>--fw-semi</code> throughout — matching
+the one title that is already right.</p>
+
+<!-- ══════════════════ 4 · PATH LANDING ══════════════════ -->
+<h2>4 · The learning path landing</h2>
+<p class="note">DESIGN_SYSTEM §3.6: emoji are "not in titles, section headers, result screens, or path
+step rows", kept only where they are genuine wayfinding — <b>the Topics category grid</b>, where one icon
+per topic aids scanning a large set. The path landing has emoji in the page title (🛤️) and in each card
+title (🌱 🌿 🌳), and the path timeline header repeats the card's icon. None of these is one-icon-per-item
+wayfinding: there are three cards and the level is already stated in the section header directly above,
+so the sprout is decorating a word that is already there.</p>
+
+<div class="frames">
+  <div class="frame">
+    <p class="cap">Now · v120</p>
+    <div class="phone now">
+      <div class="header"><div class="header-row">
+        <div class="header-slot"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg></span></div>
+        <div class="header-title"><span class="zh">廣東話</span><span class="en">Cantonese Learner</span></div>
+        <div class="header-slot"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="12" r="3.2"/></svg></span></div>
+      </div></div>
+      <div class="scroll"><div class="path-list">
+        <div class="page-header">
+          <h2 class="page-header-title"><span class="page-header-emoji">🛤️</span>Learning Path</h2>
+          <p class="page-header-sub">Curated lessons in order. Tap any to jump in — nothing is locked.</p>
+        </div>
+        <div class="path-level-header">Beginner</div>
+        <div class="card path-card">
+          <div class="path-card-top"><span class="path-card-icon">🌱</span><span class="path-card-title">Beginner</span></div>
+          <div class="path-card-desc">Everything you need to function in Cantonese — greetings to emergencies — across 11 themed chapters.</div>
+          <div class="path-card-progress"><div class="path-progress-bar"><div class="path-progress-fill" style="width:37%"></div></div><span class="path-progress-count">15 / 41</span></div>
+        </div>
+        <div class="path-level-header">Intermediate</div>
+        <div class="card path-card">
+          <div class="path-card-top"><span class="path-card-icon">🌿</span><span class="path-card-title">Intermediate</span></div>
+          <div class="path-card-desc">Connectives first, then deeper tier-2 topics. (Being built out.)</div>
+          <div class="path-card-progress"><div class="path-progress-bar"><div class="path-progress-fill" style="width:0%"></div></div><span class="path-progress-count">0 / 11</span></div>
+        </div>
+      </div></div>
+    </div>
+    <p class="sub">Titles in Noto Serif TC. Level named twice per card, once as an eyebrow and once as a
+    title, plus a third time as a sprout.</p>
+  </div>
+
+  <div class="frame">
+    <p class="cap">A · <em>emoji out, Fraunces in</em> <span class="rec">pick</span></p>
+    <div class="phone fix">
+      <div class="header"><div class="header-row">
+        <div class="header-slot"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg></span></div>
+        <div class="header-title"><span class="zh">廣東話</span><span class="en">Cantonese Learner</span></div>
+        <div class="header-slot"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="12" r="3.2"/></svg></span></div>
+      </div></div>
+      <div class="scroll"><div class="path-list">
+        <div class="page-header">
+          <h2 class="page-header-title">Learning Path</h2>
+          <p class="page-header-sub">Curated lessons in order. Tap any to jump in — nothing is locked.</p>
+        </div>
+        <div class="path-level-header">Beginner</div>
+        <div class="card path-card">
+          <div class="path-card-top"><span class="path-card-title">Beginner</span><span class="path-progress-count" style="color:var(--brand)">15 / 41</span></div>
+          <div class="path-card-desc">Everything you need to function in Cantonese — greetings to emergencies — across 11 themed chapters.</div>
+          <div class="path-card-progress"><div class="path-progress-bar"><div class="path-progress-fill" style="width:37%"></div></div></div>
+        </div>
+        <div class="path-level-header">Intermediate</div>
+        <div class="card path-card">
+          <div class="path-card-top"><span class="path-card-title">Intermediate</span><span class="path-progress-count">0 / 11</span></div>
+          <div class="path-card-desc">Connectives first, then deeper tier-2 topics. (Being built out.)</div>
+          <div class="path-card-progress"><div class="path-progress-bar"><div class="path-progress-fill" style="width:0%"></div></div></div>
+        </div>
+      </div></div>
+    </div>
+    <p class="sub">Emoji removed from the page title and the card titles; titles move to Fraunces at
+    <code>--fw-semi</code>. The count moves up beside the title so the bar can run the full width, which
+    is the only layout change — everything else is a token swap.</p>
+  </div>
+
+  <div class="frame">
+    <p class="cap">B · type fix only, emoji kept</p>
+    <div class="phone fix">
+      <div class="header"><div class="header-row">
+        <div class="header-slot"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg></span></div>
+        <div class="header-title"><span class="zh">廣東話</span><span class="en">Cantonese Learner</span></div>
+        <div class="header-slot"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="12" r="3.2"/></svg></span></div>
+      </div></div>
+      <div class="scroll"><div class="path-list">
+        <div class="page-header">
+          <h2 class="page-header-title"><span class="page-header-emoji">🛤️</span>Learning Path</h2>
+          <p class="page-header-sub">Curated lessons in order. Tap any to jump in — nothing is locked.</p>
+        </div>
+        <div class="path-level-header">Beginner</div>
+        <div class="card path-card">
+          <div class="path-card-top"><span class="path-card-icon">🌱</span><span class="path-card-title">Beginner</span></div>
+          <div class="path-card-desc">Everything you need to function in Cantonese — greetings to emergencies — across 11 themed chapters.</div>
+          <div class="path-card-progress"><div class="path-progress-bar"><div class="path-progress-fill" style="width:37%"></div></div><span class="path-progress-count">15 / 41</span></div>
+        </div>
+        <div class="path-level-header">Intermediate</div>
+        <div class="card path-card">
+          <div class="path-card-top"><span class="path-card-icon">🌿</span><span class="path-card-title">Intermediate</span></div>
+          <div class="path-card-desc">Connectives first, then deeper tier-2 topics. (Being built out.)</div>
+          <div class="path-card-progress"><div class="path-progress-bar"><div class="path-progress-fill" style="width:0%"></div></div><span class="path-progress-count">0 / 11</span></div>
+        </div>
+      </div></div>
+    </div>
+    <p class="sub">The smaller change if the growth metaphor is worth keeping. It leaves §3.6 stating a rule
+    the app does not follow, so §3.6 would need an amendment naming the path landing as a second exception
+    — a doc change, not a silent one.</p>
+  </div>
+</div>
+
+<p class="note"><b>Scope note.</b> <code>renderPageHeader()</code> is shared by five screens and four of
+them pass an emoji: 📖 Topics, 🗂️ Word Review (×2), 🌐 Translate (×2), 🛤️ Learning Path. If the emoji
+argument holds on the path landing it holds on all of them, and the honest change is to drop the parameter
+rather than pass an empty string at five call sites. <b>The Topics <i>grid</i> keeps its per-topic
+icons</b> — that is the §3.6 exception and it is untouched either way.</p>
+
+<h2>5 · Also found, not proposed here</h2>
+<p class="note"><b>41 selectors carry the same property in two separate rules.</b> Standing check 1 only
+inspects a single rule, so it cannot see this: <code>.path-card-title</code> declares
+<code>font-size:16px</code> at one place and <code>--fs-lead</code> (17px) at another, and the later one
+silently wins. The same holds for <code>.lesson-title</code>, <code>.path-timeline-title</code>,
+<code>.quiz-chinese</code> and 37 more. Nothing is visibly broken — the later declaration is generally the
+intended one — but every dead declaration is a place where a future edit lands with no effect. This is the
+same failure shape STATUS.md records for <code>.cp-done .cp-card .path-step-title</code> at v108. It wants
+a script and a sweep of its own, not a fix bolted onto this work.</p>
+
+<p class="note"><b><code>index.html</code> line 9 is stale.</b> The comment says the font system is
+"Source Serif 4 (English serif headers)"; the stylesheet link two lines below loads Fraunces. Harmless,
+one-line fix, worth doing in whichever deploy touches this.</p>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tier treatment — four ways not to look like the subtabs</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Noto+Serif+TC:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+    --font-serif:   'Noto Serif TC', 'Fraunces', Georgia, serif;
+    --font-ui:      'Inter', 'Noto Serif TC', -apple-system, system-ui, sans-serif;
+    --font-display: 'Fraunces', 'Noto Serif TC', Georgia, serif;
+    --fs-micro: 11px; --fs-meta: 12px; --fs-small: 13px; --fs-body: 15px;
+    --fs-lead: 17px;  --fs-h3: 22px;   --fs-h2: 28px;
+    --lh-heading: 1.25;
+    --fw-regular: 400; --fw-medium: 500; --fw-semi: 600; --fw-bold: 700;
+    --sp-1: 4px; --sp-2: 8px; --sp-3: 12px; --sp-4: 16px; --sp-5: 24px; --sp-6: 32px;
+    --r-sm: 8px; --r-md: 12px; --r-lg: 16px; --r-pill: 999px;
+    --tap-min: 44px;
+    --elev-1: 0 1px 2px rgba(58,42,30,.04), 0 1px 3px rgba(58,42,30,.06);
+    --ink: #1C1917; --ink-soft: #292524;
+    --parchment: #FFFFFF; --parchment-warm: #FAF8F5; --parchment-deep: #F0EBE4;
+    --brand: #C2410C; --brand-tint: #FEF0E9; --brand-edge: #F5D9C9; --brand-dark: #9A3412;
+    --jade: #15803D; --jade-tint: #DCFCE7; --jade-edge: #C9E7D3;
+    --muted: #A8A29E; --muted-dark: #78716C;
+    --parchment-border: #EAE4DC;
+    --header-bg: #6E2639; --header-text: #F7EEE8; --header-sub: rgba(255,255,255,.6); --header-icon: #F7EEE8;
+    --milestone: var(--header-bg); --milestone-tint: #FBF0F2; --milestone-edge: #EBD3D9;
+    --measure: 680px; --edge-emph: 3px;
+    --border: 1px solid var(--parchment-border);
+    --border-soft: 1px solid var(--parchment-deep);
+  }
+
+  /* ══════════ page chrome (mockup only) ══════════ */
+  body { margin:0; background:var(--parchment-deep); font-family:var(--font-ui); color:var(--ink); padding:24px 16px 72px; }
+  .wrap { max-width:1240px; margin:0 auto; }
+  h1 { font-family:var(--font-display); font-size:var(--fs-h2); font-weight:var(--fw-medium); margin:0 0 6px; }
+  h2 { font-family:var(--font-display); font-size:var(--fs-lead); font-weight:var(--fw-medium); margin:46px 0 4px; }
+  .lede { font-size:var(--fs-small); line-height:1.5; color:var(--muted-dark); margin:0 0 8px; max-width:76ch; }
+  .note { font-size:var(--fs-meta); line-height:1.65; color:var(--muted-dark); margin:8px 0 0; max-width:76ch; }
+  .note b { color:var(--ink-soft); }
+  .frames { display:flex; gap:22px; flex-wrap:wrap; align-items:flex-start; margin-top:16px; }
+  .frame { width:268px; }
+  .frame > .cap { font-size:var(--fs-micro); font-weight:var(--fw-semi); letter-spacing:.1em; text-transform:uppercase; color:var(--muted-dark); margin:0 0 8px; }
+  .frame > .cap em { font-style:normal; color:var(--brand); }
+  .frame > .sub { font-size:var(--fs-meta); line-height:1.55; color:var(--muted-dark); margin:9px 0 0; }
+  table { border-collapse:collapse; font-size:var(--fs-meta); margin-top:12px; width:100%; }
+  th,td { text-align:left; padding:7px 10px; border-bottom:var(--border-soft); vertical-align:top; }
+  th { font-size:var(--fs-micro); letter-spacing:.08em; text-transform:uppercase; color:var(--muted-dark); font-weight:var(--fw-semi); }
+  code { font-family:ui-monospace,Menlo,monospace; font-size:11px; background:var(--parchment-deep); padding:1px 5px; border-radius:4px; }
+  .rec { display:inline-block; background:var(--jade-tint); color:var(--jade); font-size:9px; font-weight:var(--fw-semi); letter-spacing:.1em; text-transform:uppercase; padding:3px 6px; border-radius:4px; vertical-align:2px; }
+  .no { display:inline-block; background:#EDE7DE; color:var(--muted-dark); font-size:9px; font-weight:var(--fw-semi); letter-spacing:.1em; text-transform:uppercase; padding:3px 6px; border-radius:4px; vertical-align:2px; }
+
+  .phone { position:relative; background:var(--parchment-warm); border:6px solid var(--ink); border-radius:22px; overflow:hidden; height:380px; display:flex; flex-direction:column; }
+  .scroll { flex:1; overflow:hidden; position:relative; }
+
+  /* ══════════ app chrome, v121 ══════════ */
+  .header { background:var(--header-bg); padding:9px var(--sp-4); flex:none; }
+  .header-row { display:flex; align-items:center; gap:var(--sp-2); }
+  .header-slot { flex:0 0 30px; display:flex; align-items:center; justify-content:center; }
+  .header-title { flex:1; display:flex; align-items:center; flex-direction:column; }
+  .header-title .zh { font-size:17px; color:var(--header-text); font-family:var(--font-display); font-weight:var(--fw-bold); letter-spacing:.06em; line-height:1.1; }
+  .header-title .en { font-size:6.5px; color:var(--header-sub); text-transform:uppercase; margin-top:1px; font-weight:var(--fw-bold); letter-spacing:.16em; }
+  .ic { width:28px; height:28px; border:none; background:transparent; color:var(--header-icon); opacity:.72; display:inline-flex; align-items:center; justify-content:center; }
+  .ic svg { width:15px; height:15px; }
+
+  .ctx { background:var(--parchment-warm); border-bottom:var(--border-soft); }
+  .ctx-inner { max-width:var(--measure); margin:0 auto; }
+  .ctx-row { display:flex; align-items:center; justify-content:space-between; gap:var(--sp-2); padding:8px var(--sp-4) 7px; }
+  .ctx-back { display:flex; align-items:center; gap:6px; font-size:var(--fs-meta); font-weight:var(--fw-medium); line-height:1.2; color:var(--ink); background:none; border:none; padding:0; }
+  .ctx-back svg { width:14px; height:14px; flex:none; }
+  .ctx-meta { font-size:var(--fs-micro); font-weight:var(--fw-medium); line-height:1; color:var(--muted-dark); white-space:nowrap; }
+
+  .content { padding:var(--sp-3) var(--sp-5); }
+  .lesson-head2 { margin-bottom:var(--sp-3); }
+  .lesson-title { font-family:var(--font-display); font-size:23px; font-weight:var(--fw-semi); color:var(--ink); margin:0 0 3px; letter-spacing:-.01em; line-height:var(--lh-heading); }
+
+  /* the row under the title — shared shell for every variant */
+  .tierline { display:flex; align-items:center; gap:2px; min-height:var(--tap-min); }
+  .tier-count { font-size:var(--fs-meta); font-weight:var(--fw-regular); color:var(--muted); }
+  .tier-sep { color:var(--parchment-border); font-size:var(--fs-meta); margin:0 2px; }
+
+  /* subtabs — the thing every variant must NOT resemble */
+  .tabs { display:flex; border-bottom:var(--border-soft); padding:var(--sp-2) 0 0; margin-bottom:var(--sp-3); }
+  .tabs .tab { flex:1; display:flex; align-items:center; justify-content:center; gap:6px; padding:0 0 9px; border:none; background:none; color:var(--muted-dark); font-size:var(--fs-meta); font-weight:var(--fw-medium); position:relative; }
+  .tabs .tab svg { width:13px; height:13px; }
+  .tabs .tab--on { color:var(--brand); }
+  .tabs .tab--on::after { content:''; position:absolute; left:0; right:0; bottom:-1px; height:2px; background:var(--brand); }
+
+  .wgrid { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+  .wcard { background:var(--parchment); border:var(--border); border-radius:var(--r-md); padding:9px 10px; box-shadow:var(--elev-1); }
+  .wcard .zh { font-family:var(--font-serif); font-size:18px; color:var(--ink); text-align:center; }
+  .wcard .jy { font-size:9.5px; color:var(--brand); margin-top:3px; text-align:center; font-weight:var(--fw-semi); }
+
+  /* ─── REJECTED reference: the underline from mockup 22 option A ─── */
+  .tA { display:inline-flex; align-items:center; min-height:var(--tap-min); padding:0 9px; border:none; background:none; font-size:var(--fs-meta); font-weight:var(--fw-medium); line-height:1; color:var(--muted-dark); }
+  .tA.on { color:var(--brand); font-weight:var(--fw-semi); box-shadow:inset 0 -2px 0 var(--brand); }
+
+  /* ─── A · tinted chip ─── */
+  .tB { display:inline-flex; align-items:center; min-height:var(--tap-min); padding:0 10px; border:none; background:none; font-size:var(--fs-meta); font-weight:var(--fw-medium); color:var(--muted-dark); }
+  .tB > i { display:inline-flex; align-items:center; font-style:normal; padding:5px 10px; border-radius:var(--r-sm); }
+  .tB.on { color:var(--brand-dark); font-weight:var(--fw-semi); }
+  .tB.on > i { background:var(--brand-tint); }
+
+  /* ─── B · leading marker ─── */
+  .tC { display:inline-flex; align-items:center; gap:6px; min-height:var(--tap-min); padding:0 9px; border:none; background:none; font-size:var(--fs-meta); font-weight:var(--fw-medium); color:var(--muted-dark); }
+  .tC > i { width:5px; height:5px; border-radius:var(--r-pill); background:transparent; flex:none; }
+  .tC.on { color:var(--brand); font-weight:var(--fw-semi); }
+  .tC.on > i { background:var(--brand); }
+
+  /* ─── C · state + offer (asymmetric) ─── */
+  .tierline--split { justify-content:space-between; }
+  .tier-state { font-size:var(--fs-meta); color:var(--muted-dark); }
+  .tier-state b { color:var(--ink-soft); font-weight:var(--fw-semi); }
+  .tier-offer { display:inline-flex; align-items:center; gap:5px; min-height:var(--tap-min); padding:0 0 0 10px; border:none; background:none; font-size:var(--fs-meta); font-weight:var(--fw-medium); color:var(--brand); }
+  .tier-offer svg { width:13px; height:13px; flex:none; opacity:.75; }
+
+  /* ─── D · foot only ─── */
+  .xref-card { background:var(--parchment); border:var(--border); border-radius:var(--r-md); margin:var(--sp-4) 0 0; overflow:hidden; }
+  .xref { display:flex; align-items:center; gap:var(--sp-2); width:100%; padding:10px var(--sp-4); border:none; background:transparent; text-align:left; }
+  .xref-node { width:22px; height:22px; border-radius:var(--r-pill); border:1px solid var(--parchment-border); background:var(--parchment); color:var(--muted-dark); display:flex; align-items:center; justify-content:center; font-size:9.5px; font-weight:var(--fw-semi); flex:none; }
+  .xref-txt { flex:1; min-width:0; }
+  .xref-lb { display:block; font-size:8px; font-weight:var(--fw-bold); text-transform:uppercase; letter-spacing:.1em; color:var(--muted-dark); }
+  .xref-nm { display:block; font-size:11.5px; font-weight:var(--fw-medium); color:var(--ink); }
+  .xref-go { color:var(--muted-dark); display:flex; flex:none; }
+  .xref-go svg { width:14px; height:14px; }
+
+  .swatchrow { display:flex; gap:10px; flex-wrap:wrap; margin-top:10px; }
+  .swatch { background:var(--parchment); border:var(--border); border-radius:var(--r-md); padding:12px 14px; }
+  .swatch .lbl { font-size:9px; letter-spacing:.11em; text-transform:uppercase; color:var(--muted-dark); font-weight:var(--fw-bold); margin-bottom:8px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<h1>Tier treatment — four ways not to look like the subtabs</h1>
+<p class="lede">Mockup 22's placement holds: the tier sits in a meta line under the title, and option X's
+behaviour is settled for the path route. What is open is <b>what the standalone control looks like</b>,
+because the underline drawn in mockup 22 is the subtabs' own language, one row above them. Every frame
+below shows the meta line <i>and</i> the Learn / Chat / Quiz row, since the collision is the whole point.
+The nameplate reads 廣東話 (gwong2 dung1 waa2).</p>
+
+<h2>0 · Which selected-state languages are already taken</h2>
+<p class="note">Counted from <code>styles.css</code>, so the options below are not guesses about what is
+free:</p>
+
+<table>
+  <tr><th>Treatment</th><th>Already means</th></tr>
+  <tr><td>Brand <b>underline</b> + brand text</td><td><code>.tab--on</code> — the Learn / Chat / Quiz subtabs, one row below</td></tr>
+  <tr><td>Brand <b>top border</b> + brand text</td><td><code>.tabs--top .tab--on</code> — the bottom tab bar</td></tr>
+  <tr><td>Brand <b>outline</b>, transparent fill</td><td><code>.pill--on</code> — tier today, and the quiz direction toggle. <code>.seg-btn.on</code> doubles the stroke for the speed control</td></tr>
+  <tr><td>Brand <b>fill</b>, white text</td><td><code>.node--current</code>, <code>.convo-ctrl-btn.on</code> — and §3.1 caps the screen at one filled thing</td></tr>
+  <tr><td>Milestone fill</td><td><code>.segs &gt; i.on</code> — checkpoint activity pips</td></tr>
+  <tr><td>Brand <b>text colour alone</b></td><td><code>.path-card-count.on</code> — the only near-free one</td></tr>
+</table>
+
+<p class="note"><b>That leaves less room than it looks.</b> Underline, top border, outline and fill are all
+spoken for, and three of the four are spoken for by a chooser. The genuinely unused options are a
+<b>tinted wash</b>, a <b>leading marker</b>, and <b>not being a chooser at all</b> — which is options A, B
+and C/D below.</p>
+
+<div class="swatchrow">
+  <div class="swatch">
+    <div class="lbl">Rejected — mockup 22's underline</div>
+    <span class="tA on">Tier 1</span><span class="tier-sep">·</span><span class="tA">Tier 2</span>
+  </div>
+  <div class="swatch">
+    <div class="lbl">A — tinted chip</div>
+    <span class="tB on"><i>Tier 1</i></span><span class="tB"><i>Tier 2</i></span>
+  </div>
+  <div class="swatch">
+    <div class="lbl">B — leading marker</div>
+    <span class="tC on"><i></i>Tier 1</span><span class="tC"><i></i>Tier 2</span>
+  </div>
+  <div class="swatch">
+    <div class="lbl">C — state + offer</div>
+    <span class="tier-state"><b>Tier 1</b> · 10 words</span>
+    <span class="tier-offer">Switch to Tier 2 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span>
+  </div>
+</div>
+
+<!-- ══════════════════ IN CONTEXT ══════════════════ -->
+<h2>1 · In context, from Topics — with the subtabs directly below</h2>
+
+<div class="frames">
+
+  <div class="frame">
+    <p class="cap">Reference · mockup 22's underline <span class="no">rejected</span></p>
+    <div class="phone">
+      <div class="header"><div class="header-row">
+        <div class="header-slot"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg></span></div>
+        <div class="header-title"><span class="zh">廣東話</span><span class="en">Cantonese Learner</span></div>
+        <div class="header-slot"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="12" r="3.2"/></svg></span></div>
+      </div></div>
+      <div class="scroll">
+        <div class="ctx"><div class="ctx-inner"><div class="ctx-row">
+          <button class="ctx-back"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg> Topics</button>
+          <span class="ctx-meta">Everyday Essentials</span>
+        </div></div></div>
+        <div class="content">
+          <div class="lesson-head2">
+            <h2 class="lesson-title">Greetings</h2>
+            <div class="tierline" style="margin-left:-9px">
+              <span class="tA on">Tier 1</span><span class="tier-sep">·</span><span class="tA">Tier 2</span><span class="tier-sep">·</span><span class="tier-count" style="padding-left:7px">10 words</span>
+            </div>
+          </div>
+          <div class="tabs">
+            <button class="tab tab--on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 7v14"/><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"/></svg><span>Learn</span></button>
+            <button class="tab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22z"/></svg><span>Chat</span></button>
+            <button class="tab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.42 10.922a1 1 0 0 0-.019-1.838L12.83 5.18a2 2 0 0 0-1.66 0L2.6 9.08a1 1 0 0 0 0 1.832l8.57 3.908a2 2 0 0 0 1.66 0z"/><path d="M22 10v6"/><path d="M6 12.5V16a6 3 0 0 0 12 0v-3.5"/></svg><span>Quiz</span></button>
+          </div>
+          <div class="wgrid">
+            <div class="wcard"><div class="zh">你好</div><div class="jy">nei5 hou2</div></div>
+            <div class="wcard"><div class="zh">早晨</div><div class="jy">zou2 san4</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <p class="sub">Two brand underlines, 44px apart, at two different scales. It reads as one control that
+    has wrapped, or as a hierarchy that does not exist — tier and view are unrelated axes.</p>
+  </div>
+
+  <div class="frame">
+    <p class="cap">A · tinted chip</p>
+    <div class="phone">
+      <div class="header"><div class="header-row">
+        <div class="header-slot"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg></span></div>
+        <div class="header-title"><span class="zh">廣東話</span><span class="en">Cantonese Learner</span></div>
+        <div class="header-slot"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="12" r="3.2"/></svg></span></div>
+      </div></div>
+      <div class="scroll">
+        <div class="ctx"><div class="ctx-inner"><div class="ctx-row">
+          <button class="ctx-back"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg> Topics</button>
+          <span class="ctx-meta">Everyday Essentials</span>
+        </div></div></div>
+        <div class="content">
+          <div class="lesson-head2">
+            <h2 class="lesson-title">Greetings</h2>
+            <div class="tierline" style="margin-left:-10px">
+              <span class="tB on"><i>Tier 1</i></span><span class="tB"><i>Tier 2</i></span><span class="tier-sep">·</span><span class="tier-count">10 words</span>
+            </div>
+          </div>
+          <div class="tabs">
+            <button class="tab tab--on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 7v14"/><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"/></svg><span>Learn</span></button>
+            <button class="tab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22z"/></svg><span>Chat</span></button>
+            <button class="tab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.42 10.922a1 1 0 0 0-.019-1.838L12.83 5.18a2 2 0 0 0-1.66 0L2.6 9.08a1 1 0 0 0 0 1.832l8.57 3.908a2 2 0 0 0 1.66 0z"/><path d="M22 10v6"/><path d="M6 12.5V16a6 3 0 0 0 12 0v-3.5"/></svg><span>Quiz</span></button>
+          </div>
+          <div class="wgrid">
+            <div class="wcard"><div class="zh">你好</div><div class="jy">nei5 hou2</div></div>
+            <div class="wcard"><div class="zh">早晨</div><div class="jy">zou2 san4</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <p class="sub">A wash rather than a stroke, so no line competes with the subtab rule. <b>But it is still
+    a two-up chooser stacked on a three-up chooser</b>, which is the structural half of the complaint —
+    only the paint has changed. Text goes <code>--brand-dark</code>, not <code>--brand</code>, to clear
+    contrast on the tint.</p>
+  </div>
+
+  <div class="frame">
+    <p class="cap">B · leading marker</p>
+    <div class="phone">
+      <div class="header"><div class="header-row">
+        <div class="header-slot"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg></span></div>
+        <div class="header-title"><span class="zh">廣東話</span><span class="en">Cantonese Learner</span></div>
+        <div class="header-slot"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="12" r="3.2"/></svg></span></div>
+      </div></div>
+      <div class="scroll">
+        <div class="ctx"><div class="ctx-inner"><div class="ctx-row">
+          <button class="ctx-back"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg> Topics</button>
+          <span class="ctx-meta">Everyday Essentials</span>
+        </div></div></div>
+        <div class="content">
+          <div class="lesson-head2">
+            <h2 class="lesson-title">Greetings</h2>
+            <div class="tierline" style="margin-left:-9px">
+              <span class="tC on"><i></i>Tier 1</span><span class="tC"><i></i>Tier 2</span><span class="tier-sep">·</span><span class="tier-count">10 words</span>
+            </div>
+          </div>
+          <div class="tabs">
+            <button class="tab tab--on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 7v14"/><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"/></svg><span>Learn</span></button>
+            <button class="tab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22z"/></svg><span>Chat</span></button>
+            <button class="tab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.42 10.922a1 1 0 0 0-.019-1.838L12.83 5.18a2 2 0 0 0-1.66 0L2.6 9.08a1 1 0 0 0 0 1.832l8.57 3.908a2 2 0 0 0 1.66 0z"/><path d="M22 10v6"/><path d="M6 12.5V16a6 3 0 0 0 12 0v-3.5"/></svg><span>Quiz</span></button>
+          </div>
+          <div class="wgrid">
+            <div class="wcard"><div class="zh">你好</div><div class="jy">nei5 hou2</div></div>
+            <div class="wcard"><div class="zh">早晨</div><div class="jy">zou2 san4</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <p class="sub">The quietest of the choosers, and the marker is a genuinely unused form. <b>But a 5px
+    dot is doing all the work</b> — at arm's length on a phone the two tiers look identical, and the
+    inactive one has no affordance at all. Restraint past the point of legibility.</p>
+  </div>
+
+  <div class="frame">
+    <p class="cap">C · <em>state + offer</em> <span class="rec">pick</span></p>
+    <div class="phone">
+      <div class="header"><div class="header-row">
+        <div class="header-slot"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg></span></div>
+        <div class="header-title"><span class="zh">廣東話</span><span class="en">Cantonese Learner</span></div>
+        <div class="header-slot"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="12" r="3.2"/></svg></span></div>
+      </div></div>
+      <div class="scroll">
+        <div class="ctx"><div class="ctx-inner"><div class="ctx-row">
+          <button class="ctx-back"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg> Topics</button>
+          <span class="ctx-meta">Everyday Essentials</span>
+        </div></div></div>
+        <div class="content">
+          <div class="lesson-head2">
+            <h2 class="lesson-title">Greetings</h2>
+            <div class="tierline tierline--split">
+              <span class="tier-state"><b>Tier 1</b> · 10 words</span>
+              <button class="tier-offer">Switch to Tier 2 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></button>
+            </div>
+          </div>
+          <div class="tabs">
+            <button class="tab tab--on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 7v14"/><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"/></svg><span>Learn</span></button>
+            <button class="tab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22z"/></svg><span>Chat</span></button>
+            <button class="tab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.42 10.922a1 1 0 0 0-.019-1.838L12.83 5.18a2 2 0 0 0-1.66 0L2.6 9.08a1 1 0 0 0 0 1.832l8.57 3.908a2 2 0 0 0 1.66 0z"/><path d="M22 10v6"/><path d="M6 12.5V16a6 3 0 0 0 12 0v-3.5"/></svg><span>Quiz</span></button>
+          </div>
+          <div class="wgrid">
+            <div class="wcard"><div class="zh">你好</div><div class="jy">nei5 hou2</div></div>
+            <div class="wcard"><div class="zh">早晨</div><div class="jy">zou2 san4</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <p class="sub"><b>Not a chooser at all</b>, so there is nothing for the subtabs to collide with — it is
+    a sentence about where you are, and one action. Left side is plain text; right side is the only
+    interactive element, and it names its destination. <b>No new selected-state language is invented,
+    because there is no selected state.</b></p>
+  </div>
+</div>
+
+<!-- ══════════════════ WHY C ══════════════════ -->
+<h2>2 · Why C, and what it costs</h2>
+
+<p class="note"><b>The complaint has a structural half and a cosmetic half, and only C answers both.</b>
+Repainting the chooser (A, B) fixes the visual echo but leaves a two-up selector sitting on a three-up
+selector — the thing that reads as a hierarchy between two axes that are unrelated. C stops the tier being
+a selector, so the question of what its selected state looks like never arises.</p>
+
+<p class="note"><b>It also makes both routes speak the same grammar.</b> Option X already settled that in
+path context the meta line states the tier as text and the move lives elsewhere, named. C is the same
+sentence with the move inline instead of at the foot — <i>state on the left, one named offer on the
+right</i>. Compare the two side by side below: the only difference is where the offer sits, and why.</p>
+
+<div class="frames">
+  <div class="frame">
+    <p class="cap">Standalone · C</p>
+    <div class="phone" style="height:210px">
+      <div class="content" style="padding-top:var(--sp-4)">
+        <h2 class="lesson-title">Greetings</h2>
+        <div class="tierline tierline--split">
+          <span class="tier-state"><b>Tier 1</b> · 10 words</span>
+          <button class="tier-offer">Switch to Tier 2 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></button>
+        </div>
+        <div class="tabs">
+          <button class="tab tab--on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 7v14"/><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"/></svg><span>Learn</span></button>
+          <button class="tab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22z"/></svg><span>Chat</span></button>
+          <button class="tab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.42 10.922a1 1 0 0 0-.019-1.838L12.83 5.18a2 2 0 0 0-1.66 0L2.6 9.08a1 1 0 0 0 0 1.832l8.57 3.908a2 2 0 0 0 1.66 0z"/><path d="M22 10v6"/><path d="M6 12.5V16a6 3 0 0 0 12 0v-3.5"/></svg><span>Quiz</span></button>
+        </div>
+        <div class="wgrid"><div class="wcard"><div class="zh">你好</div><div class="jy">nei5 hou2</div></div><div class="wcard"><div class="zh">早晨</div><div class="jy">zou2 san4</div></div></div>
+      </div>
+    </div>
+    <p class="sub">The move is cheap and reversible, so it is inline.</p>
+  </div>
+
+  <div class="frame">
+    <p class="cap">From a path · X (settled)</p>
+    <div class="phone" style="height:210px">
+      <div class="content" style="padding-top:var(--sp-4)">
+        <h2 class="lesson-title">Greetings</h2>
+        <div class="tierline"><span class="tier-state"><b>Tier 1</b> · 10 words</span></div>
+        <div class="tabs">
+          <button class="tab tab--on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 7v14"/><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"/></svg><span>Learn</span></button>
+          <button class="tab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22z"/></svg><span>Chat</span></button>
+          <button class="tab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.42 10.922a1 1 0 0 0-.019-1.838L12.83 5.18a2 2 0 0 0-1.66 0L2.6 9.08a1 1 0 0 0 0 1.832l8.57 3.908a2 2 0 0 0 1.66 0z"/><path d="M22 10v6"/><path d="M6 12.5V16a6 3 0 0 0 12 0v-3.5"/></svg><span>Quiz</span></button>
+        </div>
+        <div class="wgrid"><div class="wcard"><div class="zh">你好</div><div class="jy">nei5 hou2</div></div><div class="wcard"><div class="zh">早晨</div><div class="jy">zou2 san4</div></div></div>
+        <div class="xref-card">
+          <button class="xref">
+            <span class="xref-node">2</span>
+            <span class="xref-txt"><span class="xref-lb">Also in the Intermediate path</span><span class="xref-nm">Greetings · Tier 2 — 10 more words</span></span>
+            <span class="xref-go"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span></button>
+        </div>
+      </div>
+    </div>
+    <p class="sub">The move relocates you to another path, so it is at the foot and carries its
+    consequences. <b>Same left-hand sentence, deliberately different weight of offer.</b></p>
+  </div>
+
+  <div class="frame">
+    <p class="cap">C · single-tier topic (34 of 42)</p>
+    <div class="phone" style="height:210px">
+      <div class="content" style="padding-top:var(--sp-4)">
+        <h2 class="lesson-title">Me, You &amp; Them</h2>
+        <div class="tierline" style="min-height:26px"><span class="tier-state">14 words</span></div>
+        <div class="tabs">
+          <button class="tab tab--on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 7v14"/><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"/></svg><span>Learn</span></button>
+          <button class="tab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22z"/></svg><span>Chat</span></button>
+          <button class="tab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.42 10.922a1 1 0 0 0-.019-1.838L12.83 5.18a2 2 0 0 0-1.66 0L2.6 9.08a1 1 0 0 0 0 1.832l8.57 3.908a2 2 0 0 0 1.66 0z"/><path d="M22 10v6"/><path d="M6 12.5V16a6 3 0 0 0 12 0v-3.5"/></svg><span>Quiz</span></button>
+        </div>
+        <div class="wgrid"><div class="wcard"><div class="zh">我</div><div class="jy">ngo5</div></div><div class="wcard"><div class="zh">你</div><div class="jy">nei5</div></div></div>
+      </div>
+    </div>
+    <p class="sub">No tier to state and no offer to make, so the line is the word count alone and shortens
+    to 26px. <b>This is the shape most of the app is in</b>, and C is the only option where the majority
+    case is not a chooser with one option removed.</p>
+  </div>
+</div>
+
+<table>
+  <tr><th></th><th>Escapes the subtab echo</th><th>Stops being a stacked chooser</th><th>Invents a new selected state</th><th>Switch cost</th></tr>
+  <tr><td>Underline <span class="no">rejected</span></td><td>No</td><td>No</td><td>No — reuses the subtabs'</td><td>1 tap</td></tr>
+  <tr><td>A · tinted chip</td><td>Yes</td><td><b>No</b></td><td>Yes — a tint wash</td><td>1 tap</td></tr>
+  <tr><td>B · leading marker</td><td>Yes</td><td><b>No</b></td><td>Yes — a marker dot</td><td>1 tap</td></tr>
+  <tr><td>C · state + offer <span class="rec">pick</span></td><td>Yes</td><td>Yes</td><td><b>None needed</b></td><td>1 tap</td></tr>
+</table>
+
+<p class="note"><b>What C costs, stated plainly.</b> With three or more tiers it stops working — "Switch to
+Tier 2" has no room for a third target and would need a chooser after all. Today the maximum is two and
+the schema is only ever populated with <code>[1]</code> or <code>[1, 2]</code>, so this is a real but
+currently theoretical limit; it is worth a line in the register rather than designing around now. The
+second cost is smaller: C's offer is a text button with an arrow, and the app has no other inline text
+action of that kind, so it is one genuinely new component — <code>.tier-offer</code> — even though it
+needs no new state language.</p>
+
+<p class="note"><b>One question I would put back to you rather than settle.</b> C's offer is drawn in
+<code>--brand</code>, which makes it the only brand-coloured interactive thing above the subtabs. The
+alternative is <code>--muted-dark</code> with a brand arrow, which is quieter but drops close to the
+word count beside it and may not read as tappable at all. Both are defensible; the brand version is drawn
+because an offer that nobody notices is the same as option L, which was not what was chosen.</p>
+
+</div>
+</body>
+</html>

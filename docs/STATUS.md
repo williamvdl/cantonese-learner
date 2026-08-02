@@ -13,7 +13,7 @@ not a history log. Approved design decisions and whether they were built live in
 > convention (`v121 — <what changed>`) so this file stops being load-bearing on
 > its own.
 
-Last updated: 2026-08-01 · sw.js at v120
+Last updated: 2026-08-02 · sw.js at v122
 
 ## Confirmed live and working
 - **Patterns/Drills removed** from the app entirely (not soft-hidden). Checkpoints
@@ -45,6 +45,15 @@ phase 4 across v108–v112, phase 5 at v113, phase 6 across v114–v120.
 dead-CSS sweep. Every approved decision in `DESIGN_DECISIONS.md` is built and
 there are no *Not built* rows left.
 
+> **v121 is post-rollout convergence, not a seventh phase.** It came from looking
+> at the finished app on a device rather than from a plan, and everything it
+> fixed was drift *from decisions already made* — mockup 10's separator that was
+> never built, mockup 10's standalone shell that was never built, and §1's and
+> §3.6's rules about type and emoji that eight and seven call sites respectively
+> did not follow. **The rollout closing did not mean the app matched the spec; it
+> meant every mockup had been through a phase.** Those are different claims, and
+> only the second one was true at v120.
+
 Phase 6 shipped four things that had been approved and silently never
 implemented, which is more than any other phase: MOCK-17-fill, the subtab
 treatment, at v114; DES-20, the centred header, at v115 — nobody had noticed it
@@ -69,7 +78,7 @@ screen.
 | Border widths in play | 1 / 1.5 / 2 / 2.5 / 3px | **1px + 2px** |
 | `border-radius` values | 78 raw px + 19 `50%` | **all on the scale** |
 | Competing content columns | 5 | **1 (`--measure`)** |
-| `styles.css` | 1292 lines | **1327 lines** (1160 after phase 3; phase 4 added the path-context components, phase 5 three, phase 6 the subtab primitive, the tab bar, the settings sheet and the docked bar, less the v120 sweep) |
+| `styles.css` | 1292 lines | **1403 lines** (1160 after phase 3; phase 4 added the path-context components, phase 5 three, phase 6 the subtab primitive, the tab bar, the settings sheet and the docked bar, less the v120 sweep) |
 | Rules redeclaring the card surface | 12 | **0 (`.card` only)** |
 | Painted sizes of the circular play control | 7 (28–44px) | **2 (32 / 44px)** |
 | Interactive controls declaring `min-height` under `--tap-min` | 9 | **0** |
@@ -134,7 +143,65 @@ orphan hues `#B7861E`, `#e4d4ad`, `#8a6716`,
 | 6 · 6 | v119 | **`state.homeView` → `state.topicsView`** — the last item in phase 6, and invisible: no screen changes. The name predated the Dashboard, when Topics *was* Home; since v105 it has pointed at the wrong screen. 16 call sites. The real work was the migration: `history.state` outlives a deploy, so entries written by v118 arrive carrying the old key, and `applyNavSnapshot()`'s `f in snap` guard skips absent fields **silently** — backing out of a topic into a pre-deploy entry would have restored `nav: 'topics'` while leaving `topicsView` false, showing the topic you just left and making BACK look broken. `migrateNavSnapshot()` maps the old key forward at the read boundary. |
 | — | v120 | **Dead-CSS sweep, driven by measurement rather than memory.** Removed 16 classes with no emitter (`.mode-btn`, `.conv-mode-pill(s)`, `.mode-row`, `.home-header/title/subtitle`, `.translate-header` + descendants, `.translate-dir-label.muted`, `.speed-row`, `.speed-label`, `.choices-zh`, `.convo-meta`, `.nav-subitem`, `.btn--disabled`, `.tag--brand`, `.tag--milestone`) and the `--ink-drawer` token, whose own comment said *legacy*. Nine hardcoded greys in `render.js` replaced: four by existing primitives (`.section-label`, `.boot-msg` ×3), five by tokens. **No hardcoded colour remains in the JS.** Invisible except one loading state, which gains 20px of padding by adopting `.boot-msg`. The sweep enumerated CSS classes only, so two dead JS handlers survived it — see the note on sweeps below. |
 
+| — | v121 | **Post-rollout convergence off device QA.** The topic context block is closed with a hairline above and below the stepper and the stage progress hairline is retired (DES-23, DES-24); a standalone topic now uses the same `.ctx` shell instead of `.back-home-btn` (DES-25); eight Latin title sites and two score values move from `--font-serif` to `--font-display` at `--fw-semi` (DES-26); `renderPageHeader()`'s emoji parameter is removed and the path landing loses its card icons, with the count moving beside the title (DES-27). Backed by mockup 21. Also swept: the dead duplicate `font-size` / `font-weight` declarations on the three path-title selectors, and `index.html`'s font comment, which credited Source Serif 4 while the stylesheet loaded Fraunces. |
+
+| — | v122 | **Tier ladder, and the tier-change defect.** `.round-selector` retired; `.tierline` / `.ladder` / `.rung` render the tier as a stated position with adjacent rungs offered (DES-28). Inside a path the rungs are absent and `.xref` offers the crossing at the foot, one row per adjacent tier, each naming its path (DES-29). A tier change now routes through `goToTier()` → `openPathLesson()` (DES-30), fixing a defect where switching tier inside a path left the chrome describing the tier just left and wrote completion to the wrong lesson. Backed by mockups 22, 23 and 24. New standing check: `tools/tier-harness.js`. |
+
 ### Notes worth carrying forward
+
+**Measuring for a design question found a data-corrupting bug.** The tier work
+started as "where should the pills sit". Counting which path owns which tier —
+to answer that question, not to look for defects — is what surfaced DES-30, a
+handler that had been writing completion to the wrong lesson since tiers existed.
+No standing check could have caught it: every file parsed, every class was used,
+every token was declared. **The bug lived in the gap between two pieces of state
+that were each individually valid** (`state.currentRound` said 2,
+`state.fromPathTier` said 1) and only wrong together. Where two state fields must
+agree, something should assert that they do — which is what `tier-harness.js` now
+does for the premise underneath them.
+
+**A design decision can rest on a fact about the data, and that fact can rot.**
+The ladder is only correct while every (topic, tier) pair belongs to exactly one
+path. Nothing in the app enforces that; it is a property of how the path files
+happen to be authored. Authoring a topic into two paths would break the
+cross-reference silently — it would name a path, just the wrong one. **When a
+design rests on a data invariant, the invariant needs a check, not a comment.**
+
+**Optimising for the current data is a trap when the roadmap contradicts it.**
+Mockup 23 recommended a control tuned for "8 of 42 topics have a second tier",
+which was true and about to stop being true. The redraw at three tiers changed
+the answer outright — two of the three options wrapped and grew the header from
+one row to two. **Ask what the data will look like after the next backlog item,
+not what it looks like now**, before letting a count drive a layout.
+
+
+**A closed rollout is not a conformant app.** Every v121 fix was drift from a
+decision that already existed — two from mockup 10, one from §1, one from §3.6 —
+and none was caught by any of the seven standing checks, because **no check reads
+the spec.** The checks verify internal consistency (no duplicate declarations, no
+undeclared tokens, no dead classes); they cannot tell you that
+`.page-header-title` uses the wrong one of two declared fonts, because both are
+declared and both are used. The gap is structural, and the only thing that closed
+it was looking at the running app beside the written rule.
+
+**A token that is declared, used, and wrong is invisible to tooling.**
+`--font-serif` on a Latin title is valid CSS, passes every check, and renders
+without warning — Noto Serif TC has Latin glyphs, so the string never falls
+through to the fallback that would have exposed the mistake. This is the *inverse*
+of the `--font-cjk` bug recorded below: that one referenced an undeclared token
+and fell back to a generic serif, which at least looked wrong. **The failure that
+degrades gracefully is the one that survives four phases.** Where two tokens
+could both plausibly apply, the rule needs to be written at the call site, not
+just in the spec — which is why DES-26 is stated as a prohibition ("never a Latin
+title") rather than an assignment.
+
+**Progress can be reported twice, and one of the two will be wrong.** The stage
+hairline and the stage stepper measured the same fact. At 40% nobody noticed; at
+100% the hairline filled the full width and became a divider, which is how it was
+first reported. A redundant indicator is not merely redundant — it has states its
+sibling does not, and those states are unreviewed. Before adding a second view of
+one quantity, check whether the first already answers it more precisely.
+
 
 - **Checkpoint chrome is a wrapper class, not an argument.** `renderQuizCore` and
   `renderConversation` are reused by checkpoint activities; milestone treatment

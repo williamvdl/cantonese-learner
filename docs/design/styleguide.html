@@ -149,17 +149,16 @@ code{ background:#DAD4CA; padding:1px 5px; border-radius:4px; font-size:11.5px; 
 .sg-plate .en{ font:var(--fw-medium) 8.5px/1 var(--font-ui); letter-spacing:.24em; text-transform:uppercase; opacity:.72; }
 
 /* contextual row */
-.ctx{ background:var(--parchment-warm); }
+.ctx{ background:var(--parchment-warm); border-bottom:var(--border-soft); }
+.ctx-head--split{ border-bottom:var(--border-soft); }
 .ctx-inner{ max-width:var(--measure); margin:0 auto; }
-.ctx-row{ display:flex; align-items:center; justify-content:space-between; gap:var(--sp-2); padding:10px var(--sp-4) 9px; }
+.ctx-row{ display:flex; align-items:center; justify-content:space-between; gap:var(--sp-2); padding:8px var(--sp-4) 7px; }
 .ctx-back{ display:flex; align-items:center; gap:6px; font:var(--fw-medium) var(--fs-meta)/1.2 var(--font-ui); color:var(--ink); background:none; border:none; cursor:pointer; padding:0; }
 .ctx-back svg{ width:15px; height:15px; flex:none; }
-.ctx-meta{ font:var(--fw-medium) 10.5px/1 var(--font-ui); color:var(--muted-dark); white-space:nowrap; }
-.ctx-track{ height:2px; background:var(--parchment-deep); }
-.ctx-fill{ height:2px; background:var(--brand); }
+.ctx-meta{ font:var(--fw-medium) var(--fs-micro)/1 var(--font-ui); color:var(--muted-dark); white-space:nowrap; }
 
 /* stage stepper */
-.stepper{ display:flex; align-items:center; padding:12px var(--sp-4) 11px; max-width:var(--measure); margin:0 auto; }
+.stepper{ display:flex; align-items:center; padding:8px var(--sp-4) 7px; max-width:var(--measure); margin:0 auto; }
 .sx{ display:flex; align-items:center; flex:1; }
 .sx:last-child{ flex:0 0 auto; }
 .sline{ flex:1; height:1px; background:var(--parchment-border); }
@@ -219,6 +218,23 @@ code{ background:#DAD4CA; padding:1px 5px; border-radius:4px; font-size:11.5px; 
 .tag--brand{ color:var(--brand); border-color:var(--brand-edge); }
 .tag--milestone{ color:var(--milestone); border-color:var(--milestone-edge); }
 .tag--done{ color:var(--jade); border-color:var(--jade-edge); }
+.tierline{ display:flex; align-items:center; gap:var(--sp-2); min-height:var(--tap-min); }
+.tierline--split{ justify-content:space-between; }
+.tier-state{ font:var(--fw-regular) var(--fs-meta)/1.4 var(--font-ui); color:var(--muted-dark); white-space:nowrap; }
+.tier-state b{ color:var(--ink-soft); font-weight:var(--fw-semi); }
+.ladder{ display:flex; align-items:center; gap:2px; flex:none; margin-right:-9px; }
+.rung{ display:inline-flex; align-items:center; gap:4px; min-height:var(--tap-min); padding:0 9px; border:none; background:none; font:var(--fw-medium) var(--fs-meta)/1 var(--font-ui); color:var(--brand); white-space:nowrap; cursor:pointer; }
+.rung svg{ width:12px; height:12px; flex:none; opacity:.7; }
+.rung.dn{ color:var(--muted-dark); }
+.xref-card{ margin:var(--sp-4) 0 0; overflow:hidden; }
+.xref{ display:flex; align-items:center; gap:var(--sp-2); width:100%; min-height:var(--tap-min); padding:10px var(--sp-4); border:none; border-top:var(--border-soft); background:transparent; text-align:left; cursor:pointer; }
+.xref:first-child{ border-top:none; }
+.xref-node{ width:22px; height:22px; border-radius:var(--r-pill); border:var(--border); background:var(--parchment); color:var(--muted-dark); display:flex; align-items:center; justify-content:center; font:var(--fw-semi) 10px/1 var(--font-ui); flex:none; }
+.xref-txt{ flex:1; min-width:0; }
+.xref-lb{ display:block; font:var(--fw-bold) 8.5px/1.3 var(--font-ui); text-transform:uppercase; letter-spacing:.1em; color:var(--muted-dark); }
+.xref-nm{ display:block; font:var(--fw-medium) var(--fs-meta)/1.3 var(--font-ui); color:var(--ink); }
+.xref-go{ color:var(--muted-dark); display:flex; flex:none; }
+.xref-go svg{ width:14px; height:14px; }
 .pill-solid{ display:inline-flex; align-items:center; gap:5px; font:var(--fw-semi) 9.5px/1 var(--font-ui); letter-spacing:.14em; text-transform:uppercase; color:#fff; background:var(--brand); padding:6px 10px; border-radius:var(--r-pill); }
 .pill-solid svg{ width:10px; height:10px; }
 
@@ -402,6 +418,7 @@ table.spec tr:last-child td{ border-bottom:none; }
   <a href="#list">Divided list</a>
   <a href="#labels">Labels &amp; note</a>
   <a href="#pills">Pills &amp; tags</a>
+  <a href="#tierladder">Tier ladder</a>
   <a href="#buttons">Buttons</a>
   <a href="#progress">Progress</a>
   <a href="#wordcard">Word card</a>
@@ -503,9 +520,9 @@ table.spec tr:last-child td{ border-bottom:none; }
 
 <section id="context">
   <h2>Contextual row</h2>
-  <p class="note">Sits under the header, on canvas. Carries the back target, position, and a progress hairline. <b>Back is labelled with the destination</b> — the stage you came from, not "Beginner Path". Meta carries stage position ("3 of 5"), never whole-path position.</p>
+  <p class="note">Sits under the header, on canvas. Carries the back target and position. <b>Back is labelled with the destination</b> — the stage you came from, not "Beginner Path". Meta carries stage position ("3 of 5"), never whole-path position. <b>The stepper renders INSIDE <code>.ctx</code></b> (v121, DES-23): the block is a closed band with a hairline above and below the strip — <code>.ctx-head--split</code> separates the back row from the stepper, <code>.ctx</code>'s own bottom edge closes it against the lesson. Before v121 nothing here had an edge and all three parts sat on the page background. <b>The progress hairline is retired</b> (DES-24) — the stepper reports stage progress node by node and more precisely, and at 100% the hairline filled the full width and read as a divider. <b>A standalone topic uses the same shell</b> (DES-25): no stepper, no split, and the meta slot carries the topic's category instead of a stage position.</p>
   <div class="stage deep" style="padding:0;overflow:hidden;border-radius:var(--r-md)" id="ctxdemo"></div>
-  <div class="cls">.ctx › .ctx-inner › .ctx-row + .ctx-track › .ctx-fill</div>
+  <div class="cls">.ctx › .ctx-head[--split] › .ctx-inner › .ctx-row &nbsp;·&nbsp; .stepper follows inside .ctx</div>
 </section>
 
 <section id="stepper">
@@ -585,16 +602,24 @@ table.spec tr:last-child td{ border-bottom:none; }
 
 <section id="pills">
   <h2>Pills &amp; tags</h2>
-  <p class="note">Pills are interactive (tier selectors, filters). Tags are not (metadata, status). Only <code>.pill-solid</code> fills, reserved for the single most important thing on a screen.</p>
+  <p class="note">Pills are interactive (filters, the quiz direction toggle). Tags are not (metadata, status). Only <code>.pill-solid</code> fills, reserved for the single most important thing on a screen. <b>Note the tier selector is no longer a pill</b> — see the tier ladder below.</p>
   <div class="stage row" style="align-items:center">
-    <button class="pill">Tier 2</button>
-    <button class="pill pill--on">Tier 1</button>
+    <button class="pill">EN → 中</button>
+    <button class="pill pill--on">中 → EN</button>
     <span class="tag">Recall</span>
     <span class="tag tag--brand">Next up</span>
     <span class="tag tag--milestone">Checkpoint</span>
     <span class="tag tag--done">Complete</span>
     <span class="pill-solid" id="psolid"></span>
   </div>
+</section>
+
+<section id="tierladder">
+  <h2>Tier ladder</h2>
+  <p class="note">The meta line under a lesson title. <b>Deliberately not a chooser</b> (DES-28, v122): a one-of-N control here sits directly on the <code>.tabs</code> row and reads as a hierarchy between two unrelated axes — tier is content scope, the subtabs are view. So there is no selected state, and no new selected-state language enters the system. <code>.tier-state</code> states the position; <code>.rung</code> offers the adjacent tiers only. <b>Up is <code>--brand</code>, down is <code>--muted-dark</code></b> — the ladder has a direction, so the upward rung is the offer and the downward one is the way back.</p>
+  <p class="note">A single rung names its destination; two rungs shorten to bare numbers, which is only legible because the state text then reads &ldquo;Tier 2 of 3&rdquo;. <b>Inside a path the rungs are absent entirely</b> — every tier belongs to exactly one path, so a tier change crosses paths, and the move is offered at the foot by <code>.xref</code> with the destination path named.</p>
+  <div class="cls">.tierline[--split] › .tier-state + .ladder › .rung[.dn]</div>
+  <div class="stage" id="tierdemo"></div>
 </section>
 
 <section id="buttons">
@@ -777,7 +802,7 @@ sw('sw-tone',[['tone 1','#E74C3C'],['tone 2','#E67E22'],['tone 3','#c8a200'],['t
 document.getElementById('fams').innerHTML=`
   <div class="grid2">
     <div class="stage"><div style="font:500 26px/1.2 var(--font-display);color:var(--ink)">Food &amp; Dishes</div><div class="cls">--font-display · Fraunces — page and section titles, score values, English reveals</div></div>
-    <div class="stage"><div style="font:500 26px/1.2 var(--font-serif);color:var(--ink)">飯 麵 好味</div><div class="cls">--font-serif · Noto Serif TC — all Chinese, and the nameplate</div></div>
+    <div class="stage"><div style="font:500 26px/1.2 var(--font-serif);color:var(--ink)">飯 麵 好味</div><div class="cls">--font-serif · Noto Serif TC — all Chinese, the nameplate, watermarks. <b>Never a Latin title.</b> Noto Serif TC ships full Latin coverage, so a Latin string set in --font-serif renders in the CJK face rather than falling through to Fraunces — eight title sites did exactly that until v121 (DES-26).</div></div>
     <div class="stage"><div style="font:500 17px/1.4 var(--font-ui);color:var(--ink)">Everything else — labels, body, buttons, jyutping</div><div class="cls">--font-ui · Inter</div></div>
   </div>`;
 
@@ -798,11 +823,39 @@ document.getElementById('hdr').innerHTML=`
   <div class="sg-plate"><span class="zh">廣東話</span><span class="en">Cantonese Learner</span></div>
   <button class="icon right">${I.menu}</button>`;
 
+document.getElementById('tierdemo').innerHTML=`
+  <div style="max-width:340px">
+    <div style="font:var(--fw-bold) 9px/1 var(--font-ui);letter-spacing:.11em;text-transform:uppercase;color:var(--muted-dark);margin-bottom:4px">One tier &mdash; degrades to the count alone</div>
+    <div class="tierline" style="min-height:26px"><span class="tier-state">14 words</span></div>
+    <div style="font:var(--fw-bold) 9px/1 var(--font-ui);letter-spacing:.11em;text-transform:uppercase;color:var(--muted-dark);margin:10px 0 4px">Tier 1 of 2 &mdash; one rung, named</div>
+    <div class="tierline tierline--split">
+      <span class="tier-state"><b>Tier 1</b> &middot; 10 words</span>
+      <span class="ladder"><button class="rung">Tier 2 ${I.arrow}</button></span>
+    </div>
+    <div style="font:var(--fw-bold) 9px/1 var(--font-ui);letter-spacing:.11em;text-transform:uppercase;color:var(--muted-dark);margin:10px 0 4px">Tier 2 of 3 &mdash; two rungs, bare numbers</div>
+    <div class="tierline tierline--split">
+      <span class="tier-state"><b>Tier 2</b> of 3 &middot; 10 words</span>
+      <span class="ladder"><button class="rung dn">${I.back} 1</button><button class="rung">3 ${I.arrow}</button></span>
+    </div>
+    <div style="font:var(--fw-bold) 9px/1 var(--font-ui);letter-spacing:.11em;text-transform:uppercase;color:var(--muted-dark);margin:14px 0 4px">In a path &mdash; stated only, crossing offered at the foot</div>
+    <div class="tierline"><span class="tier-state"><b>Tier 2</b> of 3 &middot; 10 words</span></div>
+    <div class="card xref-card">
+      <button class="xref"><span class="xref-node">1</span><span class="xref-txt"><span class="xref-lb">Earlier, in the Beginner path</span><span class="xref-nm">Tier 1 &mdash; 10 words</span></span><span class="xref-go">${I.arrow}</span></button>
+      <button class="xref"><span class="xref-node">3</span><span class="xref-txt"><span class="xref-lb">Next, in the Advanced path</span><span class="xref-nm">Tier 3 &mdash; 12 words</span></span><span class="xref-go">${I.arrow}</span></button>
+    </div>
+  </div>`;
+
 document.getElementById('ctxdemo').innerHTML=`
-  <div class="ctx"><div class="ctx-inner"><div class="ctx-row">
+  <div class="ctx"><div class="ctx-head ctx-head--split"><div class="ctx-inner"><div class="ctx-row">
     <button class="ctx-back">${I.back} Building Sentences</button>
     <span class="ctx-meta">3 of 5</span>
-  </div></div><div class="ctx-track"><div class="ctx-fill" style="width:40%"></div></div></div>`;
+  </div></div></div>
+  <div class="stepper">
+    <div class="sx"><span class="node node--done">${I.check}</span><span class="sline done"></span></div>
+    <div class="sx"><span class="node node--current">2</span><span class="sline"></span></div>
+    <div class="sx"><span class="node">3</span><span class="sline"></span></div>
+    <div class="sx"><span class="node node--cp"><span>&#9670;</span></span></div>
+  </div></div>`;
 
 document.getElementById('stepdemo').innerHTML=`
   <div class="stepper">

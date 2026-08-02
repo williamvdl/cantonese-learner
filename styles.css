@@ -422,9 +422,57 @@
      render() only when the bar is actually present — a standalone topic has no
      continuation and must not reserve space for one. */
   .content--docked { padding-bottom: calc(var(--tabbar-h) + var(--bar-h) + var(--sp-5) + env(safe-area-inset-bottom, 0px)); }
-  .lesson-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
-  .lesson-title { font-family: var(--font-display); font-size: var(--fs-h2); font-weight: var(--fw-medium); color: var(--ink); margin: 0; letter-spacing: -0.01em; }
-  .lesson-count { font-size: var(--fs-meta); color: var(--muted); margin-top: 2px; }
+  /* DES-28 (v122): the header STACKS — title, then one tier line carrying the
+     tier and the word count. It was a flex row (title | count) sitting under a
+     44px `.round-selector` pill row: two rows and ~101px of chrome for two
+     facts. `.lesson-count` retired; the count lives in `.tier-state`. */
+  .lesson-header { margin-bottom: var(--sp-3); }
+  .lesson-title { font-family: var(--font-display); font-size: var(--fs-h2); font-weight: var(--fw-medium); color: var(--ink); margin: 0 0 3px; letter-spacing: -0.01em; }
+
+  /* ── Tier ladder — `.tierline` › `.tier-state` + `.ladder` › `.rung`
+        (§2, MOCK-24-D, DES-28, v122).
+     Deliberately NOT a chooser. A one-of-N chooser here would sit directly on
+     top of the `.tabs` row and read as a hierarchy between two axes that are
+     unrelated — tier is content scope, the subtabs are view. So there is no
+     selected state to design: the left side STATES the position, the right side
+     offers the adjacent rungs. That also means no new selected-state language
+     enters the system, which matters because underline, top border, outline and
+     fill are all already spoken for (`.tab--on`, `.tabs--top .tab--on`,
+     `.pill--on`, `.node--current`).
+     `min-height` carries the 44px target, not padding, so standing check 2 can
+     see it. `.ladder` is inset by its own padding so the rung text sits flush
+     with the content edge. ── */
+  .tierline { display: flex; align-items: center; gap: var(--sp-2); min-height: var(--tap-min); }
+  .tierline--split { justify-content: space-between; }
+  .tier-state { font-family: var(--font-ui); font-size: var(--fs-meta); font-weight: var(--fw-regular); color: var(--muted-dark); white-space: nowrap; }
+  .tier-state b { color: var(--ink-soft); font-weight: var(--fw-semi); }
+  .ladder { display: flex; align-items: center; gap: 2px; flex: none; margin-right: -9px; }
+  /* Up is brand, down is muted: the ladder has a direction, so the upward rung
+     is the offer and the downward one is the way back. This is also what keeps
+     exactly one brand-coloured interactive element above the subtabs (§3.1 in
+     spirit — the rule counts fills, but a second brand accent here would still
+     compete with the active subtab). */
+  .rung { display: inline-flex; align-items: center; gap: 4px; min-height: var(--tap-min); padding: 0 9px; border: none; background: none; font-family: var(--font-ui); font-size: var(--fs-meta); font-weight: var(--fw-medium); line-height: 1; color: var(--brand); white-space: nowrap; cursor: pointer; }
+  .rung svg { width: 12px; height: 12px; flex: none; opacity: 0.7; }
+  .rung.dn { color: var(--muted-dark); }
+  .rung:active { transform: scale(0.96); }
+
+  /* ── Tier cross-reference — the same move offered at the FOOT of a path lesson
+        (§2, MOCK-22-X, DES-29, v122). Inside a path the inline ladder is absent:
+        every tier belongs to a path, so a tier change relocates you between
+        paths, and that consequence is too large for a control at the top that
+        looks like a filter. One row per adjacent tier, each naming its path.
+        Built on `.card`; deliberately quieter than `.bar-next` — outline node,
+        muted arrow, no brand — so the path's own forward step stays louder. ── */
+  .xref-card { margin: var(--sp-5) 0 0; overflow: hidden; }
+  .xref { display: flex; align-items: center; gap: var(--sp-2); width: 100%; min-height: var(--tap-min); padding: 10px var(--sp-4); border: none; border-top: var(--border-soft); background: transparent; text-align: left; cursor: pointer; }
+  .xref:first-child { border-top: none; }
+  .xref-node { width: 22px; height: 22px; border-radius: var(--r-pill); border: var(--border); background: var(--parchment); color: var(--muted-dark); display: flex; align-items: center; justify-content: center; font-family: var(--font-ui); font-size: 10px; font-weight: var(--fw-semi); flex: none; }
+  .xref-txt { flex: 1; min-width: 0; }
+  .xref-lb { display: block; font-family: var(--font-ui); font-size: 8.5px; font-weight: var(--fw-bold); text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted-dark); }
+  .xref-nm { display: block; font-family: var(--font-ui); font-size: var(--fs-meta); font-weight: var(--fw-medium); color: var(--ink); }
+  .xref-go { color: var(--muted-dark); display: flex; flex: none; }
+  .xref-go svg { width: 14px; height: 14px; }
   .hint { font-size: var(--fs-micro); color: var(--muted); margin-bottom: 12px; }
 
   /* Word grid */
@@ -468,9 +516,6 @@
   .topic-card-pip { width: 6px; height: 6px; border-radius: var(--r-pill); background: var(--brand); }
   .topic-card-pip.empty { background: var(--brand-edge); }
 
-  /* Round selector inside topic page */
-  .round-selector { display: flex; gap: 6px; margin-bottom: 12px; align-items: center; }
-  .round-label { font-size: var(--fs-micro); color: var(--muted-dark); font-weight: var(--fw-bold); letter-spacing: 1px; text-transform: uppercase; margin-right: 4px; }
 
   /* Back-to-home button */
   .back-home-btn { display: inline-flex; align-items: center; gap: 5px; background: transparent; border: none; color: var(--muted-dark); font-size: var(--fs-small); cursor: pointer; padding: var(--sp-2) 0; margin-bottom: var(--sp-3); font-weight: var(--fw-semi); }
@@ -480,21 +525,38 @@
         labelled with its destination (the stage you came from, not the path);
         meta carries STAGE position, never whole-path position. Scrolls away.
         Ported from styleguide.html § Contextual row. ── */
-  .ctx { background: var(--parchment-warm); }
+  /* DES-23 (v121): the block is CLOSED. Before, .ctx, .stepper and the page all
+     sat on --parchment-warm with no edges anywhere, so the only visible boundary
+     in the whole region was the progress hairline — and a hairline is not a
+     divider, which is exactly how it was being read. The block now carries a
+     hairline above and below the stepper: .ctx-row's bottom edge separates the
+     back row from the strip, and .ctx's bottom edge closes the block against the
+     lesson. That is the pair mockup 10 drew and the built version never had. */
+  .ctx { background: var(--parchment-warm); border-bottom: var(--border-soft); }
   .ctx-inner { max-width: var(--measure); margin: 0 auto; }
-  .ctx-row { display: flex; align-items: center; justify-content: space-between; gap: var(--sp-2); padding: 10px var(--sp-4) 9px; }
+  .ctx-row { display: flex; align-items: center; justify-content: space-between; gap: var(--sp-2); padding: 8px var(--sp-4) 7px; }
+  /* Only when a stepper follows. A standalone topic's row IS the block, so a
+     second line directly above .ctx's own bottom edge would be two rules 1px
+     apart. Emitted as a modifier rather than a :not() so the markup says which
+     shape it is. */
+  .ctx-head--split { border-bottom: var(--border-soft); }
   .ctx-back { display: flex; align-items: center; gap: 6px; min-height: var(--tap-min); font-family: var(--font-ui); font-size: var(--fs-meta); font-weight: var(--fw-medium); line-height: 1.2; color: var(--ink); background: none; border: none; cursor: pointer; padding: 0; }
   .ctx-back svg { width: 15px; height: 15px; flex: none; }
-  .ctx-meta { font-family: var(--font-ui); font-size: 10.5px; font-weight: var(--fw-medium); line-height: 1; color: var(--muted-dark); white-space: nowrap; }
-  /* The hairline tracks STAGE progress (§3.4) — it moves visibly across five
-     topics instead of creeping 2% per lesson across forty-one. */
-  .ctx-track { height: 2px; background: var(--parchment-deep); }
-  .ctx-fill { height: 2px; background: var(--brand); }
+  /* --fs-micro, not the 10.5px this carried until v121 — the only type size on
+     the screen that was off the scale. */
+  .ctx-meta { font-family: var(--font-ui); font-size: var(--fs-micro); font-weight: var(--fw-medium); line-height: 1; color: var(--muted-dark); white-space: nowrap; }
+  /* DES-24 (v121): .ctx-track / .ctx-fill retired. The hairline reported stage
+     progress, which the stepper below it already reports node by node and more
+     precisely — and at 100% the fill spanned the full width and became an
+     orange rule through the middle of the screen. Two readings of one fact, one
+     of which was wrong. .segs was considered as a replacement and rejected: it
+     is coloured --milestone, and milestone means CHECKPOINT (§4), so borrowing
+     it here would make an ordinary lesson read as an event. */
 
   /* ── Stage stepper (§2, MOCK-10-B) — the sibling topics of the current
         stage, plus the stage checkpoint as a diamond at the end. Tappable.
         Present only when a topic was entered from a path. ── */
-  .stepper { display: flex; align-items: center; padding: 12px var(--sp-4) 11px; max-width: var(--measure); margin: 0 auto; }
+  .stepper { display: flex; align-items: center; padding: 8px var(--sp-4) 7px; max-width: var(--measure); margin: 0 auto; }
   .sx { display: flex; align-items: center; flex: 1; }
   .sx:last-child { flex: 0 0 auto; }
   .sline { flex: 1; height: 1px; background: var(--parchment-border); }
@@ -802,7 +864,7 @@
   .review-done-stats { display: flex; gap: 10px; margin: 14px 0 18px; }
   .review-done-stats .rd-stat { flex: 1; background: var(--parchment); border: 1px solid var(--parchment-border);
     border-radius: var(--r-md); padding: 14px 6px; }
-  .review-done-stats .rd-stat b { display: block; font-family: var(--font-serif); font-size: 26px; line-height: 1; }
+  .review-done-stats .rd-stat b { display: block; font-family: var(--font-display); font-size: 26px; font-weight: var(--fw-semi); line-height: 1; }
   .review-done-stats .rd-stat span { font-size: var(--fs-micro); color: var(--muted-light); }
 
   .review-progress { display: inline-flex; gap: 5px; align-items: center; }
@@ -849,9 +911,12 @@
   .path-card:active { transform: scale(0.98); }
   .path-card.locked { border-color: var(--parchment-border); cursor: default; opacity: 0.7; }
   .path-card.locked:active { transform: none; }
-  .path-card-top { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; }
-  .path-card-icon { font-size: var(--fs-h2); line-height: 1; }
-  .path-card-title { flex: 1; font-size: 16px; font-weight: var(--fw-bold); color: var(--ink); }
+  /* DES-27: .path-card-icon retired with the emoji. The row is now title +
+     count, so the gap closes to --sp-2. */
+  .path-card-top { display: flex; align-items: center; gap: var(--sp-2); margin-bottom: 10px; }
+  /* font-size and font-weight are set in the path-titles block below — declared
+     here too until v121, where the later rule silently won. */
+  .path-card-title { flex: 1; color: var(--ink); }
   .tone-guide-foot { margin-top: 14px; padding-top: 12px; border-top: var(--border); }
   .ph-title { font-family: var(--font-display); font-size: 20px; font-weight: var(--fw-medium); color: var(--ink); margin-bottom: var(--sp-2); }
   .fatal-msg { padding: 40px 20px; text-align: center; color: var(--feedback-bad); font-size: var(--fs-small); }
@@ -863,14 +928,17 @@
   .path-card-progress { display: flex; align-items: center; gap: 10px; }
   .path-progress-bar { flex: 1; height: 6px; background: var(--parchment-border); border-radius: var(--r-pill); overflow: hidden; }
   .path-progress-fill { height: 100%; background: var(--brand); transition: width 0.3s; }
-  .path-progress-count { font-size: var(--fs-micro); color: var(--muted-dark); font-weight: var(--fw-bold); white-space: nowrap; }
+  .path-progress-count, .path-card-count { font-size: var(--fs-micro); color: var(--muted-dark); font-weight: var(--fw-bold); white-space: nowrap; }
+  /* Brand only once there is progress to report. At 0 / 11 a brand-coloured
+     count would advertise a path that has not been started. */
+  .path-card-count.on { color: var(--brand); }
 
   /* Path timeline */
   .path-timeline-wrap { padding: 12px 20px 40px; max-width: var(--measure); margin: 0 auto; }
   .path-timeline-back { display: inline-flex; align-items: center; gap: 5px; background: transparent; border: none; color: var(--muted-dark); font-size: var(--fs-small); cursor: pointer; padding: 4px 0; margin-bottom: 8px; font-weight: var(--fw-semi); }
   .path-timeline-back:hover { color: var(--ink); }
   .path-timeline-header { margin-bottom: var(--sp-5); }
-  .path-timeline-title { font-size: var(--fs-h3); font-weight: var(--fw-bold); color: var(--ink); margin-bottom: 4px; }
+  .path-timeline-title { color: var(--ink); margin-bottom: 4px; }
   .path-timeline-sub { font-size: var(--fs-meta); color: var(--muted-dark); margin-bottom: 10px; }
   .path-timeline-progress { display: flex; align-items: center; gap: 10px; margin-top: 10px; }
 
@@ -897,7 +965,7 @@
   .path-step.done .path-step-card { background: var(--parchment-warm); border-color: var(--parchment-border); }
   .path-step-row { display: flex; align-items: center; gap: 10px; }
   .path-step-text { flex: 1; min-width: 0; }
-  .path-step-title { font-size: 14px; font-weight: var(--fw-bold); color: var(--ink); line-height: 1.2; }
+  .path-step-title { color: var(--ink); line-height: 1.2; }
   .path-step-meta { font-size: var(--fs-micro); color: var(--muted-dark); margin-top: 2px; }
   .path-next-badge { display: inline-block; font-size: 9px; font-weight: var(--fw-bold); letter-spacing: 1px; text-transform: uppercase; color: #fff; background: var(--brand); padding: 2px 7px; border-radius: var(--r-sm); margin-bottom: 5px; }
 
@@ -943,8 +1011,7 @@
   /* Meta + UI labels — uppercase tracking for premium "luxury label" feel */
   .header-title .en,
   .quiz-label,
-  .quiz-review-title,
-  .round-label {
+  .quiz-review-title {
     font-family: var(--font-ui);
     font-weight: var(--fw-bold);
     text-transform: uppercase;
@@ -968,10 +1035,16 @@
     letter-spacing: 0.01em;
   }
 
-  /* Path titles — proper editorial */
+  /* Path titles — proper editorial.
+     DES-26 (v121): --font-display, not --font-serif. Noto Serif TC ships full
+     Latin coverage and is loaded with it, so a Latin title set in --font-serif
+     never falls through to Fraunces — it renders in the CJK face. That put every
+     path title in a different serif from .lesson-title, one tap away. Weight
+     drops to --fw-semi with the face: Fraunces at 700 is heavier than Noto Serif
+     TC at 700 and would out-shout .lesson-title, which is already --fw-semi. */
   .path-card-title, .path-timeline-title, .path-step-title {
-    font-family: var(--font-serif);
-    font-weight: var(--fw-bold);
+    font-family: var(--font-display);
+    font-weight: var(--fw-semi);
     letter-spacing: -0.005em;
   }
   .path-card-title { font-size: var(--fs-lead); }
@@ -1063,10 +1136,14 @@
   /* Speak-mode polish */
 
   .page-header { margin-bottom: var(--sp-5); }
+  /* DES-26: --font-display. See the path-titles note below. The flex row and its
+     gap remain — the title is a single text node now that the emoji slot is gone
+     (DES-27), but .page-header-title is shared by five screens and flex costs
+     nothing if one of them ever needs a trailing count. */
   .page-header-title {
-    font-family: var(--font-serif);
+    font-family: var(--font-display);
     font-size: var(--fs-h2);
-    font-weight: var(--fw-bold);
+    font-weight: var(--fw-semi);
     color: var(--ink-soft);
     letter-spacing: -0.01em;
     line-height: var(--lh-heading);
@@ -1075,7 +1152,6 @@
     gap: var(--sp-2);
     margin: 0 0 var(--sp-1);
   }
-  .page-header-emoji { font-size: 0.85em; }
   .page-header-sub {
     font-family: var(--font-ui);
     font-size: var(--fs-small);
@@ -1198,7 +1274,7 @@
   .path-stage-band { display: flex; align-items: center; gap: 9px; margin: 22px 0 12px; }
   .path-stage-band:first-child { margin-top: 4px; }
   .path-stage-num { flex: 0 0 auto; width: 24px; height: 24px; border-radius: var(--r-sm); background: var(--brand); color: #fff; font-size: var(--fs-meta); font-weight: var(--fw-bold); display: flex; align-items: center; justify-content: center; }
-  .path-stage-name { font-family: var(--font-serif); font-weight: var(--fw-bold); color: var(--ink); font-size: var(--fs-body); }
+  .path-stage-name { font-family: var(--font-display); font-weight: var(--fw-semi); color: var(--ink); font-size: var(--fs-body); }
   .path-stage-rule { flex: 1; height: 1px; background: var(--parchment-border); }
   .path-stage-meta { font-size: var(--fs-micro); color: var(--muted); }
 
@@ -1228,7 +1304,7 @@
   .cp-hero { text-align: center; padding: 10px 0 2px; }
   .cp-diamond { width: 56px; height: 56px; margin: 0 auto 12px; background: var(--milestone); border-radius: var(--r-md); transform: rotate(45deg); display: flex; align-items: center; justify-content: center; box-shadow: var(--elev-2); }
   .cp-diamond span { transform: rotate(-45deg); font-size: 25px; color: #fff; }
-  .cp-hero-h { font-family: var(--font-serif); font-size: var(--fs-h3); color: var(--ink); font-weight: var(--fw-bold); }
+  .cp-hero-h { font-family: var(--font-display); font-size: var(--fs-h3); color: var(--ink); font-weight: var(--fw-semi); }
   .cp-hero-stage { font-size: var(--fs-small); color: var(--brand); font-weight: var(--fw-semi); margin: 3px 0 2px; }
   .cp-hero-prog { font-size: var(--fs-meta); color: var(--muted); margin-bottom: 4px; }
   .cp-optional { display: inline-flex; align-items: center; gap: 6px; background: var(--feedback-good-tint); border: 1px solid var(--feedback-good-tint); color: var(--jade); border-radius: var(--r-pill); padding: 5px 12px; font-size: 11.5px; margin: 6px 0 16px; }
@@ -1253,9 +1329,9 @@
   .cp-done-wrap { text-align: center; padding: 8px 0; }
   .cp-done-ring { width: 112px; height: 112px; border-radius: var(--r-pill); margin: 6px auto 14px; display: flex; align-items: center; justify-content: center; }
   .cp-done-inner { width: 90px; height: 90px; border-radius: var(--r-pill); background: var(--parchment-warm); display: flex; flex-direction: column; align-items: center; justify-content: center; }
-  .cp-done-pct { font-family: var(--font-serif); font-size: 26px; font-weight: var(--fw-bold); color: var(--milestone); }
+  .cp-done-pct { font-family: var(--font-display); font-size: 26px; font-weight: var(--fw-semi); color: var(--milestone); }
   .cp-done-cap { font-size: 9.5px; color: var(--muted); letter-spacing: 1px; }
-  .cp-done-h { font-family: var(--font-serif); font-size: 21px; color: var(--ink); font-weight: var(--fw-bold); }
+  .cp-done-h { font-family: var(--font-display); font-size: 21px; color: var(--ink); font-weight: var(--fw-semi); }
   .cp-done-sub { font-size: var(--fs-small); color: var(--muted); margin: 4px 0 16px; }
   .cp-diag { background: var(--brand-tint); border: 1px solid var(--parchment-border); border-radius: var(--r-md); padding: 14px; box-shadow: var(--elev-1); margin-bottom: 12px; text-align: left; }
   .cp-diag-lbl { font-size: var(--fs-micro); font-weight: var(--fw-bold); letter-spacing: .5px; color: var(--brand); margin-bottom: 6px; }
@@ -1273,7 +1349,7 @@
   /* Checkpoint convo header */
   .cp-convo-head { background: var(--milestone-tint); border: 1px solid var(--milestone); border-radius: var(--r-md); padding: 13px 15px; margin-bottom: 12px; }
   .cp-convo-kick { font-size: 10px; font-weight: var(--fw-bold); letter-spacing: 1px; text-transform: uppercase; color: var(--milestone); }
-  .cp-convo-title { font-family: var(--font-serif); font-size: 18px; color: var(--ink); font-weight: var(--fw-bold); margin-top: 2px; }
+  .cp-convo-title { font-family: var(--font-display); font-size: 18px; color: var(--ink); font-weight: var(--fw-semi); margin-top: 2px; }
 
   /* ═══════════════════════════════════════════════════════════════════════
      DASHBOARD — Home (DESIGN_SYSTEM §2, mockup 14-dashboard.html)
