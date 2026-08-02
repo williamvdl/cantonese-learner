@@ -21,7 +21,7 @@ at and no built/not-built axis. If they ever need a register they should get the
 own file rather than being forced into this one. For now they live in the *Current
 architecture* section of the project instructions.
 
-Last updated: 2026-08-01 · sw.js at v120
+Last updated: 2026-08-02 · sw.js at v122
 
 ---
 
@@ -115,6 +115,7 @@ several below existed only as an aside in `DESIGN_SYSTEM.md` or a comment in
 | ID | Decides | Status | Notes |
 |---|---|---|---|
 | MOCK-14-C | Dashboard hero — a card with a 3px left rule carrying the state, not a filled band | Built | Direct consequence of DES-02. |
+| MOCK-22-X | Inside a path, tier is **stated at the top and offered at the foot**, named, rather than switched inline | Built | v122. Option X of four (Now / Follow / Lock / Cross-reference). Chosen because switching tier always crosses paths, and a segmented pill says *two views of one thing* rather than *this one is in a different course*. Lock (no control at all in path context) was the drawn alternative and is strictly less work; it was rejected for hiding a real connection rather than explaining it. |
 | MOCK-24-D | Tier is a **ladder**, not a chooser: position stated on the left, adjacent rungs offered on the right | Built | v122. Mockups 22, 23 and 24 in sequence. 22 settled the placement (a meta line under the title) and the path behaviour (option X). 23 tried three treatments for the standalone control after the underline in 22 was rejected for reusing the subtabs' own language one row below. 24 redrew the whole thing against three tiers once it was clear tier 2 becomes the norm and tier 3 arrives with Advanced — and the middle rung is what ruled out the two chooser options, since three chips plus the word count exceed the 312px content width and force the block from one row to two. **MOCK-23-C is not superseded by MOCK-24-D; it is its two-tier case.** The markup is identical at two tiers. |
 | MOCK-23-A, MOCK-23-B | Tinted chip row, and marker-dot row, for the tier control | Rejected | v122. Both escape the visual echo with the subtabs but remain a one-of-N chooser sitting on a one-of-N chooser, which was the structural half of the objection. Both also wrap at three tiers. Recorded because they are the correct answer if tiers ever become **parallel variants rather than depths** — see DES-28's reopening condition. |
 | MOCK-21-A | Topic top area: the context block is a **closed band**, and a standalone topic uses the **same shell** | Built | v121. Mockup 21, mocked on v120. Two options were drawn: A retired the stage hairline, B kept it in `--milestone`. A chosen, with one amendment settled in review — mockup 21's option A closed the block at the bottom only, and the built version carries a hairline **above and below** the stepper, which is the pair mockup 10 drew. B was rejected on DES-02: a deep-red rule directly under the oxblood header is the merge that decision exists to prevent. |

@@ -199,17 +199,29 @@ lesson. Nothing marks it at rest; pressing drops its opacity, the language
 `.btn-icon--header` already uses. No hover rule — hover would assert an
 affordance the resting state deliberately withholds on a touch-first surface.
 
-### Contextual row — `.ctx` › `.ctx-inner` › `.ctx-row` + `.ctx-track`
-Sits under the header, on canvas. Carries back target, position, progress
-hairline. **Back is labelled with its destination** — the stage you came from,
-not the path. **Meta carries stage position ("3 of 5"), never whole-path
-position.** Scrolls away; only the header band stays pinned.
+### Contextual row — `.ctx` › `.ctx-head`[`--split`] › `.ctx-inner` › `.ctx-row`
+Sits under the header, on canvas. Carries the back target and position. **Back is
+labelled with its destination** — the stage you came from, not the path. **Meta
+carries stage position ("3 of 5"), never whole-path position.** Scrolls away; only
+the header band stays pinned.
 
-Two degradations, both the same shell with less in it — never a different shape.
+**The block is closed** (v121, DES-23). The stepper renders *inside* `.ctx`, and a
+hairline sits above and below it: `.ctx-head--split` separates the back row from
+the strip, `.ctx`'s own bottom edge closes the block against the lesson. Both are
+full-bleed rather than capped at `--measure`, or the two rules disagree in width
+above 680px. `--split` follows the **stepper's presence**, not the context's — a
+separator with nothing under it would land 1px above the block's own edge.
+
+`.ctx-track` / `.ctx-fill` are **retired** (v121, DES-24) — see §3.4.
+
+Three degradations, all the same shell with less in it — never a different shape.
 A topic in `path.lessons` but in **no stage** (Intermediate's `numbers`) falls back
-to the path as its back target and drops the hairline entirely, because an empty
-track reads as 0% rather than "not applicable". The **checkpoint hub** overrides
-the meta to `Checkpoint · <path>` and reuses the hub's own back handler.
+to the path as its back target. The **checkpoint hub** overrides the meta to
+`Checkpoint · <path>` and reuses the hub's own back handler. A **standalone topic**
+opened from Topics uses the same shell with no stepper and no split, and puts the
+topic's category in the meta slot instead of a stage position (v121, DES-25); the
+slot is omitted rather than left blank when a topic has no category, because an
+empty slot reads as a rendering fault.
 
 ### Stage stepper — `.stepper` › `.sx` › `.node` + `.sline`
 The sibling topics of the current stage, plus the stage checkpoint as a diamond
@@ -221,6 +233,25 @@ Nodes run at the **base 28px** (MOCK-16-S28). At 20px the strip read as decorati
 while being the screen's primary lateral navigation. The widest strip in the data
 is six nodes, which leaves 22px per connector on a 360px viewport — a stage of
 more than five topics would need this re-checked.
+
+### Tier ladder — `.tierline`[`--split`] › `.tier-state` + `.ladder` › `.rung`[`.dn`]
+The meta line under a lesson title, carrying the tier and the word count in one
+row. Replaced `.round-selector` at v122 (DES-28), which was a 44px pill row *above*
+the title plus a count to its right — two rows for two facts.
+
+**It is not a chooser, and that is the point.** See §3.5b for the reasoning. The
+left side states the position; `.rung` offers the **adjacent** tiers only. Up is
+`--brand`, down is `--muted-dark`. A single rung names its destination ("Tier 2");
+two rungs shorten to bare numbers, which is legible only because `.tier-state` then
+reads "Tier 2 of 3" — **do not shorten the single-rung case to match.** A
+single-tier topic degrades to the word count alone rather than the row vanishing,
+so the title never shifts. `min-height` carries the 44px target, not padding.
+
+### Tier cross-reference — `.xref-card` (on `.card`) › `.xref` › `.xref-node` + `.xref-txt` + `.xref-go`
+The same move offered at the **foot** of a path lesson (v122, DES-29), where the
+inline ladder is absent. One row per adjacent tier, each naming the path it belongs
+to. Built on `.card`; deliberately quieter than `.bar-next` — outline node, muted
+arrow, no brand — so the path's own forward step stays the louder of the two.
 
 ### Nodes — `.node` + `--done` `--current` `--cp`
 One shape family for all position markers. Circles for lessons, rotated rounded
