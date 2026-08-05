@@ -39,18 +39,25 @@
  * output folder when you are done — it is disposable and is not committed.
  *
  * USAGE
- *   node tools/tts-probe.js                 # every yue-HK voice, plain + SSML
- *   node tools/tts-probe.js --list          # just list the voices, no synthesis
- *   node tools/tts-probe.js --filter=Wavenet   # only voices matching a substring
- *   node tools/tts-probe.js --dry           # show the plan, spend nothing
+ *   node tools/tts-probe.js --list                    # what exists, no synthesis
+ *   node tools/tts-probe.js --filter=Standard         # one family
+ *   node tools/tts-probe.js --voices=Standard-A,Kore  # a named handful
+ *   node tools/tts-probe.js --dry                     # show the plan, spend nothing
+ *
+ * WHAT --list REVEALED (2026-08): yue-HK has only TWO families — Chirp3-HD
+ * (30 voices, Preview, the one with the defect) and Standard (4 voices, GA).
+ * There is no WaveNet, no Neural2 and no Gemini TTS for Cantonese. So the real
+ * comparison is four Standard voices against what the app already has, and a
+ * full 34-voice run is wasted effort: the 30 Chirp3-HD entries are one model
+ * wearing different speakers, and two of them have already been ruled out by
+ * ear. Use --filter=Standard.
  *
  * Auth is the same as generate-audio.js: `gcloud auth print-access-token`,
  * so if audio generation works, this works.
  *
- * COST: the full run is roughly 40 voices x 6 phrases of a few characters each —
- * comfortably inside the free monthly tier on every voice family. Chirp3-HD and
- * Gemini voices bill at a higher rate than Standard, but at this volume the
- * whole probe costs pennies at most.
+ * COST: a --filter=Standard run is 40 clips of a few characters each, well
+ * inside the free monthly tier. A full 34-voice run is ~340 clips and still
+ * cheap, but it is 340 clips to listen to.
  */
 'use strict';
 
@@ -66,6 +73,11 @@ const arg = (name) => { const m = args.find(a => a.startsWith(`--${name}=`)); re
 const LIST_ONLY = args.includes('--list');
 const DRY = args.includes('--dry');
 const FILTER = arg('filter');
+// --voices=Standard-A,Kore — comma-separated substrings, matched against the
+// full voice name. There are 34 yue-HK voices and 30 of them are the same
+// Chirp3-HD model wearing different speakers, so a full run mostly re-answers a
+// question you have already answered by ear. Name the handful you care about.
+const VOICES = (arg('voices') || '').split(',').map(s => s.trim()).filter(Boolean);
 
 // ── The test set ─────────────────────────────────────────────────────────────
 // Six phrases, each chosen to isolate one variable. `ipa` is the pronunciation
@@ -249,7 +261,9 @@ ${byPhrase.map(g => `
 
   log(`\nyue-HK TTS probe · project ${project}`);
   const all = await listVoices(token, project);
-  const voices = FILTER ? all.filter(v => v.name.includes(FILTER)) : all;
+  const voices = VOICES.length ? all.filter(v => VOICES.some(w => v.name.includes(w)))
+               : FILTER        ? all.filter(v => v.name.includes(FILTER))
+               : all;
 
   const families = [...new Set(all.map(v => v.family))];
   log(`\n${all.length} yue-HK voices available, in ${families.length} families:`);
@@ -258,7 +272,12 @@ ${byPhrase.map(g => `
     log(`  ${f.padEnd(12)} ${names.length.toString().padStart(2)}  (${names.join(', ')})`);
   });
   if (LIST_ONLY) { log(''); return; }
-  if (FILTER) log(`\nfilter "${FILTER}" → ${voices.length} of ${all.length} voices`);
+  if (VOICES.length) log(`\n--voices=${VOICES.join(',')} → ${voices.length} of ${all.length} voices`);
+  else if (FILTER)  log(`\n--filter=${FILTER} → ${voices.length} of ${all.length} voices`);
+  if (!voices.length) {
+    log('\nNothing matched. Run with --list to see the available names.\n');
+    return;
+  }
 
   // Plain text for every phrase; SSML only for the phrases with an IPA target,
   // and only on families that might accept it.
