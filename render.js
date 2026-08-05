@@ -210,6 +210,9 @@ function renderQuizCore(opts) {
   const { word: cw, choices, selected, direction, idx, total,
           ariaLabel, dirAttr, choiceAttr, listenId, replayId, nextId } = opts;
   const answered = selected !== null && selected !== undefined;
+  // Computed here rather than beside the answer panel below, because the listen
+  // prompt card needs it too (see the reveal in that branch).
+  const wasWrong = answered && choices[selected] !== cw;
   const pct = (idx / total * 100).toFixed(0);
 
   // --- Direction toggle ---
@@ -236,10 +239,19 @@ function renderQuizCore(opts) {
         <div class="quiz-prompt-en">${cw.e}</div>
       </div>`;
   } else if (direction === 'listen-en') {
+    // v122. `listen-en` is the only direction where the characters are never on
+    // screen, so a CORRECT answer used to end without the learner ever seeing
+    // what they had just heard — no way to check a tone against the jyutping.
+    // The reveal lands in the prompt card, where the question was, rather than
+    // in a new row. Correct only: a wrong answer already gets the full
+    // wrong-panel reveal below, and showing it twice would read as a fault.
     promptCard = `
       <div class="card quiz-card quiz-card-listen">
         <div class="quiz-label">Listen — what does it mean?</div>
         <button class="quiz-listen-big" id="${listenId}" aria-label="Play audio">${icon('volume',38)}</button>
+        ${answered && !wasWrong ? `
+          <div class="quiz-chinese">${cw.c}</div>
+          <div class="quiz-jyutping">${colorJyutping(cw.j)}</div>` : ''}
         <div class="quiz-listen-hint">Tap to replay</div>
       </div>`;
   } else {
@@ -275,7 +287,6 @@ function renderQuizCore(opts) {
   // The label is "Next question", not "Next" (MOCK-12): the continuation card is
   // on screen during the quiz and carries its own forward action, so a bare
   // "Next" would read as two forwards a thumb apart meaning different things.
-  const wasWrong = answered && choices[selected] !== cw;
   let answerPanel = '';
   if (answered && wasWrong) {
     answerPanel = `<div class="quiz-wrong-panel">
@@ -2698,8 +2709,16 @@ function attachEvents(lesson) {
   });
 
   // Quiz back
+  // Back to Lesson from the quiz result screen. Clears the flip state so the
+  // Words list comes back face-down — every other route into a topic (the topic
+  // card, openPathLesson, the tier switch) already resets it, and leaving the
+  // English showing means the next study pass has the answers already revealed.
   const qb = document.getElementById('quiz-back');
-  if (qb) qb.addEventListener('click', () => { state.mode = 'study'; render(); });
+  if (qb) qb.addEventListener('click', () => {
+    state.mode = 'study';
+    state.flipped = {};
+    render();
+  });
 
   // ── Path-mode in-topic handlers ─────────────────────────────────────
   // Mark the current step complete + celebration toast + transition to "Next step" state

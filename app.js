@@ -1051,9 +1051,29 @@ function checkpointProgress(pathKey, stageId) {
   const cp = getStageCheckpoint(pathKey, stageId);
   const stage = getStage(pathKey, stageId);
   if (!cp || !stage) return { done: 0, total: 0, complete: false, available: [] };
+  // Availability must be answerable from the REFERENCE data alone — paths and
+  // path_convos, both loaded by init() before the first paint. It must never
+  // depend on the topic cache, which is lazy-loaded per topic and is empty on a
+  // cold start.
+  //
+  // v122 fix. `words` used to test `getCheckpointWords(...).length > 0`, which
+  // walks getRoundWords() and so reads store.topicCache synchronously. On a cold
+  // start that is always 0, so the Words activity vanished, and for a checkpoint
+  // with the Conversation already done the sum became 1 of 1 → `complete: true`.
+  // buildPathSequence() then dropped the checkpoint entirely and the dashboard's
+  // "Next up" jumped to the lesson AFTER it. Tapping HOME afterwards looked like
+  // a fix; it was just the topic cache having warmed in between.
+  //
+  // A stage's Words activity is offerable exactly when the stage has topics, and
+  // that is knowable from learning_paths.json. Verified against the data: all 15
+  // checkpoint stages have topics and every one yields words (16–60 each), so
+  // this is equivalent to the old test whenever the cache is warm — and correct
+  // when it is not. The word POOL is still built by getCheckpointWords(); the
+  // render() guard above renderCheckpointHub loads the stage's topics before the
+  // hub paints, so the pool is never built against an empty cache.
   const available = CHECKPOINT_ACTIVITIES.filter(a => {
     if (a === 'convo') return !!(cp.convo && store.pathConvo(cp.convo));
-    if (a === 'words') return getCheckpointWords(pathKey, stage).length > 0;
+    if (a === 'words') return (stage.topics || []).length > 0;
     return false;
   });
   const done = available.filter(a => checkpointActivityDone(pathKey, cp.id, a)).length;

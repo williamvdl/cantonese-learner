@@ -6,7 +6,7 @@
 // up a new service worker when this string changes. If you forget to bump it,
 // users will keep serving the old index.html from cache.
 
-const CACHE_VERSION = 'cantonese-teahouse-v121';
+const CACHE_VERSION = 'cantonese-teahouse-v122';
 
 // App shell — fetched at install time.
 // NOTE: when adding a new .js or .css file to the app, add it here too,
@@ -27,12 +27,17 @@ const SHELL_ASSETS = [
 
 // Topic JSONs — pre-cached so every topic works offline from first install
 const TOPIC_KEYS = [
+  // 42 keys — must match the file count in /data/topics exactly. `connectives`
+  // and `pronouns` were missing until v122, so neither was available offline;
+  // `pronouns` is Beginner lesson one. Cross-check this list against the
+  // directory after adding any topic — nothing else enforces it.
   'adjectives', 'animals', 'attractions', 'body', 'classifiers', 'clothing', 'colors',
-  'comparisons', 'cooking', 'directions', 'drinks', 'emergencies', 'family', 'feelings',
-  'food', 'friends', 'fruitveg', 'greetings', 'hobbies', 'home', 'hotels',
-  'location', 'meatseafood', 'modals', 'money', 'numbers', 'particles', 'phrases',
-  'questions', 'restaurant', 'school', 'shopping', 'sports', 'tech', 'tense',
-  'time', 'transport', 'weather', 'work', 'yesno',
+  'comparisons', 'connectives', 'cooking', 'directions', 'drinks', 'emergencies',
+  'family', 'feelings', 'food', 'friends', 'fruitveg', 'greetings', 'hobbies',
+  'home', 'hotels', 'location', 'meatseafood', 'modals', 'money', 'numbers',
+  'particles', 'phrases', 'pronouns', 'questions', 'restaurant', 'school',
+  'shopping', 'sports', 'tech', 'tense', 'time', 'transport', 'weather',
+  'work', 'yesno',
 ];
 const TOPIC_ASSETS = TOPIC_KEYS.map(k => `./data/topics/${k}.json`);
 

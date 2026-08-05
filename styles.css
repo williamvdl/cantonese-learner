@@ -700,7 +700,7 @@
   .bubble-jyutping { font-size: var(--fs-micro); margin-bottom: 3px; }
   .bubble-english  { font-size: var(--fs-micro); opacity: 0.75; margin-top: 4px; }
   .bubble-eng-hint { font-size: var(--fs-micro); opacity: 0.5; margin-top: 4px; font-style: italic; }
-  .bubble-play-row { display: flex; justify-content: flex-end; margin-top: 8px; }
+  .bubble-play-row { display: flex; align-items: center; justify-content: flex-end; gap: var(--sp-3); margin-top: 8px; }
   .bubble-row.left .bubble-play-row { justify-content: flex-start; }
   .bubble-row.right .bubble-play { border-color: rgba(255,255,255,0.55); color: rgba(255,255,255,0.9); }
   .bubble-play.is-playing { background: var(--brand); border-color: var(--brand); color: #fff; }
@@ -717,6 +717,14 @@
   .cp-convo .bubble-row.right .bubble-play    { border-color: rgba(255,255,255,0.55); color: rgba(255,255,255,0.9); }
   .cp-convo .bubble-row.right .breakdown-btn  { color: rgba(255,255,255,0.75); }
   .cp-convo .bubble-play.is-playing   { background: var(--milestone); border-color: var(--milestone); color: #fff; }
+  /* The playing state on a user-side bubble needs its own rule here. The two
+     rules that would otherwise decide it disagree, and neither wins outright:
+     `.bubble-row.right .bubble-play.is-playing` (0,4,0) sets the white fill,
+     while `.cp-convo .bubble-row.right .bubble-play` above ties it at 0,4,0 and
+     wins on `color` by coming later — giving a white icon on a white circle,
+     i.e. a blank button. Fixed at v122; the topic-conversation equivalent was
+     never affected because no .cp-convo rule tied with it. */
+  .cp-convo .bubble-row.right .bubble-play.is-playing { background: #fff; border-color: #fff; color: var(--milestone); }
   .cp-convo .speak-turn               { color: var(--milestone); }
   .cp-convo .speak-action-btn.primary { background: var(--milestone); }
   .cp-convo .mic-btn.idle             { background: var(--milestone-tint); border-color: var(--milestone-edge); color: var(--milestone); }
@@ -809,6 +817,11 @@
   .quiz-listen-big { width: 96px; height: 96px; border-radius: var(--r-pill); border: 1px solid var(--brand-edge); background: var(--brand-tint); color: var(--brand); font-size: var(--fs-h1); cursor: pointer; margin: var(--sp-2) 0; transition: transform var(--dur-fast) var(--ease); }
   .quiz-listen-big:active { transform: scale(0.94); box-shadow: var(--elev-2); }
   .quiz-listen-hint { font-size: var(--fs-meta); font-weight: var(--fw-medium); color: var(--muted); margin-top: 4px; }
+  /* The correct-answer reveal (v122) reuses .quiz-chinese / .quiz-jyutping rather
+     than declaring its own type, but steps the display size down: here it sits
+     under a 96px control inside a card that already has a label, where 56px
+     would push the choices and the Next button off a 390px screen. */
+  .quiz-card-listen .quiz-chinese { font-size: var(--fs-h2); line-height: var(--lh-heading); }
 
   /* en-zh choice button variant — shows Chinese + jyutping stacked */
   .choice-btn-zh { padding: var(--sp-3) var(--sp-3); display: flex; flex-direction: column; align-items: center; gap: var(--sp-1); }
