@@ -4,7 +4,7 @@
 questions behind it. Meant to be short-lived — when a piece ships, fold its
 outcome into STATUS.md and clear this file back down for the next thing.*
 
-Last updated: 2026-08-02 · sw.js at v121
+Last updated: 2026-08-07 · sw.js at v124
 
 ## Nothing in progress
 
@@ -30,6 +30,25 @@ script before a sweep; it is in BACKLOG.md.
 > delivered first and was labelled v121 at the time, but it was never deployed, so
 > a second number would have recorded a release that never existed. Numbers track
 > **deploys**, not delivery turns.
+
+**v122 to v124 shipped after this file was cleared and do not reopen it.** All
+three came from a device QA pass rather than a plan: v122 carried six defect
+fixes with no design decisions, v123 migrated TTS from Google to Azure and
+regenerated all 1,376 audio files, and v124 was the emoji sweep (DES-31, DES-32).
+All three are folded into STATUS.md, and the two new decisions into
+DESIGN_DECISIONS.md.
+
+> **Three deploys, three version numbers — and that is correct.** The rule is one
+> number per *deploy*, not per delivery turn. These were deployed separately and
+> each cleared a service-worker cache on its own, so collapsing them would have
+> recorded two releases that never existed. Compare v121, where two work packages
+> shared one number because they went out together.
+
+`tools/tts-probe.js` was added at v123 and is deliberately **not** a ninth
+standing check. It answers a question — which voices a provider offers and how
+they handle a given sound — rather than asserting an invariant, and there is
+nothing for it to regress against between runs. It is recorded in BACKLOG.md so
+it is found rather than rewritten.
 
 Everything not yet done is unsequenced in BACKLOG.md. The standing checks below are
 permanent and stay here regardless of what is in progress.
@@ -101,6 +120,13 @@ the wrong path. Second the **rendering** across every state, including a
 **simulated three-tier topic**, because none exists yet and the middle rung is the
 state the design was chosen for. Run it after any change to `data/learning_paths.json`
 or `data/topics_index.json`, not just after touching the tier code.
+
+**Re-verified at v124, 2026-08-07** — unchanged from the v121 baseline below,
+which is the point: the emoji sweep touched 33 call sites and two CSS rules and
+moved none of these figures. `dead-css.js` still reports 436 declared classes
+because `.result-emoji` and `.review-empty-emoji` left as `.result-mark` and
+`.result-mark--good` arrived. Check 2's delta against `git show HEAD:styles.css`
+is zero.
 
 **Baseline re-verified at v121, 2026-08-02.** All eight pass:
 check 1 clean, check 2 gives **zero** `min-height` misses, two declared-height

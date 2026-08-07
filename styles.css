@@ -868,7 +868,6 @@
   .review-landing-label { font-size: var(--fs-body); color: var(--muted-dark); font-weight: var(--fw-semi); margin-top: 6px; }
   .review-landing-note { font-size: var(--fs-small); color: var(--muted); margin: 14px auto 20px; max-width: 320px; line-height: 1.5; }
   .review-empty { text-align: center; padding: 40px 24px; }
-  .review-empty-emoji { font-size: 44px; }
   .review-empty-title { font-size: var(--fs-lead); font-weight: var(--fw-bold); color: var(--ink); margin-top: 10px; }
   .review-empty-text { font-size: var(--fs-small); color: var(--muted); margin: 8px auto 0; max-width: 300px; line-height: 1.5; }
   .review-allclear-note { font-size: var(--fs-small); color: var(--muted-dark); margin: 14px 0 4px; }
@@ -905,7 +904,14 @@
 
   /* Quiz result */
   .result { text-align: center; padding: var(--sp-7) var(--sp-5); }
-  .result-emoji { font-size: var(--fs-display); margin-bottom: var(--sp-2); }
+  /* v123 — replaces .result-emoji and .review-empty-emoji, which were 56px and
+     44px emoji. One rule now serves the Word Review done screen, both Review
+     empty states and the quiz result, because all four were the same job: a
+     single glyph marking an outcome above a message. The icon takes its size
+     from the call site's icon() argument, so this rule only positions and
+     colours it. Muted is the resting form; --good is the success form (§4). */
+  .result-mark { color: var(--muted); margin-bottom: var(--sp-2); line-height: 1; }
+  .result-mark--good { color: var(--jade); }
   .result-score { font-size: 26px; font-weight: var(--fw-medium); color: var(--ink); margin-top: var(--sp-2); font-family: var(--font-display); letter-spacing: -0.01em; }
   .result-msg { font-size: 14px; color: var(--muted-dark); margin-top: var(--sp-2); }
   .back-btn { margin-top: 24px; padding: 10px 28px; background: var(--brand); color: #fff; border: none; border-radius: var(--r-pill); font-size: 14px; cursor: pointer; font-weight: var(--fw-bold); }

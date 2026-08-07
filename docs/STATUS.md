@@ -13,7 +13,7 @@ not a history log. Approved design decisions and whether they were built live in
 > convention (`v121 — <what changed>`) so this file stops being load-bearing on
 > its own.
 
-Last updated: 2026-08-02 · sw.js at v121
+Last updated: 2026-08-07 · sw.js at v124
 
 ## Confirmed live and working
 - **Patterns/Drills removed** from the app entirely (not soft-hidden). Checkpoints
@@ -21,9 +21,14 @@ Last updated: 2026-08-02 · sw.js at v121
 - **TTS replaces the browser's Web Speech API** for all pre-generatable content
   (words, sentences, topic Chat conversations, checkpoint conversations). Full
   audio generation run complete, not just a test batch.
-  - Google Cloud Chirp3-HD, `yue-HK` voice. Default voice is **Puck** (male) for
-    words/sentences. Conversations use two voices picked per line by speaker —
-    currently You=Kore, Other=Puck.
+  - **Azure AI Speech, `zh-HK` Neural** (v123 onward). `zh-HK-WanLungNeural`
+    (male) narrates words and sentences and plays the non-user speaker;
+    `zh-HK-HiuGaaiNeural` (female) plays the learner's own lines. Only three
+    `zh-HK` voices exist — WanLung, HiuMaan, HiuGaai — confirmed against the live
+    `voices/list` endpoint rather than the documentation.
+  - *Was, until v123:* Google Cloud Chirp3-HD, `yue-HK` voice. Default **Puck** (male) for
+    words/sentences. Conversations use two voices picked per line by speaker.
+    **Superseded at v123 — see the Azure entry below.**
   - Generated via `tools/generate-audio.js` (vanilla Node, no npm deps, auth via
     `gcloud auth print-access-token`). Incremental — safe to re-run.
   - Playback goes through `speakItem()` / `speakConvoLine()`. Web Speech API is
@@ -145,6 +150,10 @@ orphan hues `#B7861E`, `#e4d4ad`, `#8a6716`,
 
 | — | v121 | **Post-rollout convergence, then the tier ladder — one deploy.** Two bodies of work, both off device QA, shipped together because v121 was never deployed on its own. *Convergence (mockups 21, DES-23 to DES-27):* the topic context block is closed with a hairline above and below the stepper and the stage progress hairline is retired; a standalone topic uses the same `.ctx` shell instead of `.back-home-btn`; eight Latin title sites and two score values move from `--font-serif` to `--font-display` at `--fw-semi`; `renderPageHeader()`'s emoji parameter is removed and the path landing loses its card icons. *Tier ladder (mockups 22–24, DES-28 to DES-30):* `.round-selector` retired for `.tierline` / `.ladder` / `.rung`, which state the tier and offer only the adjacent rungs; inside a path the rungs are absent and `.xref` offers the crossing at the foot, one row per adjacent tier, each naming its path; a tier change routes through `goToTier()` → `openPathLesson()`, fixing a defect where switching tier inside a path left the chrome describing the tier just left and wrote completion to the wrong lesson. Also swept: the dead duplicate declarations on the three path-title selectors, and `index.html`'s font comment, which credited Source Serif 4 while the stylesheet loaded Fraunces. New standing check: `tools/tier-harness.js`. |
 
+| — | v122 | **QA fixes off device — six changes, no design decisions.** *Cold-start next-up:* `checkpointProgress()` decided whether a checkpoint offered a Words activity by counting `getCheckpointWords()`, which reads the lazy-loaded topic cache; on a cold start that is always 0, so a checkpoint whose Conversation was already done computed 1 of 1 and `complete: true`, and the dashboard's next-up skipped past it. Availability now comes from `learning_paths.json` — a stage offers Words when it has topics — which is answerable before any topic JSON loads. *Bubble action row* gains a gap; the two controls were flush. *The playing state on a user-side bubble inside a checkpoint conversation* got its own rule: `.bubble-row.right .bubble-play.is-playing` and `.cp-convo .bubble-row.right .bubble-play` tie at 0,4,0 and the later won on `color`, giving a white icon on a white circle. *Back to Lesson* from a quiz now clears `state.flipped` — every other route into a topic already did. *The audio-only quiz direction* reveals the characters and jyutping on a **correct** answer; it was the one path through a quiz where the learner never saw what they heard. *`sw.js` precaches 42 topics, not 40* — `connectives` and `pronouns` were missing, so neither worked offline, and `pronouns` is Beginner lesson one. |
+| — | v123 | **TTS migrated from Google to Azure — all 1,376 audio files regenerated.** Not a design change; see the architecture note below and the header of `tools/generate-audio.js` for the full diagnosis. Google's Chirp3-HD `yue-HK` voice cannot produce a bare syllabic nasal, so 唔 (m4) and 五 (ng5) both came back with a vowel inserted, affecting 207 files. Azure's `zh-HK` Neural voices say both correctly at comparable naturalness. Casting mirrors what it replaced: `zh-HK-WanLungNeural` for words, sentences and the non-user speaker, `zh-HK-HiuGaaiNeural` for the learner's own lines. |
+| — | v124 | **The emoji sweep (DES-31, DES-32).** 33 pictographic sites in `render.js` reduced to one. Roughly half were removed outright, the rest replaced with `ICON_PATHS` entries or a disclosure chevron. `.result-emoji` and `.review-empty-emoji` collapse into `.result-mark` / `.result-mark--good` (DES-32). The survivor is `📚 All Categories` inside the category filter's native `<select>`, which cannot hold an SVG. `renderCheckpointDone()`'s `emoji` parameter is removed rather than passed empty — the same move DES-27 made on `renderPageHeader()`. |
+
 ### Notes worth carrying forward
 
 **Measuring for a design question found a data-corrupting bug.** The tier work
@@ -200,6 +209,61 @@ first reported. A redundant indicator is not merely redundant — it has states 
 sibling does not, and those states are unreviewed. Before adding a second view of
 one quantity, check whether the first already answers it more precisely.
 
+
+**An availability check that reads a lazy-loaded cache is a clock, not a fact.**
+`checkpointProgress()` asked "does this checkpoint have Words to offer" by
+counting the words, which meant reading `store.topicCache` — populated
+per-topic, on demand, after the first paint. So the same question returned
+different answers depending on *when* it was asked, and the dashboard asked it at
+the only moment the answer was wrong. The tell in the bug report was that tapping
+HOME appeared to fix it: nothing was fixed, the cache had merely warmed in
+between. **Before writing a predicate, ask what it reads and whether that thing
+is loaded yet** — and prefer the reference data, which `init()` has by the first
+paint, over anything lazy.
+
+**Two rules can tie on specificity and split a component between them.** The
+blank play button was not one rule losing; it was `background` resolving from one
+rule and `color` from another, at identical 0,4,0 specificity, decided by source
+order. Neither rule was wrong alone. This is the cross-rule duplicate problem in
+BACKLOG.md wearing a different face — there the later declaration silently wins
+and the earlier is dead; here **both win, on different properties, and produce a
+state neither author intended.** When a state rule and a resting rule can tie,
+give the state its own rule at higher specificity rather than relying on order.
+
+**A backlog count taken from memory was out by a factor of six.** BACKLOG.md
+recorded *"emoji still in speak mode — five sites"* for two phases. Measured at
+v124 by scanning for pictographic codepoints in emitted strings: **33**, across
+Translate, the checkpoint, both result screens, the sentence chips, the quiz
+toggle and the conversation controls, with speak mode contributing eight. The
+entry was not wrong about speak mode; it was written from the place the problem
+had last been noticed, and it fixed the scope of the problem at the scope of that
+observation. **A backlog item that names a count should say how the count was
+derived**, or the next person plans against the anecdote. Same shape as the
+`.speed-btn` and drawer retirements, both of which missed about a third of their
+target for the same reason — and this is the third time.
+
+**A provider can be missing a phoneme, and the app has no way to know.** Google's
+Chirp3-HD `yue-HK` voice cannot produce a bare syllabic nasal — Cantonese has two
+(m̩ and ŋ̍) and both came back with a vowel inserted, across 207 of 1,376 files.
+Nothing in the pipeline could detect it: every request returned 200, every file
+was valid MP3 of a plausible length, and every other Cantonese-specific character
+was fine. **The only detector was a human ear**, and it took a year to be noticed.
+Two things generalise. First, the *variation* was the diagnosis: the inserted
+vowel changed with the neighbouring syllables, which is what distinguished an
+acoustic model improvising from a dictionary returning the wrong word — a
+deterministic error would have been identical every time. Second, when the
+diagnosis pointed at a fix, the useful move was to **ask the API what exists**
+rather than read the docs: `voices:list` showed `yue-HK` has only two families,
+where the documentation had implied WaveNet and Neural2 were available. Google's
+own pages contradicted each other twice during the investigation, on SSML support
+and on Preview status.
+
+**Building on a Preview-tier dependency is a decision, not a default.** `yue-HK`
+entered Preview on Chirp3-HD in December 2025 and was still Preview eight months
+later with no published GA date. Missing an entire phoneme class of the target
+language is the kind of defect Preview status exists to warn about, and the
+warning was there to be read before a single file was generated. Azure's `zh-HK`
+Neural voices are GA and have been since 2021.
 
 - **Checkpoint chrome is a wrapper class, not an argument.** `renderQuizCore` and
   `renderConversation` are reused by checkpoint activities; milestone treatment
@@ -412,8 +476,14 @@ UX and visual design. It may be worth a line in the project instructions.)*
 ## Architecture worth knowing
 - Persistence routes through an async storage abstraction layer, built ahead of
   an eventual Supabase migration.
-- Two separate, non-interchangeable API keys: Gemini (Google AI Studio) for
-  Translate; Google Cloud (gcloud CLI auth) for TTS generation.
+- Two separate, non-interchangeable credentials: a **Gemini** key (Google AI
+  Studio) for the Translate feature, and **Azure AI Speech** (`SPEECH_KEY` +
+  `SPEECH_REGION` environment variables) for TTS generation. The Azure key must
+  never enter the repo — it is public, and git history keeps a key after the line
+  is deleted. *Changed at v123: TTS generation was Google Cloud via `gcloud` CLI
+  auth until then. `tools/generate-audio.js` keeps the Google backend behind
+  `--provider=google` as the A/B reference, not as a fallback — for this corpus
+  it produces known-defective audio.*
 - Service worker caches audio automatically via the existing generic runtime
   fetch handler — no dedicated audio-caching code was needed.
 - `renderTopicsScreen()` renders the Topics screen; `renderDashboard()` is Home.

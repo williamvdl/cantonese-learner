@@ -4,7 +4,7 @@
 IN_PROGRESS.md when it's picked up; delete it from here once it's shipped and
 folded into STATUS.md.*
 
-Last updated: 2026-08-02 · sw.js at v121
+Last updated: 2026-08-07 · sw.js at v124
 
 ## Product
 
@@ -96,9 +96,13 @@ Last updated: 2026-08-02 · sw.js at v121
   with them in the file. Candidate: collect every `getElementById`, `querySelector`
   and `querySelectorAll` argument in the JS and check each against what the JS
   actually emits.
-- **Conversation voice pairing reconfirmation** — You=Kore/Other=Puck was never
-  revisited after the words/sentences default flipped to Puck; worth a quick
-  confirm with William.
+- **Male/female voice toggle is now cheaper than it was.** Azure `zh-HK` has
+  three voices (WanLung male, HiuMaan and HiuGaai female) against Chirp3-HD's 30,
+  so a toggle has fewer options but they are all confirmed correct. The casting
+  was reconfirmed at v123 — WanLung narrates and plays the other speaker,
+  HiuGaai plays You. **HiuMaan was never compared against HiuGaai for the You
+  role**; HiuGaai was heard, judged fine and adopted. One-word change to
+  `--voice-you` plus a regeneration if it is ever worth revisiting.
 - **Adopt a commit-message convention.** 22 of the last 25 commits are titled
   *"Add files via upload"*, GitHub Desktop's default, so the repo carries no
   changelog and STATUS.md's deploy table is the only record of what shipped when.
@@ -106,6 +110,40 @@ Last updated: 2026-08-02 · sw.js at v121
   only in the docs. One line per commit (`v121 — <what changed>`) would stop the
   deploy table being load-bearing on its own. Corrected in STATUS.md, which used to
   claim the commit history *was* the history log.
+
+- **The `.result-mark` glyph is one component across four screens now — judge it
+  on device.** DES-32 collapsed `.result-emoji` and `.review-empty-emoji` into
+  one rule serving the Word Review done screen, both Review empty states and the
+  quiz result. Two things to look at: whether a 34px outline icon carries enough
+  weight where a 44–56px emoji used to sit, and whether the quiz result losing
+  its three-way distinction (it now has two states where 🏆/⭐/💪 had three) reads
+  as flatter or as calmer. Reverting is a one-line change at each call site.
+
+- **`tools/tts-probe.js` is a tool without a standing check's job.** Added during
+  the v123 investigation. It calls `voices:list` for whatever the provider offers
+  today and synthesises a six-phrase set — two syllabic-nasal phrases, two
+  controls, a sentence — through every voice, writing an HTML page that groups
+  results *by phrase* so voices can be compared side by side. It is not run
+  routinely and does not belong in the standing eight; it earns its place the next
+  time a pronunciation question arises. Keep it, and point it at a new provider
+  rather than writing a fresh script.
+
+- **Consider a `search` and an `eye` icon for `ICON_PATHS`.** The v124 sweep hit
+  two glyphs doing genuine affordance work with no equivalent in the 21-icon set:
+  🔍 on the breakdown toggles and 👁 on the sentence reveal hint. The breakdown
+  toggle took a `▾` chevron instead, which matches `.s-chip-chev` directly below
+  it and is arguably better than an icon would have been; the reveal hint simply
+  lost its glyph and now reads as plain text. Neither is wrong, but if a third
+  site ever wants one of these, add the icon rather than inventing a third
+  treatment.
+
+- **A full-corpus regeneration is a 1,376-file commit unless it is split.** v123
+  went out as three commits by scope — words, sentences, conversations — so a
+  problem in one is revertable without the others. Worth doing the same way next
+  time, and worth knowing that the audio is runtime-cached by the service worker
+  under `CACHE_VERSION`, so **the version bump must land with or after the audio,
+  never before it**: bumping first clears the cache and then re-caches the old
+  files under the new name.
 
 ## Design follow-ups
 
@@ -169,19 +207,17 @@ pass. These are the loose ends they left or surfaced.*
   caught — mockup 10's continuation card, which had no register row and no line in
   the phase brief.)*
 - **`.cp-optional` is a sentence dressed as a chip.** "Optional — do any, in any
-  order" is styled with `--feedback-good-tint` and a 🔓 emoji. Green reads as
-  *done* per §4 but the content is informational, and §3.6 arguably rules out the
-  emoji. Deliberately pulled from the phase 3 migration — forcing it into `.tag`
-  would have set a full sentence in 9.5px uppercase. Needs its own small decision.
+  order" is styled with `--feedback-good-tint`. Green reads as *done* per §4 but
+  the content is informational. Deliberately pulled from the phase 3 migration —
+  forcing it into `.tag` would have set a full sentence in 9.5px uppercase. Needs
+  its own small decision. *(The 🔓 half is closed: removed at v124 under DES-31.
+  §3.6 did not "arguably" rule it out, which is how it survived two audits — it
+  ruled it out plainly, and nobody had measured.)*
 - **`.sentence-note` carries a retired hue.** It uses `rgba(183,134,30,.09)` and
   `rgba(183,134,30,.25)` — that is `#B7861E`, the retired `CP_GOLD`. It survived
   every audit because they all grepped for six-digit hex and this is `rgba()`.
   The last orphan hue in the file, and it sits under sentences app-wide, so
   changing it is a visible colour decision rather than a swap.
-- **Emoji still in speak mode.** Five sites: the listening hints, the "Speak"
-  label, an empty-state glyph and the 76px hero mic. DESIGN_SYSTEM §3.6 grants
-  its emoji exception to the Topics category grid only. The hero mic was
-  deliberately excluded from the phase 3 control vocabulary as a one-off.
 - **`"Got it — next"` was left unchanged** in v113 when the correct-answer button
   became "Next question". Mockup 12 specified only the one relabel, "Got it" already
   reads as an acknowledgement rather than a plain forward, and it shares
@@ -279,6 +315,17 @@ pass. These are the loose ends they left or surfaced.*
   the app sees a real mismatch with no way to tell which is authoritative. Fix by
   copying the values from `styles.css`, and check the rest of the styleguide's
   `:root` against the app's the same way — this is unlikely to be the only one.
+- **The styleguide's *One progress indicator per screen* note describes a retired
+  component.** It says the contextual hairline tracks stage progress — but
+  `.ctx-track` / `.ctx-fill` were retired at v121 under DES-24, precisely because
+  the hairline and the stepper reported the same fact. The note's *argument* is
+  still right and is still §3.4; only its example is gone. Found 2026-08-07 while
+  updating the Emoji section, which carried the identical shape of error: it still
+  said "the dashboard topic grid" more than a week after `DESIGN_SYSTEM.md`
+  corrected the same sentence. **Both are one-line prose fixes, and both existed
+  because a correction was applied to the spec and not to its live companion.** The
+  Emoji one is fixed; this one is not.
+
 - **`docs/design/styleguide.html` lags in six places now.** Three are long-standing:
   the dashboard entry, the `站 (zaam6)` watermark rule, and the `.quiz-ms` /
   `.cp-convo` variant mechanism. Three were added by the v120 sweep and found in the

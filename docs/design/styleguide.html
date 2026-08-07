@@ -736,8 +736,22 @@ table.spec tr:last-child td{ border-bottom:none; }
   <p class="note">When something needs to be louder than its neighbours, it gets <code>--edge-emph</code> on the left, not a bigger shadow or a brighter fill. Consistent across next-up steps, checkpoint cards and the quiz teaching panel.</p>
   <h3>Repeating content is a list</h3>
   <p class="note">Three or more sibling items of the same kind go in one card as hairline rows. Cards are for distinct things, not for each item in a set.</p>
-  <h3>Emoji</h3>
-  <p class="note">Not in titles, section headers, result screens, or path step rows. Kept where they are genuine wayfinding — the dashboard topic grid, where an icon per topic aids scanning a large set. Everywhere else they undercut the typography that does the work.</p>
+  <h3>Emoji <span class="tag-new">built &middot; swept v124</span></h3>
+  <p class="note">Not in titles, section headers, result screens, or path step rows. Kept where they are genuine wayfinding — the <b>Topics</b> category grid, where an icon per topic aids scanning a large set. Everywhere else they undercut the typography that does the work.</p>
+  <p class="note"><b>Corrected here 2026-08-07:</b> this note said <i>"the dashboard topic grid"</i> — the same error <code>DESIGN_SYSTEM.md</code> §3.6 corrected on 2026-07-28 and this copy never received. There is no topic grid on the dashboard; <code>renderTopicsScreen()</code> renders Topics and <code>renderDashboard()</code> renders Home.</p>
+  <p class="note"><b>Swept at v124 (DES-31).</b> 33 pictographic sites in <code>render.js</code> reduced to one. Removed outright where the text carried the meaning; replaced with <code>ICON_PATHS</code> entries where the glyph was doing affordance work; <code>🔍 word breakdown</code> took a <code>▾</code> disclosure chevron matching <code>.s-chip-chev</code>. <b>The one survivor is <code>📚 All Categories</code> in the category filter</b>, which is a native <code>&lt;select&gt;</code> — an <code>&lt;option&gt;</code> accepts text only, so no icon can go there. Bound to the element, not the label: if the filter stops being a native select, the exception expires.</p>
+  <h3>Outcome mark — <code>.result-mark</code> <span class="tag-new">built &middot; v124</span></h3>
+  <p class="note">One glyph above a message, marking how something went. Replaces <code>.result-emoji</code> (56px) and <code>.review-empty-emoji</code> (44px), which were separate rules doing the same job (DES-32). Muted at rest; <code>.result-mark--good</code> is <code>--jade</code> for success. Size comes from the <code>icon()</code> call, not from CSS. Serves the Word Review done screen, both Review empty states and the quiz result.</p>
+  <div class="stage" style="display:flex;gap:var(--sp-6);align-items:center;justify-content:center;padding:var(--sp-5)">
+    <div style="text-align:center">
+      <div style="color:var(--jade);line-height:1"><svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+      <div style="font-size:12px;color:var(--muted);margin-top:6px"><code>--good</code></div>
+    </div>
+    <div style="text-align:center">
+      <div style="color:var(--muted);line-height:1"><svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+      <div style="font-size:12px;color:var(--muted);margin-top:6px">resting</div>
+    </div>
+  </div>
   <h3>Jyutping</h3>
   <p class="note">Every Chinese string is immediately followed by jyutping. Tone colouring is applied per-syllable by <code>colorJyutping()</code> and never by hand.</p>
   <div class="stage jp-demo" style="max-width:420px">

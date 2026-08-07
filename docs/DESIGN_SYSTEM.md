@@ -588,6 +588,30 @@ topic aids scanning a large set. Everywhere else they undercut the typography.
 > was already named in the section header directly above **and** in the card
 > title, so the sprout decorated a word that was on screen twice already.
 
+> **Swept at v124 (DES-31, DES-32) — the rule now holds everywhere but one
+> place.** DES-27 closed the page headers; measuring the rest found **33**
+> pictographic sites in `render.js`, where BACKLOG.md had recorded five. Roughly
+> half were removed outright (section headings, speak-mode status lines, the
+> sentence hints, the Translate flags, `🔓` on `.cp-optional`, `🎉` on the
+> path-complete toast); the rest were replaced with `ICON_PATHS` entries where the
+> glyph was doing affordance work (the mic ×4, the record dot, `🔊` in the quiz
+> direction toggle, `🧩`/`🎙` on the conversation controls, `📖`/`💬` on the
+> checkpoint activity cards). `🔍 word breakdown` took a `▾` disclosure chevron
+> rather than a new search icon, matching `.s-chip-chev` immediately below it.
+>
+> **The single survivor is `📚 All Categories` in the category filter, and the
+> reason is technical rather than aesthetic:** the filter is a native `<select>`
+> and an `<option>` accepts text only, so no icon can go there. Its siblings
+> already carry the per-category icons from `categories.json` — the Topics
+> category vocabulary this rule exempts — so removing one and leaving the rest
+> would read as a rendering fault. **This exception is bound to the element, not
+> to the label: if the filter stops being a native select, it expires.**
+>
+> The result screens named in the rule above are now genuinely clear. `.result-emoji`
+> and `.review-empty-emoji` are retired in favour of `.result-mark` /
+> `.result-mark--good` (DES-32), one component serving the Word Review done
+> screen, both Review empty states and the quiz result.
+
 > **Corrected 2026-07-28.** This previously read "the dashboard topic grid".
 > There is no topic grid on the dashboard: the function then called
 > `renderHomeScreen()` renders the **Topics** destination, and `renderDashboard()`

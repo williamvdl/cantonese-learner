@@ -91,7 +91,7 @@ function renderTranslate() {
       <div class="translate-wrap">
         ${renderPageHeader('Translate', 'AI-powered translation with word-by-word breakdown')}
         <div class="apikey-setup">
-          <h3>🔑 One-time setup</h3>
+          <h3>One-time setup</h3>
           <p>Paste your <strong>Google Gemini API key</strong> to enable translations. It's saved securely on your device only — never uploaded anywhere.</p>
           <input type="${tr.showApiKey ? 'text' : 'password'}" id="apikey-input" class="apikey-input" placeholder="AIza..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
           <button class="apikey-save" id="apikey-save">Save Key & Continue</button>
@@ -108,8 +108,8 @@ function renderTranslate() {
   // Main translate UI
   const result = tr.result;
   const isToYue = tr.direction === 'en-yue';
-  const fromLabel = isToYue ? '🇬🇧 English' : '🇭🇰 Cantonese';
-  const toLabel   = isToYue ? '🇭🇰 Cantonese' : '🇬🇧 English';
+  const fromLabel = isToYue ? 'English' : 'Cantonese';
+  const toLabel   = isToYue ? 'Cantonese' : 'English';
   const placeholder = isToYue
     ? "Type or speak English, e.g. 'I want to drink tea'"
     : "Type or speak Cantonese characters, e.g. '我想飲茶'";
@@ -140,19 +140,19 @@ function renderTranslate() {
 
       <div class="translate-input-wrap">
         <textarea class="translate-input" id="translate-input" placeholder="${placeholder}" rows="3">${tr.inputText.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}</textarea>
-        ${listening ? '<div class="translate-listening-hint">🎙 Listening… speak now, then tap mic to stop</div>' : ''}
+        ${listening ? `<div class="translate-listening-hint"><span class="icon-label">${icon('mic',14)} Listening… speak now, then tap mic to stop</span></div>` : ''}
         <div class="translate-input-actions">
           <button class="btn-icon btn-icon--brand translate-mic ${listening?'listening':''}" id="translate-mic" title="${listening?'Stop listening':'Speak instead of typing'}">
             ${icon('mic', 18)}
           </button>
           ${tr.inputText ? '<button class="translate-clear" id="translate-clear">Clear</button>' : ''}
           <button class="translate-go" id="translate-go" ${tr.loading ? 'disabled' : ''}>
-            ${tr.loading ? '⏳ Translating…' : '✨ Translate'}
+            ${tr.loading ? 'Translating…' : 'Translate'}
           </button>
         </div>
       </div>
 
-      ${tr.error ? `<div class="translate-error">⚠ ${tr.error}</div>` : ''}
+      ${tr.error ? `<div class="translate-error">${tr.error}</div>` : ''}
 
       ${tr.loading ? `<div class="translate-loading">Translating with Gemini… <br><small style="color:var(--muted)">May retry automatically if the server is busy</small></div>` : ''}
 
@@ -219,7 +219,7 @@ function renderQuizCore(opts) {
   const dirs = [
     { key:'zh-en',    label:'漢→EN', title:'See Chinese, pick English' },
     { key:'en-zh',    label:'EN→漢', title:'See English, pick Chinese' },
-    { key:'listen-en',label:'🔊→EN', title:'Listen, pick English' },
+    { key:'listen-en',label:`${icon('volume',13)}→EN`, title:'Listen, pick English' },
   ];
   const dirToggle = `
     <div class="quiz-dir-toggle" role="tablist" aria-label="${ariaLabel}">
@@ -328,7 +328,7 @@ function renderReviewDone(o) {
     <div class="content">
       ${renderPageHeader(o.title, '')}
       <div class="result">
-        <div class="result-emoji">${o.graduated > 0 ? '🌟' : '✅'}</div>
+        <div class="result-mark${o.graduated > 0 ? ' result-mark--good' : ''}">${icon('check',34)}</div>
         <div class="review-done-stats">
           <div class="rd-stat"><b>${o.reviewed}</b><span>reviewed</span></div>
           <div class="rd-stat"><b style="color:var(--jade-bright)">${o.graduated}</b><span>graduated</span></div>
@@ -368,7 +368,7 @@ function renderWordReview() {
       // All caught up — used before, bin now empty.
       body = `
         <div class="review-empty">
-          <div class="review-empty-emoji">🎉</div>
+          <div class="result-mark result-mark--good">${icon('check',34)}</div>
           <div class="review-empty-title">All caught up — great work!</div>
           <p class="review-empty-text">You've reviewed every word. New ones will appear here as you do more quizzes.</p>
         </div>`;
@@ -376,7 +376,7 @@ function renderWordReview() {
       // Never used — bin has never had anything in it.
       body = `
         <div class="review-empty">
-          <div class="review-empty-emoji">📥</div>
+          <div class="result-mark">${icon('review',34)}</div>
           <div class="review-empty-title">No review words yet</div>
           <p class="review-empty-text">Words you miss in quizzes will collect here to practise later.</p>
         </div>`;
@@ -834,8 +834,8 @@ function renderCheckpointHub() {
   const prog = checkpointProgress(pathKey, stageId);
 
   const meta = {
-    words:    { icon:'📖', name:'Words',        tag:'RECALL',  desc:'Vocabulary from all topics in this stage' },
-    convo:    { icon:'💬', name:'Conversation', tag:'PRODUCE', desc:'A longer scene — read & speak' },
+    words:    { icon: icon('bookOpen',15), name:'Words',        tag:'RECALL',  desc:'Vocabulary from all topics in this stage' },
+    convo:    { icon: icon('messageCircle',15), name:'Conversation', tag:'PRODUCE', desc:'A longer scene — read & speak' },
   };
   const cards = prog.available.map(act => {
     const m = meta[act];
@@ -890,7 +890,7 @@ function renderCheckpointHub() {
         <div class="cp-hero-h">Checkpoint</div>
         <div class="cp-hero-stage">${stage.name}</div>
         <div class="cp-hero-prog">${prog.done} of ${prog.total} reviewed</div>
-        <div class="cp-optional">🔓 Optional — do any, in any order</div>
+        <div class="cp-optional">Optional — do any, in any order</div>
       </div>
       <div class="cp-flow-hint">Suggested flow: recall → produce</div>
       ${cards}
@@ -911,7 +911,6 @@ function renderCheckpointWords() {
     const total = q.pool.length;
     return renderCheckpointDone({
       activityLabel: 'Words',
-      emoji: '📖',
       score: q.score,
       total,
       stage,
@@ -940,7 +939,7 @@ function renderCheckpointWords() {
   return `
     <div class="content quiz-ms">
       <button class="back-home-btn" data-cp-act-back><span class="icon-label">${icon('arrowLeft',15)} Checkpoint</span></button>
-      <div class="cp-activity-heading">📖 Words review</div>
+      <div class="cp-activity-heading">Words review</div>
       <div class="quiz-meta">
         <span class="quiz-count">Word ${q.idx+1} / ${q.pool.length}</span>
         <span class="quiz-score">Score: ${q.score}</span>
@@ -956,13 +955,16 @@ function renderCheckpointWords() {
 // Shared done screen for checkpoint activities: score ring + session-based
 // diagnostic ("Most misses were from <Topic> — revisit?") + missed list.
 function renderCheckpointDone(opts) {
-  const { activityLabel, emoji, score, total, stage, missedTopicKeys, missedItems, activity } = opts;
+  // v123: `emoji` is GONE from this destructure, not left unused — the same move
+  // DES-27 made on renderPageHeader at v121, and for the same reason. A parameter
+  // that still exists is a parameter a future call site will pass something to.
+  const { activityLabel, score, total, stage, missedTopicKeys, missedItems, activity } = opts;
   const pct = total > 0 ? Math.round(score / total * 100) : 0;
   const diag = checkpointDiagnostic(stage, missedTopicKeys);
 
   const diagBlock = diag ? `
     <div class="cp-diag">
-      <div class="cp-diag-lbl">💡 One thing to look at</div>
+      <div class="cp-diag-lbl">One thing to look at</div>
       <div class="cp-diag-text">Most of your misses were from <b>${diag.label}</b>. A quick revisit might help.</div>
       <button class="cp-diag-revisit" data-cp-revisit="${diag.topicKey}">↩ Revisit ${diag.label}</button>
     </div>` : '';
@@ -985,7 +987,7 @@ function renderCheckpointDone(opts) {
         <div class="cp-done-ring" style="background:conic-gradient(var(--milestone) ${pct}%, var(--milestone-edge) 0)">
           <div class="cp-done-inner"><div class="cp-done-pct">${pct}%</div><div class="cp-done-cap">${activityLabel.toUpperCase()}</div></div>
         </div>
-        <div class="cp-done-h">${activityLabel} done ${emoji}</div>
+        <div class="cp-done-h">${activityLabel} done</div>
         <div class="cp-done-sub">${score} of ${total} correct</div>
       </div>
       ${diagBlock}
@@ -1617,7 +1619,7 @@ function renderConversation() {
   const hasGapLines = lines.some(l => l.u && Array.isArray(l.opts) && l.opts.length > 0);
   const gapBtnHtml = (inCheckpointConvo || !hasGapLines) ? '' : `
       <button class="convo-ctrl-btn${gapOn?' on':''}" id="gap-mode-btn">
-        🧩 Fill-the-Gap
+        <span class="icon-label">${icon('quiz',15)} Fill-the-Gap</span>
       </button>`;
   const controls = `
     <div class="convo-controls">
@@ -1626,7 +1628,7 @@ function renderConversation() {
       </button>
       ${gapBtnHtml}
       <button class="convo-ctrl-btn${speakOn?' on':''}" id="speak-mode-btn">
-        🎙 Speak
+        <span class="icon-label">${icon('mic',15)} Speak</span>
       </button>
     </div>`;
 
@@ -1638,7 +1640,6 @@ function renderConversation() {
         <div class="convo-scenario">${convo.title}</div>
         ${controls}
         <div class="speak-unsupported">
-          <div style="font-size:24px;margin-bottom:8px">🎙</div>
           <strong>Speech recognition not supported</strong><br>
           Your browser doesn't support voice input. Try Chrome on Android or desktop.
         </div>`;
@@ -1652,8 +1653,8 @@ function renderConversation() {
     const isLast  = step >= lines.length - 1;
 
     const statusText = {
-      idle:      isUser ? '👇 Press the mic and say the line above' : '👂 Listen, then continue',
-      listening: '🎙 Listening… speak the line, then press Stop',
+      idle:      isUser ? 'Press the mic and say the line above' : 'Listen, then continue',
+      listening: 'Listening… speak the line, then press Stop',
       matched:   '',
       mismatch:  '',
     }[status] || '';
@@ -1692,7 +1693,7 @@ function renderConversation() {
       ${controls}
       <div class="speak-nav">
         <span>Line ${step+1} of ${lines.length}</span>
-        <span class="speak-turn">${isUser?'🗣 Your turn':'👂 Listen'}</span>
+        <span class="speak-turn">${isUser?'Your turn':'Listen'}</span>
       </div>
       <div class="speak-card">
         <div class="speak-prompt">${spkName}</div>
@@ -1701,7 +1702,7 @@ function renderConversation() {
         ${englishEl}
         ${isUser ? `
           <button class="mic-btn ${status==='listening'?'listening':'idle'}" id="mic-btn">
-            ${status==='listening'?'🔴':'🎙'}
+            ${status==='listening'? icon('stop',22) : icon('mic',22)}
           </button>
           <div class="speak-status">${statusText}</div>
           ${status==='listening' ? `
@@ -1757,7 +1758,7 @@ function renderConversation() {
             <div class="bubble-wrap">
               <div class="bubble-name">${spkName}</div>
               <div class="bubble bubble--gap">
-                <div class="gap-prompt">👆 What would you say?</div>
+                <div class="gap-prompt">What would you say?</div>
                 <div class="gap-options">${opts}</div>
               </div>
             </div>
@@ -1796,7 +1797,7 @@ function renderConversation() {
       </div>` : '';
     const bdBtn = line.bd ? `
       <button class="breakdown-btn" data-breakdown="${i}">
-        ${bdOpen ? '▲ hide breakdown' : '🔍 word breakdown'}
+        ${bdOpen ? '▲ hide breakdown' : '▾ word breakdown'}
       </button>` : '';
     return `
       <div class="bubble-row ${side}">
@@ -1849,14 +1850,14 @@ function renderSentences(topic) {
 
     const englishEl = revealed
       ? `<div class="sentence-english">${s.e}</div>`
-      : `<div class="sentence-eng-hint">👁 tap to reveal English</div>`;
+      : `<div class="sentence-eng-hint">tap to reveal English</div>`;
 
     const chips = `
       <div class="sentence-chips">
         ${s.bd ? `<button class="s-chip s-chip-bd${bdOpen?' open':''}" data-sent-bd="${i}">
-          <span class="s-chip-chev">▸</span>🔍 breakdown</button>` : ''}
+          <span class="s-chip-chev">▸</span> breakdown</button>` : ''}
         ${hasNote ? `<button class="s-chip s-chip-note${!noteClosed?' open':''}" data-sent-note="${i}">
-          <span class="s-chip-chev">▸</span>💡 note</button>` : ''}
+          <span class="s-chip-chev">▸</span> note</button>` : ''}
       </div>`;
 
     return `
@@ -1879,7 +1880,7 @@ function renderSentences(topic) {
   }).join('');
   return `
     <div class="sentences">
-      <h3>💬 Sentences</h3>
+      <h3>Sentences</h3>
       ${items}
     </div>`;
 }
@@ -1927,7 +1928,7 @@ function renderStudy(lesson) {
     <div class="word-grid">${cards}</div>
     ${renderSentences(state.topic)}
     <div class="tone-guide">
-      <h3>📖 Jyutping Tone Guide</h3>
+      <h3>Jyutping Tone Guide</h3>
       <div class="tone-grid">${toneRows}</div>
       <p class="tone-note">The number at the end of each syllable tells you which tone to use. Colours match throughout the app.</p>
     </div>`;
@@ -1939,7 +1940,7 @@ function renderQuiz(lesson) {
 
   if (q.done) {
     const pct = q.score / q.queue.length;
-    const emoji = pct >= 0.75 ? '🏆' : pct >= 0.5 ? '⭐' : '💪';
+    const mark  = pct >= 0.75 ? icon('check',34) : pct >= 0.5 ? icon('check',34) : icon('refresh',34);
     const msg   = pct >= 0.75 ? "Excellent! You're a natural!" : pct >= 0.5 ? "Good effort! Keep practising." : "Keep going — practice makes perfect!";
 
     // Build the missed-word review list (only when there were misses).
@@ -1969,7 +1970,7 @@ function renderQuiz(lesson) {
 
     return `
       <div class="result">
-        <div class="result-emoji">${emoji}</div>
+        <div class="result-mark${pct >= 0.5 ? ' result-mark--good' : ''}">${mark}</div>
         <div class="result-score">${q.score} / ${q.queue.length} correct</div>
         <div class="result-msg">${msg}</div>
         <button class="back-btn" id="quiz-back"><span class="icon-label">${icon('arrowLeft',15)} Back to Lesson</span></button>
@@ -2737,7 +2738,7 @@ function attachEvents(lesson) {
         toggleLessonComplete(state.activePath, state.topic, tier);
       }
       state.toast = ctx.isLast
-        ? { text: '🎉 Path complete!', kind: 'final' }
+        ? { text: 'Path complete!', kind: 'final' }
         : { text: '✓ Step complete!',  kind: 'step'  };
       render();
       // Dissolve the toast after a beat. If it was the final step, also auto-return to the timeline.
