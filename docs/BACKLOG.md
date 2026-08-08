@@ -4,7 +4,7 @@
 IN_PROGRESS.md when it's picked up; delete it from here once it's shipped and
 folded into STATUS.md.*
 
-Last updated: 2026-08-07 · sw.js at v124
+Last updated: 2026-08-08 · sw.js at v125
 
 ## Product
 
@@ -67,7 +67,7 @@ Last updated: 2026-08-07 · sw.js at v124
   Cantonese, response pauses, phrases likely revisited at spaced intervals. These
   need different script formats, so pick a direction before authoring starts.
   Technically unblocked either way: fixed scripts fit the existing offline
-  `generate-audio.js`/Chirp3-HD pipeline exactly like checkpoint conversations
+  `generate-audio.js`/Azure zh-HK pipeline exactly like checkpoint conversations
   do — no live API, no new architecture. Playback leans continuous/podcast-style
   with pause + skip-forward/back by line (cheap, since audio is already per-line
   files); read-along transcript still on the table. Nav placement (nested in a
@@ -259,12 +259,16 @@ pass. These are the loose ends they left or surfaced.*
   classifying it is, and per the standing lesson that has to be done by declaration
   rather than by shape. Worth one pass with the cross-file audit before the rollout
   closes, since a dead declaration reads as a live one to anyone editing later.
-- **The checkpoint hub's back target.** Labelled with the stage name and routed
-  through `history.back()`, which is what that button already did. Reaching the hub
-  from a topic's stepper diamond therefore lands back on that topic rather than the
-  timeline — inside the same stage either way. Making it deterministic would put the
-  on-screen back and the hardware back out of step, so it was left alone. *(Moved
-  here 2026-08-01: it had lived only in IN_PROGRESS.md, which is cleared between
+- **The checkpoint hub's back target — SUPERSEDED at v125 by DES-33.** Kept for the
+  reasoning, not as an open item. It was labelled with the stage name and routed
+  through `history.back()`. Reaching the hub from a topic's stepper diamond
+  therefore landed back on that topic rather than the timeline — inside the same
+  stage either way. Making it deterministic would put the on-screen back and the
+  hardware back out of step, so it was left alone. **What that reasoning missed is
+  that the two were only in step because the label lied**: it named the stage while
+  going wherever you had come from, which was the stage's timeline only sometimes.
+  DES-33 accepts the divergence and makes the label true instead. *(Moved here
+  2026-08-01: it had lived only in IN_PROGRESS.md, which is cleared between
   phases.)*
 - **The mark-complete auto-return is gated on not being mid-question.** Marking the
   *final* lesson of a path complete auto-returns to the timeline after 3s; from the

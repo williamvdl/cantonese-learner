@@ -736,6 +736,27 @@ table.spec tr:last-child td{ border-bottom:none; }
   <p class="note">When something needs to be louder than its neighbours, it gets <code>--edge-emph</code> on the left, not a bigger shadow or a brighter fill. Consistent across next-up steps, checkpoint cards and the quiz teaching panel.</p>
   <h3>Repeating content is a list</h3>
   <p class="note">Three or more sibling items of the same kind go in one card as hairline rows. Cards are for distinct things, not for each item in a set.</p>
+  <h3>Conversation bubble &mdash; <code>.bubble</code> <span class="tag-new">built &middot; v125</span></h3>
+  <p class="note"><b>Both sides are light grounds (DES-35).</b> The learner's bubble is <code>--brand-tint</code> (<code>--milestone-tint</code> inside <code>.cp-convo</code>), not a saturated fill, because <b>tone colour requires a light ground</b> &mdash; all six tones measured 1.13:1 to 2.13:1 on <code>--brand</code>, against 2.44:1 to 5.87:1 on white elsewhere in the app. Speaker distinction is carried by a 3px outer edge and a small-caps name (DES-36), not by the fill: <code>--brand</code> on the learner's side, <code>--parchment-border</code> on the other. <b>This retired a bug class as well as a defect</b> &mdash; with no white-on-dark state to resolve, <code>.bubble-play.is-playing</code> needs one rule instead of four.</p>
+  <p class="note"><b>Note the specificity on the state modifiers.</b> <code>.bubble--gap</code>, <code>--correct</code> and <code>--wrong</code> are qualified to <code>.bubble-row .bubble.bubble--gap</code> (0,3,0). A bare single-class modifier is 0,1,0 and loses to <code>.bubble-row.right .bubble</code> at 0,2,0 &mdash; which is exactly what had been happening, silently, since they were written.</p>
+  <div class="stage" style="padding:var(--sp-4);background:var(--parchment-warm)">
+    <div style="display:flex;justify-content:flex-start;margin-bottom:12px"><div style="max-width:80%">
+      <div style="font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:4px;padding:0 4px">Vendor</div>
+      <div style="background:var(--parchment);border:1px solid var(--parchment-border);border-left:3px solid var(--parchment-border);border-radius:var(--r-md);border-bottom-left-radius:4px;padding:var(--sp-3) var(--sp-4)">
+        <div style="font-size:17px;line-height:1.4;margin-bottom:4px">有，仲有雞同豬肉。</div>
+        <div style="font-size:11px;font-weight:600"><span style="color:#2980B9">jau5</span>, <span style="color:#8E44AD">zung6</span> <span style="color:#2980B9">jau5</span> <span style="color:#E74C3C">gai1</span> <span style="color:#27AE60">tung4</span> <span style="color:#E74C3C">zyu1</span> <span style="color:#8E44AD">juk6</span>.</div>
+      </div></div></div>
+    <div style="display:flex;justify-content:flex-end"><div style="max-width:80%">
+      <div style="font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:4px;padding:0 4px;text-align:right">You</div>
+      <div style="background:var(--brand-tint);border:1px solid var(--brand-edge);border-right:3px solid var(--brand);border-radius:var(--r-md);border-bottom-right-radius:4px;padding:var(--sp-3) var(--sp-4)">
+        <div style="font-size:17px;line-height:1.4;margin-bottom:4px">唔該畀啲牛肉。</div>
+        <div style="font-size:11px;font-weight:600"><span style="color:#27AE60">m4</span> <span style="color:#E74C3C">goi1</span> <span style="color:#E67E22">bei2</span> <span style="color:#E74C3C">di1</span> <span style="color:#27AE60">ngau4</span> <span style="color:#8E44AD">juk6</span>.</div>
+      </div></div></div>
+  </div>
+
+  <h3>Contextual row &mdash; the control is an <i>up</i> control <span class="tag-new">built &middot; v125</span></h3>
+  <p class="note"><b>DES-33.</b> It always goes to the path timeline and is labelled with the path, from every entry route. It is <i>not</i> <code>history.back()</code> and deliberately diverges from the hardware back key, which still pops one entry. <b>DES-34:</b> the meta slot names the <i>stage</i>, because the count beside it (<code>st.step</code> / <code>st.total</code>) is stage-scoped &mdash; a count and its label must describe the same scope.</p>
+
   <h3>Emoji <span class="tag-new">built &middot; swept v124</span></h3>
   <p class="note">Not in titles, section headers, result screens, or path step rows. Kept where they are genuine wayfinding — the <b>Topics</b> category grid, where an icon per topic aids scanning a large set. Everywhere else they undercut the typography that does the work.</p>
   <p class="note"><b>Corrected here 2026-08-07:</b> this note said <i>"the dashboard topic grid"</i> — the same error <code>DESIGN_SYSTEM.md</code> §3.6 corrected on 2026-07-28 and this copy never received. There is no topic grid on the dashboard; <code>renderTopicsScreen()</code> renders Topics and <code>renderDashboard()</code> renders Home.</p>

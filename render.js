@@ -872,8 +872,13 @@ function renderCheckpointHub() {
   const cpStepper = stageCtx ? renderStageStepper(stageCtx, true) : '';
   const aboveEl = stageCtx
     ? renderContextRow(stageCtx, {
-        meta: `Checkpoint · ${stageCtx.path.label}`,
-        backAttr: 'data-cp-back',
+        // DES-34 again: this row's subject is the stage's checkpoint, so the
+        // stage is what belongs beside it. Was `stageCtx.path.label`.
+        meta: `Checkpoint · ${stageCtx.stage ? stageCtx.stage.name : stageCtx.path.label}`,
+        // DES-33: up, not back. Reaching the hub from a topic's stepper diamond
+        // and pressing this now lands on the timeline rather than that topic —
+        // a longer way round, and the price of the label always being true.
+        backAttr: `data-ctx-up="${stageCtx.path.key}"`,
         split: !!cpStepper,
         after: cpStepper,
       })
@@ -1239,11 +1244,26 @@ function renderContextRow(ctx, opts) {
   const st = ctx.stage;
   // No stage (a topic in path.lessons but in no stage) degrades to the path as
   // the back target. Same shell, less information — never a different shape.
-  const backLabel = st ? st.name : `${ctx.path.label} Path`;
+  // MOCK-25-B / DES-33 (v125). The control is an UP control, not a back button:
+  // it always goes to this path's timeline and is labelled with the path, so the
+  // label names a destination that is true from every entry route. It previously
+  // said the stage name while running history.back(), which agreed with reality
+  // only when you had arrived from the timeline.
+  //
+  // This deliberately diverges from the hardware BACK key, which still pops one
+  // history entry. That divergence was the reason BACKLOG.md had left this alone;
+  // it is now accepted rather than overlooked — an in-app up control and a system
+  // back button pointing different ways is the ordinary pattern, and the two were
+  // only ever kept in step by making the label lie.
+  const backLabel = st ? ctx.path.label : `${ctx.path.label} Path`;
+  // DES-34: the count and its label must describe the same scope. `st.step` and
+  // `st.total` come from buildStageInfo() and are STAGE-scoped, so the label
+  // beside them is the stage. It read `ctx.path.label` until v125, which is how
+  // a lesson two-thirds through Eating and Shopping rendered "2 of 5 · Beginner".
   const meta = o.meta || (st
-    ? `${st.step} of ${st.total} · ${ctx.path.label}`
+    ? `${st.step} of ${st.total} · ${st.name}`
     : ctx.path.label);
-  const backAttr = o.backAttr || 'id="back-home-btn"';
+  const backAttr = o.backAttr || `data-ctx-up="${ctx.path.key}"`;
   // The row only takes a bottom edge when a stepper follows it, otherwise the
   // rule would sit 1px above .ctx's own bottom edge. `split` is passed by the
   // caller rather than inferred from `st`, because the checkpoint hub renders a
@@ -1279,7 +1299,7 @@ function renderStandaloneContextRow(topicKey) {
       <div class="ctx-head">
         <div class="ctx-inner">
           <div class="ctx-row">
-            <button class="ctx-back" id="back-home-btn">${icon('arrowLeft',15)} Topics</button>
+            <button class="ctx-back" data-ctx-up-topics>${icon('arrowLeft',15)} Topics</button>
             ${cat ? `<span class="ctx-meta">${cat.label}</span>` : ''}
           </div>
         </div>
@@ -2230,24 +2250,46 @@ function attachEvents(lesson) {
       render();
     });
   });
-  // Back to home button. Routed through history.back() so the on-screen back
-  // button and the phone/browser BACK button behave identically — both pop the
-  // same history entry, and the popstate handler restores the previous screen.
-  const backHomeBtn = document.getElementById('back-home-btn');
-  if (backHomeBtn) backHomeBtn.addEventListener('click', () => {
-    window.speechSynthesis.cancel();
-    stopAudioFile();
-    if (_navReady) { history.back(); return; }
-    // Fallback if history isn't available — replicate the original logic.
-    if (state.fromPath) {
-      state.nav = 'path'; state.pathView = 'timeline';
-      state.fromPath = false; state.fromPathTier = null;
-      state.mode = 'study'; state.tab = 'words';
-    } else {
-      state.topicsView = true; state.mode = 'study'; state.tab = 'words';
-    }
-    window.scrollTo(0, 0);
-    render();
+  // ── The contextual row's UP control (MOCK-25-B / DES-33) ───────────────────
+  // Deterministic, not history.back(): it goes to the path timeline named on the
+  // label, from wherever you are. pushNav() is called so the hardware BACK key
+  // still returns you to the screen you left — the two controls do different
+  // jobs and both remain correct, which is the whole point of the decision.
+  document.querySelectorAll('[data-ctx-up]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      window.speechSynthesis.cancel();
+      stopAudioFile();
+      state.activePath  = btn.dataset.ctxUp;
+      state.nav         = 'path';
+      state.pathView    = 'timeline';
+      // Leaving the topic/checkpoint entirely, so its view state goes with it.
+      state.checkpoint  = null;
+      state.checkpointAct = null;
+      state.fromPath    = false;
+      state.fromPathTier = null;
+      state.mode        = 'study';
+      state.tab         = 'words';
+      state.flipped     = {};
+      pushNav();
+      window.scrollTo(0, 0);
+      render();
+    });
+  });
+
+  // The standalone-topic equivalent — same contract, different parent. A topic
+  // opened from Topics has no path, so its parent in the hierarchy is Topics.
+  document.querySelectorAll('[data-ctx-up-topics]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      window.speechSynthesis.cancel();
+      stopAudioFile();
+      state.topicsView = true;
+      state.mode       = 'study';
+      state.tab        = 'words';
+      state.flipped    = {};
+      pushNav();
+      window.scrollTo(0, 0);
+      render();
+    });
   });
 
   // Category filter dropdown

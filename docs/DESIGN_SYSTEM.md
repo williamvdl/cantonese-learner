@@ -345,9 +345,28 @@ Three quiz directions, one card. Subject centred and large; the label above
 states the task.
 
 ### Bubble — `.bubble-row.left/.right` › `.bubble` (+ `--gap` `--correct` `--wrong` `--tappable` `.is-playing`)
-**The side carries the colour.** A user bubble is brand with white text and
-inverted controls; the other speaker is parchment with a hairline. No colour is
-computed per line.
+**The side carries an edge, not a fill** (DES-35, DES-36 — v125). Both bubbles sit
+on a light ground: the learner's is `--brand-tint` with a 3px `--brand` right edge,
+the other speaker's is `--parchment` with a 3px `--parchment-border` left edge. The
+speaker name above it is the small-caps meta treatment at `--fs-micro`. No colour
+is computed per line.
+
+**This section read "a user bubble is brand with white text and inverted controls"
+until v125, and the reason it changed is a rule worth carrying:** *tone colour
+requires a light ground, so any surface carrying jyutping is a tint and never a
+saturated fill.* Measured, all six tone colours land between **1.13:1 and 2.13:1**
+on `--brand` and 1.79:1 to 4.31:1 on `--milestone`, against 2.44:1 to 5.87:1 for
+the same palette on white elsewhere. The saturated fill therefore forced a
+`!important` stripping tone colour from the learner's own lines — the lines the
+learner is meant to produce. Lighting the ground removed the need for the override
+rather than overriding the override. **Before adding any dark surface that will
+carry jyutping, this is the constraint to check first.**
+
+**Watch the specificity on the state modifiers.** `--gap`, `--correct` and
+`--wrong` are qualified to `.bubble-row .bubble.bubble--gap` (0,3,0). A bare
+single-class modifier is 0,1,0 and loses to `.bubble-row.right .bubble` at 0,2,0 —
+which is what had silently been happening since they were written, because these
+three are always emitted on the user side.
 
 ### Subtabs & tab bar — `.tabs` › `.tab` (+ `--on`) · `.tabs--top` *(subtabs built v114; `.tabs--top` built v117 with the tab bar)*
 **One primitive, two consumers.** The topic's view switch (Learn / Chat / Quiz) and

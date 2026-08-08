@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Contextual row — what back means, and what the count counts</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Noto+Serif+TC:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --font-serif:'Noto Serif TC',Georgia,serif;
+  --font-ui:'Inter','Noto Serif TC',-apple-system,system-ui,sans-serif;
+  --font-display:'Fraunces','Noto Serif TC',Georgia,serif;
+  --fs-micro:11px; --fs-meta:12px; --fs-small:13px; --fs-body:15px; --fs-lead:17px; --fs-h2:28px;
+  --lh-heading:1.25;
+  --fw-regular:400; --fw-medium:500; --fw-semi:600; --fw-bold:700;
+  --sp-1:4px; --sp-2:8px; --sp-3:12px; --sp-4:16px; --sp-5:24px; --sp-6:32px;
+  --r-sm:8px; --r-md:12px; --r-pill:999px; --tap-min:44px;
+  --elev-1:0 1px 2px rgba(58,42,30,.04),0 1px 3px rgba(58,42,30,.06);
+  --ink:#1C1917; --ink-soft:#292524;
+  --parchment:#FFFFFF; --parchment-warm:#FAF8F5; --parchment-deep:#F0EBE4;
+  --brand:#C2410C; --brand-tint:#FEF0E9; --brand-edge:#F5D9C9; --brand-dark:#9A3412;
+  --jade:#15803D; --jade-tint:#DCFCE7; --jade-edge:#BBE7C9;
+  --muted:#A8A29E; --muted-dark:#78716C;
+  --parchment-border:#EAE4DC;
+  --header-bg:#6E2639; --header-text:#F7EEE8; --header-sub:rgba(255,255,255,.6);
+  --milestone:var(--header-bg);
+  --measure:680px;
+  --border:1px solid var(--parchment-border);
+  --border-soft:1px solid var(--parchment-deep);
+}
+body{margin:0;background:var(--parchment-deep);font-family:var(--font-ui);color:var(--ink);padding:24px 16px 72px}
+.wrap{max-width:1280px;margin:0 auto}
+h1{font-family:var(--font-display);font-size:var(--fs-h2);font-weight:var(--fw-medium);margin:0 0 6px}
+h2{font-family:var(--font-display);font-size:var(--fs-lead);font-weight:var(--fw-medium);margin:48px 0 4px}
+h3{font-size:var(--fs-small);font-weight:var(--fw-semi);margin:24px 0 6px}
+.lede{font-size:var(--fs-small);line-height:1.55;color:var(--muted-dark);margin:0 0 8px;max-width:80ch}
+.note{font-size:var(--fs-meta);line-height:1.65;color:var(--muted-dark);margin:8px 0 0;max-width:80ch}
+.note b{color:var(--ink-soft)}
+code{font-family:ui-monospace,Menlo,monospace;font-size:11px;background:var(--parchment-deep);padding:1px 5px;border-radius:4px}
+table{border-collapse:collapse;font-size:var(--fs-meta);margin-top:12px;width:100%;background:var(--parchment);border-radius:var(--r-md);overflow:hidden}
+th,td{text-align:left;padding:8px 11px;border-bottom:var(--border-soft);vertical-align:top}
+th{font-size:var(--fs-micro);letter-spacing:.08em;text-transform:uppercase;color:var(--muted-dark);font-weight:var(--fw-semi);background:var(--parchment-warm)}
+.rec{display:inline-block;background:var(--jade-tint);color:var(--jade);font-size:9px;font-weight:var(--fw-semi);letter-spacing:.1em;text-transform:uppercase;padding:3px 6px;border-radius:4px;vertical-align:2px}
+.no{display:inline-block;background:#EDE7DE;color:var(--muted-dark);font-size:9px;font-weight:var(--fw-semi);letter-spacing:.1em;text-transform:uppercase;padding:3px 6px;border-radius:4px;vertical-align:2px}
+.warn{display:inline-block;background:#FDF1E3;color:#9A5B10;font-size:9px;font-weight:var(--fw-semi);letter-spacing:.1em;text-transform:uppercase;padding:3px 6px;border-radius:4px;vertical-align:2px}
+.bug{display:inline-block;background:#FDE7E7;color:#A93226;font-size:9px;font-weight:var(--fw-semi);letter-spacing:.1em;text-transform:uppercase;padding:3px 6px;border-radius:4px;vertical-align:2px}
+
+.cols{display:flex;gap:20px;flex-wrap:wrap;margin-top:16px}
+.col{width:360px}
+.col > h3{margin-top:0}
+
+/* ── real phone chrome, 360px content ── */
+.phone{width:360px;background:var(--parchment-warm);border:var(--border);border-radius:var(--r-md);overflow:hidden;box-shadow:var(--elev-1)}
+.hdr{background:var(--header-bg);color:var(--header-text);display:grid;grid-template-columns:var(--tap-min) 1fr var(--tap-min);align-items:center;padding:8px 6px}
+.hdr .ic{width:var(--tap-min);height:32px;display:flex;align-items:center;justify-content:center;opacity:.75}
+.hdr .plate{text-align:center}
+.hdr .zh{font-family:var(--font-serif);font-size:19px;line-height:1.1}
+.hdr .en{font-size:8px;letter-spacing:.16em;text-transform:uppercase;color:var(--header-sub);margin-top:2px}
+
+/* .ctx — transcribed from styles.css:535-547 */
+.ctx{background:var(--parchment-warm);border-bottom:var(--border-soft)}
+.ctx-inner{max-width:var(--measure);margin:0 auto}
+.ctx-row{display:flex;align-items:center;justify-content:space-between;gap:var(--sp-2);padding:8px var(--sp-4) 7px}
+.ctx-head--split{border-bottom:var(--border-soft)}
+.ctx-back{display:flex;align-items:center;gap:6px;min-height:var(--tap-min);font-family:var(--font-ui);font-size:var(--fs-meta);font-weight:var(--fw-medium);line-height:1.2;color:var(--ink);background:none;border:none;cursor:pointer;padding:0;text-align:left}
+.ctx-back svg{width:15px;height:15px;flex:none}
+.ctx-meta{font-family:var(--font-ui);font-size:var(--fs-micro);font-weight:var(--fw-medium);line-height:1;color:var(--muted-dark);white-space:nowrap}
+
+/* Option C only — the two-segment trail */
+.ctx-trail{display:flex;align-items:center;gap:5px;min-height:var(--tap-min);font-size:var(--fs-meta);font-weight:var(--fw-medium);line-height:1.2;flex-wrap:nowrap;min-width:0}
+.ctx-seg{background:none;border:none;padding:0;font:inherit;cursor:pointer;color:var(--muted-dark);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ctx-seg--here{color:var(--ink);flex-shrink:1;min-width:0}
+.ctx-sep{color:var(--muted);flex:none;font-size:10px}
+
+/* stepper — transcribed from styles.css:559+ */
+.stepper{display:flex;align-items:center;padding:8px var(--sp-4) 7px;max-width:var(--measure);margin:0 auto}
+.sx{display:flex;align-items:center;flex:1}
+.sx:last-child{flex:0 0 auto}
+.sline{flex:1;height:1px;background:var(--parchment-border)}
+.sline.done{background:var(--jade-edge)}
+.node{width:20px;height:20px;border-radius:var(--r-pill);border:1px solid var(--parchment-border);background:var(--parchment);flex:none}
+.node.done{background:var(--jade-tint);border-color:var(--jade-edge)}
+.node.cur{background:var(--brand-tint);border:2px solid var(--brand)}
+.node.cp{border-radius:3px;transform:rotate(45deg);width:17px;height:17px;border-color:#C9A6AF}
+
+.body{padding:var(--sp-4)}
+.ltitle{font-family:var(--font-display);font-size:22px;font-weight:var(--fw-semi);line-height:var(--lh-heading);margin:0 0 2px}
+.lsub{font-size:var(--fs-meta);color:var(--muted-dark)}
+.tabs{display:flex;border-bottom:var(--border);margin-top:var(--sp-4)}
+.tab{flex:1;text-align:center;padding:10px 0;font-size:var(--fs-meta);font-weight:var(--fw-semi);color:var(--muted-dark);border-bottom:2px solid transparent;margin-bottom:-1px}
+.tab--on{color:var(--brand);border-bottom-color:var(--brand)}
+
+.caption{font-size:var(--fs-micro);color:var(--muted-dark);margin:8px 0 14px;line-height:1.55}
+.caption b{color:var(--ink-soft)}
+.rowlbl{font-size:var(--fs-micro);letter-spacing:.08em;text-transform:uppercase;color:var(--muted-dark);font-weight:var(--fw-bold);margin:20px 0 6px}
+.hl{background:#FFF6D9;padding:0 3px;border-radius:2px}
+.strike{text-decoration:line-through;opacity:.55}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<h1>Contextual row — what back means, and what the count counts</h1>
+<p class="lede">Mockup 25. Two device-QA issues that live in the same twenty pixels and have to be
+decided together. <b>Issue 4</b> is a plain defect. <b>Issue 3</b> is a design question that
+reopens something the backlog settled deliberately, so it needs an argument rather than a fix.</p>
+
+<h2>The defect, first — it is not in dispute</h2>
+<p class="note"><code>renderContextRow()</code> builds the meta slot as
+<code>${st.step} of ${st.total} · ${ctx.path.label}</code>. <code>st.step</code> and
+<code>st.total</code> come from <code>buildStageInfo()</code> and are <b>stage-scoped</b>;
+<code>ctx.path.label</code> is the <b>path</b>. So a lesson two-thirds of the way through
+<i>Eating and Shopping</i> renders <span class="hl">2 of 5 · Beginner</span> — a position
+inside the stage, labelled with the course. <code>getPathContext()</code>'s own comment says
+the row works in stage terms; only the label was left behind.</p>
+<p class="note"><b>The count is right. The label is wrong.</b> But it cannot be fixed on its own:
+the back control immediately to its left <i>already</i> says the stage name, so putting the
+stage in the meta slot too gives the same six words twice on one 360px row. That is why this
+mockup exists — issue 4's fix depends on what issue 3 decides.</p>
+
+<h2>What back does today</h2>
+<p class="note"><code>backAttr</code> defaults to <code>id="back-home-btn"</code>, whose handler
+is <code>history.back()</code>. The label is the stage name. So the control reads as a
+<i>place</i> and behaves as a <i>direction</i>, and the two only agree by luck:</p>
+
+<table>
+  <tr><th>You reached the lesson from…</th><th>Label says</th><th>Back actually goes to</th><th></th></tr>
+  <tr><td>Path timeline</td><td>Eating and Shopping</td><td>Path timeline</td><td><span class="rec">agrees</span></td></tr>
+  <tr><td>Dashboard → Resume lesson</td><td>Eating and Shopping</td><td><b>Dashboard</b></td><td><span class="bug">lies</span></td></tr>
+  <tr><td>Stage stepper (sibling topic)</td><td>Eating and Shopping</td><td><b>The previous topic</b></td><td><span class="bug">lies</span></td></tr>
+  <tr><td>Checkpoint hub → back</td><td>Eating and Shopping</td><td>Wherever the hub came from</td><td><span class="bug">lies</span></td></tr>
+</table>
+<p class="note"><b>This was a deliberate choice, not an oversight.</b> BACKLOG.md records it:
+routing through <code>history.back()</code> keeps the on-screen back and the phone's hardware
+back in step. A control that always goes to one fixed destination necessarily disagrees with
+the hardware button, which always goes back one entry. <b>Any breadcrumb buys honesty in the
+label by spending it in the relationship with the hardware key</b> — that is the real trade,
+and it is what the three options below price differently.</p>
+
+<h2>Three options</h2>
+
+<div class="cols">
+
+  <!-- ─────────── A ─────────── -->
+  <div class="col">
+    <h3>A · Label follows the action <span class="no">smallest</span></h3>
+    <div class="phone">
+      <div class="hdr"><div class="ic">ⓘ</div><div class="plate"><div class="zh">廣東話</div><div class="en">Cantonese Learner</div></div><div class="ic">⚙</div></div>
+      <div class="ctx">
+        <div class="ctx-head--split"><div class="ctx-inner"><div class="ctx-row">
+          <button class="ctx-back"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg> Back</button>
+          <span class="ctx-meta">2 of 5 · Eating and Shopping</span>
+        </div></div></div>
+        <div class="stepper">
+          <div class="sx"><div class="node done"></div><div class="sline done"></div></div>
+          <div class="sx"><div class="node cur"></div><div class="sline"></div></div>
+          <div class="sx"><div class="node"></div><div class="sline"></div></div>
+          <div class="sx"><div class="node"></div><div class="sline"></div></div>
+          <div class="sx"><div class="node cp"></div></div>
+        </div>
+      </div>
+      <div class="body">
+        <div class="ltitle">Food</div>
+        <div class="lsub">Tier 1 · 15 words</div>
+        <div class="tabs"><div class="tab tab--on">Learn</div><div class="tab">Chat</div><div class="tab">Quiz</div></div>
+      </div>
+    </div>
+    <p class="caption"><b>The label stops naming a place.</b> <code>history.back()</code> is
+    untouched, so the hardware key and the on-screen control stay identical — and because the
+    stage name is no longer in the back slot, <b>issue 4's fix drops straight into the meta
+    slot with no duplication</b>. One word changed, one label changed, zero new behaviour.
+    <br><br>The cost: you lose the breadcrumb entirely. The row no longer tells you where you
+    sit in the hierarchy at a glance, only that a way out exists — which the stepper below it
+    partly answers anyway.</p>
+  </div>
+
+  <!-- ─────────── B ─────────── -->
+  <div class="col">
+    <h3>B · Breadcrumb to the path <span class="rec">solves both</span></h3>
+    <div class="phone">
+      <div class="hdr"><div class="ic">ⓘ</div><div class="plate"><div class="zh">廣東話</div><div class="en">Cantonese Learner</div></div><div class="ic">⚙</div></div>
+      <div class="ctx">
+        <div class="ctx-head--split"><div class="ctx-inner"><div class="ctx-row">
+          <button class="ctx-back"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg> Beginner</button>
+          <span class="ctx-meta">2 of 5 · Eating and Shopping</span>
+        </div></div></div>
+        <div class="stepper">
+          <div class="sx"><div class="node done"></div><div class="sline done"></div></div>
+          <div class="sx"><div class="node cur"></div><div class="sline"></div></div>
+          <div class="sx"><div class="node"></div><div class="sline"></div></div>
+          <div class="sx"><div class="node"></div><div class="sline"></div></div>
+          <div class="sx"><div class="node cp"></div></div>
+        </div>
+      </div>
+      <div class="body">
+        <div class="ltitle">Food</div>
+        <div class="lsub">Tier 1 · 15 words</div>
+        <div class="tabs"><div class="tab tab--on">Learn</div><div class="tab">Chat</div><div class="tab">Quiz</div></div>
+      </div>
+    </div>
+    <p class="caption"><b>Back always goes to the path timeline, labelled with the path.</b> The
+    stage moves into the meta slot beside its own count, so the row finally reads as one
+    coherent sentence: you are in Beginner, in Eating and Shopping, at lesson 2 of 5. Nothing
+    repeats and <b>issue 4 is fixed by the same move</b>.
+    <br><br>The cost is the one the backlog was protecting against: from the dashboard, the
+    on-screen back now goes to the path timeline while the hardware key goes to the dashboard.
+    Two back controls, two destinations, both reasonable. Whether that is confusing or simply
+    normal — most apps behave exactly this way — is the judgement this mockup is asking for.</p>
+  </div>
+
+  <!-- ─────────── C ─────────── -->
+  <div class="col">
+    <h3>C · Two-segment trail <span class="warn">tight at 360px</span></h3>
+    <div class="phone">
+      <div class="hdr"><div class="ic">ⓘ</div><div class="plate"><div class="zh">廣東話</div><div class="en">Cantonese Learner</div></div><div class="ic">⚙</div></div>
+      <div class="ctx">
+        <div class="ctx-head--split"><div class="ctx-inner"><div class="ctx-row">
+          <div class="ctx-trail">
+            <button class="ctx-seg">Beginner</button>
+            <span class="ctx-sep">›</span>
+            <button class="ctx-seg ctx-seg--here">Eating and Shopping</button>
+          </div>
+          <span class="ctx-meta">2 of 5</span>
+        </div></div></div>
+        <div class="stepper">
+          <div class="sx"><div class="node done"></div><div class="sline done"></div></div>
+          <div class="sx"><div class="node cur"></div><div class="sline"></div></div>
+          <div class="sx"><div class="node"></div><div class="sline"></div></div>
+          <div class="sx"><div class="node"></div><div class="sline"></div></div>
+          <div class="sx"><div class="node cp"></div></div>
+        </div>
+      </div>
+      <div class="body">
+        <div class="ltitle">Food</div>
+        <div class="lsub">Tier 1 · 15 words</div>
+        <div class="tabs"><div class="tab tab--on">Learn</div><div class="tab">Chat</div><div class="tab">Quiz</div></div>
+      </div>
+    </div>
+    <p class="caption"><b>The most honest and the most expensive.</b> Both levels are named and
+    both are tappable, so nothing is implied. But the back <i>arrow</i> has to go — there is no
+    room for it beside two segments and a count — and with it goes the one glyph that says
+    "this row is how you leave". <br><br><b>Look at the width.</b> "Eating and Shopping" is not
+    the longest stage name in the data, and this is 360px, which is a real phone. The segment
+    already needs <code>text-overflow: ellipsis</code> to be safe, and a truncated breadcrumb
+    segment is worse than no breadcrumb — it names a place using letters you can't read.</p>
+  </div>
+
+</div>
+
+<h2>The same three, on the other entry routes</h2>
+<p class="note">A row only earns its keep if it holds up everywhere it appears. These are the
+three cases that are not "lesson opened from the timeline".</p>
+
+<div class="rowlbl">Standalone topic — no path, no stage (DES-25 says the shell must not move)</div>
+<div class="cols">
+  <div class="col">
+    <div class="phone"><div class="ctx"><div class="ctx-inner"><div class="ctx-row">
+      <button class="ctx-back"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg> Back</button>
+      <span class="ctx-meta">Food &amp; Drink</span>
+    </div></div></div></div>
+    <p class="caption"><b>A</b> — unchanged from today in every respect but the word. The
+    category stays in the meta slot.</p>
+  </div>
+  <div class="col">
+    <div class="phone"><div class="ctx"><div class="ctx-inner"><div class="ctx-row">
+      <button class="ctx-back"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg> Topics</button>
+      <span class="ctx-meta">Food &amp; Drink</span>
+    </div></div></div></div>
+    <p class="caption"><b>B</b> — the breadcrumb degrades cleanly: there is no path, so the
+    parent is Topics. Reads correctly and needs no special case.</p>
+  </div>
+  <div class="col">
+    <div class="phone"><div class="ctx"><div class="ctx-inner"><div class="ctx-row">
+      <div class="ctx-trail"><button class="ctx-seg">Topics</button><span class="ctx-sep">›</span><button class="ctx-seg ctx-seg--here">Food &amp; Drink</button></div>
+    </div></div></div></div>
+    <p class="caption"><b>C</b> — the trail has to absorb the category to have a second segment
+    at all, which means the meta slot empties. DES-25 warns that <b>an empty slot reads as a
+    rendering fault</b>, so C needs a different shape here rather than the same one.</p>
+  </div>
+</div>
+
+<div class="rowlbl">Checkpoint hub — the row is also its only lateral navigation</div>
+<div class="cols">
+  <div class="col">
+    <div class="phone"><div class="ctx"><div class="ctx-head--split"><div class="ctx-inner"><div class="ctx-row">
+      <button class="ctx-back"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg> Back</button>
+      <span class="ctx-meta">Checkpoint · Eating and Shopping</span>
+    </div></div></div>
+    <div class="stepper"><div class="sx"><div class="node done"></div><div class="sline done"></div></div><div class="sx"><div class="node done"></div><div class="sline done"></div></div><div class="sx"><div class="node done"></div><div class="sline done"></div></div><div class="sx"><div class="node done"></div><div class="sline done"></div></div><div class="sx"><div class="node cp cur"></div></div></div></div></div>
+    <p class="caption"><b>A</b> — the hub passes its own <code>meta</code>, so "Checkpoint ·" can
+    now carry the stage instead of the path. Same fix, same slot.</p>
+  </div>
+  <div class="col">
+    <div class="phone"><div class="ctx"><div class="ctx-head--split"><div class="ctx-inner"><div class="ctx-row">
+      <button class="ctx-back"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg> Beginner</button>
+      <span class="ctx-meta">Checkpoint · Eating and Shopping</span>
+    </div></div></div>
+    <div class="stepper"><div class="sx"><div class="node done"></div><div class="sline done"></div></div><div class="sx"><div class="node done"></div><div class="sline done"></div></div><div class="sx"><div class="node done"></div><div class="sline done"></div></div><div class="sx"><div class="node done"></div><div class="sline done"></div></div><div class="sx"><div class="node cp cur"></div></div></div></div></div>
+    <p class="caption"><b>B</b> — consistent with the lesson row. <b>This is where B costs the
+    most</b>: reaching the hub from a topic's stepper diamond and pressing back now lands on the
+    timeline rather than the topic you came from, which is a longer way round to somewhere you
+    were one tap ago.</p>
+  </div>
+  <div class="col">
+    <div class="phone"><div class="ctx"><div class="ctx-head--split"><div class="ctx-inner"><div class="ctx-row">
+      <div class="ctx-trail"><button class="ctx-seg">Beginner</button><span class="ctx-sep">›</span><button class="ctx-seg ctx-seg--here">Eating and Shopping</button></div>
+      <span class="ctx-meta">Checkpoint</span>
+    </div></div></div>
+    <div class="stepper"><div class="sx"><div class="node done"></div><div class="sline done"></div></div><div class="sx"><div class="node done"></div><div class="sline done"></div></div><div class="sx"><div class="node done"></div><div class="sline done"></div></div><div class="sx"><div class="node done"></div><div class="sline done"></div></div><div class="sx"><div class="node cp cur"></div></div></div></div></div>
+    <p class="caption"><b>C</b> — actually reads best here, because "Checkpoint" alone is short
+    enough to leave the trail room. The hub is C's strongest case and the standalone topic is
+    its weakest.</p>
+  </div>
+</div>
+
+<h2>Where the recommendation lands</h2>
+<table>
+  <tr><th>&nbsp;</th><th>A · Label follows action</th><th>B · Breadcrumb</th><th>C · Trail</th></tr>
+  <tr><td>Fixes issue 4 without duplication</td><td>Yes</td><td>Yes</td><td>Yes</td></tr>
+  <tr><td>Label always true</td><td>Yes</td><td>Yes</td><td>Yes</td></tr>
+  <tr><td>Agrees with the hardware back key</td><td><b>Always</b></td><td>Only from the timeline</td><td>Only from the timeline</td></tr>
+  <tr><td>Says where you are in the hierarchy</td><td>No</td><td>Partly — one level</td><td><b>Both levels</b></td></tr>
+  <tr><td>Survives a long stage name at 360px</td><td>Yes</td><td>Yes</td><td><b>Needs ellipsis</b></td></tr>
+  <tr><td>Keeps the back arrow</td><td>Yes</td><td>Yes</td><td><b>No room</b></td></tr>
+  <tr><td>Works on a standalone topic</td><td>Yes</td><td>Yes</td><td><b>Needs a second shape</b></td></tr>
+  <tr><td>Reopens a settled decision</td><td><b>No</b></td><td>Yes</td><td>Yes</td></tr>
+</table>
+
+<p class="note" style="margin-top:16px"><b>I would take B.</b> It is the only option that makes the
+row state your position rather than merely offer an exit, it fixes issue 4 as a side effect
+rather than as a second edit, and it degrades correctly on a standalone topic with no special
+case. The hardware-key divergence it introduces is real but it is also <i>ordinary</i> — an
+in-app up control and a system back button pointing different ways is the pattern most apps
+already use, and the backlog note was written when nothing had tested whether the divergence
+actually confuses anyone.</p>
+<p class="note"><b>The honest case for A</b> is that it is one word, carries no risk at all, and
+the stepper directly beneath already shows your position within the stage more precisely than a
+breadcrumb would. If the row's job is "get me out of here", A does it and stops. Choose A if
+after seeing B on device the divergence bothers you — it is a strictly smaller change and
+nothing about B is hard to reach later.</p>
+<p class="note"><b>C should not be built.</b> Not because the idea is wrong — it is the most
+truthful of the three — but because it fails on the two things this mockup was drawn to test:
+it needs a truncating segment at a real phone width, and it needs a second shape for standalone
+topics, which is exactly what DES-25 settled against.</p>
+
+<h2>What gets recorded either way</h2>
+<p class="note">Whichever wins, two register rows follow. One for the back semantics — and if it
+is B or C, it <b>supersedes</b> the backlog's <i>checkpoint hub back target</i> note rather than
+silently contradicting it, naming the hardware-key divergence as accepted rather than
+overlooked. One for the meta label, stating the rule as <b>the count and its label must describe
+the same scope</b>, which is the shape of the original defect and the thing a future edit could
+undo again.</p>
+
+</div>
+</body>
+</html>

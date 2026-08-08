@@ -13,7 +13,7 @@ not a history log. Approved design decisions and whether they were built live in
 > convention (`v121 — <what changed>`) so this file stops being load-bearing on
 > its own.
 
-Last updated: 2026-08-07 · sw.js at v124
+Last updated: 2026-08-08 · sw.js at v125
 
 ## Confirmed live and working
 - **Patterns/Drills removed** from the app entirely (not soft-hidden). Checkpoints
@@ -30,7 +30,13 @@ Last updated: 2026-08-07 · sw.js at v124
     words/sentences. Conversations use two voices picked per line by speaker.
     **Superseded at v123 — see the Azure entry below.**
   - Generated via `tools/generate-audio.js` (vanilla Node, no npm deps, auth via
-    `gcloud auth print-access-token`). Incremental — safe to re-run.
+    the `SPEECH_KEY` / `SPEECH_REGION` environment variables). Incremental — safe
+    to re-run. Carries a `--provider=google` backend as the A/B reference only;
+    that path still authenticates through `gcloud auth print-access-token`.
+  - `tools/tts-probe.js` (v123) answers "which voices does a provider offer, and
+    how does each handle a given sound" by calling `voices/list` and synthesising
+    a fixed six-phrase set through every one. Not a standing check — it asserts
+    no invariant — but the thing to reach for before any future voice question.
   - Playback goes through `speakItem()` / `speakConvoLine()`. Web Speech API is
     kept, deliberately, only for the Translate tab (no stable ID to pre-generate).
   - No fallback on missing audio by design — a toast shows instead of a silent
@@ -153,6 +159,7 @@ orphan hues `#B7861E`, `#e4d4ad`, `#8a6716`,
 | — | v122 | **QA fixes off device — six changes, no design decisions.** *Cold-start next-up:* `checkpointProgress()` decided whether a checkpoint offered a Words activity by counting `getCheckpointWords()`, which reads the lazy-loaded topic cache; on a cold start that is always 0, so a checkpoint whose Conversation was already done computed 1 of 1 and `complete: true`, and the dashboard's next-up skipped past it. Availability now comes from `learning_paths.json` — a stage offers Words when it has topics — which is answerable before any topic JSON loads. *Bubble action row* gains a gap; the two controls were flush. *The playing state on a user-side bubble inside a checkpoint conversation* got its own rule: `.bubble-row.right .bubble-play.is-playing` and `.cp-convo .bubble-row.right .bubble-play` tie at 0,4,0 and the later won on `color`, giving a white icon on a white circle. *Back to Lesson* from a quiz now clears `state.flipped` — every other route into a topic already did. *The audio-only quiz direction* reveals the characters and jyutping on a **correct** answer; it was the one path through a quiz where the learner never saw what they heard. *`sw.js` precaches 42 topics, not 40* — `connectives` and `pronouns` were missing, so neither worked offline, and `pronouns` is Beginner lesson one. |
 | — | v123 | **TTS migrated from Google to Azure — all 1,376 audio files regenerated.** Not a design change; see the architecture note below and the header of `tools/generate-audio.js` for the full diagnosis. Google's Chirp3-HD `yue-HK` voice cannot produce a bare syllabic nasal, so 唔 (m4) and 五 (ng5) both came back with a vowel inserted, affecting 207 files. Azure's `zh-HK` Neural voices say both correctly at comparable naturalness. Casting mirrors what it replaced: `zh-HK-WanLungNeural` for words, sentences and the non-user speaker, `zh-HK-HiuGaaiNeural` for the learner's own lines. |
 | — | v124 | **The emoji sweep (DES-31, DES-32).** 33 pictographic sites in `render.js` reduced to one. Roughly half were removed outright, the rest replaced with `ICON_PATHS` entries or a disclosure chevron. `.result-emoji` and `.review-empty-emoji` collapse into `.result-mark` / `.result-mark--good` (DES-32). The survivor is `📚 All Categories` inside the category filter's native `<select>`, which cannot hold an SVG. `renderCheckpointDone()`'s `emoji` parameter is removed rather than passed empty — the same move DES-27 made on `renderPageHeader()`. |
+| MOCK-25-B, MOCK-26-C+ | v125 | **The last two device-QA issues (3, 4, 10a, 10b).** *Contextual row (DES-33, DES-34):* the back control becomes an up control — always to the path timeline, labelled with the path — and the meta slot names the stage beside its own stage-scoped count. Supersedes the backlog's `history.back()` note; the hardware-key divergence is accepted and documented. *Conversation (DES-35, DES-36):* the user bubble goes from a saturated fill to `--brand-tint` / `--milestone-tint`, the `!important` forcing user-side jyutping to white is retired, and a 3px outer edge plus a small-caps name carries the speaker distinction. Tone colour on the learner's own lines goes from absent to 2.19–5.27:1, level with the rest of the app. **Found while re-checking the bubble states against a light ground:** `.bubble--gap`, `.bubble--correct` and `.bubble--wrong` are emitted on the user side at 0,1,0 against `.bubble-row.right .bubble` at 0,2,0, so their background and border have never applied — pre-existing, exposed by the redesign, requalified to 0,3,0. |
 
 ### Notes worth carrying forward
 
@@ -209,6 +216,25 @@ first reported. A redundant indicator is not merely redundant — it has states 
 sibling does not, and those states are unreviewed. Before adding a second view of
 one quantity, check whether the first already answers it more precisely.
 
+
+**A modifier that never outranks its context is invisible, not weak.**
+`.bubble--gap`, `.bubble--correct` and `.bubble--wrong` are one class (0,1,0) and
+are emitted on bubbles that `.bubble-row.right .bubble` (0,2,0) already styles.
+Their `background` and `border` therefore never applied, and the answered states
+have been rendering in the plain user-bubble skin for as long as they have
+existed. Nobody reported it because the result still *looked* deliberate. Two
+things generalise. **A BEM-style `--modifier` is not automatically stronger than
+the rule it modifies** — it is weaker than any two-class contextual selector, and
+component CSS is full of those. And this was found only because the redesign
+forced a re-read of every bubble state; **a defect that produces a plausible
+result has no reporter**, so the only way it surfaces is a deliberate audit.
+
+**Ask what an `!important` is protecting before deleting it.** The rule forcing
+user-side jyutping to white looked like over-caution and was load-bearing: every
+tone colour measured between 1.13:1 and 2.13:1 on the saturated fill. Deleting it
+alone would have replaced *absent* tone information with *illegible* tone
+information, which is worse. What made it removable was changing the ground, not
+the rule. **The fix for a defensive override is usually upstream of it.**
 
 **An availability check that reads a lazy-loaded cache is a clock, not a fact.**
 `checkpointProgress()` asked "does this checkpoint have Words to offer" by

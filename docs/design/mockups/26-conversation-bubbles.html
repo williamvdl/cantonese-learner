@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Conversation bubbles — tone colour on a dark fill, and the redesign</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Noto+Serif+TC:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --font-serif:'Noto Serif TC',Georgia,serif;
+  --font-ui:'Inter','Noto Serif TC',-apple-system,system-ui,sans-serif;
+  --font-display:'Fraunces','Noto Serif TC',Georgia,serif;
+  --fs-micro:11px; --fs-meta:12px; --fs-small:13px; --fs-body:15px; --fs-lead:17px; --fs-h2:28px;
+  --fw-regular:400; --fw-medium:500; --fw-semi:600; --fw-bold:700;
+  --sp-1:4px; --sp-2:8px; --sp-3:12px; --sp-4:16px; --sp-5:24px; --sp-6:32px;
+  --r-sm:8px; --r-md:12px; --r-pill:999px; --tap-min:44px;
+  --elev-1:0 1px 2px rgba(58,42,30,.04),0 1px 3px rgba(58,42,30,.06);
+  --ink:#1C1917; --ink-soft:#292524;
+  --parchment:#FFFFFF; --parchment-warm:#FAF8F5; --parchment-deep:#F0EBE4;
+  --brand:#C2410C; --brand-tint:#FEF0E9; --brand-edge:#F5D9C9; --brand-dark:#9A3412;
+  --jade:#15803D; --jade-tint:#DCFCE7; --jade-edge:#BBE7C9;
+  --muted:#A8A29E; --muted-dark:#78716C;
+  --parchment-border:#EAE4DC;
+  --header-bg:#6E2639; --header-text:#F7EEE8;
+  --milestone:var(--header-bg); --milestone-tint:#FBF0F2; --milestone-edge:#EBD3D9;
+  --border:1px solid var(--parchment-border);
+  --border-soft:1px solid var(--parchment-deep);
+
+  /* the six TONES, verbatim from app.js:159 */
+  --t1:#E74C3C; --t2:#E67E22; --t3:#c8a200; --t4:#27AE60; --t5:#2980B9; --t6:#8E44AD;
+  /* candidate lightened ramp for option B — each mixed toward white until it
+     clears 4.5:1 on --milestone. Computed, not eyeballed. */
+  --d1:#F09086; --d2:#EB984E; --d3:#CBA80F; --d4:#52BE80; --d5:#7FB3D5; --d6:#C49ED4;
+}
+body{margin:0;background:var(--parchment-deep);font-family:var(--font-ui);color:var(--ink);padding:24px 16px 72px}
+.wrap{max-width:1280px;margin:0 auto}
+h1{font-family:var(--font-display);font-size:var(--fs-h2);font-weight:var(--fw-medium);margin:0 0 6px}
+h2{font-family:var(--font-display);font-size:var(--fs-lead);font-weight:var(--fw-medium);margin:48px 0 4px}
+h3{font-size:var(--fs-small);font-weight:var(--fw-semi);margin:24px 0 6px}
+.lede{font-size:var(--fs-small);line-height:1.55;color:var(--muted-dark);margin:0 0 8px;max-width:80ch}
+.note{font-size:var(--fs-meta);line-height:1.65;color:var(--muted-dark);margin:8px 0 0;max-width:80ch}
+.note b{color:var(--ink-soft)}
+code{font-family:ui-monospace,Menlo,monospace;font-size:11px;background:var(--parchment-deep);padding:1px 5px;border-radius:4px}
+table{border-collapse:collapse;font-size:var(--fs-meta);margin-top:12px;width:100%;background:var(--parchment);border-radius:var(--r-md);overflow:hidden}
+th,td{text-align:left;padding:8px 11px;border-bottom:var(--border-soft);vertical-align:top}
+th{font-size:var(--fs-micro);letter-spacing:.08em;text-transform:uppercase;color:var(--muted-dark);font-weight:var(--fw-semi);background:var(--parchment-warm)}
+.rec{display:inline-block;background:var(--jade-tint);color:var(--jade);font-size:9px;font-weight:var(--fw-semi);letter-spacing:.1em;text-transform:uppercase;padding:3px 6px;border-radius:4px;vertical-align:2px}
+.no{display:inline-block;background:#EDE7DE;color:var(--muted-dark);font-size:9px;font-weight:var(--fw-semi);letter-spacing:.1em;text-transform:uppercase;padding:3px 6px;border-radius:4px;vertical-align:2px}
+.bug{display:inline-block;background:#FDE7E7;color:#A93226;font-size:9px;font-weight:var(--fw-semi);letter-spacing:.1em;text-transform:uppercase;padding:3px 6px;border-radius:4px;vertical-align:2px}
+.warn{display:inline-block;background:#FDF1E3;color:#9A5B10;font-size:9px;font-weight:var(--fw-semi);letter-spacing:.1em;text-transform:uppercase;padding:3px 6px;border-radius:4px;vertical-align:2px}
+.cols{display:flex;gap:20px;flex-wrap:wrap;margin-top:16px}
+.col{width:360px}
+.col > h3{margin-top:0}
+.caption{font-size:var(--fs-micro);color:var(--muted-dark);margin:8px 0 14px;line-height:1.55}
+.caption b{color:var(--ink-soft)}
+.rowlbl{font-size:var(--fs-micro);letter-spacing:.08em;text-transform:uppercase;color:var(--muted-dark);font-weight:var(--fw-bold);margin:22px 0 6px}
+
+/* ── the conversation surface ── */
+.conv{width:360px;background:var(--parchment-warm);border:var(--border);border-radius:var(--r-md);padding:var(--sp-4);box-shadow:var(--elev-1)}
+.conv.ms{background:var(--parchment-warm)}
+.brow{display:flex;margin-bottom:14px}
+.brow.left{justify-content:flex-start}
+.brow.right{justify-content:flex-end}
+.bwrap{max-width:80%}
+.bname{font-size:10px;color:var(--muted);margin-bottom:3px;padding:0 4px}
+.brow.right .bname{text-align:right}
+.bub{border-radius:var(--r-md);padding:var(--sp-3) var(--sp-4);box-shadow:var(--elev-1);position:relative}
+.brow.left .bub{background:var(--parchment);border:var(--border);border-bottom-left-radius:4px}
+.bzh{font-size:var(--fs-lead);line-height:1.4;margin-bottom:var(--sp-1);font-family:var(--font-serif)}
+.bjp{font-size:var(--fs-micro);margin-bottom:3px;font-weight:var(--fw-semi)}
+.beng{font-size:var(--fs-micro);opacity:.75;font-style:italic}
+.brow-act{display:flex;align-items:center;justify-content:flex-end;gap:var(--sp-3);margin-top:8px}
+.brow.left .brow-act{justify-content:flex-start}
+.bbd{font-size:10px;font-weight:var(--fw-semi);opacity:.8}
+.bplay{width:32px;height:32px;border-radius:var(--r-pill);border:1px solid currentColor;display:flex;align-items:center;justify-content:center;font-size:10px;flex:none;opacity:.85}
+
+/* today's fills */
+.v-today .brow.right .bub{background:var(--brand);border:1px solid var(--brand);border-bottom-right-radius:4px;color:#fff}
+.v-today .brow.right .bjp span{color:rgba(255,255,255,.88)}
+.v-ms .brow.right .bub{background:var(--milestone);border:1px solid var(--milestone);border-bottom-right-radius:4px;color:#fff}
+.v-ms .brow.right .bjp span{color:rgba(255,255,255,.88)}
+/* A — delete the override, tones as-is on the dark fill */
+.v-a .brow.right .bub{background:var(--brand);border:1px solid var(--brand);border-bottom-right-radius:4px;color:#fff}
+.v-a2 .brow.right .bub{background:var(--milestone);border:1px solid var(--milestone);border-bottom-right-radius:4px;color:#fff}
+/* B — lightened ramp on the milestone fill */
+.v-b .brow.right .bub{background:var(--milestone);border:1px solid var(--milestone);border-bottom-right-radius:4px;color:#fff}
+.v-b .bjp .s1{color:var(--d1)}.v-b .bjp .s2{color:var(--d2)}.v-b .bjp .s3{color:var(--d3)}
+.v-b .bjp .s4{color:var(--d4)}.v-b .bjp .s5{color:var(--d5)}.v-b .bjp .s6{color:var(--d6)}
+/* C — light tinted user bubble, one ramp everywhere */
+.v-c .brow.right .bub{background:var(--brand-tint);border:1px solid var(--brand-edge);border-bottom-right-radius:4px;color:var(--ink)}
+.v-c .brow.right .bub .beng{color:var(--muted-dark)}
+.v-c-ms .brow.right .bub{background:var(--milestone-tint);border:1px solid var(--milestone-edge);border-bottom-right-radius:4px;color:var(--ink)}
+.v-c-ms .brow.right .bub .beng{color:var(--muted-dark)}
+
+/* C+ — the redesign layered on C: an edge marking who speaks */
+.v-cplus .brow.right .bub{background:var(--brand-tint);border:1px solid var(--brand-edge);border-right:3px solid var(--brand);border-bottom-right-radius:4px;color:var(--ink)}
+.v-cplus .brow.left .bub{border-left:3px solid var(--parchment-border)}
+.v-cplus .brow.right .bub .beng{color:var(--muted-dark)}
+.v-cplus .bname{font-size:9px;letter-spacing:.08em;text-transform:uppercase;font-weight:var(--fw-semi);color:var(--muted)}
+
+.s1{color:var(--t1)}.s2{color:var(--t2)}.s3{color:var(--t3)}.s4{color:var(--t4)}.s5{color:var(--t5)}.s6{color:var(--t6)}
+
+/* contrast swatch strip */
+.cs{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.csw{padding:7px 9px;border-radius:var(--r-sm);font-size:var(--fs-micro);font-weight:var(--fw-semi);min-width:82px}
+.csw i{display:block;font-style:normal;font-size:9px;opacity:.75;font-weight:var(--fw-regular);margin-top:2px}
+.fail{outline:2px solid #A93226;outline-offset:-2px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<h1>Conversation bubbles — tone colour on a dark fill, and the redesign</h1>
+<p class="lede">Mockup 26. Issue 10 from device QA, which is two things: <b>10a</b>, the tone
+colours are stripped from the learner's own lines, and <b>10b</b>, the conversation could read
+more like a conversation. They are drawn together because the cheapest fix for 10a is also a
+redesign decision, so settling them separately would mean settling them twice.</p>
+
+<h2>10a is not a preference — it is measured, and it is worse than it looks</h2>
+<p class="note"><code>styles.css:674</code> forces every jyutping syllable on a right-side bubble
+to white with <code>!important</code>. That looks like an over-cautious override. It is not:
+<b>every one of the six tone colours fails on both dark fills</b>, and on the brand-orange fill
+the worst is 1.13:1, which is effectively invisible.</p>
+
+<table>
+  <tr><th>Tone</th><th>Colour</th><th>on <code>--brand</code> #C2410C<br><span style="font-weight:400;text-transform:none;letter-spacing:0">topic conversation</span></th><th>on <code>--milestone</code> #6E2639<br><span style="font-weight:400;text-transform:none;letter-spacing:0">checkpoint conversation</span></th><th>on white<br><span style="font-weight:400;text-transform:none;letter-spacing:0">everywhere else in the app</span></th></tr>
+  <tr><td>1 High level</td><td><code>#E74C3C</code></td><td>1.36:1</td><td>2.75:1</td><td>3.8:1</td></tr>
+  <tr><td>2 High rising</td><td><code>#E67E22</code></td><td>1.82:1</td><td>3.69:1</td><td>2.8:1</td></tr>
+  <tr><td>3 Mid level</td><td><code>#c8a200</code></td><td>2.13:1</td><td>4.31:1</td><td>2.4:1</td></tr>
+  <tr><td>4 Low falling</td><td><code>#27AE60</code></td><td>1.80:1</td><td>3.66:1</td><td>2.9:1</td></tr>
+  <tr><td>5 Low rising</td><td><code>#2980B9</code></td><td>1.20:1</td><td>2.44:1</td><td>4.3:1</td></tr>
+  <tr><td>6 Low level</td><td><code>#8E44AD</code></td><td><b>1.13:1</b></td><td>1.79:1</td><td>5.9:1</td></tr>
+  <tr><td>— white, today's override</td><td><code>#FFFFFF</code></td><td>5.18:1</td><td>10.50:1</td><td>—</td></tr>
+</table>
+<p class="note"><b>Read the third column before judging the first two.</b> The tone palette has
+never met AA on white either — tone 3 sits at 2.4:1 there. So the bar is not "reach 4.5:1"; the
+bar is <b>do no worse than the app already does on a light ground</b>, which is a 2.4–5.9 band.
+The brand fill lands at 1.1–2.1, entirely below it. The milestone fill lands at 1.8–4.3,
+overlapping at the top and far below at the bottom.</p>
+
+<h3>Which is why option A — simply deleting the override — is off the table</h3>
+<div class="cols">
+  <div class="col">
+    <div class="conv v-a">
+      <div class="brow right"><div class="bwrap"><div class="bname">You</div>
+        <div class="bub"><div class="bzh">唔該畀啲牛肉。</div>
+        <div class="bjp"><span class="s4">m4</span> <span class="s1">goi1</span> <span class="s2">bei2</span> <span class="s1">di1</span> <span class="s4">ngau4</span> <span class="s6">juk6</span>.</div>
+        <div class="beng">Some beef please.</div></div></div></div>
+    </div>
+    <p class="caption"><b>Topic conversation, <code>--brand</code>.</b> This is what deleting the
+    <code>!important</code> gives you. Tone 6 purple on orange is the pair at 1.13:1.</p>
+  </div>
+  <div class="col">
+    <div class="conv v-a2">
+      <div class="brow right"><div class="bwrap"><div class="bname">You</div>
+        <div class="bub"><div class="bzh">唔該畀啲牛肉。</div>
+        <div class="bjp"><span class="s4">m4</span> <span class="s1">goi1</span> <span class="s2">bei2</span> <span class="s1">di1</span> <span class="s4">ngau4</span> <span class="s6">juk6</span>.</div>
+        <div class="beng">Some beef please.</div></div></div></div>
+    </div>
+    <p class="caption"><b>Checkpoint conversation, <code>--milestone</code>.</b> Better, and still
+    not good — the blues and purples disappear into the oxblood.</p>
+  </div>
+  <div class="col">
+    <div class="conv v-today">
+      <div class="brow right"><div class="bwrap"><div class="bname">You</div>
+        <div class="bub"><div class="bzh">唔該畀啲牛肉。</div>
+        <div class="bjp"><span style="color:rgba(255,255,255,.88)">m4 goi1 bei2 di1 ngau4 juk6.</span></div>
+        <div class="beng">Some beef please.</div></div></div></div>
+    </div>
+    <p class="caption"><b>Today.</b> Legible, and the tone information is simply absent — on the
+    lines the learner is meant to <i>produce</i>, which is where it matters most. <span class="bug">the reported issue</span></p>
+  </div>
+</div>
+
+<h2>Option B — a second tone ramp for dark fills</h2>
+<p class="note">Lighten each tone toward white until it clears the light-ground band. Computed
+rather than eyeballed. The result depends entirely on which fill you are lightening against,
+and that turns out to decide the whole question:</p>
+
+<div class="rowlbl">On <code>--milestone</code> #6E2639 — needs 6–48% white, and the hues survive</div>
+<div class="cs">
+  <div class="csw" style="background:#6E2639;color:#F09086">tone 1 <i>#F09086 · 4.52:1</i></div>
+  <div class="csw" style="background:#6E2639;color:#EB984E">tone 2 <i>#EB984E · 4.57:1</i></div>
+  <div class="csw" style="background:#6E2639;color:#CBA80F">tone 3 <i>#CBA80F · 4.58:1</i></div>
+  <div class="csw" style="background:#6E2639;color:#52BE80">tone 4 <i>#52BE80 · 4.52:1</i></div>
+  <div class="csw" style="background:#6E2639;color:#7FB3D5">tone 5 <i>#7FB3D5 · 4.66:1</i></div>
+  <div class="csw" style="background:#6E2639;color:#C49ED4">tone 6 <i>#C49ED4 · 4.60:1</i></div>
+</div>
+<div class="rowlbl">On <code>--brand</code> #C2410C — needs 84–92% white, and the hues do not</div>
+<div class="cs">
+  <div class="csw fail" style="background:#C2410C;color:#FDEDEC">tone 1 <i>#FDEDEC · 90% white</i></div>
+  <div class="csw fail" style="background:#C2410C;color:#FCEDE0">tone 2 <i>#FCEDE0 · 86% white</i></div>
+  <div class="csw fail" style="background:#C2410C;color:#F6F0D6">tone 3 <i>#F6F0D6 · 84% white</i></div>
+  <div class="csw fail" style="background:#C2410C;color:#E1F4E9">tone 4 <i>#E1F4E9 · 86% white</i></div>
+  <div class="csw fail" style="background:#C2410C;color:#EAF2F8">tone 5 <i>#EAF2F8 · 90% white</i></div>
+  <div class="csw fail" style="background:#C2410C;color:#F6F0F8">tone 6 <i>#F6F0F8 · 92% white</i></div>
+</div>
+<p class="note"><b>That second strip is the finding.</b> Six near-identical off-whites carrying
+no information — a tone ramp that cannot be told apart is not a tone ramp, it is white with
+extra tokens. So <b>option B cannot serve the topic conversation at all</b>, only the
+checkpoint one. Which means B does not solve issue 10a; it solves half of it and leaves the
+brand-orange bubble needing a different answer anyway.</p>
+
+<div class="cols">
+  <div class="col">
+    <div class="conv v-b">
+      <div class="brow left"><div class="bwrap"><div class="bname">Vendor</div>
+        <div class="bub"><div class="bzh">有，仲有雞同豬肉。</div>
+        <div class="bjp"><span class="s5">jau5</span>, <span class="s6">zung6</span> <span class="s5">jau5</span> <span class="s1">gai1</span> <span class="s4">tung4</span> <span class="s1">zyu1</span> <span class="s6">juk6</span>.</div>
+        <div class="beng">Yes, there's chicken and pork too.</div></div></div></div>
+      <div class="brow right"><div class="bwrap"><div class="bname">You</div>
+        <div class="bub"><div class="bzh">唔該畀啲牛肉。</div>
+        <div class="bjp"><span class="s4">m4</span> <span class="s1">goi1</span> <span class="s2">bei2</span> <span class="s1">di1</span> <span class="s4">ngau4</span> <span class="s6">juk6</span>.</div>
+        <div class="beng">Some beef please.</div></div></div></div>
+    </div>
+    <p class="caption"><b>B on the checkpoint conversation.</b> It works — but note the two sides
+    now use <i>different tone colours for the same tone</i>. Tone 4 is <span class="s4">#27AE60</span>
+    on the left and <span style="color:#3C9A63">#52BE80</span> on the right. <b>The learner is
+    being taught that colour means tone</b>, and here it means tone-and-also-who-is-speaking.</p>
+  </div>
+</div>
+
+<h2>Option C — light the user bubble, keep one ramp <span class="rec">recommended</span></h2>
+<p class="note">Stop fighting the ground and change it. If the learner's bubble is a tint rather
+than a saturated fill, the existing tone ramp works unchanged — no second ramp, no new tokens,
+no divergence between what a colour means on the left and on the right.</p>
+
+<div class="cols">
+  <div class="col">
+    <h3>C · topic conversation</h3>
+    <div class="conv v-c">
+      <div class="brow left"><div class="bwrap"><div class="bname">Vendor</div>
+        <div class="bub"><div class="bzh">有，仲有雞同豬肉。</div>
+        <div class="bjp"><span class="s5">jau5</span>, <span class="s6">zung6</span> <span class="s5">jau5</span> <span class="s1">gai1</span> <span class="s4">tung4</span> <span class="s1">zyu1</span> <span class="s6">juk6</span>.</div>
+        <div class="beng">Yes, there's chicken and pork too.</div>
+        <div class="brow-act"><span class="bbd">▾ word breakdown</span><span class="bplay">▶</span></div></div></div></div>
+      <div class="brow right"><div class="bwrap"><div class="bname">You</div>
+        <div class="bub"><div class="bzh">唔該畀啲牛肉。</div>
+        <div class="bjp"><span class="s4">m4</span> <span class="s1">goi1</span> <span class="s2">bei2</span> <span class="s1">di1</span> <span class="s4">ngau4</span> <span class="s6">juk6</span>.</div>
+        <div class="beng">Some beef please.</div>
+        <div class="brow-act"><span class="bbd">▾ word breakdown</span><span class="bplay">▶</span></div></div></div></div>
+    </div>
+    <p class="caption">Tone colours identical on both sides, at the same contrast the rest of the
+    app already uses. The two speakers stay apart by <b>alignment, tail direction, name label and
+    a warm tint against white</b> — four signals, where today three of them were doing nothing
+    because the fill was shouting.</p>
+  </div>
+  <div class="col">
+    <h3>C · checkpoint conversation</h3>
+    <div class="conv v-c-ms">
+      <div class="brow left"><div class="bwrap"><div class="bname">Vendor</div>
+        <div class="bub"><div class="bzh">有，仲有雞同豬肉。</div>
+        <div class="bjp"><span class="s5">jau5</span>, <span class="s6">zung6</span> <span class="s5">jau5</span> <span class="s1">gai1</span> <span class="s4">tung4</span> <span class="s1">zyu1</span> <span class="s6">juk6</span>.</div>
+        <div class="beng">Yes, there's chicken and pork too.</div>
+        <div class="brow-act"><span class="bbd">▾ word breakdown</span><span class="bplay">▶</span></div></div></div></div>
+      <div class="brow right"><div class="bwrap"><div class="bname">You</div>
+        <div class="bub"><div class="bzh">唔該畀啲牛肉。</div>
+        <div class="bjp"><span class="s4">m4</span> <span class="s1">goi1</span> <span class="s2">bei2</span> <span class="s1">di1</span> <span class="s4">ngau4</span> <span class="s6">juk6</span>.</div>
+        <div class="beng">Some beef please.</div>
+        <div class="brow-act"><span class="bbd">▾ word breakdown</span><span class="bplay">▶</span></div></div></div></div>
+    </div>
+    <p class="caption"><code>--milestone-tint</code> replaces <code>--brand-tint</code>, so the
+    checkpoint variant still reads as an event without a saturated fill. <b>This also removes the
+    v122 bug's whole class</b>: with no white-on-white state to resolve, the specificity tie that
+    produced the blank play button cannot recur.</p>
+  </div>
+  <div class="col">
+    <h3>C+ · with an edge marking the speaker <span class="warn">the 10b half</span></h3>
+    <div class="conv v-cplus">
+      <div class="brow left"><div class="bwrap"><div class="bname">Vendor</div>
+        <div class="bub"><div class="bzh">有，仲有雞同豬肉。</div>
+        <div class="bjp"><span class="s5">jau5</span>, <span class="s6">zung6</span> <span class="s5">jau5</span> <span class="s1">gai1</span> <span class="s4">tung4</span> <span class="s1">zyu1</span> <span class="s6">juk6</span>.</div>
+        <div class="beng">Yes, there's chicken and pork too.</div>
+        <div class="brow-act"><span class="bbd">▾ word breakdown</span><span class="bplay">▶</span></div></div></div></div>
+      <div class="brow right"><div class="bwrap"><div class="bname">You</div>
+        <div class="bub"><div class="bzh">唔該畀啲牛肉。</div>
+        <div class="bjp"><span class="s4">m4</span> <span class="s1">goi1</span> <span class="s2">bei2</span> <span class="s1">di1</span> <span class="s4">ngau4</span> <span class="s6">juk6</span>.</div>
+        <div class="beng">Some beef please.</div>
+        <div class="brow-act"><span class="bbd">▾ word breakdown</span><span class="bplay">▶</span></div></div></div></div>
+    </div>
+    <p class="caption"><b>A 3px edge on the outer side of each bubble</b>, brand on yours and
+    neutral on theirs, plus the speaker name in the small-caps meta treatment. This is the
+    system's existing emphasis language (<code>--edge-emph</code> is already "louder than its
+    neighbours" on next-up steps and checkpoint cards) rather than a new one. <b>It restores
+    the at-a-glance distinction the saturated fill was providing</b>, without spending contrast
+    to get it.</p>
+  </div>
+</div>
+
+<h2>What C costs, stated plainly</h2>
+<p class="note"><b>The learner's line stops being the loudest thing on screen.</b> That is a real
+loss and worth naming rather than glossing: a saturated bubble makes "this is yours" instant.
+Against it — §3.1 says the one filled element on a screen belongs to the action to take next,
+and in a conversation that is the play control or the Speak button, not a transcript line. The
+current design spends the screen's single loudest note on a label.</p>
+<p class="note"><b>It is also more change than a colour swap.</b> Every bubble state has to be
+re-checked against a light ground: <code>--gap</code> (the dashed fill-the-gap bubble),
+<code>--correct</code>, <code>--wrong</code>, <code>.is-playing</code>, and the speak-mode
+target line. Three of those are already light, so they will need their own separation from the
+newly-light user bubble rather than inheriting it by contrast.</p>
+
+<table>
+  <tr><th>&nbsp;</th><th>Today</th><th>A · delete override</th><th>B · dark ramp</th><th>C · light bubble</th></tr>
+  <tr><td>Tone colour on the learner's own lines</td><td><b>None</b></td><td>Present, illegible</td><td>Present, checkpoint only</td><td><b>Present, both</b></td></tr>
+  <tr><td>Worst contrast</td><td>5.18:1</td><td><b>1.13:1</b></td><td>4.52:1 / n/a on brand</td><td>2.4:1, same as the rest of the app</td></tr>
+  <tr><td>Same colour means the same tone on both sides</td><td>n/a</td><td>Yes</td><td><b>No</b></td><td>Yes</td></tr>
+  <tr><td>New tokens</td><td>—</td><td>None</td><td><b>Six</b></td><td>None</td></tr>
+  <tr><td>Solves the topic conversation too</td><td>—</td><td>No</td><td><b>No</b></td><td>Yes</td></tr>
+  <tr><td>Speaker distinction at a glance</td><td><b>Strong</b></td><td>Strong</td><td>Strong</td><td>Needs C+'s edge</td></tr>
+  <tr><td>Retires the white-on-white bug class</td><td>No</td><td>No</td><td>No</td><td><b>Yes</b></td></tr>
+</table>
+
+<p class="note" style="margin-top:16px"><b>Recommendation: C, built with C+'s edge and name
+treatment.</b> It is the only option that answers issue 10a on both conversation types, it needs
+no new tokens, it keeps one meaning for one colour, and it removes the conditions that produced
+the v122 blank-play-button defect rather than patching around them. The 10b redesign then costs
+almost nothing extra, because the edge and the name label are the same edit.</p>
+<p class="note"><b>If the loss of the saturated fill turns out to matter more on device than it
+does here</b>, the fallback is B on the checkpoint conversation and today's white override on
+the topic one — accepting that the learner's tone colours exist in one place and not the other,
+and recording that as deliberate rather than leaving it to be re-discovered.</p>
+
+<h2>What gets recorded</h2>
+<p class="note">Three rows if C is chosen. One for the fill decision, stating the rule as
+<b>tone colour requires a light ground, so any surface carrying jyutping must be a tint and
+never a saturated fill</b> — that is the durable form, and it prevents the same trap being set
+again on some future dark component. One for the speaker-distinction mechanism (edge plus name,
+not fill). One retiring the <code>!important</code> at <code>styles.css:674</code>, noting that
+it was correct given its constraints and that <b>changing the ground is what made it
+unnecessary</b> — a rule worth keeping, since the instinct on seeing an <code>!important</code>
+is to delete it rather than to ask what it was protecting.</p>
+
+</div>
+</body>
+</html>
