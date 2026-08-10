@@ -864,25 +864,44 @@ function getTierLadder(topicKey, tier) {
 }
 
 // Move to another tier of the topic already open. This is the ONLY route a tier
-// change takes as of v121, and it is why the v121 defect closes: the old
-// [data-round] handler set state.currentRound alone, leaving state.fromPathTier
-// and state.activePath describing the tier just left — so the chrome kept
-// reporting the old lesson and "mark complete" wrote to it. Because every tier
-// belongs to a path, a tier change is always a path change too, and going
-// through openPathLesson() moves all three together by construction.
+// change takes as of v121.
+//
+// The destination CONTEXT follows the origin context, and this is the whole of
+// the function's difficulty:
+//
+//   In a path  — a tier change is also a path change, because the destination
+//     tier belongs to a different path from the one being left. state.activePath
+//     must follow the DESTINATION, or the chrome and the completion write
+//     disagree (DES-30, the v121 defect).
+//
+//   Standalone — a tier change is NOT a path change. Browsing a topic from
+//     Topics and stepping up a rung stays standalone (DES-28: outside a path the
+//     ladder is a control, and it must still be one after it is used).
+//
+// v121 through v127 applied the first rule to both routes: any tier owned by any
+// path entered as a path lesson, so the standalone ladder was a one-way door
+// into the Intermediate path — path chrome, a Mark Complete button, and no rung
+// back down, because renderTierLine() correctly degrades to a statement inside a
+// path. It was live for all ten two-tier topics from v121; it only became
+// reachable on `modals` and `comparisons` at v127, which is when it was found.
 function goToTier(topicKey, tier) {
-  const owner = pathOwningTier(topicKey, tier);
-  if (owner) {
-    // Enter as a genuine lesson of whichever path owns this tier. state.activePath
-    // follows the DESTINATION, not the origin — this single line is what stops the
-    // chrome and the completion write disagreeing. openPathLesson() pushes, scrolls
-    // and renders, so nothing further is needed here.
-    state.activePath = owner.key;
-    openPathLesson(topicKey, tier);
-    return;
+  if (state.fromPath) {
+    const owner = pathOwningTier(topicKey, tier);
+    if (owner) {
+      // Enter as a genuine lesson of whichever path owns this tier. This single
+      // line is what stops the chrome and the completion write disagreeing.
+      // openPathLesson() pushes, scrolls and renders, so nothing further here.
+      state.activePath = owner.key;
+      openPathLesson(topicKey, tier);
+      return;
+    }
+    // Inside a path, but no path owns the destination (a tier authored ahead of
+    // its path). It cannot be a path lesson, so drop to the standalone shape
+    // rather than leaving stale path chrome on screen.
   }
-  // No path owns this tier (possible for one authored ahead of its path). Fall
-  // back to the standalone shape rather than leaving stale path chrome on screen.
+  // Standalone — stay standalone. state.activePath is left as it is: it is inert
+  // while fromPath is false, and the standalone topic-open handlers rely on the
+  // same thing rather than clearing it.
   state.topic        = topicKey;
   state.currentRound = tier;
   state.fromPath     = false;

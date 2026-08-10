@@ -4,7 +4,7 @@
 questions behind it. Meant to be short-lived — when a piece ships, fold its
 outcome into STATUS.md and clear this file back down for the next thing.*
 
-Last updated: 2026-08-10 · sw.js at v127
+Last updated: 2026-08-10 · sw.js at v128
 
 ## Nothing in progress
 
@@ -123,7 +123,12 @@ breaking it would not fail any other check; the cross-reference would simply nam
 the wrong path. Second the **rendering** across every state, including a
 **simulated three-tier topic**, because none exists yet and the middle rung is the
 state the design was chosen for. Run it after any change to `data/learning_paths.json`
-or `data/topics_index.json`, not just after touching the tier code.
+or `data/topics_index.json`, not just after touching the tier code. **Extended at
+v128** with a third thing: what the rung *does*. It lifts `goToTier()` as well and
+asserts the destination context follows the origin context — standalone stays
+standalone, in-path follows the destination's owner — across both directions and
+every two-tier topic. The first two sections passed for the seven versions the
+v128 defect was live, because both only ever drew the ladder.
 
 **9 · `tools/content-report.js --check`** (added v127) is the first standing check
 that reads **content** rather than CSS, JS or navigation. It asserts eight

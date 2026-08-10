@@ -42,7 +42,22 @@ const grab = name => {
     else if (src[k] === '}') { d--; if (!d) return src.slice(i, k + 1); }
   }
 };
-eval(['pathOwningTier','getTierLadder','renderTierLine','renderTierXref'].map(grab).join('\n'));
+// goToTier() is lifted too. Until v128 this harness checked only what the ladder
+// DRAWS, never what its button DOES — and the v127 defect lived entirely in the
+// second. A control that renders correctly and navigates wrongly is invisible to
+// a rendering check, so the stubs below record the resulting state instead.
+let navPushes = 0;
+const resetLessonViewState = () => {};
+const pushNav = () => { navPushes++; };
+const render  = () => {};
+const window  = { scrollTo: () => {} };
+const openPathLesson = (topicKey, tier) => {
+  state.topic = topicKey; state.currentRound = tier;
+  state.nav = 'topics'; state.topicsView = false;
+  state.fromPath = true; state.fromPathTier = tier;
+  pushNav();
+};
+eval(['pathOwningTier','getTierLadder','renderTierLine','renderTierXref','goToTier'].map(grab).join('\n'));
 
 let fail = 0;
 const ok = (c, m) => { if (!c) { console.log('  FAIL ' + m); fail++; } };
@@ -116,6 +131,51 @@ ok(x3.includes('Beginner') && x3.includes('Advanced'), '3-tier: xref names both 
 state.topic='greetings'; state.currentRound=1; state.fromPath=false;
 const l2 = renderTierLine();
 ok(/Tier 2/.test(l2.slice(l2.indexOf('<span class="ladder">'))), '2-tier: single rung stays named');
+
+// ── What the rung DOES, not just what it draws (v128) ────────────────────────
+// The destination context must follow the ORIGIN context. Both directions of
+// both routes, on real data.
+console.log('— goToTier preserves the origin context —');
+
+const go = (topic, from, to, inPath, activePath) => {
+  Object.assign(state, {
+    topic, currentRound: from, fromPath: inPath,
+    fromPathTier: inPath ? from : null,
+    activePath: activePath || null,
+  });
+  goToTier(topic, to);
+  return { round: state.currentRound, fromPath: state.fromPath, activePath: state.activePath };
+};
+
+// Standalone: browsing modals from Topics and stepping up a rung must NOT enter
+// the Intermediate path. This is the v127 defect, and it was live for all ten
+// two-tier topics from v121.
+let r = go('modals', 1, 2, false);
+ok(r.round === 2, 'standalone up: lands on tier 2');
+ok(r.fromPath === false, 'standalone up: stays standalone (does not enter Intermediate)');
+ok(!state.fromPathTier, 'standalone up: fromPathTier stays clear');
+// The rung back down must therefore still be drawn — the whole point of staying
+// standalone is that the control survives being used.
+ok(/data-tier="1"/.test(renderTierLine()), 'standalone up: the rung back down is still offered');
+
+r = go('modals', 2, 1, false);
+ok(r.round === 1 && r.fromPath === false, 'standalone down: stays standalone');
+
+// In a path: a tier change IS a path change, and activePath follows the
+// DESTINATION. This is DES-30 and must not regress.
+r = go('modals', 1, 2, true, 'beginner');
+ok(r.fromPath === true, 'in-path up: stays in a path');
+ok(r.activePath === 'intermediate', 'in-path up: activePath follows the destination (DES-30)');
+ok(state.fromPathTier === 2, 'in-path up: fromPathTier matches the tier entered');
+
+r = go('modals', 2, 1, true, 'intermediate');
+ok(r.fromPath === true && r.activePath === 'beginner', 'in-path down: activePath follows the destination');
+
+// Every two-tier topic, both routes — the defect was uniform, so the check is too.
+const twoTier = idx.filter(t => t.rounds.length > 1 && t.key !== '__sim');
+let leaked = twoTier.filter(t => go(t.key, t.rounds[0], t.rounds[1], false).fromPath);
+console.log('  two-tier topics leaking into a path from standalone:', leaked.length, '/', twoTier.length);
+ok(!leaked.length, 'no two-tier topic leaks into a path from the standalone ladder');
 
 console.log(fail ? `\n${fail} FAILURES` : '\nall tier assertions pass');
 process.exit(fail ? 1 : 0);

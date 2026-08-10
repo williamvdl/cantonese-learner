@@ -13,7 +13,7 @@ not a history log. Approved design decisions and whether they were built live in
 > convention (`v121 — <what changed>`) so this file stops being load-bearing on
 > its own.
 
-Last updated: 2026-08-10 · sw.js at v127
+Last updated: 2026-08-10 · sw.js at v128
 
 ## Confirmed live and working
 - **Patterns/Drills removed** from the app entirely (not soft-hidden). Checkpoints
@@ -165,6 +165,7 @@ orphan hues `#B7861E`, `#e4d4ad`, `#8a6716`,
 | MOCK-25-B, MOCK-26-C+ | v125 | **The last two device-QA issues (3, 4, 10a, 10b).** *Contextual row (DES-33, DES-34):* the back control becomes an up control — always to the path timeline, labelled with the path — and the meta slot names the stage beside its own stage-scoped count. Supersedes the backlog's `history.back()` note; the hardware-key divergence is accepted and documented. *Conversation (DES-35, DES-36):* the user bubble goes from a saturated fill to `--brand-tint` / `--milestone-tint`, the `!important` forcing user-side jyutping to white is retired, and a 3px outer edge plus a small-caps name carries the speaker distinction. Tone colour on the learner's own lines goes from absent to 2.19–5.27:1, level with the rest of the app. **Found while re-checking the bubble states against a light ground:** `.bubble--gap`, `.bubble--correct` and `.bubble--wrong` are emitted on the user side at 0,1,0 against `.bubble-row.right .bubble` at 0,2,0, so their background and border have never applied — pre-existing, exposed by the redesign, requalified to 0,3,0. |
 | — | v126 | **DES-33 applied to the rest of the app — the sweep v125 should have been.** v125 changed only the contextual row, and the identical fault was live on three more controls, found on device: *Back to Learning Paths* on the path timeline (two emit sites) and both checkpoint-hub controls, including the one reading **"✓ Checkpoint complete — back to path"**, which from the dashboard went to the dashboard. They survived because each screen had grown its own back handler — four of them, three routing through `history.back()` — so there was no single place to enforce the rule. All four collapse into one `[data-up]` handler over a three-value vocabulary (`paths`, `path:<key>`, `topics`); an unrecognised value warns rather than guessing a default. **The activity screens are deliberately left on `history.back()`**: `state.checkpointAct` is only ever set from a hub card, so with one parent the label cannot lie, and converting them would push a third entry onto the stack and leave the hardware key pointing at a finished quiz. |
 | — | v127 | **The content register, and the three data defects it found.** `docs/CONTENT.md` (corpus inventory, Intermediate chapter plan) and `docs/CONTENT_SPEC_TIER2.md` (tier-2 authoring rules, previously held outside the repo) join `docs/`; `tools/content-report.js` becomes **standing check 9**, the first that reads content rather than CSS, JS or navigation, and generates every count in the register so none is hand-typed. Its eight assertions found three defects on first run. *`topics_index.json` declared `modals` and `comparisons` as tier-1-only* while both topic files carry a tier 2 — and `getAvailableRounds()` reads the index, not the file, so `getTierLadder()` returned no rungs and the whole of chapter I-3 was reachable only by walking the Intermediate path. Two word counts on the same file were also wrong. *`intermediate-s3` had no checkpoint `id` or `wordCap`* — now `intermediate-s3-cp` at 25. All three, plus the `sw.js` precache omission fixed at v122, were the last step of the session that shipped I-3. |
+| — | v128 | **The standalone tier ladder was a one-way door into a path.** Found on device after v127. `goToTier()` entered the destination tier's owning path whenever *any* path owned it — correct inside a path (DES-30), wrong from Topics. Opening `modals` standalone and tapping the Tier 2 rung produced the Intermediate lesson's chrome: an up control reading *Intermediate*, a Mark Complete button, and no rung back down, because `renderTierLine()` correctly degrades to a statement inside a path. The escape, the DES-29 cross-reference, routed back through the same function into the *Beginner* path — so once used, the standalone ladder could not return you to standalone. The path branch is now gated on `state.fromPath`; the standalone branch that already existed as a fallback becomes the standalone route. **Live for all ten two-tier topics since v121** — it only became reachable on `modals` and `comparisons` at v127, which is why it surfaced then. `tools/tier-harness.js` gains a section asserting what the rung *does* in all four origin/direction combinations, plus a sweep of every two-tier topic; verified to fail against the v127 file before being committed against the fix. |
 
 ### Notes worth carrying forward
 
@@ -193,6 +194,24 @@ the answer outright — two of the three options wrapped and grew the header fro
 one row to two. **Ask what the data will look like after the next backlog item,
 not what it looks like now**, before letting a count drive a layout.
 
+
+**A control can render correctly and navigate wrongly, and a rendering check
+cannot tell.** `tier-harness.js` was written at v121 to protect the tier ladder.
+It lifted four functions by name, asserted the data premise, simulated a
+three-tier topic — and passed throughout the seven versions the v128 defect was
+live, because every function it held draws the ladder and none of them is what
+the button calls. The check verified the picture, not the behaviour. **When a
+control is worth a standing check, the check has to include what happens after
+it is pressed**, which is what the harness now does by stubbing `render()` and
+`pushNav()` and reading the resulting state.
+
+**A rule that is right in one context is a defect when applied to both.** DES-30
+— a tier change moves `activePath` to the destination — is correct and closed a
+real data-corrupting bug. It was simply scoped too widely: it is a rule about
+what happens *inside a path*, and v121 wrote it as a rule about tier changes.
+The comment above `goToTier()` even stated the over-general premise in plain
+words — *"because every tier belongs to a path, a tier change is always a path
+change too"* — and it read as a justification rather than the error it was.
 
 **A closed rollout is not a conformant app.** Every v121 fix was drift from a
 decision that already existed — two from mockup 10, one from §1, one from §3.6 —
