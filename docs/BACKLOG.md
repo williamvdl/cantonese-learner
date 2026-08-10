@@ -87,6 +87,58 @@ are pointers only — detail goes there, not here.*
   that the sheet is the sole writer of `state.speed`. Deleting them is six lines and
   behaviour-identical — but it touches a cached shell asset, so it needs its own
   `sw.js` bump rather than riding along with a doc commit.
+- **A screen smoke harness — render every screen headlessly and assert it doesn't
+  throw.** The one defect class with no cover today. The Fill-the-Gap crash was
+  `.map()` on a null `opts`: a render throw on a data shape, which takes the whole
+  screen down rather than looking slightly wrong. Nothing currently catches that
+  shape — `validate.js` and `content-report.js` check the data, the harnesses check
+  named functions, and neither renders a screen.
+
+  **Feasibility was measured 2026-08-10, not estimated, and it is cheaper than it
+  looks.** Of the 40 `render*` functions, the render half touches the DOM in exactly
+  two places — `render()`'s `getElementById('app')` and one post-render marker
+  animation in `renderDiamondProgress()`. Everything from `attachEvents()` onward is
+  the binding half. So the view layer is effectively pure string functions. Taking
+  one screen's full dependency closure gave 7 functions, **all resolvable by
+  `grab()`, none needing a DOM stub**, and the Topics screen rendered to 20 KB of
+  HTML in plain Node — no jsdom, no npm, same pattern as the existing harnesses.
+  Rough shape: every screen × topic × tier × mode × tab, asserting no throw plus a
+  few invariants. ~200 lines.
+
+  **Four things to settle before building, and they are why this is a discussion
+  rather than a task:**
+  - *Fixture faithfulness.* The harness needs a `store` stub matching `data.js`. If
+    the stub drifts, the harness tests a fiction and passes — the same
+    hand-maintained-derived-data shape that caused the `topics_index.json` defect.
+    Deriving the stub from `data.js` rather than writing it is the obvious answer
+    and may not be cheap.
+  - *What to assert beyond "no throw".* No-throw is the valuable, stable part.
+    Assertions about output content drift toward appearance-checking, which is the
+    trap `tier-harness.js` fell into — it passed for seven versions while testing
+    the drawing and not the doing.
+  - *Where it stops.* `attachEvents()` genuinely needs a DOM and stays out of scope,
+    so handler wiring remains uncovered. Whether that gap matters is worth deciding
+    deliberately rather than discovering later.
+  - *Permutation count and runtime.* 42 topics and 52 tiers across several modes.
+    It has to stay fast enough to actually get run.
+
+  **Rejected alternatives, so they are not re-proposed:** golden-file snapshots
+  (most deploys change markup intentionally on a design-system project, so goldens
+  would churn and diffs would start being approved unread) and browser automation
+  such as Playwright (needs `node_modules` and a runner, breaking the no-build-step
+  constraint, and its marginal catch over the harness is layout, tap targets and
+  CSS — the judgement category that needs eyes anyway).
+
+- **Enumerate the app's "agreement pairs" and assert each one.** Nearly every
+  defect found in the last fortnight was two things that must match with nothing
+  making them match: `topics_index.json` vs the topic files, `TOPIC_KEYS` vs
+  `data/topics/`, `state.activePath` vs `state.fromPath`, a path's `lessons[]` vs
+  its `stages[]`. Each was fixed with a check written against that specific pair —
+  which catches the last defect, never the next. Listing the pairs exhaustively and
+  writing one assertion each is the only version of this that generalises. Smaller
+  in code than the smoke harness, larger as a sit-down, and partly redundant with
+  checks that already exist for the pairs known about.
+
 - **Give `tools/dead-css.js` a JS direction, or write it a sibling.** It enumerates
   declared CSS classes and asks whether the JS emits them; it cannot see the reverse
   — a handler bound to a selector, ID or data attribute that nothing emits. That is
