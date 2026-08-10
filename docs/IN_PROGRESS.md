@@ -4,7 +4,7 @@
 questions behind it. Meant to be short-lived — when a piece ships, fold its
 outcome into STATUS.md and clear this file back down for the next thing.*
 
-Last updated: 2026-08-08 · sw.js at v125
+Last updated: 2026-08-09 · sw.js at v126
 
 ## Nothing in progress
 
@@ -31,9 +31,11 @@ script before a sweep; it is in BACKLOG.md.
 > a second number would have recorded a release that never existed. Numbers track
 > **deploys**, not delivery turns.
 
-**v122 to v125 shipped after this file was cleared and do not reopen it.**
+**v122 to v126 shipped after this file was cleared and do not reopen it.**
 v125 closed the last two device-QA issues from mockups 25 and 26 (DES-33 to
-DES-36), and with it the whole eleven-issue QA batch. Nothing is in progress. All
+DES-36), and v126 swept DES-33's rule across the three further controls that
+still broke it. That closes the whole eleven-issue QA batch. Nothing is in
+progress. All
 three came from a device QA pass rather than a plan: v122 carried six defect
 fixes with no design decisions, v123 migrated TTS from Google to Azure and
 regenerated all 1,376 audio files, and v124 was the emoji sweep (DES-31, DES-32).

@@ -765,7 +765,7 @@ function renderPathTimeline(pathKey) {
   if (!path.lessons.length) {
     return `
       <div class="path-timeline-wrap">
-        <button class="path-timeline-back" data-path-back><span class="icon-label">${icon('arrowLeft',15)} Back to Learning Paths</span></button>
+        <button class="path-timeline-back" data-up="paths"><span class="icon-label">${icon('arrowLeft',15)} Back to Learning Paths</span></button>
         <div class="path-empty-msg">${path.label} — coming soon.</div>
       </div>`;
   }
@@ -808,7 +808,7 @@ function renderPathTimeline(pathKey) {
 
   return `
     <div class="path-timeline-wrap">
-      <button class="path-timeline-back" data-path-back><span class="icon-label">${icon('arrowLeft',15)} Back to Learning Paths</span></button>
+      <button class="path-timeline-back" data-up="paths"><span class="icon-label">${icon('arrowLeft',15)} Back to Learning Paths</span></button>
       <div class="path-timeline-header">
         <div class="path-timeline-title">${path.label}</div>
         <div class="path-timeline-sub">${path.desc}</div>
@@ -878,11 +878,11 @@ function renderCheckpointHub() {
         // DES-33: up, not back. Reaching the hub from a topic's stepper diamond
         // and pressing this now lands on the timeline rather than that topic —
         // a longer way round, and the price of the label always being true.
-        backAttr: `data-ctx-up="${stageCtx.path.key}"`,
+        backAttr: `data-up="path:${stageCtx.path.key}"`,
         split: !!cpStepper,
         after: cpStepper,
       })
-    : `<button class="back-home-btn" data-cp-back><span class="icon-label">${icon('arrowLeft',15)} ${stage.name}</span></button>`;
+    : `<button class="back-home-btn" data-up="path:${pathKey}"><span class="icon-label">${icon('arrowLeft',15)} ${stage.name}</span></button>`;
 
   const pips = `<div class="segs cp-segs">${prog.available.map(a =>
     `<i class="${checkpointActivityDone(pathKey, cpId, a) ? 'on' : ''}"></i>`).join('')}</div>`;
@@ -900,7 +900,7 @@ function renderCheckpointHub() {
       <div class="cp-flow-hint">Suggested flow: recall → produce</div>
       ${cards}
       ${pips}
-      <button class="${finishCls}" data-cp-back>${finishLabel}</button>
+      <button class="${finishCls}" data-up="path:${pathKey}">${finishLabel}</button>
     </div>`;
 }
 
@@ -1263,7 +1263,7 @@ function renderContextRow(ctx, opts) {
   const meta = o.meta || (st
     ? `${st.step} of ${st.total} · ${st.name}`
     : ctx.path.label);
-  const backAttr = o.backAttr || `data-ctx-up="${ctx.path.key}"`;
+  const backAttr = o.backAttr || `data-up="path:${ctx.path.key}"`;
   // The row only takes a bottom edge when a stepper follows it, otherwise the
   // rule would sit 1px above .ctx's own bottom edge. `split` is passed by the
   // caller rather than inferred from `st`, because the checkpoint hub renders a
@@ -1299,7 +1299,7 @@ function renderStandaloneContextRow(topicKey) {
       <div class="ctx-head">
         <div class="ctx-inner">
           <div class="ctx-row">
-            <button class="ctx-back" data-ctx-up-topics>${icon('arrowLeft',15)} Topics</button>
+            <button class="ctx-back" data-up="topics">${icon('arrowLeft',15)} Topics</button>
             ${cat ? `<span class="ctx-meta">${cat.label}</span>` : ''}
           </div>
         </div>
@@ -2250,42 +2250,58 @@ function attachEvents(lesson) {
       render();
     });
   });
-  // ── The contextual row's UP control (MOCK-25-B / DES-33) ───────────────────
-  // Deterministic, not history.back(): it goes to the path timeline named on the
-  // label, from wherever you are. pushNav() is called so the hardware BACK key
-  // still returns you to the screen you left — the two controls do different
-  // jobs and both remain correct, which is the whole point of the decision.
-  document.querySelectorAll('[data-ctx-up]').forEach(btn => {
+  // ── UP controls (DES-33 at v125, generalised across the app at v126) ──────
+  // ONE handler for every control whose LABEL NAMES A DESTINATION. The rule the
+  // register states is that such a control must actually go there, and the way
+  // to keep that true is to have a single vocabulary rather than a bespoke
+  // handler per screen — four of those existed, three of them routed through
+  // history.back(), and two were reachable from more than one parent and so
+  // named a place they did not always go.
+  //
+  //   data-up="paths"        → the Learning Paths list
+  //   data-up="path:<key>"   → that path's timeline
+  //   data-up="topics"       → the Topics screen
+  //
+  // pushNav() on the way up, so the hardware BACK key still retraces your steps.
+  // The two controls do different jobs and both stay correct.
+  //
+  // NOT converted, deliberately: `data-cp-act-back` ("Checkpoint") and
+  // `data-cp-act-done` ("back to checkpoint") on the activity screens. A
+  // checkpoint activity has exactly ONE parent — `state.checkpointAct` is only
+  // ever set from a hub card — so history.back() already lands where the label
+  // says. Converting them for symmetry would push a third entry onto the stack
+  // and leave the hardware key pointing at a finished quiz.
+  document.querySelectorAll('[data-up]').forEach(btn => {
     btn.addEventListener('click', () => {
+      const dest = btn.dataset.up;
       window.speechSynthesis.cancel();
       stopAudioFile();
-      state.activePath  = btn.dataset.ctxUp;
-      state.nav         = 'path';
-      state.pathView    = 'timeline';
-      // Leaving the topic/checkpoint entirely, so its view state goes with it.
-      state.checkpoint  = null;
+      // Leaving whatever screen we are on, so its view state goes with it.
+      state.checkpoint    = null;
       state.checkpointAct = null;
-      state.fromPath    = false;
-      state.fromPathTier = null;
-      state.mode        = 'study';
-      state.tab         = 'words';
-      state.flipped     = {};
-      pushNav();
-      window.scrollTo(0, 0);
-      render();
-    });
-  });
+      state.checkpointQuiz = null;
+      state.fromPath      = false;
+      state.fromPathTier  = null;
+      state.mode          = 'study';
+      state.tab           = 'words';
+      state.flipped       = {};
 
-  // The standalone-topic equivalent — same contract, different parent. A topic
-  // opened from Topics has no path, so its parent in the hierarchy is Topics.
-  document.querySelectorAll('[data-ctx-up-topics]').forEach(btn => {
-    btn.addEventListener('click', () => {
-      window.speechSynthesis.cancel();
-      stopAudioFile();
-      state.topicsView = true;
-      state.mode       = 'study';
-      state.tab        = 'words';
-      state.flipped    = {};
+      if (dest === 'topics') {
+        state.topicsView = true;
+      } else if (dest === 'paths') {
+        state.nav = 'path';
+        state.pathView = 'list';
+      } else if (dest.startsWith('path:')) {
+        state.activePath = dest.slice(5);
+        state.nav = 'path';
+        state.pathView = 'timeline';
+      } else {
+        // An unknown destination is a bug in the emit site, not something to
+        // paper over with a guessed default — say so rather than navigating
+        // somewhere arbitrary.
+        console.warn('[data-up] unknown destination:', dest);
+        return;
+      }
       pushNav();
       window.scrollTo(0, 0);
       render();
@@ -2921,14 +2937,6 @@ function attachEvents(lesson) {
 
   // Back from timeline → path list. Routed through history.back() so it matches
   // the phone BACK button (both pop the entry that path-open pushed).
-  document.querySelectorAll('[data-path-back]').forEach(btn => {
-    btn.addEventListener('click', () => {
-      if (_navReady) { history.back(); return; }
-      state.pathView = 'list';
-      window.scrollTo(0, 0);
-      render();
-    });
-  });
 
   // Tap a lesson in the timeline → open the topic with fromPath flag
   document.querySelectorAll('[data-path-lesson]').forEach(card => {
@@ -2980,14 +2988,6 @@ function attachEvents(lesson) {
 
   // Back from hub → timeline (and from finish button). history.back() pops the
   // entry openCheckpoint pushed; popstate clears the checkpoint state.
-  document.querySelectorAll('[data-cp-back]').forEach(btn => {
-    btn.addEventListener('click', () => {
-      if (_navReady) { history.back(); return; }
-      state.checkpoint = null; state.checkpointAct = null;
-      window.scrollTo(0, 0);
-      render();
-    });
-  });
 
   // Launch an activity from a hub card.
   document.querySelectorAll('[data-cp-act]').forEach(card => {

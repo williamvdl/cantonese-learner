@@ -13,7 +13,7 @@ not a history log. Approved design decisions and whether they were built live in
 > convention (`v121 — <what changed>`) so this file stops being load-bearing on
 > its own.
 
-Last updated: 2026-08-08 · sw.js at v125
+Last updated: 2026-08-09 · sw.js at v126
 
 ## Confirmed live and working
 - **Patterns/Drills removed** from the app entirely (not soft-hidden). Checkpoints
@@ -160,6 +160,7 @@ orphan hues `#B7861E`, `#e4d4ad`, `#8a6716`,
 | — | v123 | **TTS migrated from Google to Azure — all 1,376 audio files regenerated.** Not a design change; see the architecture note below and the header of `tools/generate-audio.js` for the full diagnosis. Google's Chirp3-HD `yue-HK` voice cannot produce a bare syllabic nasal, so 唔 (m4) and 五 (ng5) both came back with a vowel inserted, affecting 207 files. Azure's `zh-HK` Neural voices say both correctly at comparable naturalness. Casting mirrors what it replaced: `zh-HK-WanLungNeural` for words, sentences and the non-user speaker, `zh-HK-HiuGaaiNeural` for the learner's own lines. |
 | — | v124 | **The emoji sweep (DES-31, DES-32).** 33 pictographic sites in `render.js` reduced to one. Roughly half were removed outright, the rest replaced with `ICON_PATHS` entries or a disclosure chevron. `.result-emoji` and `.review-empty-emoji` collapse into `.result-mark` / `.result-mark--good` (DES-32). The survivor is `📚 All Categories` inside the category filter's native `<select>`, which cannot hold an SVG. `renderCheckpointDone()`'s `emoji` parameter is removed rather than passed empty — the same move DES-27 made on `renderPageHeader()`. |
 | MOCK-25-B, MOCK-26-C+ | v125 | **The last two device-QA issues (3, 4, 10a, 10b).** *Contextual row (DES-33, DES-34):* the back control becomes an up control — always to the path timeline, labelled with the path — and the meta slot names the stage beside its own stage-scoped count. Supersedes the backlog's `history.back()` note; the hardware-key divergence is accepted and documented. *Conversation (DES-35, DES-36):* the user bubble goes from a saturated fill to `--brand-tint` / `--milestone-tint`, the `!important` forcing user-side jyutping to white is retired, and a 3px outer edge plus a small-caps name carries the speaker distinction. Tone colour on the learner's own lines goes from absent to 2.19–5.27:1, level with the rest of the app. **Found while re-checking the bubble states against a light ground:** `.bubble--gap`, `.bubble--correct` and `.bubble--wrong` are emitted on the user side at 0,1,0 against `.bubble-row.right .bubble` at 0,2,0, so their background and border have never applied — pre-existing, exposed by the redesign, requalified to 0,3,0. |
+| — | v126 | **DES-33 applied to the rest of the app — the sweep v125 should have been.** v125 changed only the contextual row, and the identical fault was live on three more controls, found on device: *Back to Learning Paths* on the path timeline (two emit sites) and both checkpoint-hub controls, including the one reading **"✓ Checkpoint complete — back to path"**, which from the dashboard went to the dashboard. They survived because each screen had grown its own back handler — four of them, three routing through `history.back()` — so there was no single place to enforce the rule. All four collapse into one `[data-up]` handler over a three-value vocabulary (`paths`, `path:<key>`, `topics`); an unrecognised value warns rather than guessing a default. **The activity screens are deliberately left on `history.back()`**: `state.checkpointAct` is only ever set from a hub card, so with one parent the label cannot lie, and converting them would push a third entry onto the stack and leave the hardware key pointing at a finished quiz. |
 
 ### Notes worth carrying forward
 
@@ -216,6 +217,25 @@ first reported. A redundant indicator is not merely redundant — it has states 
 sibling does not, and those states are unreviewed. Before adding a second view of
 one quantity, check whether the first already answers it more precisely.
 
+
+**Fixing the instance is not fixing the rule.** DES-33 established that a control
+whose label names a destination must go there — and the first pass changed only
+the screen the bug was reported on. Three more controls had the identical fault,
+including one reading *"✓ Checkpoint complete — back to path"* that went to the
+dashboard. They survived because each screen had grown its **own** back handler:
+four handlers, three of them `history.back()`, no single place where the rule
+could be stated. The fix was to collapse them into one `[data-up]` handler over a
+named vocabulary. **When a decision is a rule rather than a fix, the next step is
+to find every site the rule governs** — and if there is no single place to enforce
+it, making one is part of the work.
+
+**The test for a back control is the number of parents, not the wording.**
+`history.back()` is correct wherever a screen has exactly one way in — the label
+cannot lie if there is only one place to return to. It is wrong the moment a
+second entry point exists. So the audit question is not "does this say Back?" but
+"how many things set the state this screen renders from?" — which is answerable
+by grep, and was: one setter for the checkpoint activity (safe), four entry points
+for the path timeline (not).
 
 **A modifier that never outranks its context is invisible, not weak.**
 `.bubble--gap`, `.bubble--correct` and `.bubble--wrong` are one class (0,1,0) and

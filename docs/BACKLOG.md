@@ -4,7 +4,7 @@
 IN_PROGRESS.md when it's picked up; delete it from here once it's shipped and
 folded into STATUS.md.*
 
-Last updated: 2026-08-08 · sw.js at v125
+Last updated: 2026-08-09 · sw.js at v126
 
 ## Product
 
