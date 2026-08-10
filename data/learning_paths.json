@@ -410,7 +410,8 @@
             "comparisons"
           ],
           "checkpoint": {
-            "words": true,
+            "id": "intermediate-s3-cp",
+            "wordCap": 25,
             "convo": "intermediate-s3"
           }
         },

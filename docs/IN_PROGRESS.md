@@ -4,7 +4,7 @@
 questions behind it. Meant to be short-lived — when a piece ships, fold its
 outcome into STATUS.md and clear this file back down for the next thing.*
 
-Last updated: 2026-08-09 · sw.js at v126
+Last updated: 2026-08-10 · sw.js at v127
 
 ## Nothing in progress
 
@@ -124,6 +124,22 @@ the wrong path. Second the **rendering** across every state, including a
 **simulated three-tier topic**, because none exists yet and the middle rung is the
 state the design was chosen for. Run it after any change to `data/learning_paths.json`
 or `data/topics_index.json`, not just after touching the tier code.
+
+**9 · `tools/content-report.js --check`** (added v127) is the first standing check
+that reads **content** rather than CSS, JS or navigation. It asserts eight
+properties of the curriculum the data describes: that every lesson in a path's
+`lessons` array sits in one of its stages, that every `(topic, tier)` pair belongs
+to at most one path, that every lesson's tier exists in its topic file, that every
+checkpoint has an `id` and any conversation it names exists, that stage numbering
+is contiguous, that topics and categories map both ways, that `topics_index.json`
+matches the topic files it summarises, and that every topic file is in `sw.js`'s
+`TOPIC_KEYS`. It overlaps `validate.js` not at all — that one checks whether the
+data is *well-formed*; this checks whether it is *coherent*. Two findings sit in
+an `EXPECTED` allowlist at the head of the file, printed rather than hidden, each
+with a comment naming what removes it; delete them when I-2 Sentence Grammar is
+built and the checks start failing again. Run it after any change under `data/`.
+Without `--check` it prints the corpus inventory that `docs/CONTENT.md` is
+generated from, so no count in that document is ever hand-typed.
 
 **Re-verified at v124, 2026-08-07** — unchanged from the v121 baseline below,
 which is the point: the emoji sweep touched 33 call sites and two CSS rules and

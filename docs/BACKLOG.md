@@ -4,7 +4,7 @@
 IN_PROGRESS.md when it's picked up; delete it from here once it's shipped and
 folded into STATUS.md.*
 
-Last updated: 2026-08-09 · sw.js at v126
+Last updated: 2026-08-10 · sw.js at v127
 
 ## Product
 
@@ -22,28 +22,31 @@ Last updated: 2026-08-09 · sw.js at v126
 
 ## Content
 
-- **Vocabulary/content expansion — I-2 (Sentence Grammar).** Checked against the
-  repo (2026-07-25): further along than this item implied. Intermediate stages
-  s1 (Connectives), s3 (Saying More), s4 (Food/Dining/Shopping), and s5 (Me & My
-  People) are all built, with full checkpoint conversations. `intermediate-s2`
-  doesn't exist in the data — numbering jumps s1 → s3. Open question for
-  William: was Sentence Grammar (s2) deliberately skipped/reserved, or is it a
-  real gap to fill before extending past s5?
-- **Note-authoring pass.** Checked against the repo (2026-07-25): 246/307
-  sentences (80%) now have a teaching note — well past the original 15–25%
-  target. 22 of 42 topics are at 100%. Remaining gaps, by topic:
-  - Biggest: `connectives` 9/20 (45%), `numbers` 5/10 (50%)
-  - ~60%: `animals`, `attractions`, `colors`, `home`, `location`, `work`, `pronouns`
-  - ~70–89%: `body`, `friends`, `restaurant`, `shopping`, `food`, `family`,
-    `hotels`, `money`, `school`, `tech`, `transport`, `feelings`, `time`
-- **Per-stage checkpoint watermark.** The checkpoint hero currently carries a
-  fixed 站 (zaam6). A per-stage character would keep the watermark rule fully
-  intact — 句 (geoi3) for Building Sentences, 家 (gaa1) for Home & Surroundings,
-  人 (jan4) for Me & My People, and so on across all 15 stages. That's 15 authored
-  values plus a field in `learning_paths.json`, so it's a data change with a
-  validator run rather than a one-line default. **Adopt only if checkpoint heroes
-  start feeling samey** — the fixed character is the deliberate default, and the
-  field would simply override it. See DESIGN_SYSTEM §Watermark.
+*The corpus register, the full Intermediate chapter plan, and the tier-2
+authoring spec live in `docs/CONTENT.md` and `docs/CONTENT_SPEC_TIER2.md`. These
+are pointers only — detail goes there, not here.*
+
+- **Intermediate expansion — 7 of 17 v1 lessons remain.** I-2 Sentence Grammar
+  (4 lessons) and I-6 Out, Work & Safety (3). Chapter shape, v2 reservations and
+  per-topic direction are settled in CONTENT.md §5. *(The old open question here
+  — whether `intermediate-s2` was skipped or reserved — is answered: reserved.)*
+- **Note-authoring pass.** 246/307 sentences (80%) carry a teaching note. The
+  genuine gaps and the cases that are deliberately note-free are separated in
+  CONTENT.md §2 — do not work from a raw percentage, several rounds are complete
+  at 5/8 by design.
+- **Fill-the-Gap `opts`.** 19 conversations have user turns without them, so the
+  activity is hidden. Listed in CONTENT.md §2. Mechanical authoring, no design
+  question attached.
+- **`clothing` tier 2.** The sizing vocabulary displaced when `shopping` tier 2
+  was refocused onto bargaining. Reserved home in chapter I-4. CONTENT.md §5.4.
+- **Per-stage checkpoint watermark.** The checkpoint hero carries a fixed
+  站 (zaam6). A per-stage character — 句 (geoi3) for Building Sentences,
+  家 (gaa1) for Home & Surroundings, 人 (jan4) for Me & My People — would keep the
+  watermark rule intact. 15 authored values plus a field in `learning_paths.json`,
+  so a data change with a validator run rather than a one-line default. **Adopt
+  only if checkpoint heroes start feeling samey** — the fixed character is the
+  deliberate default and the field would simply override it. See DESIGN_SYSTEM
+  §Watermark; content side in CONTENT.md §5.8.
 
 ## Features
 
@@ -54,8 +57,9 @@ Last updated: 2026-08-09 · sw.js at v126
   listening-based activity designs worth considering. **The redesigned checkpoint
   hub already accommodates a third activity** without layout changes — the
   activities are numbered and the diamond progress ring scales to three segments.
-- **Intermediate checkpoint hub expansion** (data-only, after Beginner testing) —
-  bundle in the `intermediate-s3` missing-`id` fix while touching this.
+- **Intermediate checkpoint hub expansion** (data-only, after Beginner testing).
+  *(The `intermediate-s3` missing-`id` fix that used to be bundled here landed at
+  v127.)*
 - **Male/female voice toggle** — discussed as a future idea, not built. Architecture
   (`speakItem`/`speakConvoLine` as the single audio-path resolvers) was kept
   simple specifically to make this cheap to add later. Lands in the new **settings

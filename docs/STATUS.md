@@ -13,7 +13,7 @@ not a history log. Approved design decisions and whether they were built live in
 > convention (`v121 — <what changed>`) so this file stops being load-bearing on
 > its own.
 
-Last updated: 2026-08-09 · sw.js at v126
+Last updated: 2026-08-10 · sw.js at v127
 
 ## Confirmed live and working
 - **Patterns/Drills removed** from the app entirely (not soft-hidden). Checkpoints
@@ -41,8 +41,11 @@ Last updated: 2026-08-09 · sw.js at v126
     kept, deliberately, only for the Translate tab (no stable ID to pre-generate).
   - No fallback on missing audio by design — a toast shows instead of a silent
     synthetic-voice substitute.
-- **Stable IDs** fully in place — 600/600 words, 307/307 sentences, 150/150
-  dialogues. Validator passes clean.
+- **Stable IDs** fully in place — 585/585 words, 307/307 sentences, 150/150
+  drills. Validator passes clean. *(Corrected at v127: this line read "600/600
+  words" from the ID-minting work. 600 is the count of `wid` references inside
+  `patterns.json`'s 150 drills — four per drill — not the word corpus, which is
+  585. Both numbers were right about different things; see CONTENT.md §2.)*
 
 ## Design system — phases 1–6 complete, rollout closed
 
@@ -161,6 +164,7 @@ orphan hues `#B7861E`, `#e4d4ad`, `#8a6716`,
 | — | v124 | **The emoji sweep (DES-31, DES-32).** 33 pictographic sites in `render.js` reduced to one. Roughly half were removed outright, the rest replaced with `ICON_PATHS` entries or a disclosure chevron. `.result-emoji` and `.review-empty-emoji` collapse into `.result-mark` / `.result-mark--good` (DES-32). The survivor is `📚 All Categories` inside the category filter's native `<select>`, which cannot hold an SVG. `renderCheckpointDone()`'s `emoji` parameter is removed rather than passed empty — the same move DES-27 made on `renderPageHeader()`. |
 | MOCK-25-B, MOCK-26-C+ | v125 | **The last two device-QA issues (3, 4, 10a, 10b).** *Contextual row (DES-33, DES-34):* the back control becomes an up control — always to the path timeline, labelled with the path — and the meta slot names the stage beside its own stage-scoped count. Supersedes the backlog's `history.back()` note; the hardware-key divergence is accepted and documented. *Conversation (DES-35, DES-36):* the user bubble goes from a saturated fill to `--brand-tint` / `--milestone-tint`, the `!important` forcing user-side jyutping to white is retired, and a 3px outer edge plus a small-caps name carries the speaker distinction. Tone colour on the learner's own lines goes from absent to 2.19–5.27:1, level with the rest of the app. **Found while re-checking the bubble states against a light ground:** `.bubble--gap`, `.bubble--correct` and `.bubble--wrong` are emitted on the user side at 0,1,0 against `.bubble-row.right .bubble` at 0,2,0, so their background and border have never applied — pre-existing, exposed by the redesign, requalified to 0,3,0. |
 | — | v126 | **DES-33 applied to the rest of the app — the sweep v125 should have been.** v125 changed only the contextual row, and the identical fault was live on three more controls, found on device: *Back to Learning Paths* on the path timeline (two emit sites) and both checkpoint-hub controls, including the one reading **"✓ Checkpoint complete — back to path"**, which from the dashboard went to the dashboard. They survived because each screen had grown its own back handler — four of them, three routing through `history.back()` — so there was no single place to enforce the rule. All four collapse into one `[data-up]` handler over a three-value vocabulary (`paths`, `path:<key>`, `topics`); an unrecognised value warns rather than guessing a default. **The activity screens are deliberately left on `history.back()`**: `state.checkpointAct` is only ever set from a hub card, so with one parent the label cannot lie, and converting them would push a third entry onto the stack and leave the hardware key pointing at a finished quiz. |
+| — | v127 | **The content register, and the three data defects it found.** `docs/CONTENT.md` (corpus inventory, Intermediate chapter plan) and `docs/CONTENT_SPEC_TIER2.md` (tier-2 authoring rules, previously held outside the repo) join `docs/`; `tools/content-report.js` becomes **standing check 9**, the first that reads content rather than CSS, JS or navigation, and generates every count in the register so none is hand-typed. Its eight assertions found three defects on first run. *`topics_index.json` declared `modals` and `comparisons` as tier-1-only* while both topic files carry a tier 2 — and `getAvailableRounds()` reads the index, not the file, so `getTierLadder()` returned no rungs and the whole of chapter I-3 was reachable only by walking the Intermediate path. Two word counts on the same file were also wrong. *`intermediate-s3` had no checkpoint `id` or `wordCap`* — now `intermediate-s3-cp` at 25. All three, plus the `sw.js` precache omission fixed at v122, were the last step of the session that shipped I-3. |
 
 ### Notes worth carrying forward
 
@@ -541,10 +545,6 @@ UX and visual design. It may be worth a line in the project instructions.)*
   longer exists.
 
 ## Known, deliberately unfixed
-- `intermediate-s3` checkpoint is missing the `id` field the other 14 checkpoints
-  have (checkpoint-completion tracking for it would save under a malformed key).
-  Low priority — Intermediate checkpoints aren't in active use yet. Bundle the fix
-  into the Intermediate checkpoint hub expansion when that's picked up.
 - **The cause of phase 4 is worth remembering: a decision that lives only in a
   mockup does not survive.** MOCK-06-C, MOCK-05-retreat and MOCK-07-Asoft were all
   settled against mockups 05–07 and none reached the code; the completed-checkpoint
