@@ -4,7 +4,7 @@
 IN_PROGRESS.md when it's picked up; delete it from here once it's shipped and
 folded into STATUS.md.*
 
-Last updated: 2026-08-10 · sw.js at v127
+Last updated: 2026-08-10 · sw.js at v128
 
 ## Product
 
@@ -79,12 +79,6 @@ are pointers only — detail goes there, not here.*
 
 ## Quality
 
-- **Full Stage 2 QA walkthrough — now unblocked.** A dedicated pass across every
-  screen type (topic Learn/Chat/Quiz, Word Review, both conversation types, all
-  speed settings, a checkpoint hub) has never happened as one deliberate pass;
-  fixes so far came from organic testing. It was deferred until the rollout
-  finished so it wouldn't be run twice. **The rollout finished at v120**, so this
-  is now due.
 - **Two dead `state.speed` writers in `render.js`** (~line 2066), found by the
   2026-08-01 doc audit. A `getElementById('speed-' + s)` loop over slow/normal/fast
   for the retired header speed control, and a `[data-drawer-speed]` handler for the
@@ -128,7 +122,7 @@ are pointers only — detail goes there, not here.*
   today and synthesises a six-phrase set — two syllabic-nasal phrases, two
   controls, a sentence — through every voice, writing an HTML page that groups
   results *by phrase* so voices can be compared side by side. It is not run
-  routinely and does not belong in the standing eight; it earns its place the next
+  routinely and does not belong in the standing nine; it earns its place the next
   time a pronunciation question arises. Keep it, and point it at a new provider
   rather than writing a fresh script.
 

@@ -529,6 +529,43 @@ Neural voices are GA and have been since 2021.
   which is the shape of every other stale figure in these documents. `--edge-emph`
   has 4, `--measure-text` 1, `--jade-edge` 10, `--feedback-bad` 9.
 
+## How this app is tested
+
+**QA is organic and fix-forward.** The app is tested by being used, and defects
+are fixed as they surface rather than hunted in scheduled sweeps. Adopted
+2026-08-10, closing the *Full Stage 2 QA walkthrough* item that had sat in
+BACKLOG.md since the design-system rollout ended at v120.
+
+That item proposed one deliberate pass across topic Learn/Chat/Quiz, Word Review,
+both conversation types, the speed settings and a checkpoint hub. It is closed as
+**done in substance** — those screens have been walked in ordinary use, and every
+defect found since v120 came from exactly that. It was never a claim that the
+screens were untested; it was a claim that the testing had not been formalised,
+and the formalising is what has now been dropped. Two things had also gone stale:
+the label — no *Stage 1* or *Stage 2* is defined anywhere in the repo, the
+numbering came from a chat that never reached the docs — and the screen list,
+written at v120 and missing the Home dashboard, the path timeline, the standalone
+context row and the tier ladder, all of which shipped after it.
+
+**This is recorded rather than simply deleted** because a removed backlog item
+leaves no trace, and the next reader to notice that no formal QA sweep has ever
+run will propose one. It has been considered and declined. What carries the load
+instead:
+
+- **The nine standing checks** (IN_PROGRESS.md), which cover what is mechanically
+  checkable — CSS, navigation, storage migration, tier data and behaviour, and
+  content coherence.
+- **Change-scoped QA per deploy**, given as *screens that changed* and *screens
+  sharing the changed code*, so each deploy is judged on its blast radius rather
+  than the whole app.
+- **A check written against each defect found in use**, which is what turns a
+  one-off fix into cover. The v128 tier-ladder defect is the worked example.
+
+The trade is deliberate and worth stating plainly: a defect on a screen that is
+rarely opened will live longer here than under a scheduled sweep. That is
+acceptable for a single-user study app and would not be for a paid product — so
+**revisit this before any subscription launch**, not before.
+
 ## Deploy labelling
 
 Future work is **not** given `sw.js` numbers in advance. A phase lists its deploys
