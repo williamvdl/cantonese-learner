@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Pronunciation Assessment Probe</title>
+<!--
+  tools/pron-probe.html — a diagnostic probe for Azure Pronunciation Assessment.
+
+  WHY THIS EXISTS
+  ---------------
+  The app's Speak mode today runs Web Speech recognition and then compares the
+  decoded characters against the target with fuzzyMatch() — strict equality
+  after punctuation stripping. That measures INTELLIGIBILITY, not pronunciation.
+  The recogniser's language model repairs tone errors from surrounding context,
+  so a wrong tone can pass; and homophones can fail a correct utterance. For a
+  tonal language that is the wrong axis, and it is worst on bare syllables,
+  which have no context to decode from.
+
+  Azure Pronunciation Assessment scores audio against a reference text it is
+  GIVEN, rather than decoding and comparing. Context cannot rescue a wrong tone.
+  On paper that is the right tool. This probe exists because "on paper" is not
+  evidence, and three separate things need proving before any design work:
+
+    1. TRANSPORT. Does a browser origin reach the speech-to-text REST endpoint
+       at all? Server-side calls are the documented path; browser calls depend
+       on CORS headers Microsoft does not document. If this fails, the fallback
+       is the Speech JS SDK over websockets, which means a CDN dependency in an
+       app that currently has none — a design decision, not a detail.
+
+    2. FORMAT. Chrome on Android records webm/opus. The endpoint's accepted
+       content types are narrower than MediaRecorder's output, so the probe
+       tries each candidate against the same blob and reports which is taken.
+
+    3. DISCRIMINATION — THE ACTUAL QUESTION. It is not enough that a score comes
+       back. The score must DROP when the utterance is wrong. Every test item
+       here has two slots, "said correctly" and "said wrong", precisely so the
+       two sit side by side. If a deliberate tone error scores the same as a
+       correct reading, Azure is no better than what the app already does and
+       this whole direction is dead. That comparison is the point of the file.
+
+  SECURITY
+  --------
+  The subscription key is held in a module-scope variable and NOTHING ELSE.
+  It is never written to localStorage, never to sessionStorage, never to the
+  DOM as a value attribute that survives, and never sent anywhere but Azure.
+  Reloading the page loses it. This is deliberately WEAKER persistence than the
+  app's Gemini key, which lives in localStorage under 'cantonese:apiKey' and
+  survives browser restarts.
+
+  NOT APP CODE
+  ------------
+  This is a throwaway diagnostic. It does not use the design system, does not
+  share styles.css, is not in the sw.js precache list, and is not linked from
+  the app. It cannot affect the app's behaviour, and adding it needs no
+  CACHE_VERSION bump. Delete it once the question is answered.
+-->
+<style>
+  :root {
+    --ink: #1b1a17;
+    --muted: #6b665e;
+    --line: #ddd8cf;
+    --bg: #faf8f4;
+    --card: #ffffff;
+    --good: #2e7d4f;
+    --bad: #b3402e;
+    --warn: #a8761c;
+    --accent: #7c2d2d;
+  }
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  body {
+    margin: 0; padding: 16px 14px 64px;
+    font: 16px/1.5 -apple-system, "Segoe UI", Roboto, sans-serif;
+    color: var(--ink); background: var(--bg);
+  }
+  h1 { font-size: 19px; margin: 0 0 4px; }
+  .sub { color: var(--muted); font-size: 13px; margin: 0 0 18px; }
+  .card {
+    background: var(--card); border: 1px solid var(--line);
+    border-radius: 10px; padding: 14px; margin-bottom: 14px;
+  }
+  label { display: block; font-size: 13px; color: var(--muted); margin-bottom: 4px; }
+  input[type=text], input[type=password] {
+    width: 100%; padding: 10px; font-size: 16px;
+    border: 1px solid var(--line); border-radius: 7px; margin-bottom: 10px;
+    background: #fff; color: var(--ink);
+  }
+  button {
+    font: inherit; font-size: 15px; padding: 10px 14px;
+    border: 1px solid var(--line); border-radius: 7px;
+    background: #fff; color: var(--ink); cursor: pointer;
+  }
+  button.primary { background: var(--accent); border-color: var(--accent); color: #fff; }
+  button.rec { background: var(--bad); border-color: var(--bad); color: #fff; }
+  button:disabled { opacity: .45; cursor: default; }
+  .row { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+  .hz { font-size: 30px; line-height: 1.25; margin: 0 0 2px; }
+  .jp { color: var(--accent); font-size: 15px; margin: 0 0 2px; }
+  .en { color: var(--muted); font-size: 13px; margin: 0 0 12px; }
+  .slot { border-top: 1px dashed var(--line); padding-top: 10px; margin-top: 10px; }
+  .slot h3 { font-size: 13px; margin: 0 0 8px; color: var(--muted); text-transform: uppercase; letter-spacing: .04em; }
+  .scores { display: flex; gap: 14px; flex-wrap: wrap; margin: 10px 0 6px; }
+  .score b { display: block; font-size: 24px; line-height: 1.1; }
+  .score span { font-size: 11px; color: var(--muted); text-transform: uppercase; }
+  table { width: 100%; border-collapse: collapse; font-size: 14px; margin-top: 8px; }
+  th, td { text-align: left; padding: 5px 6px; border-bottom: 1px solid var(--line); }
+  th { font-size: 11px; color: var(--muted); text-transform: uppercase; font-weight: 600; }
+  .verdict { font-weight: 600; }
+  .pass { color: var(--good); } .fail { color: var(--bad); } .mid { color: var(--warn); }
+  .delta { font-size: 14px; padding: 9px 11px; border-radius: 7px; background: #f3f0ea; margin-top: 12px; }
+  .log { font: 12px/1.45 ui-monospace, Menlo, Consolas, monospace; white-space: pre-wrap;
+         word-break: break-word; background: #23211d; color: #ded8cd;
+         padding: 11px; border-radius: 7px; max-height: 40vh; overflow: auto; }
+  details { margin-top: 8px; } summary { font-size: 13px; color: var(--muted); cursor: pointer; }
+  .status { font-size: 13px; color: var(--muted); min-height: 20px; margin-top: 8px; }
+  .err { color: var(--bad); font-weight: 600; }
+  audio { width: 100%; margin-top: 8px; }
+  input[type=range] { width: 100%; }
+</style>
+</head>
+<body>
+
+<h1>Pronunciation Assessment Probe</h1>
+<p class="sub">Azure zh-HK · diagnostic only · not app code</p>
+
+<!-- ── Credentials ───────────────────────────────────────────────────────── -->
+<div class="card">
+  <label for="key">Subscription key <span style="color:var(--bad)">— memory only, lost on reload</span></label>
+  <input type="password" id="key" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="paste Azure key">
+  <label for="region">Region — must match SPEECH_REGION</label>
+  <input type="text" id="region" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="e.g. australiaeast">
+  <div class="row">
+    <button class="primary" id="save">Hold key</button>
+    <button id="clear">Clear key</button>
+    <button id="mic">Grant mic</button>
+  </div>
+  <div class="status" id="credStatus"></div>
+</div>
+
+<!-- ── Threshold ─────────────────────────────────────────────────────────── -->
+<div class="card">
+  <label for="thresh">Pass threshold — <b id="threshVal">60</b></label>
+  <input type="range" id="thresh" min="0" max="100" value="60">
+  <div class="sub" style="margin:6px 0 0">
+    A verdict is a threshold applied to a score. Slide this after recording to
+    see where tick and cross would land on your own voice — the results below
+    re-colour live.
+  </div>
+</div>
+
+<div id="items"></div>
+
+<!-- ── Diagnostics ───────────────────────────────────────────────────────── -->
+<div class="card">
+  <div class="row" style="justify-content:space-between;margin-bottom:8px">
+    <b style="font-size:14px">Transport log</b>
+    <button id="copyLog">Copy</button>
+  </div>
+  <div class="log" id="log">Waiting.</div>
+</div>
+
+<script>
+'use strict';
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   TEST SET
+   Chosen to isolate the four things that matter, not to be representative.
+   - si1/si3 are a tone minimal pair: identical segments, different tone only.
+     This is the single most diagnostic pair in the file. Web Speech routinely
+     passes these wrongly; if Azure does too, the direction fails here.
+   - m4 and ng5 are Cantonese's two bare syllabic nasals — the exact phonemes
+     Chirp3-HD could not SYNTHESISE (see tools/tts-probe.js). Whether the
+     assessor can SCORE them is a separate question, and an open one.
+   - A multi-syllable word introduces syllable segmentation.
+   - Two sentences bring FluencyScore and CompletenessScore into play; both are
+     meaningless on a single word. The longer one repeats 唔 (m4) in context,
+     so the nasal can be compared bare against embedded.
+   Sentences are real corpus rows, not invented, so scores transfer directly.
+   ═══════════════════════════════════════════════════════════════════════════ */
+const TESTS = [
+  { id: 't1', c: '詩', j: 'si1', e: 'poem',
+    wrong: 'Say it as 試 (si3) — same sounds, falling tone instead of high level.' },
+  { id: 't2', c: '試', j: 'si3', e: 'to try',
+    wrong: 'Say it as 詩 (si1) — the mirror of the item above.' },
+  { id: 't3', c: '唔', j: 'm4', e: 'not',
+    wrong: 'Insert a vowel — say "muh" rather than a bare humming m.' },
+  { id: 't4', c: '五', j: 'ng5', e: 'five',
+    wrong: 'Say "ng1" — correct sound, wrong tone. Or "nong" with a vowel.' },
+  { id: 't5', c: '朋友', j: 'pang4 jau5', e: 'friend',
+    wrong: 'Flatten both tones to level — say "pang1 jau1".' },
+  { id: 't6', c: '我係阿明。', j: 'ngo5 hai6 aa3 ming4.', e: 'I am Ah Ming.',
+    wrong: 'Say 明 (ming4) as ming1 — one wrong tone in an otherwise correct line.' },
+  { id: 't7', c: '唔該俾個湯同甜品我。', j: 'm4 goi1 bei2 go3 tong1 tung4 tim4 ban2 ngo5.',
+    e: 'Please give me a soup and dessert.',
+    wrong: 'Drop 同甜品 (tung4 tim4 ban2) entirely — tests CompletenessScore and miscue.' }
+];
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   STATE — key lives here and nowhere else.
+   ═══════════════════════════════════════════════════════════════════════════ */
+let CREDS = { key: null, region: null };
+let stream = null;              // retained MediaStream, so mic permission is asked once
+let workingContentType = null;  // learned on first success; reused thereafter
+const results = {};             // results[testId][slot] = parsed result
+let threshold = 60;
+
+const $ = id => document.getElementById(id);
+const logEl = $('log');
+let logBuf = [];
+function log(msg) {
+  const t = new Date().toISOString().slice(11, 19);
+  logBuf.push('[' + t + '] ' + msg);
+  logEl.textContent = logBuf.join('\n');
+  logEl.scrollTop = logEl.scrollHeight;
+}
+
+/* ── Credentials ──────────────────────────────────────────────────────────── */
+$('save').onclick = () => {
+  const k = $('key').value.trim(), r = $('region').value.trim().toLowerCase();
+  if (!k || !r) { $('credStatus').innerHTML = '<span class="err">Both fields needed.</span>'; return; }
+  CREDS = { key: k, region: r };
+  $('key').value = '';                       // clear the input; value lives only in CREDS
+  $('credStatus').textContent = 'Key held in memory for ' + r + '. Not stored.';
+  log('Credentials held. Region=' + r + '. Key length=' + k.length + ' (not logged).');
+};
+$('clear').onclick = () => {
+  CREDS = { key: null, region: null };
+  $('key').value = '';
+  $('credStatus').textContent = 'Cleared.';
+  log('Credentials cleared from memory.');
+};
+
+/* ── Microphone ───────────────────────────────────────────────────────────── */
+/* Browser audio processing is tuned to make speech intelligible to humans, which
+   is exactly the wrong goal here — AGC and noise suppression can mask the very
+   defects being measured. All three are disabled where the browser allows it. */
+$('mic').onclick = async () => {
+  try {
+    stream = await navigator.mediaDevices.getUserMedia({
+      audio: { channelCount: 1, echoCancellation: false, noiseSuppression: false, autoGainControl: false }
+    });
+    const s = stream.getAudioTracks()[0].getSettings();
+    $('credStatus').textContent = 'Mic ready.';
+    log('Mic granted. sampleRate=' + (s.sampleRate || '?') + ' channels=' + (s.channelCount || '?'));
+    log('MediaRecorder support: ' + CANDIDATE_TYPES.filter(t => MediaRecorder.isTypeSupported(t)).join(', '));
+  } catch (e) {
+    $('credStatus').innerHTML = '<span class="err">Mic denied: ' + e.name + '</span>';
+    log('MIC FAILED: ' + e.name + ' — ' + e.message);
+  }
+};
+
+/* ── Recording ────────────────────────────────────────────────────────────── */
+/* Chrome on Android gives webm/opus. Azure's accepted content types are
+   narrower than MediaRecorder's output, so record in the best available and
+   let the POST layer discover which Content-Type string is accepted. */
+const CANDIDATE_TYPES = ['audio/webm;codecs=opus', 'audio/ogg;codecs=opus', 'audio/webm', 'audio/mp4'];
+const CONTENT_TYPE_FOR = {
+  'audio/webm;codecs=opus': ['audio/webm; codecs=opus', 'audio/ogg; codecs=opus'],
+  'audio/ogg;codecs=opus':  ['audio/ogg; codecs=opus'],
+  'audio/webm':             ['audio/webm; codecs=opus'],
+  'audio/mp4':              ['audio/mp4']
+};
+
+let activeRec = null;
+function record(btn, onDone) {
+  if (activeRec) { activeRec.stop(); return; }
+  if (!stream) { alert('Grant mic access first.'); return; }
+
+  const mime = CANDIDATE_TYPES.find(t => MediaRecorder.isTypeSupported(t));
+  if (!mime) { log('FATAL: no supported MediaRecorder mime type.'); return; }
+
+  const rec = new MediaRecorder(stream, { mimeType: mime });
+  const chunks = [];
+  let secs = 0;
+  const tick = setInterval(() => { secs++; btn.textContent = 'Stop (' + secs + 's)'; if (secs >= 10) rec.stop(); }, 1000);
+
+  rec.ondataavailable = e => { if (e.data.size) chunks.push(e.data); };
+  rec.onstop = () => {
+    clearInterval(tick);
+    activeRec = null;
+    btn.classList.remove('rec');
+    btn.textContent = btn.dataset.label;
+    const blob = new Blob(chunks, { type: mime });
+    log('Recorded ' + blob.size + ' bytes as ' + mime + ' (' + secs + 's).');
+    onDone(blob, mime);
+  };
+
+  activeRec = rec;
+  btn.classList.add('rec');
+  btn.textContent = 'Stop (0s)';
+  rec.start();
+}
+
+/* ── Azure call ───────────────────────────────────────────────────────────── */
+/* btoa() throws on any code point above 0xFF, so every reference text here
+   would break it. Encode to UTF-8 bytes first, then base64 those. */
+function b64utf8(str) {
+  const bytes = new TextEncoder().encode(str);
+  let bin = '';
+  bytes.forEach(b => { bin += String.fromCharCode(b); });
+  return btoa(bin);
+}
+
+async function assess(blob, recMime, referenceText) {
+  if (!CREDS.key) throw new Error('No key held.');
+
+  const cfg = {
+    ReferenceText: referenceText,
+    GradingSystem: 'HundredMark',
+    Granularity: 'Phoneme',      // asks for word → syllable → phoneme depth
+    EnableMiscue: true,          // flags omissions and insertions
+    Dimension: 'Comprehensive'
+  };
+  const header = b64utf8(JSON.stringify(cfg));
+  const url = 'https://' + CREDS.region + '.stt.speech.microsoft.com'
+            + '/speech/recognition/conversation/cognitiveservices/v1'
+            + '?language=zh-HK&format=detailed';
+
+  // Try the learned content type first; otherwise walk the candidates.
+  const types = workingContentType ? [workingContentType] : (CONTENT_TYPE_FOR[recMime] || ['audio/webm; codecs=opus']);
+  let lastErr = null;
+
+  for (const ct of types) {
+    log('POST → ' + CREDS.region + ' as "' + ct + '" (' + blob.size + ' bytes)');
+    let res;
+    try {
+      res = await fetch(url, {
+        method: 'POST',
+        headers: {
+          'Ocp-Apim-Subscription-Key': CREDS.key,
+          'Content-Type': ct,
+          'Pronunciation-Assessment': header,
+          'Accept': 'application/json'
+        },
+        body: blob
+      });
+    } catch (e) {
+      /* A fetch that rejects with no response is the CORS signature. This is
+         the single most important diagnostic in the file — it is the answer to
+         "can a browser call this endpoint at all", and it looks like a network
+         error rather than anything mentioning CORS. */
+      log('NETWORK/CORS FAILURE: ' + e.name + ' — ' + e.message);
+      log('  → No HTTP status means the response never reached JS. Almost');
+      log('    certainly CORS. Check devtools console for the blocked-origin');
+      log('    message. If confirmed, REST is out and the Speech JS SDK is the');
+      log('    fallback — which means a CDN dependency decision.');
+      throw new Error('Transport blocked (likely CORS)');
+    }
+
+    const text = await res.text();
+    if (res.status === 401 || res.status === 403) {
+      log('AUTH FAILED ' + res.status + ' — key or region wrong. Region must match SPEECH_REGION exactly.');
+      throw new Error('Auth failed (' + res.status + ')');
+    }
+    if (res.status === 429) {
+      log('THROTTLED 429 — unexpected on S0. Retry in a moment.');
+      throw new Error('Throttled');
+    }
+    if (res.status === 400) {
+      log('REJECTED 400 as "' + ct + '": ' + text.slice(0, 300));
+      lastErr = new Error('400 on ' + ct);
+      continue;                        // try the next content type
+    }
+    if (!res.ok) { log('HTTP ' + res.status + ': ' + text.slice(0, 300)); throw new Error('HTTP ' + res.status); }
+
+    let json;
+    try { json = JSON.parse(text); }
+    catch (e) { log('Unparseable body: ' + text.slice(0, 300)); throw new Error('Bad JSON'); }
+
+    if (json.RecognitionStatus && json.RecognitionStatus !== 'Success') {
+      /* NoMatch and InitialSilenceTimeout are recording problems, not scoring
+         problems — worth separating so a silent take is not read as a low score. */
+      log('RecognitionStatus=' + json.RecognitionStatus + ' — no audio matched. Re-record closer to the mic.');
+      throw new Error(json.RecognitionStatus);
+    }
+
+    workingContentType = ct;
+    log('SUCCESS as "' + ct + '". This content type works — reusing it.');
+    return json;
+  }
+  throw lastErr || new Error('All content types rejected');
+}
+
+/* ── Parsing ──────────────────────────────────────────────────────────────── */
+function parse(json) {
+  const nb = (json.NBest && json.NBest[0]) || {};
+  const pa = nb.PronunciationAssessment || {};
+  const syllables = [];
+  (nb.Words || []).forEach(w => {
+    const wpa = w.PronunciationAssessment || {};
+    if (w.Syllables && w.Syllables.length) {
+      w.Syllables.forEach(s => syllables.push({
+        label: s.Syllable || s.Grapheme || '?',
+        word: w.Word,
+        score: (s.PronunciationAssessment || {}).AccuracyScore,
+        err: wpa.ErrorType
+      }));
+    } else {
+      syllables.push({ label: w.Word, word: w.Word, score: wpa.AccuracyScore, err: wpa.ErrorType });
+    }
+  });
+  return {
+    overall: pa.PronScore, accuracy: pa.AccuracyScore,
+    fluency: pa.FluencyScore, completeness: pa.CompletenessScore,
+    heard: nb.Display || nb.Lexical || '', syllables, raw: json
+  };
+}
+
+/* ── Rendering ────────────────────────────────────────────────────────────── */
+function cls(score) {
+  if (score == null) return 'mid';
+  return score >= threshold ? 'pass' : 'fail';
+}
+function scoreBlock(r) {
+  const cells = [['Overall', r.overall], ['Accuracy', r.accuracy]];
+  if (r.fluency != null) cells.push(['Fluency', r.fluency]);
+  if (r.completeness != null) cells.push(['Complete', r.completeness]);
+  return '<div class="scores">' + cells.map(([label, v]) =>
+    '<div class="score"><b class="' + cls(v) + '">' + (v == null ? '—' : Math.round(v)) + '</b><span>' + label + '</span></div>'
+  ).join('') + '</div>'
+  + '<div class="verdict ' + cls(r.overall) + '">'
+  + (r.overall == null ? '' : (r.overall >= threshold ? '✓ Pass at ' + threshold : '✗ Fail at ' + threshold))
+  + '</div>'
+  + (r.heard ? '<div class="en" style="margin:6px 0 0">Decoded as: ' + r.heard + '</div>' : '')
+  + '<table><thead><tr><th>Syllable</th><th>Score</th><th>Flag</th></tr></thead><tbody>'
+  + r.syllables.map(s =>
+      '<tr><td>' + s.label + '</td><td class="' + cls(s.score) + '">'
+      + (s.score == null ? '—' : Math.round(s.score)) + '</td><td>'
+      + (s.err && s.err !== 'None' ? s.err : '') + '</td></tr>').join('')
+  + '</tbody></table>'
+  + '<details><summary>Raw response</summary><div class="log">'
+  + JSON.stringify(r.raw, null, 1).replace(/</g, '&lt;') + '</div></details>';
+}
+
+function renderItem(t) {
+  const r = results[t.id] || {};
+  const el = $('res-' + t.id);
+  let html = '';
+  ['right', 'wrong'].forEach(slot => {
+    const label = slot === 'right' ? 'Said correctly' : 'Said wrong (deliberate)';
+    html += '<div class="slot"><h3>' + label + '</h3>';
+    if (slot === 'wrong') html += '<div class="en" style="margin:-4px 0 8px">' + t.wrong + '</div>';
+    html += r[slot] ? scoreBlock(r[slot]) : '<div class="sub" style="margin:0">Not recorded.</div>';
+    html += '</div>';
+  });
+
+  /* The delta IS the finding. A high correct score means nothing on its own;
+     what matters is the gap between the two takes. */
+  if (r.right && r.wrong && r.right.overall != null && r.wrong.overall != null) {
+    const d = Math.round(r.right.overall - r.wrong.overall);
+    const reads = d >= 20 ? 'The assessor separates these clearly. This is what we need.'
+                : d >= 8  ? 'Some separation, but narrow. A threshold here would be fragile.'
+                : 'No meaningful separation — the wrong reading scored as well as the right one. '
+                  + 'If this holds across items, Azure is no better than the current Speak.';
+    html += '<div class="delta"><b>Δ ' + d + '</b> — ' + reads + '</div>';
+  }
+  el.innerHTML = html;
+}
+
+function build() {
+  $('items').innerHTML = TESTS.map(t => `
+    <div class="card">
+      <p class="hz">${t.c}</p>
+      <p class="jp">${t.j}</p>
+      <p class="en">${t.e}</p>
+      <div class="row">
+        <button data-t="${t.id}" data-slot="right" data-label="Record correct">Record correct</button>
+        <button data-t="${t.id}" data-slot="wrong"  data-label="Record wrong">Record wrong</button>
+      </div>
+      <div id="play-${t.id}"></div>
+      <div id="res-${t.id}"></div>
+    </div>`).join('');
+
+  document.querySelectorAll('[data-slot]').forEach(btn => {
+    btn.onclick = () => {
+      const t = TESTS.find(x => x.id === btn.dataset.t);
+      const slot = btn.dataset.slot;
+      record(btn, async (blob, mime) => {
+        $('play-' + t.id).innerHTML = '';
+        const audio = document.createElement('audio');
+        audio.controls = true; audio.src = URL.createObjectURL(blob);
+        $('play-' + t.id).appendChild(audio);
+        try {
+          const json = await assess(blob, mime, t.c);
+          results[t.id] = results[t.id] || {};
+          results[t.id][slot] = parse(json);
+          renderItem(t);
+        } catch (e) {
+          $('res-' + t.id).innerHTML = '<div class="slot"><span class="err">' + e.message
+            + '</span><div class="sub">See transport log below.</div></div>';
+        }
+      });
+    };
+  });
+  TESTS.forEach(renderItem);
+}
+
+$('thresh').oninput = e => {
+  threshold = +e.target.value;
+  $('threshVal').textContent = threshold;
+  TESTS.forEach(renderItem);        // verdicts re-colour live; scores never change
+};
+
+$('copyLog').onclick = () => {
+  navigator.clipboard.writeText(logBuf.join('\n'))
+    .then(() => { $('copyLog').textContent = 'Copied'; setTimeout(() => $('copyLog').textContent = 'Copy', 1200); });
+};
+
+build();
+log('Probe loaded. Secure context: ' + window.isSecureContext + '. Grant mic, hold key, then record.');
+</script>
+</body>
+</html>
