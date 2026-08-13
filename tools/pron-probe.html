@@ -121,7 +121,7 @@
 <body>
 
 <h1>Pronunciation Assessment Probe</h1>
-<p class="sub">Azure zh-HK · diagnostic only · not app code</p>
+<p class="sub">Azure zh-HK · diagnostic only · not app code · build <b>B4-matrix</b></p>
 
 <!-- ── Credentials ───────────────────────────────────────────────────────── -->
 <div class="card">
@@ -147,6 +147,19 @@
     see where tick and cross would land on your own voice — the results below
     re-colour live.
   </div>
+</div>
+
+<!-- ── Config matrix ─────────────────────────────────────────────────────── -->
+<div class="card">
+  <b style="font-size:14px">Config matrix</b>
+  <div class="sub" style="margin:4px 0 10px">
+    Recognition works but no scores come back, so the fault is in the assessment
+    config, not the audio. This records <b>once</b> and re-sends the same audio
+    under several configurations. Whichever returns a scores block is the answer.
+    Say 詩 (si1) when prompted.
+  </div>
+  <button class="primary" id="matrix" data-label="Record &amp; run matrix">Record &amp; run matrix</button>
+  <div id="matrixOut"></div>
 </div>
 
 <div id="items"></div>
@@ -203,6 +216,13 @@ let CREDS = { key: null, region: null };
 let stream = null;              // retained MediaStream, so mic permission is asked once
 const results = {};             // results[testId][slot] = parsed result
 let threshold = 60;
+
+/* Build stamp. Run 2 was lost to a stale cached copy: the log showed strings
+   that no longer existed in the file, and there was no way to tell from the
+   probe itself which version was executing. This line settles it — if the
+   build tag in the log is not the one you just committed, the phone is serving
+   an old file and nothing else in the log means anything. */
+const PROBE_BUILD = 'B4-matrix';
 
 const $ = id => document.getElementById(id);
 const logEl = $('log');
@@ -590,8 +610,134 @@ $('copyLog').onclick = () => {
     .then(() => { $('copyLog').textContent = 'Copied'; setTimeout(() => $('copyLog').textContent = 'Copy', 1200); });
 };
 
+/* ═══════════════════════════════════════════════════════════════════════════
+   CONFIG MATRIX
+   Run 3 established that the audio pipeline is sound: Azure decoded 詩, 唔 and
+   五 correctly from the transcoded WAV. So recognition is fine and the missing
+   PronunciationAssessment block is a CONFIG fault, not a transport or format
+   fault. zh-HK is confirmed present in Microsoft's supported-locale table, so
+   the locale is not the problem either.
+
+   Rather than guess one variable at a time across a dozen round trips, this
+   records once and re-POSTs the same audio under several configurations. Only
+   the config differs, so whichever returns a scores block isolates the culprit
+   in a single pass.
+
+   Each row exists to kill one specific hypothesis:
+     A  the exact config that failed in run 3 — the control, expected to fail
+     B  Granularity dropped to Word — phoneme depth may be rejected for zh-HK,
+        and syllable-level output is documented as en-US only
+     C  minimal config — only ReferenceText and GradingSystem, nothing optional
+     D  EnableMiscue off — miscue alignment on a single character may be
+        degenerate, since there is nothing to align against
+     E  Dimension omitted entirely — it is deprecated in newer API versions and
+        an unrecognised value may invalidate the whole header
+     F  en-US with an English reference against the SAME Cantonese audio. The
+        scores will be meaningless and low, which does not matter: this asks
+        only whether ANY assessment block comes back. If F scores and A–E do
+        not, the fault is zh-HK-specific. If F also fails, the header itself is
+        not reaching the service and nothing about the config matters.
+   ═══════════════════════════════════════════════════════════════════════════ */
+const MATRIX = [
+  { id: 'A', lang: 'zh-HK', ref: '詩', note: 'run-3 config (control)',
+    cfg: { GradingSystem: 'HundredMark', Granularity: 'Phoneme', EnableMiscue: true, Dimension: 'Comprehensive' } },
+  { id: 'B', lang: 'zh-HK', ref: '詩', note: 'Granularity=Word',
+    cfg: { GradingSystem: 'HundredMark', Granularity: 'Word', EnableMiscue: true, Dimension: 'Comprehensive' } },
+  { id: 'C', lang: 'zh-HK', ref: '詩', note: 'minimal config',
+    cfg: { GradingSystem: 'HundredMark' } },
+  { id: 'D', lang: 'zh-HK', ref: '詩', note: 'miscue off',
+    cfg: { GradingSystem: 'HundredMark', Granularity: 'Phoneme', EnableMiscue: false, Dimension: 'Comprehensive' } },
+  { id: 'E', lang: 'zh-HK', ref: '詩', note: 'no Dimension key',
+    cfg: { GradingSystem: 'HundredMark', Granularity: 'Phoneme', EnableMiscue: false } },
+  { id: 'F', lang: 'en-US', ref: 'hello', note: 'en-US control — presence test only',
+    cfg: { GradingSystem: 'HundredMark', Granularity: 'Phoneme', EnableMiscue: false, Dimension: 'Comprehensive' } }
+];
+
+async function rawPost(wavBlob, lang, cfg) {
+  const header = b64utf8(JSON.stringify(cfg));
+  const url = 'https://' + CREDS.region + '.stt.speech.microsoft.com'
+            + '/speech/recognition/conversation/cognitiveservices/v1'
+            + '?language=' + encodeURIComponent(lang) + '&format=detailed';
+  const res = await fetch(url, {
+    method: 'POST',
+    headers: {
+      'Ocp-Apim-Subscription-Key': CREDS.key,
+      'Content-Type': AZURE_CONTENT_TYPE,
+      'Pronunciation-Assessment': header,
+      'Accept': 'application/json'
+    },
+    body: wavBlob
+  });
+  const text = await res.text();
+  return { status: res.status, text };
+}
+
+$('matrix').onclick = () => {
+  const btn = $('matrix');
+  if (!CREDS.key) { $('matrixOut').innerHTML = '<div class="slot"><span class="err">Hold the key first.</span></div>'; return; }
+
+  record(btn, async (blob, mime) => {
+    let wav;
+    try {
+      wav = await toWav16kMono(blob);
+      log('MATRIX — transcoded ' + wav.blob.size + ' B WAV, ' + wav.seconds.toFixed(2)
+          + 's, peak ' + Math.round(wav.peak * 100) + '%.');
+      if (wav.peak < 0.02) log('  ⚠ near-silent take — re-record before trusting any row.');
+    } catch (e) { log('MATRIX transcode failed: ' + e.message); return; }
+
+    const rows = [];
+    for (const m of MATRIX) {
+      log('MATRIX ' + m.id + ' — ' + m.lang + ' · ' + m.note);
+      log('  config: ' + JSON.stringify(m.cfg));
+      let r;
+      try { r = await rawPost(wav.blob, m.lang, m.cfg); }
+      catch (e) { log('  → request failed: ' + e.message); rows.push({ m, ok: false, detail: e.message }); continue; }
+
+      let json = null;
+      try { json = JSON.parse(r.text); } catch (e) { /* leave null */ }
+      const nb = json && json.NBest && json.NBest[0];
+      const pa = nb && nb.PronunciationAssessment;
+      const decoded = nb ? (nb.Display || nb.Lexical || '') : '';
+
+      if (pa) {
+        log('  → SCORES: Pron=' + pa.PronScore + ' Acc=' + pa.AccuracyScore
+            + ' Flu=' + pa.FluencyScore + ' Comp=' + pa.CompletenessScore);
+        rows.push({ m, ok: true, detail: 'Pron ' + Math.round(pa.PronScore || 0), pa });
+      } else {
+        log('  → HTTP ' + r.status + ', decoded="' + decoded + '", no scores block.');
+        /* Dump the body once. If the service is objecting to the header it will
+           usually say so somewhere in here, and guessing is how we lost run 3. */
+        if (m.id === 'A') log('  raw A: ' + r.text.slice(0, 700));
+        rows.push({ m, ok: false, detail: 'HTTP ' + r.status + ' · no scores' });
+      }
+    }
+
+    const anyZh = rows.some(r => r.ok && r.m.lang === 'zh-HK');
+    const enOk  = rows.some(r => r.ok && r.m.lang === 'en-US');
+    let verdict;
+    if (anyZh)      verdict = 'A working zh-HK config exists — use it and the feature is live.';
+    else if (enOk)  verdict = 'en-US scores but zh-HK does not. The header reaches the service, '
+                            + 'so the fault is zh-HK-specific despite the docs listing it. '
+                            + 'That is a support question for Microsoft, not a code fix.';
+    else            verdict = 'Nothing scored, including en-US. The assessment header is not '
+                            + 'taking effect at all — most likely stripped or ignored on this '
+                            + 'endpoint. Next step is the Speech JS SDK over websockets.';
+
+    $('matrixOut').innerHTML =
+      '<table><thead><tr><th>Run</th><th>Config</th><th>Result</th></tr></thead><tbody>'
+      + rows.map(r => '<tr><td>' + r.m.id + '</td><td>' + r.m.lang + ' · ' + r.m.note
+          + '</td><td class="' + (r.ok ? 'pass' : 'fail') + '">'
+          + (r.ok ? '✓ ' : '✗ ') + r.detail + '</td></tr>').join('')
+      + '</tbody></table><div class="delta">' + verdict + '</div>';
+    log('MATRIX COMPLETE — ' + verdict);
+  });
+};
+
+
 build();
-log('Probe loaded. Secure context: ' + window.isSecureContext + '. Grant mic, hold key, then record.');
+log('Probe build ' + PROBE_BUILD + ' loaded. Secure context: ' + window.isSecureContext
+    + '. Expect a "Transcoded ... → WAV/PCM 16k" line before every POST — if you');
+log('do not see one, you are running a cached older copy. Reload with ?v=' + Date.now());
 </script>
 </body>
 </html>
