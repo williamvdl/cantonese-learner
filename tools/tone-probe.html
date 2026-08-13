@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Tone Contour Probe</title>
+<!--
+  tools/tone-probe.html — build T1
+
+  WHY THIS EXISTS
+  ---------------
+  tools/pron-probe.html established, with evidence, that Azure Pronunciation
+  Assessment cannot hear Cantonese tone: 詩 (si1), 試 (si3) and 事 (si6) all
+  scored 100/100, and the score only moved when the CONSONANT or VOWEL was
+  wrong. That is structural rather than a bug — the assessment scores phonemes,
+  and tone is suprasegmental, riding on top of the phonemes rather than being
+  one of them. Azure's tone-and-intonation dimension is prosody, which is en-US
+  only. A market search then found no commercial API that scores Cantonese tone:
+  Speechace is English-centric, and SpeechSuper — which DOES return a separate
+  tone score, exactly the architecture wanted here — supports Mandarin but not
+  Cantonese.
+
+  So tone has to be measured directly. Tone IS pitch: fundamental frequency
+  (F0) over the voiced part of a syllable, described by its HEIGHT and its
+  SHAPE. This probe extracts that curve and draws it. Nothing is sent anywhere.
+
+  WHAT IT MUST PROVE
+  ------------------
+  Not "can it draw a curve" — it will always draw something. The question is
+  whether the six tones occupy SEPARABLE regions, for a given speaker, using
+  only that speaker's own voice as the reference frame. The summary at the
+  bottom reports the closest pair, because the system is only as good as its
+  worst confusion.
+
+  WHY TWO SPEAKERS
+  ----------------
+  A learner and a native speaker differ in two ways that must not be confused:
+    1. VOCAL RANGE. A typical male voice sits roughly an octave below a female
+       one. If the maths only worked for one of them it would be measuring the
+       speaker, not the tone. Every contour here is therefore expressed in
+       SEMITONES RELATIVE TO THAT SPEAKER'S OWN MEDIAN PITCH, computed across
+       all of their takes. A tone that lands "+4 semitones above my middle" is
+       comparable between a bass and a soprano; raw Hertz is not.
+    2. CORRECTNESS. The native set is the target. The learner set is the
+       attempt. Only with both can the probe answer the question that actually
+       matters — not "are my six tones different from each other" but "are my
+       six tones different in the SAME WAY hers are".
+  A learner can be self-consistently wrong: six distinct contours that are all
+  shifted or flattened. That reads as success against yourself alone, which is
+  why the classifier below scores learner takes against the NATIVE set.
+
+  METHOD
+  ------
+  YIN pitch detection (difference function → cumulative mean normalised
+  difference → absolute threshold → parabolic interpolation). Chosen over plain
+  autocorrelation, which octave-errors badly on low male voices — precisely the
+  error that would fake a tone difference. Frames are energy-gated, median-
+  filtered to kill residual octave jumps, trimmed to the voiced core, then
+  resampled to a fixed number of points so contours of different durations can
+  be compared shape-to-shape.
+
+  NOT APP CODE. Diagnostic only. Not in the sw.js precache list, not linked
+  from the app, needs no CACHE_VERSION bump. Audio never leaves the device.
+-->
+<style>
+  :root {
+    --ink:#1b1a17; --muted:#6b665e; --line:#ddd8cf; --bg:#faf8f4; --card:#fff;
+    --good:#2e7d4f; --bad:#b3402e; --warn:#a8761c; --accent:#7c2d2d;
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  body{margin:0;padding:16px 14px 64px;font:16px/1.5 -apple-system,"Segoe UI",Roboto,sans-serif;
+       color:var(--ink);background:var(--bg)}
+  h1{font-size:19px;margin:0 0 4px}
+  .sub{color:var(--muted);font-size:13px;margin:0 0 16px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px;margin-bottom:14px}
+  label{display:block;font-size:13px;color:var(--muted);margin-bottom:4px}
+  button{font:inherit;font-size:15px;padding:10px 14px;border:1px solid var(--line);
+         border-radius:7px;background:#fff;color:var(--ink);cursor:pointer}
+  button.primary{background:var(--accent);border-color:var(--accent);color:#fff}
+  button.rec{background:var(--bad);border-color:var(--bad);color:#fff}
+  button.on{background:var(--ink);border-color:var(--ink);color:#fff}
+  .row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+  .hz{font-size:26px;line-height:1.2;margin:0}
+  .jp{color:var(--accent);font-size:15px;margin:0}
+  .en{color:var(--muted);font-size:13px;margin:0 0 8px}
+  .tone-row{display:flex;gap:12px;align-items:center;border-top:1px solid var(--line);padding:12px 0}
+  .tone-row:first-of-type{border-top:none}
+  .tone-meta{flex:1;min-width:0}
+  .swatch{width:10px;height:38px;border-radius:3px;flex:none}
+  table{width:100%;border-collapse:collapse;font-size:14px;margin-top:8px}
+  th,td{text-align:left;padding:5px 6px;border-bottom:1px solid var(--line)}
+  th{font-size:11px;color:var(--muted);text-transform:uppercase;font-weight:600}
+  .verdict{font-size:14px;padding:10px 12px;border-radius:7px;background:#f3f0ea;margin-top:12px}
+  .pass{color:var(--good);font-weight:600}
+  .fail{color:var(--bad);font-weight:600}
+  .mid{color:var(--warn);font-weight:600}
+  .log{font:12px/1.45 ui-monospace,Menlo,Consolas,monospace;white-space:pre-wrap;word-break:break-word;
+       background:#23211d;color:#ded8cd;padding:11px;border-radius:7px;max-height:34vh;overflow:auto}
+  .status{font-size:13px;color:var(--muted);min-height:20px;margin-top:8px}
+  .err{color:var(--bad);font-weight:600}
+  svg{width:100%;height:260px;display:block;background:#fff;border:1px solid var(--line);border-radius:8px}
+  .legend{display:flex;gap:10px;flex-wrap:wrap;font-size:12px;margin-top:8px}
+  .legend i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:4px}
+</style>
+</head>
+<body>
+
+<h1>Tone Contour Probe</h1>
+<p class="sub">Cantonese F0 · on-device · nothing uploaded · build <b>T1-tone</b></p>
+
+<!-- ── Speaker ───────────────────────────────────────────────────────────── -->
+<div class="card">
+  <label>Who is recording?</label>
+  <div class="row">
+    <button id="spk-learner" class="on" data-spk="learner">Learner (me)</button>
+    <button id="spk-native" data-spk="native">Native speaker</button>
+    <button id="mic">Grant mic</button>
+  </div>
+  <div class="sub" style="margin:10px 0 0">
+    Record all six on one speaker, then switch and do the other. Each speaker is
+    measured against their own median pitch, so a low voice and a high voice are
+    directly comparable.
+  </div>
+  <div class="status" id="micStatus"></div>
+</div>
+
+<div id="items"></div>
+
+<!-- ── Contours ──────────────────────────────────────────────────────────── -->
+<div class="card">
+  <b style="font-size:14px">Contours</b>
+  <div class="sub" style="margin:4px 0 10px">
+    Vertical axis is semitones above or below that speaker's own median pitch.
+    Horizontal is the syllable start to end. Solid is the selected speaker;
+    dashed is the other, once recorded.
+  </div>
+  <svg id="chart" viewBox="0 0 320 200" preserveAspectRatio="none"></svg>
+  <div class="legend" id="legend"></div>
+  <div id="summary"></div>
+</div>
+
+<!-- ── Diagnostics ───────────────────────────────────────────────────────── -->
+<div class="card">
+  <div class="row" style="justify-content:space-between;margin-bottom:8px">
+    <b style="font-size:14px">Log</b>
+    <span class="row" style="gap:6px">
+      <button id="copyLog">Copy</button>
+      <button id="clearAll">Clear data</button>
+    </span>
+  </div>
+  <div class="log" id="log">Waiting.</div>
+</div>
+
+<script>
+'use strict';
+
+const PROBE_BUILD = 'T1-tone';
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   TEST SET — the six-tone minimal set on the syllable "si".
+   These six words differ ONLY in tone: identical initial, identical final. That
+   is what makes them the right test. Any separation seen in the contours is
+   therefore caused by tone and nothing else — no confound from different
+   consonants or vowels changing the pitch track.
+
+   Two nasals follow. 唔 (m4) and 五 (ng5) are syllabic nasals: no vowel at all,
+   and fully voiced from start to finish. They are the EASIEST case for pitch
+   detection (nothing unvoiced to trim) and were the phonemes that defeated
+   Chirp3-HD synthesis, so it is worth seeing what they look like measured.
+   ═══════════════════════════════════════════════════════════════════════════ */
+const TESTS = [
+  { id:'si1', c:'詩', j:'si1', e:'poem',      tone:1, desc:'high, level',        color:'#c0392b' },
+  { id:'si2', c:'史', j:'si2', e:'history',   tone:2, desc:'mid, rising',        color:'#d68910' },
+  { id:'si3', c:'試', j:'si3', e:'to try',    tone:3, desc:'mid, level',         color:'#7d8c1f' },
+  { id:'si4', c:'時', j:'si4', e:'time',      tone:4, desc:'low, falling',       color:'#1f7a8c' },
+  { id:'si5', c:'市', j:'si5', e:'market',    tone:5, desc:'low, rising',        color:'#5b4b8a' },
+  { id:'si6', c:'事', j:'si6', e:'matter',    tone:6, desc:'low, level',         color:'#8a5b4b' },
+  { id:'m4',  c:'唔', j:'m4',  e:'not',       tone:4, desc:'syllabic nasal, low', color:'#4a4a4a' },
+  { id:'ng5', c:'五', j:'ng5', e:'five',      tone:5, desc:'syllabic nasal, rising', color:'#8a8a3a' }
+];
+
+const RATE = 16000;      // analysis sample rate
+const FRAME = 1024;      // 64 ms — long enough to resolve F0 down to ~60 Hz
+const HOP = 160;         // 10 ms steps
+const FMIN = 60, FMAX = 500;   // covers a low male voice through a high female one
+const POINTS = 20;       // contour resampled to this many points for comparison
+
+let speaker = 'learner';
+let stream = null;
+/* takes[speaker][testId] = { hz:[], semis:[], contour:[POINTS], meanSemi, slope, voicedMs } */
+const takes = { learner: {}, native: {} };
+
+const $ = id => document.getElementById(id);
+let logBuf = [];
+function log(m) {
+  logBuf.push('[' + new Date().toISOString().slice(11,19) + '] ' + m);
+  $('log').textContent = logBuf.join('\n');
+  $('log').scrollTop = $('log').scrollHeight;
+}
+
+/* ── Mic ──────────────────────────────────────────────────────────────────── */
+/* AGC and noise suppression are disabled: both reshape the signal to make speech
+   pleasant, and either could distort the very pitch track being measured. */
+async function ensureMic() {
+  if (stream && stream.getAudioTracks().some(t => t.readyState === 'live')) return stream;
+  stream = await navigator.mediaDevices.getUserMedia({
+    audio:{ channelCount:1, echoCancellation:false, noiseSuppression:false, autoGainControl:false }
+  });
+  $('micStatus').textContent = 'Mic ready.';
+  log('Mic live at ' + (stream.getAudioTracks()[0].getSettings().sampleRate || '?') + ' Hz.');
+  return stream;
+}
+$('mic').onclick = async () => {
+  try { await ensureMic(); }
+  catch (e) { $('micStatus').innerHTML = '<span class="err">Mic unavailable: ' + e.name + '</span>';
+              log('MIC FAILED: ' + e.name); }
+};
+
+/* ── Recording ────────────────────────────────────────────────────────────── */
+const MIMES = ['audio/webm;codecs=opus','audio/ogg;codecs=opus','audio/webm','audio/mp4'];
+let activeRec = null;
+async function record(btn, onDone) {
+  if (activeRec) { activeRec.stop(); return; }
+  try { await ensureMic(); }
+  catch (e) { log('MIC FAILED: ' + e.name + ' — ' + e.message); return; }
+
+  const mime = MIMES.find(t => MediaRecorder.isTypeSupported(t));
+  const rec = new MediaRecorder(stream, { mimeType: mime });
+  const chunks = [];
+  let secs = 0;
+  const tick = setInterval(() => { secs++; btn.textContent = 'Stop ' + secs + 's'; if (secs >= 6) rec.stop(); }, 1000);
+  rec.ondataavailable = e => { if (e.data.size) chunks.push(e.data); };
+  rec.onstop = () => {
+    clearInterval(tick); activeRec = null;
+    btn.classList.remove('rec'); btn.textContent = btn.dataset.label;
+    onDone(new Blob(chunks, { type: mime }));
+  };
+  activeRec = rec; btn.classList.add('rec'); btn.textContent = 'Stop 0s'; rec.start();
+}
+
+/* ── Decode to mono 16k PCM ───────────────────────────────────────────────── */
+async function toPcm16k(blob) {
+  const bytes = await blob.arrayBuffer();
+  const Ctx = window.AudioContext || window.webkitAudioContext;
+  const decoded = await new Ctx().decodeAudioData(bytes);
+  const off = new OfflineAudioContext(1, Math.ceil(decoded.duration * RATE), RATE);
+  const src = off.createBufferSource();
+  src.buffer = decoded; src.connect(off.destination); src.start();
+  const rendered = await off.startRendering();
+  return rendered.getChannelData(0);
+}
+
+/* ── YIN pitch detection ──────────────────────────────────────────────────── */
+/* Plain autocorrelation reports a subharmonic — half the true frequency — often
+   enough on low voices to invent a tone difference that is not there. YIN's
+   cumulative mean normalised difference suppresses exactly that failure, which
+   is why the extra complexity is worth carrying in a probe whose whole purpose
+   is to decide whether small pitch differences are real. */
+function yin(buf, start, threshold) {
+  const W = FRAME >> 1;
+  const diff = new Float32Array(W);
+  for (let tau = 1; tau < W; tau++) {
+    let s = 0;
+    for (let i = 0; i < W; i++) { const d = buf[start + i] - buf[start + i + tau]; s += d * d; }
+    diff[tau] = s;
+  }
+  // Cumulative mean normalised difference
+  const cmnd = new Float32Array(W);
+  cmnd[0] = 1;
+  let running = 0;
+  for (let tau = 1; tau < W; tau++) {
+    running += diff[tau];
+    cmnd[tau] = running === 0 ? 1 : diff[tau] * tau / running;
+  }
+  const tauMin = Math.floor(RATE / FMAX), tauMax = Math.min(W - 1, Math.floor(RATE / FMIN));
+  let tau = -1;
+  for (let t = tauMin; t <= tauMax; t++) {
+    if (cmnd[t] < threshold) {
+      while (t + 1 <= tauMax && cmnd[t + 1] < cmnd[t]) t++;
+      tau = t; break;
+    }
+  }
+  if (tau < 0) return null;
+  // Parabolic interpolation around the minimum for sub-sample precision
+  const x0 = tau > 1 ? tau - 1 : tau, x2 = tau + 1 < W ? tau + 1 : tau;
+  let better = tau;
+  if (x0 !== tau && x2 !== tau) {
+    const s0 = cmnd[x0], s1 = cmnd[tau], s2 = cmnd[x2];
+    const denom = 2 * (2 * s1 - s2 - s0);
+    if (denom !== 0) better = tau + (s2 - s0) / denom;
+  }
+  return RATE / better;
+}
+
+function median(arr) {
+  if (!arr.length) return null;
+  const s = [...arr].sort((a, b) => a - b);
+  return s[Math.floor(s.length / 2)];
+}
+
+/* ── Track: PCM → voiced F0 series ────────────────────────────────────────── */
+function track(pcm) {
+  // Energy gate first. Silence and breath noise produce spurious "pitch", and a
+  // spurious frame at the edge of a syllable distorts the whole contour shape.
+  const rms = [];
+  for (let i = 0; i + FRAME < pcm.length; i += HOP) {
+    let s = 0;
+    for (let k = 0; k < FRAME; k++) s += pcm[i + k] * pcm[i + k];
+    rms.push(Math.sqrt(s / FRAME));
+  }
+  const peak = Math.max(...rms, 1e-9);
+  const gate = peak * 0.15;
+
+  const raw = [];
+  for (let n = 0, i = 0; i + FRAME < pcm.length; i += HOP, n++) {
+    raw.push(rms[n] < gate ? null : yin(pcm, i, 0.15));
+  }
+
+  // Median-filter over 5 frames. Kills isolated octave errors without smearing
+  // a genuine contour, which changes over tens of frames rather than one.
+  const filt = raw.map((v, i) => {
+    const win = raw.slice(Math.max(0, i - 2), i + 3).filter(x => x != null);
+    return win.length >= 3 ? median(win) : v;
+  });
+
+  // Trim to the longest continuous voiced run — the syllable core.
+  let best = [], cur = [];
+  filt.forEach(v => {
+    if (v == null) { if (cur.length > best.length) best = cur; cur = []; }
+    else cur.push(v);
+  });
+  if (cur.length > best.length) best = cur;
+  return best;
+}
+
+/* Resample a series to POINTS by linear interpolation, so contours of different
+   durations compare as SHAPES rather than as unequal-length arrays. */
+function resample(series, n) {
+  if (series.length < 2) return null;
+  const out = [];
+  for (let i = 0; i < n; i++) {
+    const pos = i * (series.length - 1) / (n - 1);
+    const lo = Math.floor(pos), hi = Math.ceil(pos), f = pos - lo;
+    out.push(series[lo] * (1 - f) + series[hi] * f);
+  }
+  return out;
+}
+
+/* ── Speaker normalisation ────────────────────────────────────────────────── */
+/* THE CRUX OF THE TWO-SPEAKER DESIGN. Raw Hertz is not comparable between a low
+   voice and a high one — a native speaker's "low" tone may sit above a learner's
+   "high" one in absolute terms. Every value is therefore converted to semitones
+   relative to that speaker's OWN median pitch across all their takes. Semitones
+   because pitch is perceived logarithmically: a fifth is a fifth whether sung
+   by a bass or a soprano. Recompute after every take, since the median improves
+   as more of the speaker's range is captured. */
+function speakerMedian(spk) {
+  const all = [];
+  Object.values(takes[spk]).forEach(t => { if (t && t.hz) all.push(...t.hz); });
+  return median(all);
+}
+
+function recomputeSemitones(spk) {
+  const med = speakerMedian(spk);
+  if (!med) return;
+  Object.values(takes[spk]).forEach(t => {
+    if (!t || !t.hz || !t.hz.length) return;
+    t.semis = t.hz.map(f => 12 * Math.log2(f / med));
+    t.contour = resample(t.semis, POINTS);
+    t.meanSemi = t.semis.reduce((a, b) => a + b, 0) / t.semis.length;
+    // Slope across the contour: positive rises, negative falls. Separates the
+    // contour tones (2, 4, 5) from the level ones (1, 3, 6).
+    t.slope = t.contour ? t.contour[POINTS - 1] - t.contour[0] : 0;
+  });
+  takes[spk]._median = med;
+}
+
+/* ── Separability ─────────────────────────────────────────────────────────── */
+/* A system is only as good as its worst confusion, so report the CLOSEST pair
+   rather than an average. Distance is the mean absolute difference between two
+   normalised contours, in semitones — an interpretable unit: 1 semitone is a
+   piano fret, 2 is a whole tone, 12 is an octave. */
+function contourDistance(a, b) {
+  if (!a || !b) return null;
+  let s = 0;
+  for (let i = 0; i < POINTS; i++) s += Math.abs(a[i] - b[i]);
+  return s / POINTS;
+}
+
+/* Rank every pair, closest first. A single "closest pair" number is misleading
+   here: a synthetic model of the six Chao tone targets (55, 25, 33, 21, 23, 22)
+   puts the pairs in a very uneven spread, from 0.92 semitones apart to 6.92.
+   The four tightest are all inside the LOW-TONE CLUSTER — 4 vs 6, 5 vs 6,
+   3 vs 5, 2 vs 3 — because tones 3, 4, 5 and 6 all live in the bottom half of
+   the speaker's range and differ mainly by small height offsets. That is a fact
+   about Cantonese, not a defect in the method, so a tight number there is
+   expected and must not be read as failure. The high-tone contrasts are wide:
+   si1 vs si3 models at 4.0 semitones. */
+const HARD_PAIRS = { '4-6':1, '5-6':1, '3-5':1, '2-3':1 };
+
+function allPairs(spk) {
+  const ids = TESTS.filter(t => t.id.startsWith('si')).map(t => t.id)
+                   .filter(id => takes[spk][id] && takes[spk][id].contour);
+  const out = [];
+  for (let i = 0; i < ids.length; i++)
+    for (let j = i + 1; j < ids.length; j++) {
+      const a = TESTS.find(t => t.id === ids[i]).tone;
+      const b = TESTS.find(t => t.id === ids[j]).tone;
+      const key = Math.min(a, b) + '-' + Math.max(a, b);
+      out.push({ a: ids[i], b: ids[j],
+                 d: contourDistance(takes[spk][ids[i]].contour, takes[spk][ids[j]].contour),
+                 hard: !!HARD_PAIRS[key] });
+    }
+  return out.sort((x, y) => x.d - y.d);
+}
+
+function separability(spk) {
+  const p = allPairs(spk);
+  return p.length ? { pairs: p, n: p.length } : null;
+}
+
+/* Classify each learner take against the NATIVE set by nearest contour.
+   This is the question that matters. A learner can produce six perfectly
+   distinct contours that are all wrong — self-consistent but not Cantonese.
+   Separability alone would call that a success; this will not. */
+function classifyAgainstNative() {
+  const nativeIds = TESTS.map(t => t.id).filter(id => takes.native[id] && takes.native[id].contour);
+  if (!nativeIds.length) return null;
+  const rows = [];
+  TESTS.forEach(t => {
+    const mine = takes.learner[t.id];
+    if (!mine || !mine.contour) return;
+    let best = { id: null, d: Infinity };
+    nativeIds.forEach(nid => {
+      const d = contourDistance(mine.contour, takes.native[nid].contour);
+      if (d < best.d) best = { id: nid, d };
+    });
+    rows.push({ target: t.id, got: best.id, d: best.d, ok: best.id === t.id });
+  });
+  return rows;
+}
+
+/* ── Chart ────────────────────────────────────────────────────────────────── */
+function drawChart() {
+  const svg = $('chart');
+  const W = 320, H = 200, PAD = 22;
+  const semis = [];
+  ['learner', 'native'].forEach(s => Object.values(takes[s]).forEach(t => {
+    if (t && t.contour) semis.push(...t.contour);
+  }));
+  const lo = semis.length ? Math.min(-6, Math.floor(Math.min(...semis)) - 1) : -8;
+  const hi = semis.length ? Math.max(6, Math.ceil(Math.max(...semis)) + 1) : 8;
+
+  const x = i => PAD + (i / (POINTS - 1)) * (W - PAD - 6);
+  const y = v => H - PAD - ((v - lo) / (hi - lo)) * (H - PAD * 2);
+
+  let g = '';
+  // Gridlines every 3 semitones
+  for (let v = Math.ceil(lo / 3) * 3; v <= hi; v += 3) {
+    g += `<line x1="${PAD}" y1="${y(v)}" x2="${W - 6}" y2="${y(v)}" stroke="#eee" stroke-width="1"/>`
+       + `<text x="2" y="${y(v) + 3}" font-size="7" fill="#999">${v > 0 ? '+' : ''}${v}</text>`;
+  }
+  g += `<line x1="${PAD}" y1="${y(0)}" x2="${W - 6}" y2="${y(0)}" stroke="#bbb" stroke-width="1" stroke-dasharray="2 2"/>`;
+
+  ['native', 'learner'].forEach(spk => {
+    TESTS.forEach(t => {
+      const take = takes[spk][t.id];
+      if (!take || !take.contour) return;
+      const pts = take.contour.map((v, i) => x(i) + ',' + y(v)).join(' ');
+      const dash = spk === 'native' ? 'stroke-dasharray="4 3"' : '';
+      const wgt  = spk === speaker ? 2 : 1.2;
+      const op   = spk === speaker ? 1 : 0.5;
+      g += `<polyline points="${pts}" fill="none" stroke="${t.color}" stroke-width="${wgt}"
+             opacity="${op}" ${dash} stroke-linejoin="round"/>`;
+    });
+  });
+  svg.innerHTML = g;
+
+  $('legend').innerHTML = TESTS.map(t =>
+    `<span><i style="background:${t.color}"></i>${t.c} ${t.j}</span>`).join('')
+    + '<span style="color:var(--muted)">solid = ' + speaker + ' · dashed = other</span>';
+}
+
+/* ── Summary ──────────────────────────────────────────────────────────────── */
+function drawSummary() {
+  const sep = separability(speaker);
+  const med = takes[speaker]._median;
+  let html = '';
+
+  const rows = TESTS.filter(t => takes[speaker][t.id] && takes[speaker][t.id].contour);
+  if (rows.length) {
+    html += '<table><thead><tr><th>Tone</th><th>Height</th><th>Slope</th><th>Voiced</th></tr></thead><tbody>'
+      + rows.map(t => {
+        const k = takes[speaker][t.id];
+        return `<tr><td>${t.c} ${t.j}</td><td>${k.meanSemi.toFixed(1)} st</td>`
+             + `<td>${k.slope > 0 ? '+' : ''}${k.slope.toFixed(1)} st</td>`
+             + `<td>${k.voicedMs} ms</td></tr>`;
+      }).join('') + '</tbody></table>';
+    if (med) html += `<div class="sub" style="margin-top:6px">${speaker} median pitch: ${Math.round(med)} Hz</div>`;
+  }
+
+  if (sep) {
+    const shown = sep.pairs.slice(0, 5);
+    const easy = sep.pairs.filter(p => !p.hard);
+    const worstEasy = easy.length ? easy[0] : null;
+    html += '<div class="verdict"><b>Tightest pairs</b> — a system is only as good as its worst '
+          + 'confusion, so these decide it.<table><thead><tr><th>Pair</th><th>Apart</th><th></th></tr>'
+          + '</thead><tbody>'
+          + shown.map(p => {
+              const cls = p.d >= 2 ? 'pass' : p.d >= 1 ? 'mid' : 'fail';
+              return `<tr><td>${p.a} vs ${p.b}</td><td class="${cls}">${p.d.toFixed(2)} st</td>`
+                   + `<td class="sub">${p.hard ? 'expected close' : ''}</td></tr>`;
+            }).join('')
+          + '</tbody></table>';
+    if (worstEasy) {
+      const d = worstEasy.d;
+      const read = d >= 2
+        ? 'The wide contrasts are holding up — bigger than the wobble between two takes of the same tone.'
+        : d >= 1
+        ? 'Even the contrasts that should be wide are coming out narrow. Check the recordings are clean before concluding anything.'
+        : 'Contrasts that ought to be obvious are not separating. Something is wrong with the recording or the tracking, not with Cantonese.';
+      html += `<div class="sub" style="margin-top:8px">Tightest pair outside the low-tone cluster: `
+            + `<b>${worstEasy.a} vs ${worstEasy.b}, ${d.toFixed(2)} st</b>. ${read}</div>`;
+    }
+    html += '<div class="sub" style="margin-top:6px">Tones 3, 4, 5 and 6 all sit low in the range and '
+          + 'differ mostly by small height offsets, so a tight number between those is normal for the '
+          + 'language. Modelled ideally, 4 vs 6 is only 0.92 st apart while si1 vs si3 is 4.0 st.</div></div>';
+  }
+
+  const cls2 = classifyAgainstNative();
+  if (cls2 && cls2.length) {
+    const hits = cls2.filter(r => r.ok).length;
+    html += '<div class="verdict"><b>Learner vs native reference: ' + hits + '/' + cls2.length
+          + ' matched.</b><table><thead><tr><th>Said</th><th>Nearest native</th><th>Dist</th></tr></thead><tbody>'
+          + cls2.map(r => `<tr><td>${r.target}</td><td class="${r.ok ? 'pass' : 'fail'}">${r.got}</td>`
+              + `<td>${r.d.toFixed(2)} st</td></tr>`).join('')
+          + '</tbody></table><div class="sub" style="margin-top:6px">'
+          + 'This is the real test. Six contours that differ from each other but not from '
+          + 'hers means self-consistently wrong, which separability alone would score as a pass.'
+          + '</div></div>';
+  }
+
+  $('summary').innerHTML = html;
+}
+
+/* ── Build ────────────────────────────────────────────────────────────────── */
+function build() {
+  $('items').innerHTML = '<div class="card">' + TESTS.map(t => `
+    <div class="tone-row">
+      <div class="swatch" style="background:${t.color}"></div>
+      <div class="tone-meta">
+        <p class="hz">${t.c}</p>
+        <p class="jp">${t.j}</p>
+        <p class="en">${t.e} — ${t.desc}</p>
+        <div id="st-${t.id}" class="sub" style="margin:0"></div>
+      </div>
+      <button data-t="${t.id}" data-label="Record">Record</button>
+    </div>`).join('') + '</div>';
+
+  document.querySelectorAll('[data-t]').forEach(btn => {
+    btn.onclick = () => {
+      const t = TESTS.find(x => x.id === btn.dataset.t);
+      record(btn, async (blob) => {
+        try {
+          const pcm = await toPcm16k(blob);
+          const hz = track(pcm);
+          const ms = Math.round(hz.length * HOP / RATE * 1000);
+          if (hz.length < 5) {
+            $('st-' + t.id).innerHTML = '<span class="err">Too little voiced audio ('
+              + ms + ' ms). Say it louder and hold it a beat longer.</span>';
+            log(t.id + ' [' + speaker + ']: only ' + hz.length + ' voiced frames — rejected.');
+            return;
+          }
+          takes[speaker][t.id] = { hz, voicedMs: ms };
+          recomputeSemitones(speaker);
+          const k = takes[speaker][t.id];
+          $('st-' + t.id).textContent = 'height ' + k.meanSemi.toFixed(1)
+            + ' st · slope ' + (k.slope > 0 ? '+' : '') + k.slope.toFixed(1) + ' st · ' + ms + ' ms';
+          log(t.id + ' [' + speaker + ']: ' + ms + 'ms voiced, median '
+              + Math.round(median(hz)) + ' Hz, height ' + k.meanSemi.toFixed(1)
+              + ' st, slope ' + k.slope.toFixed(1) + ' st.');
+          refresh();
+        } catch (e) {
+          $('st-' + t.id).innerHTML = '<span class="err">' + e.message + '</span>';
+          log(t.id + ' FAILED: ' + e.name + ' — ' + e.message);
+        }
+      });
+    };
+  });
+}
+
+function refresh() {
+  // Recompute both speakers: the median moves as takes accumulate, so earlier
+  // contours must be re-normalised rather than left on a stale reference.
+  recomputeSemitones('learner'); recomputeSemitones('native');
+  TESTS.forEach(t => {
+    const k = takes[speaker][t.id];
+    const el = $('st-' + t.id);
+    if (el && k && k.contour) {
+      el.textContent = 'height ' + k.meanSemi.toFixed(1)
+        + ' st · slope ' + (k.slope > 0 ? '+' : '') + k.slope.toFixed(1) + ' st · ' + k.voicedMs + ' ms';
+    } else if (el && !k) { el.textContent = ''; }
+  });
+  drawChart(); drawSummary();
+}
+
+document.querySelectorAll('[data-spk]').forEach(b => {
+  b.onclick = () => {
+    speaker = b.dataset.spk;
+    document.querySelectorAll('[data-spk]').forEach(x => x.classList.toggle('on', x === b));
+    log('Speaker → ' + speaker + '.');
+    refresh();
+  };
+});
+
+$('clearAll').onclick = () => {
+  takes.learner = {}; takes.native = {};
+  log('All takes cleared.');
+  refresh();
+};
+
+$('copyLog').onclick = () => navigator.clipboard.writeText(logBuf.join('\n'))
+  .then(() => { $('copyLog').textContent = 'Copied'; setTimeout(() => $('copyLog').textContent = 'Copy', 1200); });
+
+build();
+refresh();
+log('Probe build ' + PROBE_BUILD + ' loaded. Secure context: ' + window.isSecureContext + '.');
+log('Nothing is uploaded — all analysis runs on this device. Takes are held in');
+log('memory only and are lost on reload, so do both speakers in one sitting.');
+</script>
+</body>
+</html>
