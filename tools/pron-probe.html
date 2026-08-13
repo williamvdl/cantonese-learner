@@ -121,7 +121,7 @@
 <body>
 
 <h1>Pronunciation Assessment Probe</h1>
-<p class="sub">Azure zh-HK · diagnostic only · not app code · build <b>B4-matrix</b></p>
+<p class="sub">Azure zh-HK · diagnostic only · not app code · build <b>B5-parse</b></p>
 
 <!-- ── Credentials ───────────────────────────────────────────────────────── -->
 <div class="card">
@@ -222,7 +222,7 @@ let threshold = 60;
    probe itself which version was executing. This line settles it — if the
    build tag in the log is not the one you just committed, the phone is serving
    an old file and nothing else in the log means anything. */
-const PROBE_BUILD = 'B4-matrix';
+const PROBE_BUILD = 'B5-parse';
 
 const $ = id => document.getElementById(id);
 const logEl = $('log');
@@ -475,38 +475,67 @@ async function assess(rawBlob, recMime, referenceText) {
      PronunciationAssessment block is a failure and is reported as one. */
   const nb = (json.NBest && json.NBest[0]) || null;
   const display = nb ? (nb.Display || nb.Lexical || '') : '';
-  const hasScores = !!(nb && nb.PronunciationAssessment);
-  log('RecognitionStatus=' + status + ' · decoded="' + display + '" · scores=' + (hasScores ? 'yes' : 'NO'));
-  if (!hasScores) {
-    log('  ⚠ 200 OK but no PronunciationAssessment block. If decoded text is');
-    log('    empty or punctuation only, the service heard nothing usable.');
+  const scored = hasScores(json);
+  log('RecognitionStatus=' + status + ' · decoded="' + display + '" · scores=' + (scored ? 'yes' : 'NO'));
+  if (!scored) {
+    log('  ⚠ 200 OK but no score fields on NBest[0]. If decoded text is empty');
+    log('    or punctuation only, the service heard nothing usable.');
     throw new Error('200 but no scores — see log');
   }
   return json;
 }
 
 /* ── Parsing ──────────────────────────────────────────────────────────────── */
+/* THE RUN-4 BUG. The REST short-audio API and the Speech SDK return the same
+   scores in DIFFERENT SHAPES. The SDK nests them under a PronunciationAssessment
+   object; REST puts them FLAT on NBest[0] alongside Confidence and Display, and
+   per-word scores flat on each Words[] entry. This file was written against the
+   SDK shape, so it looked for a key that REST never sends and reported "no
+   scores" six times over a response that contained a full set of them.
+   resolvePA() accepts either shape so the question can never turn on it again.
+   Note also: Syllables[] is en-US only. For zh-HK the depth below a word is
+   Phonemes[], and their Phoneme name strings come back EMPTY — documented
+   behaviour, since phoneme names are published for en-US and zh-CN only. So a
+   zh-HK phoneme row can show a score but not what sound it refers to. */
+function resolvePA(container) {
+  if (!container) return null;
+  const pa = container.PronunciationAssessment || container;   // SDK shape, else REST flat
+  if (pa.PronScore == null && pa.AccuracyScore == null) return null;
+  return pa;
+}
+
+function hasScores(json) {
+  const nb = json && json.NBest && json.NBest[0];
+  return !!resolvePA(nb);
+}
+
 function parse(json) {
   const nb = (json.NBest && json.NBest[0]) || {};
-  const pa = nb.PronunciationAssessment || {};
-  const syllables = [];
+  const pa = resolvePA(nb) || {};
+  const units = [];
+
   (nb.Words || []).forEach(w => {
-    const wpa = w.PronunciationAssessment || {};
-    if (w.Syllables && w.Syllables.length) {
-      w.Syllables.forEach(s => syllables.push({
-        label: s.Syllable || s.Grapheme || '?',
-        word: w.Word,
-        score: (s.PronunciationAssessment || {}).AccuracyScore,
-        err: wpa.ErrorType
-      }));
-    } else {
-      syllables.push({ label: w.Word, word: w.Word, score: wpa.AccuracyScore, err: wpa.ErrorType });
-    }
+    const wpa = resolvePA(w) || {};
+    units.push({
+      label: w.Word, kind: 'word',
+      score: wpa.AccuracyScore, err: wpa.ErrorType
+    });
+    // en-US gets named syllables; zh-HK gets unnamed phonemes. Show whichever exists.
+    const sub = w.Syllables || w.Phonemes || [];
+    sub.forEach((x, i) => {
+      const xpa = resolvePA(x) || x;
+      const name = x.Syllable || x.Grapheme || x.Phoneme || '';
+      units.push({
+        label: '   ' + (name || ('ph' + (i + 1))), kind: 'sub',
+        score: xpa.AccuracyScore, err: ''
+      });
+    });
   });
+
   return {
     overall: pa.PronScore, accuracy: pa.AccuracyScore,
     fluency: pa.FluencyScore, completeness: pa.CompletenessScore,
-    heard: nb.Display || nb.Lexical || '', syllables, raw: json
+    heard: nb.Display || nb.Lexical || '', syllables: units, raw: json
   };
 }
 
@@ -555,7 +584,9 @@ function renderItem(t) {
     const reads = d >= 20 ? 'The assessor separates these clearly. This is what we need.'
                 : d >= 8  ? 'Some separation, but narrow. A threshold here would be fragile.'
                 : 'No meaningful separation — the wrong reading scored as well as the right one. '
-                  + 'If this holds across items, Azure is no better than the current Speak.';
+                  + 'Check "Decoded as" on both: if a wrong tone was decoded as a DIFFERENT '
+                  + 'character and still scored high, the assessor is grading segments and '
+                  + 'ignoring tone, which is the one thing this app needs it to hear.';
     html += '<div class="delta"><b>Δ ' + d + '</b> — ' + reads + '</div>';
   }
   el.innerHTML = html;
@@ -696,7 +727,7 @@ $('matrix').onclick = () => {
       let json = null;
       try { json = JSON.parse(r.text); } catch (e) { /* leave null */ }
       const nb = json && json.NBest && json.NBest[0];
-      const pa = nb && nb.PronunciationAssessment;
+      const pa = resolvePA(nb);
       const decoded = nb ? (nb.Display || nb.Lexical || '') : '';
 
       if (pa) {
