@@ -106,7 +106,7 @@
 <body>
 
 <h1>Tone Contour Probe</h1>
-<p class="sub">Cantonese F0 · on-device · nothing uploaded · build <b>T1-tone</b></p>
+<p class="sub">Cantonese F0 · on-device · nothing uploaded · build <b>T2-repeats</b></p>
 
 <!-- ── Speaker ───────────────────────────────────────────────────────────── -->
 <div class="card">
@@ -117,9 +117,11 @@
     <button id="mic">Grant mic</button>
   </div>
   <div class="sub" style="margin:10px 0 0">
-    Record all six on one speaker, then switch and do the other. Each speaker is
-    measured against their own median pitch, so a low voice and a high voice are
-    directly comparable.
+    Record each tone <b>three times</b> for one speaker, then switch and do the
+    other. The repeats are not optional — they measure how much you vary saying
+    the same tone twice, and that is what every other number gets judged against.
+    <b>Hold each syllable for about half a second</b>; takes under 150 ms are too
+    short to describe a shape.
   </div>
   <div class="status" id="micStatus"></div>
 </div>
@@ -154,7 +156,7 @@
 <script>
 'use strict';
 
-const PROBE_BUILD = 'T1-tone';
+const PROBE_BUILD = 'T2-repeats';
 
 /* ═══════════════════════════════════════════════════════════════════════════
    TEST SET — the six-tone minimal set on the syllable "si".
@@ -184,10 +186,21 @@ const FRAME = 1024;      // 64 ms — long enough to resolve F0 down to ~60 Hz
 const HOP = 160;         // 10 ms steps
 const FMIN = 60, FMAX = 500;   // covers a low male voice through a high female one
 const POINTS = 20;       // contour resampled to this many points for comparison
+const REPS_MAX = 3;      // takes per tone — enough for a noise floor, few enough to sit through
+const MIN_MS = 150;      /* Run 1's native takes ran 50–260 ms, several near 100 ms — ten frames,
+                            too few to describe a contour. A fluent speaker says an isolated
+                            syllable fast; a learner drawls it, which quietly made the two sets
+                            non-comparable. Warn rather than reject, but warn loudly. */
 
 let speaker = 'learner';
 let stream = null;
-/* takes[speaker][testId] = { hz:[], semis:[], contour:[POINTS], meanSemi, slope, voicedMs } */
+/* takes[speaker][testId] = { reps:[{hz:[],voicedMs}], contour, meanSemi, slope, spread }
+   REPEATS ARE THE POINT. Run 1 produced between-tone distances with nothing to
+   compare them against. A gap of 1.5 semitones between two tones means nothing
+   until you know how far apart two takes of the SAME tone land — that is the
+   noise floor, and a between-tone gap only counts if it clears it. Up to
+   REPS_MAX takes per tone; the contour used is their average, and their mean
+   pairwise distance is the noise floor. */
 const takes = { learner: {}, native: {} };
 
 const $ = id => document.getElementById(id);
@@ -356,7 +369,9 @@ function resample(series, n) {
    as more of the speaker's range is captured. */
 function speakerMedian(spk) {
   const all = [];
-  Object.values(takes[spk]).forEach(t => { if (t && t.hz) all.push(...t.hz); });
+  Object.values(takes[spk]).forEach(t => {
+    if (t && t.reps) t.reps.forEach(r => all.push(...r.hz));
+  });
   return median(all);
 }
 
@@ -364,15 +379,34 @@ function recomputeSemitones(spk) {
   const med = speakerMedian(spk);
   if (!med) return;
   Object.values(takes[spk]).forEach(t => {
-    if (!t || !t.hz || !t.hz.length) return;
-    t.semis = t.hz.map(f => 12 * Math.log2(f / med));
-    t.contour = resample(t.semis, POINTS);
-    t.meanSemi = t.semis.reduce((a, b) => a + b, 0) / t.semis.length;
-    // Slope across the contour: positive rises, negative falls. Separates the
-    // contour tones (2, 4, 5) from the level ones (1, 3, 6).
-    t.slope = t.contour ? t.contour[POINTS - 1] - t.contour[0] : 0;
+    if (!t || !t.reps || !t.reps.length) return;
+    t.reps.forEach(r => {
+      r.semis = r.hz.map(f => 12 * Math.log2(f / med));
+      r.contour = resample(r.semis, POINTS);
+    });
+    const good = t.reps.filter(r => r.contour);
+    if (!good.length) return;
+    // Average the repeats point-by-point. One odd take should not define a tone.
+    t.contour = [];
+    for (let i = 0; i < POINTS; i++)
+      t.contour.push(good.reduce((a, r) => a + r.contour[i], 0) / good.length);
+    t.meanSemi = t.contour.reduce((a, b) => a + b, 0) / POINTS;
+    t.slope = t.contour[POINTS - 1] - t.contour[0];
+    // Spread = mean pairwise distance between this tone's own repeats.
+    let sum = 0, n = 0;
+    for (let i = 0; i < good.length; i++)
+      for (let j = i + 1; j < good.length; j++) { sum += contourDistance(good[i].contour, good[j].contour); n++; }
+    t.spread = n ? sum / n : null;
   });
   takes[spk]._median = med;
+}
+
+/* THE NOISE FLOOR. Averaged across every tone that has more than one take, this
+   is how far apart two attempts at the SAME tone land. Any between-tone gap
+   smaller than this is indistinguishable from you simply saying it twice. */
+function noiseFloor(spk) {
+  const vals = Object.values(takes[spk]).filter(t => t && t.spread != null).map(t => t.spread);
+  return vals.length ? vals.reduce((a, b) => a + b, 0) / vals.length : null;
 }
 
 /* ── Separability ─────────────────────────────────────────────────────────── */
@@ -512,14 +546,23 @@ function drawSummary() {
                    + `<td class="sub">${p.hard ? 'expected close' : ''}</td></tr>`;
             }).join('')
           + '</tbody></table>';
+    const nf = noiseFloor(speaker);
+    if (nf != null) {
+      const clears = sep.pairs.filter(p => p.d > nf * 1.5).length;
+      html += `<div class="sub" style="margin-top:8px"><b>Noise floor: ${nf.toFixed(2)} st</b> — how far `
+            + `apart two takes of the SAME tone land. ${clears} of ${sep.pairs.length} tone pairs are `
+            + `more than 1.5× that apart, which is the only bar that means anything: a gap smaller than `
+            + `your own repeat variation is not a difference the app could ever act on.</div>`;
+    } else {
+      html += '<div class="sub" style="margin-top:8px">Record each tone at least twice to establish '
+            + 'the noise floor. Without it these distances have nothing to be measured against.</div>';
+    }
     if (worstEasy) {
       const d = worstEasy.d;
-      const read = d >= 2
-        ? 'The wide contrasts are holding up — bigger than the wobble between two takes of the same tone.'
-        : d >= 1
-        ? 'Even the contrasts that should be wide are coming out narrow. Check the recordings are clean before concluding anything.'
-        : 'Contrasts that ought to be obvious are not separating. Something is wrong with the recording or the tracking, not with Cantonese.';
-      html += `<div class="sub" style="margin-top:8px">Tightest pair outside the low-tone cluster: `
+      const read = nf == null ? 'No noise floor yet.'
+        : d > nf * 1.5 ? 'Comfortably above your repeat variation — a real difference.'
+        : 'Not clear of your own repeat variation. Either the takes are short or the tones are being produced too alike.';
+      html += `<div class="sub" style="margin-top:6px">Tightest pair outside the low-tone cluster: `
             + `<b>${worstEasy.a} vs ${worstEasy.b}, ${d.toFixed(2)} st</b>. ${read}</div>`;
     }
     html += '<div class="sub" style="margin-top:6px">Tones 3, 4, 5 and 6 all sit low in the range and '
@@ -565,20 +608,24 @@ function build() {
           const pcm = await toPcm16k(blob);
           const hz = track(pcm);
           const ms = Math.round(hz.length * HOP / RATE * 1000);
-          if (hz.length < 5) {
-            $('st-' + t.id).innerHTML = '<span class="err">Too little voiced audio ('
-              + ms + ' ms). Say it louder and hold it a beat longer.</span>';
-            log(t.id + ' [' + speaker + ']: only ' + hz.length + ' voiced frames — rejected.');
+          if (hz.length < 8) {
+            $('st-' + t.id).innerHTML = '<span class="err">Only ' + ms + ' ms voiced — too short to '
+              + 'describe a contour. Hold the syllable for about half a second.</span>';
+            log(t.id + ' [' + speaker + ']: ' + ms + 'ms, ' + hz.length + ' frames — REJECTED.');
             return;
           }
-          takes[speaker][t.id] = { hz, voicedMs: ms };
-          recomputeSemitones(speaker);
-          const k = takes[speaker][t.id];
-          $('st-' + t.id).textContent = 'height ' + k.meanSemi.toFixed(1)
-            + ' st · slope ' + (k.slope > 0 ? '+' : '') + k.slope.toFixed(1) + ' st · ' + ms + ' ms';
-          log(t.id + ' [' + speaker + ']: ' + ms + 'ms voiced, median '
-              + Math.round(median(hz)) + ' Hz, height ' + k.meanSemi.toFixed(1)
-              + ' st, slope ' + k.slope.toFixed(1) + ' st.');
+          const slot = takes[speaker][t.id] || (takes[speaker][t.id] = { reps: [] });
+          slot.reps.push({ hz, voicedMs: ms });
+          if (slot.reps.length > REPS_MAX) slot.reps.shift();   // keep the most recent
+          /* Log only what will not change later. Heights are relative to the
+             speaker median, which moves as takes accumulate, so logging a height
+             here would record a number the screen later contradicts — exactly the
+             kind of self-misleading instrumentation that cost three runs on the
+             Azure probe. Per-take median Hz and duration are stable; heights live
+             on screen where they are always current. */
+          log(t.id + ' [' + speaker + '] take ' + slot.reps.length + '/' + REPS_MAX
+              + ': ' + ms + 'ms voiced, median ' + Math.round(median(hz)) + ' Hz'
+              + (ms < MIN_MS ? '  ⚠ SHORT — contour unreliable below ' + MIN_MS + 'ms' : ''));
           refresh();
         } catch (e) {
           $('st-' + t.id).innerHTML = '<span class="err">' + e.message + '</span>';
@@ -590,16 +637,18 @@ function build() {
 }
 
 function refresh() {
-  // Recompute both speakers: the median moves as takes accumulate, so earlier
-  // contours must be re-normalised rather than left on a stale reference.
   recomputeSemitones('learner'); recomputeSemitones('native');
   TESTS.forEach(t => {
     const k = takes[speaker][t.id];
     const el = $('st-' + t.id);
-    if (el && k && k.contour) {
-      el.textContent = 'height ' + k.meanSemi.toFixed(1)
-        + ' st · slope ' + (k.slope > 0 ? '+' : '') + k.slope.toFixed(1) + ' st · ' + k.voicedMs + ' ms';
-    } else if (el && !k) { el.textContent = ''; }
+    if (!el) return;
+    if (k && k.contour) {
+      const shortest = Math.min(...k.reps.map(r => r.voicedMs));
+      el.innerHTML = k.reps.length + '/' + REPS_MAX + ' takes · height ' + k.meanSemi.toFixed(1)
+        + ' st · slope ' + (k.slope > 0 ? '+' : '') + k.slope.toFixed(1) + ' st'
+        + (k.spread != null ? ' · repeat spread ' + k.spread.toFixed(2) + ' st' : '')
+        + (shortest < MIN_MS ? ' <span class="err">· short take, hold it longer</span>' : '');
+    } else { el.textContent = ''; }
   });
   drawChart(); drawSummary();
 }
