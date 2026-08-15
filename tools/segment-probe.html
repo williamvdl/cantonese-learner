@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Syllable Segmentation Probe</title>
 <!--
-  tools/segment-probe.html — build S3
+  tools/segment-probe.html — build S4
 
   WHY THIS EXISTS
   ---------------
@@ -230,7 +230,7 @@
 <body>
 
 <h1>Syllable Segmentation Probe</h1>
-<p class="sub">Can a multi-syllable word be split into syllables from its pitch track alone? · build <b>S3</b></p>
+<p class="sub">Can a multi-syllable word be split into syllables from its pitch track alone? · build <b>S4</b></p>
 
 <!-- ── Reference ─────────────────────────────────────────────────────────── -->
 <div class="card">
@@ -253,7 +253,8 @@
     there actually are, then grades each recovered syllable.
   </div>
   <div class="row">
-    <button class="primary" id="sweep" disabled>Run sweep</button>
+    <button class="primary" id="grid" disabled>Run all 7 (pre-registered grid)</button>
+    <button id="sweep" disabled>Run once, with the settings below</button>
     <select id="limit">
       <option value="0">All words</option>
       <option value="60">First 60 (quick look)</option>
@@ -290,6 +291,10 @@
     The prediction is fixed by spelling and no setting changes it. The bar,
     stated before the run: <b>LONG above SHORT, SHORT above NONE</b>. If no
     setting produces that ordering, the model is wrong rather than the settings.
+    <b>Run all 7</b> works through a grid fixed in the source — one setting moved
+    at a time from the baseline — and appends every run to a single log, so the
+    whole set can be copied once. The three dropdowns apply to the single-run
+    button only; the grid ignores them and sets its own.
   </p>
   <progress id="bar" value="0" max="100" style="display:none;margin-top:12px"></progress>
   <div class="sub" id="sweepText" style="margin-top:8px">Idle.</div>
@@ -453,39 +458,52 @@ function median(a){ if(!a.length) return null; const s=[...a].sort((x,y)=>x-y); 
 /* Returns the per-frame pitch track (nulls where unvoiced) alongside the frame
    energies. tone-reference.html collapses this to the single longest run; the
    whole question here is what the OTHER runs are, so nothing is collapsed. */
-function analyse(pcm){
-  const rms = [];
+/* ── Two stages, and the split is what makes a seven-run grid affordable ──
+   YIN's output for a frame — its frequency estimate and how confident that
+   estimate is — depends only on the audio and on YIN_THRESHOLD, which is fixed.
+   None of the three adjustable settings changes it. So the expensive work is
+   done ONCE per clip and cached, and each run of the grid is a re-thresholding
+   of numbers already in memory. Seven runs then cost barely more than one, and
+   395 clips are fetched and decoded a single time rather than seven times. */
+function precompute(pcm){
+  const rms = [], hz = [], aper = [];
   for (let i = 0; i+FRAME < pcm.length; i += HOP){
     let s = 0; for (let k = 0; k < FRAME; k++) s += pcm[i+k]*pcm[i+k];
     rms.push(Math.sqrt(s/FRAME));
   }
-  const gate = Math.max(...rms, 1e-9) * GATE_FRACTION;
-  const raw = [];
+  const peak = Math.max(...rms, 1e-9);
+  /* A floor well below the lowest gate any run will use, so no run is ever
+     denied a frame that its own gate would have admitted. Its only job is to
+     avoid spending YIN on true silence. */
+  const floor = peak * 0.005;
   for (let n = 0, i = 0; i+FRAME < pcm.length; i += HOP, n++){
-    if (rms[n] < gate){ raw.push(null); continue; }
+    if (rms[n] < floor){ hz.push(null); aper.push(1); continue; }
     const r = yin(pcm, i, YIN_THRESHOLD);
-    /* Two gates, not one: enough energy, AND a periodicity estimate confident
-       enough to call the frame voiced. A fricative can pass the first easily. */
-    raw.push(r && r.aper < VOICE_THRESHOLD ? r.hz : null);
+    hz.push(r ? r.hz : null);
+    aper.push(r ? r.aper : 1);
   }
+  return { rms, hz, aper, peak };
+}
+
+/* Apply one run's settings to a cached clip. Returns the raw voicing track and
+   the median-filtered one; the raw feeds run counting after gap closing, the
+   filtered feeds pitch values for grading. */
+function trackFrom(pre, gateFraction, voiceThreshold){
+  const gate = pre.peak * gateFraction;
+  const raw = pre.hz.map((v,n) =>
+    (v != null && pre.rms[n] >= gate && pre.aper[n] < voiceThreshold) ? v : null);
   /* Median filter over 5 frames kills residual octave jumps, which matters for
      reading a PITCH VALUE. It also closes any voiceless gap shorter than about
-     30 ms — which is fatal for COUNTING RUNS, because a short gap is exactly
-     what a boundary looks like. S1 ran both jobs off this filtered track and
-     that is the likeliest reason /h/ boundaries went missing. The two tracks
-     are kept apart here and the caller picks. */
+     30 ms — fatal for COUNTING RUNS, because a short gap is what a boundary
+     looks like. S1 and S2 ran both jobs off this one track. They are separate
+     here: gap closing is an explicit parameter, not a side effect of smoothing. */
   const f0 = raw.map((v,i) => {
     const w = raw.slice(Math.max(0,i-2), i+3).filter(x => x != null);
     return w.length >= 3 ? median(w) : v;
   });
-  return { f0, raw, rms };
+  return { raw, f0 };
 }
 
-/* Close every voiceless interval shorter than minGap. Run first, before runs
-   are counted, so a one-frame dropout inside a vowel never becomes a boundary.
-   The value written into a closed gap is irrelevant — only the voiced/unvoiced
-   pattern matters here, and the pitch values used for grading come from the
-   separately filtered track. */
 function closeGaps(track, minGap){
   const out = track.slice();
   let i = 0;
@@ -585,6 +603,7 @@ function adoptReference(r, where){
     + ` · high-level threshold derived at <b>${HIGH_TH.toFixed(2)} st</b>`;
   $('refPasteWrap').style.display = 'none';
   $('sweep').disabled = false;
+  $('grid').disabled = false;
   log('Reference adopted from ' + where + '. High-level threshold ' + HIGH_TH.toFixed(2) + ' st.');
 }
 
@@ -637,132 +656,200 @@ async function decodeClip(ctx, url){
 
 /* ── Section A ───────────────────────────────────────────────────────────── */
 let SWEEP = null;
+let CORPUS = null;      /* words, decoded and precomputed once, reused by every run */
+let GRID_RESULTS = [];
 
-async function runSweep(){
-  $('sweep').disabled = true;
-  logBuf = []; log('Reading corpus…');
+/* THE GRID IS PRE-REGISTERED IN CODE, NOT CHOSEN AFTER LOOKING AT RESULTS.
+   Three adjustable settings and a result you would like to improve is how a
+   measurement quietly becomes a fitting exercise. Fixing the whole set in
+   advance and reading every cell together is what keeps it a sweep: one
+   setting moves at a time from a baseline, and no run here was picked because
+   an earlier one disappointed. If the ordering holds in exactly one isolated
+   cell out of seven, that is noise and should be read as a failure, not seized
+   on as the answer. */
+const GRID = [
+  { label:'1 baseline',      voice:0.20, gate:0.05, gap:3 },
+  { label:'2 gate 0.02',     voice:0.20, gate:0.02, gap:3 },
+  { label:'3 gate 0.10 (S1)',voice:0.20, gate:0.10, gap:3 },
+  { label:'4 voicing 0.10',  voice:0.10, gate:0.05, gap:3 },
+  { label:'5 voicing 0.30',  voice:0.30, gate:0.05, gap:3 },
+  { label:'6 gap 5 · 50 ms', voice:0.20, gate:0.05, gap:5 },
+  { label:'7 gap 2 · 20 ms', voice:0.20, gate:0.05, gap:2 }
+];
+
+async function loadCorpus(limit){
+  if (CORPUS && CORPUS.limit === limit) return CORPUS;
+  log('Reading corpus…');
   let words = await collectWords();
   const byClass = {};
   words.forEach(w => byClass[w.wordClass] = (byClass[w.wordClass]||0)+1);
   log('Multi-syllable words with clean tone digits: ' + words.length);
   log('  predicted by spelling: ' + Object.entries(byClass).map(([k,v]) => k+'→'+v).join('  '));
-
-  VOICE_THRESHOLD = +$('voiceTh').value;
-  GATE_FRACTION   = +$('gateFrac').value;
-  MIN_GAP         = +$('minGap').value;
-  log('Settings: voicing ' + VOICE_THRESHOLD + ', gate ' + GATE_FRACTION
-      + ', min gap ' + MIN_GAP + ' frames, min run ' + MIN_RUN
-      + ' frames, pitch values still at YIN ' + YIN_THRESHOLD + '.');
-
-  const lim = +$('limit').value;
-  if (lim && words.length > lim){ words = words.slice(0, lim); log('  limited to first ' + lim + ' for this run'); }
+  if (limit && words.length > limit){ words = words.slice(0, limit); log('  limited to first ' + limit); }
 
   const Ctx = window.AudioContext || window.webkitAudioContext;
   const ctx = new Ctx();
   $('bar').style.display = 'block';
-
-  /* Pass one: track every clip, keep the frames. The voice median has to be
-     computed across the whole set before any syllable can be expressed in
-     semitones, so nothing can be graded until every clip has been read. */
   const rows = [];
-  const allHz = [];
   let done = 0, failed = 0;
   for (const w of words){
     try {
       const pcm = await decodeClip(ctx, '../audio/words/' + w.id + '.mp3');
-      const { f0, raw, rms } = analyse(pcm);
-      /* Gap-closed raw track: spurious dropouts removed without closing the
-         genuine gaps a median filter would also have swallowed. The median
-         filtered count is kept alongside as the S1/S2 comparison. */
-      const gapped = closeGaps(raw, MIN_GAP);
-      const runs = voicedRuns(gapped, MIN_RUN);
-      const runsFiltered = voicedRuns(f0, MIN_RUN).length;
-      const altRuns = MIN_RUN_ALT.map(m => voicedRuns(gapped, m).length);
-      f0.forEach(v => { if (v != null) allHz.push(v); });
-      rows.push({ w, f0, raw, rms, runs, runsFiltered, altRuns });
+      rows.push({ w, pre: precompute(pcm) });
     } catch (e){ failed++; log('  skip ' + w.id + ' (' + w.c + ') — ' + e.message); }
     done++;
     $('bar').value = done/words.length*100;
-    $('sweepText').textContent = 'Analysed ' + done + ' / ' + words.length + ' clips…';
+    $('sweepText').textContent = 'Decoding ' + done + ' / ' + words.length + ' clips (once, for all runs)…';
   }
+  $('bar').style.display = 'none';
+  log('Decoded and analysed ' + rows.length + ' clips, ' + failed + ' unreadable. Cached for every run below.\n');
+  CORPUS = { rows, limit };
+  return CORPUS;
+}
 
+/* One run of the grid against the cached corpus. No audio is touched here. */
+function evaluate(set){
+  const { rows } = CORPUS;
+  const tracks = rows.map(r => {
+    const { raw, f0 } = trackFrom(r.pre, set.gate, set.voice);
+    const gapped = closeGaps(raw, set.gap);
+    return { w:r.w, rms:r.pre.rms, f0, raw, gapped,
+             runs: voicedRuns(gapped, MIN_RUN),
+             runsFiltered: voicedRuns(f0, MIN_RUN).length,
+             altRuns: MIN_RUN_ALT.map(m => voicedRuns(gapped, m).length) };
+  });
+
+  const allHz = [];
+  tracks.forEach(t => t.f0.forEach(v => { if (v != null) allHz.push(v); }));
   const med = median(allHz);
-  log('\nAnalysed ' + rows.length + ' clips, ' + failed + ' unreadable. Voice median ' + Math.round(med) + ' Hz.');
 
-  /* Declination, estimated the same way tone-reference does: the mean slope
-     shared by every syllable measured. A clip is a whole utterance, so it
-     carries a phrase-final fall that belongs to no tone. */
+  /* Declination, estimated the way tone-reference does: the mean slope shared
+     by every voiced run measured. A clip is a whole utterance, so it carries a
+     phrase-final fall that belongs to no tone. */
   const rawSlopes = [];
-  for (const r of rows){
-    for (const run of r.runs){
+  for (const t of tracks){
+    for (const run of t.runs){
       const st = [];
-      for (let i = run.a; i < run.b; i++) if (r.f0[i] != null) st.push(12*Math.log2(r.f0[i]/med));
+      for (let i = run.a; i < run.b; i++) if (t.f0[i] != null) st.push(12*Math.log2(t.f0[i]/med));
       const c = resample(st, POINTS);
       if (c) rawSlopes.push(c[POINTS-1] - c[0]);
     }
   }
   const declination = rawSlopes.reduce((a,b)=>a+b,0) / (rawSlopes.length || 1);
-  log('Declination across ' + rawSlopes.length + ' voiced runs: ' + declination.toFixed(2) + ' st (removed before classifying).');
 
-  /* Pass two: judge. */
   const stats = {};
   for (const k of ['LONG','SHORT','NONE'])
     stats[k] = { n:0, runMatch:0, runOver:0, runUnder:0, filtMatch:0, syl:0, sylOK:0, altShift:[0,0], examples:[] };
-
-  /* Per-onset tally, two-syllable words only. One boundary per word means the
-     run count tests that boundary and nothing else, so a failure can be
-     attributed to a specific consonant instead of to the word as a whole. */
   const onsetTally = {};
 
-  for (const r of rows){
-    const w = r.w, s = stats[w.wordClass];
-    s.n++;
-    const expected = w.groups.length;
-    const got = r.runs.length;
-    if (got === expected) s.runMatch++;
-    else if (got > expected) s.runOver++;
-    else s.runUnder++;
-    if (r.runsFiltered === expected) s.filtMatch++;
-    r.altRuns.forEach((n,i) => { if ((n === expected) !== (got === expected)) s.altShift[i]++; });
+  for (const t of tracks){
+    const w = t.w, st = stats[w.wordClass];
+    st.n++;
+    const expected = w.groups.length, got = t.runs.length;
+    if (got === expected) st.runMatch++;
+    else if (got > expected) st.runOver++;
+    else st.runUnder++;
+    if (t.runsFiltered === expected) st.filtMatch++;
+    t.altRuns.forEach((n,i) => { if ((n === expected) !== (got === expected)) st.altShift[i]++; });
 
     if (w.syls.length === 2){
       const key = checkedCoda(w.syls[0]) ? '(checked coda)' : onsetKey(w.syls[1]);
       const o = onsetTally[key] || (onsetTally[key] = { key, cls: w.wordClass, n:0, ok:0, over:0, under:0 });
       o.n++;
       if (got === expected) o.ok++;
-      else if (got > expected) o.over++;      /* a break invented, or one syllable split in two */
-      else o.under++;                          /* the boundary produced no gap at all */
+      else if (got > expected) o.over++;   /* a break invented, or a syllable split in two */
+      else o.under++;                       /* the boundary produced no gap at all */
     }
 
     if (got !== expected){
-      if (s.examples.length < 4) s.examples.push(w.c + ' (' + w.j + ') expected ' + expected + ', got ' + got);
-      continue;                       /* cannot align, so nothing to grade */
+      if (st.examples.length < 4) st.examples.push(w.c + ' (' + w.j + ') expected ' + expected + ', got ' + got);
+      continue;
     }
 
-    /* Runs map onto groups in order. A group holding more than one syllable is
-       split on its energy dip — the NONE class is precisely the set where that
-       fallback carries the whole result. */
     let segs = [];
-    r.runs.forEach((run, gi) => { segs = segs.concat(splitByEnergyDip(run, r.rms, w.groups[gi].length)); });
+    t.runs.forEach((run, gi) => { segs = segs.concat(splitByEnergyDip(run, t.rms, w.groups[gi].length)); });
     if (segs.length !== w.syls.length) continue;
 
     segs.forEach((seg, si) => {
-      const st = [];
-      for (let i = seg.a; i < seg.b; i++) if (r.f0[i] != null) st.push(12*Math.log2(r.f0[i]/med));
-      const c = resample(st, POINTS);
+      const stv = [];
+      for (let i = seg.a; i < seg.b; i++) if (t.f0[i] != null) stv.push(12*Math.log2(t.f0[i]/med));
+      const c = resample(stv, POINTS);
       if (!c) return;
-      s.syl++;
+      st.syl++;
       const heard = classifySyllable(c, declination).cls;
-      if (heard === TARGET_CLASS[w.tones[si]]) s.sylOK++;
+      if (heard === TARGET_CLASS[w.tones[si]]) st.sylOK++;
     });
   }
+  return { stats, onsetTally, med, declination, set };
+}
 
-  SWEEP = { stats, onsetTally, med, declination, analysed: rows.length,
-            settings: { VOICE_THRESHOLD, GATE_FRACTION, MIN_GAP, MIN_RUN } };
-  renderSweep(stats, onsetTally);
-  $('bar').style.display = 'none';
-  $('sweepText').textContent = 'Done — ' + rows.length + ' clips.';
-  $('sweep').disabled = false;
+function logRun(res){
+  const s = res.stats, order = ['LONG','SHORT','NONE'];
+  const r = k => s[k].n ? s[k].runMatch/s[k].n : 0;
+  const ordered = r('LONG') >= r('SHORT') && r('SHORT') >= r('NONE');
+  log('───────────────────────────────────────────────');
+  log('RUN ' + res.set.label + '  ·  voicing ' + res.set.voice + '  gate ' + res.set.gate
+      + '  min gap ' + res.set.gap + ' frames  (min run ' + MIN_RUN + ', YIN ' + YIN_THRESHOLD + ')');
+  log('Voice median ' + Math.round(res.med) + ' Hz · declination ' + res.declination.toFixed(2) + ' st');
+  log('Run agreement:      ' + order.map(k => k + ' ' + pct(s[k].runMatch, s[k].n)).join('  '));
+  log('  too few / too many: ' + order.map(k => k + ' ' + s[k].runUnder + '/' + s[k].runOver).join('  '));
+  log('Median-filtered:    ' + order.map(k => k + ' ' + pct(s[k].filtMatch, s[k].n)).join('  '));
+  log('Class recovery:     ' + order.map(k => k + ' ' + pct(s[k].sylOK, s[k].syl)).join('  '));
+  log('ORDERING LONG ≥ SHORT ≥ NONE: ' + (ordered ? 'HOLDS' : 'does not hold'));
+  const os = Object.values(res.onsetTally).sort((a,b) => (a.ok/a.n) - (b.ok/b.n));
+  log('Per onset  [onset  n  found%  no-gap  extra]:');
+  os.forEach(o => log('   ' + o.key.padEnd(22) + String(o.n).padStart(4)
+      + pct(o.ok,o.n).padStart(8) + String(o.under).padStart(7) + String(o.over).padStart(7)
+      + (o.n < 10 ? '   (too few to conclude)' : '')));
+  return ordered;
+}
+
+async function runSweep(){
+  $('sweep').disabled = true; $('grid').disabled = true;
+  logBuf = [];
+  const set = { label:'manual', voice:+$('voiceTh').value, gate:+$('gateFrac').value, gap:+$('minGap').value };
+  await loadCorpus(+$('limit').value);
+  const res = evaluate(set);
+  logRun(res);
+  SWEEP = res;
+  renderSweep(res.stats, res.onsetTally);
+  $('sweepText').textContent = 'Done — ' + CORPUS.rows.length + ' clips.';
+  $('sweep').disabled = false; $('grid').disabled = false;
+}
+
+async function runGrid(){
+  $('sweep').disabled = true; $('grid').disabled = true;
+  logBuf = [];
+  log('PRE-REGISTERED GRID — ' + GRID.length + ' runs, fixed in code before any of them ran.');
+  log('Bar set in advance: LONG ≥ SHORT ≥ NONE.\n');
+  await loadCorpus(+$('limit').value);
+  GRID_RESULTS = [];
+  for (let i = 0; i < GRID.length; i++){
+    $('sweepText').textContent = 'Run ' + (i+1) + ' of ' + GRID.length + ' — ' + GRID[i].label + '…';
+    await new Promise(r => setTimeout(r, 0));      /* let the page paint between runs */
+    const res = evaluate(GRID[i]);
+    res.ordered = logRun(res);
+    GRID_RESULTS.push(res);
+  }
+  log('\n═══════════════════ ALL ' + GRID.length + ' RUNS ═══════════════════');
+  log('run                    LONG   SHORT    NONE   ordering');
+  GRID_RESULTS.forEach(r => {
+    const s = r.stats;
+    log('  ' + r.set.label.padEnd(20)
+        + pct(s.LONG.runMatch,s.LONG.n).padStart(7)
+        + pct(s.SHORT.runMatch,s.SHORT.n).padStart(8)
+        + pct(s.NONE.runMatch,s.NONE.n).padStart(8)
+        + '   ' + (r.ordered ? 'HOLDS' : '—'));
+  });
+  const held = GRID_RESULTS.filter(r => r.ordered).length;
+  log('\nOrdering holds in ' + held + ' of ' + GRID.length + ' runs.');
+  /* Last displayed is the baseline, so the tables on screen always describe a
+     known run rather than whichever happened to finish last. */
+  const shown = GRID_RESULTS[0];
+  SWEEP = shown;
+  renderSweep(shown.stats, shown.onsetTally);
+  $('sweepText').textContent = 'Grid complete — ' + GRID.length + ' runs. Tables show run 1; the log has all ' + GRID.length + '.';
+  $('sweep').disabled = false; $('grid').disabled = false;
 }
 
 function renderSweep(stats, onsetTally){
@@ -862,7 +949,9 @@ function renderSweep(stats, onsetTally){
   log('Class recovery (upper bound): ' + order.map(k => k+' '+pct(stats[k].sylOK,stats[k].syl)).join('  '));
 }
 
-$('sweep').onclick = () => runSweep().catch(e => { log('SWEEP FAILED: ' + e.message); $('sweep').disabled = false; });
+const unlock = () => { $('sweep').disabled = false; $('grid').disabled = false; };
+$('sweep').onclick = () => runSweep().catch(e => { log('SWEEP FAILED: ' + e.message); unlock(); });
+$('grid').onclick  = () => runGrid().catch(e  => { log('GRID FAILED: '  + e.message); unlock(); });
 
 /* ── Section B: the same prediction, on a human voice ────────────────────── */
 let MIC_WORDS = [], micTakes = {}, activeRec = null;
@@ -921,7 +1010,7 @@ async function judgeTake(i, blob){
   VOICE_THRESHOLD = +$('voiceTh').value;
   GATE_FRACTION   = +$('gateFrac').value;
   MIN_GAP         = +$('minGap').value;
-  const { raw } = analyse(pcm);
+  const { raw } = trackFrom(precompute(pcm), GATE_FRACTION, VOICE_THRESHOLD);
   const runs = voicedRuns(closeGaps(raw, MIN_GAP), MIN_RUN);
   micTakes[i] = { runs: runs.length, expected: w.groups.length };
   const ok = runs.length === w.groups.length;
