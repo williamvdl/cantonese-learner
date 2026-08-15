@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Syllable Segmentation Probe</title>
 <!--
-  tools/segment-probe.html — build S1
+  tools/segment-probe.html — build S2
 
   WHY THIS EXISTS
   ---------------
@@ -82,6 +82,55 @@
   addition is that this page keeps ALL voiced runs rather than the longest, which
   is the whole point.
 
+  WHAT S2 CHANGED, AND WHY
+  ------------------------
+  S1's sweep produced an ordering that cannot be true: LONG 72.2%, SHORT 84.5%,
+  NONE 62.1%. LONG is the class where a break is most certain — tens of ms of
+  frication or aspiration — so it cannot segment WORSE than the class that
+  depends on a brief stop closure. When a probe reports something physically
+  backwards, the probe is the first suspect, not the phenomenon. S1's own
+  sensitivity line said as much: 56 words changed verdict at MIN_RUN 3 and 76 at
+  8, out of 395. The run count was being decided by settings, not by sound.
+
+  Three settings were inherited from tone-reference.html without being examined,
+  and all three work against counting runs:
+
+    1. THE MEDIAN FILTER. tone-reference extracts the single longest voiced run,
+       so closing short holes in the track is a benefit there. Here a hole IS the
+       answer. A 5-frame median filter erases any voiceless interval shorter than
+       ~30 ms — which is most of an intervocalic /h/. S1's comment described this
+       as helpful. It was backwards. S2 counts runs on the RAW track and uses the
+       filtered one only for pitch values, and shows both so the size of the
+       effect is visible rather than swapped in silently.
+    2. THE YIN THRESHOLD. 0.40 was chosen by tone-reference to get enough usable
+       clips out of mp3-coded audio. That is a threshold for accepting a pitch
+       VALUE. Reused as a voiced/unvoiced decision it is far too permissive, and
+       will report periodicity inside frication. S2 separates the two: the pitch
+       value still comes from 0.40, the voicing decision uses its own setting.
+    3. THE ENERGY GATE at 10% of peak, likewise never examined for this purpose.
+
+  HOW TO USE THE KNOBS WITHOUT FOOLING YOURSELF
+  ---------------------------------------------
+  Three adjustable settings and a result you want to improve is how a measurement
+  turns into a fitting exercise. The guard is that THE PREDICTION CANNOT BE TUNED:
+  it comes from spelling, it is fixed before any audio is read, and no setting
+  changes it. So there is a falsifiable bar, stated in advance:
+
+      LONG MUST COME OUT ABOVE SHORT, AND SHORT ABOVE NONE.
+
+  That ordering is a physical claim about consonants, not a fitted one. If some
+  setting produces it, the settings were the problem and the number under that
+  setting is real. If NO setting produces it, the classification model is wrong
+  and no amount of adjustment will rescue it — which is itself a finding, and the
+  point at which Azure's per-phoneme alignment becomes the honest answer.
+
+  S2 also adds the breakdown that makes a failure actionable: a per-onset table
+  over the 347 TWO-syllable words. Two syllables means exactly one boundary, so
+  the run count tests that boundary and nothing else — no attribution problem.
+  S1's misses were 你好 (nei5 hou2), 唔係 (m4 hai6), 二十 (ji6 sap6) and 三十
+  (saam1 sap6): every one an /h/ or /s/ onset. That is either instrumentation or
+  a real fact about weak Cantonese /h/, and only a per-onset count can tell which.
+
   NOT APP CODE. Diagnostic only, not in the sw.js precache list, no CACHE_VERSION
   bump. Read-only apart from the microphone in section B; writes nothing.
 -->
@@ -128,7 +177,7 @@
 <body>
 
 <h1>Syllable Segmentation Probe</h1>
-<p class="sub">Can a multi-syllable word be split into syllables from its pitch track alone? · build <b>S1</b></p>
+<p class="sub">Can a multi-syllable word be split into syllables from its pitch track alone? · build <b>S2</b></p>
 
 <!-- ── Reference ─────────────────────────────────────────────────────────── -->
 <div class="card">
@@ -158,6 +207,28 @@
       <option value="150">First 150</option>
     </select>
   </div>
+  <div class="row" style="margin-top:10px">
+    <label class="sub" style="margin:0">Voicing decision
+      <select id="voiceTh">
+        <option value="0.10">strict · 0.10</option>
+        <option value="0.20" selected>0.20</option>
+        <option value="0.30">0.30</option>
+        <option value="0.40">as S1 · 0.40</option>
+      </select>
+    </label>
+    <label class="sub" style="margin:0">Energy gate
+      <select id="gateFrac">
+        <option value="0.05">0.05</option>
+        <option value="0.10" selected>as S1 · 0.10</option>
+        <option value="0.20">0.20</option>
+      </select>
+    </label>
+  </div>
+  <p class="sub" style="margin:10px 0 0">
+    The prediction is fixed by spelling and no setting changes it. The bar,
+    stated before the run: <b>LONG above SHORT, SHORT above NONE</b>. If no
+    setting produces that ordering, the model is wrong rather than the settings.
+  </p>
   <progress id="bar" value="0" max="100" style="display:none;margin-top:12px"></progress>
   <div class="sub" id="sweepText" style="margin-top:8px">Idle.</div>
   <div id="sweepOut"></div>
@@ -193,9 +264,18 @@
    drift, three pages stop being comparable and a difference in result becomes
    impossible to attribute. */
 const RATE = 16000, FRAME = 1024, HOP = 160, FMIN = 60, FMAX = 500, POINTS = 20;
-const YIN_THRESHOLD = 0.40;    /* tone-reference swept this: 0.15→91 clips usable,
-                                  0.40→170, 0.50→185. 0.40 is the knee. */
-const GATE_FRACTION = 0.10;
+
+/* Threshold for accepting a pitch VALUE. tone-reference swept this: 0.15→91
+   clips usable, 0.40→170, 0.50→185, and settled on the knee at 0.40. Kept
+   identical so the pitch numbers stay comparable across all three probes. */
+const YIN_THRESHOLD = 0.40;
+
+/* Threshold for the voiced/unvoiced DECISION — a different question, and S1's
+   mistake was answering it with the number above. 0.40 accepts a periodicity
+   estimate that is 40% as strong as a clean vowel's, which frication can reach.
+   Set from the control; these are the defaults if the control is absent. */
+let VOICE_THRESHOLD = 0.20;
+let GATE_FRACTION   = 0.10;
 
 /* A voiced run shorter than this is noise or a fragment, not a syllable. At a
    10 ms hop, 5 frames is 50 ms. The sweep reports how many words would answer
@@ -224,6 +304,14 @@ function onsetClass(syl){
   return 'NONE';                       /* m n ng l w j, or a vowel onset */
 }
 function checkedCoda(syl){ return /[ptk][1-6]$/.test(syl); }
+
+/* The onset as spelled, for the per-onset table. Longest match first so "gw",
+   "kw" and "ng" are not read as "g", "k" and "n". */
+function onsetKey(syl){
+  for (const o of [...ONSET_LONG, ...ONSET_SHORT].sort((a,b) => b.length - a.length))
+    if (syl.startsWith(o)) return o;
+  return 'voiced or zero onset';
+}
 
 /* Per boundary: does a voicing break fall here, and how confidently?
    A checked coda on the left is as good as a long onset on the right. */
@@ -278,7 +366,11 @@ function yin(buf, start, threshold){
     const s0 = cmnd[x0], s1 = cmnd[tau], s2 = cmnd[x2], den = 2*(2*s1 - s2 - s0);
     if (den !== 0) better = tau + (s2-s0)/den;
   }
-  return RATE/better;
+  /* The aperiodicity at the chosen lag comes back too. It is how confident the
+     estimate is, and it is what a voiced/unvoiced decision should be made on —
+     the frequency alone tells you nothing about whether there was really a
+     periodic signal to measure. */
+  return { hz: RATE/better, aper: cmnd[tau] };
 }
 
 function median(a){ if(!a.length) return null; const s=[...a].sort((x,y)=>x-y); return s[Math.floor(s.length/2)]; }
@@ -294,16 +386,24 @@ function analyse(pcm){
   }
   const gate = Math.max(...rms, 1e-9) * GATE_FRACTION;
   const raw = [];
-  for (let n = 0, i = 0; i+FRAME < pcm.length; i += HOP, n++)
-    raw.push(rms[n] < gate ? null : yin(pcm, i, YIN_THRESHOLD));
-  /* Median filter over 5 frames kills residual octave jumps. It also closes
-     one-frame holes, which matters here: a single dropped frame inside a
-     syllable would otherwise be counted as a boundary. */
+  for (let n = 0, i = 0; i+FRAME < pcm.length; i += HOP, n++){
+    if (rms[n] < gate){ raw.push(null); continue; }
+    const r = yin(pcm, i, YIN_THRESHOLD);
+    /* Two gates, not one: enough energy, AND a periodicity estimate confident
+       enough to call the frame voiced. A fricative can pass the first easily. */
+    raw.push(r && r.aper < VOICE_THRESHOLD ? r.hz : null);
+  }
+  /* Median filter over 5 frames kills residual octave jumps, which matters for
+     reading a PITCH VALUE. It also closes any voiceless gap shorter than about
+     30 ms — which is fatal for COUNTING RUNS, because a short gap is exactly
+     what a boundary looks like. S1 ran both jobs off this filtered track and
+     that is the likeliest reason /h/ boundaries went missing. The two tracks
+     are kept apart here and the caller picks. */
   const f0 = raw.map((v,i) => {
     const w = raw.slice(Math.max(0,i-2), i+3).filter(x => x != null);
     return w.length >= 3 ? median(w) : v;
   });
-  return { f0, rms };
+  return { f0, raw, rms };
 }
 
 function voicedRuns(f0, minRun){
@@ -451,6 +551,11 @@ async function runSweep(){
   log('Multi-syllable words with clean tone digits: ' + words.length);
   log('  predicted by spelling: ' + Object.entries(byClass).map(([k,v]) => k+'→'+v).join('  '));
 
+  VOICE_THRESHOLD = +$('voiceTh').value;
+  GATE_FRACTION   = +$('gateFrac').value;
+  log('Voicing decision at ' + VOICE_THRESHOLD + ', energy gate at ' + GATE_FRACTION
+      + ', pitch values still at YIN ' + YIN_THRESHOLD + '.');
+
   const lim = +$('limit').value;
   if (lim && words.length > lim){ words = words.slice(0, lim); log('  limited to first ' + lim + ' for this run'); }
 
@@ -467,11 +572,14 @@ async function runSweep(){
   for (const w of words){
     try {
       const pcm = await decodeClip(ctx, '../audio/words/' + w.id + '.mp3');
-      const { f0, rms } = analyse(pcm);
-      const runs = voicedRuns(f0, MIN_RUN);
-      const altRuns = MIN_RUN_ALT.map(m => voicedRuns(f0, m).length);
+      const { f0, raw, rms } = analyse(pcm);
+      /* Runs come off the RAW track — see the note in analyse(). The filtered
+         count is kept alongside purely to show what the filter was costing. */
+      const runs = voicedRuns(raw, MIN_RUN);
+      const runsFiltered = voicedRuns(f0, MIN_RUN).length;
+      const altRuns = MIN_RUN_ALT.map(m => voicedRuns(raw, m).length);
       f0.forEach(v => { if (v != null) allHz.push(v); });
-      rows.push({ w, f0, rms, runs, altRuns });
+      rows.push({ w, f0, raw, rms, runs, runsFiltered, altRuns });
     } catch (e){ failed++; log('  skip ' + w.id + ' (' + w.c + ') — ' + e.message); }
     done++;
     $('bar').value = done/words.length*100;
@@ -499,7 +607,12 @@ async function runSweep(){
   /* Pass two: judge. */
   const stats = {};
   for (const k of ['LONG','SHORT','NONE'])
-    stats[k] = { n:0, runMatch:0, runOver:0, runUnder:0, syl:0, sylOK:0, altShift:[0,0], examples:[] };
+    stats[k] = { n:0, runMatch:0, runOver:0, runUnder:0, filtMatch:0, syl:0, sylOK:0, altShift:[0,0], examples:[] };
+
+  /* Per-onset tally, two-syllable words only. One boundary per word means the
+     run count tests that boundary and nothing else, so a failure can be
+     attributed to a specific consonant instead of to the word as a whole. */
+  const onsetTally = {};
 
   for (const r of rows){
     const w = r.w, s = stats[w.wordClass];
@@ -509,7 +622,14 @@ async function runSweep(){
     if (got === expected) s.runMatch++;
     else if (got > expected) s.runOver++;
     else s.runUnder++;
+    if (r.runsFiltered === expected) s.filtMatch++;
     r.altRuns.forEach((n,i) => { if ((n === expected) !== (got === expected)) s.altShift[i]++; });
+
+    if (w.syls.length === 2){
+      const key = checkedCoda(w.syls[0]) ? '(checked coda)' : onsetKey(w.syls[1]);
+      const o = onsetTally[key] || (onsetTally[key] = { key, cls: w.wordClass, n:0, ok:0 });
+      o.n++; if (got === expected) o.ok++;
+    }
 
     if (got !== expected){
       if (s.examples.length < 4) s.examples.push(w.c + ' (' + w.j + ') expected ' + expected + ', got ' + got);
@@ -534,17 +654,19 @@ async function runSweep(){
     });
   }
 
-  SWEEP = { stats, med, declination, analysed: rows.length };
-  renderSweep(stats);
+  SWEEP = { stats, onsetTally, med, declination, analysed: rows.length,
+            settings: { VOICE_THRESHOLD, GATE_FRACTION, MIN_RUN } };
+  renderSweep(stats, onsetTally);
   $('bar').style.display = 'none';
   $('sweepText').textContent = 'Done — ' + rows.length + ' clips.';
   $('sweep').disabled = false;
 }
 
-function renderSweep(stats){
+function renderSweep(stats, onsetTally){
   const order = ['LONG','SHORT','NONE'];
   let html = '<table><thead><tr><th>Predicted class</th><th>Words</th>'
     + '<th>Run count as predicted</th><th>Too few runs</th><th>Too many</th>'
+    + '<th>Same, off the filtered track (S1\'s method)</th>'
     + '<th>Syllable class recovered</th></tr></thead><tbody>';
   let totN=0, totM=0, totS=0, totSOK=0;
   for (const k of order){
@@ -556,11 +678,30 @@ function renderSweep(stats){
       + `<td class="num">${s.n}</td>`
       + `<td class="num ${cls}">${s.runMatch} · ${pct(s.runMatch,s.n)}</td>`
       + `<td class="num">${s.runUnder}</td><td class="num">${s.runOver}</td>`
+      + `<td class="num sub">${pct(s.filtMatch,s.n)}</td>`
       + `<td class="num">${s.sylOK} / ${s.syl} · ${pct(s.sylOK,s.syl)}</td></tr>`;
   }
   html += `<tr><td><b>All</b></td><td class="num">${totN}</td>`
     + `<td class="num">${totM} · ${pct(totM,totN)}</td><td class="num"></td><td class="num"></td>`
+    + `<td class="num"></td>`
     + `<td class="num">${totSOK} / ${totS} · ${pct(totSOK,totS)}</td></tr></tbody></table>`;
+
+  /* The bar was set before the run and is checked automatically, so the ordering
+     is not something to be eyeballed sympathetically after the fact. */
+  const rL = stats.LONG.n ? stats.LONG.runMatch/stats.LONG.n : 0;
+  const rS = stats.SHORT.n ? stats.SHORT.runMatch/stats.SHORT.n : 0;
+  const rN = stats.NONE.n ? stats.NONE.runMatch/stats.NONE.n : 0;
+  const ordered = rL >= rS && rS >= rN;
+  html += `<div class="verdict"><b class="${ordered?'pass':'fail'}">`
+    + (ordered ? 'Ordering holds: LONG ≥ SHORT ≥ NONE.' : 'Ordering does NOT hold.')
+    + '</b> '
+    + (ordered
+        ? 'The classes rank the way consonants say they must, so these settings are '
+        + 'measuring the audio rather than themselves, and the figures above can be read as real.'
+        : 'A class that is physically easier to segment is scoring worse than a harder one, '
+        + 'so something other than the acoustics is deciding the answer. Change one setting '
+        + 'at a time and watch the per-onset table below — do not read the headline yet.')
+    + `</div>`;
 
   /* Sensitivity: if the headline moves when MIN_RUN moves, the headline is
      partly a property of the setting rather than of the audio, and that has to
@@ -569,6 +710,29 @@ function renderSweep(stats){
     + 'Words whose verdict flips when MIN_RUN changes from ' + MIN_RUN + ' frames to '
     + MIN_RUN_ALT.map((m,i) => m + ' (' + order.reduce((a,k)=>a+stats[k].altShift[i],0) + ' words)').join(' or ')
     + '. A large number here means the run count is being decided by the threshold, not by the sound.</div>';
+
+  /* Per-onset, two-syllable words only — one boundary each, so a miss is
+     attributable to a consonant rather than to a word. */
+  const os = Object.values(onsetTally).sort((a,b) => (a.ok/a.n) - (b.ok/b.n));
+  html += '<h2 style="margin:18px 0 0">Per boundary, by the onset that should break it</h2>'
+    + '<p class="sub" style="margin:4px 0 0">Two-syllable words only: exactly one boundary each. '
+    + 'Cells under 10 words are marked — they are too small to conclude from.</p>'
+    + '<table><thead><tr><th>Onset of syllable 2</th><th>Predicted</th><th>Words</th>'
+    + '<th>Break found</th></tr></thead><tbody>'
+    + os.map(o => {
+        const rate = o.ok/o.n;
+        const cls = o.n < 10 ? 'sub' : rate > 0.9 ? 'pass' : rate > 0.7 ? 'mid' : 'fail';
+        return `<tr><td><b>${o.key}</b></td><td class="sub">${o.cls}</td>`
+          + `<td class="num">${o.n}${o.n < 10 ? ' ⚠' : ''}</td>`
+          + `<td class="num ${cls}">${o.ok} · ${pct(o.ok,o.n)}</td></tr>`;
+      }).join('')
+    + '</tbody></table>'
+    + '<div class="verdict">An onset near the bottom of this table that was predicted LONG is the '
+    + 'thing to explain. Two candidates and they need different fixes: the tracker is calling '
+    + 'frication voiced, which the voicing threshold addresses — or the consonant genuinely does '
+    + 'not interrupt voicing in running speech, in which case it belongs in a different class and '
+    + 'the prediction rule is what changes. Cantonese /h/ is the obvious suspect for the second: '
+    + 'it is a weak glottal fricative and between vowels it is often barely there at all.</div>';
 
   for (const k of order){
     if (stats[k].examples.length)
@@ -583,7 +747,10 @@ function renderSweep(stats){
     + 'to be improved or Azure\'s per-phoneme alignment, which is network-only.</div>';
 
   $('sweepOut').innerHTML = html;
-  log('\nRun agreement: ' + order.map(k => k+' '+pct(stats[k].runMatch,stats[k].n)).join('  '));
+  log('\nRun agreement (raw track): ' + order.map(k => k+' '+pct(stats[k].runMatch,stats[k].n)).join('  '));
+  log('Same off the filtered track: ' + order.map(k => k+' '+pct(stats[k].filtMatch,stats[k].n)).join('  '));
+  log('Ordering LONG ≥ SHORT ≥ NONE: ' + (ordered ? 'HOLDS' : 'does not hold'));
+  log('Per onset: ' + os.map(o => o.key+' '+pct(o.ok,o.n)+' (n='+o.n+')').join('  '));
   log('Class recovery (upper bound): ' + order.map(k => k+' '+pct(stats[k].sylOK,stats[k].syl)).join('  '));
 }
 
@@ -643,8 +810,10 @@ async function judgeTake(i, blob){
   const off = new OfflineAudioContext(1, Math.ceil(decoded.duration * RATE), RATE);
   const src = off.createBufferSource(); src.buffer = decoded; src.connect(off.destination); src.start();
   const pcm = (await off.startRendering()).getChannelData(0);
-  const { f0, rms } = analyse(pcm);
-  const runs = voicedRuns(f0, MIN_RUN);
+  VOICE_THRESHOLD = +$('voiceTh').value;
+  GATE_FRACTION   = +$('gateFrac').value;
+  const { raw } = analyse(pcm);
+  const runs = voicedRuns(raw, MIN_RUN);
   micTakes[i] = { runs: runs.length, expected: w.groups.length };
   const ok = runs.length === w.groups.length;
   $('micres-' + i).innerHTML = `<span class="${ok?'pass':'fail'}">${runs.length} run${runs.length===1?'':'s'}</span>`
