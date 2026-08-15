@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Alignment Check — does Azure give us syllable times?</title>
+<!--
+  tools/align-check.html — build A1
+
+  ONE QUESTION
+  ------------
+  Azure Pronunciation Assessment cannot score Cantonese TONE — pron-probe.html
+  established that, and it is why DES-37 measures pitch on-device instead. But
+  scoring is not the only thing it could do for us. If it returns WHERE each
+  syllable starts and ends, that timing alone unblocks two of the three designs
+  in mockup 27:
+
+    MOCK-27-A, runtime alignment — cut the LEARNER's pitch track at Azure's
+      syllable times, then classify each syllable ourselves. Needs a call on
+      every attempt.
+    MOCK-27-C, contour match with boundaries shipped — run this ONCE per model
+      clip, offline, commit the boundaries as data, and the app never calls
+      Azure again. The learner's audio is aligned to the model by time-warping,
+      not by a recogniser.
+
+  So the question is narrow: DOES THE RESPONSE CARRY USABLE SYLLABLE TIMINGS FOR
+  zh-HK, on our own TTS clips and on a live microphone? If it does not, MOCK-27-A
+  is dead and MOCK-27-C loses its cheapest route to boundaries, and we should
+  find that out in fifteen minutes rather than after building three prototypes.
+
+  PRESENCE IS NOT USEFULNESS
+  --------------------------
+  The recorded lesson from the first Azure investigation was that a status code
+  is not an outcome: the endpoint answers HTTP 200 with an empty recognition when
+  it dislikes the audio format, so success has to be inspected rather than
+  inferred. The same trap has a second form here. A `Syllables` array can be
+  present and still be worthless — all offsets zero, or one span covering the
+  whole clip, or fewer entries than the word has syllables. So this page does not
+  ask "is the field there". It checks that the timings increase, sit inside the
+  audio, divide it into as many pieces as the jyutping says there are, and give
+  each piece a length a syllable could plausibly have. Then it draws them against
+  the clip so the answer can be eyeballed as well as read.
+
+  AUDIO FORMAT
+  ------------
+  WAV/PCM 16 kHz mono, transcoded here, exactly as pron-probe.html does. The REST
+  short-audio endpoint accepts two formats and webm is not one of them, and it
+  signals that by returning an empty success rather than an error.
+
+  THE KEY
+  -------
+  Held in a module-scope variable and nowhere else. Not localStorage, not the
+  DOM, not the log. It is gone on reload. This is a different key from the app's
+  Gemini key and the two must never be conflated.
+
+  NOT APP CODE. Diagnostic only, not in the sw.js precache list, no CACHE_VERSION
+  bump. Writes nothing.
+-->
+<style>
+  :root{--ink:#1b1a17;--muted:#6b665e;--line:#ddd8cf;--bg:#faf8f4;--card:#fff;
+        --good:#2e7d4f;--bad:#b3402e;--warn:#a8761c;--accent:#7c2d2d}
+  *{box-sizing:border-box}
+  body{margin:0 auto;padding:18px 16px 64px;font:16px/1.5 -apple-system,"Segoe UI",Roboto,sans-serif;
+       color:var(--ink);background:var(--bg);max-width:860px}
+  h1{font-size:20px;margin:0 0 4px}
+  h2{font-size:15px;margin:0 0 10px}
+  .sub{color:var(--muted);font-size:13px;margin:0 0 14px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:16px;margin-bottom:14px}
+  label{display:block;font-size:12px;color:var(--muted);margin:10px 0 4px;text-transform:uppercase;letter-spacing:.05em}
+  input,select{width:100%;font:inherit;font-size:15px;padding:10px;border:1px solid var(--line);
+               border-radius:7px;background:#fff;color:var(--ink)}
+  button{font:inherit;font-size:15px;padding:10px 16px;border:1px solid var(--line);
+         border-radius:7px;background:#fff;color:var(--ink);cursor:pointer;min-height:44px}
+  button.primary{background:var(--accent);border-color:var(--accent);color:#fff}
+  button.rec{background:var(--bad);border-color:var(--bad);color:#fff}
+  button:disabled{opacity:.45;cursor:default}
+  .row{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:12px}
+  .err{color:var(--bad);font-weight:600}
+  .ok{color:var(--good);font-weight:600}
+  .warnt{color:var(--warn);font-weight:600}
+  table{width:100%;border-collapse:collapse;font-size:14px;margin-top:12px}
+  th,td{text-align:left;padding:7px 8px;border-bottom:1px solid var(--line);vertical-align:top}
+  th{font-size:11px;color:var(--muted);text-transform:uppercase;font-weight:600}
+  td.num{text-align:right;font-variant-numeric:tabular-nums}
+  .verdict{font-size:14px;padding:12px 14px;border-radius:7px;background:#f3f0ea;margin-top:14px;line-height:1.55}
+  .log{font:12px/1.45 ui-monospace,Menlo,Consolas,monospace;white-space:pre-wrap;word-break:break-word;
+       background:#23211d;color:#ded8cd;padding:12px;border-radius:7px;max-height:44vh;overflow:auto}
+  .tl{position:relative;height:52px;background:#f3f0ea;border:1px solid var(--line);border-radius:7px;margin-top:12px;overflow:hidden}
+  .tl-seg{position:absolute;top:0;bottom:0;border-left:1px solid #fff;background:#7c2d2d;opacity:.16}
+  .tl-seg:nth-child(even){opacity:.30}
+  .tl-lbl{position:absolute;top:6px;font-size:12px;color:var(--ink);transform:translateX(-50%);white-space:nowrap}
+  .tl-ms{position:absolute;bottom:5px;font-size:10px;color:var(--muted);transform:translateX(-50%)}
+  .check{display:flex;gap:8px;align-items:flex-start;padding:6px 0;font-size:14px;border-bottom:1px solid var(--line)}
+  .check:last-child{border-bottom:none}
+  .check b{min-width:22px}
+</style>
+</head>
+<body>
+
+<h1>Alignment Check</h1>
+<p class="sub">Does Azure return usable syllable start and end times for zh-HK? · build <b>A1</b></p>
+
+<div class="card">
+  <h2>Credentials</h2>
+  <p class="sub" style="margin:0">
+    Speech resource key and region. Held in memory only — cleared on reload, never
+    written to storage, never printed to the log. <b>Not the Gemini key.</b>
+  </p>
+  <label for="key">Subscription key</label>
+  <input type="password" id="key" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="paste Azure Speech key">
+  <label for="region">Region — must match the resource</label>
+  <input type="text" id="region" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="e.g. australiaeast">
+  <div class="row">
+    <button class="primary" id="hold">Hold key</button>
+    <button id="clearKey">Clear</button>
+  </div>
+  <p class="sub" id="credStatus" style="margin-top:10px">No key held.</p>
+</div>
+
+<div class="card">
+  <h2>1 · Our own clips <span class="sub" style="display:inline">— the test that matters for MOCK-27-C</span></h2>
+  <p class="sub" style="margin:0 0 4px">
+    If this passes, the model clips can be aligned once, offline, and their
+    boundaries committed as data. The app then needs no key and no network.
+  </p>
+  <label for="clip">Word or phrase</label>
+  <select id="clip"><option>loading corpus…</option></select>
+  <div class="row">
+    <button class="primary" id="runClip" disabled>Send this clip</button>
+    <button id="playClip" disabled>Play it</button>
+    <button id="runAll" disabled>Send all ten</button>
+  </div>
+</div>
+
+<div class="card">
+  <h2>2 · Your microphone <span class="sub" style="display:inline">— the test that matters for MOCK-27-A</span></h2>
+  <p class="sub" style="margin:0 0 4px">
+    Same question on live speech. A synthesiser is articulated more clearly than a
+    person, so passing on our clips does not guarantee passing on yours — and it is
+    your audio that MOCK-27-A would have to align on every attempt.
+  </p>
+  <div class="row">
+    <button id="rec" disabled>Record the selected word</button>
+  </div>
+</div>
+
+<div class="card">
+  <h2>Result</h2>
+  <div id="result"><p class="sub" style="margin:0">Nothing sent yet.</p></div>
+</div>
+
+<div class="card">
+  <div class="row" style="justify-content:space-between;margin:0 0 8px">
+    <b style="font-size:14px">Log</b>
+    <button id="copyLog">Copy</button>
+  </div>
+  <div class="log" id="log">Idle.</div>
+</div>
+
+<script>
+'use strict';
+
+/* ── State. The key lives here and nowhere else. ─────────────────────────── */
+let CREDS = { key: null, region: null };
+let ITEMS = [], SELECTED = null;
+
+const $ = id => document.getElementById(id);
+let logBuf = [];
+function log(m){ logBuf.push(m); $('log').textContent = logBuf.join('\n'); $('log').scrollTop = 1e9; }
+
+$('hold').onclick = () => {
+  const k = $('key').value.trim(), r = $('region').value.trim().toLowerCase();
+  if (!k || !r){ $('credStatus').innerHTML = '<span class="err">Both fields are needed.</span>'; return; }
+  CREDS = { key: k, region: r };
+  $('key').value = '';                        /* the value lives only in CREDS now */
+  $('credStatus').innerHTML = 'Key held in memory for <b>' + r + '</b>. Not stored.';
+  log('Credentials held. Region=' + r + '. Key length=' + k.length + ' (not logged).');
+  refreshButtons();
+};
+$('clearKey').onclick = () => {
+  CREDS = { key: null, region: null };
+  $('key').value = '';
+  $('credStatus').textContent = 'No key held.';
+  log('Credentials cleared.');
+  refreshButtons();
+};
+function refreshButtons(){
+  const ready = !!CREDS.key && ITEMS.length > 0;
+  $('runClip').disabled = !ready;
+  $('runAll').disabled  = !ready;
+  $('rec').disabled     = !ready;
+  $('playClip').disabled = ITEMS.length === 0;
+}
+
+/* ── Corpus items, derived rather than hand-listed ────────────────────────
+   Four single syllables covering the four confident tone classes, four
+   two-syllable words with distinct tone pairs, two four-syllable phrases.
+   Taken in corpus order so the set is reproducible and nobody chose it. */
+const CLS = { 1:'high level', 2:'rising', 3:'mid/low level', 4:'low falling', 5:'rising', 6:'mid/low level' };
+
+async function loadItems(){
+  const idx = await (await fetch('../data/topics_index.json')).json();
+  const all = [];
+  for (const t of idx.topics){
+    let topic;
+    try { topic = await (await fetch('../data/topics/' + t.key + '.json')).json(); } catch (e){ continue; }
+    for (const rk of Object.keys(topic.rounds || {}))
+      for (const w of (topic.rounds[rk].words || [])) all.push(w);
+  }
+  const syls = w => (w.j || '').trim().toLowerCase().split(/\s+/);
+  const clean = w => syls(w).every(s => /[1-6]$/.test(s));
+
+  const picks = [], seenClass = new Set(), seenPair = new Set();
+  for (const w of all){
+    const s = syls(w);
+    if (s.length !== 1 || !clean(w)) continue;
+    const c = CLS[s[0].slice(-1)];
+    if (seenClass.has(c)) continue;
+    seenClass.add(c); picks.push(w);
+  }
+  for (const w of all){
+    const s = syls(w);
+    if (s.length !== 2 || !clean(w)) continue;
+    const pair = s.map(x => x.slice(-1)).join('');
+    if (seenPair.has(pair)) continue;
+    seenPair.add(pair); picks.push(w);
+    if (seenPair.size === 4) break;
+  }
+  all.filter(w => syls(w).length >= 4 && clean(w)).slice(0, 2).forEach(w => picks.push(w));
+
+  ITEMS = picks.map(w => ({ ...w, syls: syls(w) }));
+  $('clip').innerHTML = ITEMS.map((w,i) =>
+    `<option value="${i}">${w.c} (${w.j}) — ${w.syls.length} syllable${w.syls.length>1?'s':''}</option>`).join('');
+  SELECTED = ITEMS[0];
+  $('clip').onchange = () => { SELECTED = ITEMS[+$('clip').value]; };
+  log('Corpus items derived: ' + ITEMS.map(w => w.c).join(' '));
+  refreshButtons();
+}
+
+/* ── Audio: everything Azure receives is WAV/PCM 16 kHz mono ─────────────── */
+const AZURE_CONTENT_TYPE = 'audio/wav; codecs=audio/pcm; samplerate=16000';
+const TARGET_RATE = 16000;
+const CANDIDATE_TYPES = ['audio/webm;codecs=opus','audio/ogg;codecs=opus','audio/webm','audio/mp4'];
+
+async function toWav16kMono(blob){
+  const bytes = await blob.arrayBuffer();
+  const Ctx = window.AudioContext || window.webkitAudioContext;
+  const decoded = await new Ctx().decodeAudioData(bytes);
+  const frames = Math.ceil(decoded.duration * TARGET_RATE);
+  const off = new OfflineAudioContext(1, frames, TARGET_RATE);
+  const src = off.createBufferSource();
+  src.buffer = decoded; src.connect(off.destination); src.start();
+  const pcm = (await off.startRendering()).getChannelData(0);
+
+  const buf = new ArrayBuffer(44 + pcm.length * 2);
+  const view = new DataView(buf);
+  const str = (o, s) => { for (let i = 0; i < s.length; i++) view.setUint8(o + i, s.charCodeAt(i)); };
+  str(0,'RIFF');  view.setUint32(4, 36 + pcm.length*2, true);
+  str(8,'WAVE');  str(12,'fmt ');
+  view.setUint32(16,16,true); view.setUint16(20,1,true); view.setUint16(22,1,true);
+  view.setUint32(24,TARGET_RATE,true); view.setUint32(28,TARGET_RATE*2,true);
+  view.setUint16(32,2,true); view.setUint16(34,16,true);
+  str(36,'data'); view.setUint32(40, pcm.length*2, true);
+  for (let i = 0; i < pcm.length; i++){
+    const s = Math.max(-1, Math.min(1, pcm[i]));
+    view.setInt16(44 + i*2, s < 0 ? s*0x8000 : s*0x7fff, true);
+  }
+  let peak = 0;
+  for (let i = 0; i < pcm.length; i++){ const a = Math.abs(pcm[i]); if (a > peak) peak = a; }
+  return { blob: new Blob([buf], { type:'audio/wav' }), peak, seconds: decoded.duration };
+}
+
+const b64utf8 = s => btoa(String.fromCharCode(...new TextEncoder().encode(s)));
+
+async function assess(rawBlob, referenceText){
+  if (!CREDS.key) throw new Error('No key held.');
+  const wav = await toWav16kMono(rawBlob);
+  log('  audio: ' + wav.seconds.toFixed(2) + 's, peak ' + Math.round(wav.peak*100) + '%, '
+      + wav.blob.size + ' B WAV/PCM 16k mono');
+  if (wav.peak < 0.02) log('  ⚠ effectively silent — any result below is a recording problem, not an alignment one');
+
+  const cfg = {
+    ReferenceText: referenceText,
+    GradingSystem: 'HundredMark',
+    Granularity: 'Phoneme',        /* word → syllable → phoneme depth */
+    EnableMiscue: false,           /* miscue can drop words, and dropped words have no timings */
+    Dimension: 'Comprehensive'
+  };
+  const url = 'https://' + CREDS.region + '.stt.speech.microsoft.com'
+            + '/speech/recognition/conversation/cognitiveservices/v1'
+            + '?language=zh-HK&format=detailed';
+  let res;
+  try {
+    res = await fetch(url, { method:'POST', headers:{
+      'Ocp-Apim-Subscription-Key': CREDS.key,
+      'Content-Type': AZURE_CONTENT_TYPE,
+      'Pronunciation-Assessment': b64utf8(JSON.stringify(cfg)),
+      'Accept': 'application/json'
+    }, body: wav.blob });
+  } catch (e){
+    log('  NETWORK FAILURE: ' + e.name + ' — no HTTP status means the response never arrived.');
+    throw e;
+  }
+  const text = await res.text();
+  if (res.status === 401 || res.status === 403){ log('  AUTH FAILED ' + res.status + ' — key or region wrong.'); throw new Error('auth'); }
+  if (!res.ok){ log('  HTTP ' + res.status + ': ' + text.slice(0,300)); throw new Error('http ' + res.status); }
+  return { json: JSON.parse(text), seconds: wav.seconds };
+}
+
+/* ── Inspection ──────────────────────────────────────────────────────────
+   Azure offsets are in 100-nanosecond ticks: 10,000 ticks to the millisecond.
+   Nothing below trusts a field for existing — every check asks whether the
+   value could actually be true. */
+const TICKS_PER_MS = 10000;
+
+function inspect(json, seconds, item){
+  const checks = [];
+  const add = (pass, label, detail) => checks.push({ pass, label, detail });
+
+  const status = json.RecognitionStatus;
+  add(status === 'Success', 'Recognition succeeded', 'RecognitionStatus = ' + status
+      + (status === 'Success' ? '' : ' — an empty success usually means the audio format was rejected'));
+  const best = (json.NBest || [])[0];
+  add(!!best, 'A result was returned', best ? 'NBest[0] present' : 'NBest empty');
+  if (!best) return { checks, segs: [] };
+
+  const words = best.Words || [];
+  add(words.length > 0, 'Words carry structure', words.length + ' word entries');
+
+  /* Azure may split a Chinese phrase per character or per word; either is fine
+     as long as the syllables underneath add up. */
+  let syllables = [];
+  let sylSource = 'none';
+  for (const w of words){
+    if (Array.isArray(w.Syllables) && w.Syllables.length){
+      sylSource = 'Syllables';
+      w.Syllables.forEach(s => syllables.push({ label: s.Syllable || w.Word, offset: s.Offset, duration: s.Duration }));
+    }
+  }
+  if (!syllables.length){
+    /* Fall back to phonemes: syllable boundaries can be rebuilt from them, and
+       for our purposes phoneme times would be enough. */
+    for (const w of words){
+      if (Array.isArray(w.Phonemes) && w.Phonemes.length){
+        sylSource = 'Phonemes (no Syllables array)';
+        w.Phonemes.forEach(p => syllables.push({ label: p.Phoneme, offset: p.Offset, duration: p.Duration }));
+      }
+    }
+  }
+  if (!syllables.length && words.length){
+    sylSource = 'Words only';
+    words.forEach(w => syllables.push({ label: w.Word, offset: w.Offset, duration: w.Duration }));
+  }
+  add(sylSource === 'Syllables', 'Syllable-level timings present',
+      'source: ' + sylSource + ' — ' + syllables.length + ' entries');
+
+  const timed = syllables.filter(s => typeof s.offset === 'number' && typeof s.duration === 'number');
+  add(timed.length === syllables.length && timed.length > 0, 'Every entry has an offset and a duration',
+      timed.length + ' of ' + syllables.length + ' timed');
+
+  const nonZero = timed.filter(s => s.duration > 0);
+  add(nonZero.length === timed.length && timed.length > 0, 'No zero-length spans',
+      (timed.length - nonZero.length) + ' entries had zero duration');
+
+  let increasing = true;
+  for (let i = 1; i < timed.length; i++) if (timed[i].offset < timed[i-1].offset) increasing = false;
+  add(increasing, 'Offsets increase through the clip', increasing ? 'monotonic' : 'out of order — not a timeline');
+
+  const clipMs = seconds * 1000;
+  const last = timed[timed.length-1];
+  const endMs = last ? (last.offset + last.duration)/TICKS_PER_MS : 0;
+  add(endMs > 0 && endMs <= clipMs * 1.15, 'Timings land inside the audio',
+      'last span ends at ' + Math.round(endMs) + ' ms, clip is ' + Math.round(clipMs) + ' ms');
+
+  const shortest = timed.length ? Math.min(...timed.map(s => s.duration/TICKS_PER_MS)) : 0;
+  add(shortest >= 30, 'Every span is long enough to be a syllable',
+      'shortest is ' + Math.round(shortest) + ' ms');
+
+  if (sylSource === 'Syllables'){
+    add(syllables.length === item.syls.length, 'One span per syllable in the jyutping',
+        syllables.length + ' spans against ' + item.syls.length + ' syllables in ' + item.j);
+  }
+
+  const segs = timed.map(s => ({
+    label: s.label,
+    startMs: s.offset/TICKS_PER_MS,
+    endMs: (s.offset + s.duration)/TICKS_PER_MS
+  }));
+  return { checks, segs, clipMs, sylSource };
+}
+
+function render(item, res){
+  const { checks, segs, clipMs } = res;
+  const passed = checks.filter(c => c.pass).length;
+  let html = `<h2 style="margin:0 0 6px">${item.c} (${item.j})</h2>`
+    + `<p class="sub" style="margin:0 0 10px">${passed} of ${checks.length} checks passed.</p>`
+    + checks.map(c => `<div class="check"><b class="${c.pass?'ok':'err'}">${c.pass?'✓':'✗'}</b>`
+        + `<span>${c.label}<div class="sub" style="margin:0">${c.detail}</div></span></div>`).join('');
+
+  if (segs.length && clipMs){
+    /* Drawn to scale against the clip, because "plausible" is easier to judge by
+       eye than by reading three numbers. */
+    const span = Math.max(clipMs, segs[segs.length-1].endMs);
+    html += '<div class="tl">' + segs.map(s => {
+        const l = s.startMs/span*100, w = (s.endMs-s.startMs)/span*100;
+        return `<div class="tl-seg" style="left:${l}%;width:${w}%"></div>`;
+      }).join('')
+      + segs.map(s => {
+        const mid = (s.startMs + s.endMs)/2/span*100;
+        return `<div class="tl-lbl" style="left:${mid}%">${s.label}</div>`
+             + `<div class="tl-ms" style="left:${mid}%">${Math.round(s.endMs-s.startMs)} ms</div>`;
+      }).join('') + '</div>'
+      + `<p class="sub" style="margin:6px 0 0">Full width is the ${Math.round(span)} ms clip.</p>`;
+  }
+
+  const good = checks.every(c => c.pass);
+  html += '<div class="verdict">' + (good
+    ? '<b class="ok">Usable.</b> The response divides this clip into as many pieces as the jyutping '
+      + 'says there are, in order, inside the audio, each long enough to be real. That is everything '
+      + 'MOCK-27-C needs from a build-time pass, and everything MOCK-27-A needs at runtime.'
+    : '<b class="err">Not usable as it stands.</b> Read the failed rows above: a missing Syllables '
+      + 'array means the depth is not offered for zh-HK, while spans that are present but zero, '
+      + 'out of order or outside the audio mean the field exists and cannot be trusted — which is '
+      + 'worse, because it would have looked like success.') + '</div>';
+
+  $('result').innerHTML = html;
+}
+
+/* ── Runs ────────────────────────────────────────────────────────────────── */
+async function runOne(item, blob, label){
+  log('\n─── ' + item.c + ' (' + item.j + ') · ' + label + ' ───');
+  try {
+    const { json, seconds } = await assess(blob, item.c);
+    const res = inspect(json, seconds, item);
+    res.checks.forEach(c => log('  ' + (c.pass ? 'ok  ' : 'FAIL') + '  ' + c.label + ' — ' + c.detail));
+    if (res.segs.length) log('  spans: ' + res.segs.map(s =>
+      s.label + ' ' + Math.round(s.startMs) + '–' + Math.round(s.endMs) + ' ms').join('  '));
+    render(item, res);
+    return res;
+  } catch (e){
+    log('  aborted: ' + e.message);
+    $('result').innerHTML = '<p class="err">Failed — see the log.</p>';
+    return null;
+  }
+}
+
+async function clipBlob(item){
+  const res = await fetch('../audio/words/' + item.id + '.mp3');
+  if (!res.ok) throw new Error('clip missing: HTTP ' + res.status);
+  return await res.blob();
+}
+
+$('runClip').onclick = async () => {
+  $('runClip').disabled = true;
+  logBuf = [];
+  try { await runOne(SELECTED, await clipBlob(SELECTED), 'our TTS clip'); }
+  catch (e){ log('clip fetch failed: ' + e.message); }
+  $('runClip').disabled = false;
+};
+
+$('runAll').onclick = async () => {
+  $('runAll').disabled = true; $('runClip').disabled = true;
+  logBuf = [];
+  log('Sending all ' + ITEMS.length + ' clips.');
+  let usable = 0;
+  for (const item of ITEMS){
+    try {
+      const res = await runOne(item, await clipBlob(item), 'our TTS clip');
+      if (res && res.checks.every(c => c.pass)) usable++;
+    } catch (e){ log('  clip fetch failed: ' + e.message); }
+  }
+  log('\n═══ ' + usable + ' of ' + ITEMS.length + ' clips returned usable syllable timings. ═══');
+  $('runAll').disabled = false; $('runClip').disabled = false;
+};
+
+$('playClip').onclick = async () => {
+  const a = new Audio('../audio/words/' + SELECTED.id + '.mp3');
+  a.play().catch(e => log('playback failed: ' + e.message));
+};
+
+let activeRec = null;
+$('rec').onclick = async () => {
+  if (activeRec){ activeRec.stop(); return; }
+  const item = SELECTED;
+  let stream;
+  try {
+    stream = await navigator.mediaDevices.getUserMedia({ audio:{ echoCancellation:false, noiseSuppression:false, autoGainControl:false } });
+  } catch (e){ log('MIC FAILED: ' + e.name + ' — ' + e.message); return; }
+  const mime = CANDIDATE_TYPES.find(t => MediaRecorder.isTypeSupported(t));
+  const rec = new MediaRecorder(stream, { mimeType: mime });
+  const chunks = [];
+  rec.ondataavailable = e => chunks.push(e.data);
+  rec.onstop = async () => {
+    stream.getTracks().forEach(t => t.stop());
+    activeRec = null;
+    $('rec').classList.remove('rec'); $('rec').textContent = 'Record the selected word';
+    logBuf = [];
+    await runOne(item, new Blob(chunks, { type: mime }), 'your microphone');
+  };
+  activeRec = rec;
+  $('rec').classList.add('rec'); $('rec').textContent = 'Stop';
+  rec.start();
+  setTimeout(() => { if (activeRec === rec) rec.stop(); }, 5000);
+};
+
+$('copyLog').onclick = () => navigator.clipboard.writeText(logBuf.join('\n'))
+  .then(() => { $('copyLog').textContent = 'Copied'; setTimeout(() => $('copyLog').textContent = 'Copy', 1200); });
+
+loadItems().catch(e => log('Could not read the corpus: ' + e.message));
+log('Ready. Hold a key, then send one clip before sending all ten.');
+</script>
+</body>
+</html>
