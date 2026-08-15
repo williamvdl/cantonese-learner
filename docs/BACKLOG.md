@@ -50,6 +50,38 @@ are pointers only — detail goes there, not here.*
 
 ## Features
 
+- **Tone checking on single words** (DES-37, first surface). Record one word,
+  measure F0 on-device, grade shape then height band, draw the curve against the
+  target. Isolated words are the strong case: citation form, one syllable, no
+  time-alignment needed — the whole voiced run *is* the syllable. Everything the
+  grading model needs is proven; see the probes in `tools/`. Open sub-questions:
+  first-run calibration (DESIGN_DECISIONS Open row), and whether the word-identity
+  half uses Web Speech or Azure — Web Speech is free and already built but **owns
+  the microphone**, so it cannot share a recording with the pitch tracker, whereas
+  Azure works from a blob already in hand. Worth testing whether both can run off
+  one stream before committing.
+- **Tone checking on sentences and chat lines** (DES-37, second surface). These
+  are **one item, not two** — a chat line is a sentence, and both already carry a
+  full jyutping breakdown. Per-syllable grading needs *time alignment*, which the
+  breakdown does not provide: it says which syllables and which tones, not where
+  in the audio each one falls. Voiced runs cannot be counted as a proxy, because
+  voiceless initials (s, t, k, h, f) split the pitch track at points that are not
+  syllable boundaries, and checked syllables ending -p/-t/-k have almost no voiced
+  portion. **Azure already returns the alignment** — see the STATUS note — which
+  makes this tractable. The genuine remaining unknown is different: in connected
+  speech tone contours compress and the whole utterance drifts downward, so
+  citation-form targets would be too harsh and would fail people speaking
+  correctly. Needs measuring before targets can be set. Two probe-shaped
+  questions, both cheap, neither blocking the word surface.
+- **Chat Speak upgrade** (DES-37). The existing Speak mode stays exactly as it is
+  until the sentence surface above is ready — it works, and replacing it with
+  something unproven would be a downgrade. When it is upgraded it gains the tone
+  check alongside the current word-identity check rather than replacing it. The
+  known weakness it fixes: `fuzzyMatch()` is strict equality after punctuation
+  stripping, so a pass means only "the recogniser thinks you said this word", and
+  the recogniser repairs tone errors from context. That hole is exactly what the
+  pitch tracker closes.
+
 - **Stage 3 — checkpoint activity using sentence data.** Replaces the removed
   Patterns slot. Not yet designed. Should reuse existing per-topic sentence data
   (no new authoring), fit into the checkpoint hub as a third activity alongside
@@ -57,6 +89,10 @@ are pointers only — detail goes there, not here.*
   listening-based activity designs worth considering. **The redesigned checkpoint
   hub already accommodates a third activity** without layout changes — the
   activities are numbered and the diamond progress ring scales to three segments.
+  DES-37 gives this a candidate shape: sentences drawn from the stage's topics,
+  spoken rather than tapped, with self-judged read-aloud as the fallback when mic
+  or network is unavailable. Gated on the sentence surface below, not on this
+  item's own design.
 - **Intermediate checkpoint hub expansion** (data-only, after Beginner testing).
   *(The `intermediate-s3` missing-`id` fix that used to be bundled here landed at
   v127.)*

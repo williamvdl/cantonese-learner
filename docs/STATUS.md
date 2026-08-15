@@ -13,7 +13,7 @@ not a history log. Approved design decisions and whether they were built live in
 > convention (`v121 — <what changed>`) so this file stops being load-bearing on
 > its own.
 
-Last updated: 2026-08-10 · sw.js at v128
+Last updated: 2026-08-15 · sw.js at v128
 
 ## Confirmed live and working
 - **Patterns/Drills removed** from the app entirely (not soft-hidden). Checkpoints
@@ -37,6 +37,14 @@ Last updated: 2026-08-10 · sw.js at v128
     how does each handle a given sound" by calling `voices/list` and synthesising
     a fixed six-phrase set through every one. Not a standing check — it asserts
     no invariant — but the thing to reach for before any future voice question.
+  - Three further diagnostics from the 2026-08-15 pronunciation investigation,
+    all non-standing and all kept because the questions will be asked again:
+    `tools/pron-probe.html` (Azure Pronunciation Assessment — answered: browser
+    transport works, zh-HK scoring is tone-blind), `tools/tone-probe.html`
+    (two-speaker F0 contour probe — answered: tone is measurable in-browser,
+    and established the noise floor and the four confident classes), and
+    `tools/tone-reference.html` (builds tone references from the existing TTS
+    corpus — answered: good height anchor, unusable shape anchor). See DES-37.
   - Playback goes through `speakItem()` / `speakConvoLine()`. Web Speech API is
     kept, deliberately, only for the Translate tab (no stable ID to pre-generate).
   - No fallback on missing audio by design — a toast shows instead of a silent
@@ -168,6 +176,56 @@ orphan hues `#B7861E`, `#e4d4ad`, `#8a6716`,
 | — | v128 | **The standalone tier ladder was a one-way door into a path.** Found on device after v127. `goToTier()` entered the destination tier's owning path whenever *any* path owned it — correct inside a path (DES-30), wrong from Topics. Opening `modals` standalone and tapping the Tier 2 rung produced the Intermediate lesson's chrome: an up control reading *Intermediate*, a Mark Complete button, and no rung back down, because `renderTierLine()` correctly degrades to a statement inside a path. The escape, the DES-29 cross-reference, routed back through the same function into the *Beginner* path — so once used, the standalone ladder could not return you to standalone. The path branch is now gated on `state.fromPath`; the standalone branch that already existed as a fallback becomes the standalone route. **Live for all ten two-tier topics since v121** — it only became reachable on `modals` and `comparisons` at v127, which is why it surfaced then. `tools/tier-harness.js` gains a section asserting what the rung *does* in all four origin/direction combinations, plus a sweep of every two-tier topic; verified to fail against the v127 file before being committed against the fix. |
 
 ### Notes worth carrying forward
+
+**Azure Pronunciation Assessment cannot score Cantonese tone.** Confirmed by
+measurement, not inference: 詩 (si1), 試 (si3) and 事 (si6) all returned 100 on
+accuracy, fluency, completeness and overall, with ErrorType "None", *including*
+when the decoded text differed from the reference. The score only moves when a
+consonant or vowel is wrong. This is structural rather than a bug — the assessment
+scores phonemes, and tone is suprasegmental; Azure's tone-and-intonation dimension
+is **prosody**, which is en-US only. zh-HK *is* in the supported-locale list, so
+the locale is not the issue. A market search found no alternative: Speechace is
+English-centric, and SpeechSuper returns a separate tone score — exactly the
+architecture wanted — but supports Mandarin, not Cantonese. **Do not re-propose
+Azure scoring for tone.** Two things from that investigation are still useful:
+Azure's REST endpoint **is reachable from a browser origin** (CORS permits it, no
+SDK or CDN dependency needed), and its response carries **per-word and
+per-phoneme `Offset` and `Duration`** for zh-HK — the time alignment the sentence
+surface will need.
+
+**An HTTP 200 is not an outcome.** The Azure pronunciation probe posted WebM
+audio to an endpoint that accepts only WAV/PCM and OGG/OPUS. It did not answer
+400. It answered **200 with an empty recognition** — and the probe's own log
+printed "SUCCESS" on the status code, so three sessions were spent debugging
+transport that was never broken. Then the same probe reported "no scores" six
+times over responses that contained a full set of them, because the REST API
+returns scores *flat* on `NBest[0]` while the SDK nests them under a
+`PronunciationAssessment` object, and the code was written against the SDK shape.
+It then printed a confident recommendation to abandon REST for the SDK. **Judge
+success on the payload, never the status code**, and where two API shapes exist,
+accept either rather than assuming which one is in play. This is the same failure
+as the stale clone: the concrete-looking artefact was the wrong one to trust.
+
+**A reference set can be the noisy side of a comparison.** Tone measurement was
+validated against a native speaker's recordings and scored 2/8 — read at first as
+"the learner's tones are wrong". The opposite was true. The learner's careful
+citation forms measured 8/8 on shape, 8/8 on band, with 15/15 tone pairs clearing
+the noise floor; the native speaker's natural, relaxed productions came out
+compressed at 5/8 on band with a tightest pair *below* the noise floor. Fluent
+speakers do not produce citation forms on demand, and the exaggerated version is
+the measurable one. **Before concluding a signal is bad, check whether the thing
+it is being measured against is worse** — and prefer a reference averaged over
+many exemplars to one recorded in a single session.
+
+**Generated audio carries utterance-level prosody that is not part of the word.**
+Building tone references from the 189 single-syllable clips produced *every* tone
+sloping downward, including tone 2, which must rise. Each clip is a complete
+utterance, so the synthesiser applies a phrase-final fall — about −1.75 st,
+shared by all six tones and belonging to none of them. It has to be estimated from
+the data and subtracted. Two settings also needed retuning from their live-mic
+values: at the mic threshold only 91 of 189 clips yielded enough voiced frames and
+tone 4 collapsed to a single exemplar. **Pre-generated audio is not neutral test
+data** — it carries the choices of whatever produced it.
 
 **Measuring for a design question found a data-corrupting bug.** The tier work
 started as "where should the pills sit". Counting which path owns which tier —
