@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Syllable Segmentation Probe</title>
 <!--
-  tools/segment-probe.html — build S2
+  tools/segment-probe.html — build S3
 
   WHY THIS EXISTS
   ---------------
@@ -131,6 +131,59 @@
   (saam1 sap6): every one an /h/ or /s/ onset. That is either instrumentation or
   a real fact about weak Cantonese /h/, and only a per-onset count can tell which.
 
+  WHAT S3 CHANGED, AND WHAT S2 GOT WRONG
+  --------------------------------------
+  S2 predicted that the median filter was erasing short voiceless gaps and that
+  counting runs on the raw track would fix the ordering. It did not. Measured:
+
+      raw track       LONG 61.4%  SHORT 80.2%  NONE 45.6%
+      filtered track  LONG 72.2%  SHORT 85.3%  NONE 62.1%
+
+  The filter was HELPING, on every class. So the dominant error is not missing
+  boundaries, it is inventing them — the raw track drops frames inside syllables
+  and each dropout is counted as a break. NONE tells the story most clearly: it
+  expects one run and its agreement fell hardest when the filter came off, which
+  only happens if extra runs are appearing.
+
+  That means S2's diagnosis was backwards, and so was the fix. Both builds were
+  choosing between two bad options: a raw track that over-segments, and a median
+  filter that under-segments by closing genuine gaps along with spurious ones. A
+  filter designed to smooth pitch VALUES was being asked to make a voicing
+  DECISION, and it cannot do both jobs at once.
+
+  S3 stops asking it to. Run counting now uses an explicit two-parameter rule
+  stated in milliseconds, which is what the question actually is:
+
+      MIN_GAP  how long a voiceless interval must be to count as a boundary
+      MIN_RUN  how long a voiced interval must be to count as a syllable
+
+  Close every gap shorter than MIN_GAP, then drop every run shorter than MIN_RUN.
+  Spurious one-frame dropouts vanish because they are too short to be boundaries;
+  a real /h/ or stop closure survives because it is not. The median filter stays
+  where it belongs — smoothing the pitch values used for grading, nothing else.
+
+  THE ENERGY GATE IS THE OTHER SUSPECT
+  ------------------------------------
+  The gate is a fraction of the clip's PEAK, so anything much quieter than the
+  loudest vowel reads as silence. A nasal coda is exactly that: 朋友 (pang4 jau5)
+  came back as two runs on the mic when one was predicted, twice, and 朋 (pang4)
+  ends in /ng/. If a quiet coda is being cut out of its own syllable, the gate is
+  manufacturing boundaries by itself. S3 lowers the default to 0.05 and leans on
+  the YIN aperiodicity for the voicing decision instead, which is the measurement
+  that actually knows whether a frame was periodic.
+
+  WHAT THE PER-ONSET TABLE CANNOT TELL YOU YET
+  --------------------------------------------
+  The S2 run ranked z 92.6%, g 89.5%, d 82.6% at the top and h 50.0%, c 50.0% at
+  the bottom — which would mean unaspirated stops segment better than aspirated
+  ones, the reverse of what phonetics predicts. Do not act on that. It was
+  measured at a setting now known to over-segment, so every cell is contaminated
+  in an unknown proportion, and cells with fewer than ten words (p, k, gw, t) are
+  noise regardless. S3 logs the miss DIRECTION per onset — too many runs versus
+  too few — because that is what separates a consonant that fails to break
+  voicing from a tracker that breaks it in the wrong place, and S2 could not tell
+  them apart.
+
   NOT APP CODE. Diagnostic only, not in the sw.js precache list, no CACHE_VERSION
   bump. Read-only apart from the microphone in section B; writes nothing.
 -->
@@ -177,7 +230,7 @@
 <body>
 
 <h1>Syllable Segmentation Probe</h1>
-<p class="sub">Can a multi-syllable word be split into syllables from its pitch track alone? · build <b>S2</b></p>
+<p class="sub">Can a multi-syllable word be split into syllables from its pitch track alone? · build <b>S3</b></p>
 
 <!-- ── Reference ─────────────────────────────────────────────────────────── -->
 <div class="card">
@@ -218,9 +271,18 @@
     </label>
     <label class="sub" style="margin:0">Energy gate
       <select id="gateFrac">
-        <option value="0.05">0.05</option>
-        <option value="0.10" selected>as S1 · 0.10</option>
+        <option value="0.02">0.02</option>
+        <option value="0.05" selected>0.05</option>
+        <option value="0.10">as S1 · 0.10</option>
         <option value="0.20">0.20</option>
+      </select>
+    </label>
+    <label class="sub" style="margin:0">Shortest gap that counts as a boundary
+      <select id="minGap">
+        <option value="1">1 frame · 10 ms (no closing)</option>
+        <option value="2">2 · 20 ms</option>
+        <option value="3" selected>3 · 30 ms</option>
+        <option value="5">5 · 50 ms</option>
       </select>
     </label>
   </div>
@@ -275,7 +337,12 @@ const YIN_THRESHOLD = 0.40;
    estimate that is 40% as strong as a clean vowel's, which frication can reach.
    Set from the control; these are the defaults if the control is absent. */
 let VOICE_THRESHOLD = 0.20;
-let GATE_FRACTION   = 0.10;
+
+/* Fraction of the clip's PEAK below which a frame is treated as silence. A blunt
+   instrument: a nasal coda is far quieter than the vowel before it, so a gate
+   set high enough to exclude room noise also excludes part of the syllable and
+   manufactures a boundary. S3 sets it low and lets the aperiodicity decide. */
+let GATE_FRACTION = 0.05;
 
 /* A voiced run shorter than this is noise or a fragment, not a syllable. At a
    10 ms hop, 5 frames is 50 ms. The sweep reports how many words would answer
@@ -283,6 +350,14 @@ let GATE_FRACTION   = 0.10;
    a threshold that changes the headline number is a finding, not a setting. */
 const MIN_RUN = 5;
 const MIN_RUN_ALT = [3, 8];
+
+/* How long a voiceless interval must be before it counts as a boundary rather
+   than a dropped frame. This is the parameter S1 and S2 never had: they had a
+   median filter, which closes gaps and smooths values in one indivisible step,
+   so the two decisions could not be set independently. At a 10 ms hop, 3 frames
+   is 30 ms — shorter than any real stop closure, longer than any tracker
+   hiccup. Set from the control. */
+let MIN_GAP = 3;
 
 /* Shape threshold in semitones across the syllable, from tone-reference's
    classify(). Rising and falling are categorical judgements a threshold can
@@ -404,6 +479,27 @@ function analyse(pcm){
     return w.length >= 3 ? median(w) : v;
   });
   return { f0, raw, rms };
+}
+
+/* Close every voiceless interval shorter than minGap. Run first, before runs
+   are counted, so a one-frame dropout inside a vowel never becomes a boundary.
+   The value written into a closed gap is irrelevant — only the voiced/unvoiced
+   pattern matters here, and the pitch values used for grading come from the
+   separately filtered track. */
+function closeGaps(track, minGap){
+  const out = track.slice();
+  let i = 0;
+  while (i < out.length){
+    if (out[i] != null){ i++; continue; }
+    let j = i; while (j < out.length && out[j] == null) j++;
+    const isInterior = i > 0 && j < out.length;
+    if (isInterior && (j - i) < minGap){
+      const fill = out[i-1];
+      for (let k = i; k < j; k++) out[k] = fill;
+    }
+    i = j;
+  }
+  return out;
 }
 
 function voicedRuns(f0, minRun){
@@ -553,8 +649,10 @@ async function runSweep(){
 
   VOICE_THRESHOLD = +$('voiceTh').value;
   GATE_FRACTION   = +$('gateFrac').value;
-  log('Voicing decision at ' + VOICE_THRESHOLD + ', energy gate at ' + GATE_FRACTION
-      + ', pitch values still at YIN ' + YIN_THRESHOLD + '.');
+  MIN_GAP         = +$('minGap').value;
+  log('Settings: voicing ' + VOICE_THRESHOLD + ', gate ' + GATE_FRACTION
+      + ', min gap ' + MIN_GAP + ' frames, min run ' + MIN_RUN
+      + ' frames, pitch values still at YIN ' + YIN_THRESHOLD + '.');
 
   const lim = +$('limit').value;
   if (lim && words.length > lim){ words = words.slice(0, lim); log('  limited to first ' + lim + ' for this run'); }
@@ -573,11 +671,13 @@ async function runSweep(){
     try {
       const pcm = await decodeClip(ctx, '../audio/words/' + w.id + '.mp3');
       const { f0, raw, rms } = analyse(pcm);
-      /* Runs come off the RAW track — see the note in analyse(). The filtered
-         count is kept alongside purely to show what the filter was costing. */
-      const runs = voicedRuns(raw, MIN_RUN);
+      /* Gap-closed raw track: spurious dropouts removed without closing the
+         genuine gaps a median filter would also have swallowed. The median
+         filtered count is kept alongside as the S1/S2 comparison. */
+      const gapped = closeGaps(raw, MIN_GAP);
+      const runs = voicedRuns(gapped, MIN_RUN);
       const runsFiltered = voicedRuns(f0, MIN_RUN).length;
-      const altRuns = MIN_RUN_ALT.map(m => voicedRuns(raw, m).length);
+      const altRuns = MIN_RUN_ALT.map(m => voicedRuns(gapped, m).length);
       f0.forEach(v => { if (v != null) allHz.push(v); });
       rows.push({ w, f0, raw, rms, runs, runsFiltered, altRuns });
     } catch (e){ failed++; log('  skip ' + w.id + ' (' + w.c + ') — ' + e.message); }
@@ -627,8 +727,11 @@ async function runSweep(){
 
     if (w.syls.length === 2){
       const key = checkedCoda(w.syls[0]) ? '(checked coda)' : onsetKey(w.syls[1]);
-      const o = onsetTally[key] || (onsetTally[key] = { key, cls: w.wordClass, n:0, ok:0 });
-      o.n++; if (got === expected) o.ok++;
+      const o = onsetTally[key] || (onsetTally[key] = { key, cls: w.wordClass, n:0, ok:0, over:0, under:0 });
+      o.n++;
+      if (got === expected) o.ok++;
+      else if (got > expected) o.over++;      /* a break invented, or one syllable split in two */
+      else o.under++;                          /* the boundary produced no gap at all */
     }
 
     if (got !== expected){
@@ -655,7 +758,7 @@ async function runSweep(){
   }
 
   SWEEP = { stats, onsetTally, med, declination, analysed: rows.length,
-            settings: { VOICE_THRESHOLD, GATE_FRACTION, MIN_RUN } };
+            settings: { VOICE_THRESHOLD, GATE_FRACTION, MIN_GAP, MIN_RUN } };
   renderSweep(stats, onsetTally);
   $('bar').style.display = 'none';
   $('sweepText').textContent = 'Done — ' + rows.length + ' clips.';
@@ -666,7 +769,7 @@ function renderSweep(stats, onsetTally){
   const order = ['LONG','SHORT','NONE'];
   let html = '<table><thead><tr><th>Predicted class</th><th>Words</th>'
     + '<th>Run count as predicted</th><th>Too few runs</th><th>Too many</th>'
-    + '<th>Same, off the filtered track (S1\'s method)</th>'
+    + '<th>Same, median-filtered (S1 and S2\'s method)</th>'
     + '<th>Syllable class recovered</th></tr></thead><tbody>';
   let totN=0, totM=0, totS=0, totSOK=0;
   for (const k of order){
@@ -718,21 +821,23 @@ function renderSweep(stats, onsetTally){
     + '<p class="sub" style="margin:4px 0 0">Two-syllable words only: exactly one boundary each. '
     + 'Cells under 10 words are marked — they are too small to conclude from.</p>'
     + '<table><thead><tr><th>Onset of syllable 2</th><th>Predicted</th><th>Words</th>'
-    + '<th>Break found</th></tr></thead><tbody>'
+    + '<th>Break found</th><th>No gap at all</th><th>Extra runs</th></tr></thead><tbody>'
     + os.map(o => {
         const rate = o.ok/o.n;
         const cls = o.n < 10 ? 'sub' : rate > 0.9 ? 'pass' : rate > 0.7 ? 'mid' : 'fail';
         return `<tr><td><b>${o.key}</b></td><td class="sub">${o.cls}</td>`
           + `<td class="num">${o.n}${o.n < 10 ? ' ⚠' : ''}</td>`
-          + `<td class="num ${cls}">${o.ok} · ${pct(o.ok,o.n)}</td></tr>`;
+          + `<td class="num ${cls}">${o.ok} · ${pct(o.ok,o.n)}</td>`
+          + `<td class="num">${o.under}</td><td class="num">${o.over}</td></tr>`;
       }).join('')
     + '</tbody></table>'
-    + '<div class="verdict">An onset near the bottom of this table that was predicted LONG is the '
-    + 'thing to explain. Two candidates and they need different fixes: the tracker is calling '
-    + 'frication voiced, which the voicing threshold addresses — or the consonant genuinely does '
-    + 'not interrupt voicing in running speech, in which case it belongs in a different class and '
-    + 'the prediction rule is what changes. Cantonese /h/ is the obvious suspect for the second: '
-    + 'it is a weak glottal fricative and between vowels it is often barely there at all.</div>';
+    + '<div class="verdict"><b>Read the last two columns before the third.</b> An onset failing with '
+    + '<i>no gap at all</i> is a claim about the consonant: it did not interrupt voicing, so it '
+    + 'belongs in a different predicted class and the rule is what changes. Cantonese /h/ is the '
+    + 'obvious candidate — a weak glottal fricative, often barely there between vowels. An onset '
+    + 'failing with <i>extra runs</i> is a claim about the tracker: the boundary was found, and '
+    + 'then some more that are not there. Those are opposite problems with opposite fixes, and '
+    + 'a single percentage cannot distinguish them, which is why S2 could not.</div>';
 
   for (const k of order){
     if (stats[k].examples.length)
@@ -750,7 +855,10 @@ function renderSweep(stats, onsetTally){
   log('\nRun agreement (raw track): ' + order.map(k => k+' '+pct(stats[k].runMatch,stats[k].n)).join('  '));
   log('Same off the filtered track: ' + order.map(k => k+' '+pct(stats[k].filtMatch,stats[k].n)).join('  '));
   log('Ordering LONG ≥ SHORT ≥ NONE: ' + (ordered ? 'HOLDS' : 'does not hold'));
-  log('Per onset: ' + os.map(o => o.key+' '+pct(o.ok,o.n)+' (n='+o.n+')').join('  '));
+  log('Per onset  [onset  n  found%  no-gap  extra]:');
+  os.forEach(o => log('   ' + o.key.padEnd(22) + String(o.n).padStart(4)
+      + pct(o.ok,o.n).padStart(8) + String(o.under).padStart(7) + String(o.over).padStart(7)
+      + (o.n < 10 ? '   (too few to conclude)' : '')));
   log('Class recovery (upper bound): ' + order.map(k => k+' '+pct(stats[k].sylOK,stats[k].syl)).join('  '));
 }
 
@@ -812,8 +920,9 @@ async function judgeTake(i, blob){
   const pcm = (await off.startRendering()).getChannelData(0);
   VOICE_THRESHOLD = +$('voiceTh').value;
   GATE_FRACTION   = +$('gateFrac').value;
+  MIN_GAP         = +$('minGap').value;
   const { raw } = analyse(pcm);
-  const runs = voicedRuns(raw, MIN_RUN);
+  const runs = voicedRuns(closeGaps(raw, MIN_GAP), MIN_RUN);
   micTakes[i] = { runs: runs.length, expected: w.groups.length };
   const ok = runs.length === w.groups.length;
   $('micres-' + i).innerHTML = `<span class="${ok?'pass':'fail'}">${runs.length} run${runs.length===1?'':'s'}</span>`
