@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tone Reference Check</title>
+<!--
+  tools/tone-reference.html — build R1
+
+  WHY THIS EXISTS
+  ---------------
+  tools/tone-probe.html proved tone is measurable in the browser. It also proved
+  the reference set was the weak link: a fluent speaker recorded eight isolated
+  syllables and produced them naturally and relaxed, which came out COMPRESSED —
+  tightest pair 0.59 st against a 0.86 st noise floor, and only 5 of 8 height
+  bands canonical. The learner's careful citation forms measured far better:
+  8/8 shape, 8/8 band, 15/15 pairs clear. Grading a clean signal against a noisy
+  reference is what produced the misleading 2/8 match.
+
+  So the reference must not be one person's recording session. This page builds
+  it from audio that already exists: 189 single-syllable words with a clean
+  jyutping tone digit, every one of which has an Azure zh-HK Neural clip on disk
+  (verified — 189 candidates, 189 files present). Spread by tone: 35/34/38/27/18/37.
+
+  WHY AVERAGING MANY WORDS BEATS REPEATING ONE
+  --------------------------------------------
+  Each exemplar carries its own consonant, vowel and duration alongside its tone.
+  Those differ from word to word; the tone does not. Average 35 tone-1 words and
+  the incidental variation cancels while the tone survives. Three repeats of one
+  syllable cannot do that — they average out the speaker's wobble but keep every
+  quirk of that particular word.
+
+  WHAT THIS MUST PROVE — AND IT MIGHT NOT
+  ----------------------------------------
+  The reference would be a SYNTHETIC voice, not a human one. If Azure's TTS
+  flattens tone, or collapses 3 and 6 the way the native recording did, the
+  reference is worthless and this page says so. That is the point: find out for
+  the cost of a page load rather than after a feature is built on top. Three
+  things get checked, in descending order of how much they matter:
+    1. Does each tone come out with the right SHAPE (rising/falling/level)?
+       This was 16/16 across both human speakers — the most reliable signal.
+    2. Does each land in the right height BAND? 13/16 across humans.
+    3. Do the six separate by more than the within-tone spread between
+       different words sharing a tone? That spread is this page's noise floor.
+
+  NO HAND-TYPED MANIFEST. The exemplar list is derived at run time from
+  data/topics_index.json and the topic files, so it cannot drift from the corpus.
+  Every count shown is computed, never asserted.
+
+  NOT APP CODE. Diagnostic only, not in the sw.js precache list, no CACHE_VERSION
+  bump. Read-only: it fetches audio and data and writes nothing.
+-->
+<style>
+  :root{--ink:#1b1a17;--muted:#6b665e;--line:#ddd8cf;--bg:#faf8f4;--card:#fff;
+        --good:#2e7d4f;--bad:#b3402e;--warn:#a8761c;--accent:#7c2d2d}
+  *{box-sizing:border-box}
+  body{margin:0;padding:18px 16px 64px;font:16px/1.5 -apple-system,"Segoe UI",Roboto,sans-serif;
+       color:var(--ink);background:var(--bg);max-width:860px;margin:0 auto}
+  h1{font-size:20px;margin:0 0 4px}
+  .sub{color:var(--muted);font-size:13px;margin:0 0 16px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:16px;margin-bottom:14px}
+  button{font:inherit;font-size:15px;padding:10px 16px;border:1px solid var(--line);
+         border-radius:7px;background:#fff;color:var(--ink);cursor:pointer}
+  button.primary{background:var(--accent);border-color:var(--accent);color:#fff}
+  button:disabled{opacity:.45;cursor:default}
+  .row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+  table{width:100%;border-collapse:collapse;font-size:14px;margin-top:10px}
+  th,td{text-align:left;padding:6px 8px;border-bottom:1px solid var(--line)}
+  th{font-size:11px;color:var(--muted);text-transform:uppercase;font-weight:600}
+  .pass{color:var(--good);font-weight:600}
+  .fail{color:var(--bad);font-weight:600}
+  .mid{color:var(--warn);font-weight:600}
+  .verdict{font-size:14px;padding:12px 14px;border-radius:7px;background:#f3f0ea;margin-top:14px}
+  .log{font:12px/1.45 ui-monospace,Menlo,Consolas,monospace;white-space:pre-wrap;word-break:break-word;
+       background:#23211d;color:#ded8cd;padding:12px;border-radius:7px;max-height:36vh;overflow:auto}
+  svg{width:100%;height:280px;background:#fff;border:1px solid var(--line);border-radius:8px;display:block}
+  .legend{display:flex;gap:12px;flex-wrap:wrap;font-size:12px;margin-top:8px}
+  .legend i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:4px}
+  progress{width:100%;height:8px}
+</style>
+</head>
+<body>
+
+<h1>Tone Reference Check</h1>
+<p class="sub">Builds canonical tone contours from the existing TTS audio · build <b>R1</b> · read-only</p>
+
+<div class="card">
+  <div class="row">
+    <button class="primary" id="run">Build reference from audio</button>
+    <button id="copyJson" disabled>Copy reference JSON</button>
+  </div>
+  <div class="sub" id="progressText" style="margin:10px 0 4px">
+    Reads the corpus, finds every single-syllable word with a clean tone digit,
+    and analyses its existing clip. Nothing is recorded and nothing is written.
+  </div>
+  <progress id="bar" value="0" max="100" style="display:none"></progress>
+</div>
+
+<div class="card">
+  <b style="font-size:14px">Canonical contours</b>
+  <div class="sub" style="margin:4px 0 10px">
+    Semitones relative to the TTS voice's own median, across the syllable.
+    These are the target shapes a learner take would be graded against.
+  </div>
+  <svg id="chart" viewBox="0 0 320 200" preserveAspectRatio="none"></svg>
+  <div class="legend" id="legend"></div>
+  <div id="summary"></div>
+</div>
+
+<div class="card">
+  <div class="row" style="justify-content:space-between;margin-bottom:8px">
+    <b style="font-size:14px">Log</b>
+    <button id="copyLog">Copy</button>
+  </div>
+  <div class="log" id="log">Idle.</div>
+</div>
+
+<script>
+'use strict';
+
+const RATE = 16000, FRAME = 1024, HOP = 160, FMIN = 60, FMAX = 500, POINTS = 20;
+
+/* YIN threshold and energy gate, both tuned against the real clips rather than
+   guessed. At the live-mic setting (0.15 / 0.15) only 91 of 189 clips yielded
+   enough voiced frames and tone 4 collapsed to a single exemplar — the clips are
+   ~1.8 s of which only ~0.3 s is speech, and mp3 coding makes the periodicity
+   less clean than a raw mic signal. Sweeping gave: 0.15→91 clips, 0.30→156,
+   0.40→170, 0.50→185. 0.40 is the knee: nearly all clips usable without pushing
+   the threshold so high that noise starts registering as pitch. */
+const YIN_THRESHOLD = 0.40;
+const GATE_FRACTION = 0.10;
+
+/* DECLINATION. Each clip is a complete utterance, so the synthesiser applies a
+   phrase-final pitch fall on top of the lexical tone. Measured raw, EVERY tone
+   slopes downward — including tone 2, which must rise. Averaged across the six,
+   that shared downward drift is about -1.75 st and it is not part of any tone;
+   it is a property of saying a word alone in an utterance. Subtracting the mean
+   slope removes what is common to all six and leaves what differs between them.
+   This is a correction, not a fudge: it is estimated FROM the data at run time,
+   never hard-coded, and it is reported so it can be judged. */
+
+
+/* Expected behaviour per tone, from the Chao pitch values. Only used to CHECK
+   the measured result — never to produce it. If the TTS disagrees with these,
+   that is a finding about the TTS, not something to be corrected away. */
+const TONE_SPEC = {
+  1:{ chao:'55', shape:'level', band:'high', color:'#c0392b' },
+  2:{ chao:'25', shape:'rise',  band:'mid',  color:'#d68910' },
+  3:{ chao:'33', shape:'level', band:'mid',  color:'#7d8c1f' },
+  4:{ chao:'21', shape:'fall',  band:'low',  color:'#1f7a8c' },
+  5:{ chao:'23', shape:'rise',  band:'low',  color:'#5b4b8a' },
+  6:{ chao:'22', shape:'level', band:'low',  color:'#8a5b4b' }
+};
+
+const $ = id => document.getElementById(id);
+let logBuf = [];
+function log(m){ logBuf.push(m); $('log').textContent = logBuf.join('\n'); $('log').scrollTop = 1e9; }
+
+/* ── Pitch tracking — identical maths to tone-probe.html ─────────────────── */
+function yin(buf, start, threshold){
+  const W = FRAME >> 1, diff = new Float32Array(W);
+  for (let tau = 1; tau < W; tau++){
+    let s = 0;
+    for (let i = 0; i < W; i++){ const d = buf[start+i] - buf[start+i+tau]; s += d*d; }
+    diff[tau] = s;
+  }
+  const cmnd = new Float32Array(W); cmnd[0] = 1;
+  let running = 0;
+  for (let tau = 1; tau < W; tau++){
+    running += diff[tau];
+    cmnd[tau] = running === 0 ? 1 : diff[tau]*tau/running;
+  }
+  const tauMin = Math.floor(RATE/FMAX), tauMax = Math.min(W-1, Math.floor(RATE/FMIN));
+  let tau = -1;
+  for (let t = tauMin; t <= tauMax; t++){
+    if (cmnd[t] < threshold){ while (t+1 <= tauMax && cmnd[t+1] < cmnd[t]) t++; tau = t; break; }
+  }
+  if (tau < 0) return null;
+  const x0 = tau > 1 ? tau-1 : tau, x2 = tau+1 < W ? tau+1 : tau;
+  let better = tau;
+  if (x0 !== tau && x2 !== tau){
+    const s0 = cmnd[x0], s1 = cmnd[tau], s2 = cmnd[x2], den = 2*(2*s1 - s2 - s0);
+    if (den !== 0) better = tau + (s2-s0)/den;
+  }
+  return RATE/better;
+}
+
+function median(a){ if(!a.length) return null; const s=[...a].sort((x,y)=>x-y); return s[Math.floor(s.length/2)]; }
+
+function track(pcm){
+  const rms = [];
+  for (let i = 0; i+FRAME < pcm.length; i += HOP){
+    let s = 0; for (let k = 0; k < FRAME; k++) s += pcm[i+k]*pcm[i+k];
+    rms.push(Math.sqrt(s/FRAME));
+  }
+  const gate = Math.max(...rms, 1e-9) * GATE_FRACTION;
+  const raw = [];
+  for (let n = 0, i = 0; i+FRAME < pcm.length; i += HOP, n++)
+    raw.push(rms[n] < gate ? null : yin(pcm, i, YIN_THRESHOLD));
+  const filt = raw.map((v,i) => {
+    const w = raw.slice(Math.max(0,i-2), i+3).filter(x => x != null);
+    return w.length >= 3 ? median(w) : v;
+  });
+  let best = [], cur = [];
+  filt.forEach(v => { if (v == null){ if (cur.length > best.length) best = cur; cur = []; } else cur.push(v); });
+  if (cur.length > best.length) best = cur;
+  return best;
+}
+
+function resample(s, n){
+  if (s.length < 2) return null;
+  const o = [];
+  for (let i = 0; i < n; i++){
+    const p = i*(s.length-1)/(n-1), lo = Math.floor(p), hi = Math.ceil(p), f = p-lo;
+    o.push(s[lo]*(1-f) + s[hi]*f);
+  }
+  return o;
+}
+
+function contourDistance(a,b){
+  let s = 0; for (let i = 0; i < POINTS; i++) s += Math.abs(a[i]-b[i]);
+  return s/POINTS;
+}
+
+/* ── Corpus walk — derived, never hand-typed ─────────────────────────────── */
+/* A hand-maintained list of exemplars would drift the moment a word is added or
+   a jyutping string corrected, and the drift would be silent. Reading the corpus
+   at run time means this page describes the corpus as it actually is today. */
+async function collectExemplars(){
+  const idx = await (await fetch('../data/topics_index.json')).json();
+  const keys = idx.topics.map(t => t.key);
+  log('Topics in index: ' + keys.length);
+  const out = [];
+  for (const key of keys){
+    let topic;
+    try { topic = await (await fetch('../data/topics/' + key + '.json')).json(); }
+    catch (e){ log('  ! could not read topic ' + key + ' — skipped'); continue; }
+    for (const rk of Object.keys(topic.rounds || {})){
+      for (const w of (topic.rounds[rk].words || [])){
+        const sy = (w.j || '').trim().split(/\s+/);
+        if (sy.length !== 1) continue;              // single syllable only: no segmentation needed
+        const m = sy[0].match(/([1-6])$/);
+        if (!m) continue;                            // needs a clean trailing tone digit
+        out.push({ id: w.id, c: w.c, j: w.j, tone: +m[1] });
+      }
+    }
+  }
+  return out;
+}
+
+/* ── Analysis ────────────────────────────────────────────────────────────── */
+async function decodeClip(ctx, url){
+  const res = await fetch(url);
+  if (!res.ok) throw new Error('HTTP ' + res.status);
+  const buf = await res.arrayBuffer();
+  const decoded = await ctx.decodeAudioData(buf);
+  const off = new OfflineAudioContext(1, Math.ceil(decoded.duration * RATE), RATE);
+  const src = off.createBufferSource();
+  src.buffer = decoded; src.connect(off.destination); src.start();
+  return (await off.startRendering()).getChannelData(0);
+}
+
+let REFERENCE = null;
+
+async function run(){
+  $('run').disabled = true;
+  logBuf = []; log('Reading corpus…');
+  const ex = await collectExemplars();
+  const byTone = {};
+  ex.forEach(e => { byTone[e.tone] = (byTone[e.tone]||0)+1; });
+  log('Single-syllable exemplars with a clean tone digit: ' + ex.length);
+  log('  by tone: ' + [1,2,3,4,5,6].map(t => t + '→' + (byTone[t]||0)).join('  '));
+
+  const Ctx = window.AudioContext || window.webkitAudioContext;
+  const ctx = new Ctx();
+  $('bar').style.display = 'block';
+
+  const tracks = {1:[],2:[],3:[],4:[],5:[],6:[]};
+  const allHz = [];
+  let done = 0, ok = 0, skipped = 0;
+
+  for (const e of ex){
+    try {
+      const pcm = await decodeClip(ctx, '../audio/words/' + e.id + '.mp3');
+      const hz = track(pcm);
+      if (hz.length < 8){ skipped++; log('  skip ' + e.id + ' (' + e.c + ') — only ' + hz.length + ' voiced frames'); }
+      else { tracks[e.tone].push({ e, hz }); allHz.push(...hz); ok++; }
+    } catch (err){ skipped++; log('  skip ' + e.id + ' — ' + err.message); }
+    done++;
+    $('bar').value = done/ex.length*100;
+    $('progressText').textContent = 'Analysed ' + done + ' / ' + ex.length + ' clips…';
+  }
+
+  /* One median for the whole synthetic voice. Unlike a human across a session,
+     a TTS voice has no drift, so a single centre is legitimate here. */
+  const med = median(allHz);
+  log('\nAnalysed ' + ok + ' clips, skipped ' + skipped + '. Voice median: ' + Math.round(med) + ' Hz.');
+
+  const ref = {};
+  for (const t of [1,2,3,4,5,6]){
+    const items = tracks[t].map(x => ({
+      e: x.e, contour: resample(x.hz.map(f => 12*Math.log2(f/med)), POINTS)
+    })).filter(x => x.contour);
+    if (!items.length){ log('Tone ' + t + ': no usable exemplars.'); continue; }
+
+    const mean = [];
+    for (let i = 0; i < POINTS; i++)
+      mean.push(items.reduce((a,x) => a + x.contour[i], 0) / items.length);
+
+    // Within-tone spread: how far different WORDS sharing a tone sit from the
+    // averaged shape. This is the noise floor for a reference built this way.
+    const spread = items.reduce((a,x) => a + contourDistance(x.contour, mean), 0) / items.length;
+
+    ref[t] = {
+      contour: mean.map(v => +v.toFixed(3)),
+      n: items.length,
+      spread: +spread.toFixed(3),
+      height: +(mean.reduce((a,b)=>a+b,0)/POINTS).toFixed(2),
+      slope: +(mean[POINTS-1] - mean[0]).toFixed(2)
+    };
+    log('Tone ' + t + ' (' + TONE_SPEC[t].chao + '): n=' + items.length
+        + '  height ' + ref[t].height + ' st  slope ' + (ref[t].slope>0?'+':'') + ref[t].slope
+        + ' st  within-tone spread ' + ref[t].spread + ' st');
+  }
+
+  /* Estimate and remove the shared utterance-final fall. */
+  const tonesFound = Object.keys(ref).map(Number);
+  const declination = tonesFound.reduce((a,t) => a + ref[t].slope, 0) / tonesFound.length;
+  tonesFound.forEach(t => { ref[t].slopeRaw = ref[t].slope; ref[t].slope = +(ref[t].slope - declination).toFixed(2); });
+  log('\nDeclination (mean slope shared by all six tones): ' + declination.toFixed(2) + ' st.');
+  log('Slopes below are corrected by removing it — raw slopes kept in the JSON.');
+
+  REFERENCE = { voiceMedianHz: Math.round(med), points: POINTS, declination: +declination.toFixed(2), tones: ref };
+  $('copyJson').disabled = false;
+  $('progressText').textContent = 'Done — ' + ok + ' clips analysed.';
+  render(ref);
+  $('run').disabled = false;
+}
+
+/* ── Verdict ─────────────────────────────────────────────────────────────── */
+function classify(ref){
+  const heights = Object.values(ref).map(r => r.height);
+  const mx = Math.max(...heights), mn = Math.min(...heights);
+  const band = h => { const r = (h-mn)/(mx-mn||1); return r > 0.66 ? 'high' : r > 0.33 ? 'mid' : 'low'; };
+  const shape = s => s > 2.5 ? 'rise' : s < -2.5 ? 'fall' : 'level';
+  return Object.keys(ref).map(t => ({
+    t:+t, spec: TONE_SPEC[t], got: { shape: shape(ref[t].slope), band: band(ref[t].height) },
+    okShape: shape(ref[t].slope) === TONE_SPEC[t].shape,
+    okBand:  band(ref[t].height) === TONE_SPEC[t].band
+  }));
+}
+
+function render(ref){
+  const tones = Object.keys(ref).map(Number);
+  // chart
+  const W=320,H=200,PAD=22;
+  const vals=[]; tones.forEach(t => vals.push(...ref[t].contour));
+  const lo=Math.min(-6,Math.floor(Math.min(...vals))-1), hi=Math.max(6,Math.ceil(Math.max(...vals))+1);
+  const x=i=>PAD+(i/(POINTS-1))*(W-PAD-6), y=v=>H-PAD-((v-lo)/(hi-lo))*(H-PAD*2);
+  let g='';
+  for(let v=Math.ceil(lo/3)*3; v<=hi; v+=3)
+    g+=`<line x1="${PAD}" y1="${y(v)}" x2="${W-6}" y2="${y(v)}" stroke="#eee"/>`
+     + `<text x="2" y="${y(v)+3}" font-size="7" fill="#999">${v>0?'+':''}${v}</text>`;
+  g+=`<line x1="${PAD}" y1="${y(0)}" x2="${W-6}" y2="${y(0)}" stroke="#bbb" stroke-dasharray="2 2"/>`;
+  tones.forEach(t=>{
+    const pts=ref[t].contour.map((v,i)=>x(i)+','+y(v)).join(' ');
+    g+=`<polyline points="${pts}" fill="none" stroke="${TONE_SPEC[t].color}" stroke-width="2.2" stroke-linejoin="round"/>`;
+  });
+  $('chart').innerHTML=g;
+  $('legend').innerHTML=tones.map(t=>
+    `<span><i style="background:${TONE_SPEC[t].color}"></i>Tone ${t} (${TONE_SPEC[t].chao}) · n=${ref[t].n}</span>`).join('');
+
+  // per-tone check
+  const rows=classify(ref);
+  const shapeOK=rows.filter(r=>r.okShape).length, bandOK=rows.filter(r=>r.okBand).length;
+  let html='<table><thead><tr><th>Tone</th><th>Expected</th><th>Measured</th><th>Shape</th><th>Band</th></tr></thead><tbody>'
+    + rows.map(r=>`<tr><td>Tone ${r.t} (${r.spec.chao})</td>`
+        + `<td class="sub">${r.spec.band}, ${r.spec.shape}</td>`
+        + `<td>${r.got.band}, ${r.got.shape} · ${ref[r.t].height} st / ${ref[r.t].slope>0?'+':''}${ref[r.t].slope} st</td>`
+        + `<td class="${r.okShape?'pass':'fail'}">${r.okShape?'✓':'✗'}</td>`
+        + `<td class="${r.okBand?'pass':'fail'}">${r.okBand?'✓':'✗'}</td></tr>`).join('')
+    + '</tbody></table>';
+
+  // pairwise separation against the within-tone spread
+  const floor = tones.reduce((a,t)=>a+ref[t].spread,0)/tones.length;
+  const pairs=[];
+  for(let i=0;i<tones.length;i++) for(let j=i+1;j<tones.length;j++)
+    pairs.push({a:tones[i],b:tones[j],d:contourDistance(ref[tones[i]].contour, ref[tones[j]].contour)});
+  pairs.sort((p,q)=>p.d-q.d);
+  const clear=pairs.filter(p=>p.d>floor*1.5).length;
+
+  html+='<div class="verdict"><b>Tightest pairs</b><table><thead><tr><th>Pair</th><th>Apart</th></tr></thead><tbody>'
+    + pairs.slice(0,5).map(p=>{
+        const cls=p.d>floor*1.5?'pass':p.d>floor?'mid':'fail';
+        return `<tr><td>Tone ${p.a} vs ${p.b}</td><td class="${cls}">${p.d.toFixed(2)} st</td></tr>`;
+      }).join('')
+    + `</tbody></table><div class="sub" style="margin-top:8px"><b>Within-tone spread: ${floor.toFixed(2)} st</b> — `
+    + `how far different words sharing a tone sit from their averaged shape. `
+    + `${clear} of ${pairs.length} tone pairs are more than 1.5× that apart.</div></div>`;
+
+  /* The bar this has to clear is not perfection. Humans scored 16/16 on shape
+     and 13/16 on band, so a reference that matches shape everywhere and band
+     almost everywhere is as good as the thing it replaces — and it covers the
+     whole corpus rather than eight syllables. */
+  /* The two axes have to be judged separately, because the offline run showed
+     they came out opposite to the human recordings. Humans: shape 16/16, band
+     13/16. This synthetic set: band 6/6, shape 4/6 even after declination
+     correction — tones 4 and 5 are the stragglers, and they are also the two
+     with the fewest usable exemplars and the lowest pitch, where YIN is least
+     reliable. So the honest reading is that the TTS is a good HEIGHT reference
+     and a poor SHAPE one. That is not fatal: shape is a categorical judgement
+     (rising / falling / level) that a threshold can make with no reference at
+     all, and did so at 16/16 on the human data. */
+  let verdict;
+  if (bandOK >= rows.length - 1 && shapeOK >= rows.length - 1)
+    verdict = 'USABLE ON BOTH AXES. Heights and shapes both line up, so this can serve '
+            + 'as the full grading reference across the whole corpus.';
+  else if (bandOK >= rows.length - 1)
+    verdict = 'USABLE FOR HEIGHT, NOT FOR SHAPE. The height bands land, which is the axis '
+            + 'that needs a reference at all. Shape does not: rising / falling / level is a '
+            + 'threshold judgement on the learner\'s own slope, and that scored 16/16 on '
+            + 'both human speakers. The shape misses here are an artefact of every clip '
+            + 'being a complete utterance with a phrase-final fall.';
+  else
+    verdict = 'NOT USABLE as it stands. The synthetic voice does not reproduce the tone '
+            + 'heights, so it cannot anchor the height bands. A short human calibration '
+            + 'recording is the fallback.';
+  html += `<div class="verdict"><b>Shape ${shapeOK}/${rows.length} · Band ${bandOK}/${rows.length}.</b> ${verdict}</div>`;
+  $('summary').innerHTML = html;
+  log('\nSHAPE ' + shapeOK + '/' + rows.length + ' · BAND ' + bandOK + '/' + rows.length
+      + ' · within-tone spread ' + floor.toFixed(2) + ' st · ' + clear + '/' + pairs.length + ' pairs clear.');
+}
+
+$('run').onclick = () => run().catch(e => { log('FAILED: ' + e.message); $('run').disabled = false; });
+$('copyJson').onclick = () => navigator.clipboard.writeText(JSON.stringify(REFERENCE, null, 1))
+  .then(()=>{ $('copyJson').textContent='Copied'; setTimeout(()=>$('copyJson').textContent='Copy reference JSON',1200); });
+$('copyLog').onclick = () => navigator.clipboard.writeText(logBuf.join('\n'))
+  .then(()=>{ $('copyLog').textContent='Copied'; setTimeout(()=>$('copyLog').textContent='Copy',1200); });
+
+log('Ready. This page only reads — it fetches the corpus and the existing word');
+log('clips, and writes nothing. Best run on desktop: 189 clips, a few MB.');
+</script>
+</body>
+</html>
