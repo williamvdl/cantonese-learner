@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Tone Reference Check</title>
 <!--
-  tools/tone-reference.html — build R1
+  tools/tone-reference.html — build R2
 
   WHY THIS EXISTS
   ---------------
@@ -47,8 +47,19 @@
   data/topics_index.json and the topic files, so it cannot drift from the corpus.
   Every count shown is computed, never asserted.
 
+  WHAT R2 CHANGED
+  ---------------
+  R1 computed the reference and offered it on the clipboard, which meant the
+  numbers existed only wherever they were pasted. They were not in the repo, and
+  the tone feature has to READ them at runtime — a phone has no access to the
+  corpus audio, so this is the one part of the grading model the app cannot
+  recompute for itself. R2 adds a download that writes data/tone_reference.json,
+  stamps provenance and the shape/band verdict into the file, and otherwise
+  changes no maths: rerun it and the contours are identical.
+
   NOT APP CODE. Diagnostic only, not in the sw.js precache list, no CACHE_VERSION
-  bump. Read-only: it fetches audio and data and writes nothing.
+  bump for this file. It fetches audio and data and writes nothing to the repo;
+  its OUTPUT, data/tone_reference.json, is app data and does need precaching.
 -->
 <style>
   :root{--ink:#1b1a17;--muted:#6b665e;--line:#ddd8cf;--bg:#faf8f4;--card:#fff;
@@ -82,11 +93,12 @@
 <body>
 
 <h1>Tone Reference Check</h1>
-<p class="sub">Builds canonical tone contours from the existing TTS audio · build <b>R1</b> · read-only</p>
+<p class="sub">Builds canonical tone contours from the existing TTS audio · build <b>R2</b> · read-only</p>
 
 <div class="card">
   <div class="row">
     <button class="primary" id="run">Build reference from audio</button>
+    <button id="downloadJson" disabled>Download tone_reference.json</button>
     <button id="copyJson" disabled>Copy reference JSON</button>
   </div>
   <div class="sub" id="progressText" style="margin:10px 0 4px">
@@ -330,9 +342,28 @@ async function run(){
   log('\nDeclination (mean slope shared by all six tones): ' + declination.toFixed(2) + ' st.');
   log('Slopes below are corrected by removing it — raw slopes kept in the JSON.');
 
-  REFERENCE = { voiceMedianHz: Math.round(med), points: POINTS, declination: +declination.toFixed(2), tones: ref };
+  /* Provenance travels with the numbers. A committed reference file is read by
+     the app at runtime, so whoever reads it later has to be able to tell WHICH
+     corpus and WHICH voice produced it without going back to chat history —
+     the same reason every count in CONTENT.md is generated rather than typed.
+     Date only, not a timestamp: a full clock reading would churn the diff on
+     every regeneration without telling anyone anything. */
+  REFERENCE = {
+    builtBy: 'tools/tone-reference.html build R2',
+    builtOn: new Date().toISOString().slice(0, 10),
+    source: 'Azure zh-HK-WanLungNeural word clips in audio/words/',
+    exemplars: ok,
+    skipped: skipped,
+    analysis: { rate: RATE, frame: FRAME, hop: HOP, fmin: FMIN, fmax: FMAX,
+                yinThreshold: YIN_THRESHOLD, gateFraction: GATE_FRACTION },
+    voiceMedianHz: Math.round(med),
+    points: POINTS,
+    declination: +declination.toFixed(2),
+    tones: ref
+  };
   $('copyJson').disabled = false;
-  $('progressText').textContent = 'Done — ' + ok + ' clips analysed.';
+  $('downloadJson').disabled = false;
+  $('progressText').textContent = 'Done — ' + ok + ' clips analysed. Download the JSON and commit it to data/.';
   render(ref);
   $('run').disabled = false;
 }
@@ -426,12 +457,40 @@ function render(ref){
             + 'heights, so it cannot anchor the height bands. A short human calibration '
             + 'recording is the fallback.';
   html += `<div class="verdict"><b>Shape ${shapeOK}/${rows.length} · Band ${bandOK}/${rows.length}.</b> ${verdict}</div>`;
+
+  /* The verdict is written into the emitted file, not just onto the screen.
+     Whoever reads data/tone_reference.json later needs to know that its shapes
+     scored worse than its heights, because that is the whole reason shape is
+     graded by threshold rather than against these contours. A number that is
+     only ever shown in a browser tab is a number that gets remembered wrongly.
+     `bandOrder` is the honest name for what the band check measures: the six
+     tones ranked correctly WITHIN this set, normalised across their own
+     min and max — not an absolute height validated against anything external. */
+  if (REFERENCE) REFERENCE.verdict = {
+    shapeOK, bandOrderOK: bandOK, of: rows.length,
+    withinToneSpread: +floor.toFixed(2),
+    pairsClear: clear, pairsTotal: pairs.length,
+    note: 'Height anchors the band; shape is graded by threshold on the learner\'s own slope, not against these contours.'
+  };
   $('summary').innerHTML = html;
   log('\nSHAPE ' + shapeOK + '/' + rows.length + ' · BAND ' + bandOK + '/' + rows.length
       + ' · within-tone spread ' + floor.toFixed(2) + ' st · ' + clear + '/' + pairs.length + ' pairs clear.');
 }
 
 $('run').onclick = () => run().catch(e => { log('FAILED: ' + e.message); $('run').disabled = false; });
+/* Download rather than copy, because the destination is a committed file.
+   A clipboard round trip through an editor is where a hand-edit can enter, and
+   this file is the one thing the tone feature cannot recompute for itself at
+   runtime — the app has no access to the corpus audio on a phone. */
+$('downloadJson').onclick = () => {
+  const blob = new Blob([JSON.stringify(REFERENCE, null, 1) + '\n'], { type: 'application/json' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'tone_reference.json';
+  a.click();
+  setTimeout(() => URL.revokeObjectURL(a.href), 2000);
+};
+
 $('copyJson').onclick = () => navigator.clipboard.writeText(JSON.stringify(REFERENCE, null, 1))
   .then(()=>{ $('copyJson').textContent='Copied'; setTimeout(()=>$('copyJson').textContent='Copy reference JSON',1200); });
 $('copyLog').onclick = () => navigator.clipboard.writeText(logBuf.join('\n'))

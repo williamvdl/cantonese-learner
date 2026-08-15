@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Syllable Segmentation Probe</title>
+<!--
+  tools/segment-probe.html — build S1
+
+  WHY THIS EXISTS
+  ---------------
+  DES-37 is settled and the word-level tone check is the first surface. The
+  backlog describes that surface as the strong case because "isolated words are
+  citation form, one syllable, no time-alignment needed — the whole voiced run
+  IS the syllable". Measured against the corpus, that sentence covers 190 of 585
+  words. The other 395 are two syllables or more, and the feature has to grade
+  them too or it is a third of a feature.
+
+  So the question this page answers is narrow and specific: FOR A MULTI-SYLLABLE
+  WORD, CAN THE SYLLABLE BOUNDARIES BE RECOVERED FROM THE PITCH TRACK ALONE,
+  WITHOUT TIME ALIGNMENT FROM A RECOGNISER? If yes, the word surface covers the
+  whole vocabulary on-device, offline, with no key and no cost, exactly as the
+  single-syllable case does. If no, multi-syllable words need Azure's per-phoneme
+  Offset/Duration — which works, but is network-only and would put the largest
+  part of the feature behind the one dependency DES-37 was designed to avoid.
+
+  THE PREDICTION BEING TESTED
+  ---------------------------
+  Voicing is not continuous through a word. An obstruent onset — a stop closure
+  or a fricative — stops the vocal folds, so the pitch track breaks there. Every
+  such break that falls on a syllable boundary segments the word for free.
+  Reading the jyutping tells us, per boundary, whether to expect one:
+
+    LONG   p t k c s f h kw   aspirated stops, fricatives, affricate — tens of ms
+                              of clearly unvoiced signal. Should always break.
+    SHORT  b d g z gw         unaspirated stops. Voiceless, but the closure is
+                              brief and may not survive a 64 ms analysis frame.
+                              This is the group the sweep exists to judge.
+    NONE   m n ng l w j, or a vowel onset — voicing runs straight through. No
+                              break to find; the boundary has to come from
+                              somewhere else or not at all.
+  A checked coda (-p -t -k) on the PRECEDING syllable also produces a break,
+  whatever follows it.
+
+  Counted across the corpus by that rule: of 395 multi-syllable words, 176 break
+  at every boundary on a long interval, 116 depend on a short closure somewhere,
+  and 103 are continuously voiced across at least one boundary. Those are
+  PREDICTIONS FROM SPELLING. This page checks them against sound.
+
+  WHY THE SWEEP USES THE EXISTING CLIPS
+  -------------------------------------
+  Every one of those 395 words already has an Azure zh-HK clip on disk, and each
+  clip has ground truth attached: we know the word, so we know its target tones.
+  That means the whole question can be asked over the entire corpus for the cost
+  of a page load, with nobody recording anything. Recording 395 words by hand to
+  answer a question the corpus can answer is the kind of work that does not get
+  finished.
+
+  WHAT THE SWEEP CANNOT TELL YOU — READ THIS BEFORE BELIEVING THE SECOND NUMBER
+  ----------------------------------------------------------------------------
+  Two limits, both structural rather than fixable:
+
+  1. The clips are synthetic, and the reference they are graded against was built
+     from the same voice by tools/tone-reference.html. Grading a voice against
+     itself is optimistic. The CLASS RECOVERY figure below is therefore an UPPER
+     BOUND on how the pipeline performs, not an estimate of it. Take the RUN
+     AGREEMENT figure as the real result — that one is about acoustics, not about
+     whose voice it is.
+  2. A synthesiser articulates more consistently than a person. If a short stop
+     closure survives here it may still collapse in relaxed human speech, so a
+     pass on the SHORT class is necessary but not sufficient. Section B exists
+     for exactly that, on a shortlist derived from the same corpus.
+
+  STATUS.md already carries the general form of this warning: pre-generated audio
+  is not neutral test data, it carries the choices of whatever produced it.
+
+  METHOD
+  ------
+  Identical pitch tracking to tools/tone-probe.html and tools/tone-reference.html
+  — YIN with the same constants — so results are comparable across all three and
+  nothing here is a second opinion produced by a second implementation. The one
+  addition is that this page keeps ALL voiced runs rather than the longest, which
+  is the whole point.
+
+  NOT APP CODE. Diagnostic only, not in the sw.js precache list, no CACHE_VERSION
+  bump. Read-only apart from the microphone in section B; writes nothing.
+-->
+<style>
+  :root{--ink:#1b1a17;--muted:#6b665e;--line:#ddd8cf;--bg:#faf8f4;--card:#fff;
+        --good:#2e7d4f;--bad:#b3402e;--warn:#a8761c;--accent:#7c2d2d}
+  *{box-sizing:border-box}
+  body{margin:0 auto;padding:18px 16px 64px;font:16px/1.5 -apple-system,"Segoe UI",Roboto,sans-serif;
+       color:var(--ink);background:var(--bg);max-width:900px}
+  h1{font-size:20px;margin:0 0 4px}
+  h2{font-size:15px;margin:0 0 10px}
+  .sub{color:var(--muted);font-size:13px;margin:0 0 14px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:16px;margin-bottom:14px}
+  button{font:inherit;font-size:15px;padding:10px 16px;border:1px solid var(--line);
+         border-radius:7px;background:#fff;color:var(--ink);cursor:pointer}
+  button.primary{background:var(--accent);border-color:var(--accent);color:#fff}
+  button:disabled{opacity:.45;cursor:default}
+  button.rec{background:var(--bad);border-color:var(--bad);color:#fff}
+  select{font:inherit;font-size:15px;padding:9px 10px;border:1px solid var(--line);border-radius:7px;background:#fff}
+  .row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+  table{width:100%;border-collapse:collapse;font-size:14px;margin-top:10px}
+  th,td{text-align:left;padding:6px 8px;border-bottom:1px solid var(--line);vertical-align:top}
+  th{font-size:11px;color:var(--muted);text-transform:uppercase;font-weight:600}
+  td.num{text-align:right;font-variant-numeric:tabular-nums}
+  .pass{color:var(--good);font-weight:600}
+  .fail{color:var(--bad);font-weight:600}
+  .mid{color:var(--warn);font-weight:600}
+  .verdict{font-size:14px;padding:12px 14px;border-radius:7px;background:#f3f0ea;margin-top:14px}
+  .log{font:12px/1.45 ui-monospace,Menlo,Consolas,monospace;white-space:pre-wrap;word-break:break-word;
+       background:#23211d;color:#ded8cd;padding:12px;border-radius:7px;max-height:36vh;overflow:auto}
+  progress{width:100%;height:8px}
+  textarea{width:100%;min-height:90px;font:12px/1.4 ui-monospace,Menlo,Consolas,monospace;
+           border:1px solid var(--line);border-radius:7px;padding:8px}
+  .mic-word{display:flex;gap:10px;align-items:center;padding:8px 0;border-bottom:1px solid var(--line)}
+  .mic-word:last-child{border-bottom:none}
+  .mic-label{flex:1;min-width:0}
+  .mic-zh{font-size:18px}
+  .mic-jp{font-size:12px;color:var(--muted)}
+  .mic-res{font-size:12px;min-width:120px;text-align:right}
+  .tag{display:inline-block;font-size:10px;text-transform:uppercase;letter-spacing:.04em;
+       padding:2px 6px;border-radius:4px;background:#eee9e1;color:var(--muted);font-weight:600}
+</style>
+</head>
+<body>
+
+<h1>Syllable Segmentation Probe</h1>
+<p class="sub">Can a multi-syllable word be split into syllables from its pitch track alone? · build <b>S1</b></p>
+
+<!-- ── Reference ─────────────────────────────────────────────────────────── -->
+<div class="card">
+  <h2>Tone reference</h2>
+  <div class="sub" id="refStatus">Looking for <code>../data/tone_reference.json</code>…</div>
+  <div id="refPasteWrap" style="display:none">
+    <p class="sub">Not found. Run <code>tools/tone-reference.html</code>, download the JSON, and
+    either commit it to <code>data/</code> or paste it here.</p>
+    <textarea id="refPaste" placeholder="paste tone_reference.json"></textarea>
+    <div class="row" style="margin-top:8px"><button id="refUse">Use this reference</button></div>
+  </div>
+</div>
+
+<!-- ── Section A: corpus sweep ───────────────────────────────────────────── -->
+<div class="card">
+  <h2>A · Corpus sweep <span class="tag">no recording needed</span></h2>
+  <div class="sub">
+    Every multi-syllable word with clean tone digits, analysed from its existing
+    clip. Predicts the number of voiced runs from the jyutping, measures how many
+    there actually are, then grades each recovered syllable.
+  </div>
+  <div class="row">
+    <button class="primary" id="sweep" disabled>Run sweep</button>
+    <select id="limit">
+      <option value="0">All words</option>
+      <option value="60">First 60 (quick look)</option>
+      <option value="150">First 150</option>
+    </select>
+  </div>
+  <progress id="bar" value="0" max="100" style="display:none;margin-top:12px"></progress>
+  <div class="sub" id="sweepText" style="margin-top:8px">Idle.</div>
+  <div id="sweepOut"></div>
+</div>
+
+<!-- ── Section B: live mic ───────────────────────────────────────────────── -->
+<div class="card">
+  <h2>B · Your own voice <span class="tag">the part the sweep can't answer</span></h2>
+  <div class="sub">
+    A synthesiser articulates consonants more crisply than a person does. These
+    nine words are drawn from the corpus, three per class, so the same prediction
+    can be tested on real speech. Say each word once, at the pace you would say it
+    to someone — not slowly and not separated into syllables, because separating
+    them is what creates the break we are trying to find out whether you produce.
+  </div>
+  <div id="micList"><p class="sub">Waiting for the corpus…</p></div>
+  <div id="micOut"></div>
+</div>
+
+<div class="card">
+  <div class="row" style="justify-content:space-between;margin-bottom:8px">
+    <b style="font-size:14px">Log</b>
+    <button id="copyLog">Copy</button>
+  </div>
+  <div class="log" id="log">Idle.</div>
+</div>
+
+<script>
+'use strict';
+
+/* ── Analysis constants ───────────────────────────────────────────────────
+   Deliberately identical to tone-probe.html and tone-reference.html. If these
+   drift, three pages stop being comparable and a difference in result becomes
+   impossible to attribute. */
+const RATE = 16000, FRAME = 1024, HOP = 160, FMIN = 60, FMAX = 500, POINTS = 20;
+const YIN_THRESHOLD = 0.40;    /* tone-reference swept this: 0.15→91 clips usable,
+                                  0.40→170, 0.50→185. 0.40 is the knee. */
+const GATE_FRACTION = 0.10;
+
+/* A voiced run shorter than this is noise or a fragment, not a syllable. At a
+   10 ms hop, 5 frames is 50 ms. The sweep reports how many words would answer
+   differently at 3 and at 8, so this choice is visible rather than buried —
+   a threshold that changes the headline number is a finding, not a setting. */
+const MIN_RUN = 5;
+const MIN_RUN_ALT = [3, 8];
+
+/* Shape threshold in semitones across the syllable, from tone-reference's
+   classify(). Rising and falling are categorical judgements a threshold can
+   make with no reference at all; that is why DES-37 grades shape this way. */
+const SHAPE_ST = 2.5;
+
+/* ── Jyutping onset classes ───────────────────────────────────────────────
+   Two-character onsets are tested first so "gw"/"kw"/"ng" are not read as
+   "g"/"k"/"n". Classified by how the onset is DECLARED in the jyutping, which
+   is the only thing available at grading time — the app will never have a
+   phonetic transcription of what the learner actually did. */
+const ONSET_LONG  = ['kw','p','t','k','c','s','f','h'];
+const ONSET_SHORT = ['gw','b','d','g','z'];
+const CLASSES = { LONG:'every boundary long', SHORT:'relies on a short closure', NONE:'continuously voiced' };
+
+function onsetClass(syl){
+  for (const o of ONSET_LONG)  if (syl.startsWith(o)) return 'LONG';
+  for (const o of ONSET_SHORT) if (syl.startsWith(o)) return 'SHORT';
+  return 'NONE';                       /* m n ng l w j, or a vowel onset */
+}
+function checkedCoda(syl){ return /[ptk][1-6]$/.test(syl); }
+
+/* Per boundary: does a voicing break fall here, and how confidently?
+   A checked coda on the left is as good as a long onset on the right. */
+function boundaryClass(prev, next){
+  if (checkedCoda(prev)) return 'LONG';
+  return onsetClass(next);
+}
+
+/* Group the syllables into the runs we EXPECT to see. Syllables separated by a
+   break start a new group; syllables with no break between them share one. */
+function predictGroups(syls){
+  const groups = [[0]];
+  const kinds = [];
+  for (let i = 1; i < syls.length; i++){
+    const k = boundaryClass(syls[i-1], syls[i]);
+    kinds.push(k);
+    if (k === 'NONE') groups[groups.length-1].push(i);
+    else groups.push([i]);
+  }
+  const worst = kinds.includes('NONE') ? 'NONE' : kinds.includes('SHORT') ? 'SHORT' : 'LONG';
+  return { groups, kinds, wordClass: worst };
+}
+
+const $ = id => document.getElementById(id);
+let logBuf = [];
+function log(m){ logBuf.push(m); $('log').textContent = logBuf.join('\n'); $('log').scrollTop = 1e9; }
+function pct(a,b){ return b ? (a/b*100).toFixed(1) + '%' : '—'; }
+
+/* ── Pitch tracking (same maths as the other two probes) ─────────────────── */
+function yin(buf, start, threshold){
+  const W = FRAME >> 1, diff = new Float32Array(W);
+  for (let tau = 1; tau < W; tau++){
+    let s = 0;
+    for (let i = 0; i < W; i++){ const d = buf[start+i] - buf[start+i+tau]; s += d*d; }
+    diff[tau] = s;
+  }
+  const cmnd = new Float32Array(W); cmnd[0] = 1;
+  let running = 0;
+  for (let tau = 1; tau < W; tau++){
+    running += diff[tau];
+    cmnd[tau] = running === 0 ? 1 : diff[tau]*tau/running;
+  }
+  const tauMin = Math.floor(RATE/FMAX), tauMax = Math.min(W-1, Math.floor(RATE/FMIN));
+  let tau = -1;
+  for (let t = tauMin; t <= tauMax; t++){
+    if (cmnd[t] < threshold){ while (t+1 <= tauMax && cmnd[t+1] < cmnd[t]) t++; tau = t; break; }
+  }
+  if (tau < 0) return null;
+  const x0 = tau > 1 ? tau-1 : tau, x2 = tau+1 < W ? tau+1 : tau;
+  let better = tau;
+  if (x0 !== tau && x2 !== tau){
+    const s0 = cmnd[x0], s1 = cmnd[tau], s2 = cmnd[x2], den = 2*(2*s1 - s2 - s0);
+    if (den !== 0) better = tau + (s2-s0)/den;
+  }
+  return RATE/better;
+}
+
+function median(a){ if(!a.length) return null; const s=[...a].sort((x,y)=>x-y); return s[Math.floor(s.length/2)]; }
+
+/* Returns the per-frame pitch track (nulls where unvoiced) alongside the frame
+   energies. tone-reference.html collapses this to the single longest run; the
+   whole question here is what the OTHER runs are, so nothing is collapsed. */
+function analyse(pcm){
+  const rms = [];
+  for (let i = 0; i+FRAME < pcm.length; i += HOP){
+    let s = 0; for (let k = 0; k < FRAME; k++) s += pcm[i+k]*pcm[i+k];
+    rms.push(Math.sqrt(s/FRAME));
+  }
+  const gate = Math.max(...rms, 1e-9) * GATE_FRACTION;
+  const raw = [];
+  for (let n = 0, i = 0; i+FRAME < pcm.length; i += HOP, n++)
+    raw.push(rms[n] < gate ? null : yin(pcm, i, YIN_THRESHOLD));
+  /* Median filter over 5 frames kills residual octave jumps. It also closes
+     one-frame holes, which matters here: a single dropped frame inside a
+     syllable would otherwise be counted as a boundary. */
+  const f0 = raw.map((v,i) => {
+    const w = raw.slice(Math.max(0,i-2), i+3).filter(x => x != null);
+    return w.length >= 3 ? median(w) : v;
+  });
+  return { f0, rms };
+}
+
+function voicedRuns(f0, minRun){
+  const runs = []; let cur = null;
+  f0.forEach((v,i) => {
+    if (v == null){ if (cur){ if (i - cur.a >= minRun) runs.push({a:cur.a, b:i}); cur = null; } }
+    else if (!cur) cur = { a:i };
+  });
+  if (cur && f0.length - cur.a >= minRun) runs.push({ a:cur.a, b:f0.length });
+  return runs;
+}
+
+/* When two syllables share one voiced run — the NONE class — the boundary has
+   to come from somewhere. Energy is the only other cue available on-device:
+   the junction between two syllables is a local intensity minimum even when
+   voicing continues through it. Searched in the middle 50% only, because a dip
+   at the very edge is the onset or offset of the word, not a boundary. */
+function splitByEnergyDip(run, rms, n){
+  if (n <= 1) return [run];
+  const len = run.b - run.a;
+  const cuts = [];
+  for (let k = 1; k < n; k++){
+    /* Expect the boundary at an even division, then look for the quietest frame
+       within a third of a segment either side of it. The window is deliberately
+       narrow: a wide search finds the quietest frame in the word, which is its
+       edge, not its junction. */
+    const centre = run.a + Math.round(len * k / n);
+    const half   = Math.max(2, Math.round(len / (n * 3)));
+    const lo = Math.max(run.a + 1, centre - half);
+    const hi = Math.min(run.b - 1, centre + half);
+    let best = centre, bestV = Infinity;
+    for (let i = lo; i <= hi; i++) if (rms[i] < bestV){ bestV = rms[i]; best = i; }
+    cuts.push(best);
+  }
+  const out = []; let start = run.a;
+  for (const c of cuts){ out.push({ a:start, b:c }); start = c; }
+  out.push({ a:start, b:run.b });
+  return out;
+}
+
+/* ── Grading, in DES-37's four confident classes ──────────────────────────
+   HIGH_LEVEL (1) · LOW_FALL (4) · RISE (2 or 5) · MID_LOW_LEVEL (3 or 6).
+   si3 vs si6 and si2 vs si5 are out of scope by decision, so the probe must
+   not score them either — measuring something the feature will never claim
+   would make the result look worse than the feature will be.
+
+   Note what this collapses to: band is only ever consulted to separate a HIGH
+   level from a lower one. The three-way high/mid/low judgement is never needed,
+   which makes the height axis a single threshold rather than two. */
+const TARGET_CLASS = { 1:'HIGH_LEVEL', 2:'RISE', 3:'MID_LOW_LEVEL', 4:'LOW_FALL', 5:'RISE', 6:'MID_LOW_LEVEL' };
+const CLASS_LABEL  = { HIGH_LEVEL:'high level', LOW_FALL:'low falling', RISE:'rising', MID_LOW_LEVEL:'mid/low level' };
+
+function classifySyllable(contourSt, declination){
+  const slope = (contourSt[contourSt.length-1] - contourSt[0]) - declination;
+  const height = contourSt.reduce((a,b)=>a+b,0) / contourSt.length;
+  if (slope >  SHAPE_ST) return { cls:'RISE', slope, height };
+  if (slope < -SHAPE_ST) return { cls:'LOW_FALL', slope, height };
+  return { cls: height > HIGH_TH ? 'HIGH_LEVEL' : 'MID_LOW_LEVEL', slope, height };
+}
+
+function resample(s, n){
+  if (s.length < 2) return null;
+  const o = [];
+  for (let i = 0; i < n; i++){
+    const p = i*(s.length-1)/(n-1), lo = Math.floor(p), hi = Math.ceil(p), f = p-lo;
+    o.push(s[lo]*(1-f) + s[hi]*f);
+  }
+  return o;
+}
+
+/* ── Reference ───────────────────────────────────────────────────────────── */
+let REF = null, HIGH_TH = 0;
+
+function adoptReference(r, where){
+  REF = r;
+  /* The only height decision the four classes require is "is this level tone a
+     HIGH level or not", so the threshold sits midway between the reference's
+     tone 1 and tone 3 heights. Derived from the reference, never typed. */
+  const h1 = r.tones['1'].height, h3 = r.tones['3'].height;
+  HIGH_TH = (h1 + h3) / 2;
+  $('refStatus').innerHTML = `Loaded from <b>${where}</b> · voice median ${r.voiceMedianHz} Hz · `
+    + `built ${r.builtOn || 'date not recorded'} from ${r.exemplars != null ? r.exemplars + ' exemplars' : 'an unrecorded number of exemplars'}`
+    + ` · high-level threshold derived at <b>${HIGH_TH.toFixed(2)} st</b>`;
+  $('refPasteWrap').style.display = 'none';
+  $('sweep').disabled = false;
+  log('Reference adopted from ' + where + '. High-level threshold ' + HIGH_TH.toFixed(2) + ' st.');
+}
+
+async function loadReference(){
+  try {
+    const res = await fetch('../data/tone_reference.json');
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    adoptReference(await res.json(), 'data/tone_reference.json');
+  } catch (e){
+    $('refStatus').textContent = 'No committed reference found (' + e.message + ').';
+    $('refPasteWrap').style.display = 'block';
+    log('No data/tone_reference.json — run tools/tone-reference.html first.');
+  }
+}
+$('refUse').onclick = () => {
+  try { adoptReference(JSON.parse($('refPaste').value), 'pasted JSON'); }
+  catch (e){ $('refStatus').textContent = 'That did not parse: ' + e.message; }
+};
+
+/* ── Corpus walk — derived at run time, never hand-typed ─────────────────── */
+async function collectWords(){
+  const idx = await (await fetch('../data/topics_index.json')).json();
+  const out = [];
+  for (const t of idx.topics){
+    let topic;
+    try { topic = await (await fetch('../data/topics/' + t.key + '.json')).json(); }
+    catch (e){ log('  ! topic ' + t.key + ' unreadable — skipped'); continue; }
+    for (const rk of Object.keys(topic.rounds || {})){
+      for (const w of (topic.rounds[rk].words || [])){
+        const syls = (w.j || '').trim().toLowerCase().split(/\s+/);
+        if (syls.length < 2) continue;                          /* single-syllable case is already proven */
+        if (!syls.every(s => /[1-6]$/.test(s))) continue;       /* needs a clean tone digit on every syllable */
+        const p = predictGroups(syls);
+        out.push({ id:w.id, c:w.c, j:w.j, syls, tones:syls.map(s => +s.slice(-1)), ...p });
+      }
+    }
+  }
+  return out;
+}
+
+async function decodeClip(ctx, url){
+  const res = await fetch(url);
+  if (!res.ok) throw new Error('HTTP ' + res.status);
+  const decoded = await ctx.decodeAudioData(await res.arrayBuffer());
+  const off = new OfflineAudioContext(1, Math.ceil(decoded.duration * RATE), RATE);
+  const src = off.createBufferSource();
+  src.buffer = decoded; src.connect(off.destination); src.start();
+  return (await off.startRendering()).getChannelData(0);
+}
+
+/* ── Section A ───────────────────────────────────────────────────────────── */
+let SWEEP = null;
+
+async function runSweep(){
+  $('sweep').disabled = true;
+  logBuf = []; log('Reading corpus…');
+  let words = await collectWords();
+  const byClass = {};
+  words.forEach(w => byClass[w.wordClass] = (byClass[w.wordClass]||0)+1);
+  log('Multi-syllable words with clean tone digits: ' + words.length);
+  log('  predicted by spelling: ' + Object.entries(byClass).map(([k,v]) => k+'→'+v).join('  '));
+
+  const lim = +$('limit').value;
+  if (lim && words.length > lim){ words = words.slice(0, lim); log('  limited to first ' + lim + ' for this run'); }
+
+  const Ctx = window.AudioContext || window.webkitAudioContext;
+  const ctx = new Ctx();
+  $('bar').style.display = 'block';
+
+  /* Pass one: track every clip, keep the frames. The voice median has to be
+     computed across the whole set before any syllable can be expressed in
+     semitones, so nothing can be graded until every clip has been read. */
+  const rows = [];
+  const allHz = [];
+  let done = 0, failed = 0;
+  for (const w of words){
+    try {
+      const pcm = await decodeClip(ctx, '../audio/words/' + w.id + '.mp3');
+      const { f0, rms } = analyse(pcm);
+      const runs = voicedRuns(f0, MIN_RUN);
+      const altRuns = MIN_RUN_ALT.map(m => voicedRuns(f0, m).length);
+      f0.forEach(v => { if (v != null) allHz.push(v); });
+      rows.push({ w, f0, rms, runs, altRuns });
+    } catch (e){ failed++; log('  skip ' + w.id + ' (' + w.c + ') — ' + e.message); }
+    done++;
+    $('bar').value = done/words.length*100;
+    $('sweepText').textContent = 'Analysed ' + done + ' / ' + words.length + ' clips…';
+  }
+
+  const med = median(allHz);
+  log('\nAnalysed ' + rows.length + ' clips, ' + failed + ' unreadable. Voice median ' + Math.round(med) + ' Hz.');
+
+  /* Declination, estimated the same way tone-reference does: the mean slope
+     shared by every syllable measured. A clip is a whole utterance, so it
+     carries a phrase-final fall that belongs to no tone. */
+  const rawSlopes = [];
+  for (const r of rows){
+    for (const run of r.runs){
+      const st = [];
+      for (let i = run.a; i < run.b; i++) if (r.f0[i] != null) st.push(12*Math.log2(r.f0[i]/med));
+      const c = resample(st, POINTS);
+      if (c) rawSlopes.push(c[POINTS-1] - c[0]);
+    }
+  }
+  const declination = rawSlopes.reduce((a,b)=>a+b,0) / (rawSlopes.length || 1);
+  log('Declination across ' + rawSlopes.length + ' voiced runs: ' + declination.toFixed(2) + ' st (removed before classifying).');
+
+  /* Pass two: judge. */
+  const stats = {};
+  for (const k of ['LONG','SHORT','NONE'])
+    stats[k] = { n:0, runMatch:0, runOver:0, runUnder:0, syl:0, sylOK:0, altShift:[0,0], examples:[] };
+
+  for (const r of rows){
+    const w = r.w, s = stats[w.wordClass];
+    s.n++;
+    const expected = w.groups.length;
+    const got = r.runs.length;
+    if (got === expected) s.runMatch++;
+    else if (got > expected) s.runOver++;
+    else s.runUnder++;
+    r.altRuns.forEach((n,i) => { if ((n === expected) !== (got === expected)) s.altShift[i]++; });
+
+    if (got !== expected){
+      if (s.examples.length < 4) s.examples.push(w.c + ' (' + w.j + ') expected ' + expected + ', got ' + got);
+      continue;                       /* cannot align, so nothing to grade */
+    }
+
+    /* Runs map onto groups in order. A group holding more than one syllable is
+       split on its energy dip — the NONE class is precisely the set where that
+       fallback carries the whole result. */
+    let segs = [];
+    r.runs.forEach((run, gi) => { segs = segs.concat(splitByEnergyDip(run, r.rms, w.groups[gi].length)); });
+    if (segs.length !== w.syls.length) continue;
+
+    segs.forEach((seg, si) => {
+      const st = [];
+      for (let i = seg.a; i < seg.b; i++) if (r.f0[i] != null) st.push(12*Math.log2(r.f0[i]/med));
+      const c = resample(st, POINTS);
+      if (!c) return;
+      s.syl++;
+      const heard = classifySyllable(c, declination).cls;
+      if (heard === TARGET_CLASS[w.tones[si]]) s.sylOK++;
+    });
+  }
+
+  SWEEP = { stats, med, declination, analysed: rows.length };
+  renderSweep(stats);
+  $('bar').style.display = 'none';
+  $('sweepText').textContent = 'Done — ' + rows.length + ' clips.';
+  $('sweep').disabled = false;
+}
+
+function renderSweep(stats){
+  const order = ['LONG','SHORT','NONE'];
+  let html = '<table><thead><tr><th>Predicted class</th><th>Words</th>'
+    + '<th>Run count as predicted</th><th>Too few runs</th><th>Too many</th>'
+    + '<th>Syllable class recovered</th></tr></thead><tbody>';
+  let totN=0, totM=0, totS=0, totSOK=0;
+  for (const k of order){
+    const s = stats[k];
+    totN+=s.n; totM+=s.runMatch; totS+=s.syl; totSOK+=s.sylOK;
+    const rate = s.n ? s.runMatch/s.n : 0;
+    const cls = rate > 0.9 ? 'pass' : rate > 0.7 ? 'mid' : 'fail';
+    html += `<tr><td><b>${k}</b><div class="sub" style="margin:0">${CLASSES[k]}</div></td>`
+      + `<td class="num">${s.n}</td>`
+      + `<td class="num ${cls}">${s.runMatch} · ${pct(s.runMatch,s.n)}</td>`
+      + `<td class="num">${s.runUnder}</td><td class="num">${s.runOver}</td>`
+      + `<td class="num">${s.sylOK} / ${s.syl} · ${pct(s.sylOK,s.syl)}</td></tr>`;
+  }
+  html += `<tr><td><b>All</b></td><td class="num">${totN}</td>`
+    + `<td class="num">${totM} · ${pct(totM,totN)}</td><td class="num"></td><td class="num"></td>`
+    + `<td class="num">${totSOK} / ${totS} · ${pct(totSOK,totS)}</td></tr></tbody></table>`;
+
+  /* Sensitivity: if the headline moves when MIN_RUN moves, the headline is
+     partly a property of the setting rather than of the audio, and that has to
+     be visible. */
+  html += '<div class="verdict"><b>Sensitivity to the minimum run length.</b> '
+    + 'Words whose verdict flips when MIN_RUN changes from ' + MIN_RUN + ' frames to '
+    + MIN_RUN_ALT.map((m,i) => m + ' (' + order.reduce((a,k)=>a+stats[k].altShift[i],0) + ' words)').join(' or ')
+    + '. A large number here means the run count is being decided by the threshold, not by the sound.</div>';
+
+  for (const k of order){
+    if (stats[k].examples.length)
+      html += `<div class="sub" style="margin-top:10px"><b>${k} misses:</b> ${stats[k].examples.join(' · ')}</div>`;
+  }
+
+  html += '<div class="verdict"><b>How to read this.</b> The <i>run count as predicted</i> column is '
+    + 'the real result — it is about acoustics and holds regardless of whose voice it is. The '
+    + '<i>syllable class recovered</i> column grades this synthesiser against a reference built from '
+    + 'the same synthesiser, so it is an upper bound rather than an estimate. A class that segments '
+    + 'reliably here can carry the feature; a class that does not needs either the energy-dip fallback '
+    + 'to be improved or Azure\'s per-phoneme alignment, which is network-only.</div>';
+
+  $('sweepOut').innerHTML = html;
+  log('\nRun agreement: ' + order.map(k => k+' '+pct(stats[k].runMatch,stats[k].n)).join('  '));
+  log('Class recovery (upper bound): ' + order.map(k => k+' '+pct(stats[k].sylOK,stats[k].syl)).join('  '));
+}
+
+$('sweep').onclick = () => runSweep().catch(e => { log('SWEEP FAILED: ' + e.message); $('sweep').disabled = false; });
+
+/* ── Section B: the same prediction, on a human voice ────────────────────── */
+let MIC_WORDS = [], micTakes = {}, activeRec = null;
+const MIMES = ['audio/webm;codecs=opus','audio/ogg;codecs=opus','audio/webm','audio/mp4'];
+
+async function buildMicList(){
+  const words = await collectWords();
+  /* Three per class, taken in corpus order so the shortlist is reproducible and
+     nobody chose it. Two syllables only — the point is the boundary, and a
+     three-syllable word tests two of them at once. */
+  const picked = [];
+  for (const k of ['LONG','SHORT','NONE'])
+    picked.push(...words.filter(w => w.wordClass === k && w.syls.length === 2).slice(0, 3));
+  MIC_WORDS = picked;
+  $('micList').innerHTML = picked.map((w,i) => `
+    <div class="mic-word">
+      <div class="mic-label">
+        <div class="mic-zh">${w.c}</div>
+        <div class="mic-jp">${w.j} · predicts ${w.groups.length} voiced run${w.groups.length>1?'s':''} · ${w.wordClass}</div>
+      </div>
+      <button data-mic="${i}" data-label="Record">Record</button>
+      <div class="mic-res" id="micres-${i}">—</div>
+    </div>`).join('');
+  document.querySelectorAll('[data-mic]').forEach(b => b.onclick = () => toggleRec(+b.dataset.mic, b));
+  log('Mic shortlist derived from the corpus: ' + picked.map(w => w.c).join(' '));
+}
+
+async function toggleRec(i, btn){
+  if (activeRec){ activeRec.stop(); return; }
+  const stream = await navigator.mediaDevices.getUserMedia({ audio:{ echoCancellation:false, noiseSuppression:false, autoGainControl:false } });
+  const mime = MIMES.find(t => MediaRecorder.isTypeSupported(t));
+  const rec = new MediaRecorder(stream, { mimeType: mime });
+  const chunks = [];
+  rec.ondataavailable = e => chunks.push(e.data);
+  rec.onstop = async () => {
+    stream.getTracks().forEach(t => t.stop());
+    activeRec = null;
+    btn.classList.remove('rec'); btn.textContent = 'Re-record';
+    const blob = new Blob(chunks, { type: mime });
+    await judgeTake(i, blob);
+  };
+  activeRec = rec;
+  btn.classList.add('rec'); btn.textContent = 'Stop';
+  rec.start();
+  setTimeout(() => { if (activeRec === rec) rec.stop(); }, 4000);
+}
+
+async function judgeTake(i, blob){
+  const w = MIC_WORDS[i];
+  const Ctx = window.AudioContext || window.webkitAudioContext;
+  const ctx = new Ctx();
+  const decoded = await ctx.decodeAudioData(await blob.arrayBuffer());
+  const off = new OfflineAudioContext(1, Math.ceil(decoded.duration * RATE), RATE);
+  const src = off.createBufferSource(); src.buffer = decoded; src.connect(off.destination); src.start();
+  const pcm = (await off.startRendering()).getChannelData(0);
+  const { f0, rms } = analyse(pcm);
+  const runs = voicedRuns(f0, MIN_RUN);
+  micTakes[i] = { runs: runs.length, expected: w.groups.length };
+  const ok = runs.length === w.groups.length;
+  $('micres-' + i).innerHTML = `<span class="${ok?'pass':'fail'}">${runs.length} run${runs.length===1?'':'s'}</span>`
+    + `<div class="sub" style="margin:0">expected ${w.groups.length}</div>`;
+  log('mic · ' + w.c + ' (' + w.j + ') ' + w.wordClass + ': expected ' + w.groups.length + ', measured ' + runs.length);
+  renderMicSummary();
+}
+
+function renderMicSummary(){
+  const ks = Object.keys(micTakes);
+  if (!ks.length) return;
+  const byClass = {};
+  ks.forEach(k => {
+    const c = MIC_WORDS[k].wordClass;
+    byClass[c] = byClass[c] || { n:0, ok:0 };
+    byClass[c].n++;
+    if (micTakes[k].runs === micTakes[k].expected) byClass[c].ok++;
+  });
+  $('micOut').innerHTML = '<div class="verdict"><b>Your takes so far.</b> '
+    + Object.entries(byClass).map(([c,v]) => `${c}: ${v.ok}/${v.n} as predicted`).join(' · ')
+    + '. Compare against the same classes in the sweep above — a class that holds for the '
+    + 'synthesiser but not for you is the one that would fail in the app, because the app only '
+    + 'ever hears you.</div>';
+}
+
+$('copyLog').onclick = () => navigator.clipboard.writeText(logBuf.join('\n'))
+  .then(()=>{ $('copyLog').textContent='Copied'; setTimeout(()=>$('copyLog').textContent='Copy',1200); });
+
+loadReference();
+buildMicList().catch(e => { $('micList').innerHTML = '<p class="sub">Could not read the corpus: ' + e.message + '</p>'; });
+log('Ready. Section A needs no microphone; section B does.');
+log('Best run on desktop — the sweep decodes up to 395 clips.');
+</script>
+</body>
+</html>
