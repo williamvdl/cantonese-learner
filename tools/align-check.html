@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Alignment Check — does Azure give us syllable times?</title>
 <!--
-  tools/align-check.html — build A2
+  tools/align-check.html — build A4
 
   ONE QUESTION
   ------------
@@ -81,6 +81,50 @@
   timings therefore cannot be read as syllable boundaries even when they look
   tidy — 好耐 (hou2 noi6) is one entry covering two syllables.
 
+  WHAT A3 CHANGED, AND WHAT A2 FAILED TO LOOK AT
+  ----------------------------------------------
+  A2's run answered the phoneme question flatly: across ten TTS clips and one
+  microphone take, every single phoneme came back as `"Phoneme": ""`. The field
+  is present and always empty, so zh-HK does not name phonemes. Grouping them by
+  name is off the table.
+
+  But A2 printed the answer to a better question and never checked it. The WORD
+  entries are named and timed, and in Cantonese ONE CHARACTER IS ONE SYLLABLE. So
+  a word entry labelled 我 (ngo5) is already a syllable boundary, complete with
+  start and end. Reading back A2's own output:
+
+      我哋 (ngo5 dei6)   → 我 | 哋            2 entries, both single-character ✓
+      呢個 (ni1 go3)     → 呢 | 個            ✓
+      我嘅 (ngo5 ge3)    → 我 | 嘅            ✓
+      朋友 (pang4 jau5)  → 朋友               one entry covering two syllables ✗
+      好耐冇見 …          → 好耐 | 冇 | 見     one entry covering two ✗
+      請多關照 …          → 請 | 多 | 關照     one entry covering two ✗
+
+  Eight of ten items were fully resolved at the word level while the page was
+  reporting "0 of 10 usable". That is my error, not Azure's: I built the checks
+  around an assumption that syllable times must arrive from a syllable-level or
+  phoneme-level field, and never asked whether the level above had already
+  answered it. The same shape as the segmentation probe — the instrument was
+  measuring for the answer I expected rather than the one available.
+
+  A3 therefore checks what actually matters: HOW MANY SYLLABLES ARE RESOLVED,
+  by any route. A single-character word entry resolves one. A multi-character
+  entry resolves none by itself and needs splitting.
+
+  AND IT TESTS THE OBVIOUS FIX
+  ----------------------------
+  Azure tokenises the reference text, so the reference text is the lever. A3
+  sends each item twice — once as 好耐冇見, once as 好 耐 冇 見 with the
+  characters separated — because a per-character reference may force per-
+  character word entries and resolve the last two items too. If it does, both
+  MOCK-27-A and MOCK-27-C get clean syllable boundaries with nothing to infer.
+
+  Two asides worth recording. Every clip returns AccuracyScore 100, including a
+  microphone take peaking at 6%, which is further confirmation that Azure's
+  Cantonese SCORING carries no information — we are here only for the clock.
+  And the TTS clips run about 1.78s while speech ends by 900ms, so they carry
+  roughly 800ms of trailing silence.
+
   NOT APP CODE. Diagnostic only, not in the sw.js precache list, no CACHE_VERSION
   bump. Writes nothing.
 -->
@@ -126,18 +170,19 @@
 <body>
 
 <h1>Alignment Check</h1>
-<p class="sub">Does Azure return usable syllable start and end times for zh-HK? · build <b>A2</b></p>
+<p class="sub">Does Azure return usable syllable start and end times for zh-HK? · build <b>A4</b></p>
 
 <div class="card">
   <h2>Credentials</h2>
   <p class="sub" style="margin:0">
-    Speech resource key and region. Held in memory only — cleared on reload, never
-    written to storage, never printed to the log. <b>Not the Gemini key.</b>
+    Region is prefilled. Paste the key and press Hold. Held in memory only —
+    cleared on reload, never written to storage, never printed to the log.
+    <b>Not the Gemini key.</b>
   </p>
   <label for="key">Subscription key</label>
   <input type="password" id="key" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="paste Azure Speech key">
-  <label for="region">Region — must match the resource</label>
-  <input type="text" id="region" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="e.g. australiaeast">
+  <label for="region">Region — prefilled, change only for a different resource</label>
+  <input type="text" id="region" autocomplete="off" autocapitalize="off" spellcheck="false" value="australiaeast">
   <div class="row">
     <button class="primary" id="hold">Hold key</button>
     <button id="clearKey">Clear</button>
@@ -156,7 +201,7 @@
   <div class="row">
     <button class="primary" id="runClip" disabled>Send this clip</button>
     <button id="playClip" disabled>Play it</button>
-    <button id="runAll" disabled>Send all ten</button>
+    <button id="runAll" disabled>Send all ten, both ways</button>
   </div>
 </div>
 
@@ -189,7 +234,11 @@
 'use strict';
 
 /* ── State. The key lives here and nowhere else. ─────────────────────────── */
-let CREDS = { key: null, region: null };
+/* Region is prefilled rather than fixed: it is always australiaeast in practice,
+   and typing it out every run is friction with no upside. Still editable, since
+   hard-wiring it would make this page silently wrong for any other resource. */
+const DEFAULT_REGION = 'australiaeast';
+let CREDS = { key: null, region: DEFAULT_REGION };
 let ITEMS = [], SELECTED = null;
 
 const $ = id => document.getElementById(id);
@@ -197,8 +246,9 @@ let logBuf = [];
 function log(m){ logBuf.push(m); $('log').textContent = logBuf.join('\n'); $('log').scrollTop = 1e9; }
 
 $('hold').onclick = () => {
-  const k = $('key').value.trim(), r = $('region').value.trim().toLowerCase();
-  if (!k || !r){ $('credStatus').innerHTML = '<span class="err">Both fields are needed.</span>'; return; }
+  const k = $('key').value.trim();
+  const r = ($('region').value.trim() || DEFAULT_REGION).toLowerCase();
+  if (!k){ $('credStatus').innerHTML = '<span class="err">A key is needed.</span>'; return; }
   CREDS = { key: k, region: r };
   $('key').value = '';                        /* the value lives only in CREDS now */
   $('credStatus').innerHTML = 'Key held in memory for <b>' + r + '</b>. Not stored.';
@@ -206,8 +256,9 @@ $('hold').onclick = () => {
   refreshButtons();
 };
 $('clearKey').onclick = () => {
-  CREDS = { key: null, region: null };
+  CREDS = { key: null, region: DEFAULT_REGION };
   $('key').value = '';
+  $('region').value = DEFAULT_REGION;
   $('credStatus').textContent = 'No key held.';
   log('Credentials cleared.');
   refreshButtons();
@@ -300,6 +351,11 @@ async function toWav16kMono(blob){
 
 const b64utf8 = s => btoa(String.fromCharCode(...new TextEncoder().encode(s)));
 
+/* Han characters only. Cantonese is one character to one syllable, so the count
+   of Han characters is the count of syllables — punctuation like ？ in
+   洗手間喺邊？ (sai2 sau2 gaan1 hai2 bin1) must not be counted as one. */
+const hanChars = t => Array.from(String(t)).filter(ch => /[\u3400-\u9fff]/.test(ch));
+
 async function assess(rawBlob, referenceText){
   if (!CREDS.key) throw new Error('No key held.');
   const wav = await toWav16kMono(rawBlob);
@@ -351,10 +407,25 @@ function inspect(json, seconds, item){
       + (status === 'Success' ? '' : ' — an empty success usually means the audio format was rejected'));
   const best = (json.NBest || [])[0];
   add(!!best, 'A result was returned', best ? 'NBest[0] present' : 'NBest empty');
-  if (!best) return { checks, segs: [], words: [], labelled: 0, sylSource: 'none' };
+  if (!best) return { checks, segs: [], words: [], labelled: 0, sylSource: 'none',
+                      resolved: 0, expected: item.syls.length, lumped: 0, route: 'none' };
 
   const words = best.Words || [];
   add(words.length > 0, 'Words carry structure', words.length + ' word entries');
+
+  /* THE CHECK A2 SHOULD HAVE HAD. A word entry whose label is a single Han
+     character IS a syllable boundary — named, timed, nothing to infer. Entries
+     covering two or more characters resolve nothing on their own. */
+  const wordSyl = words.map(w => ({
+    label: w.Word, chars: hanChars(w.Word).length,
+    offset: w.Offset, duration: w.Duration
+  }));
+  const resolved = wordSyl.filter(w => w.chars === 1 && typeof w.offset === 'number' && w.duration > 0);
+  const lumped   = wordSyl.filter(w => w.chars > 1);
+  const expected = item.syls.length;
+  add(resolved.length === expected, 'Every syllable resolved from a word entry',
+      resolved.length + ' of ' + expected + ' syllables have their own timed entry'
+      + (lumped.length ? ' — lumped: ' + lumped.map(w => w.label + ' (' + w.chars + ' syllables)').join(', ') : ''));
 
   /* Azure may split a Chinese phrase per character or per word; either is fine
      as long as the syllables underneath add up. */
@@ -434,7 +505,15 @@ function inspect(json, seconds, item){
     startMs: s.offset/TICKS_PER_MS,
     endMs: (s.offset + s.duration)/TICKS_PER_MS
   }));
-  return { checks, segs, clipMs, sylSource, words, labelled };
+  /* When the word level resolves everything, the timeline to draw is the word
+     level — that is the answer, not a fallback. */
+  const wordSegs = resolved.length === expected
+    ? resolved.map(w => ({ label: w.label, startMs: w.offset/TICKS_PER_MS,
+                           endMs: (w.offset + w.duration)/TICKS_PER_MS }))
+    : null;
+  return { checks, segs: wordSegs || segs, clipMs, sylSource, words, labelled,
+           resolved: resolved.length, expected, lumped: lumped.length,
+           route: wordSegs ? 'word entries' : sylSource };
 }
 
 const esc = s => String(s).replace(/[&<>]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
@@ -463,31 +542,29 @@ function render(item, res){
       + `<p class="sub" style="margin:6px 0 0">Full width is the ${Math.round(span)} ms clip.</p>`;
   }
 
-  /* Three outcomes, not two. A1 called anything short of a Syllables array a
-     failure, which understated a response that carries perfectly good phoneme
-     timings — a syllable is only a run of phonemes. */
+  /* Graded on what was RESOLVED, not on which field it arrived in. A2 graded on
+     the field and called a working answer a failure. */
   const timingsSane = checks.filter(c =>
     /increase|inside the audio|long enough|zero-length|offset and a duration/.test(c.label)).every(c => c.pass);
   let tier, body;
-  if (res.sylSource === 'Syllables' && checks.every(c => c.pass)){
-    tier = '<b class="ok">Usable directly.</b>';
-    body = 'Syllable spans, in order, inside the audio, one per syllable in the jyutping. '
-         + 'That is everything MOCK-27-C needs from a one-off pass over our own clips, and '
+  if (res.resolved === res.expected && timingsSane){
+    tier = '<b class="ok">Every syllable resolved.</b>';
+    body = 'Each syllable has its own named, timed entry. Nothing needs inferring. '
+         + 'This is everything MOCK-27-C needs from a one-off pass over our clips, and '
          + 'everything MOCK-27-A needs on every attempt.';
-  } else if (res.sylSource === 'Phonemes' && timingsSane && res.labelled > 0){
-    tier = '<b class="warnt">Usable after grouping.</b>';
-    body = 'No syllable spans, but labelled phoneme spans that hold together as a timeline. '
-         + 'Syllables can be rebuilt by grouping phonemes, which is extra work and one more '
-         + 'place to be wrong — but it is work we do once, offline, for MOCK-27-C.';
-  } else if (res.sylSource === 'Phonemes' && timingsSane){
-    tier = '<b class="warnt">Timings yes, names no.</b>';
-    body = 'The spans are sane but unlabelled, so they can be counted and not identified. '
-         + 'Grouping them into syllables would be guesswork against the jyutping. Check the raw '
-         + 'response below for what the label field is actually called before concluding.';
+  } else if (res.resolved > 0 && timingsSane){
+    tier = '<b class="warnt">Partly resolved.</b>';
+    body = res.resolved + ' of ' + res.expected + ' syllables came back separately; '
+         + res.lumped + ' entr' + (res.lumped === 1 ? 'y covers' : 'ies cover') + ' more than one syllable each. '
+         + 'Those need splitting, and the phoneme spans inside them are the only cue available — '
+         + 'try the per-character reference below before accepting that.';
+  } else if (timingsSane){
+    tier = '<b class="warnt">Timed, but not divided.</b>';
+    body = 'The clock is trustworthy but nothing came back at one entry per syllable.';
   } else {
     tier = '<b class="err">Not usable as it stands.</b>';
-    body = 'Read the failed rows. Spans that are zero, out of order or outside the audio mean '
-         + 'the field exists and cannot be trusted — worse than absence, because it looks like success.';
+    body = 'Spans that are zero, out of order or outside the audio mean the field exists and '
+         + 'cannot be trusted — worse than absence, because it looks like success.';
   }
   html += '<div class="verdict">' + tier + ' ' + body + '</div>';
 
@@ -502,12 +579,22 @@ function render(item, res){
 }
 
 /* ── Runs ────────────────────────────────────────────────────────────────── */
-async function runOne(item, blob, label){
-  log('\n─── ' + item.c + ' (' + item.j + ') · ' + label + ' ───');
+/* Azure tokenises the reference text, so the reference text is the lever. If a
+   per-character reference forces per-character word entries, every syllable
+   resolves with nothing left to infer. */
+const REF_MODES = {
+  joined:  item => item.c,
+  spaced:  item => hanChars(item.c).join(' ')
+};
+
+async function runOne(item, blob, label, refMode = 'joined'){
+  const refText = REF_MODES[refMode](item);
+  log('\n─── ' + item.c + ' (' + item.j + ') · ' + label + ' · reference "' + refText + '" ───');
   try {
-    const { json, seconds } = await assess(blob, item.c);
+    const { json, seconds } = await assess(blob, refText);
     const res = inspect(json, seconds, item);
     res.checks.forEach(c => log('  ' + (c.pass ? 'ok  ' : 'FAIL') + '  ' + c.label + ' — ' + c.detail));
+    log('  RESOLVED ' + res.resolved + '/' + res.expected + ' syllables via ' + res.route);
     if (res.segs.length) log('  spans: ' + res.segs.map(s =>
       '[' + (String(s.label).trim() || '?') + '] ' + Math.round(s.startMs) + '–' + Math.round(s.endMs) + ' ms').join('  '));
     if (res.words && res.words.length){
@@ -517,6 +604,7 @@ async function runOne(item, blob, label){
       if (Array.isArray(sub) && sub.length) log('  keys on a sub-entry:   ' + Object.keys(sub[0]).join(', '));
       log('  raw first word entry:\n' + JSON.stringify(res.words[0], null, 1).split('\n').map(l => '    ' + l).join('\n'));
     }
+    res.refMode = refMode;
     render(item, res);
     return res;
   } catch (e){
@@ -535,23 +623,41 @@ async function clipBlob(item){
 $('runClip').onclick = async () => {
   $('runClip').disabled = true;
   logBuf = [];
-  try { await runOne(SELECTED, await clipBlob(SELECTED), 'our TTS clip'); }
-  catch (e){ log('clip fetch failed: ' + e.message); }
+  try {
+    const blob = await clipBlob(SELECTED);
+    await runOne(SELECTED, blob, 'our TTS clip', 'joined');
+    await runOne(SELECTED, blob, 'our TTS clip', 'spaced');
+  } catch (e){ log('clip fetch failed: ' + e.message); }
   $('runClip').disabled = false;
 };
 
 $('runAll').onclick = async () => {
   $('runAll').disabled = true; $('runClip').disabled = true;
   logBuf = [];
-  log('Sending all ' + ITEMS.length + ' clips.');
-  let usable = 0;
+  log('Sending all ' + ITEMS.length + ' clips twice — once with the reference text as written,');
+  log('once with the characters separated — to see whether tokenisation is the lever.\n');
+  const tally = { joined: 0, spaced: 0 };
+  const perItem = [];
   for (const item of ITEMS){
-    try {
-      const res = await runOne(item, await clipBlob(item), 'our TTS clip');
-      if (res && res.checks.every(c => c.pass)) usable++;
-    } catch (e){ log('  clip fetch failed: ' + e.message); }
+    let blob;
+    try { blob = await clipBlob(item); }
+    catch (e){ log('  clip fetch failed: ' + e.message); continue; }
+    const row = { item, joined: null, spaced: null };
+    for (const mode of ['joined','spaced']){
+      const res = await runOne(item, blob, 'our TTS clip', mode);
+      if (res){
+        row[mode] = res.resolved + '/' + res.expected;
+        if (res.resolved === res.expected) tally[mode]++;
+      }
+    }
+    perItem.push(row);
   }
-  log('\n═══ ' + usable + ' of ' + ITEMS.length + ' clips returned usable syllable timings. ═══');
+  log('\n═══════════════ ALL ' + ITEMS.length + ' CLIPS ═══════════════');
+  log('word                       as written   separated');
+  perItem.forEach(r => log('  ' + (r.item.c + ' (' + r.item.j + ')').padEnd(26)
+      + String(r.joined || '—').padStart(9) + String(r.spaced || '—').padStart(12)));
+  log('\nFully resolved: as written ' + tally.joined + '/' + ITEMS.length
+      + ', characters separated ' + tally.spaced + '/' + ITEMS.length + '.');
   $('runAll').disabled = false; $('runClip').disabled = false;
 };
 
@@ -577,7 +683,9 @@ $('rec').onclick = async () => {
     activeRec = null;
     $('rec').classList.remove('rec'); $('rec').textContent = 'Record the selected word';
     logBuf = [];
-    await runOne(item, new Blob(chunks, { type: mime }), 'your microphone');
+    const blob = new Blob(chunks, { type: mime });
+    await runOne(item, blob, 'your microphone', 'joined');
+    await runOne(item, blob, 'your microphone', 'spaced');
   };
   activeRec = rec;
   $('rec').classList.add('rec'); $('rec').textContent = 'Stop';
@@ -589,7 +697,7 @@ $('copyLog').onclick = () => navigator.clipboard.writeText(logBuf.join('\n'))
   .then(() => { $('copyLog').textContent = 'Copied'; setTimeout(() => $('copyLog').textContent = 'Copy', 1200); });
 
 loadItems().catch(e => log('Could not read the corpus: ' + e.message));
-log('Ready. Hold a key, then send one clip before sending all ten.');
+log('Ready. Region prefilled as ' + DEFAULT_REGION + '. Paste a key, press Hold, then send one clip before sending all ten.');
 </script>
 </body>
 </html>
