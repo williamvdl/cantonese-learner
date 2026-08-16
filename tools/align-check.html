@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Alignment Check — does Azure give us syllable times?</title>
 <!--
-  tools/align-check.html — build A1
+  tools/align-check.html — build A2
 
   ONE QUESTION
   ------------
@@ -53,6 +53,34 @@
   DOM, not the log. It is gone on reload. This is a different key from the app's
   Gemini key and the two must never be conflated.
 
+  WHAT A2 CHANGED
+  ---------------
+  The first run answered the headline question and raised a sharper one. On a
+  live microphone, 好耐冇見 (hou2 noi6 mou5 gin3) came back with NO Syllables
+  array, but with nine phoneme spans that all look real: in order, inside the
+  audio, none shorter than 60 ms. So timing IS available at a finer grain than
+  the syllable — the question is no longer whether we get timings, but whether we
+  can tell which phoneme is which, because grouping phonemes back into syllables
+  needs labels, not just counts.
+
+  Two things the first run could not show, and A2 adds:
+
+    1. THE RAW SHAPE. The spans printed with empty labels, which means the field
+       this page reads for a phoneme name came back blank or is called something
+       else. Guessing at a schema is how the last three probe builds went wrong,
+       so A2 prints the actual Words object and its key names rather than
+       inferring them. Look before modelling.
+    2. AN HONEST THREE-WAY VERDICT. A1 treated "no Syllables array" as a flat
+       fail. That was too blunt: phoneme timings with usable labels would be
+       perfectly sufficient, because a syllable is just a run of phonemes and we
+       know from the jyutping how many each syllable should have. A2 grades the
+       response as USABLE DIRECTLY, USABLE AFTER GROUPING, or NOT USABLE.
+
+  Also worth noting from run 1: three word entries came back for a four-character
+  phrase, so Azure is tokenising into WORDS rather than characters. Word-level
+  timings therefore cannot be read as syllable boundaries even when they look
+  tidy — 好耐 (hou2 noi6) is one entry covering two syllables.
+
   NOT APP CODE. Diagnostic only, not in the sw.js precache list, no CACHE_VERSION
   bump. Writes nothing.
 -->
@@ -98,7 +126,7 @@
 <body>
 
 <h1>Alignment Check</h1>
-<p class="sub">Does Azure return usable syllable start and end times for zh-HK? · build <b>A1</b></p>
+<p class="sub">Does Azure return usable syllable start and end times for zh-HK? · build <b>A2</b></p>
 
 <div class="card">
   <h2>Credentials</h2>
@@ -277,7 +305,8 @@ async function assess(rawBlob, referenceText){
   const wav = await toWav16kMono(rawBlob);
   log('  audio: ' + wav.seconds.toFixed(2) + 's, peak ' + Math.round(wav.peak*100) + '%, '
       + wav.blob.size + ' B WAV/PCM 16k mono');
-  if (wav.peak < 0.02) log('  ⚠ effectively silent — any result below is a recording problem, not an alignment one');
+  if (wav.peak < 0.10) log('  ⚠ quiet take (' + Math.round(wav.peak*100) + '% peak) — hold the phone closer. '
+      + 'A quiet recording degrades alignment for reasons that have nothing to do with whether alignment works.');
 
   const cfg = {
     ReferenceText: referenceText,
@@ -322,7 +351,7 @@ function inspect(json, seconds, item){
       + (status === 'Success' ? '' : ' — an empty success usually means the audio format was rejected'));
   const best = (json.NBest || [])[0];
   add(!!best, 'A result was returned', best ? 'NBest[0] present' : 'NBest empty');
-  if (!best) return { checks, segs: [] };
+  if (!best) return { checks, segs: [], words: [], labelled: 0, sylSource: 'none' };
 
   const words = best.Words || [];
   add(words.length > 0, 'Words carry structure', words.length + ' word entries');
@@ -331,28 +360,37 @@ function inspect(json, seconds, item){
      as long as the syllables underneath add up. */
   let syllables = [];
   let sylSource = 'none';
+  /* Read the label from whichever field actually carries it. A1 assumed
+     `Phoneme` and printed blanks when that assumption was wrong, which is
+     exactly the failure mode of guessing at a schema instead of looking at it. */
+  const labelOf = (o, fallback) =>
+    o.Syllable ?? o.Phoneme ?? o.Grapheme ?? o.Word ?? o.Display ?? fallback ?? '';
+
   for (const w of words){
     if (Array.isArray(w.Syllables) && w.Syllables.length){
       sylSource = 'Syllables';
-      w.Syllables.forEach(s => syllables.push({ label: s.Syllable || w.Word, offset: s.Offset, duration: s.Duration }));
+      w.Syllables.forEach(x => syllables.push({ label: labelOf(x, w.Word), offset: x.Offset, duration: x.Duration }));
     }
   }
   if (!syllables.length){
-    /* Fall back to phonemes: syllable boundaries can be rebuilt from them, and
-       for our purposes phoneme times would be enough. */
     for (const w of words){
       if (Array.isArray(w.Phonemes) && w.Phonemes.length){
-        sylSource = 'Phonemes (no Syllables array)';
-        w.Phonemes.forEach(p => syllables.push({ label: p.Phoneme, offset: p.Offset, duration: p.Duration }));
+        sylSource = 'Phonemes';
+        w.Phonemes.forEach(x => syllables.push({ label: labelOf(x, ''), offset: x.Offset, duration: x.Duration }));
       }
     }
   }
   if (!syllables.length && words.length){
     sylSource = 'Words only';
-    words.forEach(w => syllables.push({ label: w.Word, offset: w.Offset, duration: w.Duration }));
+    words.forEach(w => syllables.push({ label: labelOf(w, w.Word), offset: w.Offset, duration: w.Duration }));
   }
-  add(sylSource === 'Syllables', 'Syllable-level timings present',
+  add(sylSource !== 'none', 'Timings present at some grain',
       'source: ' + sylSource + ' — ' + syllables.length + ' entries');
+
+  const labelled = syllables.filter(x => String(x.label).trim().length > 0).length;
+  add(labelled === syllables.length && syllables.length > 0, 'Every span is labelled',
+      labelled + ' of ' + syllables.length + ' carry a name'
+      + (labelled === 0 ? ' — without names, spans can be counted but not identified' : ''));
 
   const timed = syllables.filter(s => typeof s.offset === 'number' && typeof s.duration === 'number');
   add(timed.length === syllables.length && timed.length > 0, 'Every entry has an offset and a duration',
@@ -379,6 +417,16 @@ function inspect(json, seconds, item){
   if (sylSource === 'Syllables'){
     add(syllables.length === item.syls.length, 'One span per syllable in the jyutping',
         syllables.length + ' spans against ' + item.syls.length + ' syllables in ' + item.j);
+  } else if (sylSource === 'Phonemes'){
+    /* A syllable is a run of phonemes, so phoneme timings are enough IF the
+       spans can be grouped back. Cantonese is onset + rime, so most syllables
+       are two phonemes and a vowel-initial one is a single phoneme. That gives
+       a range rather than a number, and a count inside the range means grouping
+       is at least arithmetically possible — labels are what make it reliable. */
+    const lo = item.syls.length, hi = item.syls.length * 3;
+    add(syllables.length >= lo && syllables.length <= hi, 'Phoneme count could group into syllables',
+        syllables.length + ' phonemes for ' + item.syls.length + ' syllables in ' + item.j
+        + ' — plausible range is ' + lo + '–' + hi);
   }
 
   const segs = timed.map(s => ({
@@ -386,8 +434,10 @@ function inspect(json, seconds, item){
     startMs: s.offset/TICKS_PER_MS,
     endMs: (s.offset + s.duration)/TICKS_PER_MS
   }));
-  return { checks, segs, clipMs, sylSource };
+  return { checks, segs, clipMs, sylSource, words, labelled };
 }
+
+const esc = s => String(s).replace(/[&<>]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
 
 function render(item, res){
   const { checks, segs, clipMs } = res;
@@ -413,15 +463,40 @@ function render(item, res){
       + `<p class="sub" style="margin:6px 0 0">Full width is the ${Math.round(span)} ms clip.</p>`;
   }
 
-  const good = checks.every(c => c.pass);
-  html += '<div class="verdict">' + (good
-    ? '<b class="ok">Usable.</b> The response divides this clip into as many pieces as the jyutping '
-      + 'says there are, in order, inside the audio, each long enough to be real. That is everything '
-      + 'MOCK-27-C needs from a build-time pass, and everything MOCK-27-A needs at runtime.'
-    : '<b class="err">Not usable as it stands.</b> Read the failed rows above: a missing Syllables '
-      + 'array means the depth is not offered for zh-HK, while spans that are present but zero, '
-      + 'out of order or outside the audio mean the field exists and cannot be trusted — which is '
-      + 'worse, because it would have looked like success.') + '</div>';
+  /* Three outcomes, not two. A1 called anything short of a Syllables array a
+     failure, which understated a response that carries perfectly good phoneme
+     timings — a syllable is only a run of phonemes. */
+  const timingsSane = checks.filter(c =>
+    /increase|inside the audio|long enough|zero-length|offset and a duration/.test(c.label)).every(c => c.pass);
+  let tier, body;
+  if (res.sylSource === 'Syllables' && checks.every(c => c.pass)){
+    tier = '<b class="ok">Usable directly.</b>';
+    body = 'Syllable spans, in order, inside the audio, one per syllable in the jyutping. '
+         + 'That is everything MOCK-27-C needs from a one-off pass over our own clips, and '
+         + 'everything MOCK-27-A needs on every attempt.';
+  } else if (res.sylSource === 'Phonemes' && timingsSane && res.labelled > 0){
+    tier = '<b class="warnt">Usable after grouping.</b>';
+    body = 'No syllable spans, but labelled phoneme spans that hold together as a timeline. '
+         + 'Syllables can be rebuilt by grouping phonemes, which is extra work and one more '
+         + 'place to be wrong — but it is work we do once, offline, for MOCK-27-C.';
+  } else if (res.sylSource === 'Phonemes' && timingsSane){
+    tier = '<b class="warnt">Timings yes, names no.</b>';
+    body = 'The spans are sane but unlabelled, so they can be counted and not identified. '
+         + 'Grouping them into syllables would be guesswork against the jyutping. Check the raw '
+         + 'response below for what the label field is actually called before concluding.';
+  } else {
+    tier = '<b class="err">Not usable as it stands.</b>';
+    body = 'Read the failed rows. Spans that are zero, out of order or outside the audio mean '
+         + 'the field exists and cannot be trusted — worse than absence, because it looks like success.';
+  }
+  html += '<div class="verdict">' + tier + ' ' + body + '</div>';
+
+  /* The raw object, because the last three probe builds went wrong by assuming a
+     shape instead of reading one. */
+  if (res.words && res.words.length){
+    html += '<details style="margin-top:12px"><summary class="sub">Raw response — the first word entry, exactly as it arrived</summary>'
+      + '<div class="log" style="margin-top:8px">' + esc(JSON.stringify(res.words[0], null, 1)) + '</div></details>';
+  }
 
   $('result').innerHTML = html;
 }
@@ -434,7 +509,14 @@ async function runOne(item, blob, label){
     const res = inspect(json, seconds, item);
     res.checks.forEach(c => log('  ' + (c.pass ? 'ok  ' : 'FAIL') + '  ' + c.label + ' — ' + c.detail));
     if (res.segs.length) log('  spans: ' + res.segs.map(s =>
-      s.label + ' ' + Math.round(s.startMs) + '–' + Math.round(s.endMs) + ' ms').join('  '));
+      '[' + (String(s.label).trim() || '?') + '] ' + Math.round(s.startMs) + '–' + Math.round(s.endMs) + ' ms').join('  '));
+    if (res.words && res.words.length){
+      log('  word entries: ' + res.words.map(w => (w.Word || '?')).join(' | '));
+      log('  keys on a word entry: ' + Object.keys(res.words[0]).join(', '));
+      const sub = res.words[0].Syllables || res.words[0].Phonemes;
+      if (Array.isArray(sub) && sub.length) log('  keys on a sub-entry:   ' + Object.keys(sub[0]).join(', '));
+      log('  raw first word entry:\n' + JSON.stringify(res.words[0], null, 1).split('\n').map(l => '    ' + l).join('\n'));
+    }
     render(item, res);
     return res;
   } catch (e){
