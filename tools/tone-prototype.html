@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tone Check Prototype — three ways of judging one recording</title>
+<!--
+  tools/tone-prototype.html — build P1
+
+  WHAT THIS IS FOR
+  ----------------
+  Mockup 27 drew three ways of giving tone feedback. Drawings cannot settle which
+  one is worth using, because the thing being chosen is how it FEELS to be told
+  you got a tone wrong. So this page implements all three for real, on ten words
+  from the corpus, and runs all three off ONE recording.
+
+  One recording matters. If each panel had its own record button you would be
+  comparing three different attempts, and your own inconsistency between takes
+  would be the biggest variable in the comparison. Record once, judged three
+  times, same audio.
+
+  THE THREE
+  ---------
+  MOCK-27-A  Sends your audio to Azure, which returns where each of YOUR
+             syllables starts and ends. Cuts your pitch track there and judges
+             each syllable's tone ON ITS OWN, against what that tone should be.
+             Needs a key and a network round trip every attempt.
+  MOCK-27-B  Ignores syllables entirely. Compares the shape of your whole
+             recording against the shape of the model clip. One curve, one
+             verdict, no key, no network.
+  MOCK-27-C  Compares against the model like B, but the model's syllable
+             boundaries are known — worked out once by Azure and saved — so your
+             frames inherit a syllable by lining up with the model's. Per
+             syllable feedback, still no key at runtime.
+
+  A JUDGES DIFFERENTLY FROM B AND C, AND THAT IS THE POINT
+  --------------------------------------------------------
+  A asks "is this syllable the right tone". B and C ask "does this sound like the
+  model". Those come apart at the end of a phrase, where a syllable sits lower
+  simply because the utterance is ending: A reads that as a wrong tone, B and C
+  compare against a model that also falls and score it fine. Making A compare
+  against the model too would have made all three nearly identical and wasted the
+  exercise, so A is implemented as mockup 27 described it.
+
+  NO MACHINE VOCABULARY ON SCREEN
+  -------------------------------
+  Everything is measured in semitones internally, because that is the only unit
+  in which two different voices can be compared at all. None of it is shown. The
+  learner is told a direction and a correction — too high, too low, it stayed
+  flat and needs to climb — because that is what can be acted on. A number with
+  no intuition attached is not feedback, it is decoration.
+
+  PREPARING THE BOUNDARIES
+  ------------------------
+  MOCK-27-C needs the model clips' syllable boundaries. Press Prepare once with a
+  key held: it sends the ten clips to Azure with the characters spaced apart,
+  which the alignment check established is what makes Azure return one entry per
+  character. Download the result and the page can load it without a key next time.
+  In the real app this pass happens once for all 585 words and ships as data.
+
+  WHAT WAS TESTED BEFORE YOU EVER PRESSED RECORD
+  ----------------------------------------------
+  Twelve synthetic cases run against B and C with curves whose right answer is
+  known by construction: matching the model, right shape but two semitones high,
+  flat when the model climbs, said much slower, and — for two-syllable words —
+  each error confined to one syllable. All twelve now report what they should.
+  Two earlier versions of the comparison did not, and both failed silently in
+  the flattering direction, which is why they were found here rather than in
+  your hands.
+
+  THE KNOWN WEAK SPOT
+  -------------------
+  A wrong tone can still shift its own syllable boundary. In the two-syllable
+  test where only the second syllable was too high, the boundary landed about
+  four frames — roughly 40 ms — early. That is small enough not to change any
+  verdict in these tests, but it is real, it is C's characteristic failure, and
+  it is what mockup 27 meant by "C's boundaries are the model's, not the
+  learner's". A pause between syllables would push it further.
+
+  ROUGH ON PURPOSE. Styling is deliberately plain — this is for deciding which
+  approach feels right, not what it should look like. Diagnostic only, not in the
+  sw.js precache list, no CACHE_VERSION bump.
+-->
+<style>
+  :root{--ink:#1b1a17;--muted:#6b665e;--line:#ddd8cf;--bg:#faf8f4;--card:#fff;
+        --good:#2e7d4f;--bad:#b3402e;--warn:#a8761c;--accent:#7c2d2d;--model:#a8a29e}
+  *{box-sizing:border-box}
+  body{margin:0 auto;padding:16px 14px 80px;font:16px/1.5 -apple-system,"Segoe UI",Roboto,sans-serif;
+       color:var(--ink);background:var(--bg);max-width:760px}
+  h1{font-size:19px;margin:0 0 4px}
+  h2{font-size:15px;margin:0 0 8px}
+  .sub{color:var(--muted);font-size:13px;margin:0 0 12px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px;margin-bottom:12px}
+  button{font:inherit;font-size:15px;padding:10px 16px;border:1px solid var(--line);
+         border-radius:7px;background:#fff;color:var(--ink);cursor:pointer;min-height:46px}
+  button.primary{background:var(--accent);border-color:var(--accent);color:#fff}
+  button.rec{background:var(--bad);border-color:var(--bad);color:#fff}
+  button:disabled{opacity:.45;cursor:default}
+  select,input{width:100%;font:inherit;font-size:15px;padding:10px;border:1px solid var(--line);
+               border-radius:7px;background:#fff;color:var(--ink)}
+  label{display:block;font-size:11px;color:var(--muted);margin:10px 0 4px;text-transform:uppercase;letter-spacing:.05em}
+  .row{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:10px}
+  .zh{font-size:30px;line-height:1.2}
+  .jp{font-size:13px;color:var(--muted)}
+  .panel{border-left:4px solid var(--line);padding-left:12px;margin-top:16px}
+  .panel h3{font-size:13px;margin:0 0 2px;letter-spacing:.04em;text-transform:uppercase;color:var(--muted)}
+  .panel .how{font-size:12px;color:var(--muted);margin:0 0 8px}
+  .syl{display:flex;align-items:center;gap:10px;padding:6px 0;border-bottom:1px solid var(--line)}
+  .syl:last-child{border-bottom:none}
+  .syl-zh{font-size:20px;width:30px;text-align:center}
+  .syl-jp{font-size:12px;color:var(--muted);width:60px}
+  .syl-v{font-size:14px;flex:1}
+  .v-good{color:var(--good);font-weight:600}
+  .v-off{color:var(--bad);font-weight:600}
+  .v-close{color:var(--warn);font-weight:600}
+  .overall{margin-top:8px;font-size:15px}
+  svg{display:block;width:100%;height:120px;background:#f6f3ee;border:1px solid var(--line);border-radius:7px}
+  .axis{display:flex;font-size:13px;margin-top:2px}
+  .axis span{flex:1;text-align:center}
+  .axis small{display:block;font-size:10px;color:var(--muted)}
+  .log{font:12px/1.45 ui-monospace,Menlo,Consolas,monospace;white-space:pre-wrap;word-break:break-word;
+       background:#23211d;color:#ded8cd;padding:10px;border-radius:7px;max-height:30vh;overflow:auto}
+  .note{font-size:12px;color:var(--muted);margin-top:8px}
+</style>
+</head>
+<body>
+
+<h1>Tone Check Prototype</h1>
+<p class="sub">One recording, judged three ways · build <b>P1</b></p>
+
+<div class="card">
+  <h2>Setup</h2>
+  <p class="sub" style="margin:0">
+    A key is needed for two things: preparing the model boundaries once, and
+    running MOCK-27-A on every attempt. MOCK-27-B and MOCK-27-C run without it
+    after preparation. Region is prefilled.
+  </p>
+  <label for="key">Azure Speech key</label>
+  <input type="password" id="key" autocomplete="off" spellcheck="false" placeholder="paste key">
+  <label for="region">Region</label>
+  <input type="text" id="region" value="australiaeast" spellcheck="false">
+  <div class="row">
+    <button id="hold">Hold key</button>
+    <button id="prep" disabled>Prepare model boundaries</button>
+    <button id="dl" disabled>Download boundaries</button>
+  </div>
+  <p class="sub" id="setupStatus" style="margin-top:10px">No key held.</p>
+</div>
+
+<div class="card">
+  <h2>Practise</h2>
+  <label for="word">Word</label>
+  <select id="word"><option>loading…</option></select>
+  <div style="margin-top:12px">
+    <div class="zh" id="wordZh">—</div>
+    <div class="jp" id="wordJp"></div>
+  </div>
+  <div class="row">
+    <button class="primary" id="rec" disabled>Record</button>
+    <button id="play" disabled>Hear it</button>
+  </div>
+  <p class="sub" id="recStatus" style="margin-top:10px">Prepare boundaries first, or load a saved file.</p>
+</div>
+
+<div class="card" id="results" style="display:none">
+  <h2>What each approach says</h2>
+
+  <div class="panel" style="border-left-color:#8a6d3b">
+    <h3>MOCK-27-A · your syllables, judged on their own</h3>
+    <p class="how">Azure marks where your syllables fall; each is judged against the tone it should be. Needs the network.</p>
+    <div id="outA"></div>
+  </div>
+
+  <div class="panel" style="border-left-color:#7c2d2d">
+    <h3>MOCK-27-B · your shape against the model's</h3>
+    <p class="how">No syllables. Your whole recording compared to the model clip. Works offline.</p>
+    <div id="outB"></div>
+  </div>
+
+  <div class="panel" style="border-left-color:#2e7d4f">
+    <h3>MOCK-27-C · same comparison, split by syllable</h3>
+    <p class="how">As B, but the model's boundaries are known, so your recording inherits them. Works offline.</p>
+    <div id="outC"></div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="row" style="justify-content:space-between;margin:0 0 8px">
+    <b style="font-size:14px">Log</b><button id="copyLog">Copy</button>
+  </div>
+  <div class="log" id="log">Idle.</div>
+</div>
+
+<script>
+'use strict';
+
+/* ── Pitch tracking. Same constants as tone-probe, tone-reference and
+   segment-probe, so numbers stay comparable across all four pages. ───────── */
+const RATE=16000, FRAME=1024, HOP=160, FMIN=60, FMAX=500;
+const YIN_THRESHOLD=0.40, VOICE_THRESHOLD=0.20, GATE_FRACTION=0.05, MIN_GAP=3;
+
+/* Judgement thresholds, in semitones. Never shown; they only decide which
+   sentence appears. A tone that climbs does so by several semitones, so 2 is
+   comfortably inside "did not really move" and 1.5 is about the point where a
+   listener starts to hear a syllable as sitting too high or too low. */
+const SLOPE_FLAT = 2.0;      /* movement below this counts as level */
+const SLOPE_DIFF = 2.0;      /* difference from the model's movement that matters */
+const HEIGHT_DIFF = 1.5;     /* difference from the model's height that matters */
+
+const $=id=>document.getElementById(id);
+let logBuf=[];
+const log=m=>{logBuf.push(m);$('log').textContent=logBuf.join('\n');$('log').scrollTop=1e9;};
+
+function yin(buf,start){
+  const W=FRAME>>1, diff=new Float32Array(W);
+  for(let tau=1;tau<W;tau++){let s=0;for(let i=0;i<W;i++){const d=buf[start+i]-buf[start+i+tau];s+=d*d;}diff[tau]=s;}
+  const cmnd=new Float32Array(W); cmnd[0]=1; let run=0;
+  for(let tau=1;tau<W;tau++){run+=diff[tau];cmnd[tau]=run===0?1:diff[tau]*tau/run;}
+  const tMin=Math.floor(RATE/FMAX), tMax=Math.min(W-1,Math.floor(RATE/FMIN));
+  let tau=-1;
+  for(let t=tMin;t<=tMax;t++){ if(cmnd[t]<YIN_THRESHOLD){ while(t+1<=tMax&&cmnd[t+1]<cmnd[t])t++; tau=t; break; } }
+  if(tau<0) return null;
+  const x0=tau>1?tau-1:tau, x2=tau+1<W?tau+1:tau; let better=tau;
+  if(x0!==tau&&x2!==tau){const s0=cmnd[x0],s1=cmnd[tau],s2=cmnd[x2],den=2*(2*s1-s2-s0);if(den!==0)better=tau+(s2-s0)/den;}
+  return { hz: RATE/better, aper: cmnd[tau] };
+}
+const median=a=>{if(!a.length)return null;const s=[...a].sort((x,y)=>x-y);return s[Math.floor(s.length/2)];};
+
+function closeGaps(t,minGap){
+  const o=t.slice(); let i=0;
+  while(i<o.length){
+    if(o[i]!=null){i++;continue;}
+    let j=i; while(j<o.length&&o[j]==null)j++;
+    if(i>0&&j<o.length&&(j-i)<minGap){const f=o[i-1];for(let k=i;k<j;k++)o[k]=f;}
+    i=j;
+  }
+  return o;
+}
+
+/* A recording reduced to what can be compared: a pitch value per frame, in
+   semitones relative to THIS speaker's own median, with the frame's time in ms.
+   The median is what lets two different voices be compared — it is the only
+   thing that puts a low voice and a high one on the same scale. */
+function contour(pcm){
+  const rms=[];
+  for(let i=0;i+FRAME<pcm.length;i+=HOP){let s=0;for(let k=0;k<FRAME;k++)s+=pcm[i+k]*pcm[i+k];rms.push(Math.sqrt(s/FRAME));}
+  const gate=Math.max(...rms,1e-9)*GATE_FRACTION;
+  const raw=[];
+  for(let n=0,i=0;i+FRAME<pcm.length;i+=HOP,n++){
+    if(rms[n]<gate){raw.push(null);continue;}
+    const r=yin(pcm,i);
+    raw.push(r&&r.aper<VOICE_THRESHOLD?r.hz:null);
+  }
+  const filled=closeGaps(raw,MIN_GAP);
+  const smoothed=filled.map((v,i)=>{const w=filled.slice(Math.max(0,i-2),i+3).filter(x=>x!=null);return w.length>=3?median(w):v;});
+  const hz=smoothed.filter(v=>v!=null);
+  if(hz.length<6) return null;
+  const med=median(hz);
+  const pts=[];
+  smoothed.forEach((v,n)=>{ if(v!=null) pts.push({ ms:(n*HOP/RATE)*1000, st:12*Math.log2(v/med) }); });
+  return { pts, medianHz: med };
+}
+
+/* ── Dynamic time warping ─────────────────────────────────────────────────
+   Lines two pitch curves up allowing for one being said faster or slower. The
+   band limits how far the match may stretch: without it a wrong tone can be
+   bent into place and score well, which would be the worst possible failure —
+   a confident tick for a mistake. */
+/* Aligned on RATE OF CHANGE, not on pitch itself.
+
+   Matching raw pitch has a flaw that took a synthetic test to see: on a rising
+   tone, being two semitones too high is indistinguishable from starting two
+   frames too early, so the alignment slides along the slope and cancels the
+   error. Worse, it drags the syllable boundary with it — in a two-syllable test
+   where only the second syllable was too high, the boundary landed eight frames
+   early and the mistake averaged away to nothing.
+
+   Rate of change is immune to a constant vertical shift, so the alignment is
+   driven by the SHAPE of the pitch movement and cannot be bribed by height.
+   It does not fully cure the drag — the same test still places the boundary
+   about four frames early — but it halves it, and the residue is a known,
+   measured weakness rather than a silent one. */
+function slopeFeature(a){
+  return a.map((_,i)=>{
+    const lo=Math.max(0,i-2), hi=Math.min(a.length-1,i+2);
+    return hi>lo ? (a[hi]-a[lo])/(hi-lo) : 0;
+  });
+}
+
+function dtw(rawA,rawB){
+  const a=slopeFeature(rawA), b=slopeFeature(rawB);
+  const n=a.length, m=b.length;
+  const band=Math.max(Math.abs(n-m)+1, Math.ceil(Math.max(n,m)*0.15));
+  const INF=Infinity;
+  const D=Array.from({length:n+1},()=>new Float64Array(m+1).fill(INF));
+  D[0][0]=0;
+  for(let i=1;i<=n;i++){
+    const lo=Math.max(1,i-band), hi=Math.min(m,i+band);
+    for(let j=lo;j<=hi;j++){
+      const c=Math.abs(a[i-1]-b[j-1]);
+      D[i][j]=c+Math.min(D[i-1][j],D[i][j-1],D[i-1][j-1]);
+    }
+  }
+  /* Walk the cheapest route back so each learner frame knows which model frame
+     it matched — that mapping is what gives MOCK-27-C its syllables. */
+  const path=[]; let i=n,j=m;
+  while(i>0&&j>0){
+    path.push([i-1,j-1]);
+    const best=Math.min(D[i-1][j],D[i][j-1],D[i-1][j-1]);
+    if(best===D[i-1][j-1]){i--;j--;} else if(best===D[i-1][j]){i--;} else {j--;}
+  }
+  path.reverse();
+  /* Reported on the raw pitch, since the feature the alignment ran on is a rate
+     and a gap between rates is not a quantity anyone can interpret. Logged
+     only — no verdict is ever taken from it. */
+  const cost=path.reduce((s,[x,y])=>s+Math.abs(rawA[x]-rawB[y]),0)/(path.length||1);
+  return { path, cost };
+}
+
+/* ── The warp is used for WHERE, never for HOW FAR APART ─────────────────
+   Two attempts at this were wrong before this one, both in the same direction,
+   and both let a real mistake disappear:
+
+     1. Averaging the gap along the warp path double-counts stretched frames.
+     2. Collapsing to one row per learner frame fixes the double-counting and
+        still does not help, because the deeper problem is not counting.
+
+   The deeper problem: on a rising tone, singing two semitones too HIGH looks
+   exactly like starting two frames too EARLY. A vertical shift and a horizontal
+   shift are the same thing on a slope, so the alignment slides along and cancels
+   the error out. Measured on two identical rising curves a true 2.00 semitones
+   apart, the gap through the warp came out at 1.01 — half the error gone, and
+   the take reported as matching the model.
+
+   No amount of care with the path fixes that, because it is what alignment IS.
+   So height is never measured through the warp. The warp answers one question
+   only — which part of your recording corresponds to which part of the model —
+   and once that is known, each stretch is measured against the other on its own
+   raw frames, where two semitones high stays two semitones high. */
+function modelMsToLearnerFrame(mineP, modelP, path, ms){
+  let j = modelP.findIndex(p => p.ms >= ms);
+  if (j < 0) j = modelP.length - 1;
+  const hits = path.filter(([,jj]) => jj === j).map(([i]) => i);
+  if (hits.length) return hits[Math.floor(hits.length/2)];
+  /* No frame paired with exactly that model frame — take the nearest pairing. */
+  let best = path[0], bestD = Infinity;
+  path.forEach(pr => { const d = Math.abs(pr[1]-j); if (d < bestD){ bestD = d; best = pr; } });
+  return best[0];
+}
+
+/* Cut a series at the given indices. Segments shorter than a few frames are
+   returned as-is and handled by the caller — too little sound to judge is a
+   real answer and better than a confident one made up from four frames. */
+function cutAt(arr, cuts){
+  const segs=[]; let start=0;
+  cuts.concat([arr.length]).forEach(c=>{ const end=Math.max(start,Math.min(arr.length,c)); segs.push(arr.slice(start,end)); start=end; });
+  return segs;
+}
+
+/* ── Plain English ───────────────────────────────────────────────────────
+   Two comparisons produce every sentence: which way the pitch moved, and how
+   high it sat. Nothing numeric reaches the screen. */
+function shapeOf(st){
+  const slope=st[st.length-1]-st[0];
+  return slope>SLOPE_FLAT?'up':slope<-SLOPE_FLAT?'down':'level';
+}
+const heightOf=st=>st.reduce((a,b)=>a+b,0)/st.length;
+
+/* Judged against what the tone should be — MOCK-27-A's way. */
+const TONE_SHAPE={1:'level',2:'up',3:'level',4:'down',5:'up',6:'level'};
+const TONE_HIGH ={1:true,2:false,3:false,4:false,5:false,6:false};
+function verdictAbsolute(st,tone){
+  const shape=shapeOf(st), height=heightOf(st), want=TONE_SHAPE[tone];
+  if(shape!==want){
+    if(want==='up')    return {k:'off', s: shape==='down' ? 'it dropped — this one climbs' : 'it stayed flat — this one climbs'};
+    if(want==='down')  return {k:'off', s: shape==='up' ? 'it climbed — this one drops' : 'it stayed flat — this one drops'};
+    return {k:'off', s: shape==='up' ? 'it climbed — this one stays steady' : 'it dropped — this one stays steady'};
+  }
+  if(want==='level'){
+    if(TONE_HIGH[tone] && height<0.5) return {k:'close', s:'right shape, too low'};
+    if(!TONE_HIGH[tone] && height>2.5) return {k:'close', s:'right shape, too high'};
+  }
+  return {k:'good', s:'good'};
+}
+
+/* Judged against the model recording — MOCK-27-B and MOCK-27-C's way. */
+function verdictRelative(mine,theirs){
+  const mySlope=mine[mine.length-1]-mine[0], theirSlope=theirs[theirs.length-1]-theirs[0];
+  const dSlope=mySlope-theirSlope, dHeight=heightOf(mine)-heightOf(theirs);
+  if(dSlope<-SLOPE_DIFF)
+    return {k:'off', s: theirSlope>SLOPE_FLAT ? 'flatter than it should be — this one climbs'
+                                              : 'it dropped more than it should'};
+  if(dSlope>SLOPE_DIFF)
+    return {k:'off', s: theirSlope<-SLOPE_FLAT ? 'flatter than it should be — this one drops'
+                                               : 'it climbed when it should hold steady'};
+  if(dHeight>HEIGHT_DIFF)  return {k:'close', s:'right shape, a bit high'};
+  if(dHeight<-HEIGHT_DIFF) return {k:'close', s:'right shape, a bit low'};
+  return {k:'good', s:'good'};
+}
+
+const cls=k=>k==='good'?'v-good':k==='close'?'v-close':'v-off';
+
+/* ── Corpus and clips ────────────────────────────────────────────────────── */
+let ITEMS=[], SELECTED=null, BOUNDS=null, CREDS={key:null,region:'australiaeast'};
+const CLS={1:'high level',2:'rising',3:'mid/low level',4:'low falling',5:'rising',6:'mid/low level'};
+const hanChars=t=>Array.from(String(t)).filter(c=>/[\u3400-\u9fff]/.test(c));
+
+async function loadItems(){
+  const idx=await (await fetch('../data/topics_index.json')).json();
+  const all=[];
+  for(const t of idx.topics){
+    let topic; try{topic=await (await fetch('../data/topics/'+t.key+'.json')).json();}catch(e){continue;}
+    for(const rk of Object.keys(topic.rounds||{})) for(const w of (topic.rounds[rk].words||[])) all.push(w);
+  }
+  const syls=w=>(w.j||'').trim().toLowerCase().split(/\s+/);
+  const clean=w=>syls(w).every(s=>/[1-6]$/.test(s));
+  const picks=[], seenC=new Set(), seenP=new Set();
+  for(const w of all){const s=syls(w); if(s.length!==1||!clean(w))continue;
+    const c=CLS[s[0].slice(-1)]; if(seenC.has(c))continue; seenC.add(c); picks.push(w);}
+  for(const w of all){const s=syls(w); if(s.length!==2||!clean(w))continue;
+    const p=s.map(x=>x.slice(-1)).join(''); if(seenP.has(p))continue; seenP.add(p); picks.push(w); if(seenP.size===4)break;}
+  all.filter(w=>syls(w).length>=4&&clean(w)).slice(0,2).forEach(w=>picks.push(w));
+  ITEMS=picks.map(w=>({...w, syls:syls(w), chars:hanChars(w.c)}));
+  $('word').innerHTML=ITEMS.map((w,i)=>`<option value="${i}">${w.c} (${w.j})</option>`).join('');
+  select(0);
+  $('word').onchange=()=>select(+$('word').value);
+  $('play').disabled=false;
+  log('Ten items derived from the corpus: '+ITEMS.map(w=>w.c).join(' '));
+}
+function select(i){
+  SELECTED=ITEMS[i];
+  $('wordZh').textContent=SELECTED.c;
+  $('wordJp').textContent=SELECTED.j+' — '+(SELECTED.e||SELECTED.en||'');
+  $('results').style.display='none';
+  refresh();
+}
+function refresh(){
+  const prepared=BOUNDS&&SELECTED&&BOUNDS[SELECTED.id];
+  $('rec').disabled=!prepared;
+  $('prep').disabled=!CREDS.key;
+  $('dl').disabled=!BOUNDS;
+  $('recStatus').textContent=prepared
+    ? 'Ready. MOCK-27-A also needs the key; the other two do not.'
+    : 'Boundaries not prepared for this word yet.';
+}
+
+const Ctx=()=>new (window.AudioContext||window.webkitAudioContext)();
+async function pcmFromBlob(blob){
+  const decoded=await Ctx().decodeAudioData(await blob.arrayBuffer());
+  const off=new OfflineAudioContext(1,Math.ceil(decoded.duration*RATE),RATE);
+  const src=off.createBufferSource(); src.buffer=decoded; src.connect(off.destination); src.start();
+  return { pcm:(await off.startRendering()).getChannelData(0), seconds:decoded.duration };
+}
+const clipBlob=async item=>{
+  const r=await fetch('../audio/words/'+item.id+'.mp3');
+  if(!r.ok) throw new Error('clip missing');
+  return r.blob();
+};
+
+/* ── Azure: used to prepare model boundaries, and by MOCK-27-A at runtime ─── */
+const AZ_TYPE='audio/wav; codecs=audio/pcm; samplerate=16000';
+const b64=s=>btoa(String.fromCharCode(...new TextEncoder().encode(s)));
+
+async function toWav(blob){
+  const {pcm}=await pcmFromBlob(blob);
+  const buf=new ArrayBuffer(44+pcm.length*2), v=new DataView(buf);
+  const str=(o,s)=>{for(let i=0;i<s.length;i++)v.setUint8(o+i,s.charCodeAt(i));};
+  str(0,'RIFF'); v.setUint32(4,36+pcm.length*2,true); str(8,'WAVE'); str(12,'fmt ');
+  v.setUint32(16,16,true); v.setUint16(20,1,true); v.setUint16(22,1,true);
+  v.setUint32(24,RATE,true); v.setUint32(28,RATE*2,true); v.setUint16(32,2,true); v.setUint16(34,16,true);
+  str(36,'data'); v.setUint32(40,pcm.length*2,true);
+  for(let i=0;i<pcm.length;i++){const s=Math.max(-1,Math.min(1,pcm[i]));v.setInt16(44+i*2,s<0?s*0x8000:s*0x7fff,true);}
+  return new Blob([buf],{type:'audio/wav'});
+}
+
+/* Characters spaced apart. The alignment check established this is what makes
+   Azure return one entry per character instead of lumping 朋友 (pang4 jau5)
+   into a single span. */
+async function syllableTimes(blob,item){
+  const wav=await toWav(blob);
+  const cfg={ReferenceText:item.chars.join(' '),GradingSystem:'HundredMark',Granularity:'Phoneme',EnableMiscue:false,Dimension:'Comprehensive'};
+  const res=await fetch('https://'+CREDS.region+'.stt.speech.microsoft.com'
+    +'/speech/recognition/conversation/cognitiveservices/v1?language=zh-HK&format=detailed',
+    {method:'POST',headers:{'Ocp-Apim-Subscription-Key':CREDS.key,'Content-Type':AZ_TYPE,
+      'Pronunciation-Assessment':b64(JSON.stringify(cfg)),'Accept':'application/json'},body:wav});
+  if(!res.ok) throw new Error('HTTP '+res.status);
+  const json=await res.json();
+  const words=((json.NBest||[])[0]||{}).Words||[];
+  const single=words.filter(w=>hanChars(w.Word).length===1&&w.Duration>0);
+  /* Outcome inspected, not inferred: a 200 with the wrong number of spans is
+     not a usable answer, and the endpoint will happily return one. */
+  if(single.length!==item.syls.length)
+    throw new Error('got '+single.length+' syllable spans, expected '+item.syls.length);
+  return single.map(w=>({ label:w.Word, startMs:w.Offset/10000, endMs:(w.Offset+w.Duration)/10000 }));
+}
+
+$('hold').onclick=()=>{
+  const k=$('key').value.trim();
+  if(!k){$('setupStatus').textContent='A key is needed.';return;}
+  CREDS={key:k,region:($('region').value.trim()||'australiaeast').toLowerCase()};
+  $('key').value='';
+  $('setupStatus').innerHTML='Key held for <b>'+CREDS.region+'</b>. Memory only.';
+  log('Key held. Region '+CREDS.region+'.');
+  refresh();
+};
+
+$('prep').onclick=async()=>{
+  $('prep').disabled=true;
+  BOUNDS=BOUNDS||{};
+  log('\nPreparing model boundaries for '+ITEMS.length+' clips…');
+  for(const item of ITEMS){
+    try{
+      const times=await syllableTimes(await clipBlob(item),item);
+      BOUNDS[item.id]={ c:item.c, j:item.j, times };
+      log('  ok   '+item.c+' ('+item.j+') → '+times.map(t=>t.label+' '+Math.round(t.startMs)+'–'+Math.round(t.endMs)+'ms').join('  '));
+    }catch(e){ log('  FAIL '+item.c+' ('+item.j+') — '+e.message); }
+  }
+  log('Prepared '+Object.keys(BOUNDS).length+' of '+ITEMS.length+'.');
+  refresh();
+};
+
+$('dl').onclick=()=>{
+  const blob=new Blob([JSON.stringify({builtOn:new Date().toISOString().slice(0,10),
+    source:'Azure zh-HK alignment of audio/words clips, characters spaced',bounds:BOUNDS},null,1)+'\n'],{type:'application/json'});
+  const a=document.createElement('a'); a.href=URL.createObjectURL(blob);
+  a.download='tone_boundaries.json'; a.click();
+  setTimeout(()=>URL.revokeObjectURL(a.href),2000);
+};
+
+$('play').onclick=async()=>{ new Audio('../audio/words/'+SELECTED.id+'.mp3').play().catch(e=>log('playback: '+e.message)); };
+
+/* ── The recording, judged three ways ────────────────────────────────────── */
+let activeRec=null;
+$('rec').onclick=async()=>{
+  if(activeRec){activeRec.stop();return;}
+  let stream;
+  try{ stream=await navigator.mediaDevices.getUserMedia({audio:{echoCancellation:false,noiseSuppression:false,autoGainControl:false}}); }
+  catch(e){ log('MIC FAILED: '+e.name); return; }
+  const mime=['audio/webm;codecs=opus','audio/ogg;codecs=opus','audio/webm','audio/mp4'].find(t=>MediaRecorder.isTypeSupported(t));
+  const rec=new MediaRecorder(stream,{mimeType:mime}), chunks=[];
+  rec.ondataavailable=e=>chunks.push(e.data);
+  rec.onstop=async()=>{
+    stream.getTracks().forEach(t=>t.stop()); activeRec=null;
+    $('rec').classList.remove('rec'); $('rec').textContent='Record';
+    await judge(SELECTED,new Blob(chunks,{type:mime}));
+  };
+  activeRec=rec; $('rec').classList.add('rec'); $('rec').textContent='Stop'; rec.start();
+  setTimeout(()=>{ if(activeRec===rec) rec.stop(); },5000);
+};
+
+async function judge(item,blob){
+  logBuf=[]; log('── '+item.c+' ('+item.j+') ──');
+  $('results').style.display='block';
+  $('outA').innerHTML='<p class="sub">working…</p>';
+  $('outB').innerHTML=$('outC').innerHTML='<p class="sub">working…</p>';
+
+  const you=await pcmFromBlob(blob);
+  const mine=contour(you.pcm);
+  if(!mine){ $('outA').innerHTML=$('outB').innerHTML=$('outC').innerHTML='<p class="v-off">Nothing audible in that take.</p>'; return; }
+  const model=contour((await pcmFromBlob(await clipBlob(item))).pcm);
+  log('your take '+you.seconds.toFixed(2)+'s, '+mine.pts.length+' voiced frames, median '+Math.round(mine.medianHz)+' Hz');
+  log('model '+model.pts.length+' voiced frames, median '+Math.round(model.medianHz)+' Hz');
+
+  renderB(item,mine,model);
+  renderC(item,mine,model);
+  renderA(item,blob,mine);
+}
+
+/* MOCK-27-B — whole shape, no syllables.
+
+   A first attempt judged this on the average gap between the two curves across
+   the whole recording, and testing it showed that will not do: a completely
+   wrong tone scored 1.51 while merely singing the right shape two semitones too
+   high scored 1.08. Averaging over the whole utterance dilutes a single bad
+   syllable until it is indistinguishable from being slightly off everywhere.
+   That is precisely the warp-hides-an-error risk mockup 27 warned about, and it
+   showed up on synthetic curves before any real audio was involved.
+
+   So B judges each third of the recording separately and reports the worst one.
+   Thirds are the finest division available without syllable boundaries — which
+   is the whole difference between this approach and C. */
+function renderB(item,mine,model){
+  const a=mine.pts.map(p=>p.st), b=model.pts.map(p=>p.st);
+  const {path,cost}=dtw(a,b);
+  const single=item.syls.length===1;
+  const parts=single?1:3;
+  const names=single?['']:['the start','the middle','the end'];
+
+  /* Thirds of the MODEL, carried across to your recording by the alignment.
+     Thirds are the finest division available without syllable boundaries —
+     which is the entire difference between this approach and C. */
+  const modelCuts=[], learnerCuts=[];
+  for(let k=1;k<parts;k++){
+    const idx=Math.round(model.pts.length*k/parts);
+    modelCuts.push(idx);
+    learnerCuts.push(modelMsToLearnerFrame(mine.pts, model.pts, path, model.pts[idx].ms));
+  }
+  const mineSegs=cutAt(a,learnerCuts), modelSegs=cutAt(b,modelCuts);
+  const vs=mineSegs.map((m,i)=> (m.length>=4&&modelSegs[i].length>=4) ? verdictRelative(m,modelSegs[i]) : {k:'good',s:'good'});
+
+  const rank={off:2,close:1,good:0};
+  let worst=0;
+  vs.forEach((v,i)=>{ if(rank[v.k]>rank[vs[worst].k]) worst=i; });
+
+  const sentence = vs[worst].k==='good'
+    ? '<span class="v-good">That sounded like the model.</span>'
+    : '<span class="'+cls(vs[worst].k)+'">'+(single?'':names[worst]+': ')+vs[worst].s+'</span>';
+
+  $('outB').innerHTML=curveSvg(a,b,null,single?null:worst)
+    +'<div class="overall">'+sentence+'</div>'
+    +'<p class="note">It can point at a stretch, not name a syllable.</p>';
+  log('B: gap along the alignment '+cost.toFixed(2)+' st (logged only, never used for the verdict) → '+vs[worst].s);
+}
+
+/* MOCK-27-C — same comparison, but the model's boundaries are known, so each of
+   your frames takes the syllable of the model frame it lined up with. */
+function renderC(item,mine,model){
+  const bounds=BOUNDS[item.id].times;
+  const a=mine.pts.map(p=>p.st), b=model.pts.map(p=>p.st);
+  const {path}=dtw(a,b);
+
+  /* The model's boundaries are known. Carry them across to your recording
+     through the alignment, then compare each syllable to its counterpart on
+     raw frames — never through the warp. */
+  const modelCuts=[], learnerCuts=[];
+  for(let k=1;k<bounds.length;k++){
+    let idx=model.pts.findIndex(p=>p.ms>=bounds[k].startMs);
+    if(idx<0) idx=model.pts.length-1;
+    modelCuts.push(idx);
+    learnerCuts.push(modelMsToLearnerFrame(mine.pts, model.pts, path, bounds[k].startMs));
+  }
+  const mineSegs=cutAt(a,learnerCuts), modelSegs=cutAt(b,modelCuts);
+
+  /* Judged once per syllable and reused — recomputing for the summary line is
+     how a summary drifts out of step with the rows above it. */
+  const vs=bounds.map((bd,k)=>
+    (mineSegs[k]&&mineSegs[k].length>=4&&modelSegs[k]&&modelSegs[k].length>=4)
+      ? verdictRelative(mineSegs[k],modelSegs[k])
+      : {k:'close',s:'not enough sound to judge'});
+  const rows=vs.map((v,k)=>{
+    log('C: '+item.chars[k]+' ('+item.syls[k]+') → '+v.s);
+    return `<div class="syl"><div class="syl-zh">${item.chars[k]||'?'}</div>`
+      +`<div class="syl-jp">${item.syls[k]}</div>`
+      +`<div class="syl-v ${cls(v.k)}">${v.s}</div></div>`;
+  }).join('');
+  const overall=vs.every(v=>v.k==='good')
+    ? '<span class="v-good">'+(vs.length>1?'All of them sounded right.':'That sounded right.')+'</span>' : '';
+
+  $('outC').innerHTML=curveSvg(a,b,modelCuts.map(i=>i/model.pts.length),null)
+    +'<div class="axis">'+bounds.map((bd,k)=>`<span>${item.chars[k]||'?'}<small>${item.syls[k]}</small></span>`).join('')+'</div>'
+    +rows+'<div class="overall">'+overall+'</div>';
+}
+
+/* MOCK-27-A — your own syllables from Azure, each judged against its target
+   tone rather than against the model. */
+async function renderA(item,blob,mine){
+  if(!CREDS.key){ $('outA').innerHTML='<p class="sub">Needs a key held. The other two ran without one.</p>'; return; }
+  let times;
+  try{ times=await syllableTimes(blob,item); }
+  catch(e){ $('outA').innerHTML='<p class="v-off">Azure could not line up that take — '+e.message+'.</p>';
+            log('A: alignment failed — '+e.message); return; }
+  const rows=times.map((t,k)=>{
+    const seg=mine.pts.filter(p=>p.ms>=t.startMs&&p.ms<=t.endMs).map(p=>p.st);
+    const tone=+item.syls[k].slice(-1);
+    const v=seg.length>=4?verdictAbsolute(seg,tone):{k:'close',s:'not enough sound to judge'};
+    log('A: '+t.label+' ('+item.syls[k]+') → '+v.s);
+    return `<div class="syl"><div class="syl-zh">${t.label}</div>`
+      +`<div class="syl-jp">${item.syls[k]}</div>`
+      +`<div class="syl-v ${cls(v.k)}">${v.s}</div></div>`;
+  }).join('');
+  $('outA').innerHTML=rows+'<p class="note">Judged against what each tone should be, not against the model — which is why a syllable at the end of a phrase can be marked wrong for simply trailing off.</p>';
+}
+
+/* ── Curve ───────────────────────────────────────────────────────────────── */
+function curveSvg(mineArr,modelArr,bounds,worstThird){
+  const W=340,H=120,P=10;
+  const all=mineArr.concat(modelArr);
+  const lo=Math.min(...all)-1, hi=Math.max(...all)+1;
+  const x=(i,n)=>P+(i/(n-1))*(W-P*2);
+  const y=v=>H-P-((v-lo)/(hi-lo))*(H-P*2);
+  const path=arr=>arr.map((v,i)=>(i?'L':'M')+x(i,arr.length).toFixed(1)+','+y(v).toFixed(1)).join(' ');
+  let g='';
+  if(worstThird!=null){
+    const x0=P+(worstThird/3)*(W-P*2), x1=P+((worstThird+1)/3)*(W-P*2);
+    g+=`<rect x="${x0}" y="0" width="${x1-x0}" height="${H}" fill="#b3402e" opacity="0.07"/>`;
+  }
+  (bounds||[]).forEach(f=>{const px=P+f*(W-P*2);g+=`<line x1="${px}" y1="4" x2="${px}" y2="${H-4}" stroke="#d9d2c8"/>`;});
+  g+=`<path d="${path(modelArr)}" fill="none" stroke="#a8a29e" stroke-width="2.5" stroke-linejoin="round"/>`;
+  g+=`<path d="${path(mineArr)}" fill="none" stroke="#7c2d2d" stroke-width="2.5" stroke-linejoin="round"/>`;
+  return `<svg viewBox="0 0 ${W} ${H}">${g}</svg>`;
+}
+
+$('copyLog').onclick=()=>navigator.clipboard.writeText(logBuf.join('\n'))
+  .then(()=>{$('copyLog').textContent='Copied';setTimeout(()=>$('copyLog').textContent='Copy',1200);});
+
+loadItems().catch(e=>log('Could not read the corpus: '+e.message));
+log('Ready. Hold a key, press Prepare once, then record.');
+</script>
+</body>
+</html>
