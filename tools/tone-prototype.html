@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Tone Check Prototype — three ways of judging one recording</title>
 <!--
-  tools/tone-prototype.html — build P2
+  tools/tone-prototype.html — build P3
 
   WHAT THIS IS FOR
   ----------------
@@ -137,12 +137,14 @@
   .log{font:12px/1.45 ui-monospace,Menlo,Consolas,monospace;white-space:pre-wrap;word-break:break-word;
        background:#23211d;color:#ded8cd;padding:10px;border-radius:7px;max-height:30vh;overflow:auto}
   .note{font-size:12px;color:var(--muted);margin-top:8px}
+  .legend{display:flex;gap:14px;font-size:11px;color:var(--muted);margin-top:4px}
+  .legend i{display:inline-block;width:14px;height:2px;margin-right:5px;vertical-align:3px}
 </style>
 </head>
 <body>
 
 <h1>Tone Check Prototype</h1>
-<p class="sub">One recording, judged three ways · build <b>P2</b></p>
+<p class="sub">One recording, judged three ways · build <b>P3</b></p>
 
 <div class="card">
   <h2>Setup</h2>
@@ -180,6 +182,7 @@
 
 <div class="card" id="results" style="display:none">
   <h2>What each approach says</h2>
+  <p class="sub" id="quality" style="margin:0 0 10px"></p>
 
   <div class="panel" style="border-left-color:#8a6d3b">
     <h3>MOCK-27-A · your syllables, judged on their own</h3>
@@ -230,7 +233,15 @@ const YIN_THRESHOLD=0.40, GATE_FRACTION=0.05, MIN_GAP=3;
    does not need the allowance and a loose threshold invites frication to be
    read as voicing. */
 const VOICE_TH_MODEL = 0.40;
-const VOICE_TH_MIC   = 0.20;
+
+/* P2 kept the microphone at the stricter 0.20 on the reasoning that raw PCM
+   does not need the allowance mp3 does. That was reasoning, not measurement,
+   and two real takes disproved it: the same word gave 49 usable readings on one
+   attempt and 15 on the next — 23% of the take — leaving a contour too jagged
+   to mean anything while the model sat at 81%. The only value with measurement
+   behind it is the one tone-reference swept, so both sides now use it and the
+   coverage check below catches whatever still falls short. */
+const VOICE_TH_MIC   = 0.40;
 
 /* A contour is only a reference if it actually covers the sound. Coverage is
    the share of a take's own speech span that produced a usable pitch reading —
@@ -605,15 +616,32 @@ async function judge(item,blob){
   log('model '+model.pts.length+' voiced frames, '+Math.round(model.coverage*100)
       +'% coverage, median '+Math.round(model.medianHz)+' Hz');
 
-  /* A reference with holes in it produces a verdict that looks exactly like a
-     verdict from a good one. Withhold instead — the fault is in the reference
-     and saying nothing is the honest answer. */
-  if(model.coverage < MIN_COVERAGE || model.pts.length < item.syls.length*8){
+  /* Always visible, because the two runs that went wrong were both diagnosable
+     from these numbers and both times they were only in the log. */
+  $('quality').innerHTML='Pitch found in <b>'+Math.round(mine.coverage*100)+'%</b> of your take'
+    +' and <b>'+Math.round(model.coverage*100)+'%</b> of the model.';
+
+  /* Either side can be too thin, and the P2 guard only watched one of them.
+     A contour with holes produces a verdict indistinguishable from a real one,
+     so withhold — but say WHICH side failed, because only one of them is
+     something you can do anything about. */
+  const thin=(c,n)=>c.coverage<MIN_COVERAGE||c.pts.length<item.syls.length*8;
+  if(thin(mine)){
+    const msg='<p class="v-off">Not enough of that take came through clearly to judge — only '
+      +Math.round(mine.coverage*100)+'% of it gave a usable pitch reading. Try again a bit louder '
+      +'and closer to the phone, and without long pauses between syllables.</p>';
+    $('outB').innerHTML=$('outC').innerHTML=msg;
+    log('! your contour too thin ('+Math.round(mine.coverage*100)+'% coverage, '
+        +mine.pts.length+' readings) — B and C withheld');
+    await renderA(item,blob,mine);
+    return;
+  }
+  if(thin(model)){
     const msg='<p class="v-off">The model recording did not give enough pitch to compare against '
       +'for this word, so there is nothing trustworthy to say. That is a fault in the reference, '
       +'not in how you said it.</p>';
     $('outB').innerHTML=$('outC').innerHTML=msg;
-    log('! model contour too thin — B and C withheld for this word');
+    log('! model contour too thin ('+Math.round(model.coverage*100)+'% coverage) — B and C withheld');
     await renderA(item,blob,mine);
     return;
   }
@@ -744,7 +772,10 @@ function curveSvg(mineArr,modelArr,bounds,worstThird){
   (bounds||[]).forEach(f=>{const px=P+f*(W-P*2);g+=`<line x1="${px}" y1="4" x2="${px}" y2="${H-4}" stroke="#d9d2c8"/>`;});
   g+=`<path d="${path(modelArr)}" fill="none" stroke="#a8a29e" stroke-width="2.5" stroke-linejoin="round"/>`;
   g+=`<path d="${path(mineArr)}" fill="none" stroke="#7c2d2d" stroke-width="2.5" stroke-linejoin="round"/>`;
-  return `<svg viewBox="0 0 ${W} ${H}">${g}</svg>`;
+  /* Which line is which was not obvious from the drawing alone. */
+  return `<svg viewBox="0 0 ${W} ${H}">${g}</svg>`
+    +'<div class="legend"><span><i style="background:#a8a29e"></i>model</span>'
+    +'<span><i style="background:#7c2d2d"></i>you</span></div>';
 }
 
 $('copyLog').onclick=()=>navigator.clipboard.writeText(logBuf.join('\n'))
