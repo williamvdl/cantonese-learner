@@ -4,7 +4,7 @@
 IN_PROGRESS.md when it's picked up; delete it from here once it's shipped and
 folded into STATUS.md.*
 
-Last updated: 2026-08-10 · sw.js at v128
+Last updated: 2026-08-17 · sw.js at v128
 
 ## Product
 
@@ -50,37 +50,46 @@ are pointers only — detail goes there, not here.*
 
 ## Features
 
-- **Tone checking on single words** (DES-37, first surface). Record one word,
-  measure F0 on-device, grade shape then height band, draw the curve against the
-  target. Isolated words are the strong case: citation form, one syllable, no
-  time-alignment needed — the whole voiced run *is* the syllable. Everything the
-  grading model needs is proven; see the probes in `tools/`. Open sub-questions:
-  first-run calibration (DESIGN_DECISIONS Open row), and whether the word-identity
-  half uses Web Speech or Azure — Web Speech is free and already built but **owns
-  the microphone**, so it cannot share a recording with the pitch tracker, whereas
-  Azure works from a blob already in hand. Worth testing whether both can run off
-  one stream before committing.
-- **Tone checking on sentences and chat lines** (DES-37, second surface). These
-  are **one item, not two** — a chat line is a sentence, and both already carry a
-  full jyutping breakdown. Per-syllable grading needs *time alignment*, which the
-  breakdown does not provide: it says which syllables and which tones, not where
-  in the audio each one falls. Voiced runs cannot be counted as a proxy, because
-  voiceless initials (s, t, k, h, f) split the pitch track at points that are not
-  syllable boundaries, and checked syllables ending -p/-t/-k have almost no voiced
-  portion. **Azure already returns the alignment** — see the STATUS note — which
-  makes this tractable. The genuine remaining unknown is different: in connected
-  speech tone contours compress and the whole utterance drifts downward, so
-  citation-form targets would be too harsh and would fail people speaking
-  correctly. Needs measuring before targets can be set. Two probe-shaped
-  questions, both cheap, neither blocking the word surface.
-- **Chat Speak upgrade** (DES-37). The existing Speak mode stays exactly as it is
-  until the sentence surface above is ready — it works, and replacing it with
-  something unproven would be a downgrade. When it is upgraded it gains the tone
-  check alongside the current word-identity check rather than replacing it. The
-  known weakness it fixes: `fuzzyMatch()` is strict equality after punctuation
-  stripping, so a pass means only "the recogniser thinks you said this word", and
-  the recogniser repairs tone errors from context. That hole is exactly what the
-  pitch tracker closes.
+- **Speak mode: show what the recogniser heard.** The next thing to do on
+  pronunciation, and it replaces the three tone items that used to sit here — see
+  the closed note below. Speak already works about 80–90% of the time, and
+  `fuzzyMatch()` is strict equality after punctuation stripping, so a fail
+  currently says only *not this word* and throws away the interesting part. **A
+  wrong Cantonese tone usually lands on a different real syllable**, so the
+  recogniser's own output is indirect tone feedback delivered by a system with an
+  enormous acoustic prior behind it — free, already built, already reliable. Show
+  the decoded text beside the target, and where they differ by tone alone, say so.
+  Not yet designed; wants a mockup.
+
+- **Tone feedback by pitch measurement — investigated and closed, 2026-08-17.**
+  Kept as a warning, not as work. Three items used to sit here (*Tone checking on
+  single words*, *…on sentences and chat lines*, *Chat Speak upgrade*) and all
+  three read as though the hard part were done: "everything the grading model
+  needs is proven". It was proven for **deliberately exaggerated single syllables
+  judged against a reference averaged over many exemplars**, which is not what any
+  of the three surfaces would have done. Four findings and the process note are in
+  STATUS.md § *Notes worth carrying forward*; the short version is that pitch-only
+  segmentation fails outright, comparing a learner against synthetic citation
+  forms carries a permanent *you were flatter than that* bias, and pitch on phone
+  audio produces confident wrong answers often enough to need a reliability gate.
+  **Do not re-scope this from DES-37 alone** — the register row records the
+  measurement, the outcome is here and in STATUS.md.
+
+  If it is ever revisited, exactly one shape has a coherent chance and it is not
+  a variation on what was tried: **calibrate against the learner, not the
+  synthesiser.** Record the six tones once on first run, build that speaker's own
+  reference, and judge every later attempt against their range. That removes the
+  bias at its root rather than compensating for it. It is a bigger build than any
+  of the three closed items, and it inherits the reliability-gate requirement
+  regardless. The DESIGN_DECISIONS *Open* row on first-run calibration is the
+  same idea arriving from the other direction.
+
+  Reusable from the investigation, and the reason it was not a total loss:
+  **Azure returns per-character syllable times for zh-HK when the reference text
+  is sent with the characters spaced apart** (`tools/align-check.html`). Any
+  future feature needing to know where in a recording a syllable falls should
+  start there rather than re-deriving it. It is a build-time tool, not a runtime
+  dependency — the times can be computed once for the whole corpus and committed.
 
 - **Stage 3 — checkpoint activity using sentence data.** Replaces the removed
   Patterns slot. Not yet designed. Should reuse existing per-topic sentence data

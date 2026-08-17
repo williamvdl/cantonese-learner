@@ -13,7 +13,7 @@ not a history log. Approved design decisions and whether they were built live in
 > convention (`v121 — <what changed>`) so this file stops being load-bearing on
 > its own.
 
-Last updated: 2026-08-15 · sw.js at v128
+Last updated: 2026-08-17 · sw.js at v128
 
 ## Confirmed live and working
 - **Patterns/Drills removed** from the app entirely (not soft-hidden). Checkpoints
@@ -37,14 +37,23 @@ Last updated: 2026-08-15 · sw.js at v128
     how does each handle a given sound" by calling `voices/list` and synthesising
     a fixed six-phrase set through every one. Not a standing check — it asserts
     no invariant — but the thing to reach for before any future voice question.
-  - Three further diagnostics from the 2026-08-15 pronunciation investigation,
-    all non-standing and all kept because the questions will be asked again:
+  - Six diagnostics from the 2026-08-15 and 2026-08-17 pronunciation
+    investigations, all non-standing, none in the `sw.js` precache list, and all
+    kept because the questions will be asked again:
     `tools/pron-probe.html` (Azure Pronunciation Assessment — answered: browser
     transport works, zh-HK scoring is tone-blind), `tools/tone-probe.html`
-    (two-speaker F0 contour probe — answered: tone is measurable in-browser,
-    and established the noise floor and the four confident classes), and
-    `tools/tone-reference.html` (builds tone references from the existing TTS
-    corpus — answered: good height anchor, unusable shape anchor). See DES-37.
+    (two-speaker F0 contour probe — answered: tone is measurable in-browser
+    *from deliberate citation forms*, and established the noise floor and the
+    four confident classes), `tools/tone-reference.html` (builds tone references
+    from the existing TTS corpus — answered: good height anchor, unusable shape
+    anchor; build R2 downloads the result so it can be committed rather than
+    pasted), `tools/segment-probe.html` (can a multi-syllable word be split from
+    its pitch track — answered: no, across a pre-registered seven-run grid),
+    `tools/align-check.html` (does Azure return usable syllable times for zh-HK —
+    answered: yes, from word entries, if the reference text is sent with the
+    characters spaced apart), and `tools/tone-prototype.html` (all three
+    candidate feedback designs over one recording — answered: none of them is
+    usable against a synthetic reference). See DES-37.
   - Playback goes through `speakItem()` / `speakConvoLine()`. Web Speech API is
     kept, deliberately, only for the Translate tab (no stable ID to pre-generate).
   - No fallback on missing audio by design — a toast shows instead of a silent
@@ -176,6 +185,73 @@ orphan hues `#B7861E`, `#e4d4ad`, `#8a6716`,
 | — | v128 | **The standalone tier ladder was a one-way door into a path.** Found on device after v127. `goToTier()` entered the destination tier's owning path whenever *any* path owned it — correct inside a path (DES-30), wrong from Topics. Opening `modals` standalone and tapping the Tier 2 rung produced the Intermediate lesson's chrome: an up control reading *Intermediate*, a Mark Complete button, and no rung back down, because `renderTierLine()` correctly degrades to a statement inside a path. The escape, the DES-29 cross-reference, routed back through the same function into the *Beginner* path — so once used, the standalone ladder could not return you to standalone. The path branch is now gated on `state.fromPath`; the standalone branch that already existed as a fallback becomes the standalone route. **Live for all ten two-tier topics since v121** — it only became reachable on `modals` and `comparisons` at v127, which is why it surfaced then. `tools/tier-harness.js` gains a section asserting what the rung *does* in all four origin/direction combinations, plus a sweep of every two-tier topic; verified to fail against the v127 file before being committed against the fix. |
 
 ### Notes worth carrying forward
+
+**Tone feedback from pitch measurement was investigated to a stop and not built.**
+2026-08-17, across four probe builds and a working three-way prototype. DES-37's
+grading model is not wrong; it was validated on the wrong thing, and nothing built
+on top of it survived contact with real recordings. Four findings, each of which
+cost a build to learn:
+
+1. **Pitch-only syllable segmentation does not work.** A pre-registered grid of
+   seven runs over all 395 multi-syllable words, one setting moved at a time,
+   with the bar stated in advance: the classes had to rank LONG ≥ SHORT ≥ NONE,
+   because that ordering is a claim about consonants rather than a fitted one.
+   **It held in zero of seven runs.** SHORT beat LONG in every single one — best
+   case LONG 60.2% against SHORT 87.1%. The modelling error was conflating
+   *voiceless* with *silent*: a stop closure is genuine silence, whereas frication
+   is **loud**, sailing through an energy gate and offering YIN spurious
+   periodicity. So b, d, g, z segment well and s, c, f, h do not, exactly
+   backwards from the story about interval length. See `tools/segment-probe.html`.
+2. **Comparing a learner against synthetic citation forms is systematically
+   biased, and the bias is unfixable within that design.** The prototype reported
+   all four syllables of 好耐冇見 (hou2 noi6 mou5 gin3) as *flatter than it should
+   be*. Four independent judgements do not fail identically — and the cause was
+   already written three notes below this one: fluent speakers do not produce
+   citation forms on demand, and the exaggerated version is the measurable one.
+   The TTS clips are fully-exaggerated citation forms, so **"you were flatter than
+   that" is a permanent verdict** against any human speaking normally. If tone
+   feedback is ever revisited, the reference has to be the learner's own
+   calibrated range, not a synthesiser's.
+3. **The verdict and the picture fail together, so the picture cannot be salvaged
+   as a consolation prize.** A pitch value pinned at the top of the tracker's
+   search range — 500 Hz, about 27 semitones above a 106 Hz voice — draws as a
+   flat-topped rectangle, and the vertical axis then stretches to fit it,
+   squashing the real pitch movement into roughly a quarter of the picture height.
+   Add the fragmentation from unvoiced gaps and a curve overlay is not merely
+   imprecise, it is unreadable.
+4. **Four faults, one shape: a confident answer resting on data too thin to carry
+   it.** A model contour of 23 usable frames against a microphone's 49 for the
+   same word; a microphone take at 23% coverage judged as if complete; a plot that
+   deleted the silences and joined the pitch either side, inventing cliffs across
+   half the picture width; and a time-warp that absorbed a real two-semitone error
+   down to one, because on a slope a vertical shift and a horizontal shift are the
+   same thing. None was an arithmetic slip. Each was a reasonable-looking step
+   encoding an assumption nobody had checked. **On phone-recorded speech, pitch is
+   far less trustworthy than a tidy curve makes it look, and any feature built on
+   it needs a reliability gate that withholds rather than guesses.**
+
+> **Process note, and the more useful half of this.** Each of the four faults was
+> found, fixed, and followed by a proposal to continue — the accumulating *pattern*
+> was the actual finding and it took being asked to step back to see it. Two
+> guards earned their place: **pre-registering the whole parameter grid and the
+> pass/fail bar before running any of it**, which is what made "zero of seven"
+> interpretable rather than an invitation to try an eighth setting; and **testing
+> the judgement against synthetic inputs whose right answer is known by
+> construction**, which caught two silent failures before they reached a device,
+> both flattering the learner. Neither would have been reached by reading code.
+
+**A negative result is worth a version number's worth of documentation.** Nothing
+shipped from the 2026-08-17 session — no `sw.js` bump, no deploy row — but the
+`tools/` diagnostics and the four findings above are the output, and they are the
+reason the backlog line no longer reads as though this were straightforward. The
+one reusable positive: **Azure returns per-character syllable times for zh-HK if
+the reference text is sent with the characters spaced apart.** 朋友 (pang4 jau5)
+comes back as one lumped span as written and as 朋 (pang4) then 友 (jau5) when
+spaced; 請多關照 (cing2 do1 gwaan1 ziu3) goes from 2 of 4 syllables resolved to
+4 of 4. Everything
+else in the response is unusable for this — the `Phoneme` field is present and
+**always empty** for zh-HK across 11 runs, and `AccuracyScore` returned 100 on a
+microphone take peaking at 6%. See `tools/align-check.html`.
 
 **Azure Pronunciation Assessment cannot score Cantonese tone.** Confirmed by
 measurement, not inference: 詩 (si1), 試 (si3) and 事 (si6) all returned 100 on
