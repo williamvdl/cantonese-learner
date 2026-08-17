@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Tone Check Prototype — three ways of judging one recording</title>
 <!--
-  tools/tone-prototype.html — build P1
+  tools/tone-prototype.html — build P2
 
   WHAT THIS IS FOR
   ----------------
@@ -77,6 +77,22 @@
   it is what mockup 27 meant by "C's boundaries are the model's, not the
   learner's". A pause between syllables would push it further.
 
+  WHAT P2 FIXED
+  -------------
+  Reported from real use: for 我哋 (ngo5 dei6), MOCK-27-C said 我 (ngo5) climbed
+  when it should hold steady. 我 (ngo5) is tone 5, low rising — it is supposed to
+  climb. MOCK-27-A disagreed with C in the same breath, which was the tell.
+
+  The cause was not the comparison but the reference. Both sides were pitch
+  tracked at the same strict setting, and they are not the same kind of audio:
+  the model clips are mp3 and your microphone is raw PCM. The model came back
+  with 23 usable frames against your 49 for the same word, so C was grading
+  against a sparse remnant in which the rise simply was not present. P2 tracks
+  the model at the setting tone-reference measured for these exact clips, and
+  adds a coverage check that withholds B and C entirely when the reference is
+  too thin — because a confident sentence built on a handful of frames is worse
+  than no sentence.
+
   ROUGH ON PURPOSE. Styling is deliberately plain — this is for deciding which
   approach feels right, not what it should look like. Diagnostic only, not in the
   sw.js precache list, no CACHE_VERSION bump.
@@ -126,7 +142,7 @@
 <body>
 
 <h1>Tone Check Prototype</h1>
-<p class="sub">One recording, judged three ways · build <b>P1</b></p>
+<p class="sub">One recording, judged three ways · build <b>P2</b></p>
 
 <div class="card">
   <h2>Setup</h2>
@@ -197,7 +213,29 @@
 /* ── Pitch tracking. Same constants as tone-probe, tone-reference and
    segment-probe, so numbers stay comparable across all four pages. ───────── */
 const RATE=16000, FRAME=1024, HOP=160, FMIN=60, FMAX=500;
-const YIN_THRESHOLD=0.40, VOICE_THRESHOLD=0.20, GATE_FRACTION=0.05, MIN_GAP=3;
+const YIN_THRESHOLD=0.40, GATE_FRACTION=0.05, MIN_GAP=3;
+
+/* How confident the periodicity estimate has to be before a frame counts as
+   voiced. P1 used one value for both sides and that was the bug behind the
+   我哋 (ngo5 dei6) result: the model clips are mp3, and mp3 coding degrades
+   exactly the periodicity this measures, while your microphone delivers raw
+   PCM. Held to the same strict setting, the model gave 23 usable frames where
+   your recording gave 49 for the same word — so MOCK-27-C was comparing against
+   a sparse remnant, and reported that 我 (ngo5) should hold steady when it is
+   a low rising tone.
+
+   0.40 for the model is not a guess: tone-reference.html swept this value on
+   these exact clips (0.15 left 91 usable, 0.40 left 170, 0.50 left 185) and
+   settled on the knee. The microphone keeps the stricter 0.20, because raw PCM
+   does not need the allowance and a loose threshold invites frication to be
+   read as voicing. */
+const VOICE_TH_MODEL = 0.40;
+const VOICE_TH_MIC   = 0.20;
+
+/* A contour is only a reference if it actually covers the sound. Coverage is
+   the share of a take's own speech span that produced a usable pitch reading —
+   the check that would have caught this on the first run instead of the tenth. */
+const MIN_COVERAGE = 0.55;
 
 /* Judgement thresholds, in semitones. Never shown; they only decide which
    sentence appears. A tone that climbs does so by several semitones, so 2 is
@@ -241,7 +279,7 @@ function closeGaps(t,minGap){
    semitones relative to THIS speaker's own median, with the frame's time in ms.
    The median is what lets two different voices be compared — it is the only
    thing that puts a low voice and a high one on the same scale. */
-function contour(pcm){
+function contour(pcm,voiceTh){
   const rms=[];
   for(let i=0;i+FRAME<pcm.length;i+=HOP){let s=0;for(let k=0;k<FRAME;k++)s+=pcm[i+k]*pcm[i+k];rms.push(Math.sqrt(s/FRAME));}
   const gate=Math.max(...rms,1e-9)*GATE_FRACTION;
@@ -249,7 +287,7 @@ function contour(pcm){
   for(let n=0,i=0;i+FRAME<pcm.length;i+=HOP,n++){
     if(rms[n]<gate){raw.push(null);continue;}
     const r=yin(pcm,i);
-    raw.push(r&&r.aper<VOICE_THRESHOLD?r.hz:null);
+    raw.push(r&&r.aper<voiceTh?r.hz:null);
   }
   const filled=closeGaps(raw,MIN_GAP);
   const smoothed=filled.map((v,i)=>{const w=filled.slice(Math.max(0,i-2),i+3).filter(x=>x!=null);return w.length>=3?median(w):v;});
@@ -258,7 +296,11 @@ function contour(pcm){
   const med=median(hz);
   const pts=[];
   smoothed.forEach((v,n)=>{ if(v!=null) pts.push({ ms:(n*HOP/RATE)*1000, st:12*Math.log2(v/med) }); });
-  return { pts, medianHz: med };
+  /* Measured against the take's own speech span, not its file length, so the
+     silence padding the TTS clips does not count against them. */
+  const spanMs = pts.length ? pts[pts.length-1].ms - pts[0].ms + (HOP/RATE*1000) : 0;
+  const coverage = spanMs ? (pts.length*(HOP/RATE*1000))/spanMs : 0;
+  return { pts, medianHz: med, coverage };
 }
 
 /* ── Dynamic time warping ─────────────────────────────────────────────────
@@ -555,11 +597,26 @@ async function judge(item,blob){
   $('outB').innerHTML=$('outC').innerHTML='<p class="sub">working…</p>';
 
   const you=await pcmFromBlob(blob);
-  const mine=contour(you.pcm);
+  const mine=contour(you.pcm,VOICE_TH_MIC);
   if(!mine){ $('outA').innerHTML=$('outB').innerHTML=$('outC').innerHTML='<p class="v-off">Nothing audible in that take.</p>'; return; }
-  const model=contour((await pcmFromBlob(await clipBlob(item))).pcm);
-  log('your take '+you.seconds.toFixed(2)+'s, '+mine.pts.length+' voiced frames, median '+Math.round(mine.medianHz)+' Hz');
-  log('model '+model.pts.length+' voiced frames, median '+Math.round(model.medianHz)+' Hz');
+  const model=contour((await pcmFromBlob(await clipBlob(item))).pcm,VOICE_TH_MODEL);
+  log('your take '+you.seconds.toFixed(2)+'s, '+mine.pts.length+' voiced frames, '
+      +Math.round(mine.coverage*100)+'% coverage, median '+Math.round(mine.medianHz)+' Hz');
+  log('model '+model.pts.length+' voiced frames, '+Math.round(model.coverage*100)
+      +'% coverage, median '+Math.round(model.medianHz)+' Hz');
+
+  /* A reference with holes in it produces a verdict that looks exactly like a
+     verdict from a good one. Withhold instead — the fault is in the reference
+     and saying nothing is the honest answer. */
+  if(model.coverage < MIN_COVERAGE || model.pts.length < item.syls.length*8){
+    const msg='<p class="v-off">The model recording did not give enough pitch to compare against '
+      +'for this word, so there is nothing trustworthy to say. That is a fault in the reference, '
+      +'not in how you said it.</p>';
+    $('outB').innerHTML=$('outC').innerHTML=msg;
+    log('! model contour too thin — B and C withheld for this word');
+    await renderA(item,blob,mine);
+    return;
+  }
 
   renderB(item,mine,model);
   renderC(item,mine,model);
