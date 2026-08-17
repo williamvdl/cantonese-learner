@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Tone Check Prototype — three ways of judging one recording</title>
 <!--
-  tools/tone-prototype.html — build P3
+  tools/tone-prototype.html — build P4
 
   WHAT THIS IS FOR
   ----------------
@@ -93,6 +93,43 @@
   too thin — because a confident sentence built on a handful of frames is worse
   than no sentence.
 
+  WHAT P4 FIXED — AND IT WAS THE PICTURE LYING, NOT THE MICROPHONE
+  ---------------------------------------------------------------
+  Reported from use: sharp spikes and cliffs in the curves that did not match
+  how the words were said. They were an artefact of how the curve was drawn.
+
+  The line was plotted one point per VOICED frame at even spacing, so every
+  silent stretch was deleted and the pitch either side butted together. Measured
+  on the real takes: 朋友 (pang4 jau5) was 69% silence, 呢個 (ni1 go3) 49%. So
+  roughly half the width of those pictures was invented, and each vertical cliff
+  was a join between two stretches of speech hundreds of milliseconds apart.
+
+  The same mistake was in the alignment. Its feature reached across a silence as
+  if consecutive entries were consecutive in time, which turns the gap between
+  two syllables into a violent imaginary slope. P4 draws on a real time axis with
+  the pen lifted at every break, and never measures across one.
+
+  A SECOND REPORT THAT TURNED OUT NOT TO BE A BUG
+  -----------------------------------------------
+  呢個 (ni1 go3) showed a much higher median than 我哋 (ngo5 dei6) on BOTH sides,
+  91 Hz against 135 Hz for the same synthetic voice, which looked like octave
+  doubling. It is not. 呢個 (ni1 go3) is tone 1 plus tone 3; 我哋 (ngo5 dei6) is
+  tone 5 plus tone 6. The gap is 6.8 semitones, which is about the real distance
+  between Cantonese low tones and a high one. The voice is doing what it should.
+  Checked properly — YIN was run against synthetic audio at a known pitch under
+  a weakened fundamental, a mic-style high-pass, jitter and heavy noise, and it
+  did not double in any of them.
+
+  ONE THING GOT BETTER BY ACCIDENT
+  --------------------------------
+  Now that breaks are known, they can be used: if you happen to leave a silence
+  at every syllable join, the joins are simply visible and the boundaries are
+  read off rather than inferred through the alignment. This is NOT the
+  segmentation that failed earlier — that tried to work out how many syllables
+  there were from the audio. Here the count is already known and the breaks are
+  trusted only when there are exactly as many as expected. It fixed the one
+  remaining test failure, where a word said 60% slower had its boundary slip.
+
   ROUGH ON PURPOSE. Styling is deliberately plain — this is for deciding which
   approach feels right, not what it should look like. Diagnostic only, not in the
   sw.js precache list, no CACHE_VERSION bump.
@@ -144,7 +181,7 @@
 <body>
 
 <h1>Tone Check Prototype</h1>
-<p class="sub">One recording, judged three ways · build <b>P3</b></p>
+<p class="sub">One recording, judged three ways · build <b>P4</b></p>
 
 <div class="card">
   <h2>Setup</h2>
@@ -307,6 +344,12 @@ function contour(pcm,voiceTh){
   const med=median(hz);
   const pts=[];
   smoothed.forEach((v,n)=>{ if(v!=null) pts.push({ ms:(n*HOP/RATE)*1000, st:12*Math.log2(v/med) }); });
+  /* Where does the timeline actually break? Unvoiced stretches are absent from
+     pts, so consecutive entries are not necessarily consecutive in time. Every
+     later step has to know that: drawing across a break invents a cliff, and
+     measuring a slope across one invents a movement. */
+  const FRAME_MS=HOP/RATE*1000;
+  pts.forEach((p,i)=>{ p.breakAfter = i<pts.length-1 && (pts[i+1].ms-p.ms) > FRAME_MS*3; });
   /* Measured against the take's own speech span, not its file length, so the
      silence padding the TTS clips does not count against them. */
   const spanMs = pts.length ? pts[pts.length-1].ms - pts[0].ms + (HOP/RATE*1000) : 0;
@@ -333,15 +376,30 @@ function contour(pcm,voiceTh){
    It does not fully cure the drag — the same test still places the boundary
    about four frames early — but it halves it, and the residue is a known,
    measured weakness rather than a silent one. */
-function slopeFeature(a){
-  return a.map((_,i)=>{
-    const lo=Math.max(0,i-2), hi=Math.min(a.length-1,i+2);
-    return hi>lo ? (a[hi]-a[lo])/(hi-lo) : 0;
+/* Change in pitch across a few frames, measured only within one continuous
+   stretch of voicing — never reaching across a silence, which is what turned the
+   join between two syllables into a violent imaginary slope.
+
+   Deliberately per FRAME and not per millisecond. Per millisecond was tried and
+   broke something that had been working: a slower speaker genuinely produces a
+   gentler rise per unit of time, so a time-normalised feature makes the same
+   tone said slowly look like a different tone, and the alignment can no longer
+   absorb the difference — the test where the whole word is said 60% slower
+   started failing. Rate invariance is the one property this feature must have,
+   since coping with speaking rate is the alignment's entire job. */
+function slopeFeature(pts){
+  const st=pts.map(p=>p.st);
+  return pts.map((p,i)=>{
+    let lo=i, hi=i;
+    while(lo>0 && !pts[lo-1].breakAfter && i-lo<2) lo--;
+    while(hi<pts.length-1 && !pts[hi].breakAfter && hi-i<2) hi++;
+    return hi>lo ? (st[hi]-st[lo])/(hi-lo) : 0;
   });
 }
 
-function dtw(rawA,rawB){
-  const a=slopeFeature(rawA), b=slopeFeature(rawB);
+function dtw(ptsA,ptsB){
+  const rawA=ptsA.map(p=>p.st), rawB=ptsB.map(p=>p.st);
+  const a=slopeFeature(ptsA), b=slopeFeature(ptsB);
   const n=a.length, m=b.length;
   const band=Math.max(Math.abs(n-m)+1, Math.ceil(Math.max(n,m)*0.15));
   const INF=Infinity;
@@ -666,7 +724,7 @@ async function judge(item,blob){
    is the whole difference between this approach and C. */
 function renderB(item,mine,model){
   const a=mine.pts.map(p=>p.st), b=model.pts.map(p=>p.st);
-  const {path,cost}=dtw(a,b);
+  const {path,cost}=dtw(mine.pts,model.pts);
   const single=item.syls.length===1;
   const parts=single?1:3;
   const names=single?['']:['the start','the middle','the end'];
@@ -691,7 +749,7 @@ function renderB(item,mine,model){
     ? '<span class="v-good">That sounded like the model.</span>'
     : '<span class="'+cls(vs[worst].k)+'">'+(single?'':names[worst]+': ')+vs[worst].s+'</span>';
 
-  $('outB').innerHTML=curveSvg(a,b,null,single?null:worst)
+  $('outB').innerHTML=curveSvg(mine.pts,model.pts,null,single?null:worst)
     +'<div class="overall">'+sentence+'</div>'
     +'<p class="note">It can point at a stretch, not name a syllable.</p>';
   log('B: gap along the alignment '+cost.toFixed(2)+' st (logged only, never used for the verdict) → '+vs[worst].s);
@@ -699,10 +757,25 @@ function renderB(item,mine,model){
 
 /* MOCK-27-C — same comparison, but the model's boundaries are known, so each of
    your frames takes the syllable of the model frame it lined up with. */
+/* A boundary's position across the picture is now its position in TIME, since
+   that is what the picture shows. */
+function msFraction(pts,idx){
+  const t0=pts[0].ms, span=Math.max(1,pts[pts.length-1].ms-t0);
+  return (pts[Math.min(idx,pts.length-1)].ms-t0)/span;
+}
+
+/* Where the voicing actually breaks, as index ranges. */
+function stretches(pts){
+  const out=[]; let start=0;
+  pts.forEach((p,i)=>{ if(p.breakAfter){ out.push([start,i]); start=i+1; } });
+  out.push([start,pts.length-1]);
+  return out;
+}
+
 function renderC(item,mine,model){
   const bounds=BOUNDS[item.id].times;
   const a=mine.pts.map(p=>p.st), b=model.pts.map(p=>p.st);
-  const {path}=dtw(a,b);
+  const {path}=dtw(mine.pts,model.pts);
 
   /* The model's boundaries are known. Carry them across to your recording
      through the alignment, then compare each syllable to its counterpart on
@@ -712,8 +785,24 @@ function renderC(item,mine,model){
     let idx=model.pts.findIndex(p=>p.ms>=bounds[k].startMs);
     if(idx<0) idx=model.pts.length-1;
     modelCuts.push(idx);
-    learnerCuts.push(modelMsToLearnerFrame(mine.pts, model.pts, path, bounds[k].startMs));
   }
+
+  /* If you happened to leave a silence at every syllable join, the joins are
+     simply visible and there is nothing to infer — read them off directly. This
+     is not the segmentation that failed earlier: that tried to work out HOW MANY
+     syllables there were from the audio. Here the count is already known, and
+     the breaks are only trusted when there are exactly as many as expected.
+     Otherwise fall back to carrying the model's boundaries across the alignment,
+     which is the general case. */
+  const myStretches=stretches(mine.pts);
+  let learnerCuts_;
+  if(myStretches.length===bounds.length){
+    learnerCuts_=myStretches.slice(1).map(([a])=>a);
+    log('C: your syllable joins were audible — boundaries read off directly');
+  } else {
+    learnerCuts_=modelCuts.map((_,k)=>modelMsToLearnerFrame(mine.pts, model.pts, path, bounds[k+1].startMs));
+  }
+  learnerCuts.push(...learnerCuts_);
   const mineSegs=cutAt(a,learnerCuts), modelSegs=cutAt(b,modelCuts);
 
   /* Judged once per syllable and reused — recomputing for the summary line is
@@ -731,7 +820,7 @@ function renderC(item,mine,model){
   const overall=vs.every(v=>v.k==='good')
     ? '<span class="v-good">'+(vs.length>1?'All of them sounded right.':'That sounded right.')+'</span>' : '';
 
-  $('outC').innerHTML=curveSvg(a,b,modelCuts.map(i=>i/model.pts.length),null)
+  $('outC').innerHTML=curveSvg(mine.pts,model.pts,modelCuts.map(i=>msFraction(model.pts,i)),null)
     +'<div class="axis">'+bounds.map((bd,k)=>`<span>${item.chars[k]||'?'}<small>${item.syls[k]}</small></span>`).join('')+'</div>'
     +rows+'<div class="overall">'+overall+'</div>';
 }
@@ -757,25 +846,49 @@ async function renderA(item,blob,mine){
 }
 
 /* ── Curve ───────────────────────────────────────────────────────────────── */
-function curveSvg(mineArr,modelArr,bounds,worstThird){
+/* Drawn on a real time axis, with the line broken wherever the voicing stops.
+
+   The previous version placed one point per voiced frame at even spacing, which
+   silently deleted every silence and butted the pitch either side together. On a
+   two-syllable take that is not a small distortion: 朋友 (pang4 jau5) was 69%
+   silence and 呢個 (ni1 go3) 49%, so roughly half the width of those pictures
+   was invented, and the vertical cliffs in them were joins between stretches of
+   speech hundreds of milliseconds apart rather than anything said.
+
+   Each curve is scaled to its own span so two takes of different lengths can be
+   compared by shape, which is the whole point — but within a curve, distance
+   across the picture is now distance in time. */
+function curveSvg(minePts,modelPts,bounds,worstThird){
   const W=340,H=120,P=10;
-  const all=mineArr.concat(modelArr);
+  const all=minePts.map(p=>p.st).concat(modelPts.map(p=>p.st));
   const lo=Math.min(...all)-1, hi=Math.max(...all)+1;
-  const x=(i,n)=>P+(i/(n-1))*(W-P*2);
   const y=v=>H-P-((v-lo)/(hi-lo))*(H-P*2);
-  const path=arr=>arr.map((v,i)=>(i?'L':'M')+x(i,arr.length).toFixed(1)+','+y(v).toFixed(1)).join(' ');
+  const xOf=pts=>{
+    const t0=pts[0].ms, span=Math.max(1,pts[pts.length-1].ms-t0);
+    return p=>P+((p.ms-t0)/span)*(W-P*2);
+  };
+  /* One path command per continuous stretch; a break lifts the pen. */
+  const pathOf=pts=>{
+    const x=xOf(pts); let d='', pen=false;
+    pts.forEach((p,i)=>{
+      d+=(pen?'L':'M')+x(p).toFixed(1)+','+y(p.st).toFixed(1)+' ';
+      pen=!p.breakAfter;
+    });
+    return d.trim();
+  };
   let g='';
   if(worstThird!=null){
     const x0=P+(worstThird/3)*(W-P*2), x1=P+((worstThird+1)/3)*(W-P*2);
     g+=`<rect x="${x0}" y="0" width="${x1-x0}" height="${H}" fill="#b3402e" opacity="0.07"/>`;
   }
   (bounds||[]).forEach(f=>{const px=P+f*(W-P*2);g+=`<line x1="${px}" y1="4" x2="${px}" y2="${H-4}" stroke="#d9d2c8"/>`;});
-  g+=`<path d="${path(modelArr)}" fill="none" stroke="#a8a29e" stroke-width="2.5" stroke-linejoin="round"/>`;
-  g+=`<path d="${path(mineArr)}" fill="none" stroke="#7c2d2d" stroke-width="2.5" stroke-linejoin="round"/>`;
+  g+=`<path d="${pathOf(modelPts)}" fill="none" stroke="#a8a29e" stroke-width="2.5" stroke-linejoin="round"/>`;
+  g+=`<path d="${pathOf(minePts)}" fill="none" stroke="#7c2d2d" stroke-width="2.5" stroke-linejoin="round"/>`;
   /* Which line is which was not obvious from the drawing alone. */
   return `<svg viewBox="0 0 ${W} ${H}">${g}</svg>`
     +'<div class="legend"><span><i style="background:#a8a29e"></i>model</span>'
-    +'<span><i style="background:#7c2d2d"></i>you</span></div>';
+    +'<span><i style="background:#7c2d2d"></i>you</span>'
+    +'<span>gaps in a line are silence</span></div>';
 }
 
 $('copyLog').onclick=()=>navigator.clipboard.writeText(logBuf.join('\n'))
