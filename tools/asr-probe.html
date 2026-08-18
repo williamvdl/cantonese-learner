@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>ASR Recognition Probe</title>
+<!--
+  tools/asr-probe.html — does a wrong tone produce a different decoded word?
+
+  WHY THIS EXISTS
+  ---------------
+  Speak mode already works 80-90% of the time, so "does speech recognition
+  work" is not the question. The question is narrower and it is the whole
+  premise of the proposed Speak-mode feature:
+
+      when the learner says the WRONG TONE, does the recogniser return a
+      different character, or does it snap to the target anyway?
+
+  If it snaps, there is nothing to show the learner and the feature cannot
+  exist. That is why every item here is spoken TWICE — once correctly, once
+  with a named wrong tone. A probe that only collects correct readings cannot
+  answer the question it was built for.
+
+  Web Speech has no tone classifier. It decodes audio to characters, and tone
+  is one of many acoustic patterns baked into that model. So a wrong tone
+  landing on a different character is a SIDE EFFECT, not a measurement — which
+  is exactly why it needs measuring rather than assuming.
+
+  RUN 1 IS CALIBRATION, NOT VERDICT
+  ---------------------------------
+  Declared before any data was collected, and binding. Run 1 may conclude:
+
+    STOP     — wrong-tone reads decode to the target anyway, at any policy.
+               No signal exists. The feature is dead and this is a finding.
+    CONTINUE — numbers look usable; set thresholds FROM these numbers and run
+               a confirmatory pass against them.
+
+  Run 1 may NOT conclude "build it". Twelve items per bank separates 5% from
+  85%; it does not separate 55% from 65%. This split exists because the tone
+  prototype (DES-37) had no bar, so every failure read as a bug worth one more
+  fix, and there was always an eighth thing to try. The bar is what turns a
+  disappointing result into a decision.
+
+  LENIENCY IS THE BINDING CONSTRAINT
+  ----------------------------------
+  A FALSE REJECT — telling the learner they got the tone wrong when they did
+  not — is worse than missing a real error. Missing one costs nothing beyond
+  today; Speak mode already lets it through silently. A confident wrong verdict
+  is the exact failure shape of DES-37. So the provisional bar is:
+
+      false rejects <= 10% is the requirement.
+      detection is whatever it turns out to be.
+
+  If detection only reaches 40% at low false rejects, that is still a feature —
+  it just shows "here's what I heard" more often than "you got the tone wrong".
+
+  RECORD ONCE, EVALUATE MANY POLICIES
+  -----------------------------------
+  Two kinds of dial, and the distinction matters. `lang` and `maxAlternatives`
+  are properties of the recogniser and must be set BEFORE recording; changing
+  them invalidates comparison with earlier attempts, so each attempt stores the
+  settings it was captured under. Match policy is applied at ANALYSIS time over
+  the stored N-best list, so every policy can be scored against one set of
+  recordings. Detection and false rejects move together as policy tightens —
+  you are picking a point on a curve, not two independent numbers.
+
+  THE CONFOUND, AND THE DISCARD BUTTON
+  ------------------------------------
+  You might simply fail to produce the wrong tone when asked. That reads as the
+  recogniser failing to detect it, and afterwards the two are indistinguishable.
+  Every attempt therefore has a discard control. Use it freely — a discarded
+  attempt costs one retake; a kept bad one silently corrupts the result.
+
+  NOT APP CODE
+  ------------
+  A throwaway diagnostic. It does not use the design system, does not share
+  styles.css, is not in the sw.js precache list, and is not linked from the app.
+  Adding it needs no CACHE_VERSION bump. Delete it once the question is answered.
+
+  normalizeChinese() and fuzzyMatch() are lifted verbatim from app.js so the
+  "app default" policy measured here is the one that actually ships.
+
+  Must be served over http(s) — it fetches asr-testset.json, which file:// will
+  not allow, and getUserMedia/SpeechRecognition need a secure origin.
+-->
+<style>
+  :root {
+    --ink: #1b1a17;
+    --muted: #6b665e;
+    --line: #ddd8cf;
+    --bg: #faf8f4;
+    --card: #ffffff;
+    --good: #2e7d4f;
+    --bad: #b3402e;
+    --warn: #a8761c;
+    --accent: #7c2d2d;
+  }
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  body {
+    margin: 0; padding: 16px 14px 90px;
+    font: 16px/1.5 -apple-system, "Segoe UI", Roboto, sans-serif;
+    color: var(--ink); background: var(--bg);
+  }
+  h1 { font-size: 19px; margin: 0 0 4px; }
+  h2 { font-size: 14px; margin: 0 0 10px; text-transform: uppercase;
+       letter-spacing: .06em; color: var(--muted); }
+  .sub { color: var(--muted); font-size: 13px; margin: 0 0 18px; }
+  .card {
+    background: var(--card); border: 1px solid var(--line);
+    border-radius: 10px; padding: 14px; margin-bottom: 14px;
+  }
+  .card.focus { border-color: var(--accent); border-width: 2px; padding: 13px; }
+  .row { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+  .row + .row { margin-top: 10px; }
+  label { font-size: 13px; color: var(--muted); }
+  select, input[type=text] {
+    font: inherit; font-size: 15px; padding: 7px 9px;
+    border: 1px solid var(--line); border-radius: 7px; background: #fff;
+    color: var(--ink); min-width: 0;
+  }
+  button {
+    font: inherit; font-size: 15px; padding: 10px 14px; border-radius: 8px;
+    border: 1px solid var(--line); background: #fff; color: var(--ink);
+    cursor: pointer;
+  }
+  button.primary { background: var(--accent); border-color: var(--accent); color: #fff; }
+  button.rec { background: var(--bad); border-color: var(--bad); color: #fff; }
+  button:disabled { opacity: .4; }
+  button.small { font-size: 13px; padding: 6px 10px; }
+
+  .hanzi { font-size: 30px; line-height: 1.25; }
+  .jyut { color: var(--muted); font-size: 14px; margin-top: 2px; }
+  .gloss { font-size: 14px; margin-top: 2px; }
+  .instruct {
+    margin-top: 12px; padding: 10px 12px; border-radius: 8px;
+    background: #fdf5e8; border: 1px solid #ecdcbc; font-size: 15px;
+  }
+  .instruct.correct { background: #eef6f0; border-color: #cfe3d6; }
+  .instruct b { font-size: 17px; }
+  .lands { color: var(--muted); font-size: 13px; margin-top: 4px; }
+
+  .pill {
+    display: inline-block; font-size: 11px; padding: 2px 7px; border-radius: 20px;
+    border: 1px solid var(--line); color: var(--muted); background: #f4f1ea;
+    text-transform: uppercase; letter-spacing: .05em;
+  }
+  .pill.pair { border-color: #cfe3d6; background: #eef6f0; color: var(--good); }
+
+  .heard { font-size: 24px; margin-top: 8px; }
+  .alts { font-size: 13px; color: var(--muted); margin-top: 4px; }
+  .alts code { font-size: 14px; color: var(--ink); }
+  .verdict { font-size: 14px; margin-top: 8px; font-weight: 600; }
+  .v-detected { color: var(--good); }
+  .v-snapped  { color: var(--bad); }
+  .v-ok       { color: var(--good); }
+  .v-false    { color: var(--bad); }
+  .v-near     { color: var(--warn); }
+
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  th, td { text-align: left; padding: 5px 4px; border-bottom: 1px solid var(--line); }
+  th { color: var(--muted); font-weight: 600; font-size: 12px; }
+  td.num { text-align: right; font-variant-numeric: tabular-nums; }
+  .big { font-size: 20px; font-variant-numeric: tabular-nums; }
+
+  .note { font-size: 12px; color: var(--muted); margin-top: 8px; }
+  .err { color: var(--bad); font-size: 14px; }
+  .progress { font-size: 13px; color: var(--muted); }
+  .bar { height: 4px; background: var(--line); border-radius: 4px; margin-top: 6px; overflow: hidden; }
+  .bar > i { display: block; height: 100%; background: var(--accent); }
+  .footer {
+    position: fixed; left: 0; right: 0; bottom: 0; padding: 10px 14px;
+    padding-bottom: calc(10px + env(safe-area-inset-bottom));
+    background: rgba(250,248,244,.96); border-top: 1px solid var(--line);
+    display: flex; gap: 8px; align-items: center;
+  }
+  .footer .grow { flex: 1; }
+  .hide { display: none !important; }
+</style>
+</head>
+<body>
+
+<h1>ASR Recognition Probe</h1>
+<p class="sub">Does a wrong tone produce a different decoded word? Run 1 is calibration — it can conclude <b>stop</b> or <b>continue</b>, not <b>build</b>.</p>
+
+<div id="fatal" class="card hide"><div class="err" id="fatalMsg"></div></div>
+
+<!-- ── Recorder settings (must be set before recording) ────────────────── -->
+<div class="card">
+  <h2>Recogniser settings</h2>
+  <div class="row">
+    <label for="lang">lang</label>
+    <select id="lang">
+      <option value="yue-Hant-HK">yue-Hant-HK (ships today)</option>
+      <option value="zh-HK">zh-HK</option>
+    </select>
+  </div>
+  <div class="row">
+    <label for="maxAlt">maxAlternatives</label>
+    <select id="maxAlt">
+      <option>1</option><option>3</option><option selected>5</option>
+    </select>
+  </div>
+  <p class="note">These are properties of the recogniser and are stored with each
+  attempt. Changing them mid-run makes attempts non-comparable — the summary
+  flags it if you do.</p>
+</div>
+
+<!-- ── Prompt ──────────────────────────────────────────────────────────── -->
+<div class="card focus" id="prompt">
+  <div class="row" style="justify-content:space-between">
+    <span class="progress" id="progressText">—</span>
+    <span class="pill" id="bankPill">—</span>
+  </div>
+  <div class="bar"><i id="progressBar" style="width:0%"></i></div>
+
+  <div style="margin-top:12px">
+    <div class="hanzi" id="pHanzi">—</div>
+    <div class="jyut" id="pJyut"></div>
+    <div class="gloss" id="pGloss"></div>
+  </div>
+
+  <div class="instruct" id="pInstruct"></div>
+  <div class="lands" id="pLands"></div>
+
+  <div class="row" style="margin-top:14px">
+    <button id="btnRec" class="primary">Record</button>
+    <button id="btnSkip" class="small">Skip item</button>
+    <button id="btnPlay" class="small">Hear target</button>
+  </div>
+
+  <div id="result" class="hide">
+    <div class="heard" id="rHeard"></div>
+    <div class="alts" id="rAlts"></div>
+    <div class="verdict" id="rVerdict"></div>
+    <div class="row" style="margin-top:10px">
+      <button id="btnKeep" class="primary">Keep &amp; continue</button>
+      <button id="btnRetake" class="small">Retake</button>
+      <button id="btnDiscard" class="small">Discard — I said it wrong</button>
+    </div>
+    <p class="note">Discard freely. A discarded attempt costs one retake; a kept
+    bad one silently corrupts the result and cannot be untangled afterwards.</p>
+  </div>
+</div>
+
+<!-- ── Analysis ────────────────────────────────────────────────────────── -->
+<div class="card">
+  <h2>Match policy — applied at analysis time</h2>
+  <div class="row">
+    <label for="policy">policy</label>
+    <select id="policy">
+      <option value="app">App default — exact match, top result only</option>
+      <option value="anyAlt" selected>Lenient — target anywhere in N-best</option>
+      <option value="anyAltNear">Lenient + tone-only counts as near-miss</option>
+      <option value="overlap">Character overlap &ge; 50%</option>
+    </select>
+  </div>
+  <p class="note">Recordings are stored with their full N-best list, so every
+  policy can be scored against the same audio. Tightening policy raises
+  detection and false rejects together.</p>
+</div>
+
+<div class="card">
+  <h2>Results</h2>
+  <div id="summary">Nothing recorded yet.</div>
+</div>
+
+<div class="footer">
+  <span class="grow progress" id="footText">—</span>
+  <button id="btnDownload" class="small">Download run</button>
+  <button id="btnReset" class="small">Reset</button>
+</div>
+
+<script>
+'use strict';
+
+// ── Lifted verbatim from app.js so the "app default" policy measured here is
+//    the one that actually ships. Do not "improve" these two functions.
+function normalizeChinese(text) {
+  // Strip whitespace and Chinese punctuation for comparison
+  return (text || '').replace(/[\s，。！？、,!?.\-]/g, '');
+}
+function fuzzyMatch(heard, target) {
+  const h = normalizeChinese(heard);
+  const t = normalizeChinese(target);
+  if (!h || !t) return false;
+  return h === t;
+}
+
+const STORE_KEY = 'asr-probe:run:v1';
+const $ = id => document.getElementById(id);
+
+let DATA = null;        // the loaded test set
+let QUEUE = [];         // flattened [{item, mode}] — every item twice
+let run = { started: null, attempts: [] };
+let cursor = 0;
+let pending = null;     // the attempt awaiting keep/retake/discard
+let rec = null;
+
+function fatal(msg) { $('fatal').classList.remove('hide'); $('fatalMsg').textContent = msg; }
+
+// ── Load ─────────────────────────────────────────────────────────────────────
+fetch('asr-testset.json')
+  .then(r => { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
+  .then(d => { DATA = d; build(); })
+  .catch(e => fatal(
+    'Could not load asr-testset.json (' + e.message + '). ' +
+    'Generate it with: node tools/asr-testset.js --write — and serve this page ' +
+    'over http(s), not file://.'
+  ));
+
+function build() {
+  const banks = [
+    ['single',   DATA.session.single],
+    ['multi',    DATA.session.multi],
+    ['sentence', DATA.session.sentence]
+  ];
+  QUEUE = [];
+  for (const [bank, items] of banks)
+    for (const it of items) {
+      // Correct read first, then the wrong-tone read of the SAME item, so the
+      // two sit adjacent and the comparison is within-item rather than across
+      // a session in which your voice, the room and the mic have all drifted.
+      QUEUE.push({ bank, item: it, mode: 'correct' });
+      QUEUE.push({ bank, item: it, mode: 'wrong' });
+    }
+  restore();
+  paint();
+}
+
+function restore() {
+  try {
+    const raw = localStorage.getItem(STORE_KEY);
+    if (!raw) { run.started = new Date().toISOString(); return; }
+    const saved = JSON.parse(raw);
+    if (saved && Array.isArray(saved.attempts)) {
+      run = saved;
+      // Resume at the first queue slot with no kept attempt — a phone call or a
+      // locked screen mid-run should cost nothing.
+      cursor = QUEUE.findIndex(q => !run.attempts.some(
+        a => a.id === q.item.id && a.mode === q.mode));
+      if (cursor < 0) cursor = QUEUE.length;
+    }
+  } catch (e) { run.started = new Date().toISOString(); }
+}
+function persist() { try { localStorage.setItem(STORE_KEY, JSON.stringify(run)); } catch (e) {} }
+
+// ── Prompt rendering ─────────────────────────────────────────────────────────
+function current() { return QUEUE[cursor] || null; }
+
+function paint() {
+  const q = current();
+  $('result').classList.add('hide');
+  pending = null;
+  renderSummary();
+
+  if (!q) {
+    $('progressText').textContent = 'Complete';
+    $('progressBar').style.width = '100%';
+    $('bankPill').textContent = '—';
+    $('pHanzi').textContent = 'Done';
+    $('pJyut').textContent = '';
+    $('pGloss').textContent = '';
+    $('pInstruct').textContent = 'All ' + QUEUE.length + ' recordings captured. ' +
+      'Download the run, then read the numbers — remembering run 1 cannot conclude "build it".';
+    $('pInstruct').className = 'instruct correct';
+    $('pLands').textContent = '';
+    $('btnRec').disabled = true; $('btnSkip').disabled = true;
+    $('footText').textContent = run.attempts.length + ' attempts';
+    return;
+  }
+
+  const it = q.item, s = it.swap;
+  $('btnRec').disabled = false; $('btnSkip').disabled = false;
+  $('progressText').textContent = 'Item ' + (cursor + 1) + ' of ' + QUEUE.length;
+  $('progressBar').style.width = (100 * cursor / QUEUE.length).toFixed(1) + '%';
+  $('bankPill').textContent = q.bank + ' · ' + s.grade;
+  $('bankPill').className = 'pill' + (s.grade === 'pair' ? ' pair' : '');
+
+  $('pHanzi').textContent = it.c;
+  $('pJyut').textContent = it.j;
+  $('pGloss').textContent = it.e || '';
+
+  if (q.mode === 'correct') {
+    $('pInstruct').className = 'instruct correct';
+    $('pInstruct').innerHTML = 'Say it <b>correctly</b>.';
+    $('pLands').textContent = '';
+  } else {
+    $('pInstruct').className = 'instruct';
+    $('pInstruct').innerHTML =
+      'Say ' + esc(s.syllable || it.c) + ' as <b>' + esc(s.wrongJyutping) + '</b>' +
+      ' — tone ' + s.fromTone + ' &rarr; tone ' + s.toTone + '. Everything else unchanged.';
+    const l = s.landsOn;
+    $('pLands').textContent = l && l.c
+      ? 'That is the word ' + l.c + ' (' + l.j + ') ' + (l.e || '')
+      : 'That syllable exists as ' + ((l && l.chars || []).slice(0, 4).join('') || '—') +
+        ' (' + ((l && l.syllable) || '') + ')';
+  }
+  $('footText').textContent = run.attempts.length + ' attempts kept';
+}
+
+function esc(s) { return String(s == null ? '' : s).replace(/[&<>]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[c])); }
+
+// ── Recording ────────────────────────────────────────────────────────────────
+$('btnRec').onclick = () => {
+  const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SpeechRec) return fatal('No SpeechRecognition in this browser. Use Chrome.');
+  if (rec) { try { rec.stop(); } catch (e) {} return; }
+
+  const q = current(); if (!q) return;
+  const lang = $('lang').value, maxAlt = parseInt($('maxAlt').value, 10);
+
+  const r = new SpeechRec();
+  r.lang = lang;
+  r.continuous = false;      // one utterance per attempt — unlike Speak mode,
+                             // which stays open for a whole conversation turn
+  r.interimResults = false;
+  r.maxAlternatives = maxAlt;
+
+  let alts = [], errored = null;
+
+  r.onresult = e => {
+    const res = e.results[0];
+    alts = [];
+    for (let i = 0; i < res.length; i++)
+      alts.push({ transcript: res[i].transcript, confidence: res[i].confidence });
+  };
+  r.onerror = e => { errored = e.error; };
+  r.onend = () => {
+    rec = null;
+    $('btnRec').textContent = 'Record';
+    $('btnRec').className = 'primary';
+    offer(q, alts, errored, lang, maxAlt);
+  };
+
+  try {
+    r.start();
+    rec = r;
+    $('btnRec').textContent = 'Stop';
+    $('btnRec').className = 'rec';
+  } catch (e) { fatal('Could not start recognition: ' + e.message); }
+};
+
+$('btnSkip').onclick = () => {
+  // Skips a whole item (both reads) — the pair is only meaningful together.
+  const q = current(); if (!q) return;
+  while (cursor < QUEUE.length && QUEUE[cursor].item.id === q.item.id) cursor++;
+  paint();
+};
+
+$('btnPlay').onclick = () => {
+  const q = current(); if (!q) return;
+  try {
+    const u = new SpeechSynthesisUtterance(q.item.c);
+    u.lang = 'zh-HK';
+    speechSynthesis.speak(u);
+  } catch (e) {}
+};
+
+// ── Verdict for one attempt under the current policy ──────────────────────────
+// Returns { hit, near } where `hit` means "the policy accepted this as the
+// target". For a correct read, hit is what you want. For a wrong-tone read, hit
+// is the recogniser SNAPPING to the target — the outcome that kills the feature.
+function evaluate(attempt, policy) {
+  const target = attempt.target;
+  const alts = attempt.alts || [];
+  if (!alts.length) return { hit: false, near: false, empty: true };
+
+  const top = alts[0].transcript;
+  const t = normalizeChinese(target);
+
+  if (policy === 'app') return { hit: fuzzyMatch(top, target), near: false };
+
+  const anyHit = alts.some(a => fuzzyMatch(a.transcript, target));
+  if (policy === 'anyAlt') return { hit: anyHit, near: false };
+
+  if (policy === 'anyAltNear') {
+    if (anyHit) return { hit: true, near: false };
+    return { hit: false, near: alts.some(a => toneOnlyDiff(a.transcript, target)) };
+  }
+
+  if (policy === 'overlap') {
+    const best = alts.reduce((m, a) => Math.max(m, overlap(normalizeChinese(a.transcript), t)), 0);
+    return { hit: best >= 0.5, near: false };
+  }
+  return { hit: anyHit, near: false };
+}
+
+// Do heard and target differ ONLY by tone? Same length, and every differing
+// character position holds two characters whose attested readings share a
+// toneless base. This is the distinction between actionable feedback ("right
+// syllable, wrong tone") and unrelated noise.
+function toneOnlyDiff(heard, target) {
+  const h = normalizeChinese(heard), t = normalizeChinese(target);
+  if (!h || h.length !== t.length || h === t) return false;
+  let anyDiff = false;
+  for (let i = 0; i < t.length; i++) {
+    if (h[i] === t[i]) continue;
+    anyDiff = true;
+    const a = (DATA.readings[h[i]] || []).map(x => x.replace(/[0-9]/g, ''));
+    const b = (DATA.readings[t[i]] || []).map(x => x.replace(/[0-9]/g, ''));
+    if (!a.length || !b.length || !a.some(x => b.includes(x))) return false;
+  }
+  return anyDiff;
+}
+
+function overlap(a, b) {
+  if (!b.length) return 0;
+  const pool = [...a];
+  let n = 0;
+  for (const ch of b) { const i = pool.indexOf(ch); if (i >= 0) { pool.splice(i, 1); n++; } }
+  return n / b.length;
+}
+
+// ── Offer the just-captured attempt for keep / retake / discard ──────────────
+function offer(q, alts, errored, lang, maxAlt) {
+  pending = {
+    id: q.item.id, bank: q.bank, mode: q.mode, grade: q.item.swap.grade,
+    target: q.item.c,
+    targetJyutping: q.item.j,
+    askedFrom: q.item.swap.fromTone, askedTo: q.item.swap.toTone,
+    contrast: q.item.swap.fromTone + '-' + q.item.swap.toTone,
+    lang, maxAlt,
+    alts, error: errored,
+    at: new Date().toISOString()
+  };
+
+  $('result').classList.remove('hide');
+  if (errored && !alts.length) {
+    $('rHeard').textContent = '(no result)';
+    $('rAlts').textContent = 'error: ' + errored;
+    $('rVerdict').textContent = '';
+    return;
+  }
+  $('rHeard').textContent = alts.length ? alts[0].transcript : '(nothing heard)';
+  $('rAlts').innerHTML = alts.slice(1).length
+    ? 'also: ' + alts.slice(1).map(a => '<code>' + esc(a.transcript) + '</code>').join(' · ')
+    : (alts.length ? 'no other alternatives returned' : '');
+
+  renderPendingVerdict();
+}
+function renderPendingVerdict() {
+  if (!pending) return;
+  const v = evaluate(pending, $('policy').value);
+  const el = $('rVerdict');
+  if (pending.mode === 'correct') {
+    el.className = 'verdict ' + (v.hit ? 'v-ok' : 'v-false');
+    el.textContent = v.hit ? 'Accepted — correct read passed.'
+      : v.empty ? 'Nothing decoded — counts as a false reject, but check the mic before keeping it.'
+      : 'FALSE REJECT — you said it right and it did not match.';
+  } else {
+    el.className = 'verdict ' + (v.hit ? 'v-snapped' : v.near ? 'v-near' : 'v-detected');
+    el.textContent = v.hit ? 'Snapped to target — wrong tone was not detected.'
+      : v.empty ? 'Nothing decoded — no evidence either way. Discard this one.'
+      : v.near ? 'Detected, tone-only difference — usable feedback.'
+      : 'Detected — decoded something other than the target.';
+  }
+}
+
+$('btnKeep').onclick = () => {
+  if (!pending) return;
+  run.attempts = run.attempts.filter(a => !(a.id === pending.id && a.mode === pending.mode));
+  run.attempts.push(pending);
+  persist();
+  cursor++;
+  paint();
+};
+$('btnRetake').onclick = () => { pending = null; $('result').classList.add('hide'); };
+$('btnDiscard').onclick = () => {
+  // Records no attempt — a discarded read must not reach the numbers in any
+  // form, or the confound it exists to remove creeps back in. But it DOES
+  // record that a discard happened, because the discard count is itself a
+  // finding: if wrong-tone reads get discarded far more often than correct
+  // ones, producing a tone on demand is the hard part, not the recognition.
+  if (!pending) return;
+  run.discards = run.discards || [];
+  run.discards.push({ id: pending.id, bank: pending.bank, mode: pending.mode, at: pending.at });
+  persist();
+  pending = null;
+  $('result').classList.add('hide');
+  renderSummary();
+};
+
+$('policy').onchange = () => { renderSummary(); renderPendingVerdict(); };
+
+// ── Summary ──────────────────────────────────────────────────────────────────
+function renderSummary() {
+  const el = $('summary');
+  if (!run.attempts.length) { el.textContent = 'Nothing recorded yet.'; return; }
+  const policy = $('policy').value;
+
+  const banks = ['single', 'multi', 'sentence'];
+  const rows = [];
+  let mixed = new Set();
+
+  let empties = 0;
+  for (const b of banks) {
+    // An attempt that decoded nothing at all is not evidence either way — on a
+    // wrong-tone read it would otherwise count as a detection, which would
+    // inflate the headline figure with silence. Empties are excluded from both
+    // sides and reported separately.
+    const kept = a => !evaluate(a, policy).empty;
+    const all = run.attempts.filter(a => a.bank === b);
+    empties += all.filter(a => !kept(a)).length;
+    const correct = all.filter(a => a.mode === 'correct' && kept(a));
+    const wrong   = all.filter(a => a.mode === 'wrong'   && kept(a));
+    all.forEach(a => mixed.add(a.lang + '/' + a.maxAlt));
+
+    const falseRej = correct.filter(a => !evaluate(a, policy).hit).length;
+    const detected = wrong.filter(a => !evaluate(a, policy).hit).length;
+    const near     = wrong.filter(a => { const v = evaluate(a, policy); return !v.hit && v.near; }).length;
+    rows.push({ b, nC: correct.length, nW: wrong.length, falseRej, detected, near });
+  }
+
+  const p = (n, d) => d ? (100 * n / d).toFixed(0) + '%' : '—';
+  let html = '<table><tr><th>bank</th><th class="num">correct reads</th>' +
+    '<th class="num">false reject</th><th class="num">wrong reads</th>' +
+    '<th class="num">detected</th><th class="num">tone-only</th></tr>';
+  for (const r of rows) {
+    html += '<tr><td>' + r.b + '</td>' +
+      '<td class="num">' + r.nC + '</td>' +
+      '<td class="num" style="color:' + (r.nC && r.falseRej / r.nC > 0.10 ? 'var(--bad)' : 'var(--good)') + '">' +
+        p(r.falseRej, r.nC) + '</td>' +
+      '<td class="num">' + r.nW + '</td>' +
+      '<td class="num">' + p(r.detected, r.nW) + '</td>' +
+      '<td class="num">' + p(r.near, r.nW) + '</td></tr>';
+  }
+  html += '</table>';
+
+  const totC = rows.reduce((s, r) => s + r.nC, 0), totFR = rows.reduce((s, r) => s + r.falseRej, 0);
+  const totW = rows.reduce((s, r) => s + r.nW, 0), totD = rows.reduce((s, r) => s + r.detected, 0);
+  html += '<div class="row" style="margin-top:12px;gap:20px">' +
+    '<div><div class="big" style="color:' + (totC && totFR / totC > 0.10 ? 'var(--bad)' : 'var(--good)') + '">' +
+      p(totFR, totC) + '</div><label>false rejects — the binding constraint</label></div>' +
+    '<div><div class="big">' + p(totD, totW) + '</div><label>detection</label></div></div>';
+
+  if (mixed.size > 1)
+    html += '<p class="note" style="color:var(--bad)">Attempts were captured under ' +
+      mixed.size + ' different recogniser settings (' + [...mixed].join(', ') +
+      '). Those are not comparable — reset, or filter in the downloaded JSON.</p>';
+
+  if (empties)
+    html += '<p class="note">' + empties + ' attempt' + (empties === 1 ? '' : 's') +
+      ' decoded nothing and are excluded from both figures.</p>';
+
+  const dis = (run.discards || []).length;
+  if (dis) {
+    const dW = (run.discards || []).filter(d => d.mode === 'wrong').length;
+    html += '<p class="note">' + dis + ' attempt' + (dis === 1 ? '' : 's') +
+      ' discarded (' + dW + ' wrong-tone, ' + (dis - dW) + ' correct). A high ' +
+      'wrong-tone discard rate means producing a tone on demand is the hard ' +
+      'part — read the detection figure with that in mind.</p>';
+  }
+
+  if (totC < 8 || totW < 8)
+    html += '<p class="note">Too few attempts to read anything into yet.</p>';
+  else
+    html += '<p class="note">Run 1 is calibration. These numbers can justify ' +
+      '<b>stop</b> or <b>set thresholds and run again</b> — not <b>build it</b>.</p>';
+
+  el.innerHTML = html;
+}
+
+// ── Export / reset ───────────────────────────────────────────────────────────
+$('btnDownload').onclick = () => {
+  const blob = new Blob([JSON.stringify({
+    probe: 'asr-probe',
+    generated: DATA && DATA.generated,
+    startedAt: run.started,
+    exportedAt: new Date().toISOString(),
+    userAgent: navigator.userAgent,
+    attempts: run.attempts,
+    discards: run.discards || []
+  }, null, 2)], { type: 'application/json' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'asr-probe-run-' + new Date().toISOString().slice(0, 10) + '.json';
+  a.click();
+  setTimeout(() => URL.revokeObjectURL(a.href), 2000);
+};
+
+$('btnReset').onclick = () => {
+  if (!confirm('Discard all ' + run.attempts.length + ' attempts and start over?')) return;
+  run = { started: new Date().toISOString(), attempts: [], discards: [] };
+  cursor = 0; persist(); paint();
+};
+</script>
+</body>
+</html>
