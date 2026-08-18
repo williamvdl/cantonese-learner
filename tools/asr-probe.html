@@ -181,6 +181,8 @@
 
 <h1>ASR Recognition Probe</h1>
 <p class="sub">Does a wrong tone produce a different decoded word? Run 1 is calibration — it can conclude <b>stop</b> or <b>continue</b>, not <b>build</b>.</p>
+<p class="sub">Tap Record, wait a beat, then speak. Bare syllables are very short —
+hold the vowel a little rather than clipping it. Recording stops itself after 6s.</p>
 
 <div id="fatal" class="card hide"><div class="err" id="fatalMsg"></div></div>
 
@@ -227,6 +229,8 @@
     <button id="btnSkip" class="small">Skip item</button>
     <button id="btnPlay" class="small">Hear target</button>
   </div>
+
+  <div class="heard" id="live" style="color:var(--muted)"></div>
 
   <div id="result" class="hide">
     <div class="heard" id="rHeard"></div>
@@ -401,6 +405,21 @@ function paint() {
 function esc(s) { return String(s == null ? '' : s).replace(/[&<>]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[c])); }
 
 // ── Recording ────────────────────────────────────────────────────────────────
+// Configured to MATCH app.js startListening() — continuous, with interim
+// results — rather than the one-shot form that seems more natural for a probe.
+// That is not a stylistic choice. Chrome on Android endpoints a one-shot
+// recognition aggressively: a bare syllable of roughly 300ms can finish before
+// the recogniser has decided speech began, and it then ends cleanly with no
+// result and no error. The measurement would look like "the recogniser cannot
+// hear single syllables" when what it actually shows is a probe configured
+// differently from the code it exists to inform.
+//
+// Interim results are on for the same reason: an empty final with visible
+// interim text ("it heard something, then discarded it") is a different fault
+// from an empty final with no interim at all ("the mic never opened"), and
+// without them the two are indistinguishable from the outside.
+let recTimer = null, recStarted = 0;
+
 $('btnRec').onclick = () => {
   const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
   if (!SpeechRec) return fatal('No SpeechRecognition in this browser. Use Chrome.');
@@ -411,32 +430,61 @@ $('btnRec').onclick = () => {
 
   const r = new SpeechRec();
   r.lang = lang;
-  r.continuous = false;      // one utterance per attempt — unlike Speak mode,
-                             // which stays open for a whole conversation turn
-  r.interimResults = false;
+  r.continuous = true;
+  r.interimResults = true;
   r.maxAlternatives = maxAlt;
 
-  let alts = [], errored = null;
+  let alts = [], errored = null, finalText = '', sawInterim = false, events = 0;
 
   r.onresult = e => {
-    const res = e.results[0];
-    alts = [];
-    for (let i = 0; i < res.length; i++)
-      alts.push({ transcript: res[i].transcript, confidence: res[i].confidence });
+    events++;
+    let interim = '';
+    for (let i = e.resultIndex; i < e.results.length; i++) {
+      const res = e.results[i];
+      if (res.isFinal) {
+        finalText += res[0].transcript;
+        // Take the N-best from the final result that actually offers one. A
+        // continuous session can emit several finals; the alternatives that
+        // matter are the ones attached to the segment carrying the utterance.
+        if (res.length > (alts.length || 0)) {
+          alts = [];
+          for (let k = 0; k < res.length; k++)
+            alts.push({ transcript: res[k].transcript, confidence: res[k].confidence });
+        }
+      } else {
+        interim += res[0].transcript;
+        sawInterim = true;
+      }
+    }
+    $('live').textContent = (finalText + interim) || '…';
   };
   r.onerror = e => { errored = e.error; };
   r.onend = () => {
+    clearTimeout(recTimer);
     rec = null;
     $('btnRec').textContent = 'Record';
     $('btnRec').className = 'primary';
-    offer(q, alts, errored, lang, maxAlt);
+    $('live').textContent = '';
+    // If finals arrived but none carried alternatives, fall back to the
+    // concatenated text so the attempt is still usable.
+    if (!alts.length && finalText.trim())
+      alts = [{ transcript: finalText.trim(), confidence: null }];
+    offer(q, alts, errored, lang, maxAlt, {
+      sawInterim, events, ms: Date.now() - recStarted
+    });
   };
 
   try {
     r.start();
     rec = r;
+    recStarted = Date.now();
     $('btnRec').textContent = 'Stop';
     $('btnRec').className = 'rec';
+    $('live').textContent = '…';
+    // Continuous recognition does not stop by itself. Stopping automatically
+    // keeps a 64-item run to one tap per attempt; the button still works if a
+    // read needs longer.
+    recTimer = setTimeout(() => { try { r.stop(); } catch (e) {} }, 6000);
   } catch (e) { fatal('Could not start recognition: ' + e.message); }
 };
 
@@ -512,7 +560,7 @@ function overlap(a, b) {
 }
 
 // ── Offer the just-captured attempt for keep / retake / discard ──────────────
-function offer(q, alts, errored, lang, maxAlt) {
+function offer(q, alts, errored, lang, maxAlt, diag) {
   pending = {
     id: q.item.id, bank: q.bank, mode: q.mode, grade: q.item.swap.grade,
     target: q.item.c,
@@ -521,14 +569,23 @@ function offer(q, alts, errored, lang, maxAlt) {
     contrast: q.item.swap.fromTone + '-' + q.item.swap.toTone,
     lang, maxAlt,
     alts, error: errored,
+    diag: diag || null,
     at: new Date().toISOString()
   };
 
   $('result').classList.remove('hide');
-  if (errored && !alts.length) {
-    $('rHeard').textContent = '(no result)';
-    $('rAlts').textContent = 'error: ' + errored;
-    $('rVerdict').textContent = '';
+  if (!alts.length) {
+    // Say WHY nothing came back rather than just that nothing did. These three
+    // states have different causes and different fixes, and a run full of
+    // undiagnosed blanks is unreadable afterwards.
+    $('rHeard').textContent = '(nothing decoded)';
+    const d = pending.diag || {};
+    $('rAlts').textContent =
+      (errored ? 'error: ' + errored + ' · ' : '') +
+      (d.sawInterim ? 'heard something, then discarded it — try speaking a beat after tapping Record'
+                    : 'no audio reached the recogniser at all — check the mic, or hold the syllable longer') +
+      ' · ' + (d.events || 0) + ' events, ' + Math.round((d.ms || 0) / 100) / 10 + 's';
+    renderPendingVerdict();
     return;
   }
   $('rHeard').textContent = alts.length ? alts[0].transcript : '(nothing heard)';
@@ -543,12 +600,12 @@ function renderPendingVerdict() {
   const v = evaluate(pending, $('policy').value);
   const el = $('rVerdict');
   if (pending.mode === 'correct') {
-    el.className = 'verdict ' + (v.hit ? 'v-ok' : 'v-false');
+    el.className = 'verdict ' + (v.hit ? 'v-ok' : v.empty ? 'v-near' : 'v-false');
     el.textContent = v.hit ? 'Accepted — correct read passed.'
       : v.empty ? 'Nothing decoded — counts as a false reject, but check the mic before keeping it.'
       : 'FALSE REJECT — you said it right and it did not match.';
   } else {
-    el.className = 'verdict ' + (v.hit ? 'v-snapped' : v.near ? 'v-near' : 'v-detected');
+    el.className = 'verdict ' + (v.hit ? 'v-snapped' : v.empty ? 'v-near' : v.near ? 'v-near' : 'v-detected');
     el.textContent = v.hit ? 'Snapped to target — wrong tone was not detected.'
       : v.empty ? 'Nothing decoded — no evidence either way. Discard this one.'
       : v.near ? 'Detected, tone-only difference — usable feedback.'
