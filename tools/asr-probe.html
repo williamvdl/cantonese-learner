@@ -197,6 +197,13 @@ hold the vowel a little rather than clipping it. Recording stops itself after 6s
     </select>
   </div>
   <div class="row">
+    <label for="mode">mode</label>
+    <select id="mode">
+      <option value="continuous">continuous + interim (matches Speak mode)</option>
+      <option value="oneshot">one-shot (Android endpoints harder)</option>
+    </select>
+  </div>
+  <div class="row">
     <label for="maxAlt">maxAlternatives</label>
     <select id="maxAlt">
       <option>1</option><option>3</option><option selected>5</option>
@@ -204,7 +211,9 @@ hold the vowel a little rather than clipping it. Recording stops itself after 6s
   </div>
   <p class="note">These are properties of the recogniser and are stored with each
   attempt. Changing them mid-run makes attempts non-comparable — the summary
-  flags it if you do.</p>
+  flags it if you do. <b>Mode is a dial rather than a fixed choice because which
+  one works is exactly what is in doubt</b> — run the same syllable through both
+  before concluding anything about the recogniser.</p>
 </div>
 
 <!-- ── Prompt ──────────────────────────────────────────────────────────── -->
@@ -427,10 +436,14 @@ $('btnRec').onclick = () => {
 
   const q = current(); if (!q) return;
   const lang = $('lang').value, maxAlt = parseInt($('maxAlt').value, 10);
+  const mode = $('mode').value;
 
   const r = new SpeechRec();
   r.lang = lang;
-  r.continuous = true;
+  r.continuous = (mode === 'continuous');
+  // Interim results stay on in both modes. They cost nothing and they are the
+  // only way to tell "heard something, then discarded it" from "no audio ever
+  // arrived" — two failures that look identical from the outside.
   r.interimResults = true;
   r.maxAlternatives = maxAlt;
 
@@ -465,12 +478,21 @@ $('btnRec').onclick = () => {
     $('btnRec').textContent = 'Record';
     $('btnRec').className = 'primary';
     $('live').textContent = '';
-    // If finals arrived but none carried alternatives, fall back to the
+    // Chrome emits a final result with an EMPTY transcript when a continuous
+    // session is stopped. Left in place it becomes alts[0], so the attempt is
+    // not "empty" by the length test, the heard line renders blank, and every
+    // read scores as a false reject — words that worked a moment ago start
+    // failing for a reason invisible on screen. Drop blank alternatives before
+    // anything downstream sees them.
+    const blanks = alts.length;
+    alts = alts.filter(a => (a.transcript || '').trim());
+    // If finals arrived but none carried usable alternatives, fall back to the
     // concatenated text so the attempt is still usable.
     if (!alts.length && finalText.trim())
       alts = [{ transcript: finalText.trim(), confidence: null }];
     offer(q, alts, errored, lang, maxAlt, {
-      sawInterim, events, ms: Date.now() - recStarted
+      mode, sawInterim, events, ms: Date.now() - recStarted,
+      blankAlts: blanks - alts.length
     });
   };
 
@@ -484,7 +506,9 @@ $('btnRec').onclick = () => {
     // Continuous recognition does not stop by itself. Stopping automatically
     // keeps a 64-item run to one tap per attempt; the button still works if a
     // read needs longer.
-    recTimer = setTimeout(() => { try { r.stop(); } catch (e) {} }, 6000);
+    // Only continuous sessions need stopping; a one-shot ends itself.
+    if (mode === 'continuous')
+      recTimer = setTimeout(() => { try { r.stop(); } catch (e) {} }, 6000);
   } catch (e) { fatal('Could not start recognition: ' + e.message); }
 };
 
@@ -510,7 +534,10 @@ $('btnPlay').onclick = () => {
 // is the recogniser SNAPPING to the target — the outcome that kills the feature.
 function evaluate(attempt, policy) {
   const target = attempt.target;
-  const alts = attempt.alts || [];
+  // Filter again here, not only at capture. Attempts restored from a run
+  // recorded before the blank-result bug was found still carry them, and a
+  // silently blank alternative reads as a confident false reject.
+  const alts = (attempt.alts || []).filter(a => (a.transcript || '').trim());
   if (!alts.length) return { hit: false, near: false, empty: true };
 
   const top = alts[0].transcript;
@@ -561,13 +588,17 @@ function overlap(a, b) {
 
 // ── Offer the just-captured attempt for keep / retake / discard ──────────────
 function offer(q, alts, errored, lang, maxAlt, diag) {
+  // Single choke point. Every path into the UI and into the stored run goes
+  // through here, so the blank-transcript filter belongs here rather than at
+  // each call site — that is how it slipped through the first time.
+  alts = (alts || []).filter(a => (a.transcript || '').trim());
   pending = {
     id: q.item.id, bank: q.bank, mode: q.mode, grade: q.item.swap.grade,
     target: q.item.c,
     targetJyutping: q.item.j,
     askedFrom: q.item.swap.fromTone, askedTo: q.item.swap.toTone,
     contrast: q.item.swap.fromTone + '-' + q.item.swap.toTone,
-    lang, maxAlt,
+    lang, maxAlt, recMode: (diag && diag.mode) || null,   // NOT `mode` — that is the read
     alts, error: errored,
     diag: diag || null,
     at: new Date().toISOString()
@@ -583,8 +614,16 @@ function offer(q, alts, errored, lang, maxAlt, diag) {
     $('rAlts').textContent =
       (errored ? 'error: ' + errored + ' · ' : '') +
       (d.sawInterim ? 'heard something, then discarded it — try speaking a beat after tapping Record'
-                    : 'no audio reached the recogniser at all — check the mic, or hold the syllable longer') +
-      ' · ' + (d.events || 0) + ' events, ' + Math.round((d.ms || 0) / 100) / 10 + 's';
+                    : 'no audio reached the recogniser at all') +
+      ' · ' + (d.mode || '?') + ' · ' +
+      (d.blankAlts ? d.blankAlts + ' blank result' + (d.blankAlts === 1 ? '' : 's') + ' dropped · ' : '') +
+      (d.events || 0) + ' events, ' +
+      Math.round((d.ms || 0) / 100) / 10 + 's' +
+      // A continuous session that ends well before its 6s stop was ended by the
+      // platform, not by us. That is the signal that separates "the syllable was
+      // too short to trigger the endpointer" from "this mode is not honoured on
+      // this device" — and it cannot be recovered after the fact.
+      (d.mode === 'continuous' && d.ms < 5000 ? ' — platform ended the session early' : '');
     renderPendingVerdict();
     return;
   }
@@ -660,7 +699,7 @@ function renderSummary() {
     empties += all.filter(a => !kept(a)).length;
     const correct = all.filter(a => a.mode === 'correct' && kept(a));
     const wrong   = all.filter(a => a.mode === 'wrong'   && kept(a));
-    all.forEach(a => mixed.add(a.lang + '/' + a.maxAlt));
+    all.forEach(a => mixed.add(a.lang + '/' + a.maxAlt + '/' + (a.recMode || 'unknown')));
 
     const falseRej = correct.filter(a => !evaluate(a, policy).hit).length;
     const detected = wrong.filter(a => !evaluate(a, policy).hit).length;
