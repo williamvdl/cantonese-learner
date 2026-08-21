@@ -147,6 +147,8 @@
   .pill.pair { border-color: #cfe3d6; background: #eef6f0; color: var(--good); }
 
   .heard { font-size: 24px; margin-top: 8px; }
+  .ann { font-size: 14px; color: var(--muted); }
+  .alts { line-height: 1.8; }
   .alts { font-size: 13px; color: var(--muted); margin-top: 4px; }
   .alts code { font-size: 14px; color: var(--ink); }
   .verdict { font-size: 14px; margin-top: 8px; font-weight: 600; }
@@ -250,6 +252,10 @@ hold the vowel a little rather than clipping it. Recording stops itself after 6s
       <button id="btnRetake" class="small">Retake</button>
       <button id="btnDiscard" class="small">Discard — I said it wrong</button>
     </div>
+    <p class="note">The recogniser returns <b>characters only</b>. The jyutping
+    and English beside them are looked up from the corpus — they are not
+    something the recogniser reported, and they say nothing about which tone it
+    heard.</p>
     <p class="note">Discard freely. A discarded attempt costs one retake; a kept
     bad one silently corrupts the result and cannot be untangled afterwards.</p>
   </div>
@@ -409,6 +415,57 @@ function paint() {
         ' (' + ((l && l.syllable) || '') + ')';
   }
   $('footText').textContent = run.attempts.length + ' attempts kept';
+}
+
+// Render a decoded string as characters + jyutping + English.
+//
+// IMPORTANT, and stated on screen too: the recogniser returns CHARACTERS ONLY.
+// It has no tone output and no jyutping output. Everything after the characters
+// here is a LOOKUP against the corpus, not something the recogniser reported.
+// Confusing the two is exactly the mistake this whole investigation exists to
+// avoid — a reading shown next to a decode can look like evidence about tone
+// when it is only evidence about which characters came back.
+//
+// Whole-string lookup first: a multi-syllable word carries the reading that
+// actually applies, where stitching single characters together does not.
+function annotate(text) {
+  const lex = (DATA && DATA.lexicon) || {};
+  const clean = normalizeChinese(text);
+  if (!clean) return { j: '', e: '' };
+
+  const whole = lex[clean];
+  if (whole) return { j: whole.j.join(' / '), e: (whole.e[0] || '') };
+
+  // Greedy longest-match segmentation, up to four characters. Per-character
+  // lookup alone is wrong for exactly the words that matter: 鍾意 (zung1 ji3)
+  // "like" is stored as one entry, so character-by-character it comes back as
+  // two unknowns even though the word is right there in the corpus.
+  const segs = [];
+  let i = 0, unknown = 0;
+  while (i < clean.length) {
+    let hit = null, len = 0;
+    for (let n = Math.min(4, clean.length - i); n >= 1; n--) {
+      const cand = lex[clean.slice(i, i + n)];
+      if (cand) { hit = cand; len = n; break; }
+    }
+    if (hit) { segs.push({ j: hit.j[0], e: hit.e[0] || '' }); i += len; }
+    else { segs.push({ j: '?', e: '' }); unknown++; i += 1; }
+  }
+
+  // Gloss only a short string. Chaining eight word-glosses produces something
+  // that looks like a translation and is not one.
+  const glossable = !unknown && segs.length <= 3;
+  return {
+    j: segs.map(s => s.j).join(' '),
+    e: glossable ? segs.map(s => s.e).filter(Boolean).join(' · ') : ''
+  };
+}
+
+function annotatedHTML(text) {
+  const a = annotate(text);
+  return esc(text) +
+    (a.j ? ' <span class="ann">(' + esc(a.j) + ')</span>' : '') +
+    (a.e ? ' <span class="ann">' + esc(a.e) + '</span>' : '');
 }
 
 function esc(s) { return String(s == null ? '' : s).replace(/[&<>]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[c])); }
@@ -613,8 +670,9 @@ function offer(q, alts, errored, lang, maxAlt, diag) {
     const d = pending.diag || {};
     $('rAlts').textContent =
       (errored ? 'error: ' + errored + ' · ' : '') +
-      (d.sawInterim ? 'heard something, then discarded it — try speaking a beat after tapping Record'
-                    : 'no audio reached the recogniser at all') +
+      (d.sawInterim ? 'heard something, then discarded it'
+        : d.blankAlts ? 'the session returned only an empty result — speech was never accepted'
+        : 'no audio reached the recogniser at all') +
       ' · ' + (d.mode || '?') + ' · ' +
       (d.blankAlts ? d.blankAlts + ' blank result' + (d.blankAlts === 1 ? '' : 's') + ' dropped · ' : '') +
       (d.events || 0) + ' events, ' +
@@ -627,10 +685,10 @@ function offer(q, alts, errored, lang, maxAlt, diag) {
     renderPendingVerdict();
     return;
   }
-  $('rHeard').textContent = alts.length ? alts[0].transcript : '(nothing heard)';
+  $('rHeard').innerHTML = annotatedHTML(alts[0].transcript);
   $('rAlts').innerHTML = alts.slice(1).length
-    ? 'also: ' + alts.slice(1).map(a => '<code>' + esc(a.transcript) + '</code>').join(' · ')
-    : (alts.length ? 'no other alternatives returned' : '');
+    ? 'also heard: ' + alts.slice(1).map(a => annotatedHTML(a.transcript)).join('<br>')
+    : 'no other alternatives returned';
 
   renderPendingVerdict();
 }
