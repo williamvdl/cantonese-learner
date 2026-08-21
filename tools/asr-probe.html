@@ -105,6 +105,12 @@
   h2 { font-size: 14px; margin: 0 0 10px; text-transform: uppercase;
        letter-spacing: .06em; color: var(--muted); }
   .sub { color: var(--muted); font-size: 13px; margin: 0 0 18px; }
+  .ver {
+    font-size: 12px; font-weight: 600; letter-spacing: .06em;
+    padding: 3px 9px; border-radius: 20px; vertical-align: middle;
+    background: var(--accent); color: #fff;
+  }
+  .verline { font-size: 12px; color: var(--muted); margin: 0 0 14px; }
   .card {
     background: var(--card); border: 1px solid var(--line);
     border-radius: 10px; padding: 14px; margin-bottom: 14px;
@@ -181,10 +187,11 @@
 </head>
 <body>
 
-<h1>ASR Recognition Probe</h1>
+<h1>ASR Recognition Probe <span id="verStamp" class="ver">—</span></h1>
 <p class="sub">Does a wrong tone produce a different decoded word? Run 1 is calibration — it can conclude <b>stop</b> or <b>continue</b>, not <b>build</b>.</p>
 <p class="sub">Tap Record, wait a beat, then speak. Bare syllables are very short —
 hold the vowel a little rather than clipping it. Recording stops itself after 6s.</p>
+<p class="verline" id="verLine"></p>
 
 <div id="fatal" class="card hide"><div class="err" id="fatalMsg"></div></div>
 
@@ -292,6 +299,21 @@ hold the vowel a little rather than clipping it. Recording stops itself after 6s
 <script>
 'use strict';
 
+// PROBE_VERSION — bump on every delivery, and put a line in PROBE_CHANGELOG.
+// A stale cached copy of this page silently wastes a whole recording session:
+// the attempts look fine, they are just captured by code with a known bug in
+// it, and there is no way to tell after the fact which build produced them.
+// The version is shown on screen AND stored on every attempt, so a downloaded
+// run can always be attributed to the build that captured it.
+const PROBE_VERSION = 'v5';
+const PROBE_CHANGELOG = [
+  ['v5', 'Version stamp on screen and in the run file.'],
+  ['v4', 'Finals stored by index, not appended — fixes duplicated transcripts on longer sentences.'],
+  ['v3', 'Decoded text shows jyutping and English; blank final results dropped.'],
+  ['v2', 'Recogniser mode became a dial; empty-result diagnostics added.'],
+  ['v1', 'First build — one-shot recognition.']
+];
+
 // ── Lifted verbatim from app.js so the "app default" policy measured here is
 //    the one that actually ships. Do not "improve" these two functions.
 function normalizeChinese(text) {
@@ -318,6 +340,8 @@ let rec = null;
 function fatal(msg) { $('fatal').classList.remove('hide'); $('fatalMsg').textContent = msg; }
 
 // ── Load ─────────────────────────────────────────────────────────────────────
+stampVersion();
+
 fetch('asr-testset.json')
   .then(r => { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
   .then(d => { DATA = d; build(); })
@@ -326,6 +350,16 @@ fetch('asr-testset.json')
     'Generate it with: node tools/asr-testset.js --write — and serve this page ' +
     'over http(s), not file://.'
   ));
+
+function stampVersion() {
+  $('verStamp').textContent = PROBE_VERSION;
+  const latest = PROBE_CHANGELOG[0];
+  $('verLine').innerHTML =
+    'This build: <b>' + esc(latest[0]) + '</b> — ' + esc(latest[1]) +
+    '<br>If the badge above does not read <b>' + esc(PROBE_VERSION) +
+    '</b>, you are on a cached copy: pull down to refresh, or open the page ' +
+    'with <code>?v=' + Date.now() + '</code> on the end.';
+}
 
 function build() {
   const banks = [
@@ -681,6 +715,7 @@ function offer(q, alts, errored, lang, maxAlt, diag) {
     askedFrom: q.item.swap.fromTone, askedTo: q.item.swap.toTone,
     contrast: q.item.swap.fromTone + '-' + q.item.swap.toTone,
     lang, maxAlt, recMode: (diag && diag.mode) || null,   // NOT `mode` — that is the read
+    probeVersion: PROBE_VERSION,
     alts, error: errored,
     diag: diag || null,
     at: new Date().toISOString()
@@ -825,6 +860,15 @@ function renderSummary() {
   // duplicated transcript. It cannot be repaired after the fact — the original
   // is unrecoverable — so they are counted and flagged rather than quietly
   // included in figures they would distort.
+  // Attempts captured by an older build are not comparable with current ones,
+  // for the same reason mixed recogniser settings are not.
+  const builds = [...new Set(run.attempts.map(a => a.probeVersion || 'pre-v5'))];
+  if (builds.length > 1)
+    html += '<p class="note" style="color:var(--bad)">This run mixes probe ' +
+      'builds (' + builds.join(', ') + '). Attempts captured by different ' +
+      'builds are not comparable — note which is which before reading the ' +
+      'figures.</p>';
+
   const suspect = run.attempts.filter(a =>
     (a.alts || []).some(x => looksRedelivered(x.transcript))).length;
   if (suspect)
@@ -855,6 +899,7 @@ function renderSummary() {
 $('btnDownload').onclick = () => {
   const blob = new Blob([JSON.stringify({
     probe: 'asr-probe',
+    probeVersion: PROBE_VERSION,
     generated: DATA && DATA.generated,
     startedAt: run.started,
     exportedAt: new Date().toISOString(),
