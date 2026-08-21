@@ -305,8 +305,9 @@ hold the vowel a little rather than clipping it. Recording stops itself after 6s
 // it, and there is no way to tell after the fact which build produced them.
 // The version is shown on screen AND stored on every attempt, so a downloaded
 // run can always be attributed to the build that captured it.
-const PROBE_VERSION = 'v5';
+const PROBE_VERSION = 'v6';
 const PROBE_CHANGELOG = [
+  ['v6', 'Cumulative finals folded, not joined — the actual cause of the stuttered transcripts. Raw event trace now recorded.'],
   ['v5', 'Version stamp on screen and in the run file.'],
   ['v4', 'Finals stored by index, not appended — fixes duplicated transcripts on longer sentences.'],
   ['v3', 'Decoded text shows jyutping and English; blank final results dropped.'],
@@ -538,18 +539,28 @@ $('btnRec').onclick = () => {
   r.interimResults = true;
   r.maxAlternatives = maxAlt;
 
-  // Finals are stored BY INDEX and assigned, never appended.
+  // Android emits CUMULATIVE finals, each at a new index.
   //
-  // Chrome on Android re-delivers a final result as the utterance is revised:
-  // onresult fires with resultIndex 0 carrying "我好攰", then fires again with
-  // resultIndex 0 carrying the fuller "我好攰所以想早啲返". Appending each
-  // delivery concatenated the revision onto the draft and produced
-  // "我好攰我好攰所以想早啲返" — a transcript that never matches the target, so
-  // correct reads scored as false rejects and wrong-tone reads scored as
-  // detections. Both sides of the 2x2 were corrupted, and only on the longer
-  // sentences where a revision actually happens. Assigning by index is
-  // idempotent under re-delivery; appending is not.
-  const finals = [], finalAlts = [];
+  // Measured, not assumed. Three corrupted transcripts from the run file were
+  // reconstructed exactly by joining a cumulative sequence:
+  //
+  //   finals: 我好攰 | 我好攰所以 | 我好攰所以想做啲飯
+  //   joined: 我好攰我好攰所以我好攰所以想做啲飯   <- exactly what appeared
+  //
+  // Each final restates the whole utterance so far rather than adding only the
+  // new words. Joining them therefore stutters, and the earlier fix — storing
+  // finals by index instead of appending — could not help, because the
+  // restatements arrive at DIFFERENT indices. Two wrong fixes in a row came
+  // from reasoning about what the spec says rather than what the device sends,
+  // so this build also records the raw event trace on every attempt (see
+  // `trace` below): the next question about event delivery gets answered from
+  // the run file instead of another round of inference.
+  //
+  // foldFinals() handles both shapes. If a final restates what we already have,
+  // it replaces it; if it carries genuinely new text, it is appended. Spec-
+  // conformant incremental delivery and Android's cumulative delivery both come
+  // out correct.
+  const finals = [], finalAlts = [], trace = [];
   let errored = null, sawInterim = false, events = 0;
 
   r.onresult = e => {
@@ -557,6 +568,7 @@ $('btnRec').onclick = () => {
     let interim = '';
     for (let i = e.resultIndex; i < e.results.length; i++) {
       const res = e.results[i];
+      trace.push({ ev: events, i, final: !!res.isFinal, n: res.length, t: res[0].transcript });
       if (res.isFinal) {
         finals[i] = res[0].transcript;
         const list = [];
@@ -568,7 +580,8 @@ $('btnRec').onclick = () => {
         sawInterim = true;
       }
     }
-    $('live').textContent = (finals.filter(Boolean).join('') + interim) || '…';
+    const sofar = foldFinals(finals);
+    $('live').textContent = (sofar.text + interim) || '…';
   };
   r.onerror = e => { errored = e.error; };
   r.onend = () => {
@@ -577,13 +590,13 @@ $('btnRec').onclick = () => {
     $('btnRec').textContent = 'Record';
     $('btnRec').className = 'primary';
     $('live').textContent = '';
-    const segs = finals.filter(s => (s || '').trim());
-    const finalText = segs.join('');
-    // With one final segment its own N-best is the utterance's N-best. With
-    // several, the alternatives belong to individual segments and cannot be
-    // recombined into alternatives for the whole utterance, so the joined text
-    // is reported as the single alternative rather than inventing a list.
-    let alts = (segs.length === 1 && finalAlts.find(Boolean)) || [];
+    const folded = foldFinals(finals);
+    const finalText = folded.text;
+    // When the folded text came verbatim from one final, that final's N-best is
+    // the utterance's N-best. When it was assembled from several, the
+    // alternatives belong to individual segments and cannot be recombined into
+    // alternatives for the whole utterance, so no list is invented.
+    let alts = (folded.index != null && finalAlts[folded.index]) || [];
     // Chrome emits a final result with an EMPTY transcript when a continuous
     // session is stopped. Left in place it becomes alts[0], so the attempt is
     // not "empty" by the length test, the heard line renders blank, and every
@@ -596,7 +609,8 @@ $('btnRec').onclick = () => {
       alts = [{ transcript: finalText.trim(), confidence: null }];
     offer(q, alts, errored, lang, maxAlt, {
       mode, sawInterim, events, ms: Date.now() - recStarted,
-      finalSegments: segs.length,
+      finalSegments: finals.filter(x => (x || '').trim()).length,
+      trace,
       blankAlts: Math.max(0, blanks - alts.length)
     });
   };
@@ -632,6 +646,23 @@ $('btnPlay').onclick = () => {
     speechSynthesis.speak(u);
   } catch (e) {}
 };
+
+// Reduce a list of final segments to the single utterance they describe.
+// Returns { text, index } where index is the final that produced the text
+// verbatim, or null when text was assembled from more than one segment.
+function foldFinals(list) {
+  let out = '', idx = null;
+  (list || []).forEach((seg, i) => {
+    const s = (seg || '').trim();
+    if (!s) return;
+    if (!out) { out = s; idx = i; return; }
+    const a = normalizeChinese(out), b = normalizeChinese(s);
+    if (b.startsWith(a)) { out = s; idx = i; }          // restatement, extended
+    else if (a.startsWith(b) || a.endsWith(b)) { }      // already covered
+    else { out += s; idx = null; }                      // genuinely new segment
+  });
+  return { text: out, index: idx };
+}
 
 // ── Verdict for one attempt under the current policy ──────────────────────────
 // Returns { hit, near } where `hit` means "the policy accepted this as the
