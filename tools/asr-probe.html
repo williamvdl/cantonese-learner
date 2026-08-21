@@ -504,7 +504,19 @@ $('btnRec').onclick = () => {
   r.interimResults = true;
   r.maxAlternatives = maxAlt;
 
-  let alts = [], errored = null, finalText = '', sawInterim = false, events = 0;
+  // Finals are stored BY INDEX and assigned, never appended.
+  //
+  // Chrome on Android re-delivers a final result as the utterance is revised:
+  // onresult fires with resultIndex 0 carrying "我好攰", then fires again with
+  // resultIndex 0 carrying the fuller "我好攰所以想早啲返". Appending each
+  // delivery concatenated the revision onto the draft and produced
+  // "我好攰我好攰所以想早啲返" — a transcript that never matches the target, so
+  // correct reads scored as false rejects and wrong-tone reads scored as
+  // detections. Both sides of the 2x2 were corrupted, and only on the longer
+  // sentences where a revision actually happens. Assigning by index is
+  // idempotent under re-delivery; appending is not.
+  const finals = [], finalAlts = [];
+  let errored = null, sawInterim = false, events = 0;
 
   r.onresult = e => {
     events++;
@@ -512,21 +524,17 @@ $('btnRec').onclick = () => {
     for (let i = e.resultIndex; i < e.results.length; i++) {
       const res = e.results[i];
       if (res.isFinal) {
-        finalText += res[0].transcript;
-        // Take the N-best from the final result that actually offers one. A
-        // continuous session can emit several finals; the alternatives that
-        // matter are the ones attached to the segment carrying the utterance.
-        if (res.length > (alts.length || 0)) {
-          alts = [];
-          for (let k = 0; k < res.length; k++)
-            alts.push({ transcript: res[k].transcript, confidence: res[k].confidence });
-        }
+        finals[i] = res[0].transcript;
+        const list = [];
+        for (let k = 0; k < res.length; k++)
+          list.push({ transcript: res[k].transcript, confidence: res[k].confidence });
+        finalAlts[i] = list;
       } else {
         interim += res[0].transcript;
         sawInterim = true;
       }
     }
-    $('live').textContent = (finalText + interim) || '…';
+    $('live').textContent = (finals.filter(Boolean).join('') + interim) || '…';
   };
   r.onerror = e => { errored = e.error; };
   r.onend = () => {
@@ -535,6 +543,13 @@ $('btnRec').onclick = () => {
     $('btnRec').textContent = 'Record';
     $('btnRec').className = 'primary';
     $('live').textContent = '';
+    const segs = finals.filter(s => (s || '').trim());
+    const finalText = segs.join('');
+    // With one final segment its own N-best is the utterance's N-best. With
+    // several, the alternatives belong to individual segments and cannot be
+    // recombined into alternatives for the whole utterance, so the joined text
+    // is reported as the single alternative rather than inventing a list.
+    let alts = (segs.length === 1 && finalAlts.find(Boolean)) || [];
     // Chrome emits a final result with an EMPTY transcript when a continuous
     // session is stopped. Left in place it becomes alts[0], so the attempt is
     // not "empty" by the length test, the heard line renders blank, and every
@@ -543,13 +558,12 @@ $('btnRec').onclick = () => {
     // anything downstream sees them.
     const blanks = alts.length;
     alts = alts.filter(a => (a.transcript || '').trim());
-    // If finals arrived but none carried usable alternatives, fall back to the
-    // concatenated text so the attempt is still usable.
     if (!alts.length && finalText.trim())
       alts = [{ transcript: finalText.trim(), confidence: null }];
     offer(q, alts, errored, lang, maxAlt, {
       mode, sawInterim, events, ms: Date.now() - recStarted,
-      blankAlts: blanks - alts.length
+      finalSegments: segs.length,
+      blankAlts: Math.max(0, blanks - alts.length)
     });
   };
 
@@ -633,6 +647,17 @@ function toneOnlyDiff(heard, target) {
     if (!a.length || !b.length || !a.some(x => b.includes(x))) return false;
   }
   return anyDiff;
+}
+
+// Does this transcript look like a draft concatenated with its own revision?
+// The signature is a leading run of characters immediately repeated: the draft,
+// then the fuller version that starts with the same words.
+function looksRedelivered(text) {
+  const t = normalizeChinese(text);
+  if (t.length < 4) return false;
+  for (let n = Math.floor(t.length / 2); n >= 2; n--)
+    if (t.slice(0, n) === t.slice(n, n * 2)) return true;
+  return false;
 }
 
 function overlap(a, b) {
@@ -795,6 +820,18 @@ function renderSummary() {
   if (empties)
     html += '<p class="note">' + empties + ' attempt' + (empties === 1 ? '' : 's') +
       ' decoded nothing and are excluded from both figures.</p>';
+
+  // Attempts captured before the re-delivery bug was found still carry the
+  // duplicated transcript. It cannot be repaired after the fact — the original
+  // is unrecoverable — so they are counted and flagged rather than quietly
+  // included in figures they would distort.
+  const suspect = run.attempts.filter(a =>
+    (a.alts || []).some(x => looksRedelivered(x.transcript))).length;
+  if (suspect)
+    html += '<p class="note" style="color:var(--bad)">' + suspect + ' attempt' +
+      (suspect === 1 ? '' : 's') + ' carry a duplicated transcript from the ' +
+      'result re-delivery bug. Re-record those items; their figures above are ' +
+      'not trustworthy.</p>';
 
   const dis = (run.discards || []).length;
   if (dis) {
