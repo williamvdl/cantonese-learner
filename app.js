@@ -1476,14 +1476,52 @@ function deduplicateRepeats(s, minLen) {
   return s;
 }
 
+// Sentence-final particles, for the free-particle rule in fuzzyMatch() below.
+// Kept in sync with data/topics/particles.json by a check in tools/validate.js —
+// if that file gains or loses a particle, the validator fails until this matches.
+// Hand-maintained derived data drifts silently, so the drift is made loud rather
+// than trusted not to happen.
+const SPEAK_FINAL_PARTICLES = new Set(['喇', '啦', '呀', '嗎', '喎', '囉', '㗎', '咋', '咩', '吖']);
+
 function fuzzyMatch(heard, target) {
-  // Strict: exact character match after normalization. Any difference → mismatch,
-  // which surfaces the per-character breakdown so the user can self-judge whether
-  // a recogniser homophone glitch is really an error or not.
-  const h = normalizeChinese(heard);
-  const t = normalizeChinese(target);
+  // Leniency, sized from measured recogniser behaviour rather than picked.
+  //
+  // This was previously an exact match, and that produced a ~25% false-reject
+  // rate on sentences in the ASR probe: 我食咗飯，仲飲咗茶 (ngo5 sik6 zo2 faan6,
+  // zung6 jam2 zo2 caa4) came back with 中 (zung1) for 仲 (zung6), and
+  // 我部電話太舊喇 (ngo5 bou6 din6 waa2 taai3 gau6 laa3) came back with 夠 (gau3)
+  // for 舊 (gau6) — correct speech marked wrong, which is the failure mode that
+  // matters most here. A false reject costs trust; a missed error costs nothing
+  // the app was catching anyway.
+  //
+  // Two rules, each earning its place against the probe's captured cases:
+  let h = normalizeChinese(heard);
+  let t = normalizeChinese(target);
   if (!h || !t) return false;
-  return h === t;
+  if (h === t) return true;
+
+  // 1) A DIFFERING SENTENCE-FINAL PARTICLE IS FREE. 喇 (laa3) and 啦 (laa1) are a
+  //    real tone minimal pair, but particles are acoustically reduced and highly
+  //    variable in running speech, so a swap between them is not evidence the
+  //    learner said anything wrong. tools/asr-testset.js excludes them as probe
+  //    targets for the same reason. Only the final character, only when both
+  //    sides are particles.
+  const hLast = h[h.length - 1], tLast = t[t.length - 1];
+  if (hLast !== tLast && SPEAK_FINAL_PARTICLES.has(hLast) && SPEAK_FINAL_PARTICLES.has(tLast)) {
+    h = h.slice(0, -1);
+    t = t.slice(0, -1);
+    if (h === t) return true;
+  }
+
+  // 2) ONE EDIT PER FOUR TARGET CHARACTERS, and below four characters, exact.
+  //    Scaling matters: a single substitution in an eight-character sentence is
+  //    almost always a recogniser homophone, whereas a single substitution in a
+  //    two-character word IS the word (媽媽 maa1 maa1 heard as 嫲嫲 maa4 maa4 is
+  //    a different word, not a glitch). The short-string floor is what keeps
+  //    vocabulary-length targets strict while sentences get room.
+  const allowance = Math.floor(t.length / 4);
+  if (!allowance) return false;
+  return editDistance(h, t) <= allowance;
 }
 
 // Align heard text against target text and return per-target-char status:
