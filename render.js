@@ -12,7 +12,7 @@
 // The tab bar shows on the loading shells deliberately: a stuck load is exactly
 // when you want a route out.
 function renderChrome() {
-  return renderTabBar() + renderSettingsSheet();
+  return renderTabBar() + renderSettingsSheet() + renderSentSpeakSheet();
 }
 
 // ── Render ────────────────────────────────────────────────────────────────────
@@ -76,6 +76,91 @@ function renderSettingsSheet() {
           <div class="set-label">Audio speed</div>
           <div class="set-help">Applies to every word and sentence.</div>
           <div class="seg">${speedBtns}</div>
+        </div>
+      </div>
+    </div>`;
+}
+
+// The sentence "Say it back" sheet (DES-38/40, MOCK-27-sheet). Speak feedback
+// on a single sentence — sentences only, per DES-38, and never states a tone
+// verdict. Reuses the .sheet host built for Settings above and the
+// .speak-card / result / breakdown markup Chat's conversation Speak mode
+// already renders — renderSpeakBreakdown() is untouched, this is placement
+// and reuse, not new machinery. Opened from a sentence card's mic button in
+// renderSentences(); closed via closeSentSpeak() so phone BACK and the ✕
+// agree, same pattern as the settings sheet.
+function renderSentSpeakSheet() {
+  if (!state.sentSpeakOpen) return '';
+  const sp = state.sentSpeak;
+  const sentence = getRoundSentences(state.topic, state.currentRound)[sp.idx];
+  if (!sentence) return '';   // stale index across a topic/round change underneath the sheet
+
+  const status = sp.status;
+  const statusText = {
+    idle:      'Press the mic and say the line above',
+    listening: 'Listening… speak the line, then press Stop',
+    matched:   '',
+    mismatch:  '',
+  }[status] || '';
+
+  const heardLine = sp.heard
+    ? `<div class="speak-heard">You said: <strong>${sp.heard}</strong></div>`
+    : '';
+
+  const result = status === 'matched'
+    ? (() => {
+        const breakdown = renderSpeakBreakdown(sp.heard || sentence.c, sentence.c, sentence.j);
+        return `<div class="speak-result-good">
+          <div>✓ Great! You said it correctly.</div>
+          ${breakdown ? breakdown : ''}
+        </div>`;
+      })()
+    : status === 'mismatch'
+    ? (() => {
+        const breakdown = renderSpeakBreakdown(sp.heard, sentence.c, sentence.j);
+        return `<div class="speak-result-bad">
+          <div style="font-weight:700;margin-bottom:4px">Hmm, that didn't quite match.</div>
+          <div>Expected: <strong>${sentence.c}</strong></div>
+          ${breakdown
+            ? breakdown
+            : `<div class="speak-heard-jp">${colorJyutping(sentence.j)}</div>`}
+        </div>`;
+      })()
+    : '';
+
+  return `
+    <div class="sheet-wrap" id="sent-speak-sheet">
+      <div class="sheet-scrim" id="sent-speak-scrim"></div>
+      <div class="sheet" role="dialog" aria-modal="true" aria-label="Say it back">
+        <div class="sheet-grab"></div>
+        <div class="sheet-head">
+          <h2 class="sheet-title">Say it back</h2>
+          <button class="btn-icon sheet-close" id="sent-speak-close" aria-label="Close">${icon('close', 17)}</button>
+        </div>
+        <div class="speak-card">
+          <div class="speak-target-zh">${sentence.c}</div>
+          <div class="speak-target-jp">${colorJyutping(sentence.j)}</div>
+          <div class="speak-target-en">${sentence.e}</div>
+          <button class="mic-btn ${status === 'listening' ? 'listening' : 'idle'}" id="sent-speak-mic">
+            ${status === 'listening' ? icon('stop', 22) : icon('mic', 22)}
+          </button>
+          <div class="speak-status">${statusText}</div>
+          ${status === 'listening' ? `
+            <div class="speak-actions">
+              <button class="speak-action-btn stop" id="sent-speak-stop-btn">⏹ Stop &amp; Check</button>
+            </div>` : ''}
+          ${status === 'idle' ? `<p class="speak-mic-note">Allow microphone access if prompted</p>` : ''}
+          ${heardLine}
+          ${result}
+          ${status === 'matched' ? `
+            <div class="speak-actions">
+              <button class="speak-action-btn primary" id="sent-speak-done"><span class="icon-label">${icon('check', 14)} Done</span></button>
+            </div>` : ''}
+          ${status === 'mismatch' ? `
+            <div class="speak-actions">
+              <button class="speak-action-btn secondary" id="sent-speak-retry"><span class="icon-label">${icon('refresh', 14)} Try Again</span></button>
+              <button class="speak-action-btn primary" id="sent-speak-done">Close</button>
+            </div>` : ''}
         </div>
       </div>
     </div>`;
@@ -1889,10 +1974,16 @@ function renderSentences(topic) {
             <div class="sentence-reveal-line" data-sent-reveal="${i}" style="cursor:pointer">${englishEl}</div>
             ${chips}
           </div>
-          <button class="btn-icon btn-icon--brand sentence-play${speaking ? ' speaking' : ''}" data-sent="${i}"
-            title="Listen to sentence">
-            ${speaking ? icon('volume',20) : iconPlay(18)}
-          </button>
+          <div class="sentence-actions">
+            <button class="btn-icon btn-icon--brand sentence-play${speaking ? ' speaking' : ''}" data-sent="${i}"
+              title="Listen to sentence">
+              ${speaking ? icon('volume',20) : iconPlay(18)}
+            </button>
+            <button class="btn-icon btn-icon--brand sentence-speak" data-sent-speak="${i}"
+              title="Say it back">
+              ${icon('mic',18)}
+            </button>
+          </div>
         </div>
         ${notePanel}
         ${bdPanel}
@@ -2570,6 +2661,53 @@ function attachEvents(lesson) {
       render();
     });
   });
+
+  // Sentence "Say it back" — mic trigger opens the sheet (DES-38/40)
+  document.querySelectorAll('[data-sent-speak]').forEach(btn => {
+    btn.addEventListener('click', e => {
+      e.stopPropagation();
+      const i = parseInt(btn.dataset.sentSpeak);
+      stopListening();
+      window.speechSynthesis.cancel();
+      stopAudioFile();
+      state.sentSpeak = { idx: i, status: 'idle', heard: '' };
+      state.sentSpeakOpen = true;
+      pushNav();
+      render();
+    });
+  });
+
+  // Sentence sheet close — ✕ and scrim both route through closeSentSpeak(),
+  // same pattern as the settings sheet, so phone BACK and the ✕ agree.
+  const sentSpeakClose = document.getElementById('sent-speak-close');
+  const sentSpeakScrim = document.getElementById('sent-speak-scrim');
+  if (sentSpeakClose) sentSpeakClose.addEventListener('click', () => closeSentSpeak());
+  if (sentSpeakScrim) sentSpeakScrim.addEventListener('click', () => closeSentSpeak());
+
+  // Sentence sheet mic — toggles start/stop, same as Chat's Speak mode
+  const sentSpeakMic = document.getElementById('sent-speak-mic');
+  if (sentSpeakMic) sentSpeakMic.addEventListener('click', () => {
+    if (state.sentSpeak.status === 'listening') {
+      finishListening();
+    } else {
+      const sentence = getRoundSentences(state.topic, state.currentRound)[state.sentSpeak.idx];
+      if (sentence) startSentSpeakListening(sentence.c);
+    }
+  });
+
+  const sentSpeakStopBtn = document.getElementById('sent-speak-stop-btn');
+  if (sentSpeakStopBtn) sentSpeakStopBtn.addEventListener('click', () => finishListening());
+
+  const sentSpeakRetry = document.getElementById('sent-speak-retry');
+  if (sentSpeakRetry) sentSpeakRetry.addEventListener('click', () => {
+    state.sentSpeak.status = 'idle';
+    state.sentSpeak.heard  = '';
+    render();
+  });
+
+  // Shared by "Done" (success) and "Close" (mismatch) — both just close the sheet.
+  const sentSpeakDone = document.getElementById('sent-speak-done');
+  if (sentSpeakDone) sentSpeakDone.addEventListener('click', () => closeSentSpeak());
 
   // Quiz listen
   const ql = document.getElementById('quiz-listen');

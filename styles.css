@@ -648,6 +648,7 @@
   .sentences h3 { font-size: 14px; font-weight: var(--fw-bold); margin-bottom: 12px; color: var(--ink); }
   .sentence-wrap { margin-bottom: 10px; }
   .sentence-card { padding: var(--sp-3) var(--sp-4); margin-bottom: var(--sp-2); display: flex; align-items: flex-start; gap: var(--sp-3); }
+  .sentence-actions { display: flex; flex-direction: column; gap: 6px; flex: 0 0 auto; }
   .sentence-body { flex: 1; }
   .sentence-chinese { font-size: var(--fs-lead); line-height: 1.4; color: var(--ink); margin-bottom: var(--sp-1); }
   .sentence-jyutping { font-size: var(--fs-meta); margin-bottom: 4px; }

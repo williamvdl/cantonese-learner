@@ -434,6 +434,44 @@ because settings is somewhere you now are.
 and a brand edge, never a fill — the same reasoning as DES-19 for tabs: a
 selector is not the screen's next action (§3.1).
 
+### Sentence speak sheet — `.sheet-wrap` › `.sheet-scrim` + `.sheet` › `.speak-card`
+Behind a sentence card's mic button, in Learn only. **Built v130** (MOCK-27-sheet,
+DES-38/40): speak feedback on a sentence — "here's what I heard," never a tone
+verdict. The second consumer of the sheet host above, which is the point —
+Settings paid for `.sheet-wrap`/`.sheet-scrim`/`.sheet` once, and this reuses
+the host unchanged. New here is only the trigger and the content.
+
+Content is `.speak-card`, unchanged from Chat's conversation Speak mode:
+target sentence, `.mic-btn`, `.speak-status`, and on a result, `.speak-result-good`
+/ `.speak-result-bad` with `renderSpeakBreakdown()`'s per-syllable grid.
+Chat's own screen is **not** replaced (DES-40) — the two are different shapes
+of problem. A sentence in Learn is one independent item in a flat list, which
+is exactly what a sheet is for: one bounded action over a backdrop you return
+to. A Chat walk is inherently sequential — turn-taking between two speakers, a
+running line position, auto-advance on match — and forcing that into
+open-close-open-close against a sheet would mean re-deriving, inside the
+sheet, the sequence state the dedicated screen already owns for free. Reuse
+happens at the content layer (`renderSpeakBreakdown()`, `.mic-btn`, the result
+panels), not the surface layer.
+
+Four states, same as Chat's: idle, listening, matched, mismatch. **Matched has
+one action, "Done," not Chat's "Next"/"Restart"** — there is no next line to
+advance into for a standalone sentence, so this replaces rather than reuses
+that button. Mismatch keeps two actions, but the second is **"Close," not
+Chat's "Skip"** — same reasoning, there is nothing to skip to.
+
+Opening pushes a history entry, same as Settings, so phone BACK closes the
+sheet rather than leaving Learn underneath; the ✕ and the scrim both route
+through `closeSentSpeak()`. `goToDestination()` also force-closes it (and
+aborts any live recognition) on any top-level navigation, same as it already
+did for the settings sheet — a sentence sheet has no business surviving a tab
+switch.
+
+**The forgiven-near-miss colour treatment (DES-39's "Close" state, distinct
+from plain match) is not yet built** — §3 of MOCK-27 is still open. When it
+lands it is a colour/status change inside `renderSpeakBreakdown()`'s existing
+output, not a new sheet state.
+
 ### Docked bar — `.bar` › `.bar-inner`
 Fixed above the tab bar, contents capped to `--measure`. **Built v118** (DES-22,
 MOCK-20-B2), resolving a two-position question that had been open since the design
@@ -869,6 +907,27 @@ pass over the dashboard. The mockup files behind each decision:
 **Paths:** the mockups live in `docs/design/mockups/`, and `styleguide.html`
 alongside them in `docs/design/`. All seventeen mockups are committed as at
 2026-07-30.
+
+**Phone-frame width: 412 CSS px, William's own device.** Adopted 2026-08-23 —
+mockup 27 was first built at an arbitrary ~300px frame and redone at Pixel 10's
+actual CSS viewport (412 × 924, confirmed against current published specs, not
+assumed from an earlier Pixel). Every mockup from here on that draws a phone
+frame uses `width:412px` for the frame; height is whatever the content needs,
+not forced to 924. Earlier mockups are not being retrofitted.
+
+**Phone-frame chrome is copied from the shipped markup, not redrawn from
+memory — same rule as the metrics one above, one layer up.** The first pass of
+mockup 27 also got the surrounding chrome wrong: the topic name sat in the
+oxblood header (it never does — that's always "廣東話 / Cantonese Learner"),
+the `.ctx` contextual row and the Learn/Chat/Quiz subtabs were missing
+entirely, and the bottom tab bar had empty icons with the wrong tab lit. None
+of this was the width — it went unnoticed until viewed on-device, next to the
+real app, because at a glance an approximated header still "reads" as a
+header. **Before drawing a phone frame, pull the real header, `.ctx` row,
+subtabs and tab bar markup and icon paths from `render.js`/`data.js` and copy
+them — don't approximate chrome that isn't the thing being decided.** Only the
+part of the screen the mockup is actually arguing about should be invented;
+everything around it should be indistinguishable from the app.
 
 **A mockup is the argument; the styleguide is the record.** Three approved path
 decisions were lost because they were settled in mockups 05–07 and never

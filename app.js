@@ -376,6 +376,13 @@ let state = {
   toast: null,                    // { text, kind } — transient overlay message; cleared after timeout.
                                    // kind: 'step' | 'final' (path completion) | 'audio-missing'
   headerDetailsOpen: false,             // ⓘ in header expands tone legend + speed settings
+  // The sentence "Say it back" sheet (DES-38/40) — speak feedback on a single
+  // sentence, opened from a sentence card in Learn. `sentSpeakOpen` is the
+  // NAV_FIELDS-tracked flag (same shape as settingsOpen, so phone BACK closes
+  // it); `sentSpeak` itself is NOT nav-tracked, same as `convo` — it's reset
+  // fresh every time the sheet opens rather than restored across history.
+  sentSpeakOpen: false,
+  sentSpeak: { idx: null, status: 'idle', heard: '' },   // status: 'idle' | 'listening' | 'matched' | 'mismatch'
   translate: {
     direction:   'en-yue',     // 'en-yue' | 'yue-en'
     inputText:   '',
@@ -436,7 +443,7 @@ let state = {
 // pushNav() only OBSERVES the resulting state and records it — it does not change
 // how navigation works, only makes the browser aware of it. Low-risk by design.
 const NAV_FIELDS = [
-  'nav', 'settingsOpen', 'topicsView', 'pathView', 'activePath',
+  'nav', 'settingsOpen', 'sentSpeakOpen', 'topicsView', 'pathView', 'activePath',
   'topic', 'currentRound', 'fromPath', 'fromPathTier',
   'mode', 'tab', 'selectedCategory',
   'checkpoint', 'checkpointAct',
@@ -526,6 +533,22 @@ function closeSettings() {
     history.back();          // triggers popstate → restores the pre-sheet snapshot
   } else {
     state.settingsOpen = false;
+    render();
+  }
+}
+
+// Close the sentence "Say it back" sheet (DES-38/40). Same shape as
+// closeSettings() — opening pushed a history entry, so closing steps back
+// through it rather than setting state directly, keeping phone BACK and the
+// ✕ in agreement. Also aborts any live recognition so leaving mid-listen
+// doesn't leave the mic running against a screen that's gone.
+function closeSentSpeak() {
+  if (!state.sentSpeakOpen) return;
+  stopListening();
+  if (_navReady) {
+    history.back();
+  } else {
+    state.sentSpeakOpen = false;
     render();
   }
 }
@@ -1181,7 +1204,7 @@ function goToDestination(target) {
   // never shows — the checkpoint hub just redraws.
   const inCheckpoint = !!state.checkpoint;
   const alreadyThere =
-    state.nav === target && !inCheckpoint && !state.fromPath && !state.settingsOpen &&
+    state.nav === target && !inCheckpoint && !state.fromPath && !state.settingsOpen && !state.sentSpeakOpen &&
     (target !== 'topics' || state.topicsView) &&
     (target !== 'path'   || state.pathView === 'list');
   if (alreadyThere) return false;
@@ -1201,6 +1224,7 @@ function goToDestination(target) {
   state.fromPath = false;          // any top-level navigation clears the path-return flag
   state.fromPathTier = null;
   state.settingsOpen = false;      // the sheet never survives a destination change
+  if (state.sentSpeakOpen) { stopListening(); state.sentSpeakOpen = false; }
   pushNav();
   return true;
 }
@@ -1607,7 +1631,17 @@ function renderSpeakBreakdown(heard, targetC, targetJ) {
   return `<div class="speak-breakdown">${cols}</div>`;
 }
 
-function startListening() {
+// Shared speech-recognition core for both conversation Speak mode and the
+// sentence "Say it back" sheet (DES-38/40). Do NOT duplicate this — the
+// Android quirk-handling below (cumulative finals, dedup) took five failed
+// probe builds to get right (see docs/PROBE_METHOD.md and the ASR notes in
+// STATUS.md); a second hand-written copy is exactly how that gets lost again.
+// getTarget()/getStatus()/applyPatch() let each caller supply its own state
+// location without this function knowing which one it is. getTarget() is
+// called at onend, not at start, matching the original conversation
+// behaviour — it reads whichever line/sentence is current at the moment
+// recognition actually ends, not the one at the moment it began.
+function startSpeechRecognition(getTarget, getStatus, applyPatch, onMatch) {
   const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
   if (!SpeechRec) return;
   if (_recognition) { try { _recognition.abort(); } catch(e){} }
@@ -1644,41 +1678,60 @@ function startListening() {
         interimTranscript += transcript;
       }
     }
-    state.convo.speakHeard = (finalTranscript + interimTranscript).trim() || '…';
-    render();
+    applyPatch({ heard: (finalTranscript + interimTranscript).trim() || '…' });
   };
   rec.onerror = (e) => {
     if (e.error === 'no-speech' || e.error === 'aborted') return;  // user-initiated stop
-    state.convo.speakStatus = 'mismatch';
-    state.convo.speakHeard = '(error: ' + e.error + ')';
-    render();
+    applyPatch({ status: 'mismatch', heard: '(error: ' + e.error + ')' });
   };
   rec.onend = () => {
-    // Recognition session ended — if user is still in 'listening' mode, evaluate result
-    if (state.convo.speakStatus === 'listening') {
+    // Recognition session ended — if the caller is still in 'listening' mode, evaluate result
+    if (getStatus() === 'listening') {
       const heard = finalTranscript.trim();
       if (!heard) {
-        state.convo.speakStatus = 'idle';
-        state.convo.speakHeard  = '';
+        applyPatch({ status: 'idle', heard: '' });
       } else {
-        const target = activeConvoSource().lines[state.convo.speakStep].c;
+        const target = getTarget();
         const matched = fuzzyMatch(heard, target);
-        state.convo.speakHeard  = heard;
-        state.convo.speakStatus = matched ? 'matched' : 'mismatch';
-        if (matched) speakConvoLine(state.convo.speakStep);
+        applyPatch({ status: matched ? 'matched' : 'mismatch', heard });
+        if (matched && onMatch) onMatch();
       }
-      render();
     }
   };
 
-  state.convo.speakStatus = 'listening';
-  state.convo.speakHeard = '';
-  render();
+  applyPatch({ status: 'listening', heard: '' });
   try { rec.start(); } catch(e) {
-    state.convo.speakStatus = 'idle';
-    render();
+    applyPatch({ status: 'idle' });
   }
   _recognition = rec;
+}
+
+// Conversation Speak mode — patches state.convo.speakStatus/speakHeard and
+// renders after every patch, same as before the recognition core was shared.
+function applyConvoSpeakPatch(patch) {
+  if ('status' in patch) state.convo.speakStatus = patch.status;
+  if ('heard'  in patch) state.convo.speakHeard  = patch.heard;
+  render();
+}
+function startListening() {
+  startSpeechRecognition(
+    () => activeConvoSource().lines[state.convo.speakStep].c,
+    () => state.convo.speakStatus,
+    applyConvoSpeakPatch,
+    () => speakConvoLine(state.convo.speakStep)
+  );
+}
+
+// Sentence "Say it back" sheet — patches state.sentSpeak.status/heard. No
+// onMatch callback: unlike a conversation line, a standalone sentence has no
+// next line to auto-advance into.
+function applySentSpeakPatch(patch) {
+  if ('status' in patch) state.sentSpeak.status = patch.status;
+  if ('heard'  in patch) state.sentSpeak.heard  = patch.heard;
+  render();
+}
+function startSentSpeakListening(target) {
+  startSpeechRecognition(() => target, () => state.sentSpeak.status, applySentSpeakPatch, null);
 }
 
 function stopListening() {

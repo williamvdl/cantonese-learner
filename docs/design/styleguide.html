@@ -703,6 +703,13 @@ table.spec tr:last-child td{ border-bottom:none; }
   <p class="note"><b>Sized to its contents, not to the viewport</b> (MOCK-19-sheet). It holds one setting today — audio speed — and a full-height surface would only advertise that. When account and subscription arrive it becomes a full screen by changing the wrapper: the <code>.set-row</code> markup inside is the same either way, so nothing here has to be rebuilt to get there. Opening pushes a history entry, so phone BACK closes the sheet rather than leaving the screen underneath, and the &times; and the scrim both route through that same step-back.</p>
   <div class="stage" style="max-width:390px" id="setdemo"></div>
   <div class="cls">.tabs.tabs--top › .tab (+ .tab--on) › .tab-ic › .tab-badge &nbsp;·&nbsp; .sheet-wrap › .sheet-scrim + .sheet › .set-row › .seg › .seg-btn</div>
+  <h3>Sentence speak sheet <span class="tag-new">built &middot; v130</span></h3>
+  <p class="note">Behind a sentence card's mic button, in Learn only (DES-38/40, MOCK-27-sheet). The <b>second consumer</b> of the sheet host above — Settings paid for <code>.sheet-wrap</code>/<code>.sheet-scrim</code>/<code>.sheet</code> once, and this reuses it unchanged. New here is only the trigger and the content.</p>
+  <p class="note">Content is <code>.speak-card</code>, unchanged from Chat's conversation Speak mode: target sentence, <code>.mic-btn</code>, <code>.speak-status</code>, and on a result, <code>.speak-result-good</code> / <code>.speak-result-bad</code> with <code>renderSpeakBreakdown()</code>'s per-syllable grid. <b>Chat's own screen is not replaced</b> (DES-40) — a sentence in Learn is one independent item a sheet suits; a Chat walk is sequential and already owns a dedicated screen for that shape. Reuse is at the content layer, not the surface.</p>
+  <p class="note"><b>Matched has one action, "Done," not Chat's "Next"/"Restart"</b> — no next line to advance into. Mismatch keeps two actions, but the second is <b>"Close," not Chat's "Skip"</b> — same reason. The forgiven-near-miss colour treatment (DES-39's "Close" state) is <b>not yet built</b>; when it lands it changes <code>renderSpeakBreakdown()</code>'s output, not the sheet shape.</p>
+  <div class="stage" style="max-width:390px" id="sentspeakdemo-idle"></div>
+  <div class="stage" style="max-width:390px;margin-top:12px" id="sentspeakdemo-mismatch"></div>
+  <div class="cls">.sheet-wrap › .sheet-scrim + .sheet › .speak-card › .mic-btn (+ .listening) · .speak-status · .speak-actions › .speak-action-btn (.primary/.secondary/.stop) · .speak-result-good/.speak-result-bad › .speak-breakdown › .bd-col</div>
 </section>
 
 <section id="watermark">
@@ -825,6 +832,8 @@ const I={
   arrow:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>',
   play:'<svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>',
   vol:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M11 5L6 9H2v6h4l5 4V5z"/><path d="M19.1 4.9a10 10 0 0 1 0 14.2M15.5 8.5a5 5 0 0 1 0 7"/></svg>',
+  mic:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" x2="12" y1="19" y2="22"/></svg>',
+  refresh:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M8 16H3v5"/></svg>',
 };
 const sw=(el,items)=>document.getElementById(el).innerHTML=items.map(([n,v,d])=>
   `<div><i style="background:${v}"></i><span>${n}<em>${v}</em>${d?`<em style="text-transform:none;letter-spacing:0">${d}</em>`:''}</span></div>`).join('');
@@ -1041,6 +1050,50 @@ document.getElementById('setdemo').innerHTML=`
       <button class="seg-btn">Slow</button>
       <button class="seg-btn on">Normal</button>
       <button class="seg-btn">Fast</button>
+    </div>
+  </div>`;
+
+// Built markup, v130 (DES-38/40). Two states of the same sheet: idle (the
+// resting state a learner opens into) and mismatch (the richest state —
+// breakdown grid plus both actions). renderSpeakBreakdown()'s real per-
+// syllable output for 你今日得唔得閒 heard as 我食咗飯, so the colours here
+// are the actual function, not approximated for the demo.
+document.getElementById('sentspeakdemo-idle').innerHTML=`
+  <div class="sheet-head"><h2 class="sheet-title">Say it back</h2><button class="btn-icon sheet-close">${I.x}</button></div>
+  <div class="speak-card">
+    <div class="speak-target-zh">我食咗飯，仲飲咗茶</div>
+    <div class="speak-target-jp"><span style="color:#2980B9;font-weight:700">ngo5</span> <span style="color:#8E44AD;font-weight:700">sik6</span> <span style="color:#E67E22;font-weight:700">zo2</span> <span style="color:#8E44AD;font-weight:700">faan6</span>, <span style="color:#8E44AD;font-weight:700">zung6</span> <span style="color:#E67E22;font-weight:700">jam2</span> <span style="color:#E67E22;font-weight:700">zo2</span> <span style="color:#27AE60;font-weight:700">caa4</span></div>
+    <div class="speak-target-en">I ate, and I also had some tea</div>
+    <button class="mic-btn idle">${I.mic}</button>
+    <div class="speak-status">Press the mic and say the line above</div>
+    <p class="speak-mic-note">Allow microphone access if prompted</p>
+  </div>`;
+document.getElementById('sentspeakdemo-mismatch').innerHTML=`
+  <div class="sheet-head"><h2 class="sheet-title">Say it back</h2><button class="btn-icon sheet-close">${I.x}</button></div>
+  <div class="speak-card">
+    <div class="speak-target-zh">我食咗飯，仲飲咗茶</div>
+    <div class="speak-target-jp"><span style="color:#2980B9;font-weight:700">ngo5</span> <span style="color:#8E44AD;font-weight:700">sik6</span> <span style="color:#E67E22;font-weight:700">zo2</span> <span style="color:#8E44AD;font-weight:700">faan6</span>, <span style="color:#8E44AD;font-weight:700">zung6</span> <span style="color:#E67E22;font-weight:700">jam2</span> <span style="color:#E67E22;font-weight:700">zo2</span> <span style="color:#27AE60;font-weight:700">caa4</span></div>
+    <div class="speak-target-en">I ate, and I also had some tea</div>
+    <button class="mic-btn idle">${I.mic}</button>
+    <div class="speak-status"></div>
+    <div class="speak-heard">You said: <strong>我聽日返工喇</strong></div>
+    <div class="speak-result-bad">
+      <div style="font-weight:700;margin-bottom:4px">Hmm, that didn't quite match.</div>
+      <div>Expected: <strong>我食咗飯，仲飲咗茶</strong></div>
+      <div class="speak-breakdown">
+        <div class="bd-col"><div class="bd-char">我</div><div class="bd-status" style="color:var(--feedback-good-text)">✓</div><div class="bd-jp" style="color:#2980B9">ngo5</div></div>
+        <div class="bd-col"><div class="bd-char" style="color:var(--feedback-bad)">食</div><div class="bd-status" style="color:var(--muted-dark)">·</div><div class="bd-jp" style="color:var(--feedback-bad)">sik6</div></div>
+        <div class="bd-col"><div class="bd-char" style="color:var(--feedback-bad)">咗</div><div class="bd-status" style="color:var(--muted-dark)">·</div><div class="bd-jp" style="color:var(--feedback-bad)">zo2</div></div>
+        <div class="bd-col"><div class="bd-char" style="color:var(--feedback-bad)">飯</div><div class="bd-status" style="color:var(--feedback-bad);font-size:14px">聽</div><div class="bd-jp" style="color:var(--feedback-bad)">faan6</div></div>
+        <div class="bd-col"><div class="bd-char" style="color:var(--feedback-bad)">仲</div><div class="bd-status" style="color:var(--feedback-bad);font-size:14px">日</div><div class="bd-jp" style="color:var(--feedback-bad)">zung6</div></div>
+        <div class="bd-col"><div class="bd-char" style="color:var(--feedback-bad)">飲</div><div class="bd-status" style="color:var(--feedback-bad);font-size:14px">返</div><div class="bd-jp" style="color:var(--feedback-bad)">jam2</div></div>
+        <div class="bd-col"><div class="bd-char" style="color:var(--feedback-bad)">咗</div><div class="bd-status" style="color:var(--feedback-bad);font-size:14px">工</div><div class="bd-jp" style="color:var(--feedback-bad)">zo2</div></div>
+        <div class="bd-col"><div class="bd-char" style="color:var(--feedback-bad)">茶</div><div class="bd-status" style="color:var(--feedback-bad);font-size:14px">喇</div><div class="bd-jp" style="color:var(--feedback-bad)">caa4</div></div>
+      </div>
+    </div>
+    <div class="speak-actions">
+      <button class="speak-action-btn secondary"><span class="icon-label">${I.refresh} Try Again</span></button>
+      <button class="speak-action-btn primary">Close</button>
     </div>
   </div>`;
 

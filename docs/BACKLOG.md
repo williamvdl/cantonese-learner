@@ -4,7 +4,7 @@
 IN_PROGRESS.md when it's picked up; delete it from here once it's shipped and
 folded into STATUS.md.*
 
-Last updated: 2026-08-22 · sw.js at v129
+Last updated: 2026-08-23 · sw.js at v130
 
 ## Product
 
@@ -50,41 +50,24 @@ are pointers only — detail goes there, not here.*
 
 ## Features
 
-- **Speak feedback on sentences — scoped, not yet designed. Wants a mockup.**
-  Supersedes *Speak mode: show what the recogniser heard*, which is closed: the
-  premise it rested on — that a wrong tone lands on a different real syllable the
-  recogniser will report — was tested and **falsified** (29% on sentences, 31% on
-  multi-syllable words; see STATUS.md § *Notes worth carrying forward*). What
-  survives is narrower and still worth building: **show the learner what was
-  heard, without a tone verdict attached.** "Here's what I heard" is true; "you
-  got the tone wrong" is not something the recogniser can know.
+- **Speak feedback on sentences — sheet built at v130, one decision still open.**
+  DES-38 (scope: sentences only, never a tone verdict), the sheet surface, and
+  Chat keeping its own dedicated screen are all settled and built — see
+  STATUS.md's *Confirmed live and working* and DES-38/40 in
+  `DESIGN_DECISIONS.md`. What's left:
 
-  **Scope is sentences only — not vocabulary.** Two reasons, both settled. Bare
-  single syllables decode to nothing at all on Android (22 of 24 attempts), so
-  single-syllable vocabulary cannot work; and a mode that worked on multi-syllable
-  vocabulary but silently not on single-syllable vocabulary is a worse experience
-  than not offering it on vocabulary at all. Sentences already exercise the
-  vocabulary in context, so little is lost. Recorded as DES-38.
-
-  Most of the machinery exists. **`renderSpeakBreakdown()` already aligns heard
-  against target by edit distance and renders per-syllable status** — matched, the
-  actual character heard instead, or missing — coloured by tone. The work is
-  placement and reuse, not invention. Open questions:
-
-  - **Where does it live?** Sentences appear in topic Learn and in Chat. Leading
-    candidate raised 2026-08-22 is a **popup / sheet UI** rather than an inline
-    expansion, which would also give the design system a component it does not
-    yet have. If adopted it needs a `DESIGN_SYSTEM.md` §2 entry and a
-    `styleguide.html` section in the same commit — the settings sheet (MOCK-19)
-    is the closest existing precedent to draw from.
-  - **Does anything change in Chat?** Chat already has Speak with the breakdown.
-    Whether sentence practice reuses that surface, or Chat adopts whatever the new
-    surface turns out to be, is undecided — worth settling before either is built
-    so two treatments of the same thing do not ship.
-  - **Should a forgiven near-miss still show what was heard?** Since v129 a
-    one-character homophone passes, and the breakdown only renders on mismatch, so
-    the learner never sees that 仲 (zung6) came back as 中 (zung1). Arguably fine;
-    arguably the interesting part. A judgement call for the mockup, not a defect.
+  - **Should a forgiven near-miss get its own visual treatment?** Since v129 a
+    one-character homophone passes `fuzzyMatch()`, and — measured against the
+    live code while building mockup 27 — `renderSpeakBreakdown()` **already**
+    renders the differing syllable in that case, in `--feedback-bad` (the
+    app's error red) nested inside the green "correct" panel. That reads as a
+    contradiction and arguably states a verdict DES-38 rules out. MOCK-27 §3
+    proposes a third "Close" state — `--brand` instead of `--feedback-bad` on
+    the differing syllable, no new token, no change to `fuzzyMatch()` or
+    `alignChars()` — but William hasn't picked between it and the two other
+    options shown (today's contradictory pairing, or no breakdown on any
+    match). Small change once decided: a colour/status branch inside
+    `renderSpeakBreakdown()`, not a new sheet state.
 
 - **Checkpoint sentence activity — the third slot, done by speaking.** Merges with
   *Stage 3 — checkpoint activity using sentence data* below and gives it a
@@ -93,9 +76,9 @@ are pointers only — detail goes there, not here.*
   are practised inside the topic* so the checkpoint tests production rather than
   repeating the lesson. Reuses existing per-topic sentence data with no new
   authoring, and the redesigned checkpoint hub already accommodates a third
-  activity without layout changes. Depends on the speak-feedback surface above
-  being settled first, since both need the same "what was heard" treatment.
-  Not yet designed.
+  activity without layout changes. **The speak-feedback surface it depends on is
+  now built** (v130) — this can be designed against it directly rather than
+  waiting further. Not yet designed.
 
 - **Tone feedback by pitch measurement — investigated and closed, 2026-08-17.**
   Kept as a warning, not as work. **Read alongside the ASR closure above**: pitch
@@ -141,8 +124,8 @@ are pointers only — detail goes there, not here.*
   activities are numbered and the diamond progress ring scales to three segments.
   DES-37 gives this a candidate shape: sentences drawn from the stage's topics,
   spoken rather than tapped, with self-judged read-aloud as the fallback when mic
-  or network is unavailable. Gated on the sentence surface below, not on this
-  item's own design.
+  or network is unavailable. The sentence surface it was gated on is now built
+  (v130) — nothing blocks this item's own design.
 - **Intermediate checkpoint hub expansion** (data-only, after Beginner testing).
   *(The `intermediate-s3` missing-`id` fix that used to be bundled here landed at
   v127.)*
