@@ -191,6 +191,34 @@ if (anySid) {
   }
 }
 
+// ── AGREEMENT: app.js SPEAK_FINAL_PARTICLES vs data/topics/particles.json ─────
+// fuzzyMatch() treats a differing sentence-final particle as free, and needs the
+// particle set at runtime — but app.js cannot read a topic file at load time, so
+// the set is a literal there. A hand-copied list drifts silently against the data
+// it mirrors, which is the root cause of several past defects, so the agreement is
+// asserted here instead of trusted.
+{
+  const APP = path.join(ROOT, 'app.js');
+  try {
+    const src = fs.readFileSync(APP, 'utf8');
+    const m = src.match(/const SPEAK_FINAL_PARTICLES = new Set\(\[([^\]]*)\]\)/);
+    if (!m) err('agreement', 'app.js: SPEAK_FINAL_PARTICLES not found — fuzzyMatch\'s free-particle rule may have been removed without updating this check');
+    else {
+      const inApp = new Set((m[1].match(/'([^']+)'/g) || []).map(x => x.slice(1, -1)));
+      const pj = topics['particles'];
+      if (!pj) err('agreement', 'data/topics/particles.json missing — cannot verify SPEAK_FINAL_PARTICLES');
+      else {
+        const inData = new Set(
+          Object.values(pj.rounds || {}).flatMap(r => (r.words || []).map(w => w.c)));
+        for (const c of inData)
+          if (!inApp.has(c)) err('agreement', `particle ${c} is in particles.json but missing from app.js SPEAK_FINAL_PARTICLES`);
+        for (const c of inApp)
+          if (!inData.has(c)) err('agreement', `particle ${c} is in app.js SPEAK_FINAL_PARTICLES but not in particles.json`);
+      }
+    }
+  } catch (e) { err('agreement', `could not read app.js: ${e.message}`); }
+}
+
 // ── Report ────────────────────────────────────────────────────────────────────
 const phase = anyWid ? 'Phase 2+ (ids + wids present)' : anyId ? 'Phase 1 (ids present, no wids)' : 'baseline (no ids)';
 console.log(`Cantonese data validator — ${phase}`);
