@@ -13,9 +13,26 @@ not a history log. Approved design decisions and whether they were built live in
 > convention (`v121 — <what changed>`) so this file stops being load-bearing on
 > its own.
 
-Last updated: 2026-08-17 · sw.js at v128
+Last updated: 2026-08-22 · sw.js at v129
 
 ## Confirmed live and working
+- **Speak mode accepts near-misses** (v129). `fuzzyMatch()` was strict equality
+  after punctuation stripping, which produced a **~25% false-reject rate on
+  sentences** in the ASR probe — correct speech marked wrong. Two rules now, both
+  sized from the probe's captured cases rather than picked: a **differing
+  sentence-final particle is free** (喇 (laa3) / 啦 (laa1) are a real minimal pair,
+  but particles are acoustically reduced and variable in running speech, so a swap
+  is not evidence of an error — `tools/asr-testset.js` excludes them as probe
+  targets for the same reason), and **one edit per four target characters, exact
+  below four.** The scaling is the point: one substitution in an eight-character
+  sentence is almost always a recogniser homophone, whereas one substitution in a
+  two-character word *is* the word — 媽媽 (maa1 maa1) heard as 嫲嫲 (maa4 maa4) is a
+  different word, not a glitch. Verified against all 13 cases from the probe runs:
+  both real false rejects now pass, all six genuine detections still fail.
+  **`SPEAK_FINAL_PARTICLES` in `app.js` is asserted against `particles.json` by
+  `tools/validate.js`** — `app.js` cannot read a topic file at load time, so the
+  set is a literal, and a hand-copied list that drifts silently is the root cause
+  of several past defects. The check was verified to fail in both directions.
 - **Patterns/Drills removed** from the app entirely (not soft-hidden). Checkpoints
   flow Words → Conversation only.
 - **TTS replaces the browser's Web Speech API** for all pre-generatable content
@@ -33,6 +50,11 @@ Last updated: 2026-08-17 · sw.js at v128
     the `SPEECH_KEY` / `SPEECH_REGION` environment variables). Incremental — safe
     to re-run. Carries a `--provider=google` backend as the A/B reference only;
     that path still authenticates through `gcloud auth print-access-token`.
+  - **`docs/PROBE_METHOD.md`** (2026-08-22) carries how to run an investigation
+    at a cost proportionate to the answer — read the shipped handler a probe
+    mirrors, stop and instrument at the second consecutive fault, pre-register
+    the pass bar, derive the test set, version-stamp anything run on a phone.
+    Written after two investigations whose findings did not justify their cost.
   - `tools/tts-probe.js` (v123) answers "which voices does a provider offer, and
     how does each handle a given sound" by calling `voices/list` and synthesising
     a fixed six-phrase set through every one. Not a standing check — it asserts
@@ -182,9 +204,81 @@ orphan hues `#B7861E`, `#e4d4ad`, `#8a6716`,
 | MOCK-25-B, MOCK-26-C+ | v125 | **The last two device-QA issues (3, 4, 10a, 10b).** *Contextual row (DES-33, DES-34):* the back control becomes an up control — always to the path timeline, labelled with the path — and the meta slot names the stage beside its own stage-scoped count. Supersedes the backlog's `history.back()` note; the hardware-key divergence is accepted and documented. *Conversation (DES-35, DES-36):* the user bubble goes from a saturated fill to `--brand-tint` / `--milestone-tint`, the `!important` forcing user-side jyutping to white is retired, and a 3px outer edge plus a small-caps name carries the speaker distinction. Tone colour on the learner's own lines goes from absent to 2.19–5.27:1, level with the rest of the app. **Found while re-checking the bubble states against a light ground:** `.bubble--gap`, `.bubble--correct` and `.bubble--wrong` are emitted on the user side at 0,1,0 against `.bubble-row.right .bubble` at 0,2,0, so their background and border have never applied — pre-existing, exposed by the redesign, requalified to 0,3,0. |
 | — | v126 | **DES-33 applied to the rest of the app — the sweep v125 should have been.** v125 changed only the contextual row, and the identical fault was live on three more controls, found on device: *Back to Learning Paths* on the path timeline (two emit sites) and both checkpoint-hub controls, including the one reading **"✓ Checkpoint complete — back to path"**, which from the dashboard went to the dashboard. They survived because each screen had grown its own back handler — four of them, three routing through `history.back()` — so there was no single place to enforce the rule. All four collapse into one `[data-up]` handler over a three-value vocabulary (`paths`, `path:<key>`, `topics`); an unrecognised value warns rather than guessing a default. **The activity screens are deliberately left on `history.back()`**: `state.checkpointAct` is only ever set from a hub card, so with one parent the label cannot lie, and converting them would push a third entry onto the stack and leave the hardware key pointing at a finished quiz. |
 | — | v127 | **The content register, and the three data defects it found.** `docs/CONTENT.md` (corpus inventory, Intermediate chapter plan) and `docs/CONTENT_SPEC_TIER2.md` (tier-2 authoring rules, previously held outside the repo) join `docs/`; `tools/content-report.js` becomes **standing check 9**, the first that reads content rather than CSS, JS or navigation, and generates every count in the register so none is hand-typed. Its eight assertions found three defects on first run. *`topics_index.json` declared `modals` and `comparisons` as tier-1-only* while both topic files carry a tier 2 — and `getAvailableRounds()` reads the index, not the file, so `getTierLadder()` returned no rungs and the whole of chapter I-3 was reachable only by walking the Intermediate path. Two word counts on the same file were also wrong. *`intermediate-s3` had no checkpoint `id` or `wordCap`* — now `intermediate-s3-cp` at 25. All three, plus the `sw.js` precache omission fixed at v122, were the last step of the session that shipped I-3. |
+| — | v129 | **Speak mode stopped marking correct speech wrong.** `fuzzyMatch()` gains two leniency rules sized from the ASR probe's captured near-misses (see *Confirmed live and working* above and the note below). Measured false rejects on sentences were ~25%: 我食咗飯，仲飲咗茶 (ngo5 sik6 zo2 faan6, zung6 jam2 zo2 caa4) came back with 中 (zung1) for 仲 (zung6), and 我部電話太舊喇 (ngo5 bou6 din6 waa2 taai3 gau6 laa3) with 夠 (gau3) for 舊 (gau6). `tools/validate.js` gains an agreement check tying `SPEAK_FINAL_PARTICLES` to `particles.json`. **One deliberate trade:** 要排幾耐隊 (jiu3 paai4 gei2 noi6 deoi2) said with 腰 (jiu1) for 要 (jiu3) now passes — a genuine tone error accepted, at one substitution in five characters. That follows from the stated asymmetry (a false reject costs trust; a missed error costs nothing the app was catching) and from tone detection being abandoned as a feature regardless. |
 | — | v128 | **The standalone tier ladder was a one-way door into a path.** Found on device after v127. `goToTier()` entered the destination tier's owning path whenever *any* path owned it — correct inside a path (DES-30), wrong from Topics. Opening `modals` standalone and tapping the Tier 2 rung produced the Intermediate lesson's chrome: an up control reading *Intermediate*, a Mark Complete button, and no rung back down, because `renderTierLine()` correctly degrades to a statement inside a path. The escape, the DES-29 cross-reference, routed back through the same function into the *Beginner* path — so once used, the standalone ladder could not return you to standalone. The path branch is now gated on `state.fromPath`; the standalone branch that already existed as a fallback becomes the standalone route. **Live for all ten two-tier topics since v121** — it only became reachable on `modals` and `comparisons` at v127, which is why it surfaced then. `tools/tier-harness.js` gains a section asserting what the rung *does* in all four origin/direction combinations, plus a sweep of every two-tier topic; verified to fail against the v127 file before being committed against the fix. |
 
 ### Notes worth carrying forward
+
+**Tone feedback from speech recognition was investigated to a stop and not
+built.** 2026-08-22, across six probe builds (`tools/asr-probe.html`,
+`tools/asr-testset.js`). This closes the second and last candidate path to tone
+feedback; the pitch note below closes the first. Together they mean the direction
+is shut with evidence behind it rather than shelved on a hunch, which is what
+stops it being reopened every few months.
+
+The premise under test was the one the *Speak mode: show what the recogniser
+heard* backlog item rested on and which had never been checked: **a wrong tone
+lands on a different real syllable, so the recogniser's own output is indirect
+tone feedback.** Method was a corpus-derived test set — every prompt a real
+syllable attested in the app's own content, 327 syllable bases, 139 of them in
+two or more tones — with every item spoken twice, once correctly and once with a
+*named* wrong tone, because a probe collecting only correct readings cannot
+answer whether errors are detectable at all.
+
+1. **Wrong tones are not detectable. 29% on sentences, 31% on multi-syllable
+   words.** The recogniser snaps to the target regardless: 醫院 (ji1 jyun2) said
+   as ji1 jyun5, 手臂 (sau2 bei3) as sau2 bei6, 大象 (daai6 zoeng6) as daai3
+   zoeng6 all returned the correct word. Web Speech has no tone classifier — tone
+   is one acoustic pattern among many inside a general speech-to-text model, so a
+   wrong tone producing a different character was always a side effect rather
+   than a measurement.
+2. **Sentence context makes detection worse, not better.** The opposite of what
+   was predicted going in. The language model repairs the tone error from
+   context, so 我鍾意馬 (ngo5 zung1 ji3 maa5) said with maa2 still came back
+   correct. Context helps *recognition* and therefore actively hides tone errors.
+3. **`maxAlternatives` is ignored by Chrome on Android. 0 of 48 attempts returned
+   more than one alternative.** The setting in `app.js` is dead, and the N-best
+   list — the main lever reserved for buying leniency without losing detection —
+   does not exist on the target device. Any future design assuming an N-best on
+   Android is assuming something that is not there.
+4. **Isolated single syllables return nothing at all. 22 of 24 attempts decoded
+   nothing**, 19 of them with zero result events — the recogniser never accepted
+   the audio. Not a tone problem: bare syllables are too short to clear Android's
+   endpointer. This is the finding that scopes speak feedback to sentences, and
+   it is kept as a documented negative rather than dropped.
+
+> **Process note, and the expensive half of this.** Five of the six probe builds
+> had a fault, and every one traced to a single omission: **the probe copied
+> Speak mode's configuration without reading its handler.** `lang`, `continuous`,
+> `interimResults` and `maxAlternatives` were taken from `startListening()`, and
+> `normalizeChinese()` / `fuzzyMatch()` were lifted verbatim so the policy
+> measured was the one that ships — all correct, none of it sufficient. Forty
+> lines below the settings, `startListening()` carries three explicit rules for
+> Chrome on Android's final-result delivery plus a `deduplicateRepeats()` safety
+> net, each written because the app had already hit that behaviour. The probe
+> reimplemented that handling from the specification, got it wrong, and burned
+> three builds converging on what was already in the codebase.
+>
+> **The bug pattern itself is worth carrying: Android emits CUMULATIVE finals at
+> successive indices.** Each final restates the whole utterance so far rather
+> than adding only the new words, so joining them stutters. Speaking
+> 我好攰，所以想早啲瞓 (ngo5 hou2 gui6, so2 ji5 soeng2 zou2 di1 fan3) produced three
+> finals — the first three characters, then the first five, then the whole line —
+> and joining them yielded a transcript carrying the opening twice and the middle
+> twice, character-for-character what appeared on screen. Storing finals by index does *not* help, because the
+> restatements arrive at different indices; the fix is to fold (replace when a
+> final restates and extends, append only when genuinely new). Two wrong fixes in
+> a row came from reasoning about what the spec says rather than what the device
+> sends. **The generalised guards are now in `docs/PROBE_METHOD.md`** — read the
+> shipped handler a probe mirrors, and instrument the raw event stream at the
+> second consecutive fault rather than the fifth.
+>
+> **A second omission, of the same shape.** The display feature this probe was
+> meant to justify was proposed as new work; it already existed.
+> `renderSpeakBreakdown()` aligns heard against target by edit distance and shows,
+> per syllable, whether it matched and which character came back instead, coloured
+> by tone. The remaining work is extending it to sentence practice, not inventing
+> it. Same failure as `.btn-icon` sitting unused for a whole phase.
 
 **Tone feedback from pitch measurement was investigated to a stop and not built.**
 2026-08-17, across four probe builds and a working three-way prototype. DES-37's
@@ -688,7 +782,10 @@ instead:
 
 - **The nine standing checks** (IN_PROGRESS.md), which cover what is mechanically
   checkable — CSS, navigation, storage migration, tier data and behaviour, and
-  content coherence.
+  content coherence. `validate.js` gained an **agreement check** at v129 tying
+  `SPEAK_FINAL_PARTICLES` in `app.js` to `particles.json` — the first of the
+  agreement-pairs class in BACKLOG.md to be built, and the pattern the rest of
+  that item should follow.
 - **Change-scoped QA per deploy**, given as *screens that changed* and *screens
   sharing the changed code*, so each deploy is judged on its blast radius rather
   than the whole app.

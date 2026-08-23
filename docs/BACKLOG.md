@@ -4,7 +4,7 @@
 IN_PROGRESS.md when it's picked up; delete it from here once it's shipped and
 folded into STATUS.md.*
 
-Last updated: 2026-08-17 · sw.js at v128
+Last updated: 2026-08-22 · sw.js at v129
 
 ## Product
 
@@ -50,19 +50,58 @@ are pointers only — detail goes there, not here.*
 
 ## Features
 
-- **Speak mode: show what the recogniser heard.** The next thing to do on
-  pronunciation, and it replaces the three tone items that used to sit here — see
-  the closed note below. Speak already works about 80–90% of the time, and
-  `fuzzyMatch()` is strict equality after punctuation stripping, so a fail
-  currently says only *not this word* and throws away the interesting part. **A
-  wrong Cantonese tone usually lands on a different real syllable**, so the
-  recogniser's own output is indirect tone feedback delivered by a system with an
-  enormous acoustic prior behind it — free, already built, already reliable. Show
-  the decoded text beside the target, and where they differ by tone alone, say so.
-  Not yet designed; wants a mockup.
+- **Speak feedback on sentences — scoped, not yet designed. Wants a mockup.**
+  Supersedes *Speak mode: show what the recogniser heard*, which is closed: the
+  premise it rested on — that a wrong tone lands on a different real syllable the
+  recogniser will report — was tested and **falsified** (29% on sentences, 31% on
+  multi-syllable words; see STATUS.md § *Notes worth carrying forward*). What
+  survives is narrower and still worth building: **show the learner what was
+  heard, without a tone verdict attached.** "Here's what I heard" is true; "you
+  got the tone wrong" is not something the recogniser can know.
+
+  **Scope is sentences only — not vocabulary.** Two reasons, both settled. Bare
+  single syllables decode to nothing at all on Android (22 of 24 attempts), so
+  single-syllable vocabulary cannot work; and a mode that worked on multi-syllable
+  vocabulary but silently not on single-syllable vocabulary is a worse experience
+  than not offering it on vocabulary at all. Sentences already exercise the
+  vocabulary in context, so little is lost. Recorded as DES-38.
+
+  Most of the machinery exists. **`renderSpeakBreakdown()` already aligns heard
+  against target by edit distance and renders per-syllable status** — matched, the
+  actual character heard instead, or missing — coloured by tone. The work is
+  placement and reuse, not invention. Open questions:
+
+  - **Where does it live?** Sentences appear in topic Learn and in Chat. Leading
+    candidate raised 2026-08-22 is a **popup / sheet UI** rather than an inline
+    expansion, which would also give the design system a component it does not
+    yet have. If adopted it needs a `DESIGN_SYSTEM.md` §2 entry and a
+    `styleguide.html` section in the same commit — the settings sheet (MOCK-19)
+    is the closest existing precedent to draw from.
+  - **Does anything change in Chat?** Chat already has Speak with the breakdown.
+    Whether sentence practice reuses that surface, or Chat adopts whatever the new
+    surface turns out to be, is undecided — worth settling before either is built
+    so two treatments of the same thing do not ship.
+  - **Should a forgiven near-miss still show what was heard?** Since v129 a
+    one-character homophone passes, and the breakdown only renders on mismatch, so
+    the learner never sees that 仲 (zung6) came back as 中 (zung1). Arguably fine;
+    arguably the interesting part. A judgement call for the mockup, not a defect.
+
+- **Checkpoint sentence activity — the third slot, done by speaking.** Merges with
+  *Stage 3 — checkpoint activity using sentence data* below and gives it a
+  direction. Raised 2026-08-22: take a selection of the topic's existing sentences
+  and have the learner **speak** them, deliberately *different from how sentences
+  are practised inside the topic* so the checkpoint tests production rather than
+  repeating the lesson. Reuses existing per-topic sentence data with no new
+  authoring, and the redesigned checkpoint hub already accommodates a third
+  activity without layout changes. Depends on the speak-feedback surface above
+  being settled first, since both need the same "what was heard" treatment.
+  Not yet designed.
 
 - **Tone feedback by pitch measurement — investigated and closed, 2026-08-17.**
-  Kept as a warning, not as work. Three items used to sit here (*Tone checking on
+  Kept as a warning, not as work. **Read alongside the ASR closure above**: pitch
+  was the first candidate path to tone feedback and recognition was the second,
+  and both are now closed with evidence. Anyone reopening the direction should
+  read both, not either alone. Three items used to sit here (*Tone checking on
   single words*, *…on sentences and chat lines*, *Chat Speak upgrade*) and all
   three read as though the hard part were done: "everything the grading model
   needs is proven". It was proven for **deliberately exaggerated single syllables
@@ -92,7 +131,9 @@ are pointers only — detail goes there, not here.*
   dependency — the times can be computed once for the whole corpus and committed.
 
 - **Stage 3 — checkpoint activity using sentence data.** Replaces the removed
-  Patterns slot. Not yet designed. Should reuse existing per-topic sentence data
+  Patterns slot. **A direction was raised 2026-08-22 — speaking the sentences —
+  and is written up under *Checkpoint sentence activity* above; read that first.**
+  Not yet designed. Should reuse existing per-topic sentence data
   (no new authoring), fit into the checkpoint hub as a third activity alongside
   Words/Conversation. Sentence audio is now pre-generated, which opens up
   listening-based activity designs worth considering. **The redesigned checkpoint
@@ -124,6 +165,14 @@ are pointers only — detail goes there, not here.*
 
 ## Quality
 
+- **`maxAlternatives` is dead code on Android.** `startListening()` sets
+  `rec.maxAlternatives = 3`, and the ASR probe measured **0 of 48 attempts
+  returning more than one alternative** on the Pixel — Chrome on Android ignores
+  it. Harmless as it stands, so this is tidying rather than a defect. The reason
+  to record it is not the line itself: **any future design that assumes an N-best
+  list on Android is assuming something that is not there**, and that assumption
+  was the main lever reserved for buying speak-mode leniency without losing
+  detection. Leave the line or delete it; do not plan around it.
 - **Two dead `state.speed` writers in `render.js`** (~line 2066), found by the
   2026-08-01 doc audit. A `getElementById('speed-' + s)` loop over slow/normal/fast
   for the retired header speed control, and a `[data-drawer-speed]` handler for the
@@ -182,7 +231,11 @@ are pointers only — detail goes there, not here.*
   which catches the last defect, never the next. Listing the pairs exhaustively and
   writing one assertion each is the only version of this that generalises. Smaller
   in code than the smoke harness, larger as a sit-down, and partly redundant with
-  checks that already exist for the pairs known about.
+  checks that already exist for the pairs known about. **One of these was built at
+  v129** — `SPEAK_FINAL_PARTICLES` in `app.js` against `data/topics/particles.json`,
+  in `tools/validate.js` — and it is the shape the rest should follow: read the
+  literal out of the source file with a regex, compare both directions, and verify
+  the check actually fails on drift before committing it.
 
 - **Give `tools/dead-css.js` a JS direction, or write it a sibling.** It enumerates
   declared CSS classes and asks whether the JS emits them; it cannot see the reverse
