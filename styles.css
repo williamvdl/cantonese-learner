@@ -265,6 +265,7 @@
   /* Labelled listen control. The circular sibling is .btn-icon--brand. */
   .btn-listen { display: inline-flex; align-items: center; justify-content: center; gap: 7px; min-height: var(--tap-min); padding: 9px 15px; border-radius: var(--r-pill); border: 1px solid var(--brand-edge); background: transparent; color: var(--brand); font-family: var(--font-ui); font-size: var(--fs-meta); font-weight: var(--fw-medium); line-height: 1; cursor: pointer; }
   .btn-icon { position: relative; flex: 0 0 auto; width: var(--tap-min); height: var(--tap-min); padding: 0; border-radius: var(--r-pill); border: var(--border); background: transparent; color: var(--muted-dark); display: inline-flex; align-items: center; justify-content: center; cursor: pointer; transition: transform var(--dur-fast) var(--ease), box-shadow var(--dur-base) var(--ease), background-color var(--dur-base) var(--ease), border-color var(--dur-fast) var(--ease), color var(--dur-fast) var(--ease); }
+  .btn-icon:disabled { opacity: 0.4; cursor: default; }
   /* Two painted sizes exist and no more (docs/design/15-control-vocabulary.html).
      --compact paints at 32px but keeps a --tap-min touch target: the pseudo-element
      extends the hit area without taking part in layout, so visual weight and
@@ -778,6 +779,14 @@
   .speak-heard { background: var(--parchment-warm); border-radius: var(--r-sm); padding: 10px 14px; margin-bottom: 14px; font-size: 18px; color: var(--ink); }
   .speak-result-good { background: var(--feedback-good-tint); border: 1px solid var(--jade); color: var(--feedback-good-text); padding: 12px 16px; border-radius: var(--r-sm); font-weight: var(--fw-bold); margin-bottom: 14px; }
   .speak-result-bad  { background: var(--brand-tint); border: 1px solid var(--brand); color: var(--brand-text-dark); padding: 12px 16px; border-radius: var(--r-sm); margin-bottom: 14px; font-size: var(--fs-small); }
+  /* A forgiven near-miss (DES-39 accepts it) that still differed from the
+     target (DES-41's "Close" state). Deliberately NOT --brand-tint: that's
+     already .speak-result-bad's colour, and reusing it here would make an
+     accepted attempt's envelope look identical to a rejected one. Neutral
+     parchment instead — the differing syllable itself carries the --brand
+     accent (below), which is enough to draw the eye without the whole panel
+     reading as either a pass or a fail. */
+  .speak-result-close { background: var(--parchment-warm); border: 1px solid var(--parchment-border); color: var(--ink-soft); padding: 12px 16px; border-radius: var(--r-sm); margin-bottom: 14px; font-size: var(--fs-small); }
   .speak-breakdown { display: flex; flex-wrap: wrap; justify-content: center; gap: 4px 10px; margin-top: 10px; padding: 10px; background: var(--parchment); border-radius: var(--r-sm); }
   .speak-breakdown .bd-col { display: flex; flex-direction: column; align-items: center; gap: 2px; min-width: 32px; }
   .speak-breakdown .bd-char { font-size: 20px; font-weight: var(--fw-bold); line-height: 1; }
@@ -798,6 +807,10 @@
   .speak-eng-hint { font-style: italic; color: var(--muted); cursor: pointer; }
   .speak-mic-note { font-size: var(--fs-micro); color: var(--muted); text-align: center; margin-top: 6px; }
   .speak-heard-jp { font-size: var(--fs-meta); color: var(--muted-dark); margin-top: 2px; }
+  /* Markers for charsToJyutping()'s two honesty cases (app.js) — a character
+     outside the corpus, and one with more than one reading in it. */
+  .jp-unknown { display: inline-block; color: var(--muted); border: 1px dashed var(--muted); border-radius: 3px; padding: 0 3px; font-weight: 500; }
+  .jp-ambiguous { border-bottom: 1px dotted currentColor; }
 
   /* Breakdown panel */
   .breakdown-panel { margin-top: 8px; background: var(--parchment-warm); border-radius: var(--r-sm); padding: 10px 12px; border: 1px solid var(--parchment-border); }
@@ -1171,6 +1184,7 @@
   .sheet { position: absolute; left: 0; right: 0; bottom: 0; background: var(--parchment); border-top-left-radius: var(--r-lg); border-top-right-radius: var(--r-lg); box-shadow: var(--elev-3); padding-bottom: calc(var(--sp-4) + env(safe-area-inset-bottom, 0px)); }
   .sheet-grab { width: 34px; height: 4px; border-radius: 2px; background: var(--parchment-border); margin: 9px auto 2px; }
   .sheet-head { display: flex; align-items: center; justify-content: space-between; padding: var(--sp-3) var(--sp-4); border-bottom: var(--border-soft); }
+  .sheet-head-actions { display: flex; align-items: center; gap: 2px; }
   .sheet-title { font-family: var(--font-display); font-size: var(--fs-lead); font-weight: var(--fw-medium); margin: 0; }
   .sheet-close { color: var(--muted-dark); margin-right: calc(var(--sp-2) * -1); }
   .set-row { padding: var(--sp-3) var(--sp-4); border-bottom: var(--border-soft); }

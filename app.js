@@ -356,6 +356,35 @@ function colorJyutping(text) {
   }).join(' ');
 }
 
+// Renders a jyutping line for arbitrary heard text (the "You said" line in
+// the sentence speak sheet, DES-38/40) — a per-character lookup against
+// store.charJyutping, derived from the corpus itself by
+// tools/build-char-jyutping.js. This is NOT a general converter: it only
+// knows what the 585 words and 307 sentences already teach. Two things it
+// shows plainly rather than guessing past:
+//   - a character the corpus never taught renders as a boxed "?", not a
+//     blank and not an invented reading
+//   - a character with more than one reading in the corpus (`amb: true`)
+//     still shows its majority reading, but marked — the recogniser's
+//     output plus a lookup is not confident enough to present as fact
+// Colours by tone digit the same way colorJyutping() does. Punctuation and
+// Latin characters (names, "William") pass through with no syllable slot —
+// they were never going to have a reading.
+function charsToJyutping(text) {
+  const map = store.charJyutping || {};
+  return [...text].map(ch => {
+    if (!/[\u4e00-\u9fff]/.test(ch)) return '';
+    const entry = map[ch];
+    if (!entry) return `<span class="jp-unknown" title="Not in the taught vocabulary">?</span>`;
+    const tone = entry.j.match(/[1-6]/);
+    const color = tone ? TONES[tone[0]].color : '#777';
+    if (entry.amb) {
+      return `<span class="jp-ambiguous" style="color:${color};font-weight:700" title="${ch} has more than one reading in the corpus — showing the most common">${entry.j}</span>`;
+    }
+    return `<span style="color:${color};font-weight:700">${entry.j}</span>`;
+  }).filter(Boolean).join(' ');
+}
+
 // ── State ─────────────────────────────────────────────────────────────────────
 let state = {
   speed: 'normal',
@@ -545,6 +574,8 @@ function closeSettings() {
 function closeSentSpeak() {
   if (!state.sentSpeakOpen) return;
   stopListening();
+  stopAudioFile();
+  state.speaking = null;
   if (_navReady) {
     history.back();
   } else {
@@ -1224,7 +1255,7 @@ function goToDestination(target) {
   state.fromPath = false;          // any top-level navigation clears the path-return flag
   state.fromPathTier = null;
   state.settingsOpen = false;      // the sheet never survives a destination change
-  if (state.sentSpeakOpen) { stopListening(); state.sentSpeakOpen = false; }
+  if (state.sentSpeakOpen) { stopListening(); stopAudioFile(); state.speaking = null; state.sentSpeakOpen = false; }
   pushNav();
   return true;
 }
@@ -1594,32 +1625,50 @@ function alignChars(heard, target) {
 }
 
 // Build the visual per-syllable breakdown grid for the Speak mismatch panel.
-// Returns '' when char↔syllable alignment can't be cleanly established (e.g. a
-// foreign word like 'William' embedded in Chinese), so the caller can fall back.
-function renderSpeakBreakdown(heard, targetC, targetJ) {
+// Returns { html: '', hasDiff: false } when char↔syllable alignment can't be
+// cleanly established (e.g. a foreign word like 'William' embedded in
+// Chinese), so the caller can fall back.
+//
+// `variant` controls how a non-matching syllable is coloured:
+//   'bad'   (default) — var(--feedback-bad). A genuine rejected mismatch.
+//   'close' — var(--brand)/var(--brand-text-dark), already documented as
+//             neutral, not error (styles.css). For a forgiven near-miss
+//             (DES-39 accepts it, but DES-41 stops presenting the differing
+//             syllable as an error inside a "you got it right" panel — the
+//             same colour communicated a tone verdict DES-38 rules out).
+// `hasDiff` tells the caller whether ANY syllable failed to match, so it can
+// choose the "Close" wrapper/copy without a second, duplicate alignment pass
+// — an exact match has hasDiff:false and looks identical to before this
+// parameter existed, regardless of which variant was requested.
+function renderSpeakBreakdown(heard, targetC, targetJ, variant) {
+  variant = variant || 'bad';
+  const badColor  = variant === 'close' ? 'var(--brand-text-dark)' : 'var(--feedback-bad)';
+  const markColor = variant === 'close' ? 'var(--brand)'           : 'var(--feedback-bad)';
+
   const punct = /[\s，。！？、,!?.\-]/;
   const charArr = Array.from(targetC).filter(c => !punct.test(c));
   // Split by whitespace, then strip any trailing punctuation that came with the syllable
   const jpArr   = (targetJ || '').split(/\s+/)
     .map(s => s.replace(/[，。！？、,!?.\-]+$/, ''))
     .filter(Boolean);
-  if (!charArr.length || charArr.length !== jpArr.length) return '';   // alignment-impossible — caller handles fallback
+  if (!charArr.length || charArr.length !== jpArr.length) return { html: '', hasDiff: false };   // alignment-impossible — caller handles fallback
 
   const heardClean = normalizeChinese(heard);
   const marks = alignChars(heardClean, charArr.join(''));
+  const hasDiff = marks.some(m => !m || m.status !== 'match');
 
   const cols = charArr.map((c, idx) => {
     const m = marks[idx] || { status: 'missing' };
     const bad = m.status !== 'match';
     const tone = jpArr[idx].match(/[1-6]/);
     const toneColor = tone ? TONES[tone[0]].color : 'var(--muted-dark)';
-    const charColor = bad ? 'var(--feedback-bad)' : 'var(--ink)';
-    const jpColor   = bad ? 'var(--feedback-bad)' : toneColor;
+    const charColor = bad ? badColor : 'var(--ink)';
+    const jpColor   = bad ? badColor : toneColor;
     const mark = m.status === 'match'   ? '✓'
                : m.status === 'wrong'   ? m.heardChar
                : '·';   // missing
     const markStyle = m.status === 'match' ? 'color:var(--feedback-good-text);font-weight:600;'
-                    : m.status === 'wrong' ? 'color:var(--feedback-bad);font-weight:600;font-size:14px;'
+                    : m.status === 'wrong' ? `color:${markColor};font-weight:600;font-size:14px;`
                     : 'color:var(--muted-dark);font-weight:600;';
     return `<div class="bd-col">
       <div class="bd-char" style="color:${charColor}">${c}</div>
@@ -1628,7 +1677,7 @@ function renderSpeakBreakdown(heard, targetC, targetJ) {
     </div>`;
   }).join('');
 
-  return `<div class="speak-breakdown">${cols}</div>`;
+  return { html: `<div class="speak-breakdown">${cols}</div>`, hasDiff };
 }
 
 // Shared speech-recognition core for both conversation Speak mode and the

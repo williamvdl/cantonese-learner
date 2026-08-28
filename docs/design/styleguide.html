@@ -703,13 +703,25 @@ table.spec tr:last-child td{ border-bottom:none; }
   <p class="note"><b>Sized to its contents, not to the viewport</b> (MOCK-19-sheet). It holds one setting today — audio speed — and a full-height surface would only advertise that. When account and subscription arrive it becomes a full screen by changing the wrapper: the <code>.set-row</code> markup inside is the same either way, so nothing here has to be rebuilt to get there. Opening pushes a history entry, so phone BACK closes the sheet rather than leaving the screen underneath, and the &times; and the scrim both route through that same step-back.</p>
   <div class="stage" style="max-width:390px" id="setdemo"></div>
   <div class="cls">.tabs.tabs--top › .tab (+ .tab--on) › .tab-ic › .tab-badge &nbsp;·&nbsp; .sheet-wrap › .sheet-scrim + .sheet › .set-row › .seg › .seg-btn</div>
-  <h3>Sentence speak sheet <span class="tag-new">built &middot; v130</span></h3>
+  <h3>Sentence speak sheet <span class="tag-new">built &middot; v131</span></h3>
   <p class="note">Behind a sentence card's mic button, in Learn only (DES-38/40, MOCK-27-sheet). The <b>second consumer</b> of the sheet host above — Settings paid for <code>.sheet-wrap</code>/<code>.sheet-scrim</code>/<code>.sheet</code> once, and this reuses it unchanged. New here is only the trigger and the content.</p>
   <p class="note">Content is <code>.speak-card</code>, unchanged from Chat's conversation Speak mode: target sentence, <code>.mic-btn</code>, <code>.speak-status</code>, and on a result, <code>.speak-result-good</code> / <code>.speak-result-bad</code> with <code>renderSpeakBreakdown()</code>'s per-syllable grid. <b>Chat's own screen is not replaced</b> (DES-40) — a sentence in Learn is one independent item a sheet suits; a Chat walk is sequential and already owns a dedicated screen for that shape. Reuse is at the content layer, not the surface.</p>
-  <p class="note"><b>Matched has one action, "Done," not Chat's "Next"/"Restart"</b> — no next line to advance into. Mismatch keeps two actions, but the second is <b>"Close," not Chat's "Skip"</b> — same reason. The forgiven-near-miss colour treatment (DES-39's "Close" state) is <b>not yet built</b>; when it lands it changes <code>renderSpeakBreakdown()</code>'s output, not the sheet shape.</p>
+  <p class="note"><b>Matched has one action, "Done," not Chat's "Next"/"Restart"</b> — no next line to advance into. Mismatch keeps two actions, but the second is <b>"Close" the button</b>, not Chat's "Skip" — same reason. (A different "Close" appears below — DES-42's name for the forgiven-near-miss panel. The two are unrelated; the panel doesn't take that name from the button.)</p>
+  <p class="note"><b><code>.sheet-head-actions</code> (v131, DES-41 context)</b> — a listen-again control, left of close, so the learner can hear the target without leaving the sheet. Disabled while listening, not merely unhelpful: played-back audio would otherwise feed back into the live recogniser as a trivially "correct" match.</p>
+  <p class="note"><b>The "You said" line carries jyutping (v131, DES-41)</b> — <code>charsToJyutping()</code> looks up each heard character against a table derived from the corpus itself, not an API call. Two marker classes say what the lookup isn't sure of rather than hiding it: <code>.jp-unknown</code> — a boxed "?" — for a character outside the corpus, and <code>.jp-ambiguous</code> — a dotted underline — for one with more than one reading in it (35 of 644 characters). Same instinct as DES-38's tone-verdict rule: showing a guess as fact would be worse than showing nothing.</p>
   <div class="stage" style="max-width:390px" id="sentspeakdemo-idle"></div>
   <div class="stage" style="max-width:390px;margin-top:12px" id="sentspeakdemo-mismatch"></div>
-  <div class="cls">.sheet-wrap › .sheet-scrim + .sheet › .speak-card › .mic-btn (+ .listening) · .speak-status · .speak-actions › .speak-action-btn (.primary/.secondary/.stop) · .speak-result-good/.speak-result-bad › .speak-breakdown › .bd-col</div>
+  <h4 style="margin:22px 0 4px">The "Close" panel <span class="tag-new">built &middot; v132</span></h4>
+  <p class="note"><b>DES-42.</b> A forgiven near-miss (DES-39 accepts it) still gets its own panel, distinct from a plain correct match and from a genuine reject — this is the fix for the contradiction found while building MOCK-27: the differing syllable used to render in <code>--feedback-bad</code> <i>inside</i> the green "you got it right" panel below. <b>MOCK-27 §3's own proposal needed correcting once checked against the live CSS</b> — it called for <code>--brand-tint</code> on the whole panel, on the assumption the colour was unclaimed. It wasn't: <code>.speak-result-bad</code> (below) already uses it for a genuine mismatch, so reusing it here would have made an accepted attempt look like a rejected one. <code>.speak-result-close</code> uses <code>--parchment-warm</code>/<code>--parchment-border</code>/<code>--ink-soft</code> instead — neutral, and distinct from both siblings. <code>--brand</code>/<code>--brand-text-dark</code> still carry the fix, scoped to just the differing syllable. Real <code>renderSpeakBreakdown()</code> output below, run with <code>variant: 'close'</code> against 仲 (zung6) heard as 中 (zung1) — the same example DES-39 was written against.</p>
+  <div class="stage" style="max-width:390px" id="sentspeakdemo-close"></div>
+  <p class="note" style="margin-top:12px">For comparison — the two states either side of it, unchanged by this fix:</p>
+  <div style="display:flex;gap:16px;flex-wrap:wrap">
+    <div class="stage" style="max-width:280px;flex:1;min-width:240px"><div class="cls" style="margin-bottom:6px">.speak-result-good — exact match</div><div id="sentspeakdemo-good-compare"></div></div>
+    <div class="stage" style="max-width:280px;flex:1;min-width:240px"><div class="cls" style="margin-bottom:6px">.speak-result-bad — genuine mismatch</div><div id="sentspeakdemo-bad-compare"></div></div>
+  </div>
+  <p class="note" style="margin-top:12px"><b>Both marker classes</b>, in isolation, on characters that actually trigger them — 上 is genuinely ambiguous in the corpus, 齉 is genuinely outside it. Real <code>charsToJyutping()</code> output, not approximated.</p>
+  <div class="stage" style="max-width:390px" id="sentspeakdemo-markers"></div>
+  <div class="cls">.sheet-head-actions &nbsp;·&nbsp; .sheet-wrap › .sheet-scrim + .sheet › .speak-card › .mic-btn (+ .listening) · .speak-status · .speak-heard › .speak-heard-jp (.jp-unknown/.jp-ambiguous) · .speak-actions › .speak-action-btn (.primary/.secondary/.stop) · .speak-result-good/.speak-result-close/.speak-result-bad › .speak-breakdown › .bd-col</div>
 </section>
 
 <section id="watermark">
@@ -1059,7 +1071,7 @@ document.getElementById('setdemo').innerHTML=`
 // syllable output for 你今日得唔得閒 heard as 我食咗飯, so the colours here
 // are the actual function, not approximated for the demo.
 document.getElementById('sentspeakdemo-idle').innerHTML=`
-  <div class="sheet-head"><h2 class="sheet-title">Say it back</h2><button class="btn-icon sheet-close">${I.x}</button></div>
+  <div class="sheet-head"><h2 class="sheet-title">Say it back</h2><div class="sheet-head-actions"><button class="btn-icon" title="Listen to the sentence">${I.play}</button><button class="btn-icon sheet-close">${I.x}</button></div></div>
   <div class="speak-card">
     <div class="speak-target-zh">我食咗飯，仲飲咗茶</div>
     <div class="speak-target-jp"><span style="color:#2980B9;font-weight:700">ngo5</span> <span style="color:#8E44AD;font-weight:700">sik6</span> <span style="color:#E67E22;font-weight:700">zo2</span> <span style="color:#8E44AD;font-weight:700">faan6</span>, <span style="color:#8E44AD;font-weight:700">zung6</span> <span style="color:#E67E22;font-weight:700">jam2</span> <span style="color:#E67E22;font-weight:700">zo2</span> <span style="color:#27AE60;font-weight:700">caa4</span></div>
@@ -1068,15 +1080,23 @@ document.getElementById('sentspeakdemo-idle').innerHTML=`
     <div class="speak-status">Press the mic and say the line above</div>
     <p class="speak-mic-note">Allow microphone access if prompted</p>
   </div>`;
+// "You said" jyutping is charsToJyutping()'s real output for this exact heard
+// string, run against the actual data/char-jyutping.json — not approximated.
+// None of these six characters happen to be ambiguous or missing, so the
+// swatch below demonstrates those two marker classes separately, on
+// characters that actually trigger them (上 is genuinely ambiguous in the
+// corpus; 齉 is genuinely outside it).
 document.getElementById('sentspeakdemo-mismatch').innerHTML=`
-  <div class="sheet-head"><h2 class="sheet-title">Say it back</h2><button class="btn-icon sheet-close">${I.x}</button></div>
+  <div class="sheet-head"><h2 class="sheet-title">Say it back</h2><div class="sheet-head-actions"><button class="btn-icon" title="Listen to the sentence">${I.play}</button><button class="btn-icon sheet-close">${I.x}</button></div></div>
   <div class="speak-card">
     <div class="speak-target-zh">我食咗飯，仲飲咗茶</div>
     <div class="speak-target-jp"><span style="color:#2980B9;font-weight:700">ngo5</span> <span style="color:#8E44AD;font-weight:700">sik6</span> <span style="color:#E67E22;font-weight:700">zo2</span> <span style="color:#8E44AD;font-weight:700">faan6</span>, <span style="color:#8E44AD;font-weight:700">zung6</span> <span style="color:#E67E22;font-weight:700">jam2</span> <span style="color:#E67E22;font-weight:700">zo2</span> <span style="color:#27AE60;font-weight:700">caa4</span></div>
     <div class="speak-target-en">I ate, and I also had some tea</div>
     <button class="mic-btn idle">${I.mic}</button>
     <div class="speak-status"></div>
-    <div class="speak-heard">You said: <strong>我聽日返工喇</strong></div>
+    <div class="speak-heard">You said: <strong>我聽日返工喇</strong>
+      <div class="speak-heard-jp"><span style="color:#2980B9;font-weight:700">ngo5</span> <span style="color:#E74C3C;font-weight:700">ting1</span> <span style="color:#8E44AD;font-weight:700">jat6</span> <span style="color:#E74C3C;font-weight:700">faan1</span> <span style="color:#E74C3C;font-weight:700">gung1</span> <span style="color:#c8a200;font-weight:700">laa3</span></div>
+    </div>
     <div class="speak-result-bad">
       <div style="font-weight:700;margin-bottom:4px">Hmm, that didn't quite match.</div>
       <div>Expected: <strong>我食咗飯，仲飲咗茶</strong></div>
@@ -1094,6 +1114,133 @@ document.getElementById('sentspeakdemo-mismatch').innerHTML=`
     <div class="speak-actions">
       <button class="speak-action-btn secondary"><span class="icon-label">${I.refresh} Try Again</span></button>
       <button class="speak-action-btn primary">Close</button>
+    </div>
+  </div>`;
+document.getElementById('sentspeakdemo-close').innerHTML=`
+  <div class="speak-card" style="padding:16px 14px">
+    <div class="speak-heard">You said: <strong>我食咗飯，中飲咗茶</strong>
+      <div class="speak-heard-jp"><span style="color:#2980B9;font-weight:700">ngo5</span> <span style="color:#8E44AD;font-weight:700">sik6</span> <span style="color:#E67E22;font-weight:700">zo2</span> <span style="color:#8E44AD;font-weight:700">faan6</span> <span style="color:#E74C3C;font-weight:700">zung1</span> <span style="color:#E67E22;font-weight:700">jam2</span> <span style="color:#E67E22;font-weight:700">zo2</span> <span style="color:#27AE60;font-weight:700">caa4</span></div>
+    </div>
+    <div class="speak-result-close">
+      Close — here's what I heard.
+      <div class="speak-breakdown"><div class="bd-col">
+      <div class="bd-char" style="color:var(--ink)">我</div>
+      <div class="bd-status" style="color:var(--feedback-good-text);font-weight:600;">✓</div>
+      <div class="bd-jp" style="color:#2980B9;font-weight:700">ngo5</div>
+    </div><div class="bd-col">
+      <div class="bd-char" style="color:var(--ink)">食</div>
+      <div class="bd-status" style="color:var(--feedback-good-text);font-weight:600;">✓</div>
+      <div class="bd-jp" style="color:#8E44AD;font-weight:700">sik6</div>
+    </div><div class="bd-col">
+      <div class="bd-char" style="color:var(--ink)">咗</div>
+      <div class="bd-status" style="color:var(--feedback-good-text);font-weight:600;">✓</div>
+      <div class="bd-jp" style="color:#E67E22;font-weight:700">zo2</div>
+    </div><div class="bd-col">
+      <div class="bd-char" style="color:var(--ink)">飯</div>
+      <div class="bd-status" style="color:var(--feedback-good-text);font-weight:600;">✓</div>
+      <div class="bd-jp" style="color:#8E44AD;font-weight:700">faan6</div>
+    </div><div class="bd-col">
+      <div class="bd-char" style="color:var(--brand-text-dark)">仲</div>
+      <div class="bd-status" style="color:var(--brand);font-weight:600;font-size:14px;">中</div>
+      <div class="bd-jp" style="color:var(--brand-text-dark);font-weight:700">zung6</div>
+    </div><div class="bd-col">
+      <div class="bd-char" style="color:var(--ink)">飲</div>
+      <div class="bd-status" style="color:var(--feedback-good-text);font-weight:600;">✓</div>
+      <div class="bd-jp" style="color:#E67E22;font-weight:700">jam2</div>
+    </div><div class="bd-col">
+      <div class="bd-char" style="color:var(--ink)">咗</div>
+      <div class="bd-status" style="color:var(--feedback-good-text);font-weight:600;">✓</div>
+      <div class="bd-jp" style="color:#E67E22;font-weight:700">zo2</div>
+    </div><div class="bd-col">
+      <div class="bd-char" style="color:var(--ink)">茶</div>
+      <div class="bd-status" style="color:var(--feedback-good-text);font-weight:600;">✓</div>
+      <div class="bd-jp" style="color:#27AE60;font-weight:700">caa4</div>
+    </div></div>
+    </div>
+  </div>`;
+document.getElementById('sentspeakdemo-good-compare').innerHTML=`
+  <div class="speak-card" style="padding:14px 10px">
+    <div class="speak-result-good">
+      ✓ Great! You said it correctly.
+      <div class="speak-breakdown"><div class="bd-col">
+      <div class="bd-char" style="color:var(--ink)">我</div>
+      <div class="bd-status" style="color:var(--feedback-good-text);font-weight:600;">✓</div>
+      <div class="bd-jp" style="color:#2980B9;font-weight:700">ngo5</div>
+    </div><div class="bd-col">
+      <div class="bd-char" style="color:var(--ink)">食</div>
+      <div class="bd-status" style="color:var(--feedback-good-text);font-weight:600;">✓</div>
+      <div class="bd-jp" style="color:#8E44AD;font-weight:700">sik6</div>
+    </div><div class="bd-col">
+      <div class="bd-char" style="color:var(--ink)">咗</div>
+      <div class="bd-status" style="color:var(--feedback-good-text);font-weight:600;">✓</div>
+      <div class="bd-jp" style="color:#E67E22;font-weight:700">zo2</div>
+    </div><div class="bd-col">
+      <div class="bd-char" style="color:var(--ink)">飯</div>
+      <div class="bd-status" style="color:var(--feedback-good-text);font-weight:600;">✓</div>
+      <div class="bd-jp" style="color:#8E44AD;font-weight:700">faan6</div>
+    </div><div class="bd-col">
+      <div class="bd-char" style="color:var(--ink)">仲</div>
+      <div class="bd-status" style="color:var(--feedback-good-text);font-weight:600;">✓</div>
+      <div class="bd-jp" style="color:#8E44AD;font-weight:700">zung6</div>
+    </div><div class="bd-col">
+      <div class="bd-char" style="color:var(--ink)">飲</div>
+      <div class="bd-status" style="color:var(--feedback-good-text);font-weight:600;">✓</div>
+      <div class="bd-jp" style="color:#E67E22;font-weight:700">jam2</div>
+    </div><div class="bd-col">
+      <div class="bd-char" style="color:var(--ink)">咗</div>
+      <div class="bd-status" style="color:var(--feedback-good-text);font-weight:600;">✓</div>
+      <div class="bd-jp" style="color:#E67E22;font-weight:700">zo2</div>
+    </div><div class="bd-col">
+      <div class="bd-char" style="color:var(--ink)">茶</div>
+      <div class="bd-status" style="color:var(--feedback-good-text);font-weight:600;">✓</div>
+      <div class="bd-jp" style="color:#27AE60;font-weight:700">caa4</div>
+    </div></div>
+    </div>
+  </div>`;
+document.getElementById('sentspeakdemo-bad-compare').innerHTML=`
+  <div class="speak-card" style="padding:14px 10px">
+    <div class="speak-result-bad">
+      Hmm, that didn't quite match.
+      <div class="speak-breakdown"><div class="bd-col">
+      <div class="bd-char" style="color:var(--ink)">我</div>
+      <div class="bd-status" style="color:var(--feedback-good-text);font-weight:600;">✓</div>
+      <div class="bd-jp" style="color:#2980B9;font-weight:700">ngo5</div>
+    </div><div class="bd-col">
+      <div class="bd-char" style="color:var(--feedback-bad)">食</div>
+      <div class="bd-status" style="color:var(--muted-dark);font-weight:600;">·</div>
+      <div class="bd-jp" style="color:var(--feedback-bad);font-weight:700">sik6</div>
+    </div><div class="bd-col">
+      <div class="bd-char" style="color:var(--feedback-bad)">咗</div>
+      <div class="bd-status" style="color:var(--muted-dark);font-weight:600;">·</div>
+      <div class="bd-jp" style="color:var(--feedback-bad);font-weight:700">zo2</div>
+    </div><div class="bd-col">
+      <div class="bd-char" style="color:var(--feedback-bad)">飯</div>
+      <div class="bd-status" style="color:var(--feedback-bad);font-weight:600;font-size:14px;">聽</div>
+      <div class="bd-jp" style="color:var(--feedback-bad);font-weight:700">faan6</div>
+    </div><div class="bd-col">
+      <div class="bd-char" style="color:var(--feedback-bad)">仲</div>
+      <div class="bd-status" style="color:var(--feedback-bad);font-weight:600;font-size:14px;">日</div>
+      <div class="bd-jp" style="color:var(--feedback-bad);font-weight:700">zung6</div>
+    </div><div class="bd-col">
+      <div class="bd-char" style="color:var(--feedback-bad)">飲</div>
+      <div class="bd-status" style="color:var(--feedback-bad);font-weight:600;font-size:14px;">返</div>
+      <div class="bd-jp" style="color:var(--feedback-bad);font-weight:700">jam2</div>
+    </div><div class="bd-col">
+      <div class="bd-char" style="color:var(--feedback-bad)">咗</div>
+      <div class="bd-status" style="color:var(--feedback-bad);font-weight:600;font-size:14px;">工</div>
+      <div class="bd-jp" style="color:var(--feedback-bad);font-weight:700">zo2</div>
+    </div><div class="bd-col">
+      <div class="bd-char" style="color:var(--feedback-bad)">茶</div>
+      <div class="bd-status" style="color:var(--feedback-bad);font-weight:600;font-size:14px;">喇</div>
+      <div class="bd-jp" style="color:var(--feedback-bad);font-weight:700">caa4</div>
+    </div></div>
+    </div>
+  </div>`;
+document.getElementById('sentspeakdemo-markers').innerHTML=`
+  <div class="speak-card" style="padding:16px 14px">
+    <div style="display:flex;justify-content:center;gap:28px;font-size:15px">
+      <div><span class="jp-ambiguous" style="color:#2980B9;font-weight:700" title="上 has more than one reading in the corpus — showing the most common">soeng5</span><div class="cls" style="margin:6px 0 0">.jp-ambiguous — 上</div></div>
+      <div><span class="jp-unknown" title="Not in the taught vocabulary">?</span><div class="cls" style="margin:6px 0 0">.jp-unknown — 齉</div></div>
     </div>
   </div>`;
 

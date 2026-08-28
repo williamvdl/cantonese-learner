@@ -69,6 +69,7 @@ const store = {
   topicCategories: null,   // { greetings: 'everyday', ... }
   paths:           null,   // [ {key, label, ..., lessons, stages?} ]
   pathConvos:      {},      // { 'beginner-s1': {title, speakers, lines} } — checkpoint consolidation convos.
+  charJyutping:    {},      // { '生': {j:'saang1', amb:true} } — derived, see tools/build-char-jyutping.js
                             // Defaults to {} so a checkpoint with no authored convo simply finds nothing.
   topicCache:      {},     // { greetings: {meta, rounds}, ... }
 
@@ -128,6 +129,18 @@ const store = {
     } catch (e) { this.pathConvos = {}; }
   },
   pathConvo(key) { return this.pathConvos[key] || null; },
+
+  // Single-character → jyutping lookup, derived from the corpus itself by
+  // tools/build-char-jyutping.js (see that file for how and why). Optional,
+  // same shape as loadPathConvos() — absent or failed just means the
+  // "You said" jyutping line in the sentence speak sheet doesn't render,
+  // never a broken sheet.
+  async loadCharJyutping() {
+    try {
+      const r = await fetch('./data/char-jyutping.json');
+      if (r.ok) this.charJyutping = await r.json();
+    } catch (e) { this.charJyutping = {}; }
+  },
 
   // Topic loader (cached) — returns the cached topic object
   async loadTopic(key) {

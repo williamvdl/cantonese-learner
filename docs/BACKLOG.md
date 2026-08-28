@@ -4,7 +4,7 @@
 IN_PROGRESS.md when it's picked up; delete it from here once it's shipped and
 folded into STATUS.md.*
 
-Last updated: 2026-08-23 · sw.js at v130
+Last updated: 2026-08-24 · sw.js at v132
 
 ## Product
 
@@ -50,25 +50,6 @@ are pointers only — detail goes there, not here.*
 
 ## Features
 
-- **Speak feedback on sentences — sheet built at v130, one decision still open.**
-  DES-38 (scope: sentences only, never a tone verdict), the sheet surface, and
-  Chat keeping its own dedicated screen are all settled and built — see
-  STATUS.md's *Confirmed live and working* and DES-38/40 in
-  `DESIGN_DECISIONS.md`. What's left:
-
-  - **Should a forgiven near-miss get its own visual treatment?** Since v129 a
-    one-character homophone passes `fuzzyMatch()`, and — measured against the
-    live code while building mockup 27 — `renderSpeakBreakdown()` **already**
-    renders the differing syllable in that case, in `--feedback-bad` (the
-    app's error red) nested inside the green "correct" panel. That reads as a
-    contradiction and arguably states a verdict DES-38 rules out. MOCK-27 §3
-    proposes a third "Close" state — `--brand` instead of `--feedback-bad` on
-    the differing syllable, no new token, no change to `fuzzyMatch()` or
-    `alignChars()` — but William hasn't picked between it and the two other
-    options shown (today's contradictory pairing, or no breakdown on any
-    match). Small change once decided: a colour/status branch inside
-    `renderSpeakBreakdown()`, not a new sheet state.
-
 - **Checkpoint sentence activity — the third slot, done by speaking.** Merges with
   *Stage 3 — checkpoint activity using sentence data* below and gives it a
   direction. Raised 2026-08-22: take a selection of the topic's existing sentences
@@ -77,8 +58,9 @@ are pointers only — detail goes there, not here.*
   repeating the lesson. Reuses existing per-topic sentence data with no new
   authoring, and the redesigned checkpoint hub already accommodates a third
   activity without layout changes. **The speak-feedback surface it depends on is
-  now built** (v130) — this can be designed against it directly rather than
-  waiting further. Not yet designed.
+  now fully built and settled, including the near-miss treatment** (v132) — this
+  can be designed against it directly rather than waiting further. Not yet
+  designed.
 
 - **Tone feedback by pitch measurement — investigated and closed, 2026-08-17.**
   Kept as a warning, not as work. **Read alongside the ASR closure above**: pitch

@@ -6,7 +6,7 @@
 // up a new service worker when this string changes. If you forget to bump it,
 // users will keep serving the old index.html from cache.
 
-const CACHE_VERSION = 'cantonese-teahouse-v130';
+const CACHE_VERSION = 'cantonese-teahouse-v132';
 
 // App shell — fetched at install time.
 // NOTE: when adding a new .js or .css file to the app, add it here too,
@@ -23,6 +23,7 @@ const SHELL_ASSETS = [
   './data/categories.json',
   './data/learning_paths.json',
   './data/path_convos.json',
+  './data/char-jyutping.json',
 ];
 
 // Topic JSONs — pre-cached so every topic works offline from first install

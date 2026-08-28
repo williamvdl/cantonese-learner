@@ -467,10 +467,34 @@ aborts any live recognition) on any top-level navigation, same as it already
 did for the settings sheet — a sentence sheet has no business surviving a tab
 switch.
 
-**The forgiven-near-miss colour treatment (DES-39's "Close" state, distinct
-from plain match) is not yet built** — §3 of MOCK-27 is still open. When it
-lands it is a colour/status change inside `renderSpeakBreakdown()`'s existing
-output, not a new sheet state.
+**`.sheet-head-actions` (built v131, DES-41 context)** — a listen-again
+control sits in the sheet head, left of close, so the learner can hear the
+target sentence again without leaving the sheet. Disabled while listening:
+played-back audio would otherwise feed straight back into the live
+recogniser as a trivially "correct" match, so the control is inert (`:disabled`,
+opacity 0.4) rather than merely unhelpful during that one state.
+
+**The "You said" line carries a jyutping sub-line (built v131, DES-41)** —
+`charsToJyutping()` looks up each character of what was actually heard against
+`data/char-jyutping.json`, a table derived from the corpus itself, not an API
+call. Two marker classes carry the same "never overclaim" instinct as
+DES-38's tone-verdict rule: `.jp-unknown` (a boxed "?") for a character
+outside the corpus, `.jp-ambiguous` (dotted underline) for one with more than
+one reading in it. Neither is decorative — both are the honest alternative to
+showing a guess as fact.
+
+**The forgiven-near-miss "Close" panel (DES-42, built v132).** `.speak-result-close`
+— `--parchment-warm`/`--parchment-border`/`--ink-soft`, deliberately not the
+`--brand-tint` MOCK-27 §3 originally proposed for the panel: that colour was
+already `.speak-result-bad`'s (genuine mismatch), so reusing it for an
+*accepted* near-miss would have made the two look the same. `--brand`/
+`--brand-text-dark` still carry the fix, but scoped to the differing syllable
+only, via a `variant` parameter on `renderSpeakBreakdown()` — a local accent,
+not a full-panel colour claim. The function now returns `{ html, hasDiff }`;
+`hasDiff` comes off the same alignment pass already being computed, so an
+exact match and a forgiven one are told apart at no extra cost, and an exact
+match's colour and copy are untouched. Applied at the content layer (DES-40),
+so both the sheet and Chat's conversation Speak mode carry it from one change.
 
 ### Docked bar — `.bar` › `.bar-inner`
 Fixed above the tab bar, contents capped to `--measure`. **Built v118** (DES-22,

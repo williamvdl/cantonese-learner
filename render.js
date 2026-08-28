@@ -96,6 +96,7 @@ function renderSentSpeakSheet() {
   if (!sentence) return '';   // stale index across a topic/round change underneath the sheet
 
   const status = sp.status;
+  const speaking = state.speaking === 'sent-speak-' + sp.idx;
   const statusText = {
     idle:      'Press the mic and say the line above',
     listening: 'Listening… speak the line, then press Stop',
@@ -103,21 +104,22 @@ function renderSentSpeakSheet() {
     mismatch:  '',
   }[status] || '';
 
+  const heardJyutping = sp.heard ? charsToJyutping(sp.heard) : '';
   const heardLine = sp.heard
-    ? `<div class="speak-heard">You said: <strong>${sp.heard}</strong></div>`
+    ? `<div class="speak-heard">You said: <strong>${sp.heard}</strong>${heardJyutping ? `<div class="speak-heard-jp">${heardJyutping}</div>` : ''}</div>`
     : '';
 
   const result = status === 'matched'
     ? (() => {
-        const breakdown = renderSpeakBreakdown(sp.heard || sentence.c, sentence.c, sentence.j);
-        return `<div class="speak-result-good">
-          <div>✓ Great! You said it correctly.</div>
+        const { html: breakdown, hasDiff } = renderSpeakBreakdown(sp.heard || sentence.c, sentence.c, sentence.j, 'close');
+        return `<div class="${hasDiff ? 'speak-result-close' : 'speak-result-good'}">
+          <div>${hasDiff ? 'Close — here\u2019s what I heard.' : '✓ Great! You said it correctly.'}</div>
           ${breakdown ? breakdown : ''}
         </div>`;
       })()
     : status === 'mismatch'
     ? (() => {
-        const breakdown = renderSpeakBreakdown(sp.heard, sentence.c, sentence.j);
+        const { html: breakdown } = renderSpeakBreakdown(sp.heard, sentence.c, sentence.j, 'bad');
         return `<div class="speak-result-bad">
           <div style="font-weight:700;margin-bottom:4px">Hmm, that didn't quite match.</div>
           <div>Expected: <strong>${sentence.c}</strong></div>
@@ -135,7 +137,14 @@ function renderSentSpeakSheet() {
         <div class="sheet-grab"></div>
         <div class="sheet-head">
           <h2 class="sheet-title">Say it back</h2>
-          <button class="btn-icon sheet-close" id="sent-speak-close" aria-label="Close">${icon('close', 17)}</button>
+          <div class="sheet-head-actions">
+            <button class="btn-icon" id="sent-speak-listen"
+              ${status === 'listening' ? 'disabled aria-disabled="true"' : ''}
+              title="${status === 'listening' ? 'Not while listening' : 'Listen to the sentence'}">
+              ${speaking ? icon('volume', 18) : iconPlay(16)}
+            </button>
+            <button class="btn-icon sheet-close" id="sent-speak-close" aria-label="Close">${icon('close', 17)}</button>
+          </div>
         </div>
         <div class="speak-card">
           <div class="speak-target-zh">${sentence.c}</div>
@@ -1766,15 +1775,15 @@ function renderConversation() {
 
     const result = status === 'matched'
       ? (() => {
-          const breakdown = renderSpeakBreakdown(cv.speakHeard || line.c, line.c, line.j);
-          return `<div class="speak-result-good">
-            <div>✓ Great! You said it correctly.</div>
+          const { html: breakdown, hasDiff } = renderSpeakBreakdown(cv.speakHeard || line.c, line.c, line.j, 'close');
+          return `<div class="${hasDiff ? 'speak-result-close' : 'speak-result-good'}">
+            <div>${hasDiff ? 'Close — here\u2019s what I heard.' : '✓ Great! You said it correctly.'}</div>
             ${breakdown ? breakdown : ''}
           </div>`;
         })()
       : status === 'mismatch'
       ? (() => {
-          const breakdown = renderSpeakBreakdown(cv.speakHeard, line.c, line.j);
+          const { html: breakdown } = renderSpeakBreakdown(cv.speakHeard, line.c, line.j, 'bad');
           return `<div class="speak-result-bad">
             <div style="font-weight:700;margin-bottom:4px">Hmm, that didn't quite match.</div>
             <div>Expected: <strong>${line.c}</strong></div>
@@ -2691,8 +2700,27 @@ function attachEvents(lesson) {
       finishListening();
     } else {
       const sentence = getRoundSentences(state.topic, state.currentRound)[state.sentSpeak.idx];
-      if (sentence) startSentSpeakListening(sentence.c);
+      if (sentence) {
+        stopAudioFile();          // don't let a replay still in flight bleed into the mic
+        state.speaking = null;
+        startSentSpeakListening(sentence.c);
+      }
     }
+  });
+
+  // Sentence sheet — replay the target audio. Disabled while listening: the
+  // mic is live, and played-back audio would otherwise feed straight back
+  // into the recogniser as a trivially "correct" match.
+  const sentSpeakListen = document.getElementById('sent-speak-listen');
+  if (sentSpeakListen) sentSpeakListen.addEventListener('click', () => {
+    if (state.sentSpeak.status === 'listening') return;
+    const idx = state.sentSpeak.idx;
+    const sentence = getRoundSentences(state.topic, state.currentRound)[idx];
+    if (!sentence) return;
+    state.speaking = 'sent-speak-' + idx;
+    render();
+    speakItem('sentence', sentence.sid, () => { state.speaking = null; render(); });
+    setTimeout(() => { if (state.speaking === 'sent-speak-' + idx) { state.speaking = null; render(); } }, 6000);
   });
 
   const sentSpeakStopBtn = document.getElementById('sent-speak-stop-btn');
@@ -3244,6 +3272,7 @@ function attachEvents(lesson) {
       store.loadCategories(),
       store.loadPaths(),
       store.loadPathConvos(),
+      store.loadCharJyutping(),
     ]);
   } catch (err) {
     console.error('[init] reference data load failed', err);
