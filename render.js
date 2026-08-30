@@ -929,6 +929,7 @@ function renderCheckpointHub() {
 
   const meta = {
     words:    { icon: icon('bookOpen',15), name:'Words',        tag:'RECALL',  desc:'Vocabulary from all topics in this stage' },
+    sentences:{ icon: icon('mic',15), name:'Sentences',    tag:'SAY',     desc:`Say back ${SENT_REVIEW_RUN} sentences from this stage` },
     convo:    { icon: icon('messageCircle',15), name:'Conversation', tag:'PRODUCE', desc:'A longer scene — read & speak' },
   };
   const cards = prog.available.map(act => {
@@ -1097,6 +1098,199 @@ function renderCheckpointDone(opts) {
 
 // Conversation activity wrapper — the existing chat engine over the checkpoint
 // consolidation convo (sourced via activeConvoSource), read + speak only.
+// ── Checkpoint sentence review (DES-44 / DES-45, MOCK-28) ──────────────────
+// Three screens behind one activity: the mode picker, the run, and the summary.
+// The run's two modes differ ONLY in the prompt block — mic, recognition,
+// result panels and navigation are shared, which is why B and C were built
+// together rather than staged apart.
+
+function renderSentReviewPicker() {
+  const cpState = state.checkpoint;
+  const stage = getStage(cpState.pathKey, cpState.stageId);
+  const opts = [
+    { mode:'listen',  ic:icon('volume',15),    name:'Listen and say back', desc:`Hear it, repeat it. Text stays hidden until after.` },
+    { mode:'produce', ic:icon('translate',15), name:'Say it in Cantonese', desc:'English prompt, you produce it. Harder.' },
+    { mode:'mix',     ic:icon('refresh',15),   name:'Mix them',            desc:`Alternates between the two across the ${SENT_REVIEW_RUN}.` },
+  ];
+  return `
+    <div class="content cp-convo">
+      <button class="back-home-btn" data-cp-act-back><span class="icon-label">${icon('arrowLeft',15)} Checkpoint</span></button>
+      <div class="cp-convo-head">
+        <div class="cp-convo-kick">◆ Consolidation · ${stage ? stage.name : ''}</div>
+        <div class="cp-convo-title">Sentences</div>
+      </div>
+      <p class="sr-intro">${SENT_REVIEW_RUN} sentences from this stage. Choose how you'd like to be prompted.</p>
+      ${opts.map(o => `
+        <button class="card cp-act-card" data-sr-mode="${o.mode}">
+          <span class="cp-act-icon">${o.ic}</span>
+          <span class="cp-act-body">
+            <span class="cp-act-name">${o.name}</span>
+            <span class="cp-act-desc">${o.desc}</span>
+          </span>
+          <span class="cp-act-right"><span class="cp-act-go">›</span></span>
+        </button>`).join('')}
+    </div>`;
+}
+
+function renderSentReviewSummary() {
+  const sr = state.sentReview;
+  const cpState = state.checkpoint;
+  const stage = getStage(cpState.pathKey, cpState.stageId);
+  const t = sentReviewTally();
+  const doneFlag = checkpointActivityDone(cpState.pathKey, cpState.cpId, 'sentences');
+  const parts = [];
+  if (t.matched) parts.push(`${t.matched} matched`);
+  if (t.close) parts.push(`${t.close} close`);
+  if (t.mismatch) parts.push(`${t.mismatch} didn't match`);
+  if (t.revealed) parts.push(`${t.revealed} revealed`);
+
+  const rows = sr.items.map((item, i) => {
+    const r = sr.results[i] || 'revealed';
+    const badge = r === 'matched'  ? `<span class="sr-row-mark" style="color:var(--feedback-good-text)">✓</span>`
+                : r === 'close'    ? `<span class="sr-row-tag">close</span>`
+                : r === 'mismatch' ? `<span class="sr-row-tag" style="color:var(--brand-text-dark)">no match</span>`
+                :                    `<span class="sr-row-tag">revealed</span>`;
+    return `<div class="sr-row"><span>${item.c}</span>${badge}</div>`;
+  }).join('');
+
+  // The milestone fires only on the run that completes a full pass of the pool
+  // (DES-45). The ring never exhausts, so this is a note, not a wall.
+  const milestone = sr.milestone ? `
+    <div class="sr-milestone">
+      <div class="sr-milestone-t">You've now been through all ${sr.poolSize}</div>
+      <div class="sr-milestone-s">Every sentence in this stage. Going again reshuffles them.</div>
+    </div>` : '';
+
+  return `
+    <div class="content cp-convo">
+      <button class="back-home-btn" data-cp-act-back><span class="icon-label">${icon('arrowLeft',15)} Checkpoint</span></button>
+      <div class="cp-convo-head">
+        <div class="cp-convo-kick">◆ Consolidation · ${stage ? stage.name : ''}</div>
+        <div class="cp-convo-title">Sentences reviewed</div>
+      </div>
+      <div class="sr-tally">
+        <div class="sr-tally-n">${sr.items.length} sentences</div>
+        <div class="sr-tally-s">${parts.join(' · ')}</div>
+      </div>
+      ${milestone}
+      <div class="sr-rows">${rows}</div>
+      <button class="cp-finish" data-cp-act-done="sentences">${doneFlag ? '✓ Reviewed — back to checkpoint' : '✓ Mark sentences reviewed'}</button>
+      <button class="sr-skip" data-sr-again>${sr.milestone ? 'Go again from the start' : `Run ${SENT_REVIEW_RUN} more`}</button>
+    </div>`;
+}
+
+function renderCheckpointSentences() {
+  const cpState = state.checkpoint;
+  if (!cpState) return '';
+  const stage = getStage(cpState.pathKey, cpState.stageId);
+  if (!stage) return '';
+
+  const sr = state.sentReview;
+  if (!sr) return renderSentReviewPicker();
+  if (sr.finished) return renderSentReviewSummary();
+
+  const item = currentSentReviewItem();
+  if (!item) return renderSentReviewPicker();
+  const mode = sentReviewModeAt(sr, sr.idx);
+  const listening = sr.status === 'listening';
+  const showTarget = sr.revealed || sr.status === 'matched' || sr.status === 'mismatch';
+
+  const segs = `<div class="segs">${sr.items.map((_, i) =>
+    `<i class="${i < sr.idx || (i === sr.idx && showTarget) ? 'on' : ''}"></i>`).join('')}</div>`;
+
+  // ── Prompt block — the only thing that differs between the two modes ──
+  let prompt;
+  if (showTarget) {
+    prompt = `
+      <div class="speak-target-zh">${item.c}</div>
+      <div class="speak-target-jp">${colorJyutping(item.j)}</div>
+      <div class="speak-target-en">${item.e}</div>`;
+  } else if (mode === 'listen') {
+    // B: audio is the primary control, the mic secondary — here the listening
+    // IS the task, which is what makes it different in kind from in-topic
+    // practice where the text is always on screen.
+    prompt = `
+      <button class="sr-listen" data-sr-play ${listening ? 'disabled aria-disabled="true"' : ''}>${icon('volume', 30)}</button>
+      <div class="speak-status">${listening ? '' : 'Tap to hear it again'}</div>
+      <div class="sr-hidden">The sentence is hidden — listen, then say it back</div>`;
+  } else {
+    // C: no audio control at all — offering "listen" before producing would
+    // hand over the answer.
+    prompt = `
+      <div class="sr-prompt-lbl">Say this in Cantonese</div>
+      <div class="sr-prompt-en">${item.e}</div>
+      <div class="sr-hidden">Cantonese hidden — say it, then check</div>`;
+  }
+
+  // ── Result — reuses the v132/v133 machinery unchanged ──
+  let result = '';
+  if (sr.status === 'matched' || sr.status === 'mismatch') {
+    const heardJp = sr.heard ? charsToJyutping(sr.heard) : '';
+    const heardLine = sr.heard
+      ? `<div class="speak-heard">You said: <strong>${sr.heard}</strong>${heardJp ? `<div class="speak-heard-jp">${heardJp}</div>` : ''}</div>`
+      : '';
+    const verdict = sr.results[sr.idx];
+    if (verdict === 'matched') {
+      const bd = renderSpeakBreakdown(sr.heard || item.c, item.c, item.j, 'close');
+      result = `${heardLine}<div class="${bd.hasDiff ? 'speak-result-close' : 'speak-result-good'}">
+        <div>${bd.hasDiff ? 'Close — here\u2019s what I heard.' : '✓ Great! You said it correctly.'}</div>
+        ${bd.html}</div>`;
+    } else if (verdict === 'close') {
+      // 'produce' mismatch: state NO verdict (DES-44). Show the target, show
+      // what was heard, show the sentence's own note, assert nothing about
+      // correctness — the app cannot tell a valid alternative from an error.
+      const note = item.note ? `<div class="sr-note">${item.note}</div>` : '';
+      result = `${heardLine}<div class="speak-result-close">
+        <div style="font-weight:700;margin-bottom:4px">Here's the sentence we had</div>
+        <div><strong>${item.c}</strong> (${colorJyutping(item.j)})</div>
+        ${note}</div>`;
+    } else {
+      const bd = renderSpeakBreakdown(sr.heard, item.c, item.j, 'bad');
+      result = `${heardLine}<div class="speak-result-bad">
+        <div style="font-weight:700;margin-bottom:4px">Hmm, that didn't quite match.</div>
+        <div>Expected: <strong>${item.c}</strong></div>
+        ${bd.html || `<div class="speak-heard-jp">${colorJyutping(item.j)}</div>`}</div>`;
+    }
+  } else if (sr.revealed) {
+    result = `<div class="speak-result-close"><div>Shown — not graded. Have a go when you're ready.</div></div>`;
+  }
+
+  const last = sr.idx >= sr.items.length - 1;
+  let actions;
+  if (sr.status === 'matched' || sr.status === 'mismatch' || sr.revealed) {
+    actions = `
+      <div class="speak-actions">
+        <button class="speak-action-btn secondary" data-sr-retry>Try again</button>
+        <button class="speak-action-btn primary" data-sr-next>${last ? 'Finish' : 'Next ›'}</button>
+      </div>`;
+  } else if (listening) {
+    actions = `<div class="speak-actions"><button class="speak-action-btn stop" data-sr-stop>⏹ Stop &amp; Check</button></div>`;
+  } else {
+    actions = `<button class="sr-skip" data-sr-reveal>${mode === 'listen' ? 'Show me the sentence' : 'Show me the answer'}</button>`;
+  }
+
+  return `
+    <div class="content cp-convo">
+      <button class="back-home-btn" data-cp-act-back><span class="icon-label">${icon('arrowLeft',15)} Checkpoint</span></button>
+      <div class="cp-convo-head">
+        <div class="cp-convo-kick">◆ Consolidation · ${stage ? stage.name : ''}</div>
+        <div class="cp-convo-title">${mode === 'listen' ? 'Say it back' : 'Say it in Cantonese'}</div>
+      </div>
+      <div class="speak-nav">
+        <span>Sentence ${sr.idx + 1} of ${sr.items.length}</span>
+        <span class="speak-turn">${listening ? 'Listening…' : (showTarget ? 'Result' : (mode === 'listen' ? 'Listen first' : 'Your turn'))}</span>
+      </div>
+      ${segs}
+      <div class="speak-card">
+        ${prompt}
+        <button class="mic-btn ${listening ? 'listening' : 'idle'}" data-sr-mic>${listening ? icon('stop', 22) : icon('mic', 22)}</button>
+        <div class="speak-status">${listening ? 'Listening… speak, then press Stop' : (showTarget ? '' : 'Press the mic and say it')}</div>
+        ${result}
+        ${actions}
+      </div>
+    </div>`;
+}
+
 function renderCheckpointConvo() {
   const cpState = state.checkpoint;
   if (!cpState) return '';
@@ -1201,6 +1395,8 @@ function render() {
   // timeline). Checked before other nav so it's a focused full-screen view.
   if (state.checkpoint && state.checkpointAct === 'words') {
     mainContent = renderCheckpointWords();
+  } else if (state.checkpoint && state.checkpointAct === 'sentences') {
+    mainContent = renderCheckpointSentences();
   } else if (state.checkpoint && state.checkpointAct === 'convo') {
     mainContent = renderCheckpointConvo();
   } else if (state.checkpoint) {
@@ -3164,6 +3360,11 @@ function attachEvents(lesson) {
       const stage = getStage(cpState.pathKey, cpState.stageId);
       if (act === 'words') {
         startCheckpointWords();
+      } else if (act === 'sentences') {
+        state.checkpointAct = 'sentences';
+        state.sentReview = null;      // mode picker first; the run starts on choice
+        pushNav();
+        render();
       } else if (act === 'convo') {
         state.checkpointAct = 'convo';
         state.convo = { convMode:'read', playingLine:null, gapAnswers:{}, bubbleRevealed:{}, breakdownOpen:{}, speakStep:0, speakStatus:'idle', speakHeard:'', speakAutoPlayed:false, speakRevealed:{} };
@@ -3174,9 +3375,86 @@ function attachEvents(lesson) {
     });
   });
 
+  // ── Checkpoint sentence review (DES-44/45) ──
+  document.querySelectorAll('[data-sr-mode]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      startSentReviewRun(btn.dataset.srMode);
+      window.scrollTo(0, 0);
+      render();
+    });
+  });
+
+  // Replay the target audio (listen mode). Disabled while the mic is live —
+  // played-back audio would otherwise feed straight into the recogniser as a
+  // trivially correct match, the same reason the Learn sheet disables it.
+  const srPlay = document.querySelector('[data-sr-play]');
+  if (srPlay) srPlay.addEventListener('click', () => {
+    const sr = state.sentReview;
+    if (!sr || sr.status === 'listening') return;
+    const item = currentSentReviewItem();
+    if (!item) return;
+    speakItem('sentence', item.sid);
+  });
+
+  const srMic = document.querySelector('[data-sr-mic]');
+  if (srMic) srMic.addEventListener('click', () => {
+    const sr = state.sentReview;
+    const item = currentSentReviewItem();
+    if (!sr || !item) return;
+    if (sr.status === 'listening') { finishListening(); return; }
+    stopAudioFile();
+    window.speechSynthesis.cancel();
+    startSentReviewListening(item.c);
+  });
+
+  const srStop = document.querySelector('[data-sr-stop]');
+  if (srStop) srStop.addEventListener('click', () => finishListening());
+
+  // Escape hatch. Reveals the target and marks the item un-graded rather than
+  // failed — a learner who genuinely cannot produce the sentence should not be
+  // punished for saying so, and the tally stays honest either way.
+  const srReveal = document.querySelector('[data-sr-reveal]');
+  if (srReveal) srReveal.addEventListener('click', () => {
+    const sr = state.sentReview;
+    if (!sr) return;
+    stopListening();
+    sr.revealed = true;
+    sr.results[sr.idx] = 'revealed';
+    render();
+  });
+
+  const srRetry = document.querySelector('[data-sr-retry]');
+  if (srRetry) srRetry.addEventListener('click', () => {
+    const sr = state.sentReview;
+    if (!sr) return;
+    stopListening();
+    sr.status = 'idle'; sr.heard = ''; sr.revealed = false;
+    render();
+  });
+
+  const srNext = document.querySelector('[data-sr-next]');
+  if (srNext) srNext.addEventListener('click', () => {
+    stopListening(); stopAudioFile();
+    sentReviewNext();
+    window.scrollTo(0, 0);
+    render();
+  });
+
+  // "Run N more" / "Go again from the start" — re-samples from the ring at the
+  // cursor, in the mode already chosen.
+  const srAgain = document.querySelector('[data-sr-again]');
+  if (srAgain) srAgain.addEventListener('click', () => {
+    startSentReviewRun(state.sentReviewMode || 'listen');
+    window.scrollTo(0, 0);
+    render();
+  });
+
   // Back from an activity → hub. Routed through history so it matches phone BACK.
   document.querySelectorAll('[data-cp-act-back]').forEach(btn => {
     btn.addEventListener('click', () => {
+      // Leaving an activity must never leave the mic or a replay running.
+      stopListening(); stopAudioFile();
+      state.sentReview = null;
       if (_navReady) { history.back(); return; }
       state.checkpointAct = null; state.checkpointQuiz = null;
       window.scrollTo(0, 0);
@@ -3190,6 +3468,8 @@ function attachEvents(lesson) {
       const act = btn.dataset.cpActDone;
       const cpState = state.checkpoint;
       if (cpState) setCheckpointActivityDone(cpState.pathKey, cpState.cpId, act, true);
+      stopListening(); stopAudioFile();
+      state.sentReview = null;
       // Clear the session and return to the hub via history (pops the activity entry).
       if (_navReady) { history.back(); return; }
       state.checkpointAct = null; state.checkpointQuiz = null;

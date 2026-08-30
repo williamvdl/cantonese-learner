@@ -1,0 +1,799 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Checkpoint sentence review — listen-back, produce, and the combined form</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Noto+Serif+TC:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  /* ── tokens, copied verbatim from styles.css :root at v132 — not re-derived ── */
+  :root {
+    --font-serif:   'Noto Serif TC', 'Fraunces', Georgia, 'Times New Roman', serif;
+    --font-ui:      'Inter', 'Noto Serif TC', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+    --font-display: 'Fraunces', 'Noto Serif TC', Georgia, serif;
+    --fs-micro:11px; --fs-meta:12px; --fs-small:13px; --fs-body:15px; --fs-lead:17px; --fs-h3:22px; --fs-h2:28px;
+    --lh-body:1.5;
+    --fw-regular:400; --fw-medium:500; --fw-semi:600; --fw-bold:700;
+    --sp-1:4px; --sp-2:8px; --sp-3:12px; --sp-4:16px; --sp-5:24px; --sp-6:32px;
+    --r-sm:8px; --r-md:12px; --r-lg:16px; --r-pill:999px; --tap-min:44px;
+    --elev-1: 0 1px 2px rgba(58,42,30,.04), 0 1px 3px rgba(58,42,30,.06);
+    --elev-2: 0 2px 4px rgba(58,42,30,.05), 0 4px 12px rgba(58,42,30,.08);
+    --elev-3: 0 4px 8px rgba(58,42,30,.06), 0 8px 20px rgba(58,42,30,.10);
+    --dur-fast:120ms; --dur-base:200ms; --ease: cubic-bezier(0.4,0,0.2,1);
+    --ink:#1C1917; --ink-soft:#292524;
+    --parchment:#FFFFFF; --parchment-warm:#FAF8F5; --parchment-deep:#F0EBE4; --parchment-border:#EAE4DC;
+    --brand:#C2410C; --brand-tint:#FEF0E9; --brand-edge:#F5D9C9; --brand-dark:#9A3412; --brand-text-dark:#9A3412;
+    --jade:#15803D; --muted:#A8A29E; --muted-dark:#78716C;
+    --feedback-good:#16A34A; --feedback-good-tint:#DCFCE7; --feedback-good-text:#15803D; --jade-edge:#C9E7D3;
+    --feedback-bad:#B42318; --feedback-bad-tint:#FEF3F2; --feedback-bad-edge:#F5CFCB;
+    --header-bg:#6E2639; --header-text:#F7EEE8; --header-sub:rgba(255,255,255,.6); --header-icon:#F7EEE8;
+    --milestone: var(--header-bg); --milestone-tint:#FBF0F2; --milestone-edge:#EBD3D9;
+    --border: 1px solid var(--parchment-border);
+    --border-soft: 1px solid var(--parchment-deep);
+    /* the six TONES, verbatim from app.js */
+    --t1:#E74C3C; --t2:#E67E22; --t3:#c8a200; --t4:#27AE60; --t5:#2980B9; --t6:#8E44AD;
+  }
+  body{margin:0;background:var(--parchment-deep);font-family:var(--font-ui);color:var(--ink-soft);padding:24px 16px 72px}
+  .wrap{max-width:1360px;margin:0 auto}
+  h1{font-family:var(--font-display);font-size:var(--fs-h2);font-weight:var(--fw-medium);margin:0 0 6px;color:var(--ink)}
+  h2{font-family:var(--font-display);font-size:var(--fs-lead);font-weight:var(--fw-medium);margin:44px 0 6px;color:var(--ink)}
+  h3{font-size:var(--fs-small);font-weight:var(--fw-semi);margin:0 0 8px;color:var(--ink)}
+  .lede{font-size:var(--fs-small);line-height:1.6;color:var(--muted-dark);margin:0 0 8px;max-width:86ch}
+  .note{font-size:var(--fs-meta);line-height:1.65;color:var(--muted-dark);margin:8px 0 0;max-width:86ch}
+  .note b{color:var(--ink-soft)}
+  code{font-family:ui-monospace,Menlo,monospace;font-size:11px;background:var(--parchment-deep);padding:1px 5px;border-radius:4px}
+  .rec{display:inline-block;background:var(--feedback-good-tint);color:var(--feedback-good-text);font-size:9px;font-weight:var(--fw-semi);letter-spacing:.1em;text-transform:uppercase;padding:3px 6px;border-radius:4px;vertical-align:2px}
+  .found{display:inline-block;background:#FDF1E3;color:#9A5B10;font-size:9px;font-weight:var(--fw-semi);letter-spacing:.1em;text-transform:uppercase;padding:3px 6px;border-radius:4px;vertical-align:2px}
+  .callout{background:var(--parchment);border:1px solid #F0D9AE;border-left:3px solid #C9971E;border-radius:var(--r-md);padding:14px 16px;margin:14px 0 8px;max-width:86ch}
+  .callout h3{margin:0 0 6px}
+  .frames{display:flex;gap:22px;flex-wrap:wrap;align-items:flex-start;margin-top:16px}
+  .frame{width:412px}
+  .frame>.cap{font-size:var(--fs-micro);font-weight:var(--fw-semi);letter-spacing:.08em;text-transform:uppercase;color:var(--muted-dark);margin:0 0 8px}
+  .frame>.cap em{font-style:normal;color:var(--brand)}
+  .frame>.sub{font-size:var(--fs-meta);line-height:1.55;color:var(--muted-dark);margin:10px 0 0}
+  .table{border-collapse:collapse;font-size:var(--fs-meta);margin-top:12px;width:100%;background:var(--parchment);border-radius:var(--r-md);overflow:hidden}
+  .table th,.table td{text-align:left;padding:9px 12px;border-bottom:var(--border-soft);vertical-align:top}
+  .table th{font-size:var(--fs-micro);letter-spacing:.06em;text-transform:uppercase;color:var(--muted-dark);font-weight:var(--fw-semi);background:var(--parchment-warm)}
+
+  /* ── phone frame — chrome copied verbatim from render.js/styles.css at v132.
+     renderHeader() is ALWAYS "廣東話 / Cantonese Learner"; a screen's own title
+     never appears there. Checkpoint activities use .back-home-btn, NOT the .ctx
+     contextual row — that's the hub's chrome, not an activity's. ── */
+  .phone{position:relative;background:var(--parchment);border:7px solid var(--ink);border-radius:26px;overflow:hidden;height:720px;display:flex;flex-direction:column}
+  .scroll{flex:1;overflow:hidden;position:relative}
+  .header{background:var(--header-bg);padding:var(--sp-3) var(--sp-4);flex:none;z-index:3}
+  .header-row{display:flex;align-items:center;gap:var(--sp-2)}
+  .header-slot{flex:0 0 var(--tap-min);display:flex;align-items:center;justify-content:center}
+  .header-title{flex:1 1 auto;min-width:0;display:flex;align-items:center;flex-direction:column}
+  .header-title .zh{font-size:21px;color:var(--header-text);font-family:var(--font-display);font-weight:var(--fw-bold);letter-spacing:.06em;line-height:1.1}
+  .header-title .en{font-size:8px;color:var(--header-sub);text-transform:uppercase;margin-top:1px;font-family:var(--font-ui);font-weight:var(--fw-bold);letter-spacing:.16em}
+  .ic{width:38px;height:38px;padding:0;border:none;background:transparent;color:var(--header-icon);opacity:.72;display:inline-flex;align-items:center;justify-content:center}
+  .content{padding:var(--sp-4) var(--sp-5)}
+
+  /* checkpoint chrome, verbatim from styles.css */
+  .back-home-btn{display:inline-flex;align-items:center;gap:5px;background:transparent;border:none;color:var(--muted-dark);font-size:var(--fs-small);padding:var(--sp-2) 0;margin-bottom:var(--sp-3);font-weight:var(--fw-semi)}
+  .cp-convo-head{background:var(--milestone-tint);border:1px solid var(--milestone);border-radius:var(--r-md);padding:13px 15px;margin-bottom:12px}
+  .cp-convo-kick{font-size:10px;font-weight:var(--fw-bold);letter-spacing:1px;text-transform:uppercase;color:var(--milestone)}
+  .cp-convo-title{font-family:var(--font-display);font-size:18px;color:var(--ink);font-weight:var(--fw-semi);margin-top:2px}
+  .cp-finish{width:100%;background:var(--brand);color:#fff;border:none;border-radius:var(--r-md);padding:14px;font-size:14.5px;font-weight:var(--fw-bold);margin-top:8px;box-shadow:var(--elev-2)}
+  .cp-finish.dim{background:var(--muted);box-shadow:none}
+  .cp-act-card{width:100%;display:flex;align-items:center;gap:13px;padding:14px 15px;margin-bottom:11px;text-align:left;background:var(--parchment);border:var(--border);border-radius:var(--r-md);box-shadow:var(--elev-1)}
+  .cp-act-icon{flex:0 0 auto;width:42px;height:42px;border-radius:var(--r-sm);display:flex;align-items:center;justify-content:center;background:var(--milestone-tint);color:var(--milestone)}
+  .cp-act-body{flex:1;display:flex;flex-direction:column}
+  .cp-act-name{font-weight:var(--fw-bold);color:var(--ink);font-size:var(--fs-body);display:flex;align-items:center;gap:7px}
+  .cp-act-tag{font-size:9.5px;font-weight:var(--fw-bold);letter-spacing:.5px;color:var(--muted);background:var(--parchment-deep);padding:2px 6px;border-radius:var(--r-pill)}
+  .cp-act-desc{font-size:11.5px;color:var(--muted);margin-top:2px}
+  .cp-act-right{flex:0 0 auto}
+  .cp-act-go{color:var(--brand);font-size:20px;font-weight:var(--fw-bold)}
+  .cp-act-done{background:var(--jade);color:#fff;font-size:10px;font-weight:var(--fw-bold);padding:4px 9px;border-radius:var(--r-pill)}
+  .segs{display:flex;gap:5px}
+  .segs>i{flex:1;height:3px;display:block;border-radius:var(--r-pill);background:var(--milestone-edge)}
+  .segs>i.on{background:var(--milestone)}
+  .cp-segs{margin:var(--sp-4) 0 var(--sp-2)}
+
+  /* speak-card internals, verbatim from styles.css §Speak mode */
+  .speak-nav{display:flex;justify-content:space-between;align-items:center;font-size:var(--fs-meta);color:var(--muted);margin-bottom:12px}
+  .speak-turn{color:var(--brand);font-weight:var(--fw-semi)}
+  .speak-card{padding:16px 14px 4px;text-align:center}
+  .speak-target-zh{font-size:22px;line-height:1.3;margin-bottom:6px;color:var(--ink)}
+  .speak-target-jp{font-size:13px;margin-bottom:5px;font-weight:700}
+  .speak-target-en{font-size:11.5px;color:var(--muted-dark);margin-bottom:12px}
+  .mic-btn{width:60px;height:60px;border-radius:var(--r-pill);border:1px solid var(--brand-edge);background:var(--brand-tint);color:var(--brand);display:flex;align-items:center;justify-content:center;margin:0 auto 10px;box-shadow:var(--elev-1)}
+  .mic-btn.listening{background:var(--feedback-bad-tint);border-color:var(--feedback-bad-edge);color:var(--feedback-bad)}
+  .speak-status{font-size:var(--fs-small);color:var(--muted-dark);min-height:20px;margin-bottom:14px}
+  .speak-heard{background:var(--parchment-warm);border-radius:var(--r-sm);padding:10px 14px;margin-bottom:14px;font-size:18px;color:var(--ink);text-align:left}
+  .speak-heard-jp{font-size:var(--fs-meta);color:var(--muted-dark);margin-top:2px}
+  .speak-result-good{background:var(--feedback-good-tint);border:1px solid var(--jade);color:var(--feedback-good-text);padding:12px 16px;border-radius:var(--r-sm);font-weight:var(--fw-bold);margin-bottom:14px;text-align:left}
+  .speak-result-close{background:var(--parchment-warm);border:1px solid var(--parchment-border);color:var(--ink-soft);padding:12px 16px;border-radius:var(--r-sm);margin-bottom:14px;font-size:var(--fs-small);text-align:left}
+  .speak-result-bad{background:var(--brand-tint);border:1px solid var(--brand);color:var(--brand-text-dark);padding:12px 16px;border-radius:var(--r-sm);margin-bottom:14px;font-size:var(--fs-small);text-align:left}
+  .speak-breakdown{display:flex;flex-wrap:wrap;justify-content:center;gap:4px 10px;margin-top:10px;padding:10px;background:var(--parchment);border-radius:var(--r-sm)}
+  .bd-col{display:flex;flex-direction:column;align-items:center;gap:2px;min-width:32px}
+  .bd-char{font-size:20px;font-weight:var(--fw-bold);line-height:1}
+  .bd-status{font-size:var(--fs-small);line-height:1}
+  .bd-jp{font-size:var(--fs-micro);line-height:1;white-space:nowrap}
+  .speak-actions{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:14px}
+  .speak-action-btn{padding:10px 22px;min-height:var(--tap-min);border-radius:var(--r-pill);border:none;font-size:var(--fs-small);font-weight:var(--fw-medium);text-align:center;display:inline-flex;align-items:center;justify-content:center}
+  .speak-action-btn.primary{flex:1;min-width:130px;background:var(--brand);color:#fff}
+  .speak-action-btn.secondary{flex:1;min-width:130px;background:transparent;border:var(--border);color:var(--muted-dark)}
+  .btn-icon{width:var(--tap-min);height:var(--tap-min);border-radius:var(--r-pill);border:var(--border);background:transparent;color:var(--muted-dark);display:inline-flex;align-items:center;justify-content:center}
+  .btn-icon--brand{border-color:var(--brand-edge);color:var(--brand)}
+  .s1{color:var(--t1)}.s2{color:var(--t2)}.s3{color:var(--t3)}.s4{color:var(--t4)}.s5{color:var(--t5)}.s6{color:var(--t6)}
+
+  /* NEW primitives proposed by this mockup — flagged, not smuggled in */
+  .sr-mode{display:flex;gap:8px;margin-bottom:14px}
+  .sr-mode-btn{flex:1;padding:9px 6px;border-radius:var(--r-sm);border:var(--border);background:transparent;font-size:11.5px;font-weight:var(--fw-medium);color:var(--muted-dark);display:flex;flex-direction:column;align-items:center;gap:3px}
+  .sr-mode-btn.on{border-color:var(--milestone);background:var(--milestone-tint);color:var(--milestone);font-weight:var(--fw-semi)}
+  .sr-listen{width:88px;height:88px;border-radius:var(--r-pill);border:1px solid var(--milestone-edge);background:var(--milestone-tint);color:var(--milestone);display:flex;align-items:center;justify-content:center;margin:0 auto 12px}
+  .sr-hidden{background:var(--parchment-deep);border:1px dashed var(--parchment-border);border-radius:var(--r-sm);padding:20px 14px;margin-bottom:12px;color:var(--muted);font-size:var(--fs-meta);font-style:italic}
+  .sr-prompt-en{font-family:var(--font-display);font-size:20px;line-height:1.35;color:var(--ink);margin-bottom:4px}
+  .sr-prompt-lbl{font-size:10px;font-weight:var(--fw-bold);letter-spacing:1px;text-transform:uppercase;color:var(--muted);margin-bottom:8px}
+  .sr-skip{width:100%;background:transparent;border:none;color:var(--muted-dark);font-size:var(--fs-meta);padding:10px 0;margin-top:2px;text-decoration:underline}
+  /* ring diagram, §5 */
+  .ring{display:flex;flex-wrap:wrap;gap:3px;margin:10px 0 4px}
+  .ring i{width:26px;height:26px;border-radius:var(--r-sm);display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:var(--fw-semi);background:var(--parchment-deep);color:var(--muted-dark);font-style:normal}
+  .ring i.r1{background:var(--milestone);color:#fff}
+  .ring i.r2{background:var(--brand);color:#fff}
+  .ring i.r3{background:var(--jade);color:#fff}
+  .ring i.r4{background:var(--milestone-tint);color:var(--milestone);border:1px solid var(--milestone-edge)}
+  .ring i.cur{outline:2px solid var(--ink);outline-offset:1px}
+  .ring-lbl{font-size:10px;font-weight:var(--fw-semi);letter-spacing:.06em;text-transform:uppercase;color:var(--muted-dark);margin:12px 0 2px}
+  .key{display:flex;gap:14px;flex-wrap:wrap;font-size:11px;color:var(--muted-dark);margin-top:8px}
+  .key span{display:inline-flex;align-items:center;gap:5px}
+  .key b{width:12px;height:12px;border-radius:3px;display:inline-block}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<h1>Checkpoint sentence review — listen-back, produce, and the combined form</h1>
+<p class="lede">Mockup 28, for the checkpoint sentence activity. Options <b>B</b> (listen, then say
+back) and <b>C</b> (English prompt, produce Cantonese) as standalone activities, then the combined
+form where the learner picks the method. Phone frames are 412px, Pixel 10's CSS viewport;
+chrome copied from the shipped markup per DESIGN_SYSTEM.md §8.</p>
+
+<div class="callout">
+<h3><span class="found">measured before designing</span></h3>
+<p class="note">Four things checked against the real corpus, because each one changes what is
+buildable:</p>
+<p class="note">1. <b>All 307 sentences have audio</b> — every <code>sid</code> has a matching file
+in <code>audio/sentences/</code>, zero missing. B is viable today with no generation run.<br>
+2. <b>Pools are 15–30 sentences per checkpoint stage</b> (beginner 15–29, intermediate 16–30) — enough
+to sample 5–6 without repeats across several attempts.<br>
+3. <b>302 sentences carry a <code>bd</code> chunk breakdown</b> — richer than assumed, and enough
+for a chunk-assembly variant later without new authoring.<br>
+4. <b>No checkpoint stage has two sentences with the same English</b> (0 of 15 stages) — so a C
+prompt always identifies exactly one target. That closes the <i>ambiguous-prompt</i> risk. It does
+<b>not</b> close the <i>synonym</i> risk — see below.</p>
+</div>
+
+<div class="callout">
+<h3><span class="found">two constraints the design has to answer</span></h3>
+<p class="note"><b>17 sentences in checkpoint pools are under 4 characters</b> — 請坐 (cing2 co5),
+係呀！(hai6 aa3), 食飯喇！(sik6 faan6 laa3). DES-39 requires an <i>exact</i> match below four
+characters, with no leniency, because at that length one substitution is the whole word. Those 17
+will false-reject far more often than the ~0% the leniency rules were tuned for. <b>Proposal: the
+checkpoint pool filters to 4+ characters</b> — it costs 17 of 302 sentences (5.6%) and keeps the
+grading honest. Filtering is one predicate in the pool builder, and the pools stay 15–30 either way.</p>
+<p class="note"><b>C's synonym risk is real and not measurable from the data.</b> "Thank you,
+goodbye!" has 多謝 (do1 ze6) as its target, but a learner who says 唔該 (m4 goi1) has produced
+defensible Cantonese and would be marked wrong — the corpus itself teaches both, and the note on
+that sentence explains the distinction. This is the same shape as the DES-37 prototype's permanent
+<i>you were flatter than that</i> verdict: correct input, told it is wrong. <b>It is why C must
+never block</b>, and why C's grading language differs from B's — see §4.</p>
+</div>
+
+<h2>1 · The hub with a third card</h2>
+<p class="lede">Unchanged apart from one more <code>.cp-act-card</code>. The hub already builds
+its cards from a <code>meta</code> map keyed by activity, and <code>.cp-segs</code> already sizes
+itself to <code>available.length</code> — a third entry needs no layout change.</p>
+
+<div class="frames">
+  <div class="frame">
+    <p class="cap">Hub — three activities</p>
+    <div class="phone">
+      <div class="header"><div class="header-row">
+        <div class="header-slot"><span class="ic"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg></span></div>
+        <div class="header-title"><span class="zh">廣東話</span><span class="en">Cantonese Learner</span></div>
+        <div class="header-slot"><span class="ic"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3.2"/><path d="M19.1 14.5a1.6 1.6 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.6 1.6 0 0 0-1.8-.3 1.6 1.6 0 0 0-1 1.5v.2a2 2 0 1 1-4 0v-.1a1.6 1.6 0 0 0-1-1.5 1.6 1.6 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.6 1.6 0 0 0 .3-1.8 1.6 1.6 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.6 1.6 0 0 0 1.5-1 1.6 1.6 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.6 1.6 0 0 0 1.8.3h.1a1.6 1.6 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.6 1.6 0 0 0 1 1.5 1.6 1.6 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.6 1.6 0 0 0-.3 1.8v.1a1.6 1.6 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.6 1.6 0 0 0-1.5 1z"/></svg></span></div>
+      </div></div>
+      <div class="scroll"><div class="content">
+        <div style="text-align:center;padding:6px 0 2px">
+          <div style="width:56px;height:56px;margin:0 auto 12px;background:var(--milestone);border-radius:var(--r-md);transform:rotate(45deg);display:flex;align-items:center;justify-content:center;box-shadow:var(--elev-2)"><span style="transform:rotate(-45deg);font-size:25px;color:#fff">◆</span></div>
+          <div style="font-family:var(--font-display);font-size:var(--fs-h3);color:var(--ink);font-weight:var(--fw-semi)">Checkpoint</div>
+          <div style="font-size:var(--fs-small);color:var(--brand);font-weight:var(--fw-semi);margin:3px 0 2px">First Words</div>
+          <div style="font-size:var(--fs-meta);color:var(--muted);margin-bottom:4px">1 of 3 reviewed</div>
+          <div style="display:inline-flex;align-items:center;gap:6px;background:var(--feedback-good-tint);border:1px solid var(--feedback-good-tint);color:var(--jade);border-radius:var(--r-pill);padding:5px 12px;font-size:11.5px;margin:6px 0 16px">Optional — do any, in any order</div>
+        </div>
+        <div style="font-size:var(--fs-micro);color:var(--muted);text-align:center;margin-bottom:14px;font-style:italic">Suggested flow: recall → produce</div>
+        <div class="cp-act-card">
+          <span class="cp-act-icon"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round"><path d="M12 7v14"/><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"/></svg></span>
+          <span class="cp-act-body">
+            <span class="cp-act-name">Words <span class="cp-act-tag">RECALL</span></span>
+            <span class="cp-act-desc">Vocabulary from all topics in this stage</span>
+          </span>
+          <span class="cp-act-right"><span class="cp-act-done">✓ Done</span></span>
+        </div>
+        <div class="cp-act-card" style="border-color:var(--milestone-edge);box-shadow:0 0 0 2px var(--milestone-tint)">
+          <span class="cp-act-icon"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" x2="12" y1="19" y2="22"/></svg></span>
+          <span class="cp-act-body">
+            <span class="cp-act-name">Sentences <span class="cp-act-tag">SPEAK</span></span>
+            <span class="cp-act-desc">Say back eight sentences from this stage</span>
+          </span>
+          <span class="cp-act-right"><span class="cp-act-go">›</span></span>
+        </div>
+        <div class="cp-act-card">
+          <span class="cp-act-icon"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22z"/></svg></span>
+          <span class="cp-act-body">
+            <span class="cp-act-name">Conversation <span class="cp-act-tag">PRODUCE</span></span>
+            <span class="cp-act-desc">A longer scene — read &amp; speak</span>
+          </span>
+          <span class="cp-act-right"><span class="cp-act-go">›</span></span>
+        </div>
+        <div class="segs cp-segs"><i class="on"></i><i></i><i></i></div>
+        <button class="cp-finish dim">Finish 2 more to complete</button>
+      </div></div>
+    </div>
+    <p class="sub">The new card sits <b>between</b> Words and Conversation — the hub's own
+    "recall → produce" hint is an ordering claim, and sentences sit between single words and a
+    whole scene. Highlighted here only to show which card is new.</p>
+  </div>
+
+  <div class="frame">
+    <p class="cap">The tag question</p>
+    <div style="background:var(--parchment);border:var(--border);border-radius:var(--r-md);padding:16px">
+      <p class="note" style="margin:0 0 12px"><b>Words is RECALL, Conversation is PRODUCE.</b>
+      A third activity needs a tag that isn't just a third synonym for "say things." Three
+      candidates, and none is obviously right — this is a taste call worth making explicitly
+      rather than defaulting:</p>
+      <div class="cp-act-card" style="margin-bottom:8px">
+        <span class="cp-act-body"><span class="cp-act-name">Sentences <span class="cp-act-tag">SPEAK</span></span>
+        <span class="cp-act-desc">Names the mode. Honest, but flat — Conversation is also speaking.</span></span>
+      </div>
+      <div class="cp-act-card" style="margin-bottom:8px">
+        <span class="cp-act-body"><span class="cp-act-name">Sentences <span class="cp-act-tag">RECALL → PRODUCE</span></span>
+        <span class="cp-act-desc">Accurate for the combined form (§3), but two words where the others have one.</span></span>
+      </div>
+      <div class="cp-act-card" style="margin-bottom:0">
+        <span class="cp-act-body"><span class="cp-act-name">Sentences <span class="cp-act-tag">SAY</span></span>
+        <span class="cp-act-desc">Parallel in length and register to RECALL/PRODUCE, and distinct from both.</span></span>
+      </div>
+      <p class="note" style="margin-top:12px">I'd take <b>SAY</b> — it sits beside RECALL and
+      PRODUCE as a third verb of the same weight, where SPEAK reads as a mode label and the arrow
+      form breaks the pattern.</p>
+    </div>
+  </div>
+</div>
+
+<h2>2 · Option B — listen, then say back</h2>
+<p class="lede">Audio plays; the Chinese is <b>hidden</b> until after the attempt. This is what
+makes it different in kind from in-topic practice, where the text is always on screen — there,
+the learner is reading aloud; here, they have to hear it first.</p>
+
+<div class="frames">
+
+  <div class="frame">
+    <p class="cap">B · <em>listening</em> — text hidden</p>
+    <div class="phone">
+      <div class="header"><div class="header-row">
+        <div class="header-slot"><span class="ic"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg></span></div>
+        <div class="header-title"><span class="zh">廣東話</span><span class="en">Cantonese Learner</span></div>
+        <div class="header-slot"><span class="ic"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3.2"/><path d="M19.1 14.5a1.6 1.6 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.6 1.6 0 0 0-1.8-.3 1.6 1.6 0 0 0-1 1.5v.2a2 2 0 1 1-4 0v-.1a1.6 1.6 0 0 0-1-1.5 1.6 1.6 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.6 1.6 0 0 0 .3-1.8 1.6 1.6 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.6 1.6 0 0 0 1.5-1 1.6 1.6 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.6 1.6 0 0 0 1.8.3h.1a1.6 1.6 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.6 1.6 0 0 0 1 1.5 1.6 1.6 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.6 1.6 0 0 0-.3 1.8v.1a1.6 1.6 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.6 1.6 0 0 0-1.5 1z"/></svg></span></div>
+      </div></div>
+      <div class="scroll"><div class="content">
+        <button class="back-home-btn"><span style="display:inline-flex;align-items:center;gap:5px"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg> Checkpoint</span></button>
+        <div class="cp-convo-head">
+          <div class="cp-convo-kick">◆ Consolidation · First Words</div>
+          <div class="cp-convo-title">Say it back</div>
+        </div>
+        <div class="speak-nav"><span>Sentence 2 of 8</span><span class="speak-turn">Listen first</span></div>
+        <div class="segs" style="margin-bottom:14px"><i class="on"></i><i></i><i></i><i></i><i></i><i></i></div>
+        <div class="speak-card">
+          <div class="sr-listen"><svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4.7a.7.7 0 0 0-1.2-.5L6 8H3a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1h3l3.8 3.8a.7.7 0 0 0 1.2-.5z"/><path d="M16 9a5 5 0 0 1 0 6"/><path d="M19.4 6a9 9 0 0 1 0 12"/></svg></div>
+          <div class="speak-status">Tap to hear it again</div>
+          <div class="sr-hidden">The sentence is hidden — listen, then say it back</div>
+          <div class="mic-btn"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" x2="12" y1="19" y2="22"/></svg></div>
+          <div class="speak-status">Press the mic and say what you heard</div>
+          <button class="sr-skip">Show me the sentence</button>
+        </div>
+      </div></div>
+    </div>
+    <p class="sub">The big speaker is the primary control, the mic secondary — inverted from the
+    v132 sheet, because here the <b>listening</b> is the task. "Show me the sentence" is an escape
+    hatch that reveals the text and drops the item to un-graded, so a learner is never stuck on a
+    sentence they can't parse by ear.</p>
+  </div>
+
+  <div class="frame">
+    <p class="cap">B · <em>result</em> — reveals the text</p>
+    <div class="phone">
+      <div class="header"><div class="header-row">
+        <div class="header-slot"><span class="ic"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg></span></div>
+        <div class="header-title"><span class="zh">廣東話</span><span class="en">Cantonese Learner</span></div>
+        <div class="header-slot"><span class="ic"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3.2"/><path d="M19.1 14.5a1.6 1.6 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.6 1.6 0 0 0-1.8-.3 1.6 1.6 0 0 0-1 1.5v.2a2 2 0 1 1-4 0v-.1a1.6 1.6 0 0 0-1-1.5 1.6 1.6 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.6 1.6 0 0 0 .3-1.8 1.6 1.6 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.6 1.6 0 0 0 1.5-1 1.6 1.6 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.6 1.6 0 0 0 1.8.3h.1a1.6 1.6 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.6 1.6 0 0 0 1 1.5 1.6 1.6 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.6 1.6 0 0 0-.3 1.8v.1a1.6 1.6 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.6 1.6 0 0 0-1.5 1z"/></svg></span></div>
+      </div></div>
+      <div class="scroll"><div class="content">
+        <button class="back-home-btn"><span style="display:inline-flex;align-items:center;gap:5px"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg> Checkpoint</span></button>
+        <div class="cp-convo-head">
+          <div class="cp-convo-kick">◆ Consolidation · First Words</div>
+          <div class="cp-convo-title">Say it back</div>
+        </div>
+        <div class="speak-nav"><span>Sentence 2 of 8</span><span class="speak-turn">Result</span></div>
+        <div class="segs" style="margin-bottom:14px"><i class="on"></i><i class="on"></i><i></i><i></i><i></i><i></i></div>
+        <div class="speak-card">
+          <div class="speak-target-zh">早晨！你好嗎？</div>
+          <div class="speak-target-jp"><span class="s2">zou2</span> <span class="s4">san4</span>! <span class="s5">nei5</span> <span class="s2">hou2</span> <span class="s3">maa3</span>?</div>
+          <div class="speak-target-en">Good morning! How are you?</div>
+          <div class="speak-heard">You said: <strong>早晨！你好嗎？</strong>
+            <div class="speak-heard-jp"><span class="s2">zou2</span> <span class="s4">san4</span> <span class="s5">nei5</span> <span class="s2">hou2</span> <span class="s3">maa3</span></div>
+          </div>
+          <div class="speak-result-good">
+            <div>✓ Great! You said it correctly.</div>
+            <div class="speak-breakdown">
+              <div class="bd-col"><div class="bd-char">早</div><div class="bd-status" style="color:var(--feedback-good-text)">✓</div><div class="bd-jp s2">zou2</div></div>
+              <div class="bd-col"><div class="bd-char">晨</div><div class="bd-status" style="color:var(--feedback-good-text)">✓</div><div class="bd-jp s4">san4</div></div>
+              <div class="bd-col"><div class="bd-char">你</div><div class="bd-status" style="color:var(--feedback-good-text)">✓</div><div class="bd-jp s5">nei5</div></div>
+              <div class="bd-col"><div class="bd-char">好</div><div class="bd-status" style="color:var(--feedback-good-text)">✓</div><div class="bd-jp s2">hou2</div></div>
+              <div class="bd-col"><div class="bd-char">嗎</div><div class="bd-status" style="color:var(--feedback-good-text)">✓</div><div class="bd-jp s3">maa3</div></div>
+            </div>
+          </div>
+          <div class="speak-actions">
+            <button class="speak-action-btn secondary">Try again</button>
+            <button class="speak-action-btn primary">Next ›</button>
+          </div>
+        </div>
+      </div></div>
+    </div>
+    <p class="sub">Result reuses the v132 machinery wholesale — <code>renderSpeakBreakdown()</code>,
+    the good/close/bad panels, the "You said" jyutping line from DES-41. Nothing new is graded
+    here; the only change is that the target text appears <i>now</i> rather than from the start.
+    <b>"Next" is always enabled</b>, whatever the verdict — see §4.</p>
+  </div>
+
+</div>
+
+<h2>3 · Option C — English prompt, produce Cantonese</h2>
+<p class="lede">The hardest of the three, and the only one that tests recall rather than
+repetition. Same result treatment; the difference is entirely in the prompt and in how a
+mismatch is worded.</p>
+
+<div class="frames">
+
+  <div class="frame">
+    <p class="cap">C · <em>prompt</em></p>
+    <div class="phone">
+      <div class="header"><div class="header-row">
+        <div class="header-slot"><span class="ic"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg></span></div>
+        <div class="header-title"><span class="zh">廣東話</span><span class="en">Cantonese Learner</span></div>
+        <div class="header-slot"><span class="ic"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3.2"/><path d="M19.1 14.5a1.6 1.6 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.6 1.6 0 0 0-1.8-.3 1.6 1.6 0 0 0-1 1.5v.2a2 2 0 1 1-4 0v-.1a1.6 1.6 0 0 0-1-1.5 1.6 1.6 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.6 1.6 0 0 0 .3-1.8 1.6 1.6 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.6 1.6 0 0 0 1.5-1 1.6 1.6 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.6 1.6 0 0 0 1.8.3h.1a1.6 1.6 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.6 1.6 0 0 0 1 1.5 1.6 1.6 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.6 1.6 0 0 0-.3 1.8v.1a1.6 1.6 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.6 1.6 0 0 0-1.5 1z"/></svg></span></div>
+      </div></div>
+      <div class="scroll"><div class="content">
+        <button class="back-home-btn"><span style="display:inline-flex;align-items:center;gap:5px"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg> Checkpoint</span></button>
+        <div class="cp-convo-head">
+          <div class="cp-convo-kick">◆ Consolidation · First Words</div>
+          <div class="cp-convo-title">Say it in Cantonese</div>
+        </div>
+        <div class="speak-nav"><span>Sentence 3 of 8</span><span class="speak-turn">Your turn</span></div>
+        <div class="segs" style="margin-bottom:14px"><i class="on"></i><i class="on"></i><i></i><i></i><i></i><i></i></div>
+        <div class="speak-card">
+          <div class="sr-prompt-lbl">Say this in Cantonese</div>
+          <div class="sr-prompt-en">Thank you, goodbye!</div>
+          <div class="sr-hidden" style="margin-top:14px">Cantonese hidden — say it, then check</div>
+          <div class="mic-btn"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" x2="12" y1="19" y2="22"/></svg></div>
+          <div class="speak-status">Press the mic and say it</div>
+          <button class="sr-skip">Show me the answer</button>
+        </div>
+      </div></div>
+    </div>
+    <p class="sub">No audio control here at all — offering "listen" before producing would give
+    the answer away. The escape hatch reveals the Cantonese and marks the item un-graded, same as
+    B's.</p>
+  </div>
+
+  <div class="frame">
+    <p class="cap">C · <em>mismatch</em> — the synonym problem, answered</p>
+    <div class="phone">
+      <div class="header"><div class="header-row">
+        <div class="header-slot"><span class="ic"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg></span></div>
+        <div class="header-title"><span class="zh">廣東話</span><span class="en">Cantonese Learner</span></div>
+        <div class="header-slot"><span class="ic"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3.2"/><path d="M19.1 14.5a1.6 1.6 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.6 1.6 0 0 0-1.8-.3 1.6 1.6 0 0 0-1 1.5v.2a2 2 0 1 1-4 0v-.1a1.6 1.6 0 0 0-1-1.5 1.6 1.6 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.6 1.6 0 0 0 .3-1.8 1.6 1.6 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.6 1.6 0 0 0 1.5-1 1.6 1.6 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.6 1.6 0 0 0 1.8.3h.1a1.6 1.6 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.6 1.6 0 0 0 1 1.5 1.6 1.6 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.6 1.6 0 0 0-.3 1.8v.1a1.6 1.6 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.6 1.6 0 0 0-1.5 1z"/></svg></span></div>
+      </div></div>
+      <div class="scroll"><div class="content">
+        <button class="back-home-btn"><span style="display:inline-flex;align-items:center;gap:5px"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg> Checkpoint</span></button>
+        <div class="cp-convo-head">
+          <div class="cp-convo-kick">◆ Consolidation · First Words</div>
+          <div class="cp-convo-title">Say it in Cantonese</div>
+        </div>
+        <div class="speak-nav"><span>Sentence 3 of 8</span><span class="speak-turn">Result</span></div>
+        <div class="segs" style="margin-bottom:14px"><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i><i></i></div>
+        <div class="speak-card">
+          <div class="sr-prompt-lbl">You were asked</div>
+          <div class="sr-prompt-en" style="font-size:16px;margin-bottom:12px">Thank you, goodbye!</div>
+          <div class="speak-heard">You said: <strong>唔該，再見！</strong>
+            <div class="speak-heard-jp"><span class="s4">m4</span> <span class="s1">goi1</span> <span class="s3">zoi3</span> <span class="s3">gin3</span></div>
+          </div>
+          <div class="speak-result-close">
+            <div style="font-weight:700;margin-bottom:4px">Here's the sentence we had</div>
+            <div><strong>多謝，再見！</strong> (<span class="s1">do1</span> <span class="s6">ze6</span>, <span class="s3">zoi3</span> <span class="s3">gin3</span>)</div>
+            <div style="margin-top:8px;padding-top:8px;border-top:1px solid var(--parchment-border);font-size:11.5px;color:var(--muted-dark)">
+              多謝 (do1 ze6) is for gifts and real kindness; 唔該 (m4 goi1) is for service and small
+              favours. Both are thank-yous.
+            </div>
+          </div>
+          <div class="speak-actions">
+            <button class="speak-action-btn secondary">Try again</button>
+            <button class="speak-action-btn primary">Next ›</button>
+          </div>
+        </div>
+      </div></div>
+    </div>
+    <p class="sub"><b>This frame is the whole argument for C's grading differing from B's.</b>
+    The learner produced good Cantonese. The app cannot tell that apart from an error — so
+    <b>it says neither</b> (DES-44). No "correct", no "wrong", no "not wrong": just the sentence we
+    had, what was heard, and the note. Every claim on this screen is one the app can actually
+    stand behind, which is the DES-38 tone rule applied to a different uncertainty. Uses
+    <code>.speak-result-close</code> (DES-42), already built for the "accepted but different"
+    shape. The explanatory line is the sentence's own <code>note</code> field, authored on 302 of
+    302 sentences — no new content.</p>
+  </div>
+
+</div>
+
+<h2>4 · Grading — graded, but never blocking</h2>
+<p class="lede">Per the brief: grade the same way Speak already does, but always allow continuing,
+and give the whole review a "mark complete." Three rules, and one thing deliberately <i>not</i>
+carried over from Words.</p>
+
+<table class="table">
+  <tr><th>Rule</th><th>Why</th></tr>
+  <tr>
+    <td><b>Every result screen's "Next" is enabled, whatever the verdict.</b> A mismatch changes
+    the panel and the copy, never the ability to move on.</td>
+    <td>The recogniser is wrong often enough that blocking on it would make the activity feel
+    broken. This is DES-39's asymmetry applied to flow rather than to matching: a false reject
+    that also traps you is much worse than one that doesn't.</td>
+  </tr>
+  <tr>
+    <td><b>An escape hatch on every prompt</b> — "Show me the sentence" (B) / "Show me the answer"
+    (C). Reveals the target and marks that item un-graded.</td>
+    <td>Without it, a learner who genuinely cannot produce the sentence has no move except leaving.
+    Marking it un-graded rather than failed keeps the tally honest without punishing the exit.</td>
+  </tr>
+  <tr>
+    <td><b>A "Mark reviewed" button completes the whole activity</b>, exactly like Conversation's,
+    and is available from the summary regardless of how the eight items went.</td>
+    <td>Matches the brief, and matches the hub's own promise — the checkpoint says
+    <i>"Optional — do any, in any order,"</i> so an activity that could refuse to complete would
+    contradict the screen it launched from.</td>
+  </tr>
+  <tr>
+    <td><b>No pass threshold, and no score out of eight on the hub card.</b> The card shows
+    done / not-done, like the other two.</td>
+    <td>Words is a quiz and can defensibly score. This cannot: with a recogniser that produced a
+    ~25% false-reject rate before DES-39's leniency, a stored "4 / 6" would be a permanent record
+    of the recogniser's accuracy, not the learner's. Same reasoning as DES-37's refusal to show a
+    score out of 100.</td>
+  </tr>
+</table>
+
+<div class="frames" style="margin-top:18px">
+  <div class="frame">
+    <p class="cap">Summary — end of the eight</p>
+    <div class="phone" style="height:600px">
+      <div class="header"><div class="header-row">
+        <div class="header-slot"><span class="ic"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg></span></div>
+        <div class="header-title"><span class="zh">廣東話</span><span class="en">Cantonese Learner</span></div>
+        <div class="header-slot"><span class="ic"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3.2"/><path d="M19.1 14.5a1.6 1.6 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.6 1.6 0 0 0-1.8-.3 1.6 1.6 0 0 0-1 1.5v.2a2 2 0 1 1-4 0v-.1a1.6 1.6 0 0 0-1-1.5 1.6 1.6 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.6 1.6 0 0 0 .3-1.8 1.6 1.6 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.6 1.6 0 0 0 1.5-1 1.6 1.6 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.6 1.6 0 0 0 1.8.3h.1a1.6 1.6 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.6 1.6 0 0 0 1 1.5 1.6 1.6 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.6 1.6 0 0 0-.3 1.8v.1a1.6 1.6 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.6 1.6 0 0 0-1.5 1z"/></svg></span></div>
+      </div></div>
+      <div class="scroll"><div class="content">
+        <button class="back-home-btn"><span style="display:inline-flex;align-items:center;gap:5px"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg> Checkpoint</span></button>
+        <div class="cp-convo-head">
+          <div class="cp-convo-kick">◆ Consolidation · First Words</div>
+          <div class="cp-convo-title">Sentences reviewed</div>
+        </div>
+        <div style="text-align:center;padding:6px 0 14px">
+          <div style="font-family:var(--font-display);font-size:30px;color:var(--ink);font-weight:var(--fw-semi)">8 sentences</div>
+          <div style="font-size:var(--fs-small);color:var(--muted-dark);margin-top:4px">4 matched · 1 close · 1 revealed</div>
+        </div>
+        <div style="background:var(--parchment-warm);border:var(--border);border-radius:var(--r-md);padding:12px 14px;margin-bottom:12px">
+          <div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;font-size:14px"><span>早晨！你好嗎？</span><span style="color:var(--feedback-good-text);font-weight:600">✓</span></div>
+          <div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;font-size:14px;border-top:1px solid var(--parchment-border)"><span>多謝，再見！</span><span style="color:var(--brand);font-weight:600;font-size:11px">close</span></div>
+          <div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;font-size:14px;border-top:1px solid var(--parchment-border)"><span>對唔住，我遲到。</span><span style="color:var(--muted);font-weight:600;font-size:11px">revealed</span></div>
+          <div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;font-size:14px;border-top:1px solid var(--parchment-border)"><span>你好！我叫William。</span><span style="color:var(--feedback-good-text);font-weight:600">✓</span></div>
+        </div>
+        <button class="cp-finish">✓ Mark sentences reviewed</button>
+        <button class="sr-skip" style="margin-top:10px">Run eight more</button>
+      </div></div>
+    </div>
+    <p class="sub">The tally is shown <b>here and then discarded</b> — it is feedback for this
+    run, not a stored grade. "Run eight more" re-samples from the stage's remaining pool; with 15–30
+    sentences per stage there is room for two to five distinct runs before repeats.</p>
+  </div>
+
+  <div class="frame">
+    <p class="cap">Combined form — the mode picker (§5)</p>
+    <div class="phone" style="height:600px">
+      <div class="header"><div class="header-row">
+        <div class="header-slot"><span class="ic"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg></span></div>
+        <div class="header-title"><span class="zh">廣東話</span><span class="en">Cantonese Learner</span></div>
+        <div class="header-slot"><span class="ic"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3.2"/><path d="M19.1 14.5a1.6 1.6 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.6 1.6 0 0 0-1.8-.3 1.6 1.6 0 0 0-1 1.5v.2a2 2 0 1 1-4 0v-.1a1.6 1.6 0 0 0-1-1.5 1.6 1.6 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.6 1.6 0 0 0 .3-1.8 1.6 1.6 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.6 1.6 0 0 0 1.5-1 1.6 1.6 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.6 1.6 0 0 0 1.8.3h.1a1.6 1.6 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.6 1.6 0 0 0 1 1.5 1.6 1.6 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.6 1.6 0 0 0-.3 1.8v.1a1.6 1.6 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.6 1.6 0 0 0-1.5 1z"/></svg></span></div>
+      </div></div>
+      <div class="scroll"><div class="content">
+        <button class="back-home-btn"><span style="display:inline-flex;align-items:center;gap:5px"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg> Checkpoint</span></button>
+        <div class="cp-convo-head">
+          <div class="cp-convo-kick">◆ Consolidation · First Words</div>
+          <div class="cp-convo-title">Sentences</div>
+        </div>
+        <p style="font-size:var(--fs-small);color:var(--muted-dark);line-height:1.6;margin:0 0 14px">
+          Eight sentences from this stage. Choose how you'd like to be prompted — you can change
+          this at any point during the review.</p>
+        <div class="cp-act-card" style="margin-bottom:9px">
+          <span class="cp-act-icon"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4.7a.7.7 0 0 0-1.2-.5L6 8H3a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1h3l3.8 3.8a.7.7 0 0 0 1.2-.5z"/><path d="M16 9a5 5 0 0 1 0 6"/><path d="M19.4 6a9 9 0 0 1 0 12"/></svg></span>
+          <span class="cp-act-body">
+            <span class="cp-act-name">Listen and say back</span>
+            <span class="cp-act-desc">Hear it, repeat it. Text stays hidden until after.</span>
+          </span>
+          <span class="cp-act-right"><span class="cp-act-go">›</span></span>
+        </div>
+        <div class="cp-act-card" style="margin-bottom:9px">
+          <span class="cp-act-icon"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18"/><path d="M12 3c2.5 2.7 2.5 15.3 0 18"/><path d="M12 3c-2.5 2.7-2.5 15.3 0 18"/></svg></span>
+          <span class="cp-act-body">
+            <span class="cp-act-name">Say it in Cantonese</span>
+            <span class="cp-act-desc">English prompt, you produce it. Harder.</span>
+          </span>
+          <span class="cp-act-right"><span class="cp-act-go">›</span></span>
+        </div>
+        <div class="cp-act-card" style="margin-bottom:0">
+          <span class="cp-act-icon"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 3h5v5"/><path d="M8 21H3v-5"/><path d="M21 3l-7.5 7.5"/><path d="M3 21l7.5-7.5"/></svg></span>
+          <span class="cp-act-body">
+            <span class="cp-act-name">Mix them</span>
+            <span class="cp-act-desc">Alternates between the two across the eight.</span>
+          </span>
+          <span class="cp-act-right"><span class="cp-act-go">›</span></span>
+        </div>
+      </div></div>
+    </div>
+    <p class="sub">One activity, three ways in — reuses <code>.cp-act-card</code>, so the picker
+    is visually the hub one level down and needs no new primitive. The alternative is an in-review
+    segmented toggle (<code>.sr-mode</code>, styled in this file); shown as a picker here because a
+    <b>choice made once, up front</b> reads as a mode, where a toggle sitting above every prompt
+    invites second-guessing mid-review.</p>
+  </div>
+</div>
+
+<h2>5 · Which eight, and what happens when they run out</h2>
+<p class="lede">The screens above say "Run eight more" without saying how the eight are chosen. Measured
+first, because the numbers decide the design: <b>after the 4+ character filter, pools run 13–30
+sentences</b>, and <b>13 of 15 stages do not divide evenly by the run length</b>. An awkward
+remainder is the normal case, not an edge case, so the rule has to handle it as its ordinary
+behaviour rather than as a special case bolted on.</p>
+
+<div class="callout">
+<h3><span class="found">measured</span></h3>
+<table class="table" style="margin-top:4px">
+  <tr><th>Stage</th><th>Pool (4+ chars)</th><th>Full runs of 8</th><th>Left over</th></tr>
+  <tr><td>beginner-s1</td><td>25</td><td>3</td><td>1</td></tr>
+  <tr><td>beginner-s2</td><td>22</td><td>2</td><td>6</td></tr>
+  <tr><td>beginner-s4 / s5 / s6 / s8</td><td>15</td><td>1</td><td>7</td></tr>
+  <tr><td>beginner-s11</td><td>13 <span style="color:var(--muted)">(smallest)</span></td><td>1</td><td>5</td></tr>
+  <tr><td>intermediate-s5</td><td>30 <span style="color:var(--muted)">(largest)</span></td><td>3</td><td>6</td></tr>
+</table>
+<p class="note">No stage has a pool under 8, so every run fills. Only intermediate-s3 (16) and
+intermediate-s4 (24) divide cleanly.</p>
+<p class="note"><b>A consequence of eight rather than six, recorded because it is a real
+trade.</b> Five stages — beginner-s4, s5, s6, s8 (15 each) and s11 (13) — now get <b>fewer than two
+full cycles</b>. On those, run 2 already draws 2–3 items from the reshuffled next cycle and may
+repeat one from run 1; at six per run, repeats did not begin until run 3. This is a review
+activity and seeing a sentence twice is not a fault, but it is a different feel on the smallest
+stages and worth knowing before it is noticed in use.</p>
+</div>
+
+<h3 style="margin-top:24px">The rule — a cursor over a ring, not a list of what's been seen</h3>
+<p class="lede">The obvious approach is storing which <code>sid</code>s have been used. That is a
+growing array per checkpoint that needs pruning and invalidating, and it has to be persisted,
+migrated and reasoned about. The cheaper answer stores <b>one integer</b>.</p>
+
+<p class="note"><b>Treat the pool as a continuous ring.</b> Position <i>p</i> maps to cycle
+<code>floor(p / poolSize)</code> and index <code>p % poolSize</code>. Each cycle's order is a
+seeded shuffle keyed on <code>cpId + cycle</code> — deterministic, so the same cycle always
+produces the same order and <b>the cursor alone reconstructs what has been seen</b>, with nothing
+else stored. A run takes positions <code>cursor … cursor+7</code> and advances the cursor by eight.</p>
+
+<p class="note"><b>Crossing a cycle boundary needs no special case.</b> If three positions remain
+in cycle 2, the run takes those three plus the first three of cycle 3's freshly-shuffled order,
+and the cursor lands mid-cycle-3. Always exactly six, always unseen-first, and the remainder
+problem disappears rather than being handled.</p>
+
+<div style="background:var(--parchment);border:var(--border);border-radius:var(--r-md);padding:16px;margin-top:14px;max-width:86ch">
+  <p class="note" style="margin:0"><b>Worked against the real beginner-s1 pool</b> — 25 sentences
+  across five topics (pronouns 8, greetings 5, yesno 3, numbers 4, phrases 5). Each box is one
+  position in the ring; colour is the run that consumes it.</p>
+
+  <div class="ring-lbl">Cycle 0 — 25 positions, seeded shuffle</div>
+  <div class="ring">
+    <i class="r1">1</i><i class="r1">1</i><i class="r1">1</i><i class="r1">1</i><i class="r1">1</i><i class="r1">1</i><i class="r1">1</i><i class="r1">1</i><i class="r2">2</i><i class="r2">2</i><i class="r2">2</i><i class="r2">2</i><i class="r2">2</i><i class="r2">2</i><i class="r2">2</i><i class="r2">2</i><i class="r3">3</i><i class="r3">3</i><i class="r3">3</i><i class="r3">3</i><i class="r3">3</i><i class="r3">3</i><i class="r3">3</i><i class="r3">3</i><i class="cur">4</i>
+  </div>
+  <div class="ring-lbl">Cycle 1 — reshuffled, different order</div>
+  <div class="ring">
+    <i class="cur">4</i><i class="cur">4</i><i class="cur">4</i><i class="cur">4</i><i class="cur">4</i><i class="cur">4</i><i class="cur">4</i><i>5</i><i>5</i><i>5</i><i>5</i><i>5</i><i>5</i><i>5</i><i>5</i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+  </div>
+  <div class="key">
+    <span><b style="background:var(--milestone)"></b> run 1</span>
+    <span><b style="background:var(--brand)"></b> run 2</span>
+    <span><b style="background:var(--jade)"></b> run 3</span>
+    <span><b style="background:var(--parchment);outline:2px solid var(--ink);outline-offset:-1px"></b> run 4 — spans the boundary</span>
+    <span><b style="background:var(--parchment-deep)"></b> run 5</span>
+  </div>
+  <p class="note" style="margin-top:12px">Run 4 is the interesting one: <b>1 position left in
+  cycle 0, topped up with the first 7 of cycle 1.</b> Eight items, none of them repeats, and the
+  cursor simply carries on. Run 5 continues from position 7 of cycle 1 — no repeat of run 4's
+  top-up, because the cursor moved past them.</p>
+</div>
+
+<p class="note" style="margin-top:16px"><b>Ordering within a cycle: round-robin by topic, shuffled
+within each.</b> A pure shuffle of beginner-s1's pool can hand back four sentences from
+<code>pronouns</code> (which contributes 8 of the 25) and one each from two others — a lumpy
+sample of a stage that is meant to be reviewed as a whole. Interleaving across topics first, then
+shuffling within each topic and shuffling the topic order per cycle, gives spread <i>and</i>
+variety at no extra storage.</p>
+
+<p class="note"><b>Where the integer lives:</b>
+<code>pathProgress[pathKey]['cp:&lt;cpId&gt;:sentences:cursor']</code>. Verified against
+<code>migratePathProgressIfNeeded()</code> — it returns early on any key starting with
+<code>cp:</code>, so a numeric value there is safe from the legacy-key rewrite that would
+otherwise mangle it. Persisted by the existing <code>savePathProgress()</code>. No new storage
+surface, no schema change.</p>
+
+<div class="callout">
+<h3>Two caveats, recorded rather than discovered later</h3>
+<p class="note"><b>Near-repeats can cross a boundary.</b> A reshuffle can place an item late in
+cycle <i>N</i> and early in cycle <i>N+1</i>, so run 5's top-up could in principle include
+something from run 4. Mitigable by seeding cycle <i>N+1</i>'s shuffle to push the previous cycle's
+tail to the back, but that is real complexity for a rare, mild artefact — not proposed.</p>
+<p class="note"><b>Content changes make "seen" approximate.</b> Adding or editing sentences changes
+<code>poolSize</code>, which shifts the position→item mapping, so a cursor stored under the old
+size no longer means quite what it meant. Worst case is one early repeat after a content change.
+Acceptable; the alternative is versioning the pool, which costs more than the problem.</p>
+</div>
+
+<h3 style="margin-top:24px">Running out — there is no wall</h3>
+<p class="lede">The ring never exhausts; it cycles. What is worth deciding is whether the learner
+is <i>told</i> when they have been through everything once.</p>
+
+<div class="frames">
+  <div class="frame">
+    <p class="cap">Summary at the end of a full cycle <span class="rec">recommended</span></p>
+    <div class="phone" style="height:600px">
+      <div class="header"><div class="header-row">
+        <div class="header-slot"><span class="ic"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg></span></div>
+        <div class="header-title"><span class="zh">廣東話</span><span class="en">Cantonese Learner</span></div>
+        <div class="header-slot"><span class="ic"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3.2"/><path d="M19.1 14.5a1.6 1.6 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.6 1.6 0 0 0-1.8-.3 1.6 1.6 0 0 0-1 1.5v.2a2 2 0 1 1-4 0v-.1a1.6 1.6 0 0 0-1-1.5 1.6 1.6 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.6 1.6 0 0 0 .3-1.8 1.6 1.6 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.6 1.6 0 0 0 1.5-1 1.6 1.6 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.6 1.6 0 0 0 1.8.3h.1a1.6 1.6 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.6 1.6 0 0 0 1 1.5 1.6 1.6 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.6 1.6 0 0 0-.3 1.8v.1a1.6 1.6 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.6 1.6 0 0 0-1.5 1z"/></svg></span></div>
+      </div></div>
+      <div class="scroll"><div class="content">
+        <button class="back-home-btn"><span style="display:inline-flex;align-items:center;gap:5px"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg> Checkpoint</span></button>
+        <div class="cp-convo-head">
+          <div class="cp-convo-kick">◆ Consolidation · First Words</div>
+          <div class="cp-convo-title">Sentences reviewed</div>
+        </div>
+        <div style="text-align:center;padding:6px 0 14px">
+          <div style="font-family:var(--font-display);font-size:30px;color:var(--ink);font-weight:var(--fw-semi)">8 sentences</div>
+          <div style="font-size:var(--fs-small);color:var(--muted-dark);margin-top:4px">7 matched · 1 close</div>
+        </div>
+        <div style="background:var(--feedback-good-tint);border:1px solid var(--jade);border-radius:var(--r-md);padding:13px 15px;margin-bottom:12px;text-align:center">
+          <div style="font-size:var(--fs-small);color:var(--feedback-good-text);font-weight:var(--fw-bold);margin-bottom:2px">You've now been through all 25</div>
+          <div style="font-size:11.5px;color:var(--feedback-good-text)">Every sentence in this stage. Going again reshuffles them.</div>
+        </div>
+        <button class="cp-finish">✓ Mark sentences reviewed</button>
+        <button class="sr-skip" style="margin-top:10px">Go again from the start</button>
+      </div></div>
+    </div>
+    <p class="sub">Only appears on the run that completes a cycle; every other run shows the plain
+    summary from §4 with "Run eight more". <b>No confirmation gate</b> — asking "are you sure you
+    want to practise more?" is friction on exactly the thing the learner just asked for.</p>
+  </div>
+
+  <div class="frame">
+    <p class="cap">Why this composes with completion</p>
+    <div style="background:var(--parchment);border:var(--border);border-radius:var(--r-md);padding:16px">
+      <p class="note" style="margin:0 0 10px"><b>The cursor is independent of the done flag.</b>
+      <code>cp:&lt;id&gt;:sentences</code> (boolean, "reviewed") and
+      <code>cp:&lt;id&gt;:sentences:cursor</code> (integer, "how far through") are separate keys
+      that never read each other.</p>
+      <p class="note">That is what makes coming back work, and it falls out of the design rather
+      than needing a feature: a learner can mark the activity reviewed after one run, have the
+      checkpoint show ✓ Done, and return three weeks later to six sentences they have not seen.
+      The hub is unchanged, the completion is unchanged, and the content is new.</p>
+      <p class="note"><b>Nothing resets the cursor</b> — not marking complete, not un-marking it,
+      not finishing the checkpoint. The only thing that advances it is running sentences, which is
+      the only thing that should.</p>
+      <div class="ring-lbl" style="margin-top:16px">What is stored, in full</div>
+      <div style="background:var(--parchment-warm);border:var(--border);border-radius:var(--r-sm);padding:10px 12px;font-family:ui-monospace,Menlo,monospace;font-size:10.5px;line-height:1.7;color:var(--ink-soft)">
+        pathProgress.beginner = {<br>
+        &nbsp;&nbsp;'greetings-t1': true,<br>
+        &nbsp;&nbsp;'cp:beginner-s1-cp:words': true,<br>
+        &nbsp;&nbsp;'cp:beginner-s1-cp:sentences': true,<br>
+        &nbsp;&nbsp;<span style="color:var(--brand)">'cp:beginner-s1-cp:sentences:cursor': 30</span><br>
+        }
+      </div>
+      <p class="note" style="margin-top:10px">One integer added per checkpoint the learner has
+      actually used. 15 checkpoints, so a ceiling of 15 integers across the whole app.</p>
+    </div>
+  </div>
+</div>
+
+<h2>6 · Decisions — all settled 2026-08-30</h2>
+<p class="lede">All seven answered by William and recorded as <b>DES-44</b> (activity shape) and
+<b>DES-45</b> (sampling). The "my lean" column is kept as the reasoning that was offered, with
+the actual decision marked — two of them went against my lean and the difference is worth being
+able to find later.</p>
+<table class="table">
+  <tr><th>Question</th><th>Options</th><th>Decision</th></tr>
+  <tr>
+    <td><b>Standalone or combined?</b> Is this one hub card with a mode picker, or would B and C
+    ever be two separate cards?</td>
+    <td>One card with the picker (mocked in §4) · two cards · one card, mode remembered from last
+    time and changeable</td>
+    <td><b>✓ One card with the picker.</b> Two cards would make a three-activity checkpoint into a
+    four-activity one and dilute the "recall → produce" shape.</td>
+  </tr>
+  <tr>
+    <td><b>How does C treat a synonym?</b> The "not wrong" panel in §3 is only honest if the app
+    can tell a synonym from an error — and it can't, without alternates in the data.</td>
+    <td>(a) Show that panel for <i>every</i> C mismatch, generously · (b) Author an
+    <code>alt</code> array on sentences where a synonym is plausible · (c) Use the DES-39 leniency
+    unchanged and accept some false rejects</td>
+    <td><b>✓ (d) — state no verdict at all</b>, a fourth option added after William asked for the
+    question to be explained. (a) makes a claim the app cannot verify and would excuse genuine
+    errors too; (c) tells a learner who produced defensible Cantonese that they were wrong. Instead
+    show the target, show what was heard, show the sentence's own <code>note</code>, and assert
+    nothing about correctness — the DES-38 instinct applied to a different uncertainty. (b) stays
+    the better long-term answer if specific sentences prove to attract the same valid alternative.</td>
+  </tr>
+  <tr>
+    <td><b>Six items, or a different count?</b></td>
+    <td>5 · 6 · 8 · all of them</td>
+    <td><b>✓ Eight</b> — William's call, against my lean of six. Every stage still fills a run, at
+    the cost of earlier repeats on the five smallest stages (see §5).</td>
+  </tr>
+  <tr>
+    <td><b>Filter out the 17 short sentences?</b></td>
+    <td>Yes, pool is 4+ characters · No, accept the false rejects · Yes, but show them un-graded</td>
+    <td><b>✓ Yes, filter.</b> 5.6% of the corpus for grading that stays trustworthy.</td>
+  </tr>
+  <tr>
+    <td><b>Which tag on the hub card?</b></td>
+    <td>SPEAK · SAY · RECALL → PRODUCE</td>
+    <td><b>✓ SAY</b> — see §1.</td>
+  </tr>
+  <tr>
+    <td><b>Signal the end of a full cycle?</b> The ring never runs out, but the learner could be
+    told when they have been through every sentence in the stage once.</td>
+    <td>Show the milestone panel and keep going (mocked in §5) · wrap silently · gate the restart
+    behind a confirmation</td>
+    <td><b>✓ Show it.</b> Completing a stage's whole sentence pool is a real accomplishment and the
+    app has nowhere else that says so. No confirmation gate — that is friction on the thing the
+    learner just asked for.</td>
+  </tr>
+  <tr>
+    <td><b>Cursor or seen-list?</b> §5 proposes one integer per checkpoint; the alternative is
+    storing which sentences have actually been shown.</td>
+    <td>Cursor over a seeded ring · array of seen <code>sid</code>s · no tracking, reshuffle every
+    run</td>
+    <td><b>✓ Cursor.</b> One integer instead of a growing array, no pruning or invalidation, and the
+    remainder case stops being a special case. The two caveats in §5 are the price and both are
+    mild. "No tracking" is the honest cheap option but produces immediate repeats, which is the
+    thing the question was asked to avoid.</td>
+  </tr>
+</table>
+
+<p class="note" style="margin-top:16px"><b>New primitives this mockup would add</b>, flagged rather
+than smuggled in: <code>.sr-listen</code> (the large audio-first control), <code>.sr-hidden</code>
+(the dashed "text withheld" placeholder), <code>.sr-prompt-en</code> / <code>.sr-prompt-lbl</code>
+(C's English prompt), <code>.sr-skip</code> (the escape hatch). <code>.sr-mode</code> is styled
+here but unused in the recommended direction — it exists so the toggle alternative can be seen if
+wanted. Everything else on these screens is existing markup: <code>.cp-convo-head</code>,
+<code>.cp-act-card</code>, <code>.segs</code>, <code>.speak-card</code> and its result panels,
+<code>.cp-finish</code>, <code>.back-home-btn</code>.</p>
+
+</div>
+</body>
+</html>

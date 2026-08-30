@@ -356,32 +356,72 @@ function colorJyutping(text) {
   }).join(' ');
 }
 
-// Renders a jyutping line for arbitrary heard text (the "You said" line in
-// the sentence speak sheet, DES-38/40) — a per-character lookup against
-// store.charJyutping, derived from the corpus itself by
-// tools/build-char-jyutping.js. This is NOT a general converter: it only
-// knows what the 585 words and 307 sentences already teach. Two things it
-// shows plainly rather than guessing past:
-//   - a character the corpus never taught renders as a boxed "?", not a
-//     blank and not an invented reading
-//   - a character with more than one reading in the corpus (`amb: true`)
-//     still shows its majority reading, but marked — the recogniser's
-//     output plus a lookup is not confident enough to present as fact
-// Colours by tone digit the same way colorJyutping() does. Punctuation and
-// Latin characters (names, "William") pass through with no syllable slot —
-// they were never going to have a reading.
+// Renders a jyutping line for arbitrary heard text — the "You said" line in
+// the sentence speak sheet (DES-38/40/41) and the checkpoint sentence review.
+//
+// TWO SOURCES, LAYERED, and the order matters (DES-43):
+//   1. store.charJyutping — 644 characters derived from the corpus itself by
+//      tools/build-char-jyutping.js. AUTHORITATIVE. These are the readings the
+//      app actually teaches.
+//   2. window.ToJyutping — a vendored ~27,500-character dictionary
+//      (vendor/to-jyutping.js). FALLBACK ONLY.
+//
+// The corpus wins wherever it has an entry, and that is not a tie-breaker
+// detail: measured, the two disagree on 44 of 644 characters, almost all
+// colloquial-vs-literary — 坐 is co5 in the corpus and zo6 in the dictionary,
+// 嗎 is maa3 vs maa1, 樓 is lau2 vs lau4. The corpus is right for spoken
+// Cantonese every time, because that is what it was authored to teach. Letting
+// the dictionary win would print maa1 in the result panel while the lesson
+// directly above it says maa3.
+//
+// WHY THE FALLBACK EXISTS AT ALL: the recogniser can return any characters,
+// including words in no lesson. For a learner who does not read Chinese — the
+// assumed audience — a character with no jyutping is not partial information,
+// it is no information. Coverage had to go to ~100%, not merely improve.
+//
+// The dictionary is queried at WORD level, not per character, so context
+// disambiguates: 三樓 gives lau2, 請坐 gives co5. Per-character lookup would
+// lose that.
+//
+// Punctuation and Latin characters (names, "William") pass through with no
+// syllable slot — they were never going to have a reading. `.jp-unknown`
+// survives as a last resort for the case where both sources miss, which should
+// now be vanishingly rare but is not worth pretending is impossible.
 function charsToJyutping(text) {
-  const map = store.charJyutping || {};
-  return [...text].map(ch => {
+  const corpus = store.charJyutping || {};
+  const lib = (typeof window !== 'undefined' && window.ToJyutping) || null;
+
+  // Ask the dictionary for the whole string at once so it can segment words,
+  // then index its output by character position. getJyutpingList returns
+  // [char, reading|null] pairs, one per input character, so positions line up
+  // with [...text] exactly.
+  let libPairs = null;
+  if (lib && typeof lib.getJyutpingList === 'function') {
+    try { libPairs = lib.getJyutpingList(text); } catch (e) { libPairs = null; }
+  }
+
+  return [...text].map((ch, i) => {
     if (!/[\u4e00-\u9fff]/.test(ch)) return '';
-    const entry = map[ch];
-    if (!entry) return `<span class="jp-unknown" title="Not in the taught vocabulary">?</span>`;
-    const tone = entry.j.match(/[1-6]/);
-    const color = tone ? TONES[tone[0]].color : '#777';
-    if (entry.amb) {
-      return `<span class="jp-ambiguous" style="color:${color};font-weight:700" title="${ch} has more than one reading in the corpus — showing the most common">${entry.j}</span>`;
+
+    const taught = corpus[ch];
+    const fromLib = libPairs && libPairs[i] && libPairs[i][1];
+    const reading = taught ? taught.j : fromLib;
+
+    if (!reading) {
+      return `<span class="jp-unknown" title="No reading available for ${ch}">?</span>`;
     }
-    return `<span style="color:${color};font-weight:700">${entry.j}</span>`;
+
+    const tone = reading.match(/[1-6]/);
+    const color = tone ? TONES[tone[0]].color : '#777';
+
+    // Only the corpus can mark a character ambiguous — it is the only source
+    // that knows it taught two readings. A dictionary fallback is not flagged:
+    // it is a single best reading, and marking every fallback would make the
+    // common case look uncertain.
+    if (taught && taught.amb) {
+      return `<span class="jp-ambiguous" style="color:${color};font-weight:700" title="${ch} has more than one reading in the corpus — showing the most common">${reading}</span>`;
+    }
+    return `<span style="color:${color};font-weight:700">${reading}</span>`;
   }).filter(Boolean).join(' ');
 }
 
@@ -412,6 +452,12 @@ let state = {
   // fresh every time the sheet opens rather than restored across history.
   sentSpeakOpen: false,
   sentSpeak: { idx: null, status: 'idle', heard: '' },   // status: 'idle' | 'listening' | 'matched' | 'mismatch'
+  // Checkpoint sentence review (DES-44/45). Like `convo`, rebuilt on entry
+  // rather than restored from a history snapshot, so it stays out of
+  // NAV_FIELDS. `sentReviewMode` outlives the session so "run more" can repeat
+  // the mode the learner picked without asking again.
+  sentReview: null,
+  sentReviewMode: null,
   translate: {
     direction:   'en-yue',     // 'en-yue' | 'yue-en'
     inputText:   '',
@@ -1036,7 +1082,7 @@ function getPathContext() {
 // changes, because callers only ever ask "is this activity done?".
 
 const CHECKPOINT_WORD_CAP_DEFAULT  = 25;
-const CHECKPOINT_ACTIVITIES = ['words', 'convo'];
+const CHECKPOINT_ACTIVITIES = ['words', 'sentences', 'convo'];
 
 // All stages for a path (empty array if the path has none — renders as a flat list).
 function getPathStages(pathKey) {
@@ -1147,6 +1193,15 @@ function checkpointProgress(pathKey, stageId) {
   const available = CHECKPOINT_ACTIVITIES.filter(a => {
     if (a === 'convo') return !!(cp.convo && store.pathConvo(cp.convo));
     if (a === 'words') return (stage.topics || []).length > 0;
+    // Same rule and same reason as 'words' (see the v122 note above): decided
+    // from learning_paths.json ALONE. It must NOT call
+    // getCheckpointSentenceGroups(), which reads the lazy-loaded topic cache and
+    // returns 0 on a cold start — that is exactly the bug that made a checkpoint
+    // report itself complete. Verified against the data: all 15 checkpoint
+    // stages have topics and every one yields a sentence pool of 13–30 after the
+    // 4-character filter, so this is equivalent to a pool test whenever the
+    // cache is warm, and correct when it is not.
+    if (a === 'sentences') return (stage.topics || []).length > 0;
     return false;
   });
   const done = available.filter(a => checkpointActivityDone(pathKey, cp.id, a)).length;
@@ -1181,6 +1236,311 @@ function getCheckpointWords(pathKey, stage) {
   }
   return out;
 }
+
+
+// ── Checkpoint sentence review: pool and sampling (DES-44 / DES-45) ─────────
+//
+// STAGE 1 OF THE BUILD: pure logic, no UI. Everything here is deterministic and
+// exercised headlessly by tools/sentence-pool-harness.js against the real
+// corpus, because the failure modes are silent — a cursor or boundary bug does
+// not throw, it surfaces weeks later as "why am I seeing this sentence again".
+
+// Minimum Han-character length for a sentence to enter the review pool.
+// DES-44: below four characters DES-39 requires an EXACT match with no
+// leniency, because at that length one substitution is the whole utterance.
+// Those sentences would false-reject at a rate the leniency rules were never
+// tuned for. Costs 17 of 302 sentences (5.6%); every stage still has a pool of
+// 13 or more, so no stage is left unable to fill a run.
+const SENT_REVIEW_MIN_CHARS = 4;
+
+// Sentences per run. DES-44, William's call over a proposed 6. No stage pool is
+// under 8, so every run fills. Recorded trade: the five smallest stages
+// (beginner-s4/s5/s6/s8 at 15, s11 at 13) now get fewer than two full cycles,
+// so run 2 already draws from a reshuffle and may repeat one item from run 1.
+// At 6 that did not begin until run 3.
+const SENT_REVIEW_RUN = 8;
+
+function sentReviewCursorKey(cpId) {
+  // Deliberately shares the 'cp:' prefix that migratePathProgressIfNeeded()
+  // returns early on, so this numeric value is never touched by the legacy
+  // boolean-key rewrite. Distinct from checkpointFlagKey(cpId, 'sentences'),
+  // which is the done flag — the two never read each other, which is what lets
+  // a learner mark the activity reviewed and still return later to unseen
+  // sentences (DES-45).
+  return 'cp:' + cpId + ':sentences:cursor';
+}
+
+function getSentReviewCursor(pathKey, cpId) {
+  const bucket = state.pathProgress[pathKey];
+  const v = bucket && bucket[sentReviewCursorKey(cpId)];
+  return Number.isFinite(v) && v >= 0 ? v : 0;
+}
+
+function setSentReviewCursor(pathKey, cpId, value) {
+  if (!state.pathProgress[pathKey]) state.pathProgress[pathKey] = {};
+  state.pathProgress[pathKey][sentReviewCursorKey(cpId)] = value;
+  savePathProgress();
+}
+
+// The stage's sentence pool, grouped by topic and still in corpus order.
+// Grouping is preserved rather than flattened because the cycle ordering below
+// interleaves across topics — see sentReviewCycleOrder().
+//
+// READS store.topicCache, so it is only safe once the stage's topics are
+// loaded. This must NEVER be called to decide whether the activity is
+// *available*: that was the v122 bug, where a cache-dependent availability test
+// silently reported 0 on a cold start and made a checkpoint look complete.
+// Availability is answerable from learning_paths.json alone.
+function getCheckpointSentenceGroups(pathKey, stage) {
+  const seen = new Set();
+  const groups = [];
+  for (const topicKey of (stage.topics || [])) {
+    const bucket = [];
+    for (const round of stageTopicRounds(pathKey, topicKey)) {
+      for (const sent of (getRoundSentences(topicKey, round) || [])) {
+        if (!sent || !sent.sid || seen.has(sent.sid)) continue;
+        if (countHanChars(sent.c) < SENT_REVIEW_MIN_CHARS) continue;
+        seen.add(sent.sid);
+        bucket.push(sent);
+      }
+    }
+    if (bucket.length) groups.push(bucket);
+  }
+  return groups;
+}
+
+function countHanChars(text) {
+  let n = 0;
+  for (const ch of String(text || '')) if (/[\u4e00-\u9fff]/.test(ch)) n++;
+  return n;
+}
+
+// Deterministic 32-bit hash, used only to seed the shuffle. Not security
+// relevant; it needs to be stable across sessions and platforms so that a given
+// (cpId, cycle) always produces the same order — that property is what lets the
+// cursor alone reconstruct what has been seen, with no stored list.
+function sentReviewHash(str) {
+  let h = 2166136261;
+  for (let i = 0; i < str.length; i++) {
+    h ^= str.charCodeAt(i);
+    h = Math.imul(h, 16777619);
+  }
+  return h >>> 0;
+}
+
+// mulberry32 — small, fast, deterministic PRNG. Seeded per cycle.
+function sentReviewRng(seed) {
+  let a = seed >>> 0;
+  return function () {
+    a |= 0; a = (a + 0x6D2B79F5) | 0;
+    let t = Math.imul(a ^ (a >>> 15), 1 | a);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+
+function sentReviewShuffle(arr, rng) {
+  const out = arr.slice();
+  for (let i = out.length - 1; i > 0; i--) {
+    const j = Math.floor(rng() * (i + 1));
+    const t = out[i]; out[i] = out[j]; out[j] = t;
+  }
+  return out;
+}
+
+// One cycle's full ordering of the pool: round-robin ACROSS topics, shuffled
+// WITHIN each topic, with the topic order itself shuffled per cycle.
+//
+// Round-robin matters (DES-45): a flat shuffle of beginner-s1's 25 sentences can
+// return four from `pronouns` (which contributes 8) and one each from two
+// others — a lumpy sample of a stage meant to be reviewed as a whole.
+// Interleaving guarantees any 8 consecutive positions span the topics.
+//
+// Deterministic given (cpId, cycle): same inputs, same order, always.
+function sentReviewCycleOrder(groups, cpId, cycle) {
+  const rng = sentReviewRng(sentReviewHash(cpId + ':' + cycle));
+  const shuffledGroups = sentReviewShuffle(groups, rng).map(g => sentReviewShuffle(g, rng));
+  const order = [];
+  let placed = 0;
+  const total = shuffledGroups.reduce((n, g) => n + g.length, 0);
+  for (let round = 0; placed < total; round++) {
+    for (const g of shuffledGroups) {
+      if (round < g.length) { order.push(g[round]); placed++; }
+    }
+  }
+  return order;
+}
+
+// Take the next `count` sentences for this checkpoint, starting at the stored
+// cursor. Does NOT advance the cursor — call advanceSentReviewCursor() with the
+// returned `consumed` when the run is actually started, so that merely
+// rendering a preview cannot burn through the pool.
+//
+// Position p maps to cycle floor(p / poolSize) and index p % poolSize. A run
+// that runs short of a cycle's end continues into the next, freshly reshuffled
+// cycle — the remainder is absorbed rather than special-cased, which matters
+// because 13 of 15 stages do not divide evenly by the run length.
+//
+// WITHIN-RUN DEDUPE, and why it is not optional. Cycle N+1 is an independent
+// permutation of the WHOLE pool, so its opening positions can contain the very
+// sentences sitting in cycle N's closing positions. A run that straddles the
+// boundary would then show the same sentence twice inside one set of eight.
+// tools/sentence-pool-harness.js caught this on 10 of 15 stages before any of
+// it reached a screen.
+//
+// The fix is to skip a position whose sentence is already in this run and walk
+// on, so a run is always `n` DISTINCT sentences. That decouples "items taken"
+// from "positions consumed", which is why `consumed` is returned separately —
+// advancing the cursor by items rather than positions would re-serve the
+// skipped ones immediately.
+//
+// Constraining the shuffle instead was considered and rejected: it would need
+// cycle N+1's first (RUN-1) items to be disjoint from cycle N's last (RUN-1),
+// which requires a pool of at least 2*(RUN-1) = 14. The smallest stage pool is
+// 13, so that constraint is not always satisfiable and would fail on exactly
+// the stages that need it most.
+function takeSentReviewRun(pathKey, stage, cpId, count) {
+  const groups = getCheckpointSentenceGroups(pathKey, stage);
+  const poolSize = groups.reduce((n, g) => n + g.length, 0);
+  if (!poolSize) return { items: [], poolSize: 0, cursor: 0, consumed: 0, cyclesCompleted: 0, wraps: false };
+
+  const n = Math.min(count || SENT_REVIEW_RUN, poolSize);
+  const start = getSentReviewCursor(pathKey, cpId);
+  const items = [];
+  const takenSids = new Set();
+  const orderCache = {};
+  let offset = 0;
+  // Bound the walk. Skips only happen near a cycle boundary and at most (n-1)
+  // of them can occur, so 2n positions is generous; the guard exists so a
+  // future change to the ordering can never spin here.
+  const maxWalk = poolSize + n * 2;
+  while (items.length < n && offset < maxWalk) {
+    const p = start + offset;
+    const cycle = Math.floor(p / poolSize);
+    if (!orderCache[cycle]) orderCache[cycle] = sentReviewCycleOrder(groups, cpId, cycle);
+    const sent = orderCache[cycle][p % poolSize];
+    offset++;
+    if (!sent || takenSids.has(sent.sid)) continue;   // already in this run — walk on
+    takenSids.add(sent.sid);
+    items.push(sent);
+  }
+  const endPos = start + offset;
+  return {
+    items,
+    poolSize,
+    cursor: start,
+    // Positions walked, which is what the cursor must advance by. Equals
+    // items.length except on a straddling run, where it is larger.
+    consumed: offset,
+    // How many complete passes through the pool the learner will have finished
+    // once this run is counted — drives the milestone panel (DES-45).
+    cyclesCompleted: Math.floor(endPos / poolSize),
+    wraps: Math.floor(start / poolSize) !== Math.floor((endPos - 1) / poolSize),
+  };
+}
+
+function advanceSentReviewCursor(pathKey, cpId, by) {
+  setSentReviewCursor(pathKey, cpId, getSentReviewCursor(pathKey, cpId) + (by || 0));
+}
+
+// ── Checkpoint sentence review: session state (DES-44) ─────────────────────
+// Modes: 'listen' (B — hear it, text hidden until after) and 'produce' (C —
+// English prompt, no audio). 'mix' alternates across the run. Held in
+// state.sentReview, which is NOT in NAV_FIELDS: like state.convo it is rebuilt
+// when the activity is entered rather than restored from a history snapshot.
+function newSentReviewSession(mode, items) {
+  return {
+    mode,                 // 'listen' | 'produce' | 'mix'
+    items,                // the run's sentences, already sampled
+    idx: 0,
+    status: 'idle',       // 'idle' | 'listening' | 'matched' | 'mismatch'
+    heard: '',
+    revealed: false,      // the escape hatch was used on THIS item
+    results: [],          // per item: 'matched' | 'close' | 'mismatch' | 'revealed'
+    finished: false,
+    cyclesCompleted: 0,
+    poolSize: 0,
+    milestone: false,     // this run completed a full pass of the pool
+  };
+}
+
+// Which mode a given position in the run uses. 'mix' alternates so the learner
+// is not asked to produce eight times in a row, which is markedly harder than
+// repeating eight times.
+function sentReviewModeAt(session, i) {
+  if (session.mode === 'mix') return (i % 2 === 0) ? 'listen' : 'produce';
+  return session.mode;
+}
+
+function currentSentReviewItem() {
+  const sr = state.sentReview;
+  if (!sr || !sr.items.length) return null;
+  return sr.items[Math.min(sr.idx, sr.items.length - 1)] || null;
+}
+
+// Start a run. Samples from the ring, advances the cursor by positions consumed
+// (not items taken — see takeSentReviewRun), and records whether this run
+// completes a full pass so the summary can show the milestone.
+function startSentReviewRun(mode) {
+  const cpState = state.checkpoint;
+  if (!cpState) return;
+  const stage = getStage(cpState.pathKey, cpState.stageId);
+  if (!stage) return;
+  const before = getSentReviewCursor(cpState.pathKey, cpState.cpId);
+  const run = takeSentReviewRun(cpState.pathKey, stage, cpState.cpId, SENT_REVIEW_RUN);
+  if (!run.items.length) return;
+  advanceSentReviewCursor(cpState.pathKey, cpState.cpId, run.consumed);
+  const session = newSentReviewSession(mode, run.items);
+  session.poolSize = run.poolSize;
+  session.cyclesCompleted = run.cyclesCompleted;
+  session.milestone = Math.floor(before / run.poolSize) < run.cyclesCompleted;
+  state.sentReview = session;
+  state.sentReviewMode = mode;   // remembered for the "run more" button
+}
+
+// Grade one attempt. Reuses fuzzyMatch (DES-39) unchanged, so leniency is
+// identical to everywhere else speech is checked.
+//
+// The 'produce' mode NEVER records a mismatch as wrong (DES-44). Given only an
+// English prompt, a learner can produce valid Cantonese that is not the stored
+// sentence — 唔該 for 多謝 — and the app cannot tell that from an error. So it
+// asserts neither, and the result is recorded as 'close': shown, not judged.
+function gradeSentReviewAttempt(heard) {
+  const sr = state.sentReview;
+  const item = currentSentReviewItem();
+  if (!sr || !item) return;
+  const matched = fuzzyMatch(heard, item.c);
+  const mode = sentReviewModeAt(sr, sr.idx);
+  sr.heard = heard;
+  if (matched) {
+    sr.status = 'matched';
+    sr.results[sr.idx] = 'matched';
+  } else if (mode === 'produce') {
+    sr.status = 'mismatch';
+    sr.results[sr.idx] = 'close';     // no verdict — see above
+  } else {
+    sr.status = 'mismatch';
+    sr.results[sr.idx] = 'mismatch';
+  }
+}
+
+function sentReviewNext() {
+  const sr = state.sentReview;
+  if (!sr) return;
+  if (sr.results[sr.idx] === undefined) sr.results[sr.idx] = 'revealed';
+  if (sr.idx >= sr.items.length - 1) { sr.finished = true; }
+  else { sr.idx++; sr.status = 'idle'; sr.heard = ''; sr.revealed = false; }
+}
+
+function sentReviewTally() {
+  const sr = state.sentReview;
+  if (!sr) return { matched: 0, close: 0, mismatch: 0, revealed: 0 };
+  const t = { matched: 0, close: 0, mismatch: 0, revealed: 0 };
+  sr.results.forEach(r => { if (t[r] !== undefined) t[r]++; });
+  return t;
+}
+
+
 
 // ── Path lesson navigation ────────────────────────────────────────────────────
 // Open a topic as a path lesson, resetting the per-lesson view state. Shared by
@@ -1243,6 +1603,10 @@ function goToDestination(target) {
   state.checkpoint = null;
   state.checkpointAct = null;
   state.checkpointQuiz = null;
+  // A sentence review session must not survive leaving the checkpoint, and the
+  // mic must not be left live against a screen that is gone — same rule the
+  // settings and Learn speak sheets follow.
+  if (state.sentReview) { stopListening(); stopAudioFile(); state.sentReview = null; }
   // Topics always returns to its home view, the Learning Path to the path list.
   if (target === 'topics') state.topicsView = true;
   if (target === 'path') state.pathView = 'list';
@@ -1267,6 +1631,7 @@ function openCheckpoint(pathKey, stageId) {
   if (!cp) return;
   state.checkpoint = { pathKey, stageId, cpId: cp.id };
   state.checkpointAct = null;
+  state.sentReview = null;
   pushNav();
   render();
 }
@@ -1782,6 +2147,29 @@ function applySentSpeakPatch(patch) {
 function startSentSpeakListening(target) {
   startSpeechRecognition(() => target, () => state.sentSpeak.status, applySentSpeakPatch, null);
 }
+
+// Checkpoint sentence review — third consumer of startSpeechRecognition().
+// Same core, same Android quirk handling; only the state location differs.
+// No onMatch callback: unlike a conversation line there is nothing to
+// auto-advance into, and unlike the Learn sheet the result screen is where the
+// learner decides what happens next.
+function applySentReviewPatch(patch) {
+  const sr = state.sentReview;
+  if (!sr) return;
+  if ('status' in patch) sr.status = patch.status;
+  if ('heard' in patch) sr.heard = patch.heard;
+  // The final verdict is graded, not taken from the recogniser's own status:
+  // 'produce' mode must never record a mismatch as wrong (DES-44).
+  if (patch.status === 'matched' || patch.status === 'mismatch') {
+    gradeSentReviewAttempt(patch.heard !== undefined ? patch.heard : sr.heard);
+  }
+  render();
+}
+
+function startSentReviewListening(target) {
+  startSpeechRecognition(() => target, () => (state.sentReview ? state.sentReview.status : 'idle'), applySentReviewPatch, null);
+}
+
 
 function stopListening() {
   if (_recognition) { try { _recognition.abort(); } catch(e){} _recognition = null; }

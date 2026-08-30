@@ -21,6 +21,22 @@
 
 <!-- Application scripts. ORDER MATTERS: data.js defines store/storage used by
      app.js; app.js defines state/logic used by render.js. Do not reorder. -->
+<!-- Vendored jyutping dictionary (DES-43). DEFERRED on purpose.
+     It is ~274KB gzipped, and as a plain blocking script it sat in front of
+     app.js and delayed first paint by a whole download on the first visit.
+     Deferring is safe here because nothing reads it at parse time: the ONLY
+     reference is window.ToJyutping inside charsToJyutping() in app.js, which
+     runs when a speech result renders, and init() is async and gated on
+     fetches — so the dictionary is always present well before anything asks
+     for it. Reaching charsToJyutping() at all requires opening a topic or
+     checkpoint, tapping the mic, granting permission and speaking, which is
+     many seconds of user action.
+     Load order note: deferred scripts run AFTER the three below, which is fine
+     for the reason above; do not "fix" that by removing defer.
+     charsToJyutping() also degrades safely if the global is somehow missing
+     (falls back to the corpus table, then to a "?" marker) — but that is a
+     backstop, not the plan. -->
+<script src="./vendor/to-jyutping.js" defer></script>
 <script src="./data.js"></script>
 <script src="./app.js"></script>
 <script src="./render.js"></script>

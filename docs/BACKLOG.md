@@ -4,7 +4,7 @@
 IN_PROGRESS.md when it's picked up; delete it from here once it's shipped and
 folded into STATUS.md.*
 
-Last updated: 2026-08-24 · sw.js at v132
+Last updated: 2026-08-30 · sw.js at v134
 
 ## Product
 
@@ -49,18 +49,6 @@ are pointers only — detail goes there, not here.*
   §Watermark; content side in CONTENT.md §5.8.
 
 ## Features
-
-- **Checkpoint sentence activity — the third slot, done by speaking.** Merges with
-  *Stage 3 — checkpoint activity using sentence data* below and gives it a
-  direction. Raised 2026-08-22: take a selection of the topic's existing sentences
-  and have the learner **speak** them, deliberately *different from how sentences
-  are practised inside the topic* so the checkpoint tests production rather than
-  repeating the lesson. Reuses existing per-topic sentence data with no new
-  authoring, and the redesigned checkpoint hub already accommodates a third
-  activity without layout changes. **The speak-feedback surface it depends on is
-  now fully built and settled, including the near-miss treatment** (v132) — this
-  can be designed against it directly rather than waiting further. Not yet
-  designed.
 
 - **Tone feedback by pitch measurement — investigated and closed, 2026-08-17.**
   Kept as a warning, not as work. **Read alongside the ASR closure above**: pitch

@@ -6,7 +6,7 @@
 // up a new service worker when this string changes. If you forget to bump it,
 // users will keep serving the old index.html from cache.
 
-const CACHE_VERSION = 'cantonese-teahouse-v132';
+const CACHE_VERSION = 'cantonese-teahouse-v134';
 
 // App shell — fetched at install time.
 // NOTE: when adding a new .js or .css file to the app, add it here too,
@@ -15,6 +15,7 @@ const SHELL_ASSETS = [
   './',
   './index.html',
   './styles.css',
+  './vendor/to-jyutping.js',
   './data.js',
   './app.js',
   './render.js',

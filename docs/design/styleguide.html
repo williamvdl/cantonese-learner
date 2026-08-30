@@ -721,6 +721,15 @@ table.spec tr:last-child td{ border-bottom:none; }
   </div>
   <p class="note" style="margin-top:12px"><b>Both marker classes</b>, in isolation, on characters that actually trigger them — 上 is genuinely ambiguous in the corpus, 齉 is genuinely outside it. Real <code>charsToJyutping()</code> output, not approximated.</p>
   <div class="stage" style="max-width:390px" id="sentspeakdemo-markers"></div>
+  <h3>Checkpoint sentence review <span class="tag-new">built &middot; v134</span></h3>
+  <p class="note">The third checkpoint activity (DES-44/45, MOCK-28). Mostly assembled from parts that already existed — <code>.cp-convo-head</code>, <code>.cp-act-card</code>, <code>.segs</code>, <code>.speak-card</code> and its result panels, <code>.cp-finish</code>. Five additions below.</p>
+  <p class="note"><b><code>.sr-listen</code> inverts the speak sheet's hierarchy.</b> In listen mode the <i>audio</i> is the task, so it is the larger control and the mic sits under it. Milestone palette rather than <code>--brand</code>, so two circular controls on one screen read as different actions rather than a pair. Disabled while the mic is live — played-back audio would feed straight back into the recogniser.</p>
+  <p class="note"><b><code>.sr-hidden</code></b> is the withheld-text placeholder: dashed and muted italic, so it reads as <i>deliberately not shown yet</i> rather than as an empty slot. It is what separates this from in-topic sentence practice, where the text is always visible.</p>
+  <div class="stage" style="max-width:390px" id="srdemo-listen"></div>
+  <p class="note" style="margin-top:12px"><b>Produce mode states no verdict on a mismatch (DES-44).</b> Given only an English prompt, a learner can produce valid Cantonese that is not the stored sentence — the app cannot tell that from an error, so it asserts neither. Compare with a <i>listen</i> mismatch below, which does say so, because there the learner heard the exact sentence.</p>
+  <div class="stage" style="max-width:390px" id="srdemo-produce"></div>
+  <div class="stage" style="max-width:390px;margin-top:12px" id="srdemo-summary"></div>
+  <div class="cls">.sr-listen · .sr-hidden · .sr-prompt-lbl / .sr-prompt-en · .sr-skip · .sr-note &nbsp;·&nbsp; .sr-tally / .sr-rows / .sr-row / .sr-milestone</div>
   <div class="cls">.sheet-head-actions &nbsp;·&nbsp; .sheet-wrap › .sheet-scrim + .sheet › .speak-card › .mic-btn (+ .listening) · .speak-status · .speak-heard › .speak-heard-jp (.jp-unknown/.jp-ambiguous) · .speak-actions › .speak-action-btn (.primary/.secondary/.stop) · .speak-result-good/.speak-result-close/.speak-result-bad › .speak-breakdown › .bd-col</div>
 </section>
 
@@ -1236,6 +1245,46 @@ document.getElementById('sentspeakdemo-bad-compare').innerHTML=`
     </div></div>
     </div>
   </div>`;
+document.getElementById('srdemo-listen').innerHTML=`
+  <div class="cp-convo-head"><div class="cp-convo-kick">◆ Consolidation · First Words</div><div class="cp-convo-title">Say it back</div></div>
+  <div class="speak-nav"><span>Sentence 2 of 8</span><span class="speak-turn">Listen first</span></div>
+  <div class="segs"><i class="on"></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+  <div class="speak-card">
+    <button class="sr-listen">${I.vol}</button>
+    <div class="speak-status">Tap to hear it again</div>
+    <div class="sr-hidden">The sentence is hidden — listen, then say it back</div>
+    <button class="mic-btn idle">${I.mic}</button>
+    <div class="speak-status">Press the mic and say it</div>
+    <button class="sr-skip">Show me the sentence</button>
+  </div>`;
+document.getElementById('srdemo-produce').innerHTML=`
+  <div class="cp-convo-head"><div class="cp-convo-kick">◆ Consolidation · First Words</div><div class="cp-convo-title">Say it in Cantonese</div></div>
+  <div class="speak-nav"><span>Sentence 3 of 8</span><span class="speak-turn">Result</span></div>
+  <div class="speak-card">
+    <div class="sr-prompt-lbl">You were asked</div>
+    <div class="sr-prompt-en" style="font-size:16px">Good morning! How are you?</div>
+    <div class="speak-heard">You said: <strong>我聽日返工喇</strong><div class="speak-heard-jp"><span style="color:#2980B9;font-weight:700">ngo5</span> <span style="color:#E74C3C;font-weight:700">ting1</span> <span style="color:#8E44AD;font-weight:700">jat6</span> <span style="color:#E74C3C;font-weight:700">faan1</span> <span style="color:#E74C3C;font-weight:700">gung1</span> <span style="color:#c8a200;font-weight:700">laa3</span></div></div>
+    <div class="speak-result-close">
+      <div style="font-weight:700;margin-bottom:4px">Here's the sentence we had</div>
+      <div><strong>早晨！你好嗎？</strong> (<span style="color:#E67E22;font-weight:700">zou2</span> <span style="color:#27AE60;font-weight:700">san4!</span> <span style="color:#2980B9;font-weight:700">nei5</span> <span style="color:#E67E22;font-weight:700">hou2</span> <span style="color:#c8a200;font-weight:700">maa3?</span>)</div>
+      <div class="sr-note">早晨 (zou2 san4) is "good morning" specifically — mornings only, unlike 你好 (nei5 hou2).</div>
+    </div>
+    <div class="speak-actions">
+      <button class="speak-action-btn secondary">Try again</button>
+      <button class="speak-action-btn primary">Next ›</button>
+    </div>
+  </div>`;
+document.getElementById('srdemo-summary').innerHTML=`
+  <div class="cp-convo-head"><div class="cp-convo-kick">◆ Consolidation · First Words</div><div class="cp-convo-title">Sentences reviewed</div></div>
+  <div class="sr-tally"><div class="sr-tally-n">8 sentences</div><div class="sr-tally-s">6 matched · 1 close · 1 revealed</div></div>
+  <div class="sr-milestone"><div class="sr-milestone-t">You've now been through all 25</div><div class="sr-milestone-s">Every sentence in this stage. Going again reshuffles them.</div></div>
+  <div class="sr-rows">
+    <div class="sr-row"><span>早晨！你好嗎？</span><span class="sr-row-mark" style="color:var(--feedback-good-text)">✓</span></div>
+    <div class="sr-row"><span>多謝，再見！</span><span class="sr-row-tag">close</span></div>
+    <div class="sr-row"><span>對唔住，我遲到。</span><span class="sr-row-tag">revealed</span></div>
+  </div>
+  <button class="cp-finish">✓ Mark sentences reviewed</button>
+  <button class="sr-skip">Go again from the start</button>`;
 document.getElementById('sentspeakdemo-markers').innerHTML=`
   <div class="speak-card" style="padding:16px 14px">
     <div style="display:flex;justify-content:center;gap:28px;font-size:15px">

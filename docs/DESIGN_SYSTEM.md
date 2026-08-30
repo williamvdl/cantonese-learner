@@ -496,6 +496,53 @@ exact match and a forgiven one are told apart at no extra cost, and an exact
 match's colour and copy are untouched. Applied at the content layer (DES-40),
 so both the sheet and Chat's conversation Speak mode carry it from one change.
 
+### Checkpoint sentence review — `.sr-listen` · `.sr-hidden` · `.sr-prompt-en` · `.sr-skip`
+The third checkpoint activity. **Built v134** (DES-44/45, MOCK-28). Three
+screens behind one hub card: a mode picker, the run, and a summary. Reuses
+`.cp-convo-head`, `.cp-act-card`, `.segs`, `.speak-card` and its result panels,
+`.cp-finish` and `.back-home-btn` — the additions below are only what none of
+those already covered.
+
+**`.sr-listen` is the one that carries a decision.** In listen mode the *audio*
+is the task, so it is the larger control and the mic sits beneath it — the
+inverse of the Learn speak sheet, where the mic leads and listening is a
+secondary aid. It takes the milestone palette (`--milestone-tint` /
+`--milestone-edge`) rather than `--brand`, so the two circular controls on the
+same screen read as different actions rather than a matched pair. Disabled while
+the mic is live, for the same reason the sheet's replay is: played-back audio
+would feed straight into the recogniser as a trivially correct match.
+
+`.sr-hidden` is the withheld-text placeholder — dashed border, muted italic, so
+it reads as *deliberately not shown yet* rather than as an empty slot or a
+failure to load. It is what makes the activity different in kind from in-topic
+sentence practice, where the text is always on screen: there the learner reads
+aloud, here they must hear it first.
+
+`.sr-prompt-lbl` / `.sr-prompt-en` are produce mode's English prompt, set in the
+display face at 20px because it is the only thing on screen the learner is
+working from. Produce mode deliberately has **no** audio control: offering
+"listen" before producing would hand over the answer.
+
+`.sr-skip` is both the per-item escape hatch and the "run more" control on the
+summary. Underlined and low-contrast rather than a button, and `--tap-min` tall:
+always available, never the obvious next move.
+
+**Grading language differs by mode, and that is the point (DES-44).** A listen
+mismatch uses `.speak-result-bad` and says so — the learner heard the exact
+sentence, so a mismatch is their error. A *produce* mismatch uses
+`.speak-result-close` and states **no verdict at all**: given only an English
+prompt a learner can produce valid Cantonese that is not the stored sentence,
+and the app cannot tell that from an error, so it asserts neither and shows the
+target, what was heard, and the sentence's own note. `.sr-note` carries that
+last part.
+
+Summary: `.sr-tally` / `.sr-rows` / `.sr-row`, and `.sr-milestone` for the run
+that completes a full pass of the stage's pool. The milestone is jade because it
+is the one moment in this activity that is unambiguously an achievement rather
+than a verdict. The tally is shown and then discarded — feedback for the run,
+never a stored score (a recogniser with a measured false-reject history should
+not be writing a permanent grade).
+
 ### Docked bar — `.bar` › `.bar-inner`
 Fixed above the tab bar, contents capped to `--measure`. **Built v118** (DES-22,
 MOCK-20-B2), resolving a two-position question that had been open since the design
