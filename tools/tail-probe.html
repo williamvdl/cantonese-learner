@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tail probe — is the final syllable being truncated?</title>
+<style>
+  :root{
+    --ink:#1C1917; --muted:#78716C; --line:#EAE4DC; --warm:#FAF8F5; --deep:#F0EBE4;
+    --brand:#C2410C; --brand-tint:#FEF0E9; --good:#15803D; --good-tint:#DCFCE7;
+    --bad:#B42318; --bad-tint:#FEF3F2; --header:#6E2639;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font-family:Inter,-apple-system,system-ui,sans-serif;background:var(--deep);color:var(--ink);padding:0 0 60px}
+  header{background:var(--header);color:#F7EEE8;padding:14px 16px}
+  header h1{margin:0;font-size:17px;font-weight:600}
+  header p{margin:4px 0 0;font-size:12px;opacity:.75;line-height:1.5}
+  .wrap{max-width:640px;margin:0 auto;padding:16px}
+  .card{background:#fff;border:1px solid var(--line);border-radius:12px;padding:16px;margin-bottom:14px}
+  h2{font-size:13px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin:0 0 10px}
+  .note{font-size:12.5px;line-height:1.65;color:var(--muted);margin:8px 0 0}
+  .note b{color:var(--ink)}
+  label{font-size:13px;font-weight:500;display:block;margin-bottom:5px}
+  input[type=text],select{width:100%;padding:10px;border:1px solid var(--line);border-radius:8px;font-size:15px;font-family:inherit;background:var(--warm)}
+  .row{margin-bottom:12px}
+  .target{font-size:26px;text-align:center;margin:6px 0 2px}
+  .targetj{font-size:14px;text-align:center;color:var(--brand);font-weight:600;margin-bottom:4px}
+  .lastsyl{text-align:center;font-size:12.5px;color:var(--muted);margin-bottom:14px}
+  .lastsyl b{color:var(--ink);font-size:15px}
+  button{font-family:inherit;cursor:pointer}
+  .rec{width:100%;padding:18px;border-radius:12px;border:none;background:var(--brand);color:#fff;font-size:17px;font-weight:700}
+  .rec.on{background:var(--bad)}
+  .rec:disabled{opacity:.5}
+  .live{margin-top:12px;padding:12px;background:var(--warm);border:1px solid var(--line);border-radius:8px;font-size:17px;min-height:52px}
+  .live small{display:block;font-size:11px;color:var(--muted);margin-bottom:4px;text-transform:uppercase;letter-spacing:.06em}
+  .att{border:1px solid var(--line);border-radius:10px;padding:12px;margin-bottom:10px;background:#fff}
+  .att.good{border-color:var(--good);background:var(--good-tint)}
+  .att.bad{border-color:var(--bad);background:var(--bad-tint)}
+  .att.part{border-color:var(--brand);background:var(--brand-tint)}
+  .att h3{margin:0 0 6px;font-size:14px}
+  .att .k{font-size:12px;color:var(--muted);margin:2px 0}
+  .att .k b{color:var(--ink)}
+  .trace{margin-top:8px;font-family:ui-monospace,Menlo,monospace;font-size:11px;background:#fff;border:1px solid var(--line);border-radius:6px;padding:8px;max-height:190px;overflow:auto;white-space:pre-wrap}
+  .verdict{margin-top:16px;padding:14px;border-radius:10px;border:1px solid var(--line);background:var(--warm);font-size:13.5px;line-height:1.6}
+  .verdict h3{margin:0 0 8px;font-size:14px}
+  .btn2{padding:10px 16px;border-radius:999px;border:1px solid var(--line);background:#fff;font-size:13px;margin-right:8px}
+  .err{background:var(--bad-tint);border:1px solid var(--bad);color:var(--bad);padding:12px;border-radius:8px;font-size:13px;margin-bottom:14px}
+</style>
+</head>
+<body>
+<header>
+  <h1>Tail probe — is the final syllable being truncated?</h1>
+  <p>One question only: when the app loses the last syllable of a sentence, is it
+  because the recogniser never heard it, or because we stop listening too early
+  and throw away an interim result that had it?</p>
+</header>
+
+<div class="wrap">
+
+<div id="err"></div>
+
+<div class="card">
+  <h2>What this is testing</h2>
+  <p class="note"><b>Background.</b> 一加二係三 (jat1 gaa1 ji6 hai6 saam1) came back
+  from the app as 一家以孩 — the first three syllables acoustically correct,
+  <code>saam1</code> missing entirely. Either failure alone would still have
+  passed the matcher; it was the two together that failed it.</p>
+  <p class="note"><b>Two candidate causes, and this tells them apart.</b>
+  (1) <b>Stop timing</b> — <code>finishListening()</code> calls
+  <code>stop()</code> the instant you tap, and the tail may still be in flight.
+  (2) <b>Discarded interims</b> — the app matches on the FINAL transcript only,
+  so if an interim contained the last syllable and the final pass dropped it,
+  we already had the answer and threw it away.</p>
+  <p class="note">Each attempt below records <b>every interim and every final</b>
+  with timestamps, and reports separately whether the last syllable appeared in
+  <i>any</i> interim versus in the final. Run the same sentence at each stop
+  delay and compare.</p>
+</div>
+
+<div class="card">
+  <h2>Target</h2>
+  <div class="row">
+    <label for="tc">Chinese</label>
+    <input type="text" id="tc" value="一加二係三">
+  </div>
+  <div class="row">
+    <label for="tj">Jyutping (for your reference while reading)</label>
+    <input type="text" id="tj" value="jat1 gaa1 ji6 hai6 saam1">
+  </div>
+  <div class="row">
+    <label for="delay">Stop delay after you tap</label>
+    <select id="delay">
+      <option value="0">0 ms — exactly what the app does today</option>
+      <option value="400">400 ms — grace period, candidate fix 1</option>
+      <option value="800">800 ms — generous grace period</option>
+      <option value="6000">6000 ms — no early stop at all (control)</option>
+    </select>
+  </div>
+  <p class="note"><b>Do all four, several times each.</b> The 0 ms and 6000 ms
+  rows are the ones that matter most: if the last syllable survives at 6000 ms
+  but not at 0 ms, stop timing is the cause and the fix is small.</p>
+</div>
+
+<div class="card">
+  <div class="target" id="showC">一加二係三</div>
+  <div class="targetj" id="showJ">jat1 gaa1 ji6 hai6 saam1</div>
+  <div class="lastsyl">watching for the last syllable: <b id="showLast">三 / saam1</b></div>
+  <button class="rec" id="btn">● Record</button>
+  <div class="live" id="live"><small>live</small>—</div>
+</div>
+
+<div class="card">
+  <h2>Attempts <span id="count" style="color:var(--muted);font-weight:400"></span></h2>
+  <div id="atts"><p class="note">Nothing recorded yet.</p></div>
+  <div id="verdict"></div>
+  <div style="margin-top:14px">
+    <button class="btn2" id="copy">Copy results</button>
+    <button class="btn2" id="dl">Download JSON</button>
+    <button class="btn2" id="clear">Clear</button>
+  </div>
+  <p class="note">Copy or download and send it over — the raw trace is what
+  answers the question, not the summary.</p>
+</div>
+
+</div>
+
+<script>
+const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+if (!SR) {
+  document.getElementById('err').innerHTML =
+    '<div class="err">This browser has no Web Speech API. Use Chrome on Android — the same browser the app runs in, which is the only one whose behaviour is relevant here.</div>';
+  document.getElementById('btn').disabled = true;
+}
+if (location.protocol === 'file:') {
+  document.getElementById('err').innerHTML +=
+    '<div class="err">Opened from file:// — speech recognition needs https. Serve this page, or open it from the deployed site (…/tools/tail-probe.html).</div>';
+}
+
+const $ = id => document.getElementById(id);
+let rec = null, attempts = [], stopTimer = null;
+
+// The last syllable is the whole point of the probe, so it is derived from the
+// target rather than typed — a mismatch between what is watched for and what is
+// said would silently invalidate every attempt.
+function lastSyllable() {
+  const c = $('tc').value.trim().replace(/[。．.!！?？，,]/g, '');
+  const j = $('tj').value.trim().replace(/[。．.!！?？，,]/g, '');
+  const chars = [...c].filter(ch => /[\u4e00-\u9fff]/.test(ch));
+  const syls = j.split(/\s+/).filter(Boolean);
+  return { char: chars[chars.length - 1] || '', syl: syls[syls.length - 1] || '' };
+}
+function refresh() {
+  $('showC').textContent = $('tc').value;
+  $('showJ').textContent = $('tj').value;
+  const l = lastSyllable();
+  $('showLast').textContent = l.char + ' / ' + l.syl;
+}
+$('tc').oninput = refresh; $('tj').oninput = refresh;
+refresh();
+
+$('btn').onclick = () => {
+  if (rec) { stopNow(); return; }
+  start();
+};
+
+function stopNow() {
+  const d = parseInt($('delay').value, 10) || 0;
+  if (stopTimer) { clearTimeout(stopTimer); stopTimer = null; }
+  if (!rec) return;
+  const r = rec;
+  $('btn').textContent = d ? 'Stopping in ' + d + 'ms…' : 'Stopping…';
+  setTimeout(() => { try { r.stop(); } catch (e) {} }, d);
+}
+
+function start() {
+  const target = $('tc').value.trim();
+  const delay = parseInt($('delay').value, 10) || 0;
+  const last = lastSyllable();
+  const t0 = Date.now();
+  const trace = [];
+  let finalText = '', lastInterim = '', bestInterim = '';
+
+  const r = new SR();
+  r.lang = 'yue-Hant-HK';
+  r.continuous = true;      // matches the app
+  r.interimResults = true;  // matches the app
+  r.maxAlternatives = 3;    // matches the app (Android ignores it, recorded anyway)
+
+  r.onresult = e => {
+    let interim = '';
+    for (let i = e.resultIndex; i < e.results.length; i++) {
+      const res = e.results[i];
+      const txt = res[0].transcript;
+      trace.push({ ms: Date.now() - t0, final: !!res.isFinal, text: txt });
+      if (res.isFinal) finalText += txt;
+      else interim += txt;
+    }
+    if (interim) {
+      lastInterim = interim;
+      // Keep the longest interim seen — the candidate the app currently discards.
+      if (interim.length > bestInterim.length) bestInterim = interim;
+    }
+    $('live').innerHTML = '<small>live</small>' + ((finalText + interim) || '…');
+  };
+  r.onerror = e => { trace.push({ ms: Date.now() - t0, error: e.error }); };
+  r.onend = () => {
+    if (stopTimer) { clearTimeout(stopTimer); stopTimer = null; }
+    rec = null;
+    $('btn').textContent = '● Record';
+    $('btn').className = 'rec';
+    record({
+      at: new Date().toISOString(),
+      target, targetJ: $('tj').value.trim(),
+      lastChar: last.char, lastSyl: last.syl,
+      stopDelayMs: delay,
+      durationMs: Date.now() - t0,
+      finalText: finalText.trim(),
+      lastInterim: lastInterim.trim(),
+      bestInterim: bestInterim.trim(),
+      inFinal: last.char ? finalText.includes(last.char) : null,
+      inAnyInterim: last.char ? trace.some(x => !x.final && x.text && x.text.includes(last.char)) : null,
+      trace,
+    });
+  };
+
+  try {
+    r.start();
+    rec = r;
+    $('btn').textContent = '■ Stop';
+    $('btn').className = 'rec on';
+    $('live').innerHTML = '<small>live</small>…';
+    // The 6000ms option is the control: never stopped early by a tap.
+    if (delay >= 6000) stopTimer = setTimeout(() => { try { r.stop(); } catch (e) {} }, 6000);
+  } catch (e) {
+    $('err').innerHTML = '<div class="err">Could not start: ' + e.message + '</div>';
+  }
+}
+
+function record(a) {
+  attempts.push(a);
+  paint();
+}
+
+function paint() {
+  $('count').textContent = attempts.length ? '(' + attempts.length + ')' : '';
+  if (!attempts.length) { $('atts').innerHTML = '<p class="note">Nothing recorded yet.</p>'; $('verdict').innerHTML = ''; return; }
+  $('atts').innerHTML = attempts.map((a, i) => {
+    const cls = a.inFinal ? 'good' : (a.inAnyInterim ? 'part' : 'bad');
+    const head = a.inFinal
+      ? '✓ last syllable IS in the final'
+      : (a.inAnyInterim
+          ? '△ last syllable was in an INTERIM but not the final'
+          : '✗ last syllable never appeared at all');
+    return '<div class="att ' + cls + '">' +
+      '<h3>#' + (i + 1) + ' — ' + head + '</h3>' +
+      '<div class="k">stop delay <b>' + a.stopDelayMs + 'ms</b> · duration <b>' + a.durationMs + 'ms</b> · events <b>' + a.trace.length + '</b></div>' +
+      '<div class="k">final: <b>' + (a.finalText || '(empty)') + '</b></div>' +
+      '<div class="k">longest interim: <b>' + (a.bestInterim || '(none)') + '</b></div>' +
+      '<div class="trace">' + a.trace.map(t =>
+        String(t.ms).padStart(5) + 'ms  ' + (t.error ? 'ERROR ' + t.error : (t.final ? 'FINAL  ' : 'interim') + '  ' + t.text)
+      ).join('\n') + '</div>' +
+    '</div>';
+  }).join('');
+
+  // Group by stop delay — the comparison the probe exists to make.
+  const byDelay = {};
+  attempts.forEach(a => {
+    const k = a.stopDelayMs;
+    byDelay[k] = byDelay[k] || { n: 0, inFinal: 0, interimOnly: 0, never: 0 };
+    byDelay[k].n++;
+    if (a.inFinal) byDelay[k].inFinal++;
+    else if (a.inAnyInterim) byDelay[k].interimOnly++;
+    else byDelay[k].never++;
+  });
+  const rows = Object.keys(byDelay).sort((a, b) => a - b).map(k => {
+    const d = byDelay[k];
+    return '<div class="k">stop delay <b>' + k + 'ms</b> — ' + d.n + ' attempt(s): ' +
+      '<b>' + d.inFinal + '</b> in final · <b>' + d.interimOnly + '</b> interim only · <b>' + d.never + '</b> never heard</div>';
+  }).join('');
+  $('verdict').innerHTML = '<div class="verdict"><h3>By stop delay</h3>' + rows +
+    '<p class="note" style="margin-top:10px">Reading it: if <b>in final</b> rises as the delay grows, stop timing is the cause. ' +
+    'If <b>interim only</b> is common at any delay, the app is discarding an answer it already had. ' +
+    'If <b>never heard</b> dominates everywhere, the recogniser genuinely cannot get this sentence and it is not an implementation bug.</p></div>';
+}
+
+function payload() {
+  return JSON.stringify({
+    probe: 'tail-probe', generated: new Date().toISOString(),
+    ua: navigator.userAgent, attempts,
+  }, null, 2);
+}
+$('copy').onclick = () => {
+  navigator.clipboard.writeText(payload())
+    .then(() => { $('copy').textContent = 'Copied'; setTimeout(() => $('copy').textContent = 'Copy results', 1500); })
+    .catch(() => alert('Copy failed — use Download instead.'));
+};
+$('dl').onclick = () => {
+  const b = new Blob([payload()], { type: 'application/json' });
+  const u = URL.createObjectURL(b);
+  const a = document.createElement('a');
+  a.href = u; a.download = 'tail-probe-' + Date.now() + '.json';
+  a.click(); URL.revokeObjectURL(u);
+};
+$('clear').onclick = () => { if (confirm('Clear all attempts?')) { attempts = []; paint(); } };
+</script>
+</body>
+</html>
