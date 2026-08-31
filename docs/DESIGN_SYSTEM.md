@@ -973,11 +973,17 @@ pass over the dashboard. The mockup files behind each decision:
 | `15-control-vocabulary.html` | Circular control sizes (B), painted size vs touch target |
 | `16-stepper-scale-and-checkpoint-context.html` | Stepper painted scale (S28), stage context on the checkpoint hub (H2) |
 | `17-subtabs.html` | Subtab treatment — hairline rail, 2px active rule, equal widths (fill) |
+| `27-sentence-speak.html` | Speak feedback on a sentence — sheet vs inline surface, whether Chat converges, and the forgiven-near-miss treatment (DES-38, DES-40, DES-42) |
+| `28-checkpoint-sentences.html` | Checkpoint sentence review — hub card, listen-back vs produce modes, grading that never blocks, and the ring sampler (DES-44, DES-45) |
 | `../styleguide.html` | Live reference for everything above |
 
 **Paths:** the mockups live in `docs/design/mockups/`, and `styleguide.html`
-alongside them in `docs/design/`. All seventeen mockups are committed as at
-2026-07-30.
+alongside them in `docs/design/`. **The table above is not complete**: it covers
+mockups 01–17 plus 27 and 28, but 18–26 were never added to it as they were
+built, and the "seventeen" figure it used to claim was wrong on both counts.
+There are 28 mockup files committed as at 2026-08-31. Backfilling 18–26 is in
+BACKLOG.md — it is left rather than guessed at, because a provenance row
+invented after the fact is worse than a missing one.
 
 **Phone-frame width: 412 CSS px, William's own device.** Adopted 2026-08-23 —
 mockup 27 was first built at an arbitrary ~300px frame and redone at Pixel 10's

@@ -4,7 +4,7 @@
 IN_PROGRESS.md when it's picked up; delete it from here once it's shipped and
 folded into STATUS.md.*
 
-Last updated: 2026-08-30 · sw.js at v134
+Last updated: 2026-08-31 · sw.js at v137
 
 ## Product
 
@@ -47,6 +47,18 @@ are pointers only — detail goes there, not here.*
   only if checkpoint heroes start feeling samey** — the fixed character is the
   deliberate default and the field would simply override it. See DESIGN_SYSTEM
   §Watermark; content side in CONTENT.md §5.8.
+
+## Documentation
+
+- **Mockup provenance table is incomplete — 18–26 missing.** `DESIGN_SYSTEM.md`
+  §8 lists mockups 01–17 plus 27–28, and until 2026-08-31 claimed "all seventeen
+  mockups are committed" when 28 exist and the table listed 10. Mockups 18–26
+  (`18-nameplate-home` through `26-conversation-bubbles`) were built across
+  v117–v129 and never added as they landed. Deliberately not backfilled by
+  guessing: a provenance row invented after the fact from a filename is worse
+  than a missing one, because it reads as authoritative. Wants someone to open
+  each and write what it actually decided, cross-checked against the DES rows
+  that cite it.
 
 ## Features
 
