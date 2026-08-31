@@ -1843,9 +1843,25 @@ async function translateText(text, direction = 'en-yue') {
 // ── Speech recognition ───────────────────────────────────────────────────────
 let _recognition = null;
 
+// Arabic digit → Chinese numeral, for comparison only (never for display).
+// The recogniser normalises spoken numbers to digits: 一加二係三
+// (jat1 gaa1 ji6 hai6 saam1) came back from the probe as 一家衣鞋3, where the
+// final 3 IS saam1 — heard correctly, then unmatchable against 三 (saam1).
+// Targets are authored in characters and contain no digits, so this is a no-op
+// on the target side and only ever repairs the heard side.
+// Per-digit rather than value-aware: 23 becomes 二三 rather than 二十三
+// (ji6 sap6 saam1), which is still one edit from the target instead of three.
+// Getting multi-digit place value right would need to know the target, and this
+// runs before any target is in hand.
+const ASR_DIGITS = { '0':'零', '1':'一', '2':'二', '3':'三', '4':'四',
+                     '5':'五', '6':'六', '7':'七', '8':'八', '9':'九' };
+
 function normalizeChinese(text) {
-  // Strip whitespace and Chinese punctuation for comparison
-  return (text || '').replace(/[\s，。！？、,!?.\-]/g, '');
+  // Strip whitespace and Chinese punctuation, and fold Arabic digits to their
+  // Chinese numerals, for comparison
+  return (text || '')
+    .replace(/[\s，。！？、,!?.\-]/g, '')
+    .replace(/[0-9]/g, d => ASR_DIGITS[d]);
 }
 
 // Edit-distance (Levenshtein) between two strings. Order-sensitive.
@@ -2045,6 +2061,36 @@ function renderSpeakBreakdown(heard, targetC, targetJ, variant) {
   return { html: `<div class="speak-breakdown">${cols}</div>`, hasDiff };
 }
 
+// Decide what the learner actually said, given the accumulated transcript and
+// the individual final segments the recogniser emitted.
+//
+// ACCUMULATION FIRST, ALWAYS. For a genuinely long utterance the segments are
+// continuations and only the accumulation can match; falling back to segments
+// first would break every multi-clause conversation line. The segment pass is a
+// fallback for the case the accumulation cannot represent: a REVISION, where a
+// later segment replaces an earlier one rather than extending it, and appending
+// the two produces something that matches nothing.
+//
+// Measured against the 13 recorded attempts in tools/fixtures/tail-probe-*.json:
+// accumulation alone passes 2, accumulation-then-segments passes 3. The extra
+// one is a fluent speaker whose correct reading arrived as a revision and was
+// concatenated into rubbish.
+//
+// A segment is only ever ACCEPTED, never used to reject: if nothing matches,
+// the accumulation is what gets shown, because that is the fullest record of
+// what was heard.
+function resolveHeard(accumulated, segments, target) {
+  if (fuzzyMatch(accumulated, target)) return { heard: accumulated, matched: true };
+  for (const seg of (segments || [])) {
+    if (seg !== accumulated && fuzzyMatch(seg, target)) {
+      // Show the segment that matched rather than the garbled concatenation —
+      // "You said: 一加二係三" is true and useful; the appended form is neither.
+      return { heard: seg, matched: true };
+    }
+  }
+  return { heard: accumulated, matched: false };
+}
+
 // Shared speech-recognition core for both conversation Speak mode and the
 // sentence "Say it back" sheet (DES-38/40). Do NOT duplicate this — the
 // Android quirk-handling below (cumulative finals, dedup) took five failed
@@ -2068,6 +2114,14 @@ function startSpeechRecognition(getTarget, getStatus, applyPatch, onMatch) {
 
   let finalTranscript = '';
   let interimTranscript = '';
+  // Every non-empty final segment the recogniser emitted, kept separately from
+  // the accumulation. The recogniser sometimes REVISES rather than continues:
+  // the tail probe caught it emitting 一家二係 (jat1 gaa1 ji6 hai6) and then
+  // 一加二係三 (jat1 gaa1 ji6 hai6 saam1) — the second being exactly right —
+  // whereupon rule 3 below appended them into 一家二係一加二係三 and destroyed
+  // the correct answer. Rule 2 could not catch it because the revision does not
+  // start with what it replaces (加 gaa1 vs 家 gaa1). See resolveHeard().
+  const finalSegments = [];
 
   rec.onresult = (e) => {
     interimTranscript = '';
@@ -2088,6 +2142,7 @@ function startSpeechRecognition(getTarget, getStatus, applyPatch, onMatch) {
         // Post-pass: collapse any consecutive-duplicate substring of length >= 4.
         // Safety net for delivery patterns that slip past rules 1–3.
         finalTranscript = deduplicateRepeats(finalTranscript);
+        if (transcript && transcript.trim()) finalSegments.push(transcript.trim());
       } else {
         interimTranscript += transcript;
       }
@@ -2101,14 +2156,14 @@ function startSpeechRecognition(getTarget, getStatus, applyPatch, onMatch) {
   rec.onend = () => {
     // Recognition session ended — if the caller is still in 'listening' mode, evaluate result
     if (getStatus() === 'listening') {
-      const heard = finalTranscript.trim();
-      if (!heard) {
+      const accumulated = finalTranscript.trim();
+      if (!accumulated) {
         applyPatch({ status: 'idle', heard: '' });
       } else {
         const target = getTarget();
-        const matched = fuzzyMatch(heard, target);
-        applyPatch({ status: matched ? 'matched' : 'mismatch', heard });
-        if (matched && onMatch) onMatch();
+        const r = resolveHeard(accumulated, finalSegments, target);
+        applyPatch({ status: r.matched ? 'matched' : 'mismatch', heard: r.heard });
+        if (r.matched && onMatch) onMatch();
       }
     }
   };

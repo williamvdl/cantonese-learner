@@ -1,0 +1,620 @@
+{
+  "probe": "tail-probe",
+  "generated": "2026-08-31T01:26:45.259Z",
+  "ua": "Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Mobile Safari/537.36",
+  "attempts": [
+    {
+      "at": "2026-08-31T01:18:02.578Z",
+      "target": "一加二係三",
+      "targetJ": "jat1 gaa1 ji6 hai6 saam1",
+      "lastChar": "三",
+      "lastSyl": "saam1",
+      "stopDelayMs": 0,
+      "durationMs": 3820,
+      "finalText": "一家衣鞋",
+      "lastInterim": "",
+      "bestInterim": "",
+      "inFinal": false,
+      "inAnyInterim": false,
+      "trace": [
+        {
+          "ms": 2498,
+          "final": true,
+          "text": ""
+        },
+        {
+          "ms": 2587,
+          "final": true,
+          "text": ""
+        },
+        {
+          "ms": 2796,
+          "final": true,
+          "text": ""
+        },
+        {
+          "ms": 3181,
+          "final": true,
+          "text": ""
+        },
+        {
+          "ms": 3819,
+          "final": true,
+          "text": "一家衣鞋"
+        }
+      ]
+    },
+    {
+      "at": "2026-08-31T01:18:11.752Z",
+      "target": "一加二係三",
+      "targetJ": "jat1 gaa1 ji6 hai6 saam1",
+      "lastChar": "三",
+      "lastSyl": "saam1",
+      "stopDelayMs": 0,
+      "durationMs": 4027,
+      "finalText": "一家e係",
+      "lastInterim": "一家e係",
+      "bestInterim": "一家e係",
+      "inFinal": false,
+      "inAnyInterim": false,
+      "trace": [
+        {
+          "ms": 2369,
+          "final": true,
+          "text": ""
+        },
+        {
+          "ms": 2622,
+          "final": true,
+          "text": ""
+        },
+        {
+          "ms": 2963,
+          "final": true,
+          "text": ""
+        },
+        {
+          "ms": 3266,
+          "final": true,
+          "text": ""
+        },
+        {
+          "ms": 3333,
+          "final": true,
+          "text": ""
+        },
+        {
+          "ms": 4016,
+          "final": false,
+          "text": "一家e係"
+        },
+        {
+          "ms": 4026,
+          "final": true,
+          "text": "一家e係"
+        }
+      ]
+    },
+    {
+      "at": "2026-08-31T01:18:19.342Z",
+      "target": "一加二係三",
+      "targetJ": "jat1 gaa1 ji6 hai6 saam1",
+      "lastChar": "三",
+      "lastSyl": "saam1",
+      "stopDelayMs": 0,
+      "durationMs": 4642,
+      "finalText": "一家姨係",
+      "lastInterim": "",
+      "bestInterim": "",
+      "inFinal": false,
+      "inAnyInterim": false,
+      "trace": [
+        {
+          "ms": 2945,
+          "final": true,
+          "text": ""
+        },
+        {
+          "ms": 3174,
+          "final": true,
+          "text": ""
+        },
+        {
+          "ms": 3540,
+          "final": true,
+          "text": ""
+        },
+        {
+          "ms": 3912,
+          "final": true,
+          "text": ""
+        },
+        {
+          "ms": 4641,
+          "final": true,
+          "text": "一家姨係"
+        }
+      ]
+    },
+    {
+      "at": "2026-08-31T01:18:41.210Z",
+      "target": "一加二係三",
+      "targetJ": "jat1 gaa1 ji6 hai6 saam1",
+      "lastChar": "三",
+      "lastSyl": "saam1",
+      "stopDelayMs": 6000,
+      "durationMs": 4935,
+      "finalText": "一家姨一家e係",
+      "lastInterim": "",
+      "bestInterim": "",
+      "inFinal": false,
+      "inAnyInterim": false,
+      "trace": [
+        {
+          "ms": 2592,
+          "final": true,
+          "text": ""
+        },
+        {
+          "ms": 2913,
+          "final": true,
+          "text": ""
+        },
+        {
+          "ms": 3154,
+          "final": true,
+          "text": ""
+        },
+        {
+          "ms": 3743,
+          "final": true,
+          "text": "一家姨"
+        },
+        {
+          "ms": 3793,
+          "final": true,
+          "text": ""
+        },
+        {
+          "ms": 4000,
+          "final": true,
+          "text": ""
+        },
+        {
+          "ms": 4934,
+          "final": true,
+          "text": "一家e係"
+        }
+      ]
+    },
+    {
+      "at": "2026-08-31T01:19:01.241Z",
+      "target": "一加二係三",
+      "targetJ": "jat1 gaa1 ji6 hai6 saam1",
+      "lastChar": "三",
+      "lastSyl": "saam1",
+      "stopDelayMs": 6000,
+      "durationMs": 4644,
+      "finalText": "一家衣鞋",
+      "lastInterim": "",
+      "bestInterim": "",
+      "inFinal": false,
+      "inAnyInterim": false,
+      "trace": [
+        {
+          "ms": 2527,
+          "final": true,
+          "text": ""
+        },
+        {
+          "ms": 2852,
+          "final": true,
+          "text": ""
+        },
+        {
+          "ms": 3259,
+          "final": true,
+          "text": ""
+        },
+        {
+          "ms": 3636,
+          "final": true,
+          "text": ""
+        },
+        {
+          "ms": 4641,
+          "final": true,
+          "text": "一家衣鞋"
+        }
+      ]
+    },
+    {
+      "at": "2026-08-31T01:19:32.529Z",
+      "target": "一加二係三",
+      "targetJ": "jat1 gaa1 ji6 hai6 saam1",
+      "lastChar": "三",
+      "lastSyl": "saam1",
+      "stopDelayMs": 800,
+      "durationMs": 4668,
+      "finalText": "一家姨係",
+      "lastInterim": "",
+      "bestInterim": "",
+      "inFinal": false,
+      "inAnyInterim": false,
+      "trace": [
+        {
+          "ms": 2464,
+          "final": true,
+          "text": ""
+        },
+        {
+          "ms": 2663,
+          "final": true,
+          "text": ""
+        },
+        {
+          "ms": 2884,
+          "final": true,
+          "text": ""
+        },
+        {
+          "ms": 3533,
+          "final": true,
+          "text": ""
+        },
+        {
+          "ms": 4667,
+          "final": true,
+          "text": "一家姨係"
+        }
+      ]
+    },
+    {
+      "at": "2026-08-31T01:19:39.507Z",
+      "target": "一加二係三",
+      "targetJ": "jat1 gaa1 ji6 hai6 saam1",
+      "lastChar": "三",
+      "lastSyl": "saam1",
+      "stopDelayMs": 800,
+      "durationMs": 4379,
+      "finalText": "一家之係",
+      "lastInterim": "",
+      "bestInterim": "",
+      "inFinal": false,
+      "inAnyInterim": false,
+      "trace": [
+        {
+          "ms": 2472,
+          "final": true,
+          "text": ""
+        },
+        {
+          "ms": 2667,
+          "final": true,
+          "text": ""
+        },
+        {
+          "ms": 2996,
+          "final": true,
+          "text": ""
+        },
+        {
+          "ms": 3498,
+          "final": true,
+          "text": ""
+        },
+        {
+          "ms": 4378,
+          "final": true,
+          "text": "一家之係"
+        }
+      ]
+    },
+    {
+      "at": "2026-08-31T01:20:01.867Z",
+      "target": "一加二係三",
+      "targetJ": "jat1 gaa1 ji6 hai6 saam1",
+      "lastChar": "三",
+      "lastSyl": "saam1",
+      "stopDelayMs": 800,
+      "durationMs": 3803,
+      "finalText": "一家姨係一家姨係三",
+      "lastInterim": "",
+      "bestInterim": "",
+      "inFinal": true,
+      "inAnyInterim": false,
+      "trace": [
+        {
+          "ms": 1969,
+          "final": true,
+          "text": ""
+        },
+        {
+          "ms": 2108,
+          "final": true,
+          "text": ""
+        },
+        {
+          "ms": 2213,
+          "final": true,
+          "text": ""
+        },
+        {
+          "ms": 2600,
+          "final": true,
+          "text": ""
+        },
+        {
+          "ms": 3168,
+          "final": true,
+          "text": "一家姨係"
+        },
+        {
+          "ms": 3800,
+          "final": false,
+          "text": ""
+        },
+        {
+          "ms": 3802,
+          "final": true,
+          "text": "一家姨係三"
+        }
+      ]
+    },
+    {
+      "at": "2026-08-31T01:20:13.850Z",
+      "target": "一加二係三",
+      "targetJ": "jat1 gaa1 ji6 hai6 saam1",
+      "lastChar": "三",
+      "lastSyl": "saam1",
+      "stopDelayMs": 800,
+      "durationMs": 3518,
+      "finalText": "一家衣鞋衫",
+      "lastInterim": "",
+      "bestInterim": "",
+      "inFinal": false,
+      "inAnyInterim": false,
+      "trace": [
+        {
+          "ms": 2047,
+          "final": true,
+          "text": ""
+        },
+        {
+          "ms": 2237,
+          "final": true,
+          "text": ""
+        },
+        {
+          "ms": 2434,
+          "final": true,
+          "text": ""
+        },
+        {
+          "ms": 2641,
+          "final": true,
+          "text": ""
+        },
+        {
+          "ms": 2889,
+          "final": true,
+          "text": ""
+        },
+        {
+          "ms": 3516,
+          "final": true,
+          "text": "一家衣鞋衫"
+        }
+      ]
+    },
+    {
+      "at": "2026-08-31T01:20:30.897Z",
+      "target": "一加二係三",
+      "targetJ": "jat1 gaa1 ji6 hai6 saam1",
+      "lastChar": "三",
+      "lastSyl": "saam1",
+      "stopDelayMs": 800,
+      "durationMs": 3645,
+      "finalText": "一家衣鞋3",
+      "lastInterim": "",
+      "bestInterim": "",
+      "inFinal": false,
+      "inAnyInterim": false,
+      "trace": [
+        {
+          "ms": 2108,
+          "final": true,
+          "text": ""
+        },
+        {
+          "ms": 2232,
+          "final": true,
+          "text": ""
+        },
+        {
+          "ms": 2382,
+          "final": true,
+          "text": ""
+        },
+        {
+          "ms": 2633,
+          "final": true,
+          "text": ""
+        },
+        {
+          "ms": 3125,
+          "final": true,
+          "text": ""
+        },
+        {
+          "ms": 3643,
+          "final": true,
+          "text": "一家衣鞋3"
+        }
+      ]
+    },
+    {
+      "at": "2026-08-31T01:24:51.682Z",
+      "target": "一加二係三",
+      "targetJ": "jat1 gaa1 ji6 hai6 saam1",
+      "lastChar": "三",
+      "lastSyl": "saam1",
+      "stopDelayMs": 800,
+      "durationMs": 4244,
+      "finalText": "一家二係一加二係三",
+      "lastInterim": "",
+      "bestInterim": "",
+      "inFinal": true,
+      "inAnyInterim": false,
+      "trace": [
+        {
+          "ms": 2029,
+          "final": true,
+          "text": ""
+        },
+        {
+          "ms": 2353,
+          "final": true,
+          "text": ""
+        },
+        {
+          "ms": 2614,
+          "final": true,
+          "text": ""
+        },
+        {
+          "ms": 2674,
+          "final": true,
+          "text": ""
+        },
+        {
+          "ms": 3109,
+          "final": true,
+          "text": ""
+        },
+        {
+          "ms": 3745,
+          "final": true,
+          "text": "一家二係"
+        },
+        {
+          "ms": 3810,
+          "final": true,
+          "text": ""
+        },
+        {
+          "ms": 4243,
+          "final": true,
+          "text": "一加二係三"
+        }
+      ]
+    },
+    {
+      "at": "2026-08-31T01:24:58.353Z",
+      "target": "一加二係三",
+      "targetJ": "jat1 gaa1 ji6 hai6 saam1",
+      "lastChar": "三",
+      "lastSyl": "saam1",
+      "stopDelayMs": 800,
+      "durationMs": 4383,
+      "finalText": "一加二一加二係",
+      "lastInterim": "",
+      "bestInterim": "",
+      "inFinal": false,
+      "inAnyInterim": false,
+      "trace": [
+        {
+          "ms": 2060,
+          "final": true,
+          "text": ""
+        },
+        {
+          "ms": 2451,
+          "final": true,
+          "text": ""
+        },
+        {
+          "ms": 2825,
+          "final": true,
+          "text": ""
+        },
+        {
+          "ms": 3408,
+          "final": true,
+          "text": "一加二"
+        },
+        {
+          "ms": 3473,
+          "final": true,
+          "text": ""
+        },
+        {
+          "ms": 4370,
+          "final": true,
+          "text": ""
+        },
+        {
+          "ms": 4377,
+          "final": true,
+          "text": "一加二係"
+        }
+      ]
+    },
+    {
+      "at": "2026-08-31T01:25:07.743Z",
+      "target": "一加二係三",
+      "targetJ": "jat1 gaa1 ji6 hai6 saam1",
+      "lastChar": "三",
+      "lastSyl": "saam1",
+      "stopDelayMs": 800,
+      "durationMs": 2665,
+      "finalText": "一加二係三",
+      "lastInterim": "",
+      "bestInterim": "",
+      "inFinal": true,
+      "inAnyInterim": false,
+      "trace": [
+        {
+          "ms": 1319,
+          "final": true,
+          "text": ""
+        },
+        {
+          "ms": 1448,
+          "final": true,
+          "text": ""
+        },
+        {
+          "ms": 1565,
+          "final": true,
+          "text": ""
+        },
+        {
+          "ms": 1641,
+          "final": true,
+          "text": ""
+        },
+        {
+          "ms": 1767,
+          "final": true,
+          "text": ""
+        },
+        {
+          "ms": 1823,
+          "final": true,
+          "text": ""
+        },
+        {
+          "ms": 2023,
+          "final": true,
+          "text": ""
+        },
+        {
+          "ms": 2663,
+          "final": true,
+          "text": "一加二係三"
+        }
+      ]
+    }
+  ]
+}

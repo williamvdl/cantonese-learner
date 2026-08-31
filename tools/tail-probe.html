@@ -172,6 +172,55 @@ function stopNow() {
   setTimeout(() => { try { r.stop(); } catch (e) {} }, d);
 }
 
+// ── Mirrors of app.js, so this page predicts the app rather than guessing ──
+// Kept honest by tools/asr-replay-harness.js, which runs the recorded traces
+// through the REAL functions in app.js and pins the results.
+const ASR_DIGITS = { '0':'零','1':'一','2':'二','3':'三','4':'四','5':'五','6':'六','7':'七','8':'八','9':'九' };
+function normalizeChinese(t) {
+  return (t || '').replace(/[\s，。！？、,!?.\-]/g, '').replace(/[0-9]/g, d => ASR_DIGITS[d]);
+}
+function editDistance(a, b) {
+  const m = a.length, n = b.length;
+  const dp = Array.from({ length: m + 1 }, (_, i) => [i, ...Array(n).fill(0)]);
+  for (let j = 0; j <= n; j++) dp[0][j] = j;
+  for (let i = 1; i <= m; i++) for (let j = 1; j <= n; j++)
+    dp[i][j] = a[i-1] === b[j-1] ? dp[i-1][j-1] : 1 + Math.min(dp[i-1][j-1], dp[i-1][j], dp[i][j-1]);
+  return dp[m][n];
+}
+const FINAL_PARTICLES = new Set(['喇','啦','呀','嗎','喎','囉','㗎','咋','咩','吖']);
+function fuzzyMatch(heard, target) {
+  let h = normalizeChinese(heard), t = normalizeChinese(target);
+  if (!h || !t) return false;
+  if (h === t) return true;
+  const hL = h[h.length-1], tL = t[t.length-1];
+  if (hL !== tL && FINAL_PARTICLES.has(hL) && FINAL_PARTICLES.has(tL)) {
+    h = h.slice(0, -1); t = t.slice(0, -1);
+    if (h === t) return true;
+  }
+  const budget = Math.floor(t.length / 4);
+  if (budget < 1) return h === t;
+  return editDistance(h, t) <= budget;
+}
+function appAccumulate(trace) {
+  let acc = ''; const segments = [];
+  for (const x of trace) {
+    if (x.error || !x.final) continue;
+    const txt = x.text;
+    if (acc && txt === acc) { /* skip */ }
+    else if (acc && txt.length > acc.length && txt.startsWith(acc)) acc = txt;
+    else acc += txt;
+    if (txt && txt.trim()) segments.push(txt.trim());
+  }
+  return { accumulated: acc.trim(), segments };
+}
+function appResolve(accumulated, segments, target) {
+  if (fuzzyMatch(accumulated, target)) return { heard: accumulated, matched: true };
+  for (const seg of segments) {
+    if (seg !== accumulated && fuzzyMatch(seg, target)) return { heard: seg, matched: true };
+  }
+  return { heard: accumulated, matched: false };
+}
+
 function start() {
   const target = $('tc').value.trim();
   const delay = parseInt($('delay').value, 10) || 0;
@@ -179,6 +228,7 @@ function start() {
   const t0 = Date.now();
   const trace = [];
   let finalText = '', lastInterim = '', bestInterim = '';
+  const segments = [];   // non-empty final segments, as the app now keeps them
 
   const r = new SR();
   r.lang = 'yue-Hant-HK';
@@ -192,7 +242,7 @@ function start() {
       const res = e.results[i];
       const txt = res[0].transcript;
       trace.push({ ms: Date.now() - t0, final: !!res.isFinal, text: txt });
-      if (res.isFinal) finalText += txt;
+      if (res.isFinal) { finalText += txt; if (txt && txt.trim()) segments.push(txt.trim()); }
       else interim += txt;
     }
     if (interim) {
@@ -208,6 +258,12 @@ function start() {
     rec = null;
     $('btn').textContent = '● Record';
     $('btn').className = 'rec';
+    // Run the app's REAL accumulation and matching, so this page predicts what
+    // the app would do rather than approximating it. Kept in step with app.js
+    // by tools/asr-replay-harness.js, which replays these traces through the
+    // real functions.
+    const acc = appAccumulate(trace);
+    const resolved = appResolve(acc.accumulated, acc.segments, target);
     record({
       at: new Date().toISOString(),
       target, targetJ: $('tj').value.trim(),
@@ -215,6 +271,11 @@ function start() {
       stopDelayMs: delay,
       durationMs: Date.now() - t0,
       finalText: finalText.trim(),
+      accumulated: acc.accumulated,
+      segments: acc.segments,
+      appHeard: resolved.heard,
+      appPass: resolved.matched,
+      recoveredBySegment: resolved.matched && resolved.heard !== acc.accumulated,
       lastInterim: lastInterim.trim(),
       bestInterim: bestInterim.trim(),
       inFinal: last.char ? finalText.includes(last.char) : null,
@@ -245,17 +306,17 @@ function paint() {
   $('count').textContent = attempts.length ? '(' + attempts.length + ')' : '';
   if (!attempts.length) { $('atts').innerHTML = '<p class="note">Nothing recorded yet.</p>'; $('verdict').innerHTML = ''; return; }
   $('atts').innerHTML = attempts.map((a, i) => {
-    const cls = a.inFinal ? 'good' : (a.inAnyInterim ? 'part' : 'bad');
-    const head = a.inFinal
-      ? '✓ last syllable IS in the final'
-      : (a.inAnyInterim
-          ? '△ last syllable was in an INTERIM but not the final'
-          : '✗ last syllable never appeared at all');
+    const cls = a.appPass ? 'good' : (a.inFinal ? 'part' : 'bad');
+    const head = a.appPass
+      ? ('✓ the app WOULD accept this' + (a.recoveredBySegment ? ' (recovered from a revision)' : ''))
+      : (a.inFinal
+          ? '△ last syllable heard, but the whole line still did not match'
+          : '✗ the app would reject this');
     return '<div class="att ' + cls + '">' +
       '<h3>#' + (i + 1) + ' — ' + head + '</h3>' +
       '<div class="k">stop delay <b>' + a.stopDelayMs + 'ms</b> · duration <b>' + a.durationMs + 'ms</b> · events <b>' + a.trace.length + '</b></div>' +
-      '<div class="k">final: <b>' + (a.finalText || '(empty)') + '</b></div>' +
-      '<div class="k">longest interim: <b>' + (a.bestInterim || '(none)') + '</b></div>' +
+      '<div class="k">app hears: <b>' + (a.appHeard || '(empty)') + '</b></div>' +
+      '<div class="k">segments: <b>' + (a.segments && a.segments.length ? a.segments.join('  |  ') : '(none)') + '</b></div>' +
       '<div class="trace">' + a.trace.map(t =>
         String(t.ms).padStart(5) + 'ms  ' + (t.error ? 'ERROR ' + t.error : (t.final ? 'FINAL  ' : 'interim') + '  ' + t.text)
       ).join('\n') + '</div>' +
