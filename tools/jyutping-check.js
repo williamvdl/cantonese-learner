@@ -169,6 +169,31 @@ console.log('\n— load strategy —');
   else ok('window.ToJyutping is only read inside charsToJyutping(), at call time');
 }
 
+// ── 6. Every "You said" line shows jyutping ────────────────────────────────
+// The point of the dictionary is that a learner who does not read Chinese can
+// read back what the recogniser heard. That only holds if EVERY surface showing
+// heard text also shows jyutping. Three surfaces render it — the Learn speak
+// sheet, the checkpoint sentence review, and Chat's conversation Speak mode —
+// and Chat was missed for two releases after DES-41 landed, shipping bare
+// characters. Asserted at source level because the three renderers are far
+// apart in render.js and nothing else ties them together.
+console.log('\n— every "You said" surface shows jyutping —');
+{
+  const renderSrc = fs.readFileSync(path.join(ROOT, 'render.js'), 'utf8');
+  const lines = renderSrc.split('\n');
+  let found = 0, bare = 0;
+  lines.forEach((line, i) => {
+    if (!line.includes('You said:')) return;
+    found++;
+    if (!line.includes('speak-heard-jp')) {
+      bare++;
+      fail(`render.js:${i + 1} renders "You said" without a speak-heard-jp sub-line`);
+    }
+  });
+  if (!found) fail('no "You said" renderers found in render.js — has the markup moved?');
+  else if (!bare) ok(`all ${found} "You said" renderers emit jyutping`);
+}
+
 console.log('');
 if (failures) { console.log(`${failures} FAILURE(S)`); process.exit(1); }
 console.log('jyutping-check: all assertions pass');

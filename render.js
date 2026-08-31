@@ -1195,7 +1195,7 @@ function renderCheckpointSentences() {
   const listening = sr.status === 'listening';
   const showTarget = sr.revealed || sr.status === 'matched' || sr.status === 'mismatch';
 
-  const segs = `<div class="segs">${sr.items.map((_, i) =>
+  const segs = `<div class="segs sr-segs">${sr.items.map((_, i) =>
     `<i class="${i < sr.idx || (i === sr.idx && showTarget) ? 'on' : ''}"></i>`).join('')}</div>`;
 
   // ── Prompt block — the only thing that differs between the two modes ──
@@ -1990,8 +1990,14 @@ function renderConversation() {
         })()
       : '';
 
+    // Same treatment as the Learn sheet and the checkpoint review (DES-41/43):
+    // show jyutping for whatever the recogniser returned, not bare characters.
+    // A learner who doesn't read Chinese gets nothing from the characters alone,
+    // which is the whole reason charsToJyutping() exists — Chat was simply
+    // missed when that landed.
+    const heardJp = cv.speakHeard ? charsToJyutping(cv.speakHeard) : '';
     const heard = cv.speakHeard
-      ? `<div class="speak-heard">You said: <strong>${cv.speakHeard}</strong></div>`
+      ? `<div class="speak-heard">You said: <strong>${cv.speakHeard}</strong>${heardJp ? `<div class="speak-heard-jp">${heardJp}</div>` : ''}</div>`
       : '';
 
     const englishEl = cv.speakRevealed[step]

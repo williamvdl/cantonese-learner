@@ -806,6 +806,11 @@
   /* Escape hatch and "run more". Deliberately low-contrast and underlined
      rather than a button: available, never the obvious next move. */
   .sr-skip { width: 100%; background: transparent; border: none; color: var(--muted-dark); font-size: var(--fs-meta); padding: 12px 0; min-height: var(--tap-min); margin-top: 2px; text-decoration: underline; cursor: pointer; }
+  /* On the summary, "run more" follows the solid Mark-reviewed button and needs
+     to sit clear of it. Scoped to that adjacency so the per-item escape hatch,
+     which sits directly under the speak card and wants to stay tight, is
+     unaffected. */
+  .cp-finish + .sr-skip { margin-top: 10px; }
   .sr-intro { font-size: var(--fs-small); color: var(--muted-dark); line-height: 1.6; margin: 0 0 14px; }
   .sr-note { margin-top: 8px; padding-top: 8px; border-top: 1px solid var(--parchment-border); font-size: 11.5px; color: var(--muted-dark); line-height: 1.55; }
   /* Summary */
@@ -1394,6 +1399,11 @@
   /* Hub pips sit between the activity cards and the finish button, measuring the
      content column (MOCK-16-H2). */
   .cp-segs { margin: var(--sp-4) 0 var(--sp-2); }
+  /* Sentence review's run progress. `.segs` is a bare primitive with no margins
+     by design — the hub positions it with .cp-segs, and this is the equivalent
+     modifier for the review screen. Only a bottom margin: .speak-nav directly
+     above already supplies the gap on top, and adding one here would double it. */
+  .sr-segs { margin-bottom: var(--sp-4); }
   .cp-done .cp-card .path-step-title,
   .cp-done .path-step-cp-prog { color: var(--muted-dark); }
   /* Outline in both states, never filled (MOCK-05-retreat). A filled oxblood
