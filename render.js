@@ -1335,7 +1335,7 @@ function render() {
       <div class="content"><div class="boot-msg">Loading topic…</div></div>
       ${renderChrome()}
     `;
-    attachEvents(null);
+    afterRender();
     store.loadTopic(state.topic).then(render).catch(err => {
       console.error('[topic load]', err);
       app.innerHTML = `
@@ -1343,7 +1343,7 @@ function render() {
         <div class="content"><div class="fatal-msg">Couldn't load topic. Check console.</div></div>
         ${renderChrome()}
       `;
-      attachEvents(null);
+      afterRender();
     });
     return;
   }
@@ -1359,7 +1359,7 @@ function render() {
           <div class="content"><div class="boot-msg">Loading path…</div></div>
           ${renderChrome()}
         `;
-        attachEvents(null);
+        afterRender();
         store.loadTopics(missing).then(render).catch(err => {
           console.error('[path load]', err);
         });
@@ -1381,7 +1381,7 @@ function render() {
           <div class="content"><div class="boot-msg">Loading checkpoint…</div></div>
           ${renderChrome()}
         `;
-        attachEvents(null);
+        afterRender();
         store.loadTopics(missing).then(render).catch(err => console.error('[checkpoint load]', err));
         return;
       }
@@ -1466,7 +1466,7 @@ function render() {
     ${renderChrome()}
   `;
 
-  attachEvents(lesson);
+  afterRender();
 }
 
 // Unified page-section header — used by Topics, Learning Path, Review, Translate
@@ -1783,7 +1783,7 @@ function renderTopicsScreen() {
       if (topics.length === 0) return '';
       const cards = topics.map(t => renderTopicCard(t)).join('');
       return `
-        <div class="cat-section" id="cat-anchor-${cat.key}">
+        <div class="cat-section">
           <div class="cat-section-header">
             <span class="cat-section-title">${cat.icon} ${cat.label}</span>
             <span class="cat-section-count">${topics.length} topic${topics.length>1?'s':''}</span>
@@ -2332,77 +2332,132 @@ function renderQuiz(lesson) {
 }
 
 // ── Events ────────────────────────────────────────────────────────────────────
-function attachEvents(lesson) {
-  // Rings resolve their own dash length from path geometry, so they can only be
-  // measured once the markup is in the DOM. Done here rather than in render():
-  // render() has five separate exits and attachEvents() has early returns of its
-  // own, so the top of this function is the single point every path passes.
-  paintDiamondRings();
+// ONE listener on #app, not 100 listeners re-bound on every render.
+//
+// WHY THIS SHAPE (v139, replacing attachEvents()):
+// Rendering sets app.innerHTML, which destroys every element and every listener
+// on it. The old attachEvents() therefore re-queried the document and re-bound
+// all 100 handlers after every state change, which forced two things: it had to
+// be the union of every screen's wiring in one 1,288-line scope, and every
+// lookup had to tolerate its element being absent — 52 `if (el)` guards. That
+// guard is why a broken control was SILENT: rename an id, and the guard steps
+// over it and the button just does nothing. No error, no warning, no failure.
+//
+// Delegation removes the cause rather than the symptom. #app itself is never
+// replaced, so a listener on it survives every render and is attached exactly
+// once. Handlers live in a table keyed by the id or data attribute that already
+// exists in the markup — no markup changed to get here, deliberately, because
+// rewriting 39 attributes across every screen would have been the larger and
+// less verifiable half of the job.
+//
+// DES-47 — INNERMOST TAPPED CONTROL WINS, ONE ACTION PER TAP.
+// A tap on a button inside a tappable card passes outward through the card too,
+// so without a rule both react. closest() returns the NEAREST registered
+// ancestor and dispatch stops there, so the rule is now structural rather than
+// remembered. That retires two incompatible conventions: eight inner controls
+// called e.stopPropagation(), and four outer ones instead checked
+// e.target.closest(…) and bailed. Measured against the markup, only four of
+// those twelve defences guarded real nesting — the rest defended against
+// nesting that does not exist. All twelve are gone; tools/wiring-check.js now
+// enumerates every genuinely nested pair and fails on any that is not declared.
+//
+// Adding a control: add one entry here and emit its attribute. There is no
+// second place to remember, and wiring-check.js fails if either half is missing.
 
-  // Nameplate → Home (DES-18). The header's only route to a top-level destination
-  // when the tab bar is hidden inside a topic (§3.10), which is why it is
-  // structural rather than a convenience. `replace` is false: this is a genuine
-  // forward move, not an overwrite of an open drawer, so BACK returns to where
-  // you were. goToDestination() no-ops when already on Home, so repeat taps
-  // cannot stack identical history entries.
-  const nameplate = document.getElementById('nameplate-home');
-  if (nameplate) nameplate.addEventListener('click', () => {
+// Handlers receive (el, e): `el` is the matched control, `e` the raw event.
+// Anything a handler needs is read from `state` or from el.dataset at call time
+// — nothing closes over a variable computed at bind time, because there is no
+// bind time any more. That is the one behavioural trap in this refactor: the
+// old code captured `wr`, `item`, `cpq` and `cw` in a closure when the screen
+// rendered, and each is re-derived below instead.
+const CLICK_ACTIONS = {
+
+  // ── Header and chrome ──────────────────────────────────────────────────────
+
+  // Nameplate → Home (DES-18). The header's only route to a top-level
+  // destination when the tab bar is hidden inside a topic (§3.10), which is why
+  // it is structural rather than a convenience. goToDestination() no-ops when
+  // already on Home, so repeat taps cannot stack identical history entries.
+  '#nameplate-home': () => {
     if (goToDestination('dashboard')) { window.scrollTo(0, 0); render(); }
-  });
+  },
 
-  // Header info ⓘ toggle — expands/collapses tone legend + speed settings
-  const headerInfo = document.getElementById('header-info-toggle');
-  if (headerInfo) headerInfo.addEventListener('click', () => { state.headerDetailsOpen = !state.headerDetailsOpen; render(); });
+  '#header-info-toggle': () => { state.headerDetailsOpen = !state.headerDetailsOpen; render(); },
 
   // Settings cog → sheet. Pushes a history entry so phone BACK closes the sheet
-  // rather than leaving the screen underneath — the pattern the drawer used, and
-  // the reason closing routes through history rather than setting state directly.
-  const settingsBtn = document.getElementById('settings-btn');
-  if (settingsBtn) settingsBtn.addEventListener('click', () => {
-    state.settingsOpen = true; pushNav(); render();
-  });
-  const settingsClose = document.getElementById('settings-close');
-  const settingsScrim = document.getElementById('settings-scrim');
-  if (settingsClose) settingsClose.addEventListener('click', () => closeSettings());
-  if (settingsScrim) settingsScrim.addEventListener('click', () => closeSettings());
+  // rather than leaving the screen underneath, which is why closing routes
+  // through history rather than setting state directly.
+  '#settings-btn': () => { state.settingsOpen = true; pushNav(); render(); },
+  '#settings-close': () => closeSettings(),
+  '#settings-scrim': () => closeSettings(),
 
-  // Audio speed — the sheet is now the only route to it, so this is the sole
-  // writer of state.speed.
-  document.querySelectorAll('[data-speed]').forEach(btn => {
-    btn.addEventListener('click', () => { state.speed = btn.dataset.speed; render(); });
-  });
+  // Audio speed — the settings sheet is the only route to it, and this is the
+  // sole writer of state.speed. Two other writers survived the v117 drawer
+  // removal bound to controls nothing emitted; both were removed at v138.
+  'data-speed': el => { state.speed = el.dataset.speed; render(); },
 
-  // Tab bar — the five top-level destinations. The reset lives in
-  // goToDestination() so this and the header nameplate cannot drift.
-  // `replace` is FALSE here, unlike the drawer it replaces: the drawer had its
-  // own history entry to overwrite, a tab tap has nothing to overwrite and is a
-  // genuine forward move, so BACK steps back through the tabs you visited.
-  document.querySelectorAll('[data-nav]').forEach(btn => {
-    btn.addEventListener('click', () => {
-      // Tapping the tab you are already on is a no-op — no re-render, no history
-      // entry. goToDestination() reports that so repeat taps cannot stack
-      // identical entries and make BACK look broken.
-      if (goToDestination(btn.dataset.nav)) { window.scrollTo(0, 0); render(); }
-    });
-  });
+  // Tab bar — the five top-level destinations. The state reset lives in
+  // goToDestination() so this and the nameplate cannot drift. Tapping the tab
+  // you are already on is a no-op: no re-render, no history entry, so repeat
+  // taps cannot stack identical entries and make BACK look broken.
+  'data-nav': el => {
+    if (goToDestination(el.dataset.nav)) { window.scrollTo(0, 0); render(); }
+  },
 
-  document.querySelectorAll('[data-cat-jump]').forEach(btn => {
-    btn.addEventListener('click', () => {
-      state.nav = 'topics';
+  // ── UP controls (DES-33 at v125, generalised across the app at v126) ────────
+  // ONE handler for every control whose LABEL NAMES A DESTINATION. The rule the
+  // register states is that such a control must actually go there, and the way
+  // to keep that true is a single vocabulary rather than a bespoke handler per
+  // screen — four of those existed, three routed through history.back(), and two
+  // were reachable from more than one parent and so named a place they did not
+  // always go.
+  //
+  //   data-up="paths"        → the Learning Paths list
+  //   data-up="path:<key>"   → that path's timeline
+  //   data-up="topics"       → the Topics screen
+  //
+  // NOT converted, deliberately: data-cp-act-back and data-cp-act-done on the
+  // activity screens. A checkpoint activity has exactly ONE parent, so
+  // history.back() already lands where the label says; converting them for
+  // symmetry would push a third entry and leave the hardware key pointing at a
+  // finished quiz.
+  'data-up': el => {
+    const dest = el.dataset.up;
+    window.speechSynthesis.cancel();
+    stopAudioFile();
+    // Leaving whatever screen we are on, so its view state goes with it.
+    state.checkpoint = null;
+    state.checkpointAct = null;
+    state.checkpointQuiz = null;
+    state.fromPath = false;
+    state.fromPathTier = null;
+    state.mode = 'study';
+    state.tab = 'words';
+    state.flipped = {};
+
+    if (dest === 'topics') {
       state.topicsView = true;
-      state.selectedCategory = btn.dataset.catJump;
-      state.fromPath = false;
-      state.fromPathTier = null;
-      pushNav();                 // a forward move, same as a tab tap
-      window.scrollTo(0, 0);
-      render();
-    });
-  });
+    } else if (dest === 'paths') {
+      state.nav = 'path';
+      state.pathView = 'list';
+    } else if (dest.startsWith('path:')) {
+      state.activePath = dest.slice(5);
+      state.nav = 'path';
+      state.pathView = 'timeline';
+    } else {
+      // An unknown destination is a bug in the emit site, not something to paper
+      // over with a guessed default — say so rather than navigating arbitrarily.
+      console.warn('[data-up] unknown destination:', dest);
+      return;
+    }
+    pushNav();
+    window.scrollTo(0, 0);
+    render();
+  },
 
-  // ── Translate events ──────────────────────────────────────────
-  // API key save
-  const apikeySave = document.getElementById('apikey-save');
-  if (apikeySave) apikeySave.addEventListener('click', () => {
+  // ── Translate ──────────────────────────────────────────────────────────────
+
+  '#apikey-save': () => {
     const input = document.getElementById('apikey-input');
     const key = (input?.value || '').trim();
     if (!key) {
@@ -2413,18 +2468,11 @@ function attachEvents(lesson) {
     setApiKey(key);
     state.translate.error = null;
     render();
-  });
+  },
 
-  // Show/hide API key toggle
-  const apikeyToggle = document.getElementById('apikey-toggle');
-  if (apikeyToggle) apikeyToggle.addEventListener('click', () => {
-    state.translate.showApiKey = !state.translate.showApiKey;
-    render();
-  });
+  '#apikey-toggle': () => { state.translate.showApiKey = !state.translate.showApiKey; render(); },
 
-  // Reset API key
-  const apikeyReset = document.getElementById('translate-reset-key');
-  if (apikeyReset) apikeyReset.addEventListener('click', () => {
+  '#translate-reset-key': () => {
     if (confirm('Remove your saved API key? You\'ll need to re-enter it to translate.')) {
       storage.clearApiKey();
       state.translate.result = null;
@@ -2432,472 +2480,183 @@ function attachEvents(lesson) {
       state.translate.inputText = '';
       render();
     }
-  });
+  },
 
-  // Direction swap (en-yue ↔ yue-en)
-  const trSwap = document.getElementById('translate-swap');
-  if (trSwap) trSwap.addEventListener('click', () => {
+  '#translate-swap': () => {
     stopTranslateListening();
     state.translate.direction = state.translate.direction === 'en-yue' ? 'yue-en' : 'en-yue';
     state.translate.inputText = '';
-    state.translate.result    = null;
-    state.translate.error     = null;
+    state.translate.result = null;
+    state.translate.error = null;
     state.translate.listening = false;
     render();
-  });
+  },
 
-  // Mic button — toggles speech input
-  const trMic = document.getElementById('translate-mic');
-  if (trMic) trMic.addEventListener('click', () => {
-    if (state.translate.listening) {
-      stopTranslateListening();
-    } else {
-      startTranslateListening();
-    }
-  });
+  '#translate-mic': () => {
+    if (state.translate.listening) stopTranslateListening();
+    else startTranslateListening();
+  },
 
-  // Translate input — keep state in sync
-  const translateInput = document.getElementById('translate-input');
-  if (translateInput) {
-    translateInput.addEventListener('input', () => {
-      state.translate.inputText = translateInput.value;
-      // No re-render on every keystroke — would lose focus. Just sync state.
-    });
-  }
-
-  // Clear input
-  const translateClear = document.getElementById('translate-clear');
-  if (translateClear) translateClear.addEventListener('click', () => {
+  '#translate-clear': () => {
     state.translate.inputText = '';
     state.translate.result = null;
     state.translate.error = null;
     render();
-  });
+  },
 
-  // Translate button
-  const translateGo = document.getElementById('translate-go');
-  if (translateGo) translateGo.addEventListener('click', async () => {
+  '#translate-go': async () => {
     const input = document.getElementById('translate-input');
     const text = (input?.value || '').trim();
     if (!text) return;
     state.translate.inputText = text;
     state.translate.loading = true;
-    state.translate.error   = null;
-    state.translate.result  = null;
+    state.translate.error = null;
+    state.translate.result = null;
     render();
     try {
       const result = await translateText(text, state.translate.direction);
-      state.translate.result  = result;
+      state.translate.result = result;
       state.translate.loading = false;
       render();
     } catch (err) {
       state.translate.loading = false;
-      state.translate.error   = err.message || 'Translation failed';
+      state.translate.error = err.message || 'Translation failed';
       render();
     }
-  });
+  },
 
-  // Listen button on translation result
-  const translateListen = document.getElementById('translate-listen');
-  if (translateListen) translateListen.addEventListener('click', () => {
-    const text = translateListen.dataset.trText;
+  '#translate-listen': el => {
+    const text = el.dataset.trText;
     state.speaking = 'translate-result';
     render();
     speak(text, () => { state.speaking = null; render(); });
     setTimeout(() => { if (state.speaking === 'translate-result') { state.speaking = null; render(); } }, 6000);
-  });
+  },
 
-  // Speed toggle
-  ['slow','normal','fast'].forEach(s => {
-    const btn = document.getElementById('speed-' + s);
-    if (btn) btn.addEventListener('click', () => { state.speed = s; render(); });
-  });
-  // Drawer speed toggle (Settings section)
-  document.querySelectorAll('[data-drawer-speed]').forEach(btn => {
-    btn.addEventListener('click', () => { state.speed = btn.dataset.drawerSpeed; render(); });
-  });
+  // ── Topics ─────────────────────────────────────────────────────────────────
 
-  // Topic buttons (legacy pill bar — still works if shown elsewhere)
-  document.querySelectorAll('[data-topic]').forEach(btn => {
-    btn.addEventListener('click', () => {
-      state.topic   = btn.dataset.topic;
-      state.mode    = 'study';
-      state.tab     = 'words';
-      state.flipped = {};
-      state.speaking= null;
-      state.sentenceBreakdownOpen = {};
-      state.sentenceRevealed = {};
-      state.sentenceNoteClosed = {};
-      state.convo   = { convMode:'read', playingLine:null, gapAnswers:{}, bubbleRevealed:{}, breakdownOpen:{}, speakStep:0, speakStatus:'idle', speakHeard:'', speakAutoPlayed:false, speakRevealed:{} };
-      render();
-    });
-  });
+  // Legacy pill bar — still works if shown elsewhere.
+  'data-topic': el => {
+    state.topic = el.dataset.topic;
+    state.mode = 'study';
+    state.tab = 'words';
+    state.flipped = {};
+    state.speaking = null;
+    state.sentenceBreakdownOpen = {};
+    state.sentenceRevealed = {};
+    state.sentenceNoteClosed = {};
+    state.convo = freshConvoState();
+    render();
+  },
 
-  // Topic cards (home screen) — enter the topic
-  document.querySelectorAll('[data-topic-card]').forEach(card => {
-    card.addEventListener('click', () => {
-      state.topic        = card.dataset.topicCard;
-      state.topicsView     = false;
-      state.currentRound = 1;
-      state.mode         = 'study';
-      state.tab          = 'words';
-      state.flipped      = {};
-      state.speaking     = null;
-      state.sentenceBreakdownOpen = {};
-      state.sentenceRevealed = {};
-      state.sentenceNoteClosed = {};
-      state.convo        = { convMode:'read', playingLine:null, gapAnswers:{}, bubbleRevealed:{}, breakdownOpen:{}, speakStep:0, speakStatus:'idle', speakHeard:'', speakAutoPlayed:false, speakRevealed:{} };
-      pushNav();                 // home → topic: BACK returns to home
-      window.scrollTo(0, 0);
-      render();
-    });
-  });
-  // ── UP controls (DES-33 at v125, generalised across the app at v126) ──────
-  // ONE handler for every control whose LABEL NAMES A DESTINATION. The rule the
-  // register states is that such a control must actually go there, and the way
-  // to keep that true is to have a single vocabulary rather than a bespoke
-  // handler per screen — four of those existed, three of them routed through
-  // history.back(), and two were reachable from more than one parent and so
-  // named a place they did not always go.
-  //
-  //   data-up="paths"        → the Learning Paths list
-  //   data-up="path:<key>"   → that path's timeline
-  //   data-up="topics"       → the Topics screen
-  //
-  // pushNav() on the way up, so the hardware BACK key still retraces your steps.
-  // The two controls do different jobs and both stay correct.
-  //
-  // NOT converted, deliberately: `data-cp-act-back` ("Checkpoint") and
-  // `data-cp-act-done` ("back to checkpoint") on the activity screens. A
-  // checkpoint activity has exactly ONE parent — `state.checkpointAct` is only
-  // ever set from a hub card — so history.back() already lands where the label
-  // says. Converting them for symmetry would push a third entry onto the stack
-  // and leave the hardware key pointing at a finished quiz.
-  document.querySelectorAll('[data-up]').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const dest = btn.dataset.up;
-      window.speechSynthesis.cancel();
-      stopAudioFile();
-      // Leaving whatever screen we are on, so its view state goes with it.
-      state.checkpoint    = null;
-      state.checkpointAct = null;
-      state.checkpointQuiz = null;
-      state.fromPath      = false;
-      state.fromPathTier  = null;
-      state.mode          = 'study';
-      state.tab           = 'words';
-      state.flipped       = {};
-
-      if (dest === 'topics') {
-        state.topicsView = true;
-      } else if (dest === 'paths') {
-        state.nav = 'path';
-        state.pathView = 'list';
-      } else if (dest.startsWith('path:')) {
-        state.activePath = dest.slice(5);
-        state.nav = 'path';
-        state.pathView = 'timeline';
-      } else {
-        // An unknown destination is a bug in the emit site, not something to
-        // paper over with a guessed default — say so rather than navigating
-        // somewhere arbitrary.
-        console.warn('[data-up] unknown destination:', dest);
-        return;
-      }
-      pushNav();
-      window.scrollTo(0, 0);
-      render();
-    });
-  });
-
-  // Category filter dropdown
-  const catSelect = document.getElementById('cat-filter-select');
-  if (catSelect) catSelect.addEventListener('change', () => {
-    state.selectedCategory = catSelect.value;
+  'data-topic-card': el => {
+    state.topic = el.dataset.topicCard;
+    state.topicsView = false;
+    state.currentRound = 1;
+    state.mode = 'study';
+    state.tab = 'words';
+    state.flipped = {};
+    state.speaking = null;
+    state.sentenceBreakdownOpen = {};
+    state.sentenceRevealed = {};
+    state.sentenceNoteClosed = {};
+    state.convo = freshConvoState();
+    pushNav();                 // home → topic: BACK returns to home
     window.scrollTo(0, 0);
     render();
-  });
+  },
 
   // Tier ladder rungs and the foot cross-reference — one handler, because they
   // are the same action offered in two places (DES-28/29). Both go through
   // goToTier(), which sets state.activePath from the DESTINATION path before
-  // entering the lesson. The v121 handler this replaces set state.currentRound
-  // alone, leaving the chrome describing the tier just left and "mark complete"
-  // writing to it; that defect closes here because a tier change is now real
-  // navigation rather than a content swap.
-  document.querySelectorAll('[data-tier]').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const t = parseInt(btn.dataset.tier);
-      if (!t || t === state.currentRound) return;
-      goToTier(state.topic, t);
-    });
-  });
+  // entering the lesson.
+  'data-tier': el => {
+    const t = parseInt(el.dataset.tier);
+    if (!t || t === state.currentRound) return;
+    goToTier(state.topic, t);
+  },
 
-  // Sub-tabs
-  const tabWords = document.getElementById('tab-words');
-  const tabConvo = document.getElementById('tab-convo');
-  const tabQuiz  = document.getElementById('tab-quiz');
-  if (tabWords) tabWords.addEventListener('click', () => {
-    state.mode = 'study'; state.tab = 'words'; render();
-  });
-  if (tabConvo) tabConvo.addEventListener('click', () => {
-    state.mode = 'study'; state.tab = 'convo'; render();
-  });
-  if (tabQuiz) tabQuiz.addEventListener('click', () => {
+  '#tab-words': () => { state.mode = 'study'; state.tab = 'words'; render(); },
+  '#tab-convo': () => { state.mode = 'study'; state.tab = 'convo'; render(); },
+  '#tab-quiz': () => {
     if (state.mode !== 'quiz') {
       state.mode = 'quiz';
       state.quiz = getQuizInitState(getRoundWords(state.topic, state.currentRound));
     }
     render();
-  });
+  },
 
-  // Conversation: Play All / Stop
-  const playAllBtn = document.getElementById('play-all-btn');
-  if (playAllBtn) playAllBtn.addEventListener('click', () => {
-    if (state.convo.playingLine !== null) {
-      window.speechSynthesis.cancel();
-      stopAudioFile();
-      state.convo.playingLine = null;
-      render();
-    } else {
-      const lines = activeConvoSource().lines;
-      playAllConvo(lines, 0);
-    }
-  });
+  // ── Word cards ─────────────────────────────────────────────────────────────
+  // data-card CONTAINS data-speak (declared in wiring-check). Innermost wins, so
+  // tapping play no longer needs stopPropagation to avoid flipping the card.
 
-  // Conversation: Gap mode toggle
-  const gapBtn = document.getElementById('gap-mode-btn');
-  if (gapBtn) gapBtn.addEventListener('click', () => {
-    state.convo.convMode   = state.convo.convMode === 'gap' ? 'read' : 'gap';
-    state.convo.gapAnswers = {};
-    state.convo.breakdownOpen = {};
+  'data-card': el => {
+    const i = parseInt(el.dataset.card);
+    state.flipped[i] = !state.flipped[i];
     render();
-  });
+  },
 
-  // Conversation: Speak mode toggle
-  const speakBtn = document.getElementById('speak-mode-btn');
-  if (speakBtn) speakBtn.addEventListener('click', () => {
+  'data-speak': el => {
+    const i = parseInt(el.dataset.speak);
+    const word = getRoundWords(state.topic, state.currentRound)[i];
+    if (!word) return;
+    state.speaking = i;
+    render();
+    speakItem('word', word.id, () => { state.speaking = null; render(); });
+    setTimeout(() => { if (state.speaking === i) { state.speaking = null; render(); } }, 4000);
+  },
+
+  // ── Sentences ──────────────────────────────────────────────────────────────
+  // These are SIBLINGS, not nested — the reveal line, the chips and the action
+  // buttons all sit side by side inside the card. Five stopPropagation calls
+  // guarded this arrangement against nesting that never existed.
+
+  'data-sent': el => {
+    const i = parseInt(el.dataset.sent);
+    const sentence = getRoundSentences(state.topic, state.currentRound)[i];
+    state.speaking = 'sent-' + i;
+    render();
+    speakItem('sentence', sentence.sid, () => { state.speaking = null; render(); });
+    setTimeout(() => { if (state.speaking === 'sent-' + i) { state.speaking = null; render(); } }, 6000);
+  },
+
+  'data-sent-bd': el => {
+    const i = parseInt(el.dataset.sentBd);
+    state.sentenceBreakdownOpen[i] = !state.sentenceBreakdownOpen[i];
+    render();
+  },
+
+  // Open by default; this flips the explicit-close flag.
+  'data-sent-note': el => {
+    const i = parseInt(el.dataset.sentNote);
+    state.sentenceNoteClosed[i] = !state.sentenceNoteClosed[i];
+    render();
+  },
+
+  'data-sent-reveal': el => {
+    const i = parseInt(el.dataset.sentReveal);
+    state.sentenceRevealed[i] = !state.sentenceRevealed[i];
+    render();
+  },
+
+  // Sentence "Say it back" — mic trigger opens the sheet (DES-38/40).
+  'data-sent-speak': el => {
+    const i = parseInt(el.dataset.sentSpeak);
     stopListening();
     window.speechSynthesis.cancel();
     stopAudioFile();
-    state.convo.convMode    = state.convo.convMode === 'speak' ? 'read' : 'speak';
-    state.convo.speakStep   = 0;
-    state.convo.speakStatus = 'idle';
-    state.convo.speakHeard  = '';
-    state.convo.playingLine = null;
+    state.sentSpeak = { idx: i, status: 'idle', heard: '' };
+    state.sentSpeakOpen = true;
+    pushNav();
     render();
-  });
+  },
 
-  // Speak: mic button — toggles start/stop
-  const micBtn = document.getElementById('mic-btn');
-  if (micBtn) micBtn.addEventListener('click', () => {
-    if (state.convo.speakStatus === 'listening') {
-      finishListening();   // gracefully stop and process
-    } else {
-      startListening();
-    }
-  });
+  // Sheet close — ✕ and scrim both route through closeSentSpeak(), same pattern
+  // as the settings sheet, so phone BACK and the ✕ agree.
+  '#sent-speak-close': () => closeSentSpeak(),
+  '#sent-speak-scrim': () => closeSentSpeak(),
 
-  // Speak: dedicated stop button
-  const speakStopBtn = document.getElementById('speak-stop-btn');
-  if (speakStopBtn) speakStopBtn.addEventListener('click', () => {
-    finishListening();
-  });
-
-  // Speak: listen button (other speaker's turn)
-  const speakListenBtn = document.getElementById('speak-listen-btn');
-  if (speakListenBtn) speakListenBtn.addEventListener('click', () => {
-    state.convo.playingLine = state.convo.speakStep;
-    render();
-    speakConvoLine(state.convo.speakStep, () => { state.convo.playingLine = null; render(); });
-  });
-
-  // Speak: next button
-  const speakNext = document.getElementById('speak-next');
-  if (speakNext) speakNext.addEventListener('click', () => {
-    const lines = activeConvoSource().lines;
-    stopListening();
-    window.speechSynthesis.cancel();
-    stopAudioFile();
-    state.convo.playingLine = null;
-    state.convo.speakStatus = 'idle';
-    state.convo.speakHeard  = '';
-    if (state.convo.speakStep >= lines.length - 1) {
-      state.convo.speakStep = 0;
-    } else {
-      state.convo.speakStep++;
-    }
-    render();
-  });
-
-  // Speak: retry button
-  const speakRetry = document.getElementById('speak-retry');
-  if (speakRetry) speakRetry.addEventListener('click', () => {
-    state.convo.speakStatus = 'idle';
-    state.convo.speakHeard  = '';
-    render();
-  });
-
-  // Speak: skip button
-  const speakSkip = document.getElementById('speak-skip');
-  if (speakSkip) speakSkip.addEventListener('click', () => {
-    const lines = activeConvoSource().lines;
-    state.convo.speakStatus = 'idle';
-    state.convo.speakHeard  = '';
-    if (state.convo.speakStep >= lines.length - 1) {
-      state.convo.speakStep = 0;
-    } else {
-      state.convo.speakStep++;
-    }
-    render();
-  });
-
-  // Breakdown toggle
-  document.querySelectorAll('[data-breakdown]').forEach(btn => {
-    btn.addEventListener('click', e => {
-      e.stopPropagation();
-      const i = parseInt(btn.dataset.breakdown);
-      state.convo.breakdownOpen[i] = !state.convo.breakdownOpen[i];
-      render();
-    });
-  });
-
-  // Bubble English reveal (tap bubble)
-  document.querySelectorAll('[data-reveal]').forEach(bubble => {
-    bubble.addEventListener('click', e => {
-      if (e.target.closest('[data-bubble]')) return; // don't fire when tapping play btn
-      const i = parseInt(bubble.dataset.reveal);
-      state.convo.bubbleRevealed[i] = !state.convo.bubbleRevealed[i];
-      render();
-    });
-  });
-
-  // Bubble play buttons
-  document.querySelectorAll('[data-bubble]').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const i = parseInt(btn.dataset.bubble);
-      state.convo.playingLine = i;
-      render();
-      speakConvoLine(i, () => { state.convo.playingLine = null; render(); });
-      setTimeout(() => { if (state.convo.playingLine === i) { state.convo.playingLine = null; render(); } }, 6000);
-    });
-  });
-
-  // Gap mode answer buttons
-  document.querySelectorAll('[data-gap-line]').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const lineIdx = parseInt(btn.dataset.gapLine);
-      const chosen  = btn.dataset.gapAns;
-      state.convo.gapAnswers[lineIdx] = chosen;
-      const correct = chosen === activeConvoSource().lines[lineIdx].c;
-      if (correct) speakConvoLine(lineIdx);
-      render();
-    });
-  });
-
-  // Mode toggle
-  // Flip cards
-  document.querySelectorAll('[data-card]').forEach(card => {
-    card.addEventListener('click', e => {
-      if (e.target.closest('[data-speak]')) return;
-      const i = parseInt(card.dataset.card);
-      state.flipped[i] = !state.flipped[i];
-      render();
-    });
-  });
-
-  // Speak buttons
-  document.querySelectorAll('[data-speak]').forEach(btn => {
-    btn.addEventListener('click', e => {
-      e.stopPropagation();
-      const i = parseInt(btn.dataset.speak);
-      const word = getRoundWords(state.topic, state.currentRound)[i];
-      if (!word) return;
-      state.speaking = i;
-      render();
-      speakItem('word', word.id, () => { state.speaking = null; render(); });
-      setTimeout(() => { if (state.speaking === i) { state.speaking = null; render(); } }, 4000);
-    });
-  });
-
-  // Sentence play buttons
-  document.querySelectorAll('[data-sent]').forEach(btn => {
-    btn.addEventListener('click', e => {
-      e.stopPropagation();
-      const i = parseInt(btn.dataset.sent);
-      const sentence = getRoundSentences(state.topic, state.currentRound)[i];
-      state.speaking = 'sent-' + i;
-      render();
-      speakItem('sentence', sentence.sid, () => { state.speaking = null; render(); });
-      setTimeout(() => { if (state.speaking === 'sent-' + i) { state.speaking = null; render(); } }, 6000);
-    });
-  });
-
-  // Sentence breakdown toggle
-  document.querySelectorAll('[data-sent-bd]').forEach(btn => {
-    btn.addEventListener('click', e => {
-      e.stopPropagation();
-      const i = parseInt(btn.dataset.sentBd);
-      state.sentenceBreakdownOpen[i] = !state.sentenceBreakdownOpen[i];
-      render();
-    });
-  });
-
-  // Per-sentence note toggle (open by default; this flips the explicit-close flag)
-  document.querySelectorAll('[data-sent-note]').forEach(btn => {
-    btn.addEventListener('click', e => {
-      e.stopPropagation();
-      const i = parseInt(btn.dataset.sentNote);
-      state.sentenceNoteClosed[i] = !state.sentenceNoteClosed[i];
-      render();
-    });
-  });
-
-  // Sentence English reveal — whole card clickable, toggles, skips play & breakdown buttons
-  document.querySelectorAll('[data-sent-reveal]').forEach(el => {
-    el.addEventListener('click', e => {
-      if (e.target.closest('[data-sent]') || e.target.closest('[data-sent-bd]') || e.target.closest('[data-sent-note]')) return;
-      const i = parseInt(el.dataset.sentReveal);
-      state.sentenceRevealed[i] = !state.sentenceRevealed[i];
-      render();
-    });
-  });
-
-  // Speak target English reveal
-  document.querySelectorAll('[data-speak-reveal]').forEach(el => {
-    el.addEventListener('click', e => {
-      e.stopPropagation();
-      const i = parseInt(el.dataset.speakReveal);
-      state.convo.speakRevealed[i] = true;
-      render();
-    });
-  });
-
-  // Sentence "Say it back" — mic trigger opens the sheet (DES-38/40)
-  document.querySelectorAll('[data-sent-speak]').forEach(btn => {
-    btn.addEventListener('click', e => {
-      e.stopPropagation();
-      const i = parseInt(btn.dataset.sentSpeak);
-      stopListening();
-      window.speechSynthesis.cancel();
-      stopAudioFile();
-      state.sentSpeak = { idx: i, status: 'idle', heard: '' };
-      state.sentSpeakOpen = true;
-      pushNav();
-      render();
-    });
-  });
-
-  // Sentence sheet close — ✕ and scrim both route through closeSentSpeak(),
-  // same pattern as the settings sheet, so phone BACK and the ✕ agree.
-  const sentSpeakClose = document.getElementById('sent-speak-close');
-  const sentSpeakScrim = document.getElementById('sent-speak-scrim');
-  if (sentSpeakClose) sentSpeakClose.addEventListener('click', () => closeSentSpeak());
-  if (sentSpeakScrim) sentSpeakScrim.addEventListener('click', () => closeSentSpeak());
-
-  // Sentence sheet mic — toggles start/stop, same as Chat's Speak mode
-  const sentSpeakMic = document.getElementById('sent-speak-mic');
-  if (sentSpeakMic) sentSpeakMic.addEventListener('click', () => {
+  '#sent-speak-mic': () => {
     if (state.sentSpeak.status === 'listening') {
       finishListening();
     } else {
@@ -2908,13 +2667,12 @@ function attachEvents(lesson) {
         startSentSpeakListening(sentence.c);
       }
     }
-  });
+  },
 
-  // Sentence sheet — replay the target audio. Disabled while listening: the
-  // mic is live, and played-back audio would otherwise feed straight back
-  // into the recogniser as a trivially "correct" match.
-  const sentSpeakListen = document.getElementById('sent-speak-listen');
-  if (sentSpeakListen) sentSpeakListen.addEventListener('click', () => {
+  // Replay the target audio. Disabled while listening: the mic is live, and
+  // played-back audio would otherwise feed straight back into the recogniser as
+  // a trivially "correct" match.
+  '#sent-speak-listen': () => {
     if (state.sentSpeak.status === 'listening') return;
     const idx = state.sentSpeak.idx;
     const sentence = getRoundSentences(state.topic, state.currentRound)[idx];
@@ -2923,487 +2681,560 @@ function attachEvents(lesson) {
     render();
     speakItem('sentence', sentence.sid, () => { state.speaking = null; render(); });
     setTimeout(() => { if (state.speaking === 'sent-speak-' + idx) { state.speaking = null; render(); } }, 6000);
-  });
+  },
 
-  const sentSpeakStopBtn = document.getElementById('sent-speak-stop-btn');
-  if (sentSpeakStopBtn) sentSpeakStopBtn.addEventListener('click', () => finishListening());
+  '#sent-speak-stop-btn': () => finishListening(),
 
-  const sentSpeakRetry = document.getElementById('sent-speak-retry');
-  if (sentSpeakRetry) sentSpeakRetry.addEventListener('click', () => {
+  '#sent-speak-retry': () => {
     state.sentSpeak.status = 'idle';
-    state.sentSpeak.heard  = '';
+    state.sentSpeak.heard = '';
     render();
-  });
+  },
 
   // Shared by "Done" (success) and "Close" (mismatch) — both just close the sheet.
-  const sentSpeakDone = document.getElementById('sent-speak-done');
-  if (sentSpeakDone) sentSpeakDone.addEventListener('click', () => closeSentSpeak());
+  '#sent-speak-done': () => closeSentSpeak(),
 
-  // Quiz listen
-  const ql = document.getElementById('quiz-listen');
-  if (ql && state.quiz) {
-    ql.addEventListener('click', () => speakItem('word', state.quiz.queue[state.quiz.idx].id));
-  }
+  // ── Conversation ───────────────────────────────────────────────────────────
+  // data-reveal (the bubble) CONTAINS data-breakdown and data-bubble, both
+  // declared in wiring-check. Innermost wins, so the bubble no longer needs to
+  // check what was tapped and the buttons no longer need stopPropagation.
 
-  // Quiz choices
-  if (state.quiz && !state.quiz.done) {
-    document.querySelectorAll('[data-choice]').forEach(btn => {
-      btn.addEventListener('click', () => {
-        if (state.quiz.selected !== null && state.quiz.selected !== undefined) return;
-        const idx = parseInt(btn.dataset.choice, 10);
-        const chosenOpt = state.quiz.choices[idx];
-        const cw = state.quiz.queue[state.quiz.idx];
-        const correct = chosenOpt === cw;          // object identity, not string
-        speakItem('word', cw.id);
-        state.quiz.selected = idx;
-        if (correct) {
-          state.quiz.score++;
-        } else {
-          state.quiz.wrongAnswers.push({ word: cw, chosen: chosenOpt });
-          // Capture into the cross-topic Word Review bin, then refresh the menu
-          // badge so its count is current even before the user opens Word Review.
-          // refreshReviewBadge re-reads the true entry count from storage, so a
-          // re-missed (already-binned) word correctly leaves the count unchanged.
-          addMiss(cw.id, state.topic, state.currentRound, cw.c)
-            .then(refreshReviewBadge)
-            .then(render);
-        }
-        render();
-        // Both correct and wrong now STOP and wait for a Next tap — no
-        // auto-advance. The answer panel (correct line / wrong panel) carries
-        // the Next button; its handler is wired below.
-      });
-    });
-  }
-
-  // "Got it — next" button shown after wrong answers
-  const qNext = document.getElementById('quiz-next');
-  if (qNext) qNext.addEventListener('click', () => advanceQuiz());
-
-  // Direction toggle — switching direction restarts the quiz from a clean state
-  // (avoids confusion of half-quiz with mixed prompt types).
-  document.querySelectorAll('[data-quiz-dir]').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const newDir = btn.dataset.quizDir;
-      if (state.quiz && state.quiz.direction === newDir) return;
-      saveQuizDirection(newDir);
-      // Reset the quiz with the new direction
-      const words = getRoundWords(state.topic, state.currentRound);
-      state.quiz = getQuizInitState(words);
-      state.quiz.direction = newDir;   // override default from storage in case race
-      state.quiz._listenAutoPlayed = null;
+  '#play-all-btn': () => {
+    if (state.convo.playingLine !== null) {
+      window.speechSynthesis.cancel();
+      stopAudioFile();
+      state.convo.playingLine = null;
       render();
-    });
-  });
-
-  // Listen mode: auto-play the audio on each new question (once, not on re-renders).
-  // Longer delay so the previous question's feedback audio (the answer playback after
-  // a correct/wrong tap) has time to finish before the new question starts.
-  if (state.quiz && !state.quiz.done && state.quiz.direction === 'listen-en') {
-    if (state.quiz._listenAutoPlayed !== state.quiz.idx) {
-      state.quiz._listenAutoPlayed = state.quiz.idx;
-      setTimeout(() => {
-        if (state.quiz && !state.quiz.done && state.quiz.direction === 'listen-en' &&
-            state.quiz._listenAutoPlayed === state.quiz.idx) {
-          speakItem('word', state.quiz.queue[state.quiz.idx].id);
-        }
-      }, 900);
+    } else {
+      playAllConvo(activeConvoSource().lines, 0);
     }
-  }
+  },
 
-  // Replay-correct button on the wrong-answer pause panel
-  const qReplay = document.getElementById('quiz-replay');
-  if (qReplay && state.quiz) {
-    qReplay.addEventListener('click', () => speakItem('word', state.quiz.queue[state.quiz.idx].id));
-  }
+  '#gap-mode-btn': () => {
+    state.convo.convMode = state.convo.convMode === 'gap' ? 'read' : 'gap';
+    state.convo.gapAnswers = {};
+    state.convo.breakdownOpen = {};
+    render();
+  },
 
-  // ── Word Review session handlers ──
-  // Landing: start a session
-  const reviewStart = document.getElementById('review-start');
-  if (reviewStart) reviewStart.addEventListener('click', () => startWordReview());
-  const reviewAgain = document.getElementById('review-again');
-  if (reviewAgain) reviewAgain.addEventListener('click', () => startWordReview());
-  const reviewExit = document.getElementById('review-exit');
-  if (reviewExit) reviewExit.addEventListener('click', () => {
-    // history.back() pops the session entry; popstate clears state.wordReview
-    // and renders the landing. Falls back to a direct close if history is absent.
-    if (_navReady) { history.back(); return; }
-    state.wordReview = null;
-    refreshReviewBadge().then(render);
-  });
+  '#speak-mode-btn': () => {
+    stopListening();
+    window.speechSynthesis.cancel();
+    stopAudioFile();
+    state.convo.convMode = state.convo.convMode === 'speak' ? 'read' : 'speak';
+    state.convo.speakStep = 0;
+    state.convo.speakStatus = 'idle';
+    state.convo.speakHeard = '';
+    state.convo.playingLine = null;
+    render();
+  },
 
-  // Active review question
-  if (state.wordReview && !state.wordReview.done) {
-    const wr = state.wordReview;
-    const item = wr.queue[wr.idx];
+  '#mic-btn': () => {
+    if (state.convo.speakStatus === 'listening') finishListening();
+    else startListening();
+  },
 
-    // Listen button (audio prompt / replay)
-    const rListen = document.getElementById('review-listen');
-    if (rListen) rListen.addEventListener('click', () => speakItem('word', item.word.id));
+  '#speak-stop-btn': () => finishListening(),
 
-    // Choice buttons
-    document.querySelectorAll('[data-review-choice]').forEach(btn => {
-      btn.addEventListener('click', () => {
-        if (wr.selected !== null && wr.selected !== undefined) return;
-        const idx = parseInt(btn.dataset.reviewChoice, 10);
-        const chosenOpt = wr.choices[idx];
-        const cw = item.word;
-        const correct = chosenOpt === cw;          // object identity, not string
-        speakItem('word', cw.id);
-        wr.selected = idx;
-        wr.reviewedThisSession++;
-        if (correct) wr.correctThisSession++;
-        // Persist the result to the bin. recordReviewResult resolves the graduation;
-        // we capture whether this word graduated so the session tally is accurate.
-        recordReviewResult(item.entry.wid, item.entry.topicKey, item.entry.round, item.entry.wordC, correct)
-          .then(res => {
-            if (res.graduated) wr.graduatedThisSession++;
-            // Keep the in-memory entry's correctCount in sync so the progress pips
-            // are right if the user lingers on the answered card.
-            item.entry.correctCount = correct
-              ? item.entry.correctCount + 1
-              : 0;
-            // A graduated word leaves the bin — refresh the badge so the menu
-            // count is current even if the user opens the menu mid-session.
-            if (res.graduated) return refreshReviewBadge().then(render);
-          });
-        render();
-        // Stop-and-confirm: both correct and wrong wait for the Next tap.
-      });
-    });
+  '#speak-listen-btn': () => {
+    state.convo.playingLine = state.convo.speakStep;
+    render();
+    speakConvoLine(state.convo.speakStep, () => { state.convo.playingLine = null; render(); });
+  },
 
-    // "Got it — next" after a wrong answer
-    const rNext = document.getElementById('review-next');
-    if (rNext) rNext.addEventListener('click', () => advanceWordReview());
+  '#speak-next': () => {
+    stopListening();
+    window.speechSynthesis.cancel();
+    stopAudioFile();
+    state.convo.playingLine = null;
+    state.convo.speakStatus = 'idle';
+    state.convo.speakHeard = '';
+    advanceSpeakStep();
+    render();
+  },
 
-    // Replay on the wrong-answer panel
-    const rReplay = document.getElementById('review-replay');
-    if (rReplay) rReplay.addEventListener('click', () => speakItem('word', item.word.id));
+  '#speak-retry': () => {
+    state.convo.speakStatus = 'idle';
+    state.convo.speakHeard = '';
+    render();
+  },
 
-    // Direction toggle — switching restarts the session cleanly with the new direction
-    document.querySelectorAll('[data-review-dir]').forEach(btn => {
-      btn.addEventListener('click', () => {
-        const newDir = btn.dataset.reviewDir;
-        if (wr.direction === newDir) return;
-        saveQuizDirection(newDir);
-        wr.direction = newDir;
-        wr.selected = null;
-        wr._listenAutoPlayed = null;
-        render();
-      });
-    });
+  '#speak-skip': () => {
+    state.convo.speakStatus = 'idle';
+    state.convo.speakHeard = '';
+    advanceSpeakStep();
+    render();
+  },
 
-    // Listen mode: auto-play audio on each new word (once per index)
-    if (wr.direction === 'listen-en') {
-      if (wr._listenAutoPlayed !== wr.idx) {
-        wr._listenAutoPlayed = wr.idx;
-        setTimeout(() => {
-          if (state.wordReview && !state.wordReview.done &&
-              state.wordReview.direction === 'listen-en' &&
-              state.wordReview._listenAutoPlayed === state.wordReview.idx) {
-            speakItem('word', state.wordReview.queue[state.wordReview.idx].word.id);
-          }
-        }, 900);
-      }
+  'data-breakdown': el => {
+    const i = parseInt(el.dataset.breakdown);
+    state.convo.breakdownOpen[i] = !state.convo.breakdownOpen[i];
+    render();
+  },
+
+  'data-reveal': el => {
+    const i = parseInt(el.dataset.reveal);
+    state.convo.bubbleRevealed[i] = !state.convo.bubbleRevealed[i];
+    render();
+  },
+
+  'data-bubble': el => {
+    const i = parseInt(el.dataset.bubble);
+    state.convo.playingLine = i;
+    render();
+    speakConvoLine(i, () => { state.convo.playingLine = null; render(); });
+    setTimeout(() => { if (state.convo.playingLine === i) { state.convo.playingLine = null; render(); } }, 6000);
+  },
+
+  'data-gap-line': el => {
+    const lineIdx = parseInt(el.dataset.gapLine);
+    const chosen = el.dataset.gapAns;
+    state.convo.gapAnswers[lineIdx] = chosen;
+    if (chosen === activeConvoSource().lines[lineIdx].c) speakConvoLine(lineIdx);
+    render();
+  },
+
+  'data-speak-reveal': el => {
+    const i = parseInt(el.dataset.speakReveal);
+    state.convo.speakRevealed[i] = true;
+    render();
+  },
+
+  // ── Quiz ───────────────────────────────────────────────────────────────────
+  // Previously these were bound only when a quiz was live. The condition moves
+  // inside the handler: with delegation there is no bind step to skip, so the
+  // guard has to be here or a stale control could act on a null session.
+
+  '#quiz-listen': () => {
+    if (!state.quiz) return;
+    speakItem('word', state.quiz.queue[state.quiz.idx].id);
+  },
+
+  'data-choice': el => {
+    const q = state.quiz;
+    if (!q || q.done) return;
+    if (q.selected !== null && q.selected !== undefined) return;
+    const idx = parseInt(el.dataset.choice, 10);
+    const chosenOpt = q.choices[idx];
+    const cw = q.queue[q.idx];
+    const correct = chosenOpt === cw;          // object identity, not string
+    speakItem('word', cw.id);
+    q.selected = idx;
+    if (correct) {
+      q.score++;
+    } else {
+      q.wrongAnswers.push({ word: cw, chosen: chosenOpt });
+      // Capture into the cross-topic Word Review bin, then refresh the menu badge
+      // so its count is current even before the user opens Word Review.
+      // refreshReviewBadge re-reads the true entry count from storage, so a
+      // re-missed (already-binned) word correctly leaves the count unchanged.
+      addMiss(cw.id, state.topic, state.currentRound, cw.c)
+        .then(refreshReviewBadge)
+        .then(render);
     }
-  }
+    render();
+    // Both correct and wrong STOP and wait for a Next tap — no auto-advance.
+  },
 
-  // End-of-quiz: retry just the missed words
-  const qRetry = document.getElementById('quiz-retry-missed');
-  if (qRetry) {
-    qRetry.addEventListener('click', () => {
-      const missed   = state.quiz.wrongAnswers.map(w => w.word);
-      const fullPool = getRoundWords(state.topic, state.currentRound);
-      // Build a fresh quiz where the queue is just the missed words but the
-      // wrong-answer choices are still drawn from the full topic word pool so
-      // each question still has 4 options to pick from.
-      state.quiz = {
-        queue: shuffle(missed),
-        idx: 0,
-        score: 0,
-        selected: null,
-        done: false,
-        choices: buildChoices(missed[0], fullPool),
-        wrongAnswers: [],
-      };
-      render();
-    });
-  }
+  '#quiz-next': () => advanceQuiz(),
 
-  // End-of-quiz: play a missed word from the review list
-  document.querySelectorAll('[data-quiz-review-play]').forEach(btn => {
-    btn.addEventListener('click', () => speakItem('word', btn.dataset.quizReviewPlay));
-  });
+  // Switching direction restarts the quiz from a clean state, avoiding the
+  // confusion of a half-quiz with mixed prompt types.
+  'data-quiz-dir': el => {
+    const newDir = el.dataset.quizDir;
+    if (state.quiz && state.quiz.direction === newDir) return;
+    saveQuizDirection(newDir);
+    state.quiz = getQuizInitState(getRoundWords(state.topic, state.currentRound));
+    state.quiz.direction = newDir;   // override default from storage in case of race
+    state.quiz._listenAutoPlayed = null;
+    render();
+  },
 
-  // Quiz back
+  '#quiz-replay': () => {
+    if (!state.quiz) return;
+    speakItem('word', state.quiz.queue[state.quiz.idx].id);
+  },
+
+  '#quiz-retry-missed': () => {
+    if (!state.quiz) return;
+    const missed = state.quiz.wrongAnswers.map(w => w.word);
+    const fullPool = getRoundWords(state.topic, state.currentRound);
+    // A fresh quiz whose queue is just the missed words, but whose wrong-answer
+    // choices still come from the full topic pool so every question has 4 options.
+    state.quiz = {
+      queue: shuffle(missed),
+      idx: 0,
+      score: 0,
+      selected: null,
+      done: false,
+      choices: buildChoices(missed[0], fullPool),
+      wrongAnswers: [],
+    };
+    render();
+  },
+
+  'data-quiz-review-play': el => speakItem('word', el.dataset.quizReviewPlay),
+
   // Back to Lesson from the quiz result screen. Clears the flip state so the
-  // Words list comes back face-down — every other route into a topic (the topic
-  // card, openPathLesson, the tier switch) already resets it, and leaving the
-  // English showing means the next study pass has the answers already revealed.
-  const qb = document.getElementById('quiz-back');
-  if (qb) qb.addEventListener('click', () => {
+  // Words list comes back face-down — every other route into a topic already
+  // resets it, and leaving the English showing means the next study pass has the
+  // answers already revealed.
+  '#quiz-back': () => {
     state.mode = 'study';
     state.flipped = {};
     render();
-  });
+  },
 
-  // ── Path-mode in-topic handlers ─────────────────────────────────────
-  // Mark the current step complete + celebration toast + transition to "Next step" state
-  const pathMark = document.getElementById('path-mark-complete');
-  if (pathMark) {
-    pathMark.addEventListener('click', () => {
-      const ctx = getPathContext();
-      if (!ctx) return;
-      // The mark button is now reachable from the Quiz subtab (MOCK-12), so the
-      // final-step auto-return below can fire mid-question and discard quiz
-      // progress. Captured at click time because the 3s timer resolves later.
-      const midQuestion = isQuizQuestionLive();
-      const tier = state.fromPathTier || state.currentRound;
-      // Only act if it's not already complete (defensive — the button shouldn't be visible otherwise)
-      if (!isLessonComplete(state.activePath, state.topic, tier)) {
-        toggleLessonComplete(state.activePath, state.topic, tier);
-      }
-      state.toast = ctx.isLast
-        ? { text: 'Path complete!', kind: 'final' }
-        : { text: '✓ Step complete!',  kind: 'step'  };
-      render();
-      // Dissolve the toast after a beat. If it was the final step, also auto-return to the timeline.
-      setTimeout(() => {
-        state.toast = null;
-        if (ctx.isLast && !midQuestion) {
-          state.nav         = 'path';
-          state.pathView    = 'timeline';
-          state.fromPath    = false;
-          state.fromPathTier = null;
-          state.mode        = 'study';
-          state.tab         = 'words';
-          pushNav();               // auto-returned to timeline: record it in history
-          window.scrollTo(0, 0);
-        }
-        render();
-      }, 3000);
-    });
-  }
+  // ── Word Review ────────────────────────────────────────────────────────────
+  // `wr` and `item` used to be captured in a closure when the screen rendered.
+  // Re-derived per call instead — the same values, read at tap time.
 
-  // "Next step → Topic" button (visible after a step is complete and there's a next)
-  const pathNext = document.getElementById('path-next-step');
-  if (pathNext) {
-    pathNext.addEventListener('click', () => {
-      const ctx = getPathContext();
-      if (!ctx || !ctx.nextStep) return;
-      window.speechSynthesis.cancel();
-      stopAudioFile();
-      // Checkpoint comes next → open its hub (openCheckpoint self-pushes nav).
-      if (ctx.nextStep.kind === 'checkpoint') {
-        openCheckpoint(state.activePath, ctx.nextStep.stageId);
+  '#review-start': () => startWordReview(),
+  '#review-again': () => startWordReview(),
+
+  '#review-exit': () => {
+    // history.back() pops the session entry; popstate clears state.wordReview and
+    // renders the landing. Falls back to a direct close if history is absent.
+    if (_navReady) { history.back(); return; }
+    state.wordReview = null;
+    refreshReviewBadge().then(render);
+  },
+
+  '#review-listen': () => {
+    const item = currentReviewItem();
+    if (item) speakItem('word', item.word.id);
+  },
+
+  'data-review-choice': el => {
+    const wr = state.wordReview;
+    if (!wr || wr.done) return;
+    if (wr.selected !== null && wr.selected !== undefined) return;
+    const item = wr.queue[wr.idx];
+    const idx = parseInt(el.dataset.reviewChoice, 10);
+    const chosenOpt = wr.choices[idx];
+    const cw = item.word;
+    const correct = chosenOpt === cw;          // object identity, not string
+    speakItem('word', cw.id);
+    wr.selected = idx;
+    wr.reviewedThisSession++;
+    if (correct) wr.correctThisSession++;
+    // Persist the result. recordReviewResult resolves the graduation; capture
+    // whether this word graduated so the session tally stays accurate.
+    recordReviewResult(item.entry.wid, item.entry.topicKey, item.entry.round, item.entry.wordC, correct)
+      .then(res => {
+        if (res.graduated) wr.graduatedThisSession++;
+        // Keep the in-memory entry's correctCount in sync so the progress pips
+        // are right if the user lingers on the answered card.
+        item.entry.correctCount = correct ? item.entry.correctCount + 1 : 0;
+        // A graduated word leaves the bin — refresh the badge so the menu count
+        // is current even if the user opens the menu mid-session.
+        if (res.graduated) return refreshReviewBadge().then(render);
+      });
+    render();
+    // Stop-and-confirm: both correct and wrong wait for the Next tap.
+  },
+
+  '#review-next': () => advanceWordReview(),
+
+  '#review-replay': () => {
+    const item = currentReviewItem();
+    if (item) speakItem('word', item.word.id);
+  },
+
+  // Switching direction restarts the session cleanly with the new direction.
+  'data-review-dir': el => {
+    const wr = state.wordReview;
+    if (!wr) return;
+    const newDir = el.dataset.reviewDir;
+    if (wr.direction === newDir) return;
+    saveQuizDirection(newDir);
+    wr.direction = newDir;
+    wr.selected = null;
+    wr._listenAutoPlayed = null;
+    render();
+  },
+
+  // ── Path mode, in-topic ────────────────────────────────────────────────────
+
+  '#path-mark-complete': () => {
+    const ctx = getPathContext();
+    if (!ctx) return;
+    // The mark button is reachable from the Quiz subtab (MOCK-12), so the
+    // final-step auto-return below can fire mid-question and discard quiz
+    // progress. Captured at tap time because the 3s timer resolves later.
+    const midQuestion = isQuizQuestionLive();
+    const tier = state.fromPathTier || state.currentRound;
+    // Only act if not already complete — defensive; the button should be hidden.
+    if (!isLessonComplete(state.activePath, state.topic, tier)) {
+      toggleLessonComplete(state.activePath, state.topic, tier);
+    }
+    state.toast = ctx.isLast
+      ? { text: 'Path complete!', kind: 'final' }
+      : { text: '✓ Step complete!', kind: 'step' };
+    render();
+    // Dissolve the toast after a beat. If it was the final step, also auto-return
+    // to the timeline.
+    setTimeout(() => {
+      state.toast = null;
+      if (ctx.isLast && !midQuestion) {
+        state.nav = 'path';
+        state.pathView = 'timeline';
+        state.fromPath = false;
+        state.fromPathTier = null;
+        state.mode = 'study';
+        state.tab = 'words';
+        pushNav();               // auto-returned to timeline: record it in history
         window.scrollTo(0, 0);
-        return;
       }
-      state.fromPathTier = ctx.nextStep.tier;
-      openPathLesson(ctx.nextStep.topic, ctx.nextStep.tier);
-    });
-  }
-
-  // ── Dashboard events ──────────────────────────────────────────────
-  // Hero CTA / card → opens the actual next-up item. Still carries its own copy
-  // of the state reset that openPathLesson() now owns; consolidating it is a
-  // dashboard change, so it is logged in BACKLOG.md rather than done here.
-  document.querySelectorAll('[data-dash-hero-topic]').forEach(card => {
-    card.addEventListener('click', () => {
-      const topicKey = card.dataset.dashHeroTopic;
-      const tier     = parseInt(card.dataset.dashHeroTier, 10) || 1;
-      state.topic        = topicKey;
-      state.currentRound = tier;
-      state.nav          = 'topics';
-      state.topicsView     = false;
-      state.fromPath      = true;
-      state.fromPathTier  = tier;
-      state.mode          = 'study';
-      state.tab           = 'words';
-      state.flipped        = {};
-      state.speaking       = null;
-      state.sentenceBreakdownOpen = {};
-      state.sentenceRevealed     = {};
-      state.sentenceNoteClosed   = {};
-      state.convo = { convMode:'read', playingLine:null, gapAnswers:{}, bubbleRevealed:{}, breakdownOpen:{}, speakStep:0, speakStatus:'idle', speakHeard:'', speakAutoPlayed:false, speakRevealed:{} };
-      // Find which path this lesson belongs to so the path-banner / "back to
-      // timeline" context is correct if the user backs out of the lesson.
-      const owningPath = (store.paths || []).find(p => (p.lessons || []).some(l => l.topic === topicKey && l.round === tier));
-      if (owningPath) state.activePath = owningPath.key;
-      pushNav();                 // dashboard → lesson: BACK returns to dashboard
-      window.scrollTo(0, 0);
       render();
-    });
-  });
-  document.querySelectorAll('[data-dash-hero-cp]').forEach(card => {
-    card.addEventListener('click', () => {
-      const pathKey = card.dataset.dashHeroCp;
-      const stageId = card.dataset.dashHeroStage;
-      state.activePath = pathKey;
-      openCheckpoint(pathKey, stageId);   // openCheckpoint() itself calls pushNav() + render()
-    });
-  });
+    }, 3000);
+  },
 
-  // Path progress card → open that path's timeline directly
-  document.querySelectorAll('[data-dash-path-open]').forEach(card => {
-    card.addEventListener('click', () => {
-      state.activePath = card.dataset.dashPathOpen;
-      state.nav        = 'path';
-      state.pathView   = 'timeline';
-      pushNav();                 // dashboard → path timeline: BACK returns to dashboard
+  '#path-next-step': () => {
+    const ctx = getPathContext();
+    if (!ctx || !ctx.nextStep) return;
+    window.speechSynthesis.cancel();
+    stopAudioFile();
+    // Checkpoint comes next → open its hub (openCheckpoint self-pushes nav).
+    if (ctx.nextStep.kind === 'checkpoint') {
+      openCheckpoint(state.activePath, ctx.nextStep.stageId);
       window.scrollTo(0, 0);
-      render();
-    });
-  });
+      return;
+    }
+    state.fromPathTier = ctx.nextStep.tier;
+    openPathLesson(ctx.nextStep.topic, ctx.nextStep.tier);
+  },
 
-  // Word Review pill → straight into the Words review screen
-  const dashReviewOpen = document.getElementById('dash-review-open');
-  if (dashReviewOpen) {
-    dashReviewOpen.addEventListener('click', () => {
-      state.nav = 'review';
-      state.wordReview = null;
-      pushNav();                 // dashboard → review: BACK returns to dashboard
-      window.scrollTo(0, 0);
-      refreshReviewBadge().then(render);
-    });
-  }
+  // ── Dashboard ──────────────────────────────────────────────────────────────
+  // The hero card still carries its own copy of the state reset openPathLesson()
+  // owns; consolidating it is a dashboard change and is logged in BACKLOG.md.
 
-  // Jump-to tiles
-  const dashTileTopics = document.getElementById('dash-tile-topics');
-  if (dashTileTopics) {
-    dashTileTopics.addEventListener('click', () => {
-      state.nav = 'topics';
-      state.topicsView = true;
-      state.fromPath = false;
-      state.fromPathTier = null;
-      pushNav();                 // dashboard → topics: BACK returns to dashboard
-      window.scrollTo(0, 0);
-      render();
-    });
-  }
-  const dashTileTranslate = document.getElementById('dash-tile-translate');
-  if (dashTileTranslate) {
-    dashTileTranslate.addEventListener('click', () => {
-      state.nav = 'translate';
-      pushNav();                 // dashboard → translate: BACK returns to dashboard
-      window.scrollTo(0, 0);
-      render();
-    });
-  }
+  'data-dash-hero-topic': el => {
+    const topicKey = el.dataset.dashHeroTopic;
+    const tier = parseInt(el.dataset.dashHeroTier, 10) || 1;
+    state.topic = topicKey;
+    state.currentRound = tier;
+    state.nav = 'topics';
+    state.topicsView = false;
+    state.fromPath = true;
+    state.fromPathTier = tier;
+    state.mode = 'study';
+    state.tab = 'words';
+    state.flipped = {};
+    state.speaking = null;
+    state.sentenceBreakdownOpen = {};
+    state.sentenceRevealed = {};
+    state.sentenceNoteClosed = {};
+    state.convo = freshConvoState();
+    // Find which path this lesson belongs to so the path banner and "back to
+    // timeline" context are correct if the user backs out of the lesson.
+    const owningPath = (store.paths || []).find(p => (p.lessons || []).some(l => l.topic === topicKey && l.round === tier));
+    if (owningPath) state.activePath = owningPath.key;
+    pushNav();                 // dashboard → lesson: BACK returns to dashboard
+    window.scrollTo(0, 0);
+    render();
+  },
 
-  // ── Learning Path events ──────────────────────────────────────────
-  // Open a path from the list view → switch to that path's timeline
-  document.querySelectorAll('[data-path-open]').forEach(btn => {
-    btn.addEventListener('click', () => {
-      state.activePath = btn.dataset.pathOpen;
-      state.pathView   = 'timeline';
-      pushNav();                 // path list → timeline: BACK returns to the list
-      window.scrollTo(0, 0);
-      render();
-    });
-  });
+  'data-dash-hero-cp': el => {
+    state.activePath = el.dataset.dashHeroCp;
+    // openCheckpoint() calls pushNav() and render() itself.
+    openCheckpoint(el.dataset.dashHeroCp, el.dataset.dashHeroStage);
+  },
 
-  // Back from timeline → path list. Routed through history.back() so it matches
-  // the phone BACK button (both pop the entry that path-open pushed).
+  'data-dash-path-open': el => {
+    state.activePath = el.dataset.dashPathOpen;
+    state.nav = 'path';
+    state.pathView = 'timeline';
+    pushNav();                 // dashboard → path timeline: BACK returns to dashboard
+    window.scrollTo(0, 0);
+    render();
+  },
 
-  // Tap a lesson in the timeline → open the topic with fromPath flag
-  document.querySelectorAll('[data-path-lesson]').forEach(card => {
-    card.addEventListener('click', (e) => {
-      // Ignore taps on the mark-complete button (handled separately)
-      if (e.target.closest('[data-path-toggle]')) return;
-      openPathLesson(card.dataset.pathLesson, parseInt(card.dataset.pathTier, 10) || 1);
-    });
-  });
+  '#dash-review-open': () => {
+    state.nav = 'review';
+    state.wordReview = null;
+    pushNav();                 // dashboard → review: BACK returns to dashboard
+    window.scrollTo(0, 0);
+    refreshReviewBadge().then(render);
+  },
+
+  '#dash-tile-topics': () => {
+    state.nav = 'topics';
+    state.topicsView = true;
+    state.fromPath = false;
+    state.fromPathTier = null;
+    pushNav();                 // dashboard → topics: BACK returns to dashboard
+    window.scrollTo(0, 0);
+    render();
+  },
+
+  '#dash-tile-translate': () => {
+    state.nav = 'translate';
+    pushNav();                 // dashboard → translate: BACK returns to dashboard
+    window.scrollTo(0, 0);
+    render();
+  },
+
+  // ── Learning path ──────────────────────────────────────────────────────────
+  // data-path-lesson CONTAINS data-path-toggle (declared in wiring-check).
+  // Innermost wins, so marking complete no longer opens the lesson underneath.
+  //
+  // Back from timeline → path list is not here: it is a data-up control, routed
+  // through history so it matches the phone BACK button.
+
+  'data-path-open': el => {
+    state.activePath = el.dataset.pathOpen;
+    state.pathView = 'timeline';
+    pushNav();                 // path list → timeline: BACK returns to the list
+    window.scrollTo(0, 0);
+    render();
+  },
+
+  'data-path-lesson': el => {
+    openPathLesson(el.dataset.pathLesson, parseInt(el.dataset.pathTier, 10) || 1);
+  },
+
+  'data-path-toggle': el => {
+    const tier = parseInt(el.dataset.pathTier, 10) || 1;
+    toggleLessonComplete(state.activePath, el.dataset.pathToggle, tier);
+    render();
+  },
 
   // Stage stepper — jump to a sibling topic of this stage without going back to
   // the timeline. Same opener as the timeline card, so nothing can drift.
-  document.querySelectorAll('[data-stage-topic]').forEach(btn => {
-    btn.addEventListener('click', () => {
-      window.speechSynthesis.cancel();
-      stopAudioFile();
-      openPathLesson(btn.dataset.stageTopic, parseInt(btn.dataset.stageTier, 10) || 1);
-    });
-  });
+  'data-stage-topic': el => {
+    window.speechSynthesis.cancel();
+    stopAudioFile();
+    openPathLesson(el.dataset.stageTopic, parseInt(el.dataset.stageTier, 10) || 1);
+  },
 
   // Stage stepper — the checkpoint diamond at the end of the strip.
-  document.querySelectorAll('[data-stage-cp]').forEach(btn => {
-    btn.addEventListener('click', () => {
-      window.speechSynthesis.cancel();
-      stopAudioFile();
-      openCheckpoint(state.activePath, btn.dataset.stageCp);
-      window.scrollTo(0, 0);
-    });
-  });
+  'data-stage-cp': el => {
+    window.speechSynthesis.cancel();
+    stopAudioFile();
+    openCheckpoint(state.activePath, el.dataset.stageCp);
+    window.scrollTo(0, 0);
+  },
 
-  // Toggle complete on a timeline lesson (without navigating)
-  document.querySelectorAll('[data-path-toggle]').forEach(btn => {
-    btn.addEventListener('click', (e) => {
-      e.stopPropagation();
-      const tier = parseInt(btn.dataset.pathTier, 10) || 1;
-      toggleLessonComplete(state.activePath, btn.dataset.pathToggle, tier);
+  // ── Checkpoints ────────────────────────────────────────────────────────────
+
+  'data-cp-open': el => {
+    openCheckpoint(state.activePath, el.dataset.cpOpen);
+    window.scrollTo(0, 0);
+  },
+
+  'data-cp-act': el => {
+    const act = el.dataset.cpAct;
+    if (!state.checkpoint) return;
+    if (act === 'words') {
+      startCheckpointWords();
+    } else if (act === 'sentences') {
+      state.checkpointAct = 'sentences';
+      state.sentReview = null;      // mode picker first; the run starts on choice
+      pushNav();
       render();
-    });
-  });
-
-  // ── Checkpoint handlers (Stage 3) ──
-  // Open a checkpoint hub from its timeline node.
-  document.querySelectorAll('[data-cp-open]').forEach(card => {
-    card.addEventListener('click', () => {
-      openCheckpoint(state.activePath, card.dataset.cpOpen);
-      window.scrollTo(0, 0);
-    });
-  });
-
-  // Back from hub → timeline (and from finish button). history.back() pops the
-  // entry openCheckpoint pushed; popstate clears the checkpoint state.
-
-  // Launch an activity from a hub card.
-  document.querySelectorAll('[data-cp-act]').forEach(card => {
-    card.addEventListener('click', () => {
-      const act = card.dataset.cpAct;
-      const cpState = state.checkpoint;
-      if (!cpState) return;
-      const stage = getStage(cpState.pathKey, cpState.stageId);
-      if (act === 'words') {
-        startCheckpointWords();
-      } else if (act === 'sentences') {
-        state.checkpointAct = 'sentences';
-        state.sentReview = null;      // mode picker first; the run starts on choice
-        pushNav();
-        render();
-      } else if (act === 'convo') {
-        state.checkpointAct = 'convo';
-        state.convo = { convMode:'read', playingLine:null, gapAnswers:{}, bubbleRevealed:{}, breakdownOpen:{}, speakStep:0, speakStatus:'idle', speakHeard:'', speakAutoPlayed:false, speakRevealed:{} };
-        pushNav();
-        render();
-      }
-      window.scrollTo(0, 0);
-    });
-  });
-
-  // ── Checkpoint sentence review (DES-44/45) ──
-  document.querySelectorAll('[data-sr-mode]').forEach(btn => {
-    btn.addEventListener('click', () => {
-      startSentReviewRun(btn.dataset.srMode);
-      window.scrollTo(0, 0);
+    } else if (act === 'convo') {
+      state.checkpointAct = 'convo';
+      state.convo = freshConvoState();
+      pushNav();
       render();
-    });
-  });
+    }
+    window.scrollTo(0, 0);
+  },
+
+  // Back from an activity → hub. Routed through history so it matches phone BACK.
+  'data-cp-act-back': () => {
+    // Leaving an activity must never leave the mic or a replay running.
+    stopListening(); stopAudioFile();
+    state.sentReview = null;
+    if (_navReady) { history.back(); return; }
+    state.checkpointAct = null; state.checkpointQuiz = null;
+    window.scrollTo(0, 0);
+    render();
+  },
+
+  // Mark an activity done + return to hub (the done-screen / convo finish button).
+  'data-cp-act-done': el => {
+    const cpState = state.checkpoint;
+    if (cpState) setCheckpointActivityDone(cpState.pathKey, cpState.cpId, el.dataset.cpActDone, true);
+    stopListening(); stopAudioFile();
+    state.sentReview = null;
+    // Return to the hub via history, which pops the activity entry.
+    if (_navReady) { history.back(); return; }
+    state.checkpointAct = null; state.checkpointQuiz = null;
+    window.scrollTo(0, 0);
+    render();
+  },
+
+  // Diagnostic "revisit topic" → open that topic's Learn tab.
+  'data-cp-revisit': el => {
+    state.checkpoint = null; state.checkpointAct = null;
+    state.checkpointQuiz = null;
+    state.topic = el.dataset.cpRevisit;
+    state.currentRound = 1;
+    state.nav = 'topics';
+    state.topicsView = false;
+    state.fromPath = false; state.fromPathTier = null;
+    state.mode = 'study'; state.tab = 'words';
+    state.flipped = {}; state.sentenceRevealed = {};
+    state.sentenceNoteClosed = {};
+    pushNav();
+    window.scrollTo(0, 0);
+    render();
+  },
+
+  // Play a missed item's audio on the done screen.
+  'data-cp-say': el => speakItem('word', el.dataset.cpSay),
+
+  // ── Checkpoint Words activity ──────────────────────────────────────────────
+  // `cpq` and `cw` were closure captures; re-derived per call.
+
+  'data-cpw-choice': el => {
+    const cpq = state.checkpointQuiz;
+    if (!cpq || cpq.done || state.checkpointAct !== 'words') return;
+    if (cpq.selected !== null && cpq.selected !== undefined) return;
+    const cw = cpq.pool[cpq.idx];
+    const idx = parseInt(el.dataset.cpwChoice, 10);
+    const chosen = cpq.choices[idx];
+    cpq.selected = idx;
+    if (chosen === cw) cpq.score++;
+    else cpq.missed.push(cw);
+    speakItem('word', cw.id);
+    render();
+  },
+
+  'data-cpw-dir': el => {
+    const cpq = state.checkpointQuiz;
+    if (!cpq) return;
+    cpq.direction = el.dataset.cpwDir;
+    storage.setQuizDirection(cpq.direction);
+    render();
+  },
+
+  '#cpw-listen': () => { const w = currentCheckpointWord(); if (w) speakItem('word', w.id); },
+  '#cpw-replay': () => { const w = currentCheckpointWord(); if (w) speakItem('word', w.id); },
+  '#cpw-next': () => advanceCheckpointWords(),
+
+  // ── Checkpoint sentence review (DES-44/45) ─────────────────────────────────
+
+  'data-sr-mode': el => {
+    startSentReviewRun(el.dataset.srMode);
+    window.scrollTo(0, 0);
+    render();
+  },
 
   // Replay the target audio (listen mode). Disabled while the mic is live —
   // played-back audio would otherwise feed straight into the recogniser as a
   // trivially correct match, the same reason the Learn sheet disables it.
-  const srPlay = document.querySelector('[data-sr-play]');
-  if (srPlay) srPlay.addEventListener('click', () => {
+  'data-sr-play': () => {
     const sr = state.sentReview;
     if (!sr || sr.status === 'listening') return;
     const item = currentSentReviewItem();
     if (!item) return;
     speakItem('sentence', item.sid);
-  });
+  },
 
-  const srMic = document.querySelector('[data-sr-mic]');
-  if (srMic) srMic.addEventListener('click', () => {
+  'data-sr-mic': () => {
     const sr = state.sentReview;
     const item = currentSentReviewItem();
     if (!sr || !item) return;
@@ -3411,134 +3242,184 @@ function attachEvents(lesson) {
     stopAudioFile();
     window.speechSynthesis.cancel();
     startSentReviewListening(item.c);
-  });
+  },
 
-  const srStop = document.querySelector('[data-sr-stop]');
-  if (srStop) srStop.addEventListener('click', () => finishListening());
+  'data-sr-stop': () => finishListening(),
 
   // Escape hatch. Reveals the target and marks the item un-graded rather than
   // failed — a learner who genuinely cannot produce the sentence should not be
   // punished for saying so, and the tally stays honest either way.
-  const srReveal = document.querySelector('[data-sr-reveal]');
-  if (srReveal) srReveal.addEventListener('click', () => {
+  'data-sr-reveal': () => {
     const sr = state.sentReview;
     if (!sr) return;
     stopListening();
     sr.revealed = true;
     sr.results[sr.idx] = 'revealed';
     render();
-  });
+  },
 
-  const srRetry = document.querySelector('[data-sr-retry]');
-  if (srRetry) srRetry.addEventListener('click', () => {
+  'data-sr-retry': () => {
     const sr = state.sentReview;
     if (!sr) return;
     stopListening();
     sr.status = 'idle'; sr.heard = ''; sr.revealed = false;
     render();
-  });
+  },
 
-  const srNext = document.querySelector('[data-sr-next]');
-  if (srNext) srNext.addEventListener('click', () => {
+  'data-sr-next': () => {
     stopListening(); stopAudioFile();
     sentReviewNext();
     window.scrollTo(0, 0);
     render();
-  });
+  },
 
   // "Run N more" / "Go again from the start" — re-samples from the ring at the
   // cursor, in the mode already chosen.
-  const srAgain = document.querySelector('[data-sr-again]');
-  if (srAgain) srAgain.addEventListener('click', () => {
+  'data-sr-again': () => {
     startSentReviewRun(state.sentReviewMode || 'listen');
     window.scrollTo(0, 0);
     render();
-  });
+  },
+};
 
-  // Back from an activity → hub. Routed through history so it matches phone BACK.
-  document.querySelectorAll('[data-cp-act-back]').forEach(btn => {
-    btn.addEventListener('click', () => {
-      // Leaving an activity must never leave the mic or a replay running.
-      stopListening(); stopAudioFile();
-      state.sentReview = null;
-      if (_navReady) { history.back(); return; }
-      state.checkpointAct = null; state.checkpointQuiz = null;
-      window.scrollTo(0, 0);
-      render();
-    });
-  });
+// Non-click events. Kept in their own tables rather than a shared one keyed by
+// event type, because there are only two and the shapes differ: `input` must not
+// re-render (it would destroy the field and lose focus mid-word), `change` must.
+const INPUT_ACTIONS = {
+  // Keep state in sync without re-rendering. A render here would replace the
+  // textarea and drop the caret on every keystroke.
+  '#translate-input': el => { state.translate.inputText = el.value; },
+};
 
-  // Mark an activity done + return to hub (the done-screen / convo finish button).
-  document.querySelectorAll('[data-cp-act-done]').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const act = btn.dataset.cpActDone;
-      const cpState = state.checkpoint;
-      if (cpState) setCheckpointActivityDone(cpState.pathKey, cpState.cpId, act, true);
-      stopListening(); stopAudioFile();
-      state.sentReview = null;
-      // Clear the session and return to the hub via history (pops the activity entry).
-      if (_navReady) { history.back(); return; }
-      state.checkpointAct = null; state.checkpointQuiz = null;
-      window.scrollTo(0, 0);
-      render();
-    });
-  });
+const CHANGE_ACTIONS = {
+  '#cat-filter-select': el => {
+    state.selectedCategory = el.value;
+    window.scrollTo(0, 0);
+    render();
+  },
+};
 
-  // Diagnostic "revisit topic" → open that topic's Learn tab.
-  document.querySelectorAll('[data-cp-revisit]').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const topicKey = btn.dataset.cpRevisit;
-      state.checkpoint = null; state.checkpointAct = null;
-      state.checkpointQuiz = null;
-      state.topic = topicKey;
-      state.currentRound = 1;
-      state.nav = 'topics';
-      state.topicsView = false;
-      state.fromPath = false; state.fromPathTier = null;
-      state.mode = 'study'; state.tab = 'words';
-      state.flipped = {}; state.sentenceRevealed = {};
-      state.sentenceNoteClosed = {};
-      pushNav();
-      window.scrollTo(0, 0);
-      render();
-    });
-  });
+// ── Dispatch ──────────────────────────────────────────────────────────────────
+// A table key is either '#some-id' or a bare 'data-attribute' name, so the
+// selector is derived from the table itself and cannot drift from it.
+function actionSelector(table) {
+  return Object.keys(table).map(k => k[0] === '#' ? k : `[${k}]`).join(',');
+}
 
-  // Play a missed item's audio on the done screen.
-  document.querySelectorAll('[data-cp-say]').forEach(btn => {
-    btn.addEventListener('click', () => speakItem('word', btn.dataset.cpSay));
-  });
-
-  // Checkpoint Words quiz — choices, direction toggle, next, listen/replay.
-  const cpq = state.checkpointQuiz;
-  if (cpq && state.checkpointAct === 'words' && !cpq.done) {
-    const cw = cpq.pool[cpq.idx];
-    document.querySelectorAll('[data-cpw-choice]').forEach(btn => {
-      btn.addEventListener('click', () => {
-        if (cpq.selected !== null && cpq.selected !== undefined) return;
-        const idx = parseInt(btn.dataset.cpwChoice, 10);
-        const chosen = cpq.choices[idx];
-        cpq.selected = idx;
-        if (chosen === cw) cpq.score++;
-        else cpq.missed.push(cw);
-        speakItem('word', cw.id);
-        render();
-      });
-    });
-    document.querySelectorAll('[data-cpw-dir]').forEach(btn => {
-      btn.addEventListener('click', () => {
-        cpq.direction = btn.dataset.cpwDir;
-        storage.setQuizDirection(cpq.direction);
-        render();
-      });
-    });
-    const cpwListen = document.getElementById('cpw-listen');
-    if (cpwListen) cpwListen.addEventListener('click', () => speakItem('word', cw.id));
-    const cpwReplay = document.getElementById('cpw-replay');
-    if (cpwReplay) cpwReplay.addEventListener('click', () => speakItem('word', cw.id));
-    const cpwNext = document.getElementById('cpw-next');
-    if (cpwNext) cpwNext.addEventListener('click', () => advanceCheckpointWords());
+// Which entry does this element answer to? Iterated in TABLE order rather than
+// attribute order so the answer is deterministic if an element ever carries two
+// registered names. Id wins over attribute, which matters for nothing today and
+// is stated so it stays predictable.
+function actionKey(el, table) {
+  if (el.id && table['#' + el.id]) return '#' + el.id;
+  for (const key of Object.keys(table)) {
+    if (key[0] !== '#' && el.hasAttribute(key)) return key;
   }
+  return null;
+}
+
+function makeDispatcher(table) {
+  const selector = actionSelector(table);
+  return e => {
+    // closest() walks outward and stops at the FIRST registered control, which
+    // is what makes DES-47 structural: the innermost wins because nothing looks
+    // any further out.
+    const el = e.target.closest(selector);
+    if (!el) return;
+    const key = actionKey(el, table);
+    if (!key) return;
+    table[key](el, e);
+  };
+}
+
+let _delegationReady = false;
+
+// Bound ONCE, to #app — which render() empties but never replaces, so these
+// survive every render. Called from afterRender() rather than init() so every
+// path into the app is covered, including the loading shells that return early.
+function initEventDelegation() {
+  if (_delegationReady) return;
+  const app = document.getElementById('app');
+  if (!app) return;
+  app.addEventListener('click', makeDispatcher(CLICK_ACTIONS));
+  app.addEventListener('input', makeDispatcher(INPUT_ACTIONS));
+  app.addEventListener('change', makeDispatcher(CHANGE_ACTIONS));
+  _delegationReady = true;
+}
+
+// ── After-render work ─────────────────────────────────────────────────────────
+// Everything that must happen once per render and is NOT a handler. This used to
+// sit at the top and bottom of attachEvents() purely because that ran on every
+// render; with the handlers gone it needs its own home, or it silently stops
+// happening. Called wherever attachEvents() was called, including render()'s
+// four early exits.
+function afterRender() {
+  initEventDelegation();
+
+  // Rings resolve their own dash length from path geometry, so they can only be
+  // measured once the markup is in the DOM.
+  paintDiamondRings();
+
+  autoPlayListenPrompts();
+}
+
+// Listen-mode prompts auto-play once per question, not on every re-render — the
+// index guard is what makes it once. The delay lets the previous question's
+// feedback audio finish before the new prompt starts.
+function autoPlayListenPrompts() {
+  const q = state.quiz;
+  if (q && !q.done && q.direction === 'listen-en' && q._listenAutoPlayed !== q.idx) {
+    q._listenAutoPlayed = q.idx;
+    setTimeout(() => {
+      const cur = state.quiz;
+      if (cur && !cur.done && cur.direction === 'listen-en' && cur._listenAutoPlayed === cur.idx) {
+        speakItem('word', cur.queue[cur.idx].id);
+      }
+    }, 900);
+  }
+
+  const wr = state.wordReview;
+  if (wr && !wr.done && wr.direction === 'listen-en' && wr._listenAutoPlayed !== wr.idx) {
+    wr._listenAutoPlayed = wr.idx;
+    setTimeout(() => {
+      const cur = state.wordReview;
+      if (cur && !cur.done && cur.direction === 'listen-en' && cur._listenAutoPlayed === cur.idx) {
+        speakItem('word', cur.queue[cur.idx].word.id);
+      }
+    }, 900);
+  }
+}
+
+// ── Small shared derivations ──────────────────────────────────────────────────
+// Named rather than inlined because each was previously a closure capture, and a
+// name is what stops the next handler re-deriving it slightly differently.
+
+// The conversation view's reset shape. Was written out in full at four call
+// sites; one of them drifting from the others is a silent bug, so it is one
+// literal now.
+function freshConvoState() {
+  return {
+    convMode: 'read', playingLine: null, gapAnswers: {}, bubbleRevealed: {},
+    breakdownOpen: {}, speakStep: 0, speakStatus: 'idle', speakHeard: '',
+    speakAutoPlayed: false, speakRevealed: {},
+  };
+}
+
+// Advance the Chat speak walk, wrapping at the end. Identical in "next" and
+// "skip"; they differ only in what they clear before calling it.
+function advanceSpeakStep() {
+  const lines = activeConvoSource().lines;
+  state.convo.speakStep = state.convo.speakStep >= lines.length - 1 ? 0 : state.convo.speakStep + 1;
+}
+
+function currentReviewItem() {
+  const wr = state.wordReview;
+  return wr && !wr.done ? wr.queue[wr.idx] : null;
+}
+
+function currentCheckpointWord() {
+  const cpq = state.checkpointQuiz;
+  return cpq && !cpq.done ? cpq.pool[cpq.idx] : null;
 }
 
 // ── Init ──────────────────────────────────────────────────────────────────────

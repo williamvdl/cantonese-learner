@@ -4,7 +4,7 @@
 IN_PROGRESS.md when it's picked up; delete it from here once it's shipped and
 folded into STATUS.md.*
 
-Last updated: 2026-08-31 · sw.js at v137
+Last updated: 2026-09-03 · sw.js at v139
 
 ## Product
 
@@ -138,14 +138,6 @@ are pointers only — detail goes there, not here.*
   list on Android is assuming something that is not there**, and that assumption
   was the main lever reserved for buying speak-mode leniency without losing
   detection. Leave the line or delete it; do not plan around it.
-- **Two dead `state.speed` writers in `render.js`** (~line 2066), found by the
-  2026-08-01 doc audit. A `getElementById('speed-' + s)` loop over slow/normal/fast
-  for the retired header speed control, and a `[data-drawer-speed]` handler for the
-  retired drawer. Neither the IDs nor the attribute are emitted anywhere, and both
-  sit about 140 lines below a comment in the settings-sheet block correctly stating
-  that the sheet is the sole writer of `state.speed`. Deleting them is six lines and
-  behaviour-identical — but it touches a cached shell asset, so it needs its own
-  `sw.js` bump rather than riding along with a doc commit.
 - **A screen smoke harness — render every screen headlessly and assert it doesn't
   throw.** The one defect class with no cover today. The Fill-the-Gap crash was
   `.map()` on a null `opts`: a render throw on a data shape, which takes the whole
@@ -202,13 +194,6 @@ are pointers only — detail goes there, not here.*
   literal out of the source file with a regex, compare both directions, and verify
   the check actually fails on drift before committing it.
 
-- **Give `tools/dead-css.js` a JS direction, or write it a sibling.** It enumerates
-  declared CSS classes and asks whether the JS emits them; it cannot see the reverse
-  — a handler bound to a selector, ID or data attribute that nothing emits. That is
-  exactly the shape of the two dead speed writers above, and check 7 passes clean
-  with them in the file. Candidate: collect every `getElementById`, `querySelector`
-  and `querySelectorAll` argument in the JS and check each against what the JS
-  actually emits.
 - **Male/female voice toggle is now cheaper than it was.** Azure `zh-HK` has
   three voices (WanLung male, HiuMaan and HiuGaai female) against Chirp3-HD's 30,
   so a toggle has fewer options but they are all confirmed correct. The casting

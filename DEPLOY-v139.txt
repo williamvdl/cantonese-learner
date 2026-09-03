@@ -1,0 +1,123 @@
+Tea House Cantonese Learner — v139 deploy package
+=================================================
+
+SUPERSEDES the v138 package. If v138 was never applied, this package contains
+everything from it as well — do not apply both, just extract this one.
+
+Extract the CONTENTS over the root of your local clone. The folder structure
+matches the repo. Delete this file afterwards; it is packaging, not a repo file.
+
+  render.js                       -> repo root   (modified — the big one)
+  sw.js                           -> repo root   (modified — CACHE_VERSION v139)
+  tools/wiring-check.js           -> tools/      (NEW — standing check 10)
+  tools/snapshot-harness.js       -> tools/      (modified)
+  tools/sentence-review-harness.js-> tools/      (modified)
+  docs/STATUS.md                  -> docs/       (modified)
+  docs/BACKLOG.md                 -> docs/       (modified)
+  docs/IN_PROGRESS.md             -> docs/       (modified)
+  docs/DESIGN_DECISIONS.md        -> docs/       (modified — DES-47)
+  docs/PRODUCTISATION_REVIEW.md   -> docs/       (NEW)
+
+
+WHAT CHANGED
+------------
+attachEvents() is gone. It was 1,188 lines — 36% of render.js — and held all 100
+addEventListener calls, re-bound after every render because setting
+app.innerHTML destroys every listener. That forced 52 `if (el)` guards, and
+those guards are why a broken control was SILENT: rename an id and the guard
+steps over it, the button does nothing, and nothing anywhere complains.
+
+Replaced by one listener on #app (plus one each for input and change), attached
+once. #app is emptied but never replaced, so they survive every render.
+Handlers live in a dispatch table keyed on the id and data-attribute names the
+markup ALREADY uses — no markup changed.
+
+DES-47: innermost tapped control wins, one action per tap. The dispatcher
+resolves a tap with closest(), which stops at the nearest registered control, so
+nothing further out is reached. This retires twelve local defences (eight
+stopPropagation calls, four parent guards checking what was tapped). Only four
+of those twelve guarded real nesting; the rest guarded nesting that did not
+exist.
+
+Also folded in: freshConvoState() replaces four hand-written copies of the same
+literal, and the two listen-mode auto-play blocks move to afterRender() — they
+only ran before because attachEvents() ran, and would have been lost silently.
+
+
+BEFORE COMMITTING
+-----------------
+Run all ten from the repo root:
+
+  node tools/validate.js
+  node tools/dead-css.js
+  node tools/nav-harness.js
+  node tools/snapshot-harness.js
+  node tools/tier-harness.js
+  node tools/jyutping-check.js
+  node tools/content-report.js
+  node tools/sentence-pool-harness.js
+  node tools/sentence-review-harness.js
+  node tools/wiring-check.js
+
+  grep CACHE_VERSION sw.js            -> cantonese-teahouse-v139
+  grep "Last updated" docs/STATUS.md  -> 2026-09-03 · sw.js at v139
+
+Suggested commit message:
+
+  v139 — event delegation (DES-47); attachEvents retired
+
+
+DEVICE QA — READ THIS PART
+--------------------------
+This is the one deploy in this arc that genuinely needs tapping through. Every
+control was verified preserved one-for-one (55 ids and 47 attributes before,
+55 and 47 after, checked by script against the pre-refactor file), and a
+purpose-built dispatch test proved innermost-wins, one-action-per-tap, no-op on
+unregistered controls, and correct resolution of all four nested pairs against
+the real table.
+
+But no check proves a handler does the RIGHT thing — only that it is reachable.
+So the list below is what to actually judge.
+
+SCREENS THAT CHANGED (nothing should look or behave differently — that is the
+claim being tested):
+
+  Everything. Every interactive control in the app now dispatches through the
+  same path. Rather than list all of it, the four nested pairs and the four
+  re-derived closures are where a fault would show first:
+
+  The four nested pairs — tap the INNER control and confirm ONLY it acts:
+   1. Word card + play button — play the audio, card must NOT flip.
+   2. Path timeline lesson card + mark-complete tick — tick must NOT open the
+      lesson.
+   3. Chat bubble + word-breakdown button — breakdown opens, English must NOT
+      reveal.
+   4. Chat bubble + play button — line plays, English must NOT reveal.
+      Then tap each bubble/card somewhere ELSE and confirm the outer action
+      still fires.
+
+  The four re-derived closures — these used to capture values when the screen
+  rendered and now read them at tap time. Most likely place for a subtle fault:
+   5. Word Review: answer a question, tap Next, answer again. Check the Listen
+      and Replay buttons play the CURRENT word, not the previous one.
+   6. Checkpoint Words: same — answer, Next, check Listen/Replay follow.
+   7. Topic Quiz: answer, Next, check Listen/Replay follow.
+   8. Listen-mode auto-play: set any quiz or Word Review to the audio direction
+      and confirm the prompt plays ONCE per question, not on every re-render and
+      not twice.
+
+  Two more worth a tap because they moved rather than being copied:
+   9. Translate: type in the box — the caret must not jump and focus must not be
+      lost mid-word. Then Translate, Listen, Clear, Swap.
+  10. Path diamonds on the timeline draw their rings correctly on first load
+      (paintDiamondRings moved into afterRender).
+
+SCREENS SHARING THE CHANGED CODE:
+  All of them, by definition. A five-minute pass — open each tab, enter a topic,
+  run a quiz, open a checkpoint and each of its three activities, open and close
+  both sheets, use the phone BACK button from each — will exercise the dispatch
+  path everywhere it exists.
+
+If any control does nothing, that is now a bug with a name: the dispatch table
+is the single place to look, and wiring-check.js will already have proved the
+entry exists, so the fault will be inside the handler rather than in the wiring.

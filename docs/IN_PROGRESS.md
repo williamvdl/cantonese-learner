@@ -4,9 +4,28 @@
 questions behind it. Meant to be short-lived — when a piece ships, fold its
 outcome into STATUS.md and clear this file back down for the next thing.*
 
-Last updated: 2026-08-31 · sw.js at v137
+Last updated: 2026-09-03 · sw.js at v139
 
 ## Nothing in progress
+
+**v138 and v139 shipped and this file is cleared down again.** A
+commercial-readiness review was written up as `docs/PRODUCTISATION_REVIEW.md` —
+standalone, deliberately not yet referenced from BACKLOG.md — and its Part C
+work is complete: `tools/wiring-check.js` (v138), the four dead controls it
+found, the `snapshot-harness.js` `NAV_FIELDS` drift, and then the delegation
+refactor itself with DES-47 (v139). Nothing from that arc is open.
+
+**v139 wants device QA before anything else is built on top of it.** It touched
+every interactive control in the app, and while every check passes and every
+control was verified preserved one-for-one, no automated check proves a handler
+does the right thing — only that it is reachable. The QA list is in the deploy
+notes.
+
+---
+
+*Below: the previous clear-down, kept for its warning.*
+
+## Nothing in progress (v137)
 
 **The speak-feedback and checkpoint-sentence arc is complete and this file is
 cleared down.** It ran from v130 to v137 and is recorded in full in STATUS.md and

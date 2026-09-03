@@ -268,7 +268,17 @@ console.log('\n— 7. every control the renderer emits is wired —');
   }
   let unwired = 0;
   for (const attr of emitted) {
-    if (!renderSrc.includes(`[${attr}]`)) { fail(`${attr} is emitted but has no querySelector in render.js`); unwired++; }
+    // v139: controls are dispatched from a table keyed by attribute name, not
+    // bound via querySelectorAll('[attr]'). The old form is still accepted so
+    // this stays true for anything fetched by hand, but a table entry is what a
+    // control normally has now. tools/wiring-check.js asserts this globally and
+    // in both directions; this stays because it checks what THIS screen actually
+    // renders in each of its states, which a static scan cannot.
+    const dispatched = new RegExp(`'${attr}'\\s*:`).test(renderSrc);
+    if (!dispatched && !renderSrc.includes(`[${attr}]`)) {
+      fail(`${attr} is emitted but has no dispatch entry or selector in render.js`);
+      unwired++;
+    }
   }
   if (!unwired) ok(`all ${emitted.size} emitted controls have handlers: ${[...emitted].sort().join(', ')}`);
 }

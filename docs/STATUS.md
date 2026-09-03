@@ -13,7 +13,7 @@ not a history log. Approved design decisions and whether they were built live in
 > convention (`v121 — <what changed>`) so this file stops being load-bearing on
 > its own.
 
-Last updated: 2026-08-31 · sw.js at v137
+Last updated: 2026-09-03 · sw.js at v139
 
 ## Confirmed live and working
 - **Checkpoint sentence review** (v134, DES-44/45). Third checkpoint activity:
@@ -236,7 +236,37 @@ orphan hues `#B7861E`, `#e4d4ad`, `#8a6716`,
 | — | v137 | **Two fixes on the speak surfaces, shipped together.** *Spacing:* the sentence review's run progress bar sat flush against the speak card, and the summary's "run more" sat 2px under the Mark-reviewed button. Both were inline margins in MOCK-28 that never got a modifier class in the build — `.segs` and `.sr-skip` are bare primitives carrying no margins by design. Added `.sr-segs` (bottom margin only; `.speak-nav` above already supplies the top gap) and `.cp-finish + .sr-skip`, scoped to that adjacency so the per-item escape hatch stays tight. *Chat's "You said" line:* it had been rendering bare characters since DES-41 landed at v131 — the Learn sheet and the checkpoint review got jyutping, Chat renders the same line from its own code a thousand lines away and was missed. For an audience assumed not to read Chinese, that line was carrying no information at all. `charsToJyutping()` applied, handling the recogniser's stray punctuation and embedded Latin (我*弟兄你呢 → ngo5 dai6 hing1 nei5 ni1) without markers. `tools/jyutping-check.js` gains a source-level assertion that all three "You said" renderers emit a `speak-heard-jp` sub-line, mutation-tested. Both patterns are in *Notes worth carrying forward*. |
 | — | v128 | **The standalone tier ladder was a one-way door into a path.** Found on device after v127. `goToTier()` entered the destination tier's owning path whenever *any* path owned it — correct inside a path (DES-30), wrong from Topics. Opening `modals` standalone and tapping the Tier 2 rung produced the Intermediate lesson's chrome: an up control reading *Intermediate*, a Mark Complete button, and no rung back down, because `renderTierLine()` correctly degrades to a statement inside a path. The escape, the DES-29 cross-reference, routed back through the same function into the *Beginner* path — so once used, the standalone ladder could not return you to standalone. The path branch is now gated on `state.fromPath`; the standalone branch that already existed as a fallback becomes the standalone route. **Live for all ten two-tier topics since v121** — it only became reachable on `modals` and `comparisons` at v127, which is why it surfaced then. `tools/tier-harness.js` gains a section asserting what the rung *does* in all four origin/direction combinations, plus a sweep of every two-tier topic; verified to fail against the v127 file before being committed against the fix. |
 
+| — | v138 | **Four pieces of dead code removed, and the check that should have found them years earlier.** New standing check `tools/wiring-check.js` asserts both directions of the markup-to-handler agreement — *no stranded handler* (bound to something no render function emits) and *no unwired control* (rendered but nothing binds it) — over `render.js`, `app.js` and `index.html`. It is the backlog item *"give `dead-css.js` a JS direction, or write it a sibling"*, built to the candidate approach that item specified. **Two of its four findings were already known and logged**: the `getElementById('speed-' + s)` loop and the `[data-drawer-speed]` handler, both retired-drawer remnants found by the 2026-08-01 doc audit and carried in BACKLOG.md ever since. **Two were not**: the `[data-cat-jump]` handler and the `id="cat-anchor-${cat.key}"` markup at `renderTopicsScreen()`, the two halves of a removed category-jump feature, each invisible to every existing check and to the audit that found the other pair. All four unreachable, so the deploy is behaviourally identical — the only source change with any effect is a corrected comment. Also fixed: `tools/snapshot-harness.js` held a hand-written copy of `NAV_FIELDS` with 14 entries against `app.js`'s 15, missing `sentSpeakOpen` since v130, so for seven deploys it passed while testing a stale list; it now reads the array out of `app.js` and throws if the extraction misses. **Ten standing checks, all green.** |
+
+| DES-47 | v139 | **Event delegation — `attachEvents()` is gone.** One listener on `#app` instead of 100 re-bound on every render. `attachEvents()` was 1,188 lines, 36% of `render.js`, and its length was architectural rather than neglect: rendering sets `app.innerHTML`, destroying every listener, so the function had to be the union of every screen's wiring in one scope with all 52 lookups guarded by `if (el)`. **That guard is why a broken control was silent** — rename an id and the guard steps over it and the button does nothing, with no error and no failing check. `#app` is emptied but never replaced, so the three delegated listeners are attached once and survive every render. **No markup changed**: the dispatch table is keyed on the id and data-attribute names that already exist, rather than on a new `data-action` attribute, which was the design first proposed and dropped after measuring — rewriting 39 attributes across every screen would have been the larger and far less verifiable half of the job. **DES-47 (innermost tapped control wins) is the behavioural half**, and it retires twelve local defences; see the register row and the note below. Also folded in: `freshConvoState()` replaces four hand-written copies of the conversation reset literal, and the two listen-mode auto-play blocks move into `afterRender()`, which is where everything that must happen once per render but is not a handler now lives — the easiest thing to lose in this refactor, since they only ran before because `attachEvents()` did. Verified: every control preserved one-for-one (55 ids and 47 attributes before, 55 and 47 after, none lost, none added, checked by script against the pre-refactor file); a purpose-built dispatch test proved innermost-wins, one-action-per-tap, no-op on unregistered controls, and correct resolution of all four declared nested pairs against the real table. `wiring-check.js` now reads the dispatch table — the one function it was designed to have to change — and gained a fourth assertion that neither retired convention can reappear. `sentence-review-harness.js`'s wiring assertion was updated for the same reason and re-verified to fail on a removed dispatch entry. **Ten standing checks, all green.** |
+
 ### Notes worth carrying forward
+
+- **A defence written from what the markup looks like is not a defence.** Twelve
+  local measures guarded nested controls before v139 — eight `stopPropagation()`
+  calls and four `e.target.closest()` parent guards. A structural walk of the
+  real markup found **four** actual nested pairs. Two thirds of the defences
+  guarded nothing, and the ones that mattered were covered inconsistently: one
+  parent guard listed three siblings and omitted the one control genuinely
+  adjacent to it, which was safe only because that control had picked the other
+  convention. This is *classify by declaration, not by shape* arriving in a third
+  place, after the 69-vs-12 CSS miscount and the dead-CSS sweep that could not
+  see JavaScript. **Measuring the nesting was itself two false starts**: by
+  source proximity it reported 22 pairs, nearly all siblings a few lines apart;
+  scoped globally rather than per function it invented a fifth pair from two
+  render functions that happened to share a variable name. If a number is going
+  to drive a decision, the first method that produces a number is rarely the one
+  to trust.
+
+- **Work that only runs because something else runs is invisible until you move
+  it.** `attachEvents()` did three things that were not event binding at all:
+  `paintDiamondRings()`, and two listen-mode auto-play blocks for the quiz and
+  Word Review. They lived there for no reason except that it ran on every render.
+  Deleting the function would have silently stopped all three — no error, no
+  failing check, just prompts that never play and rings that never draw. They now
+  have a named home in `afterRender()`. **Before removing a function that runs on
+  a schedule, list what is riding along inside it**; the riders are never in its
+  name.
 
 - **A capability added to one surface is not added to the app.** DES-41 gave the
   "You said" line jyutping, and it was applied to the Learn speak sheet. Chat's
@@ -774,7 +804,18 @@ Neural voices are GA and have been since 2021.
   survived the first, and this one survived the sweep built to stop it happening.
   The equivalent check for JS is *handler binds to a selector nothing emits*;
   `dead-css.js` should grow that direction, or a sibling tool should. Logged in
-  BACKLOG.md.
+  BACKLOG.md. *Built at v138 as `tools/wiring-check.js`, to exactly the
+  approach this note specified.* **Two things are worth carrying from how that
+  went.** First, the sibling found a **fourth** pocket this note did not: the
+  `[data-cat-jump]` handler and the `cat-anchor-${cat.key}` ids, the two halves
+  of a removed category-jump feature. So *four* times, not three — and the
+  extra pair was invisible to the very audit that found the speed writers,
+  because a doc audit reads what it thinks to look at while a check enumerates.
+  Second, and less comfortable: **the two speed writers sat in BACKLOG.md for a
+  month with a six-line fix attached.** Knowing about dead code is not the same
+  as the code being gone, and a defect with a written fix that nobody executes
+  is indistinguishable from an undiscovered one. If a finding is cheap enough
+  to fix, fix it in the session that finds it rather than logging it.
 - **Renaming a field that persists outside the app is a data migration, not a
   refactor.** `state.homeView` lived in `NAV_FIELDS`, so it was serialised into
   `history.state` — which survives a deploy. After the rename, entries written by

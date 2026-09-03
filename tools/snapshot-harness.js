@@ -1,6 +1,20 @@
 const fs=require('fs');
 const src=fs.readFileSync(require('path').join(__dirname,'..','app.js'),'utf8');
-const NAV_FIELDS=['nav','settingsOpen','topicsView','pathView','activePath','topic','currentRound','fromPath','fromPathTier','mode','tab','selectedCategory','checkpoint','checkpointAct'];
+
+// NAV_FIELDS is READ OUT OF app.js, never copied. It used to be a hand-written
+// literal here, and by v137 it had drifted: app.js listed 15 fields, this file
+// listed 14, and the missing one was `sentSpeakOpen`, added at v130. So for
+// seven deploys this harness reported "all migration scenarios pass" while
+// testing a field list the app no longer had — the exact failure mode it exists
+// to prevent, in the harness rather than in the app.
+//
+// Derived data must be generated, never hand-maintained. If this extraction
+// ever fails to find the array it throws rather than falling back to a literal,
+// because a silent fallback would just reintroduce the same drift.
+const navMatch = src.match(/const NAV_FIELDS\s*=\s*\[([\s\S]*?)\]/);
+if (!navMatch) throw new Error('snapshot-harness: could not find NAV_FIELDS in app.js');
+const NAV_FIELDS = (navMatch[1].match(/'[^']+'/g) || []).map(s => s.slice(1, -1));
+if (!NAV_FIELDS.length) throw new Error('snapshot-harness: NAV_FIELDS parsed empty');
 global.NAV_FIELDS=NAV_FIELDS;
 let s=src.indexOf('function migrateNavSnapshot');
 let e=src.indexOf('\n\n',src.indexOf('function applyNavSnapshot'));
