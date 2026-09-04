@@ -444,6 +444,18 @@ the host unchanged. New here is only the trigger and the content.
 Content is `.speak-card`, unchanged from Chat's conversation Speak mode:
 target sentence, `.mic-btn`, `.speak-status`, and on a result, `.speak-result-good`
 / `.speak-result-bad` with `renderSpeakBreakdown()`'s per-syllable grid.
+
+**`.speak-heard` — the "You said" line — shows the heard text folded, not raw
+(DES-48, v140).** The recogniser writes spoken numbers as Arabic digits, so 十
+(sap6) comes back as `10`. All three surfaces that render this line (this sheet,
+the checkpoint sentence review, Chat's Speak mode) pass the heard string through
+`foldAsrNumerals()` before **both** the characters and the `.speak-heard-jp`
+sub-line beneath them. Two rules hold here and neither is optional: the fold is
+the **same function the comparison uses**, so this line and the breakdown grid
+below it can never disagree about what a number was; and it must be applied
+before `charsToJyutping()`, which returns `''` for anything outside the CJK
+range and therefore drops digits **without** the `jp-unknown` marker — a silent
+gap rather than a visible one. `tools/jyutping-check.js` asserts both.
 Chat's own screen is **not** replaced (DES-40) — the two are different shapes
 of problem. A sentence in Learn is one independent item in a flat list, which
 is exactly what a sheet is for: one bounded action over a backdrop you return
@@ -975,6 +987,7 @@ pass over the dashboard. The mockup files behind each decision:
 | `17-subtabs.html` | Subtab treatment — hairline rail, 2px active rule, equal widths (fill) |
 | `27-sentence-speak.html` | Speak feedback on a sentence — sheet vs inline surface, whether Chat converges, and the forgiven-near-miss treatment (DES-38, DES-40, DES-42) |
 | `28-checkpoint-sentences.html` | Checkpoint sentence review — hub card, listen-back vs produce modes, grading that never blocks, and the ring sampler (DES-44, DES-45) |
+| `29-asr-numerals.html` | Recogniser numerals — value-aware folding, and whether "You said" shows the verbatim transcript or the folded characters (DES-48) |
 | `../styleguide.html` | Live reference for everything above |
 
 **Paths:** the mockups live in `docs/design/mockups/`, and `styleguide.html`

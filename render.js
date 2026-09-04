@@ -104,9 +104,19 @@ function renderSentSpeakSheet() {
     mismatch:  '',
   }[status] || '';
 
-  const heardJyutping = sp.heard ? charsToJyutping(sp.heard) : '';
-  const heardLine = sp.heard
-    ? `<div class="speak-heard">You said: <strong>${sp.heard}</strong>${heardJyutping ? `<div class="speak-heard-jp">${heardJyutping}</div>` : ''}</div>`
+  // DES-48: the recogniser writes spoken numbers as digits, so 十 (sap6) comes
+  // back as "10". Fold before BOTH the characters and their jyutping, from the
+  // same foldAsrNumerals() the comparison uses, so this line can never disagree
+  // with the breakdown grid below it about what a number was. Folding is the
+  // more faithful reading, not a looser one — speech contains no digits, so the
+  // digit was the recogniser's transcription choice, and undoing it recovers
+  // what was said. It also matters that every glyph here is one the learner can
+  // read back: charsToJyutping() gives digits no syllable at all, so an unfolded
+  // "3月10號" printed six syllables under eight spoken ones.
+  const heardShown  = sp.heard ? foldAsrNumerals(sp.heard) : '';
+  const heardJyutping = heardShown ? charsToJyutping(heardShown) : '';
+  const heardLine = heardShown
+    ? `<div class="speak-heard">You said: <strong>${heardShown}</strong>${heardJyutping ? `<div class="speak-heard-jp">${heardJyutping}</div>` : ''}</div>`
     : '';
 
   const result = status === 'matched'
@@ -1225,9 +1235,12 @@ function renderCheckpointSentences() {
   // ── Result — reuses the v132/v133 machinery unchanged ──
   let result = '';
   if (sr.status === 'matched' || sr.status === 'mismatch') {
-    const heardJp = sr.heard ? charsToJyutping(sr.heard) : '';
-    const heardLine = sr.heard
-      ? `<div class="speak-heard">You said: <strong>${sr.heard}</strong>${heardJp ? `<div class="speak-heard-jp">${heardJp}</div>` : ''}</div>`
+    // DES-48 — see renderSentSpeakSheet() for why the fold applies to display
+    // and not only to matching.
+    const heardShown = sr.heard ? foldAsrNumerals(sr.heard) : '';
+    const heardJp = heardShown ? charsToJyutping(heardShown) : '';
+    const heardLine = heardShown
+      ? `<div class="speak-heard">You said: <strong>${heardShown}</strong>${heardJp ? `<div class="speak-heard-jp">${heardJp}</div>` : ''}</div>`
       : '';
     const verdict = sr.results[sr.idx];
     if (verdict === 'matched') {
@@ -1995,9 +2008,12 @@ function renderConversation() {
     // A learner who doesn't read Chinese gets nothing from the characters alone,
     // which is the whole reason charsToJyutping() exists — Chat was simply
     // missed when that landed.
-    const heardJp = cv.speakHeard ? charsToJyutping(cv.speakHeard) : '';
-    const heard = cv.speakHeard
-      ? `<div class="speak-heard">You said: <strong>${cv.speakHeard}</strong>${heardJp ? `<div class="speak-heard-jp">${heardJp}</div>` : ''}</div>`
+    // DES-48 — see renderSentSpeakSheet() for why the fold applies to display
+    // and not only to matching.
+    const heardShown = cv.speakHeard ? foldAsrNumerals(cv.speakHeard) : '';
+    const heardJp = heardShown ? charsToJyutping(heardShown) : '';
+    const heard = heardShown
+      ? `<div class="speak-heard">You said: <strong>${heardShown}</strong>${heardJp ? `<div class="speak-heard-jp">${heardJp}</div>` : ''}</div>`
       : '';
 
     const englishEl = cv.speakRevealed[step]

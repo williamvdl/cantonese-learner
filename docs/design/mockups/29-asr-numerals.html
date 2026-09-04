@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Recogniser numerals — what "You said" shows when the transcript comes back as digits</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Noto+Serif+TC:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  /* ── tokens, copied verbatim from styles.css :root at v139 — not re-derived ── */
+  :root {
+    --font-serif:   'Noto Serif TC', 'Fraunces', Georgia, 'Times New Roman', serif;
+    --font-ui:      'Inter', 'Noto Serif TC', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+    --font-display: 'Fraunces', 'Noto Serif TC', Georgia, serif;
+    --fs-micro:11px; --fs-meta:12px; --fs-small:13px; --fs-body:15px; --fs-lead:17px; --fs-h3:22px; --fs-h2:28px;
+    --lh-body:1.5;
+    --fw-regular:400; --fw-medium:500; --fw-semi:600; --fw-bold:700;
+    --sp-1:4px; --sp-2:8px; --sp-3:12px; --sp-4:16px; --sp-5:24px; --sp-6:32px;
+    --r-sm:8px; --r-md:12px; --r-lg:16px; --r-pill:999px; --tap-min:44px;
+    --elev-1: 0 1px 2px rgba(58,42,30,.04), 0 1px 3px rgba(58,42,30,.06);
+    --elev-2: 0 2px 4px rgba(58,42,30,.05), 0 4px 12px rgba(58,42,30,.08);
+    --dur-fast:120ms; --dur-base:200ms; --ease: cubic-bezier(0.4,0,0.2,1);
+    --ink:#1C1917; --ink-soft:#292524;
+    --parchment:#FFFFFF; --parchment-warm:#FAF8F5; --parchment-deep:#F0EBE4; --parchment-border:#EAE4DC;
+    --brand:#C2410C; --brand-tint:#FEF0E9; --brand-edge:#F5D9C9; --brand-dark:#9A3412; --brand-text-dark:#9A3412;
+    --jade:#15803D; --muted:#A8A29E; --muted-dark:#78716C;
+    --feedback-good:#16A34A; --feedback-good-tint:#DCFCE7; --feedback-good-text:#15803D; --jade-edge:#C9E7D3;
+    --feedback-bad:#B42318; --feedback-bad-tint:#FEF3F2; --feedback-bad-edge:#F5CFCB;
+    --header-bg:#6E2639; --header-text:#F7EEE8; --header-sub:rgba(255,255,255,.6); --header-icon:#F7EEE8;
+    --milestone: var(--header-bg); --milestone-tint:#FBF0F2; --milestone-edge:#EBD3D9;
+    --border: 1px solid var(--parchment-border);
+    --border-soft: 1px solid var(--parchment-deep);
+    /* the six TONES, verbatim from app.js */
+    --t1:#E74C3C; --t2:#E67E22; --t3:#c8a200; --t4:#27AE60; --t5:#2980B9; --t6:#8E44AD;
+  }
+  body{margin:0;background:var(--parchment-deep);font-family:var(--font-ui);color:var(--ink-soft);padding:24px 16px 72px}
+  .wrap{max-width:1360px;margin:0 auto}
+  h1{font-family:var(--font-display);font-size:var(--fs-h2);font-weight:var(--fw-medium);margin:0 0 6px;color:var(--ink)}
+  h2{font-family:var(--font-display);font-size:var(--fs-lead);font-weight:var(--fw-medium);margin:44px 0 6px;color:var(--ink)}
+  h3{font-size:var(--fs-small);font-weight:var(--fw-semi);margin:0 0 8px;color:var(--ink)}
+  .lede{font-size:var(--fs-small);line-height:1.6;color:var(--muted-dark);margin:0 0 8px;max-width:86ch}
+  .note{font-size:var(--fs-meta);line-height:1.65;color:var(--muted-dark);margin:8px 0 0;max-width:86ch}
+  .note b{color:var(--ink-soft)}
+  code{font-family:ui-monospace,Menlo,monospace;font-size:11px;background:var(--parchment-deep);padding:1px 5px;border-radius:4px}
+  .rec{display:inline-block;background:var(--feedback-good-tint);color:var(--feedback-good-text);font-size:9px;font-weight:var(--fw-semi);letter-spacing:.1em;text-transform:uppercase;padding:3px 6px;border-radius:4px;vertical-align:2px}
+  .found{display:inline-block;background:#FDF1E3;color:#9A5B10;font-size:9px;font-weight:var(--fw-semi);letter-spacing:.1em;text-transform:uppercase;padding:3px 6px;border-radius:4px;vertical-align:2px}
+  .callout{background:var(--parchment);border:1px solid #F0D9AE;border-left:3px solid #C9971E;border-radius:var(--r-md);padding:14px 16px;margin:14px 0 8px;max-width:86ch}
+  .callout h3{margin:0 0 6px}
+  .frames{display:flex;gap:22px;flex-wrap:wrap;align-items:flex-start;margin-top:16px}
+  .frame{width:392px}
+  .frame>.cap{font-size:var(--fs-micro);font-weight:var(--fw-semi);letter-spacing:.08em;text-transform:uppercase;color:var(--muted-dark);margin:0 0 8px}
+  .frame>.cap em{font-style:normal;color:var(--brand)}
+  .frame>.sub{font-size:var(--fs-meta);line-height:1.55;color:var(--muted-dark);margin:10px 0 0}
+  .table{border-collapse:collapse;font-size:var(--fs-meta);margin-top:12px;width:100%;background:var(--parchment);border-radius:var(--r-md);overflow:hidden}
+  .table th,.table td{text-align:left;padding:9px 12px;border-bottom:var(--border-soft);vertical-align:top}
+  .table th{font-size:var(--fs-micro);letter-spacing:.06em;text-transform:uppercase;color:var(--muted-dark);font-weight:var(--fw-semi);background:var(--parchment-warm)}
+  .mono{font-family:ui-monospace,Menlo,monospace;font-size:11px}
+
+  /* ── sheet shell, copied from styles.css .sheet / .speak-card at v139 ── */
+  .sheet{background:var(--parchment);border-radius:var(--r-lg) var(--r-lg) 0 0;box-shadow:var(--elev-2);overflow:hidden;border:var(--border)}
+  .sheet-head{display:flex;align-items:center;justify-content:space-between;padding:14px 18px 12px;border-bottom:var(--border)}
+  .sheet-title{font-family:var(--font-display);font-size:var(--fs-lead);color:var(--ink);font-weight:var(--fw-medium)}
+  .sheet-grab{width:36px;height:4px;border-radius:var(--r-pill);background:var(--parchment-deep);margin:8px auto 0}
+  .speak-card{background:var(--parchment);border-radius:var(--r-lg);padding:20px 18px;border:var(--border);box-shadow:var(--elev-1);margin:14px;text-align:center}
+  .speak-target{font-family:var(--font-serif);font-size:26px;color:var(--ink);line-height:1.35;margin-bottom:6px}
+  .speak-target-jp{font-size:var(--fs-body);font-weight:var(--fw-bold);margin-bottom:4px}
+  .speak-target-en{font-size:var(--fs-small);color:var(--muted-dark);margin-bottom:16px}
+  .speak-heard{background:var(--parchment-warm);border-radius:var(--r-sm);padding:10px 14px;margin-bottom:14px;font-size:18px;color:var(--ink)}
+  .speak-heard-jp{font-size:var(--fs-meta);color:var(--muted-dark);margin-top:2px}
+  .speak-result-good{background:var(--feedback-good-tint);border:1px solid var(--jade);color:var(--feedback-good-text);padding:12px 16px;border-radius:var(--r-sm);font-weight:var(--fw-bold);margin-bottom:14px}
+  .speak-result-close{background:var(--parchment-warm);border:1px solid var(--parchment-border);color:var(--ink-soft);padding:12px 16px;border-radius:var(--r-sm);margin-bottom:14px;font-size:var(--fs-small)}
+  .speak-breakdown{display:flex;flex-wrap:wrap;justify-content:center;gap:4px 10px;margin-top:10px;padding:10px;background:var(--parchment);border-radius:var(--r-sm)}
+  .speak-breakdown .bd-col{display:flex;flex-direction:column;align-items:center;gap:2px;min-width:32px}
+  .speak-breakdown .bd-char{font-size:20px;font-weight:var(--fw-bold);line-height:1;font-family:var(--font-serif)}
+  .speak-breakdown .bd-status{font-size:var(--fs-small);line-height:1}
+  .speak-breakdown .bd-jp{font-size:var(--fs-micro);line-height:1;white-space:nowrap}
+  .done-btn{display:block;width:calc(100% - 28px);margin:0 14px 16px;background:var(--brand);color:#fff;border:none;border-radius:var(--r-pill);padding:14px;font-size:var(--fs-body);font-weight:var(--fw-semi);font-family:var(--font-ui)}
+  .t1{color:var(--t1)}.t2{color:var(--t2)}.t3{color:var(--t3)}.t4{color:var(--t4)}.t5{color:var(--t5)}.t6{color:var(--t6)}
+  .jp b{font-weight:700}
+  .gap-flag{outline:2px dashed var(--feedback-bad);outline-offset:3px;border-radius:4px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<h1>Recogniser numerals — 29</h1>
+<p class="lede">
+  Reported from a device on 2026-09-03 against the sentence 我生日係三月十號 (ngo5 saang1 jat6 hai6 saam1 jyut6 sap6 hou6),
+  “My birthday is the 10th of March.” The learner said it <b>correctly</b>. Chrome on Android transcribed it as
+  <code>我生日係3月10號</code>, writing the spoken numbers as digits. Both faults below follow from that single
+  transcription habit, and both were reproduced from the live code, not inferred from the screenshot.
+</p>
+
+<div class="callout">
+  <h3>The fold is where this starts <span class="found">measured</span></h3>
+  <p class="note">
+    <code>normalizeChinese()</code> already folds digits to Chinese numerals (DES-46) — but <b>per digit</b>, so
+    <code>10</code> becomes 一零 (jat1 ling4) rather than 十 (sap6). Its comment gives the reason: getting place value
+    right “would need to know the target”. <b>That premise is wrong, and the corpus says so.</b> Every one of the
+    <b>24 distinct numeral runs</b> across the 101 corpus lines that contain one is a <b>value form</b> — 十一, 三十五,
+    四十, 一百, 一百八十, 二百, 五百, 一千. There is not a single digit-string reading (no 二零一零-style year, no phone
+    number), so there is nothing for the target to disambiguate. A value-aware fold needs no target at all.
+  </p>
+</div>
+
+<h2>What the two faults actually are</h2>
+<table class="table">
+  <tr><th style="width:150px">Fault</th><th>Reproduced</th><th style="width:230px">Cause</th></tr>
+  <tr>
+    <td><b>十 is accused</b></td>
+    <td class="mono">alignChars('我生日係三月一零號','我生日係三月十號') →<br>十 = {status:'wrong', heardChar:'零'}</td>
+    <td>Per-digit fold turns a correct utterance into a visible error. The sentence still <i>passed</i> (2 edits, allowance 2), so the learner is told “Close” and shown a red 零 for a syllable they said perfectly.</td>
+  </tr>
+  <tr>
+    <td><b>Two syllables vanish</b></td>
+    <td class="mono">charsToJyutping('我生日係3月10號') →<br>ngo5 saang1 jat6 hai6 jyut6 hou6</td>
+    <td><code>charsToJyutping()</code> returns <code>''</code> for any character outside <code>[\u4e00-\u9fff]</code>, so digits get no syllable slot at all — silently, with no <code>?</code> marker.</td>
+  </tr>
+</table>
+<p class="note">
+  The second one matters more than it looks. DES-43 settled that for an audience assumed not to read Chinese, a
+  character with no jyutping is <b>not partial information, it is no information</b> — and it set the coverage target at
+  ~100% for exactly that reason. Digits were never in scope of that check, so a gap re-opened underneath it. The
+  <code>jp-unknown</code> “?” marker that DES-41 added as the honesty rule doesn’t fire either, because the character is
+  skipped before the lookup rather than failing it.
+</p>
+
+<h2>§1 — The fold fix, which is not a choice</h2>
+<p class="lede">
+  Value-aware folding of 1–4 digit runs. Runs of 5+ digits keep the per-digit fold, because those are the case where a
+  value reading really would be a guess (a phone number is read digit by digit). Verified against all 21 forms below,
+  which include every multi-character run the corpus uses.
+</p>
+<table class="table">
+  <tr><th>Heard</th><th>Folds to</th><th>Heard</th><th>Folds to</th><th>Heard</th><th>Folds to</th></tr>
+  <tr><td>0</td><td>零</td><td>20</td><td>二十</td><td>100</td><td>一百</td></tr>
+  <tr><td>3</td><td>三</td><td>30</td><td>三十</td><td>105</td><td>一百零五</td></tr>
+  <tr><td>10</td><td><b>十</b></td><td>35</td><td>三十五</td><td>180</td><td>一百八十</td></tr>
+  <tr><td>11</td><td>十一</td><td>38</td><td>三十八</td><td>200</td><td>二百</td></tr>
+  <tr><td>12</td><td>十二</td><td>40</td><td>四十</td><td>500</td><td>五百</td></tr>
+  <tr><td>15</td><td>十五</td><td>50</td><td>五十</td><td>1000</td><td>一千</td></tr>
+  <tr><td>99</td><td>九十九</td><td>9</td><td>九</td><td>98765</td><td>九八七六五 <span style="color:var(--muted-dark)">(5+, per digit)</span></td></tr>
+</table>
+<p class="note">
+  <b>Note 10–19 has its own rule:</b> 十 and 十一, never 一十 or 一十一 — that is the form the corpus authors
+  (十一, 十二, 十五 all appear) and the form that is actually said.
+</p>
+
+<div class="callout">
+  <h3>One residual gap, not fixed here, deliberately <span class="found">open question</span></h3>
+  <p class="note">
+    兩 (loeng5) is the <b>second most common numeral in the corpus, 12 occurrences</b>, and a value fold of
+    <code>2</code> produces 二 (ji6), not 兩. The digit <code>2</code> is the recogniser <i>declining to choose</i>
+    between them, so this is a transcription ambiguity rather than a learner error — but there is <b>no probe data
+    showing the recogniser actually returns <code>2</code> where 兩 was said</b>, so building a rule for it now would be
+    guessing at a problem that may not exist. Proposed: leave it, and let a device session tell us. Worth knowing
+    it is there, because if it does bite, it will look exactly like the 十 fault above.
+  </p>
+</div>
+
+<h2>§2 — The display choice, which is a real one</h2>
+<p class="lede">
+  The fold above fixes the breakdown grid on its own — 十 gets its tick back and the panel turns green. What it does
+  <em>not</em> settle is the “You said” line, which prints <code>sp.heard</code> raw. Both options below are shown
+  <b>after</b> the §1 fix.
+</p>
+
+<div class="frames">
+
+  <!-- CURRENT -->
+  <div class="frame">
+    <p class="cap"><em>Current — v139, the reported defect</em></p>
+    <div class="sheet">
+      <div class="sheet-grab"></div>
+      <div class="sheet-head"><span class="sheet-title">Say it back</span></div>
+      <div class="speak-card">
+        <div class="speak-target">我生日係三月十號。</div>
+        <div class="speak-target-jp jp"><span class="t5">ngo5</span> <span class="t1">saang1</span> <span class="t6">jat6</span> <span class="t6">hai6</span> <span class="t1">saam1</span> <span class="t6">jyut6</span> <span class="t6">sap6</span> <span class="t6">hou6</span>.</div>
+        <div class="speak-target-en">My birthday is the 10th of March.</div>
+        <div class="speak-heard">
+          You said: <strong>我生日係3月10號</strong>
+          <div class="speak-heard-jp jp gap-flag"><span class="t5">ngo5</span> <span class="t1">saang1</span> <span class="t6">jat6</span> <span class="t6">hai6</span> <span class="t6">jyut6</span> <span class="t6">hou6</span></div>
+        </div>
+        <div class="speak-result-close">
+          Close — here’s what I heard.
+          <div class="speak-breakdown">
+            <div class="bd-col"><div class="bd-char">我</div><div class="bd-status" style="color:var(--feedback-good-text);font-weight:600">✓</div><div class="bd-jp t5" style="font-weight:700">ngo5</div></div>
+            <div class="bd-col"><div class="bd-char">生</div><div class="bd-status" style="color:var(--feedback-good-text);font-weight:600">✓</div><div class="bd-jp t1" style="font-weight:700">saang1</div></div>
+            <div class="bd-col"><div class="bd-char">日</div><div class="bd-status" style="color:var(--feedback-good-text);font-weight:600">✓</div><div class="bd-jp t6" style="font-weight:700">jat6</div></div>
+            <div class="bd-col"><div class="bd-char">係</div><div class="bd-status" style="color:var(--feedback-good-text);font-weight:600">✓</div><div class="bd-jp t6" style="font-weight:700">hai6</div></div>
+            <div class="bd-col"><div class="bd-char">三</div><div class="bd-status" style="color:var(--feedback-good-text);font-weight:600">✓</div><div class="bd-jp t1" style="font-weight:700">saam1</div></div>
+            <div class="bd-col"><div class="bd-char">月</div><div class="bd-status" style="color:var(--feedback-good-text);font-weight:600">✓</div><div class="bd-jp t6" style="font-weight:700">jyut6</div></div>
+            <div class="bd-col gap-flag"><div class="bd-char" style="color:var(--brand-text-dark)">十</div><div class="bd-status" style="color:var(--brand);font-weight:600;font-size:14px">零</div><div class="bd-jp" style="color:var(--brand-text-dark);font-weight:700">sap6</div></div>
+            <div class="bd-col"><div class="bd-char">號</div><div class="bd-status" style="color:var(--feedback-good-text);font-weight:600">✓</div><div class="bd-jp t6" style="font-weight:700">hou6</div></div>
+          </div>
+        </div>
+      </div>
+      <button class="done-btn">✓ Done</button>
+    </div>
+    <p class="sub"><b>Two dashed outlines mark the faults.</b> Six syllables printed under eight spoken ones, and a
+      correct 十 accused of being 零. Nothing the learner did produced either.</p>
+  </div>
+
+  <!-- OPTION A -->
+  <div class="frame">
+    <p class="cap"><em>MOCK-29-A — keep the transcript verbatim</em></p>
+    <div class="sheet">
+      <div class="sheet-grab"></div>
+      <div class="sheet-head"><span class="sheet-title">Say it back</span></div>
+      <div class="speak-card">
+        <div class="speak-target">我生日係三月十號。</div>
+        <div class="speak-target-jp jp"><span class="t5">ngo5</span> <span class="t1">saang1</span> <span class="t6">jat6</span> <span class="t6">hai6</span> <span class="t1">saam1</span> <span class="t6">jyut6</span> <span class="t6">sap6</span> <span class="t6">hou6</span>.</div>
+        <div class="speak-target-en">My birthday is the 10th of March.</div>
+        <div class="speak-heard">
+          You said: <strong>我生日係3月10號</strong>
+          <div class="speak-heard-jp jp"><span class="t5">ngo5</span> <span class="t1">saang1</span> <span class="t6">jat6</span> <span class="t6">hai6</span> <span class="t1">saam1</span> <span class="t6">jyut6</span> <span class="t6">sap6</span> <span class="t6">hou6</span></div>
+        </div>
+        <div class="speak-result-good">
+          ✓ Great! You said it correctly.
+          <div class="speak-breakdown">
+            <div class="bd-col"><div class="bd-char">我</div><div class="bd-status" style="color:var(--feedback-good-text);font-weight:600">✓</div><div class="bd-jp t5" style="font-weight:700">ngo5</div></div>
+            <div class="bd-col"><div class="bd-char">生</div><div class="bd-status" style="color:var(--feedback-good-text);font-weight:600">✓</div><div class="bd-jp t1" style="font-weight:700">saang1</div></div>
+            <div class="bd-col"><div class="bd-char">日</div><div class="bd-status" style="color:var(--feedback-good-text);font-weight:600">✓</div><div class="bd-jp t6" style="font-weight:700">jat6</div></div>
+            <div class="bd-col"><div class="bd-char">係</div><div class="bd-status" style="color:var(--feedback-good-text);font-weight:600">✓</div><div class="bd-jp t6" style="font-weight:700">hai6</div></div>
+            <div class="bd-col"><div class="bd-char">三</div><div class="bd-status" style="color:var(--feedback-good-text);font-weight:600">✓</div><div class="bd-jp t1" style="font-weight:700">saam1</div></div>
+            <div class="bd-col"><div class="bd-char">月</div><div class="bd-status" style="color:var(--feedback-good-text);font-weight:600">✓</div><div class="bd-jp t6" style="font-weight:700">jyut6</div></div>
+            <div class="bd-col"><div class="bd-char">十</div><div class="bd-status" style="color:var(--feedback-good-text);font-weight:600">✓</div><div class="bd-jp t6" style="font-weight:700">sap6</div></div>
+            <div class="bd-col"><div class="bd-char">號</div><div class="bd-status" style="color:var(--feedback-good-text);font-weight:600">✓</div><div class="bd-jp t6" style="font-weight:700">hou6</div></div>
+          </div>
+        </div>
+      </div>
+      <button class="done-btn">✓ Done</button>
+    </div>
+    <p class="sub">
+      The heard line stays exactly what the recogniser returned; only the jyutping under it changes, gaining
+      <span class="t1" style="font-weight:700">saam1</span> and <span class="t6" style="font-weight:700">sap6</span>
+      for the digit runs.
+      <b>For:</b> “You said” keeps meaning <i>literally what came back</i>, and the app never puts characters in the
+      learner’s mouth. <b>Against:</b> the line still shows 3 and 10, which are characters the learner did not say and
+      cannot be read aloud in Cantonese from the page — and the count no longer lines up, since <code>10</code> is two
+      glyphs carrying one syllable.
+    </p>
+  </div>
+
+  <!-- OPTION B -->
+  <div class="frame">
+    <p class="cap"><em>MOCK-29-B — show the folded form</em></p>
+    <div class="sheet">
+      <div class="sheet-grab"></div>
+      <div class="sheet-head"><span class="sheet-title">Say it back</span></div>
+      <div class="speak-card">
+        <div class="speak-target">我生日係三月十號。</div>
+        <div class="speak-target-jp jp"><span class="t5">ngo5</span> <span class="t1">saang1</span> <span class="t6">jat6</span> <span class="t6">hai6</span> <span class="t1">saam1</span> <span class="t6">jyut6</span> <span class="t6">sap6</span> <span class="t6">hou6</span>.</div>
+        <div class="speak-target-en">My birthday is the 10th of March.</div>
+        <div class="speak-heard">
+          You said: <strong>我生日係三月十號</strong>
+          <div class="speak-heard-jp jp"><span class="t5">ngo5</span> <span class="t1">saang1</span> <span class="t6">jat6</span> <span class="t6">hai6</span> <span class="t1">saam1</span> <span class="t6">jyut6</span> <span class="t6">sap6</span> <span class="t6">hou6</span></div>
+        </div>
+        <div class="speak-result-good">
+          ✓ Great! You said it correctly.
+          <div class="speak-breakdown">
+            <div class="bd-col"><div class="bd-char">我</div><div class="bd-status" style="color:var(--feedback-good-text);font-weight:600">✓</div><div class="bd-jp t5" style="font-weight:700">ngo5</div></div>
+            <div class="bd-col"><div class="bd-char">生</div><div class="bd-status" style="color:var(--feedback-good-text);font-weight:600">✓</div><div class="bd-jp t1" style="font-weight:700">saang1</div></div>
+            <div class="bd-col"><div class="bd-char">日</div><div class="bd-status" style="color:var(--feedback-good-text);font-weight:600">✓</div><div class="bd-jp t6" style="font-weight:700">jat6</div></div>
+            <div class="bd-col"><div class="bd-char">係</div><div class="bd-status" style="color:var(--feedback-good-text);font-weight:600">✓</div><div class="bd-jp t6" style="font-weight:700">hai6</div></div>
+            <div class="bd-col"><div class="bd-char">三</div><div class="bd-status" style="color:var(--feedback-good-text);font-weight:600">✓</div><div class="bd-jp t1" style="font-weight:700">saam1</div></div>
+            <div class="bd-col"><div class="bd-char">月</div><div class="bd-status" style="color:var(--feedback-good-text);font-weight:600">✓</div><div class="bd-jp t6" style="font-weight:700">jyut6</div></div>
+            <div class="bd-col"><div class="bd-char">十</div><div class="bd-status" style="color:var(--feedback-good-text);font-weight:600">✓</div><div class="bd-jp t6" style="font-weight:700">sap6</div></div>
+            <div class="bd-col"><div class="bd-char">號</div><div class="bd-status" style="color:var(--feedback-good-text);font-weight:600">✓</div><div class="bd-jp t6" style="font-weight:700">hou6</div></div>
+          </div>
+        </div>
+      </div>
+      <button class="done-btn">✓ Done</button>
+    </div>
+    <p class="sub">
+      The heard line shows the folded characters. <b>The argument for it is that this is <i>more</i> faithful, not
+      less:</b> speech contains no digits. Writing 十 as <code>10</code> is a transcription convention the recogniser
+      chose, so undoing it recovers what was said rather than editing it. Every glyph on the line is then something the
+      learner can read back and pronounce. <b>Against:</b> “You said” is no longer byte-for-byte the transcript, so if
+      the fold is ever wrong the app misquotes the learner — and it is the only place that would show it.
+    </p>
+  </div>
+
+</div>
+
+<h2>§3 — Recommendation</h2>
+<p class="lede">
+  <b>MOCK-29-B, the folded form</b>, and the reason is the audience rule DES-43 already settled rather than a fresh
+  preference. A learner assumed not to read Chinese cannot do anything with <code>3月10號</code>: the digits are
+  unreadable as Cantonese and the jyutping line under them is the only route to the sound. Option A leaves a line whose
+  glyph count and syllable count disagree with no way to tell which digit owns which syllable, which is the same
+  “partial information is no information” problem DES-43 rejected, just smaller.
+</p>
+<p class="note">
+  <b>The case against B is real and worth stating rather than waving past</b> — it is the only surface that quotes the
+  learner, so a wrong fold misquotes them. That risk is bounded by §1: the fold is exact for every form the corpus
+  contains, and 5+ digit runs stay per-digit rather than being guessed at. If B is chosen, the safer build is to fold
+  <i>for display</i> using the same single function the comparison uses, so the two can never drift into disagreeing
+  about what a number was — which is the failure mode that would actually hurt.
+</p>
+<p class="note">
+  <b>If neither appeals</b>, there is a third shape not drawn here because it costs more than it returns: show both,
+  e.g. “You said: 我生日係三月十號 <span style="color:var(--muted-dark)">(heard as 3月10號)</span>”. It is honest and it
+  is also clutter on a line that already carries a character row and a jyutping row.
+</p>
+
+</div>
+</body>
+</html>

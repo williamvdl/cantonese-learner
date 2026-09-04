@@ -4,7 +4,7 @@
 questions behind it. Meant to be short-lived — when a piece ships, fold its
 outcome into STATUS.md and clear this file back down for the next thing.*
 
-Last updated: 2026-09-03 · sw.js at v139
+Last updated: 2026-09-03 · sw.js at v140
 
 ## Nothing in progress
 
@@ -15,8 +15,13 @@ work is complete: `tools/wiring-check.js` (v138), the four dead controls it
 found, the `snapshot-harness.js` `NAV_FIELDS` drift, and then the delegation
 refactor itself with DES-47 (v139). Nothing from that arc is open.
 
-**v139 device QA is done** — confirmed on the Pixel, nothing to carry. Nothing
-in progress.
+**v139 device QA is done** — confirmed on the Pixel, nothing to carry.
+
+**v140 is delivered and awaiting device QA** — two reported defects, the Chat
+play button (invisible during playback, right-hand bubbles only) and the
+recogniser-numeral handling on the speak surfaces (DES-48, MOCK-29-B). Both
+reproduced from the live code before being changed and verified after. Nothing
+else in progress.
 
 **Next, when picked up:** the Part A items in `docs/PRODUCTISATION_REVIEW.md`.
 The two longest-lead ones are unchanged and neither is engineering: buying a

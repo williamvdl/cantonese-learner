@@ -13,7 +13,7 @@ not a history log. Approved design decisions and whether they were built live in
 > convention (`v121 — <what changed>`) so this file stops being load-bearing on
 > its own.
 
-Last updated: 2026-09-03 · sw.js at v139
+Last updated: 2026-09-03 · sw.js at v140
 
 ## Confirmed live and working
 - **Checkpoint sentence review** (v134, DES-44/45). Third checkpoint activity:
@@ -239,8 +239,45 @@ orphan hues `#B7861E`, `#e4d4ad`, `#8a6716`,
 | — | v138 | **Four pieces of dead code removed, and the check that should have found them years earlier.** New standing check `tools/wiring-check.js` asserts both directions of the markup-to-handler agreement — *no stranded handler* (bound to something no render function emits) and *no unwired control* (rendered but nothing binds it) — over `render.js`, `app.js` and `index.html`. It is the backlog item *"give `dead-css.js` a JS direction, or write it a sibling"*, built to the candidate approach that item specified. **Two of its four findings were already known and logged**: the `getElementById('speed-' + s)` loop and the `[data-drawer-speed]` handler, both retired-drawer remnants found by the 2026-08-01 doc audit and carried in BACKLOG.md ever since. **Two were not**: the `[data-cat-jump]` handler and the `id="cat-anchor-${cat.key}"` markup at `renderTopicsScreen()`, the two halves of a removed category-jump feature, each invisible to every existing check and to the audit that found the other pair. All four unreachable, so the deploy is behaviourally identical — the only source change with any effect is a corrected comment. Also fixed: `tools/snapshot-harness.js` held a hand-written copy of `NAV_FIELDS` with 14 entries against `app.js`'s 15, missing `sentSpeakOpen` since v130, so for seven deploys it passed while testing a stale list; it now reads the array out of `app.js` and throws if the extraction misses. **Ten standing checks, all green.** |
 
 | DES-47 | v139 | **Event delegation — `attachEvents()` is gone.** One listener on `#app` instead of 100 re-bound on every render. `attachEvents()` was 1,188 lines, 36% of `render.js`, and its length was architectural rather than neglect: rendering sets `app.innerHTML`, destroying every listener, so the function had to be the union of every screen's wiring in one scope with all 52 lookups guarded by `if (el)`. **That guard is why a broken control was silent** — rename an id and the guard steps over it and the button does nothing, with no error and no failing check. `#app` is emptied but never replaced, so the three delegated listeners are attached once and survive every render. **No markup changed**: the dispatch table is keyed on the id and data-attribute names that already exist, rather than on a new `data-action` attribute, which was the design first proposed and dropped after measuring — rewriting 39 attributes across every screen would have been the larger and far less verifiable half of the job. **DES-47 (innermost tapped control wins) is the behavioural half**, and it retires twelve local defences; see the register row and the note below. Also folded in: `freshConvoState()` replaces four hand-written copies of the conversation reset literal, and the two listen-mode auto-play blocks move into `afterRender()`, which is where everything that must happen once per render but is not a handler now lives — the easiest thing to lose in this refactor, since they only ran before because `attachEvents()` did. Verified: every control preserved one-for-one (55 ids and 47 attributes before, 55 and 47 after, none lost, none added, checked by script against the pre-refactor file); a purpose-built dispatch test proved innermost-wins, one-action-per-tap, no-op on unregistered controls, and correct resolution of all four declared nested pairs against the real table. `wiring-check.js` now reads the dispatch table — the one function it was designed to have to change — and gained a fourth assertion that neither retired convention can reappear. `sentence-review-harness.js`'s wiring assertion was updated for the same reason and re-verified to fail on a removed dispatch entry. **Ten standing checks, all green.** **Confirmed on device 2026-09-03** (Pixel/Chrome): all four nested pairs resolve to the inner control, the re-derived closures in Quiz, Word Review and Checkpoint Words follow the current word, listen-mode prompts play once per question, the Translate field keeps its caret, and the path diamonds draw on first load. |
+| DES-48 | v140 | **Two device-reported defects on the speak surfaces, one root each, shipped together.** *The Chat play button was invisible during playback, on the learner's own bubbles only.* Not missing — brand-orange drawn on a brand-orange circle; sampling the reported screenshot showed the circle a uniform `#C2410C` with no glyph in it at all. `.bubble-row.right .bubble-play` was 0,3,0 and `.bubble-play.is-playing` below it 0,2,0, so the right side took the playing *background* and kept the resting *colour*. The deleted rule set `border-color: var(--brand-edge); color: var(--brand)`, which is declaration-for-declaration what `.btn-icon--brand` already gives that button at its only call site — a duplicate whose sole effect was to outrank the state below it, so **resting appearance is unchanged and the fix is invisible until you press play**. The `.cp-convo` pair has the opposite specificity ordering and was never affected, checked rather than assumed. The v125 comment claiming this bug class was retired is corrected in place: it was not, it survived in the one rule v125 left behind. *A correctly spoken sentence was accused of an error* — see DES-48. The recogniser wrote spoken numbers as digits, the per-digit fold from DES-46 turned `10` into 一零 rather than 十 (sap6), and `charsToJyutping()` silently dropped the digits so six syllables printed under eight spoken ones. `foldAsrNumerals()` is now value-aware for 1–4 digit runs and shared by matching *and* display, and all three "You said" renderers fold before printing. Verified end-to-end on the reported sentence: 8 of 8 ticks, green panel, no red mark. **Ten standing checks green**; `asr-replay-harness.js` gains the 24-form fold table, the reported case pinned by value, and an assertion that the fold never alters an authored target; `jyutping-check.js` gains a source-level assertion that no renderer prints raw heard state. Both mutation-tested. Fixture pass rate unchanged at 3/13, as expected — the fold was never what those attempts failed on. |
 
 ### Notes worth carrying forward
+
+- **A rule that duplicates a primitive is not harmless — it outranks the states
+  below it.** The v140 play-button defect was `.bubble-row.right .bubble-play`
+  restating `.btn-icon--brand`'s two declarations at higher specificity, so
+  `.is-playing` could set a background but never the matching colour. Nothing
+  looked wrong at rest, which is exactly why it survived: **the duplicate and the
+  primitive agree until a state tries to override one of them.** Two things
+  follow. Before adding a rule, check whether the element already carries a class
+  that says the same thing (this is the *check whether a primitive already
+  exists* rule arriving from the opposite direction — not an unused primitive,
+  but a used one restated). And when a state rule appears not to apply, compare
+  specificity against every rule touching the same property rather than reading
+  the state rule alone. **The v125 comment asserting this bug class was retired
+  was wrong for four releases**, and asserted it in the same file as the rule
+  that kept it alive; a comment claiming a class of bug is closed should say
+  which rules were counted.
+- **`dead-css.js` cannot see this, and the overridden-declaration script still
+  isn't built.** Reinstating the faulty rule as a mutation test passes every one
+  of the ten standing checks. That backlog item now has a named cost rather than
+  a hypothetical one: it would have caught the v140 defect at the point it was
+  written.
+- **A fold, a normalisation, or any repair applied before comparison must be
+  applied before display too, or the two will disagree in front of the user.**
+  DES-46's digit fold was scoped "for comparison only, never for display", and
+  that scoping is what produced the v140 numeral defect: the breakdown grid
+  compared against 十 while the "You said" line above it printed `10`, and the
+  jyutping under that printed neither. **The heard string reaches the screen
+  through more than one path, and a repair applied to one of them creates a
+  contradiction rather than a partial fix.** Both now route through
+  `foldAsrNumerals()`, asserted by `jyutping-check.js`.
+- **A silent skip is worse than a marked gap.** `charsToJyutping()` returns `''`
+  for anything outside `[\u4e00-\u9fff]`, so digits produced no syllable *and* no
+  `jp-unknown` marker — the DES-41 honesty rule never fired, because the
+  character was skipped before the lookup rather than failing it. A filter placed
+  ahead of a check quietly removes things from that check's scope. Worth asking of
+  any guard clause: does this skip something the check below was meant to catch?
 
 - **A defence written from what the markup looks like is not a defence.** Twelve
   local measures guarded nested controls before v139 — eight `stopPropagation()`

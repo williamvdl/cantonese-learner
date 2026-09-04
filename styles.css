@@ -735,8 +735,22 @@
   /* v125: the white-on-dark forms are retired with the saturated fill. Both
      sides now share the light-ground treatment, so `is-playing` needs only ONE
      rule — which is what retires the whole class of bug behind issue 9, rather
-     than patching the tie that produced it. */
-  .bubble-row.right .bubble-play { border-color: var(--brand-edge); color: var(--brand); }
+     than patching the tie that produced it.
+
+     v140: issue 9 was NOT retired — it survived in the one rule v125 left
+     behind. `.bubble-row.right .bubble-play` was 0,3,0 and `.is-playing` below
+     it is 0,2,0, so the right side kept `color: var(--brand)` while taking
+     `background: var(--brand)` — a brand icon on a brand circle, invisible for
+     the whole of playback on the user's own bubble. The deleted rule set
+     `border-color: var(--brand-edge); color: var(--brand)`, which is
+     declaration-for-declaration what `.btn-icon--brand` already gives the
+     button (it carries that class at the only call site, render.js). So it was
+     a duplicate whose sole effect was to outrank the state below it. Resting
+     appearance is unchanged; `.is-playing` can now actually apply.
+     The checkpoint pair below is safe and was checked, not assumed:
+     `.cp-convo .bubble-play` is 0,2,0 and its `.is-playing` sibling 0,3,0, so
+     the state wins there — the opposite ordering, which is why only one side
+     showed the fault. */
   .bubble-play.is-playing { background: var(--brand); border-color: var(--brand); color: #fff; }
 
   /* ── Checkpoint variant of the conversation. renderCheckpointConvo reuses the

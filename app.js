@@ -1843,25 +1843,70 @@ async function translateText(text, direction = 'en-yue') {
 // ── Speech recognition ───────────────────────────────────────────────────────
 let _recognition = null;
 
-// Arabic digit → Chinese numeral, for comparison only (never for display).
-// The recogniser normalises spoken numbers to digits: 一加二係三
-// (jat1 gaa1 ji6 hai6 saam1) came back from the probe as 一家衣鞋3, where the
-// final 3 IS saam1 — heard correctly, then unmatchable against 三 (saam1).
-// Targets are authored in characters and contain no digits, so this is a no-op
-// on the target side and only ever repairs the heard side.
-// Per-digit rather than value-aware: 23 becomes 二三 rather than 二十三
-// (ji6 sap6 saam1), which is still one edit from the target instead of three.
-// Getting multi-digit place value right would need to know the target, and this
-// runs before any target is in hand.
+// Arabic digit → Chinese numeral. The recogniser writes spoken numbers as
+// digits: 一加二係三 (jat1 gaa1 ji6 hai6 saam1) came back from the probe as
+// 一家衣鞋3, where the final 3 IS 三 (saam1) — heard correctly, then
+// unmatchable. Targets are authored in characters and contain no digits, so
+// this is a no-op on the target side and only ever repairs the heard side.
+//
+// VALUE-AWARE, not per digit (DES-48, correcting DES-46). The original fold
+// converted each digit separately, so 10 became 一零 (jat1 ling4) rather than
+// 十 (sap6) — which turned a correctly-spoken 我生日係三月十號 into a visible
+// error against its own target, the exact false-reject DES-39 exists to avoid.
+// DES-46's stated reason for going per-digit was that place value "would need
+// to know the target". Measured against the corpus, it doesn't: all 24 distinct
+// numeral runs across the 101 lines containing one are value forms (十一, 三十五,
+// 四十, 一百, 一百八十, 二百, 五百, 一千). There is no digit-string reading
+// anywhere in the content — no year, no phone number — so there is nothing for
+// a target to disambiguate.
+//
+// Runs of 5+ digits keep the per-digit fold, because that IS the case where a
+// value reading would be a guess: a long number is read digit by digit.
+//
+// KNOWN GAP, deliberately not closed: 兩 (loeng5) is the second most common
+// numeral in the corpus (12 occurrences) and a value fold of 2 gives 二 (ji6).
+// The digit 2 is the recogniser declining to choose between them, so this is a
+// transcription ambiguity rather than a learner error — but no probe has yet
+// shown the recogniser returning 2 where 兩 was said, so a rule for it would be
+// built against an imagined problem. Tracked in BACKLOG.md.
 const ASR_DIGITS = { '0':'零', '1':'一', '2':'二', '3':'三', '4':'四',
                      '5':'五', '6':'六', '7':'七', '8':'八', '9':'九' };
+// Index = power of ten, so ASR_PLACES[2] is the marker for the hundreds column.
+const ASR_PLACES = ['', '十', '百', '千'];
+
+// Fold every run of Arabic digits in `text` to its Chinese numeral form.
+// Punctuation and everything else passes through untouched, so this is safe to
+// use for DISPLAY as well as for comparison — and it is used for both, from
+// this one function, so the "You said" line and the breakdown grid can never
+// disagree about what a number was (DES-48).
+function foldAsrNumerals(text) {
+  return (text || '').replace(/[0-9]+/g, run => {
+    if (run.length > 4) return [...run].map(d => ASR_DIGITS[d]).join('');
+    const n = parseInt(run, 10);
+    if (n === 0) return '零';
+    const digits = String(n).split('').map(Number);
+    let out = '', pendingZero = false;
+    for (let i = 0; i < digits.length; i++) {
+      const d = digits[i], place = digits.length - 1 - i;
+      if (d === 0) { pendingZero = true; continue; }
+      // An interior zero collapses to a single 零 regardless of how many
+      // columns it spans: 1005 is 一千零五, not 一千零零五.
+      if (pendingZero && out) out += '零';
+      pendingZero = false;
+      // 10–19 is 十 / 十一, never 一十 / 一十一 — the form the corpus authors
+      // (十一, 十二, 十五 all appear) and the form actually spoken. Only when
+      // the 1 is the LEADING digit, so 110 stays 一百一十.
+      if (!(place === 1 && d === 1 && i === 0)) out += ASR_DIGITS[String(d)];
+      out += ASR_PLACES[place];
+    }
+    return out;
+  });
+}
 
 function normalizeChinese(text) {
   // Strip whitespace and Chinese punctuation, and fold Arabic digits to their
   // Chinese numerals, for comparison
-  return (text || '')
-    .replace(/[\s，。！？、,!?.\-]/g, '')
-    .replace(/[0-9]/g, d => ASR_DIGITS[d]);
+  return foldAsrNumerals((text || '').replace(/[\s，。！？、,!?.\-]/g, ''));
 }
 
 // Edit-distance (Levenshtein) between two strings. Order-sensitive.

@@ -42,6 +42,8 @@ const env = { console };
 vm.createContext(env);
 vm.runInContext([
   grabConst(/const ASR_DIGITS = \{[\s\S]*?\};/),
+  grabConst(/const ASR_PLACES = \[[\s\S]*?\];/),
+  grab('foldAsrNumerals'),
   grab('normalizeChinese'),
   grab('editDistance'),
   grabConst(/const SPEAK_FINAL_PARTICLES[\s\S]*?\]\);/),
@@ -113,6 +115,44 @@ for (const file of files) {
   if (!a10) fail('fixture has no attempt #10');
   else if (!/3|三/.test(a10.accumulated)) fail('attempt #10 no longer contains the digit — fixture changed');
   else ok('attempt #10 (一家衣鞋3) is present and exercises the fold');
+
+  // DES-48. The fold is VALUE-AWARE, and the table below is the whole
+  // specification — every multi-character numeral run the corpus actually
+  // contains is in it, derived by scanning data/topics/*.json rather than
+  // recalled. A per-digit regression (10 → 一零 rather than 十) is what this
+  // catches: it is invisible in normal use and shows up only as a correctly
+  // spoken sentence being marked wrong, which is the failure DES-39 exists to
+  // prevent. The 5+ digit row is not an edge case being tidied away — it is the
+  // one place a value reading WOULD be a guess, so it must stay per-digit.
+  const foldCases = [
+    ['0', '零'], ['3', '三'], ['9', '九'],
+    ['10', '十'], ['11', '十一'], ['12', '十二'], ['15', '十五'],
+    ['20', '二十'], ['30', '三十'], ['35', '三十五'], ['38', '三十八'],
+    ['40', '四十'], ['50', '五十'], ['99', '九十九'],
+    ['100', '一百'], ['105', '一百零五'], ['110', '一百一十'],
+    ['180', '一百八十'], ['200', '二百'], ['500', '五百'],
+    ['1000', '一千'], ['1005', '一千零五'], ['1024', '一千零二十四'],
+    ['98765', '九八七六五'],
+  ];
+  const foldBad = foldCases.filter(([inp, exp]) => env.foldAsrNumerals(inp) !== exp);
+  if (foldBad.length) foldBad.forEach(([inp, exp]) => fail(`fold ${inp} → "${env.foldAsrNumerals(inp)}", expected ${exp}`));
+  else ok(`value-aware fold correct on all ${foldCases.length} forms, incl. every multi-character run in the corpus`);
+
+  // The reported defect, pinned by value: a correctly spoken sentence whose
+  // transcript came back with digits must compare EQUAL to its target, not
+  // merely within the DES-39 edit allowance. Under the old per-digit fold this
+  // produced 我生日係三月一零號 and marked 十 (sap6) wrong with a red 零.
+  if (env.normalizeChinese('我生日係3月10號') !== env.normalizeChinese('我生日係三月十號。'))
+    fail('我生日係3月10號 does not normalise equal to its target — the v140 numeral defect is back');
+  else ok('我生日係3月10號 normalises equal to 我生日係三月十號 (ngo5 saang1 jat6 hai6 saam1 jyut6 sap6 hou6)');
+
+  // Targets are authored in characters, so the fold must never alter one.
+  // If this ever fires, the fold has started rewriting content rather than
+  // repairing transcripts.
+  const targets = [...new Set(data.attempts.map(a => a.target))].concat(['我生日係三月十號', '一百八十蚊', '十一點']);
+  const altered = targets.filter(t => env.foldAsrNumerals(t) !== t);
+  if (altered.length) fail(`the fold altered authored target(s): ${altered.join(', ')}`);
+  else ok('the fold is a no-op on every authored target — it only ever repairs the heard side');
 
   console.log('\n— 4. pass rate has not regressed —');
   console.log('     accumulation only:      ' + accOnly + ' / ' + data.attempts.length);

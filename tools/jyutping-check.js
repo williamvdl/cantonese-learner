@@ -194,6 +194,42 @@ console.log('\n— every "You said" surface shows jyutping —');
   else if (!bare) ok(`all ${found} "You said" renderers emit jyutping`);
 }
 
+// ── 7. Every "You said" line folds numerals before display ─────────────────
+// DES-48. charsToJyutping() returns '' for anything outside the CJK range, so
+// an Arabic digit gets no syllable slot AND no jp-unknown marker — it vanishes
+// silently, which is worse than the gap DES-41's "?" was built to make visible.
+// The recogniser writes spoken numbers as digits routinely, so any surface
+// printing raw heard text hits this. The fold has to happen before BOTH the
+// characters and the jyutping, and from foldAsrNumerals() specifically, so the
+// heard line and the breakdown grid below it can never disagree about what a
+// number was. Asserted at source level for the same reason as section 6: the
+// three renderers are a thousand lines apart and only a check ties them
+// together. Section 6 alone would pass on a renderer that folded neither.
+console.log('\n— every "You said" surface folds recogniser numerals —');
+{
+  const renderSrc = fs.readFileSync(path.join(ROOT, 'render.js'), 'utf8');
+  const lines = renderSrc.split('\n');
+  let checked = 0, unfolded = 0;
+  lines.forEach((line, i) => {
+    if (!line.includes('You said:')) return;
+    checked++;
+    // The heard string must be interpolated from a folded local, not straight
+    // from state (sp.heard / sr.heard / cv.speakHeard).
+    if (/\$\{(sp\.heard|sr\.heard|cv\.speakHeard)\}/.test(line)) {
+      unfolded++;
+      fail(`render.js:${i + 1} prints raw heard text — digits will render with no jyutping (DES-48)`);
+    }
+  });
+  const folds = (renderSrc.match(/foldAsrNumerals\(/g) || []).length;
+  if (folds < checked) fail(`${checked} "You said" renderers but only ${folds} foldAsrNumerals() calls in render.js`);
+  else if (!unfolded) ok(`all ${checked} "You said" renderers fold via foldAsrNumerals() before display`);
+
+  const appSrc = fs.readFileSync(path.join(ROOT, 'app.js'), 'utf8');
+  if (!/function normalizeChinese[\s\S]{0,240}foldAsrNumerals\(/.test(appSrc))
+    fail('normalizeChinese() no longer folds via foldAsrNumerals() — matching and display can now disagree about a number');
+  else ok('matching and display fold through the same function, so they cannot drift');
+}
+
 console.log('');
 if (failures) { console.log(`${failures} FAILURE(S)`); process.exit(1); }
 console.log('jyutping-check: all assertions pass');

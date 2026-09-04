@@ -263,7 +263,27 @@ pass. These are the loose ends they left or surfaced.*
   the same mistake as a sweep driven by remembered names. Wants a script (a sibling
   to `dead-css.js`, reporting selector + property + both line numbers) run once
   against the whole file, then a single deploy. **The script is the deliverable, not
-  the sweep** — without it this recurs.
+  the sweep** — without it this recurs. **Given a named cost at v140:** the Chat
+  play button was invisible for the whole of playback for four releases because
+  `.bubble-row.right .bubble-play` restated `.btn-icon--brand` at higher
+  specificity and so outranked `.is-playing`'s colour. Reinstating that rule as a
+  mutation test passes all ten standing checks. This is no longer a tidy-up with
+  no known victim — and note the scope it implies: the 41 selectors counted were
+  same-rule duplicates, whereas this one was a *cross-rule* override, which is the
+  harder and more damaging half. The script needs to cover both.
+
+- **兩 (loeng5) and the digit `2` — needs a probe, not a rule.** DES-48's numeral
+  fold is value-aware, so `2` becomes 二 (ji6). 兩 is the **second most common
+  numeral in the corpus at 12 occurrences**, and the digit `2` is the recogniser
+  declining to choose between the two — a transcription ambiguity, not a learner
+  error, and so the same shape as the 十/一零 fault DES-48 fixed. **No probe has
+  shown it actually happening**, which is why no rule was written: building for it
+  now would be guessing at a problem that may not exist, and the cheap version
+  (treat 二 and 兩 as equivalent) also excuses a genuine error, since 兩個 and 二個
+  are not interchangeable. What would settle it is a handful of device attempts on
+  sentences containing 兩, recorded as a fixture the way
+  `tail-probe-numbers-t1-s03.json` was. If it does bite, it will look exactly like
+  the 十 fault: a correct utterance marked wrong on one character.
 
 - **Row-type icons on the path timeline — now judgeable.** With emoji gone (DES-09)
   the lesson rows have no glyph at all. Not per topic: 42 would be needed and they
