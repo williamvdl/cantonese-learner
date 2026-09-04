@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Translate False-Reject Probe</title>
+<!--
+  tools/translate-reject-probe.html — how often does fuzzyMatch() reject a
+  CORRECT reading of a target that did not come from the corpus?
+
+  WHY THIS EXISTS
+  ---------------
+  Speak feedback works today on corpus sentences. The proposed extension grades
+  the learner against Gemini's translation output instead, and the leniency it
+  would use was not sized for that:
+
+      fuzzyMatch() allows floor(len/4) edits and requires an EXACT match below
+      four characters. That floor was chosen against corpus sentences, which
+      are long. Translate emits short answers constantly — 唔該 (m4 goi1),
+      好呀 (hou2 aa3) — and short is exactly where the rule has no slack.
+
+  So the question is narrow, and it is the cheapest one that could kill the
+  idea: on out-of-corpus targets, how often is a correct reading rejected, and
+  does the rate depend on length? Nothing else is measured here. Detection of
+  genuine errors is NOT in scope — DES-38 already forbids the app claiming a
+  tone verdict, so a missed error costs nothing this probe could act on.
+
+  THE PASS BAR — declared before any data exists, and binding
+  -----------------------------------------------------------
+  Taken from tools/asr-probe.html rather than invented, because the project has
+  already settled what "good enough" means for this class of feature and a
+  second, different bar would be a silent re-litigation of the first:
+
+      false rejects <= 10% is the requirement.
+
+  Applied here to two numbers, both of which must hold:
+
+      OVERALL   <= 10% of valid attempts rejected
+      SHORT     <= 10% within the 2-3 character bucket
+
+  The bucket is called out separately because an overall number can pass while
+  the short bucket fails outright — sixteen forgiving long items would bury six
+  brutal short ones, and short is what Translate actually produces.
+
+  This run MAY conclude:
+    SHIP GRADED   — both bars hold. The sheet shows matched / close / mismatch.
+    SHIP UNGRADED — either bar fails. The sheet shows "here's what I heard"
+                    with NO verdict. This is a real outcome, not a consolation
+                    prize: DES-38 already permits exactly this shape, and it is
+                    honest where a graded panel at 30% false rejects is not.
+    STOP          — the recogniser returns nothing usable often enough that
+                    there is no surface to build. Judged from the "no decode"
+                    count, which is reported separately and never counted as a
+                    rejection.
+
+  It may NOT conclude "ship graded, but tune fuzzyMatch until it passes". The
+  matcher is shared with three live surfaces; loosening it here would loosen it
+  under Chat, the Learn sheet and the checkpoint review, none of which asked.
+  If the numbers argue for a rule change, that is a separate decision with its
+  own evidence.
+
+  IT GRADES WITH THE APP'S OWN CODE, NOT A COPY
+  ----------------------------------------------
+  Every function that touches a verdict is lifted verbatim out of ../app.js at
+  page load by brace-matching extraction — the same technique
+  tools/sentence-review-harness.js uses. Nothing is reimplemented from the
+  spec. This is deliberate and it is the correction to a named past failure:
+  the ASR probe copied `lang`, `continuous` and `maxAlternatives` out of
+  startListening() and left behind the three Android final-result rules and the
+  dedupe pass sitting forty lines below, which cost three builds to rediscover.
+  Defensive-looking code is a record of what the platform actually does.
+
+  Lifted: startSpeechRecognition, resolveHeard, fuzzyMatch, normalizeChinese,
+  editDistance, deduplicateRepeats, alignChars, renderSpeakBreakdown,
+  charsToJyutping, colorJyutping, TONES, SPEAK_FINAL_PARTICLES, ASR_DIGITS.
+  If app.js renames any of them this page fails loudly on load rather than
+  quietly measuring a stale copy.
+
+  NO sw.js BUMP — not precached, not linked from the app, shares no CSS.
+
+  BEFORE RUNNING
+  --------------
+  1. GEMINI_KEY=<key> node tools/translate-probe-set.js
+  2. Serve the repo root over http (the page fetches ../app.js). On the Pixel,
+     the deployed GitHub Pages copy works: .../tools/translate-reject-probe.html
+  3. Read each target aloud ONCE, normally. Not carefully, not slowly — the
+     measurement is about ordinary speech.
+  4. Discard any attempt you know you fluffed. Discards are counted, not hidden:
+     if they cluster in one bucket that is itself a finding about difficulty.
+-->
+<style>
+  :root {
+    --ink:#2b2724; --ink-soft:#5b544e; --muted:#8c837b; --muted-dark:#6b635c;
+    --parchment:#faf7f2; --parchment-warm:#f5efe6; --parchment-border:#e2d8c8;
+    --brand:#8c2f39; --brand-text-dark:#6d242c; --brand-tint:#f6ecec;
+    --feedback-good:#e8f2e8; --feedback-good-text:#2f6b3a; --feedback-bad:#a8323f;
+  }
+  * { box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+  body { margin:0; padding:14px; font-family:system-ui,-apple-system,"Segoe UI",sans-serif;
+         background:var(--parchment); color:var(--ink); line-height:1.5; }
+  h1 { font-size:17px; margin:0 0 2px; }
+  .stamp { font-size:11px; color:var(--muted); margin-bottom:12px; }
+  .card { background:#fff; border:1px solid var(--parchment-border); border-radius:12px;
+          padding:14px; margin-bottom:12px; }
+  .bar { font-size:12px; color:var(--ink-soft); background:var(--parchment-warm);
+         border:1px solid var(--parchment-border); border-radius:10px; padding:10px 12px;
+         margin-bottom:12px; }
+  .meta { font-size:11px; color:var(--muted); text-transform:uppercase; letter-spacing:.06em; }
+  .target { font-size:32px; line-height:1.35; margin:8px 0 4px; }
+  .tjp { font-size:14px; margin-bottom:6px; }
+  .ten { font-size:12px; color:var(--muted-dark); }
+  button { font:inherit; border-radius:10px; border:1px solid var(--parchment-border);
+           background:#fff; color:var(--ink); padding:11px 14px; min-height:44px; }
+  button:disabled { opacity:.45; }
+  .primary { background:var(--brand); border-color:var(--brand); color:#fff; font-weight:600; width:100%; }
+  .row { display:flex; gap:8px; margin-top:10px; }
+  .row button { flex:1; }
+  .heard { font-size:20px; min-height:28px; margin:6px 0; }
+  .verdict { font-weight:700; margin-top:8px; }
+  .ok  { color:var(--feedback-good-text); }
+  .no  { color:var(--feedback-bad); }
+  .nul { color:var(--muted-dark); }
+  .speak-breakdown { display:flex; flex-wrap:wrap; gap:10px; margin-top:8px; }
+  .bd-col { text-align:center; min-width:26px; }
+  .bd-char { font-size:20px; } .bd-status { font-size:12px; } .bd-jp { font-size:11px; }
+  .jp-unknown { display:inline-block; border:1px solid var(--parchment-border);
+                border-radius:3px; padding:0 3px; color:var(--muted); font-size:11px; }
+  .jp-ambiguous { border-bottom:1px dotted currentColor; }
+  table { width:100%; border-collapse:collapse; font-size:12px; }
+  td,th { padding:4px 6px; border-bottom:1px solid var(--parchment-border); text-align:left; }
+  th { color:var(--muted); font-weight:600; }
+  .fail { color:var(--feedback-bad); font-weight:600; }
+  .pass { color:var(--feedback-good-text); font-weight:600; }
+  pre { white-space:pre-wrap; word-break:break-all; font-size:10px; color:var(--muted-dark);
+        background:var(--parchment-warm); padding:8px; border-radius:8px; max-height:180px; overflow:auto; }
+</style>
+</head>
+<body>
+
+<h1>Translate false-reject probe</h1>
+<div class="stamp" id="stamp">loading…</div>
+
+<div class="bar">
+  <b>Pass bar, fixed before this page had data.</b> False rejects ≤ 10% overall
+  <i>and</i> ≤ 10% in the short (2–3 character) bucket. Both must hold to ship a
+  graded panel. Either failing means the feature ships showing what was heard
+  with no verdict. Attempts that decoded nothing are excluded from both sides.
+</div>
+
+<div id="boot" class="card">Loading app.js, the jyutping dictionary and the target set…</div>
+
+<div id="run" style="display:none">
+  <div class="card">
+    <div class="meta"><span id="pos"></span> · <span id="bucket"></span> · from “<span id="en"></span>”</div>
+    <div class="target" id="target"></div>
+    <div class="tjp" id="tjp"></div>
+    <div class="ten">Read it aloud once, at normal speed.</div>
+    <div class="row"><button class="primary" id="mic">Start speaking</button></div>
+  </div>
+
+  <div class="card" id="resultCard" style="display:none">
+    <div class="meta">You said</div>
+    <div class="heard" id="heard"></div>
+    <div id="hjp" class="tjp"></div>
+    <div class="verdict" id="verdict"></div>
+    <div id="bd"></div>
+    <div class="row">
+      <button id="keep">Keep — I said it right</button>
+      <button id="discard">Discard — I fluffed it</button>
+    </div>
+    <div class="row"><button id="skip">Skip this item</button></div>
+  </div>
+</div>
+
+<div class="card" id="tally" style="display:none">
+  <div class="meta">Running result</div>
+  <table id="tallyTable"></table>
+  <div class="row"><button id="export">Export run as JSON</button></div>
+  <pre id="out" style="display:none"></pre>
+</div>
+
+<script src="../vendor/to-jyutping.js"></script>
+<script>
+// ── Lift the real implementation out of app.js ──────────────────────────────
+// Brace-matched extraction, not a copy. See the header comment for why.
+function grabFn(src, name) {
+  const i = src.indexOf('function ' + name + '(');
+  if (i < 0) throw new Error('app.js no longer defines ' + name + '()');
+  let d = 0;
+  for (let k = src.indexOf('{', i); k < src.length; k++) {
+    if (src[k] === '{') d++;
+    else if (src[k] === '}') { d--; if (!d) return src.slice(i, k + 1); }
+  }
+  throw new Error('unbalanced braces reading ' + name);
+}
+function grabConst(src, re, label) {
+  const m = src.match(re);
+  if (!m) throw new Error('app.js no longer defines ' + label);
+  return m[0];
+}
+
+const store = { charJyutping: {} };
+let APP = null, SET = null, VERSION = '(unknown)';
+
+const $ = id => document.getElementById(id);
+
+async function boot() {
+  const [appSrc, swSrc, setJson, cj] = await Promise.all([
+    fetch('../app.js').then(r => r.text()),
+    fetch('../sw.js').then(r => r.text()).catch(() => ''),
+    fetch('./translate-probe-set.json').then(r => r.json()),
+    fetch('../data/char-jyutping.json').then(r => r.json()).catch(() => ({})),
+  ]);
+  store.charJyutping = cj;
+
+  // Version-stamp everything (PROBE_METHOD: a stale cached page wastes a whole
+  // session and nothing afterwards can tell which build produced the data).
+  const vm = swSrc.match(/CACHE_VERSION\s*=\s*'([^']+)'/);
+  VERSION = vm ? vm[1] : '(sw.js unreadable)';
+
+  const pieces = [
+    'let _recognition = null;',
+    grabConst(appSrc, /const TONES\s*=\s*\{[\s\S]*?\n\};/, 'TONES'),
+    grabConst(appSrc, /const ASR_DIGITS\s*=[\s\S]*?\};/, 'ASR_DIGITS'),
+    grabConst(appSrc, /const SPEAK_FINAL_PARTICLES\s*=[\s\S]*?\]\);/, 'SPEAK_FINAL_PARTICLES'),
+    grabFn(appSrc, 'normalizeChinese'),
+    grabFn(appSrc, 'editDistance'),
+    grabFn(appSrc, 'deduplicateRepeats'),
+    grabFn(appSrc, 'fuzzyMatch'),
+    grabFn(appSrc, 'alignChars'),
+    grabFn(appSrc, 'renderSpeakBreakdown'),
+    grabFn(appSrc, 'resolveHeard'),
+    grabFn(appSrc, 'charsToJyutping'),
+    grabFn(appSrc, 'colorJyutping'),
+    grabFn(appSrc, 'startSpeechRecognition'),
+    'return { fuzzyMatch, normalizeChinese, resolveHeard, renderSpeakBreakdown,'
+      + ' charsToJyutping, colorJyutping, startSpeechRecognition,'
+      + ' stop: () => { if (_recognition) { try { _recognition.stop(); } catch(e){} } } };',
+  ];
+  APP = new Function('store', 'window', pieces.join('\n\n'))(store, window);
+
+  SET = setJson.items || [];
+  if (!SET.length) throw new Error('translate-probe-set.json has no items — run the generator first');
+
+  $('stamp').textContent = VERSION + ' · ' + SET.length + ' targets · set generated ' + (setJson.generated || '?');
+  $('boot').style.display = 'none';
+  $('run').style.display = '';
+  $('tally').style.display = '';
+  showItem();
+}
+
+// ── Run state ───────────────────────────────────────────────────────────────
+let idx = 0;
+let attempt = null;          // the attempt currently awaiting keep/discard
+const results = [];
+
+function item() { return SET[idx]; }
+
+function showItem() {
+  const it = item();
+  if (!it) {
+    $('run').innerHTML = '<div class="card"><b>Set complete.</b> Export below.</div>';
+    renderTally();
+    return;
+  }
+  $('pos').textContent    = 'Item ' + (idx + 1) + ' of ' + SET.length;
+  $('bucket').textContent = it.bucket + ' (' + it.hanCount + ' chars)';
+  $('en').textContent     = it.en;
+  $('target').textContent = it.zh;
+  // Derived locally, exactly as the real feature would have to — the model's
+  // own jp string cannot be trusted to hold one syllable per character.
+  $('tjp').innerHTML      = APP.charsToJyutping(it.zh);
+  $('resultCard').style.display = 'none';
+  $('mic').disabled = false;
+  $('mic').textContent = 'Start speaking';
+  attempt = null;
+  renderTally();
+}
+
+// Raw instrumentation, per the stop rule: record the inputs, not a summary.
+// If the probe itself starts misbehaving this is what makes the cause fall out
+// in one step instead of five.
+let trace = [];
+
+function listen() {
+  const it = item();
+  trace = [];
+  const t0 = Date.now();
+  $('mic').textContent = 'Listening — tap to stop';
+  $('mic').onclick = () => { APP.stop(); };
+
+  let status = 'idle';
+  APP.startSpeechRecognition(
+    () => it.zh,
+    () => status,
+    patch => {
+      if ('status' in patch) status = patch.status;
+      if ('heard' in patch) $('heard').textContent = patch.heard;
+      trace.push({ t: Date.now() - t0, ...patch });
+      if (patch.status === 'matched' || patch.status === 'mismatch' || patch.status === 'idle') {
+        finish(patch.status, patch.heard || '');
+      }
+    },
+    null
+  );
+}
+
+function finish(status, heard) {
+  const it = item();
+  $('mic').disabled = true;
+  $('mic').textContent = 'Done';
+  $('mic').onclick = null;
+
+  // A decode of nothing is not evidence either way and must never be counted
+  // as a rejection — that would inflate the headline with silence.
+  const noDecode = status === 'idle' || !heard.trim();
+  const matched  = status === 'matched';
+
+  attempt = {
+    id: it.id, en: it.en, zh: it.zh, bucket: it.bucket, hanCount: it.hanCount,
+    heard, matched, noDecode, version: VERSION, at: new Date().toISOString(), trace,
+  };
+
+  $('resultCard').style.display = '';
+  $('heard').textContent = heard || '(nothing decoded)';
+  $('hjp').innerHTML     = heard ? APP.charsToJyutping(heard) : '';
+  $('verdict').className = 'verdict ' + (noDecode ? 'nul' : matched ? 'ok' : 'no');
+  $('verdict').textContent = noDecode ? 'Nothing decoded — excluded from the count'
+                           : matched  ? 'ACCEPTED by fuzzyMatch()'
+                                      : 'REJECTED by fuzzyMatch()';
+
+  const bd = APP.renderSpeakBreakdown(heard, it.zh, stripSpans(APP.charsToJyutping(it.zh)),
+                                      matched ? 'close' : 'bad');
+  $('bd').innerHTML = bd.html || '';
+}
+
+// renderSpeakBreakdown wants a plain space-separated jyutping string; charsToJyutping
+// returns coloured markup. Strip it here rather than changing app.js — the probe
+// must not be the reason a shipped function grows a parameter.
+function stripSpans(html) {
+  const d = document.createElement('div');
+  d.innerHTML = html;
+  return d.textContent.trim().replace(/\s+/g, ' ');
+}
+
+function record(kind) {
+  if (attempt) results.push({ ...attempt, disposition: kind });
+  idx++;
+  showItem();
+}
+
+// ── Tally ───────────────────────────────────────────────────────────────────
+function renderTally() {
+  const kept = results.filter(r => r.disposition === 'keep' && !r.noDecode);
+  const rows = ['short', 'medium', 'long'].map(b => {
+    const inB = kept.filter(r => r.bucket === b);
+    const rej = inB.filter(r => !r.matched).length;
+    const pct = inB.length ? (rej / inB.length * 100) : null;
+    const bad = pct !== null && pct > 10;
+    return '<tr><td>' + b + '</td><td>' + inB.length + '</td><td>' + rej + '</td>'
+         + '<td class="' + (pct === null ? '' : bad ? 'fail' : 'pass') + '">'
+         + (pct === null ? '—' : pct.toFixed(0) + '%') + '</td></tr>';
+  });
+  const rejAll = kept.filter(r => !r.matched).length;
+  const pctAll = kept.length ? (rejAll / kept.length * 100) : null;
+  const discards = results.filter(r => r.disposition === 'discard').length;
+  const nulls    = results.filter(r => r.noDecode).length;
+
+  $('tallyTable').innerHTML =
+    '<tr><th>Bucket</th><th>Valid</th><th>Rejected</th><th>Rate</th></tr>'
+    + rows.join('')
+    + '<tr><th>overall</th><th>' + kept.length + '</th><th>' + rejAll + '</th>'
+    + '<th class="' + (pctAll === null ? '' : pctAll > 10 ? 'fail' : 'pass') + '">'
+    + (pctAll === null ? '—' : pctAll.toFixed(0) + '%') + '</th></tr>'
+    + '<tr><td colspan="4" style="color:var(--muted)">discarded (I fluffed it): ' + discards
+    + ' · nothing decoded: ' + nulls + ' — neither counts toward the bars</td></tr>';
+}
+
+// ── Wiring ──────────────────────────────────────────────────────────────────
+$('mic').onclick     = listen;
+$('keep').onclick    = () => record('keep');
+$('discard').onclick = () => record('discard');
+$('skip').onclick    = () => { attempt = null; idx++; showItem(); };
+$('export').onclick  = () => {
+  const kept = results.filter(r => r.disposition === 'keep' && !r.noDecode);
+  const rej  = kept.filter(r => !r.matched).length;
+  $('out').style.display = '';
+  $('out').textContent = JSON.stringify({
+    probe: 'translate-reject', version: VERSION, ranAt: new Date().toISOString(),
+    bar: 'false rejects <= 10% overall AND <= 10% short',
+    overall: { valid: kept.length, rejected: rej,
+               rate: kept.length ? +(rej / kept.length * 100).toFixed(1) : null },
+    attempts: results,
+  }, null, 2);
+};
+
+boot().catch(e => {
+  $('boot').innerHTML = '<b class="fail">Load failed:</b> ' + e.message
+    + '<br><br>Serve the repo root over http, and run tools/translate-probe-set.js first.';
+});
+</script>
+</body>
+</html>
