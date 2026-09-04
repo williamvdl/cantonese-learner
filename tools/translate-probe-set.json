@@ -1,0 +1,253 @@
+{
+  "generated": "2026-09-04T07:22:24.940Z",
+  "model": "gemini-2.5-flash-lite",
+  "promptFrom": "app.js buildPrompt() — lifted verbatim at generation time",
+  "fill": {
+    "short": 11,
+    "medium": 8,
+    "long": 11
+  },
+  "items": [
+    {
+      "id": "tp-01",
+      "en": "thank you",
+      "zh": "唔該",
+      "jpFromModel": "m4 goi1",
+      "hanCount": 2,
+      "bucket": "short"
+    },
+    {
+      "id": "tp-02",
+      "en": "excuse me",
+      "zh": "唔好意思",
+      "jpFromModel": "m4 hou2 ji3 si1",
+      "hanCount": 4,
+      "bucket": "medium"
+    },
+    {
+      "id": "tp-03",
+      "en": "sorry",
+      "zh": "對唔住",
+      "jpFromModel": "deoi3 m4 zyu6",
+      "hanCount": 3,
+      "bucket": "short"
+    },
+    {
+      "id": "tp-04",
+      "en": "no problem",
+      "zh": "冇問題",
+      "jpFromModel": "mou5 man6 tai4",
+      "hanCount": 3,
+      "bucket": "short"
+    },
+    {
+      "id": "tp-05",
+      "en": "wait a moment",
+      "zh": "等陣啦",
+      "jpFromModel": "dang2 zan6 laa1",
+      "hanCount": 3,
+      "bucket": "short"
+    },
+    {
+      "id": "tp-06",
+      "en": "how much",
+      "zh": "幾多錢",
+      "jpFromModel": "gei2 do1 cin4",
+      "hanCount": 3,
+      "bucket": "short"
+    },
+    {
+      "id": "tp-07",
+      "en": "not yet",
+      "zh": "未呀",
+      "jpFromModel": "mei4 aa3",
+      "hanCount": 2,
+      "bucket": "short"
+    },
+    {
+      "id": "tp-08",
+      "en": "me too",
+      "zh": "我都係",
+      "jpFromModel": "ngo5 dou1 hai6",
+      "hanCount": 3,
+      "bucket": "short"
+    },
+    {
+      "id": "tp-09",
+      "en": "over there",
+      "zh": "嗰度",
+      "jpFromModel": "go2 dou6",
+      "hanCount": 2,
+      "bucket": "short"
+    },
+    {
+      "id": "tp-10",
+      "en": "right now",
+      "zh": "而家",
+      "jpFromModel": "ji4 gaa1",
+      "hanCount": 2,
+      "bucket": "short"
+    },
+    {
+      "id": "tp-11",
+      "en": "I am hungry",
+      "zh": "我好肚餓",
+      "jpFromModel": "ngo5 hou2 tou5 ngo6",
+      "hanCount": 4,
+      "bucket": "medium"
+    },
+    {
+      "en": "where is the toilet",
+      "zh": "廁所在邊度呀？",
+      "jpFromModel": "ci3 so2 zoi6 bin1 dou6 aa3?",
+      "hanCount": 6,
+      "bucket": "medium",
+      "id": "tp-12"
+    },
+    {
+      "en": "can you help me",
+      "zh": "你可唔可以幫我呀？",
+      "jpFromModel": "nei5 ho2 m4 ho2 ji3 bong1 ngo5 aa3?",
+      "hanCount": 8,
+      "bucket": "long",
+      "id": "tp-13"
+    },
+    {
+      "en": "I do not understand",
+      "zh": "我唔明",
+      "jpFromModel": "ngo5 m4 ming4",
+      "hanCount": 3,
+      "bucket": "short",
+      "id": "tp-14"
+    },
+    {
+      "en": "see you tomorrow",
+      "zh": "聽日見",
+      "jpFromModel": "ting1 jat6 gin3",
+      "hanCount": 3,
+      "bucket": "short",
+      "id": "tp-15"
+    },
+    {
+      "en": "this one please",
+      "zh": "呢個唔該",
+      "jpFromModel": "ni1 go3 m4 goi1",
+      "hanCount": 4,
+      "bucket": "medium",
+      "id": "tp-16"
+    },
+    {
+      "en": "is it far from here",
+      "zh": "喺呢度遠唔遠呀？",
+      "jpFromModel": "hai2 ni1 dou6 jyun4 m4 jyun4 aa3?",
+      "hanCount": 7,
+      "bucket": "medium",
+      "id": "tp-17"
+    },
+    {
+      "en": "I would like a coffee",
+      "zh": "我想嗌杯咖啡",
+      "jpFromModel": "ngo5 soeng2 aai3 bui1 gaa3 fe1",
+      "hanCount": 6,
+      "bucket": "medium",
+      "id": "tp-18"
+    },
+    {
+      "en": "what time is it",
+      "zh": "依家幾點呀？",
+      "jpFromModel": "ji1 gaa1 gei2 dim2 aa3?",
+      "hanCount": 5,
+      "bucket": "medium",
+      "id": "tp-19"
+    },
+    {
+      "id": "tp-20",
+      "en": "my phone is broken",
+      "zh": "我嘅電話壞咗",
+      "jpFromModel": "ngo5 ge3 din6 waa2 waai6 zo2",
+      "hanCount": 6,
+      "bucket": "medium"
+    },
+    {
+      "id": "tp-21",
+      "en": "I want to book a table for two people tonight",
+      "zh": "我想今晚訂一張兩人枱。",
+      "jpFromModel": "ngo5 soeng2 gam1 maan5 ding6 jat1 zoeng1 loeng5 jan4 toi2.",
+      "hanCount": 10,
+      "bucket": "long"
+    },
+    {
+      "id": "tp-22",
+      "en": "could you speak a little more slowly please",
+      "zh": "唔該你講慢啲得唔得呀？",
+      "jpFromModel": "m4 goi1 nei5 gong2 maan6 di1 dak1 m4 dak1 aa3?",
+      "hanCount": 10,
+      "bucket": "long"
+    },
+    {
+      "id": "tp-23",
+      "en": "I have been learning Cantonese for about six months",
+      "zh": "我學咗廣東話差唔多半年",
+      "jpFromModel": "ngo5 hok6 zo2 gwong2 dung1 waa2 caa1 m4 do1 bun3 nim4",
+      "hanCount": 11,
+      "bucket": "long"
+    },
+    {
+      "id": "tp-24",
+      "en": "my friend is arriving at the airport tomorrow morning",
+      "zh": "我嘅朋友聽朝喺機場嚟",
+      "jpFromModel": "ngo5 ge3 pang4 jau5 ting1 ciu4 hai2 gei1 coeng4 lai4",
+      "hanCount": 10,
+      "bucket": "long"
+    },
+    {
+      "id": "tp-25",
+      "en": "do you know if this shop opens on Sunday",
+      "zh": "你知唔知呢間舖頭星期日開唔開㗎？",
+      "jpFromModel": "nei5 zi1 m4 zi1 ni1 gaan1 pou3 tau4 sing1 kei4 jat6 hoi1 m4 hoi1 gaa3?",
+      "hanCount": 14,
+      "bucket": "long"
+    },
+    {
+      "id": "tp-26",
+      "en": "the weather has been very hot this week",
+      "zh": "呢個星期天氣好熱呀",
+      "jpFromModel": "ni1 go3 sing1 kei4 tin1 hei3 hou2 jit6 aa3",
+      "hanCount": 9,
+      "bucket": "long"
+    },
+    {
+      "id": "tp-27",
+      "en": "I left my umbrella in the taxi yesterday",
+      "zh": "尋日我喺的士度唔記得拎遮",
+      "jpFromModel": "cam4 jat6 ngo5 hai2 dik1 si2 dou6 m4 gei3 dak1 ling1 ze1",
+      "hanCount": 12,
+      "bucket": "long"
+    },
+    {
+      "id": "tp-28",
+      "en": "she said she would call me back after lunch",
+      "zh": "佢話食完飯之後會打返畀我。",
+      "jpFromModel": "keoi5 waa6 sik6 jyun4 faan6 zi1 hau6 wui5 daa2 faan1 bei2 ngo5.",
+      "hanCount": 12,
+      "bucket": "long"
+    },
+    {
+      "en": "we should leave now or we will be late",
+      "zh": "我哋依家走，唔係就遲到喇。",
+      "jpFromModel": "ngo5 dei6 ji1 gaa1 zau2, m4 hai6 zau6 ci4 dou3 laa3.",
+      "hanCount": 11,
+      "bucket": "long",
+      "id": "tp-29"
+    },
+    {
+      "en": "this restaurant is much better than the last one",
+      "zh": "呢間餐廳好過上次嗰間好多",
+      "jpFromModel": "ni1 gaan1 caan1 teng1 hou2 gwo3 soeng3 ci3 go2 gaan1 hou2 do1",
+      "hanCount": 12,
+      "bucket": "long",
+      "id": "tp-30"
+    }
+  ],
+  "failures": []
+}
