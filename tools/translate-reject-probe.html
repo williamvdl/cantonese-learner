@@ -205,11 +205,21 @@ let APP = null, SET = null, VERSION = '(unknown)';
 const $ = id => document.getElementById(id);
 
 async function boot() {
+  // EVERY fetch here is cache-busted, and that is not belt-and-braces.
+  // sw.js registers at the ORIGIN ROOT and its fetch handler is cache-first for
+  // all GETs, so this page — served from /tools/ — sits inside its scope. A
+  // plain fetch('../app.js') would be answered from the v-whatever precache
+  // while the version stamp claimed something else entirely, and the run would
+  // grade with code that is not on disk. That is the exact failure PROBE_METHOD
+  // records: a stale cached page wastes a whole session and nothing afterwards
+  // can tell which build produced the data. A unique query string misses
+  // caches.match() and forces the network.
+  const bust = '?probe=' + Date.now();
   const [appSrc, swSrc, setJson, cj] = await Promise.all([
-    fetch('../app.js').then(r => r.text()),
-    fetch('../sw.js').then(r => r.text()).catch(() => ''),
-    fetch('./translate-probe-set.json').then(r => r.json()),
-    fetch('../data/char-jyutping.json').then(r => r.json()).catch(() => ({})),
+    fetch('../app.js' + bust, { cache: 'reload' }).then(r => r.text()),
+    fetch('../sw.js' + bust, { cache: 'reload' }).then(r => r.text()).catch(() => ''),
+    fetch('./translate-probe-set.json' + bust, { cache: 'reload' }).then(r => r.json()),
+    fetch('../data/char-jyutping.json' + bust, { cache: 'reload' }).then(r => r.json()).catch(() => ({})),
   ]);
   store.charJyutping = cj;
 
