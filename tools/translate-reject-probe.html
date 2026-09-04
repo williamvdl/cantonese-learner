@@ -156,6 +156,7 @@
     <div class="tjp" id="tjp"></div>
     <div class="ten">Read it aloud once, at normal speed.</div>
     <div class="row"><button class="primary" id="mic">Start speaking</button></div>
+    <div class="heard" id="live"></div>
   </div>
 
   <div class="card" id="resultCard" style="display:none">
@@ -266,6 +267,24 @@ const results = [];
 
 function item() { return SET[idx]; }
 
+// SINGLE OWNER OF THE MIC BUTTON. Label, enabled state and handler are three
+// facets of one thing, and the bug that prompted this function came from
+// setting them in four scattered places: finish() nulled the handler, showItem()
+// reset the label and the enabled flag but not the handler, so from item two
+// onward the button looked perfectly ready and did nothing at all when tapped.
+// Anything that changes the button goes through here, so the three can never
+// disagree again.
+function setMic(mode) {                       // 'ready' | 'listening' | 'done'
+  const b = $('mic');
+  b.disabled    = (mode === 'done');
+  b.textContent = mode === 'ready'     ? 'Start speaking'
+                : mode === 'listening' ? 'Listening — tap to stop'
+                                       : 'Done';
+  b.onclick     = mode === 'ready'     ? listen
+                : mode === 'listening' ? () => APP.stop()
+                                       : null;
+}
+
 function showItem() {
   const it = item();
   if (!it) {
@@ -281,8 +300,8 @@ function showItem() {
   // own jp string cannot be trusted to hold one syllable per character.
   $('tjp').innerHTML      = APP.charsToJyutping(it.zh);
   $('resultCard').style.display = 'none';
-  $('mic').disabled = false;
-  $('mic').textContent = 'Start speaking';
+  $('live').textContent   = '';
+  setMic('ready');
   attempt = null;
   renderTally();
 }
@@ -296,8 +315,7 @@ function listen() {
   const it = item();
   trace = [];
   const t0 = Date.now();
-  $('mic').textContent = 'Listening — tap to stop';
-  $('mic').onclick = () => { APP.stop(); };
+  setMic('listening');
 
   let status = 'idle';
   APP.startSpeechRecognition(
@@ -305,7 +323,9 @@ function listen() {
     () => status,
     patch => {
       if ('status' in patch) status = patch.status;
-      if ('heard' in patch) $('heard').textContent = patch.heard;
+      // Live, under the button — you asked to see what was heard as it happens,
+      // and #heard sits inside a card that is still hidden at this point.
+      if ('heard' in patch) { $('live').textContent = patch.heard; $('heard').textContent = patch.heard; }
       trace.push({ t: Date.now() - t0, ...patch });
       if (patch.status === 'matched' || patch.status === 'mismatch' || patch.status === 'idle') {
         finish(patch.status, patch.heard || '');
@@ -317,9 +337,7 @@ function listen() {
 
 function finish(status, heard) {
   const it = item();
-  $('mic').disabled = true;
-  $('mic').textContent = 'Done';
-  $('mic').onclick = null;
+  setMic('done');
 
   // A decode of nothing is not evidence either way and must never be counted
   // as a rejection — that would inflate the headline with silence.
@@ -387,7 +405,9 @@ function renderTally() {
 }
 
 // ── Wiring ──────────────────────────────────────────────────────────────────
-$('mic').onclick     = listen;
+// NB: the mic button is deliberately NOT wired here — setMic() owns it, and
+// showItem() calls setMic('ready') on every item including the first. Wiring it
+// in two places is how the handler came to be set once and cleared forever.
 $('keep').onclick    = () => record('keep');
 $('discard').onclick = () => record('discard');
 $('skip').onclick    = () => { attempt = null; idx++; showItem(); };
