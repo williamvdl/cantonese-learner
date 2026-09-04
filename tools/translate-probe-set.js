@@ -109,6 +109,22 @@ const hanCount = s => [...String(s)].filter(c => /[\u4e00-\u9fff]/.test(c)).leng
 
 const sleep = ms => new Promise(r => setTimeout(r, ms));
 
+// PACING. gemini-2.5-flash-lite on the free tier allows 15 requests per minute
+// (and 1,000 per day, which is not the binding limit here). The first version
+// of this script slept 400ms between calls — 150 RPM, ten times over — and
+// burned ten inputs on 429s before anyone could intervene. 5s gives 12 RPM,
+// comfortably under, and costs under three minutes for the whole set. Do not
+// tighten this to save time: the quota is per PROJECT, so a run that trips the
+// limit also breaks the Translate feature in the app for the same window.
+const GAP_MS = 5000;
+
+// A 429 body carries a RetryInfo with the server's own wait. Honour it when
+// present rather than guessing — guessing is what turned one 429 into ten.
+function retryAfterMs(bodyText) {
+  const m = bodyText.match(/"retryDelay"\s*:\s*"(\d+(?:\.\d+)?)s"/);
+  return m ? Math.ceil(parseFloat(m[1]) * 1000) + 1000 : null;
+}
+
 async function callGemini(prompt) {
   const url = 'https://generativelanguage.googleapis.com/v1beta/models/'
             + 'gemini-2.5-flash-lite:generateContent?key=' + encodeURIComponent(KEY);
@@ -116,7 +132,8 @@ async function callGemini(prompt) {
     contents: [{ parts: [{ text: prompt }] }],
     generationConfig: { temperature: 0.3, responseMimeType: 'application/json' },
   });
-  for (let attempt = 1; attempt <= 3; attempt++) {
+  const MAX = 5;
+  for (let attempt = 1; attempt <= MAX; attempt++) {
     const res = await fetch(url, {
       method: 'POST', headers: { 'Content-Type': 'application/json' }, body,
     });
@@ -124,32 +141,55 @@ async function callGemini(prompt) {
       const j = await res.json();
       return j.candidates?.[0]?.content?.parts?.[0]?.text || '';
     }
-    if (attempt === 3 || ![429, 502, 503].includes(res.status)) {
-      throw new Error('Gemini ' + res.status + ': ' + (await res.text()).slice(0, 160));
+    const text = await res.text();
+    if (attempt === MAX || ![429, 502, 503].includes(res.status)) {
+      throw new Error('Gemini ' + res.status + ': ' + text.replace(/\s+/g, ' ').slice(0, 140));
     }
-    await sleep(1200 * attempt);
+    const wait = (res.status === 429 && retryAfterMs(text)) || 20000 * attempt;
+    process.stdout.write('[429, waiting ' + Math.round(wait / 1000) + 's] ');
+    await sleep(wait);
   }
 }
 
 (async () => {
-  const items = [];
+  // RESUMABLE. If a previous run wrote some of the set, keep those targets and
+  // fetch only what is missing. A rate-limit failure part-way through must not
+  // cost the inputs that already succeeded — re-translating them would also
+  // change them, since the model is not deterministic, and a set that shifts
+  // under a re-run is not a fixture.
+  let items = [];
+  if (fs.existsSync(OUT)) {
+    try {
+      items = (JSON.parse(fs.readFileSync(OUT, 'utf8')).items || []).filter(i => i && i.zh);
+      if (items.length) console.log('Resuming — ' + items.length + ' target(s) already in '
+        + path.basename(OUT) + ', fetching only the rest.\n');
+    } catch (e) { console.log('Existing ' + path.basename(OUT) + ' unreadable, starting fresh.\n'); }
+  }
+  const have = new Set(items.map(i => i.en));
+
   const failures = [];
-  for (const en of INPUTS.slice(0, WANT)) {
+  const todo = INPUTS.slice(0, WANT).filter(en => !have.has(en));
+  if (!todo.length) console.log('Nothing missing — set is already complete.\n');
+
+  for (const en of todo) {
     process.stdout.write('  ' + en.padEnd(56, '.') + ' ');
     try {
       const obj = parseAiResponse(await callGemini(buildPrompt(en, 'en-yue')));
       const n = hanCount(obj.zh);
-      items.push({
-        id: 'tp-' + String(items.length + 1).padStart(2, '0'),
-        en, zh: obj.zh, jpFromModel: obj.jp, hanCount: n, bucket: bucketOf(n),
-      });
+      items.push({ en, zh: obj.zh, jpFromModel: obj.jp, hanCount: n, bucket: bucketOf(n) });
       console.log(obj.zh + '  (' + n + ', ' + bucketOf(n) + ')');
     } catch (e) {
       failures.push({ en, error: String(e.message || e) });
       console.log('FAILED — ' + e.message);
     }
-    await sleep(400);   // stay well clear of the free-tier rate limit
+    await sleep(GAP_MS);
   }
+
+  // Order by the authored input list so the set is stable across resumes, then
+  // number. IDs are assigned last precisely because a resume changes arrival
+  // order — an id that moved between runs would make two exports incomparable.
+  items.sort((a, b) => INPUTS.indexOf(a.en) - INPUTS.indexOf(b.en));
+  items.forEach((it, i) => { it.id = 'tp-' + String(i + 1).padStart(2, '0'); });
 
   const fill = { short: 0, medium: 0, long: 0 };
   items.forEach(i => fill[i.bucket]++);
