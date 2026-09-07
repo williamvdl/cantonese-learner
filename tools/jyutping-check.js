@@ -156,16 +156,26 @@ console.log('\n— load strategy —');
   const appTxt = fs.readFileSync(path.join(ROOT, 'app.js'), 'utf8')
     .replace(/\/\*[\s\S]*?\*\//g, '')
     .replace(/^[ \t]*\/\/.*$/gm, '');
-  const fnStart = appTxt.indexOf('function charsToJyutping');
-  let depth = 0, fnEnd = appTxt.length;
-  for (let k = appTxt.indexOf('{', fnStart); k < appTxt.length; k++) {
-    if (appTxt[k] === '{') depth++;
-    else if (appTxt[k] === '}') { depth--; if (!depth) { fnEnd = k; break; } }
-  }
+  // The permitted callers. charJyutpingSyllables() was split out of
+  // charsToJyutping() in v141 so the Translate speak-back could get the same
+  // layered readings as a plain list; the dictionary reference moved with it.
+  // Both are call-time only, which is what the deferred script requires — the
+  // constraint is unchanged, only its address is.
+  const ALLOWED = ['charJyutpingSyllables', 'charsToJyutping'];
+  const spans = ALLOWED.map(name => {
+    const fnStart = appTxt.indexOf('function ' + name);
+    if (fnStart < 0) fail(`app.js no longer defines ${name}() — this check needs updating`);
+    let depth = 0, fnEnd = appTxt.length;
+    for (let k = appTxt.indexOf('{', fnStart); k < appTxt.length; k++) {
+      if (appTxt[k] === '{') depth++;
+      else if (appTxt[k] === '}') { depth--; if (!depth) { fnEnd = k; break; } }
+    }
+    return [fnStart, fnEnd];
+  });
   const stray = [...appTxt.matchAll(/window\.ToJyutping/g)]
     .map(m => m.index)
-    .filter(i => i < fnStart || i > fnEnd);
-  if (stray.length) fail(`window.ToJyutping is referenced ${stray.length}x outside charsToJyutping() — deferring the script would break that`);
+    .filter(i => !spans.some(([a, b]) => i >= a && i <= b));
+  if (stray.length) fail(`window.ToJyutping is referenced ${stray.length}x outside ${ALLOWED.join('() / ')}() — deferring the script would break that`);
   else ok('window.ToJyutping is only read inside charsToJyutping(), at call time');
 }
 

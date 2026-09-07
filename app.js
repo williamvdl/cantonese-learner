@@ -387,7 +387,19 @@ function colorJyutping(text) {
 // syllable slot — they were never going to have a reading. `.jp-unknown`
 // survives as a last resort for the case where both sources miss, which should
 // now be vanishingly rare but is not worth pretending is impossible.
-function charsToJyutping(text) {
+// Per-character jyutping, as DATA rather than markup.
+//
+// Split out of charsToJyutping() (below, which now renders from it) because the
+// Translate speak-back needs the same layered lookup as a plain syllable list:
+// renderSpeakBreakdown() returns nothing unless the target has exactly one
+// syllable per Chinese character, and only per-character derivation guarantees
+// that. Deriving it twice would let the display and the grid drift apart.
+//
+// Returns one entry per CHINESE character only — non-Han characters are skipped
+// entirely, matching the alignment renderSpeakBreakdown() expects. A character
+// with no reading anywhere still occupies a slot, marked unknown, so the count
+// stays right rather than silently collapsing the grid.
+function charJyutpingSyllables(text) {
   const corpus = store.charJyutping || {};
   const lib = (typeof window !== 'undefined' && window.ToJyutping) || null;
 
@@ -400,29 +412,55 @@ function charsToJyutping(text) {
     try { libPairs = lib.getJyutpingList(text); } catch (e) { libPairs = null; }
   }
 
-  return [...text].map((ch, i) => {
-    if (!/[\u4e00-\u9fff]/.test(ch)) return '';
-
+  const out = [];
+  [...text].forEach((ch, i) => {
+    // Extension A (U+3400-U+4DBF) is included, not just the main block. Several
+    // everyday Cantonese particles live there - the sentence-final one read
+    // gaa3 most of all, which ends a large share of ordinary questions. Before
+    // this change it was skipped, so the "You said" line silently dropped its
+    // jyutping on every surface, and the breakdown grid refused to align on any
+    // sentence containing one.
+    if (!/[\u3400-\u4dbf\u4e00-\u9fff]/.test(ch)) return;
     const taught = corpus[ch];
     const fromLib = libPairs && libPairs[i] && libPairs[i][1];
     const reading = taught ? taught.j : fromLib;
+    out.push({ ch, reading: reading || null, amb: !!(taught && taught.amb) });
+  });
+  return out;
+}
 
+// The space-separated form renderSpeakBreakdown() takes as its targetJ.
+//
+// The no-reading marker is a middle dot rather than the "?" charsToJyutping()
+// shows. renderSpeakBreakdown() strips trailing punctuation from each syllable
+// and then drops empties, so a "?" placeholder would be erased, the syllable
+// count would fall one short of the character count, and the grid would
+// silently refuse to render - a missing reading would take the whole breakdown
+// down with it.
+function charJyutpingLine(text) {
+  return charJyutpingSyllables(text).map(s => s.reading || '\u00b7').join(' ');
+}
+
+function charsToJyutping(text) {
+  // Renders from charJyutpingSyllables() rather than repeating the lookup, so
+  // the coloured line the learner reads and the plain line the breakdown grades
+  // against can never disagree about what a character says.
+  return charJyutpingSyllables(text).map(({ ch, reading, amb }) => {
     if (!reading) {
       return `<span class="jp-unknown" title="No reading available for ${ch}">?</span>`;
     }
-
     const tone = reading.match(/[1-6]/);
     const color = tone ? TONES[tone[0]].color : '#777';
 
-    // Only the corpus can mark a character ambiguous — it is the only source
+    // Only the corpus can mark a character ambiguous - it is the only source
     // that knows it taught two readings. A dictionary fallback is not flagged:
     // it is a single best reading, and marking every fallback would make the
     // common case look uncertain.
-    if (taught && taught.amb) {
-      return `<span class="jp-ambiguous" style="color:${color};font-weight:700" title="${ch} has more than one reading in the corpus — showing the most common">${reading}</span>`;
+    if (amb) {
+      return `<span class="jp-ambiguous" style="color:${color};font-weight:700" title="${ch} has more than one reading in the corpus - showing the most common">${reading}</span>`;
     }
     return `<span style="color:${color};font-weight:700">${reading}</span>`;
-  }).filter(Boolean).join(' ');
+  }).join(' ');
 }
 
 // ── State ─────────────────────────────────────────────────────────────────────
@@ -466,6 +504,14 @@ let state = {
     error:       null,
     showApiKey:  false,
     listening:   false,
+    // Speak-back on the result (DES-49, MOCK-30-A). Two separate speech
+    // concerns now live on this screen and must not be conflated: `listening`
+    // above is DICTATION into the textarea via _translateRec, this is GRADING
+    // against the translated sentence via startSpeechRecognition(). Different
+    // recogniser instances, different lifecycles.
+    speakOpen:   false,        // has the learner asked to say it back?
+    speakStatus: 'idle',       // 'idle' | 'listening' | 'matched' | 'mismatch'
+    speakHeard:  '',
   },
   topic: 'greetings',
   mode:  'study',
@@ -2268,6 +2314,44 @@ function applySentReviewPatch(patch) {
 
 function startSentReviewListening(target) {
   startSpeechRecognition(() => target, () => (state.sentReview ? state.sentReview.status : 'idle'), applySentReviewPatch, null);
+}
+
+
+// Translate speak-back - FOURTH consumer of startSpeechRecognition() (DES-49).
+// Same core as the Learn sheet, Chat and the checkpoint review; only the state
+// location differs. No onMatch callback: there is nothing to advance into, and
+// the learner decides what happens next.
+//
+// The target is the TRANSLATED sentence, which unlike every other consumer did
+// not come from the corpus. That is fine for matching - normalizeChinese() and
+// fuzzyMatch() are text operations and never consult the corpus - but see
+// speakTranslateTarget() below for the one place it does matter.
+function applyTranslateSpeakPatch(patch) {
+  const tr = state.translate;
+  if ('status' in patch) tr.speakStatus = patch.status;
+  if ('heard'  in patch) tr.speakHeard  = patch.heard;
+  render();
+}
+
+function startTranslateSpeakListening(target) {
+  startSpeechRecognition(() => target, () => state.translate.speakStatus, applyTranslateSpeakPatch, null);
+}
+
+// SINGLE POINT OF AUDIO RESOLUTION for the Translate screen.
+//
+// Everywhere else, "listen" plays a pre-generated Azure file keyed by a stable
+// ID. A translation has no stable ID and no file, so this is the one surface
+// still using the browser's own speechSynthesis via speak(). That is a weaker
+// model to imitate than the rest of the app offers, and replacing it with a
+// runtime Azure call is agreed work - but it needs the server-side proxy from
+// docs/PRODUCTISATION_REVIEW.md (A2) first, because unlike the Gemini key the
+// Azure key would be OURS, not the learner's, and cannot go in the client.
+//
+// This function exists so that swap is a one-function change rather than a hunt
+// through call sites. Both the result Listen button and the speak-back replay
+// go through here; nothing else should call speak() on this screen.
+function speakTranslateTarget(text, onDone) {
+  speak(text, onDone);
 }
 
 

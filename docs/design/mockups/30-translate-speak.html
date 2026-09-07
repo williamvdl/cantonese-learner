@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MOCK-30 — Speak-back on the Translate screen</title>
+<!--
+  MOCK-30 — where the speak-back control lives on the Translate result.
+
+  Context: Translate already renders a result card (.translate-result) holding
+  the Cantonese line, its jyutping, the English, a Listen button in
+  .translate-result-actions, and the word-by-word breakdown. The new capability
+  is "now say it yourself" — the same speak flow the Learn sentence sheet and
+  the checkpoint review already run, but against a translated sentence rather
+  than a corpus one.
+
+  All three options reuse the existing verdict furniture unchanged:
+  .speak-heard, .speak-result-good / .speak-result-close, and the
+  renderSpeakBreakdown() grid. Nothing new is being invented for the feedback
+  itself — this is purely a placement decision.
+
+  Example sentence throughout: 我想飲杯凍檸茶
+  (ngo5 soeng2 jam2 bui1 dung3 ning4 caa4) — "I want an iced lemon tea".
+-->
+<style>
+  :root{
+    --font-ui:'Inter',system-ui,sans-serif; --font-display:Georgia,serif;
+    --fs-micro:11px; --fs-meta:12px; --fs-small:13px; --fs-body:15px; --fs-lead:17px;
+    --fw-medium:500; --fw-semi:600; --fw-bold:700;
+    --sp-2:8px; --sp-3:12px; --sp-4:16px;
+    --r-sm:8px; --r-md:12px; --r-lg:16px; --r-pill:999px;
+    --ink:#1C1917; --ink-soft:#292524;
+    --parchment:#fff; --parchment-warm:#FAF8F5; --parchment-deep:#F5F1EB;
+    --parchment-border:#EAE4DC;
+    --brand:#C2410C; --brand-dark:#9A3412; --brand-tint:#FEF0E9;
+    --brand-edge:#F5D9C9; --brand-text-dark:#9A3412;
+    --jade:#15803D; --feedback-good-tint:#DCFCE7; --feedback-good-text:#15803D;
+    --muted:#A8A29E; --muted-dark:#78716C;
+    --border:1px solid var(--parchment-border);
+    --elev-1:0 1px 2px rgba(58,42,30,.06);
+    --tap-min:44px;
+  }
+  *{box-sizing:border-box}
+  body{font-family:var(--font-ui);background:var(--parchment-deep);color:var(--ink-soft);
+       margin:0;padding:20px 12px 60px;font-size:var(--fs-body);line-height:1.5}
+  h1{font-family:var(--font-display);font-size:20px;margin:0 0 4px}
+  .lede{font-size:var(--fs-small);color:var(--muted-dark);max-width:640px;margin:0 0 24px}
+  .opt{max-width:400px;margin:0 auto 34px;background:var(--parchment-warm);
+       border:var(--border);border-radius:var(--r-lg);padding:14px}
+  .opt-h{font-family:var(--font-display);font-size:var(--fs-lead);margin:0 0 2px}
+  .opt-n{font-size:10px;font-weight:var(--fw-bold);letter-spacing:1px;
+         text-transform:uppercase;color:var(--brand);margin-bottom:6px}
+  .opt-note{font-size:var(--fs-meta);color:var(--muted-dark);margin:0 0 14px;line-height:1.55}
+
+  /* ── existing, unchanged ───────────────────────────────────────────────── */
+  .translate-result{background:var(--parchment);border-radius:var(--r-md);
+    padding:var(--sp-4);border:1px solid var(--brand-edge)}
+  .translate-zh{font-family:var(--font-display);font-size:26px;color:var(--ink);line-height:1.35}
+  .translate-jp{font-size:var(--fs-small);font-weight:var(--fw-bold);color:var(--brand-dark);margin:4px 0 6px}
+  .translate-en{font-size:var(--fs-meta);color:var(--muted-dark);margin-bottom:6px}
+  .translate-result-actions{display:flex;gap:8px;margin-top:10px;padding-top:10px;
+    border-top:1px solid var(--parchment-border)}
+  .translate-action-btn{flex:1;padding:8px 12px;border-radius:var(--r-sm);
+    border:1px solid var(--brand);background:transparent;color:var(--brand);
+    font-size:var(--fs-meta);font-weight:var(--fw-bold);min-height:var(--tap-min);
+    display:flex;align-items:center;justify-content:center;gap:4px;cursor:pointer}
+  .translate-action-btn.primary{background:var(--brand);color:#fff}
+  .foot{margin-top:12px;padding-top:10px;border-top:1px solid var(--parchment-border)}
+  .section-label{font-size:10px;font-weight:var(--fw-bold);letter-spacing:1px;
+    text-transform:uppercase;color:var(--muted);margin-bottom:8px}
+  .bdrow{display:flex;gap:10px;align-items:baseline;padding:4px 0;font-size:var(--fs-small)}
+  .bdrow b{font-size:var(--fs-body);min-width:34px}
+  .bdrow i{color:var(--brand-dark);font-style:normal;font-weight:var(--fw-bold);min-width:64px}
+  .bdrow span{color:var(--muted-dark)}
+
+  .speak-heard{background:var(--parchment-warm);border-radius:var(--r-sm);
+    padding:10px 14px;margin-bottom:12px;font-size:18px;color:var(--ink)}
+  .speak-heard-jp{font-size:var(--fs-meta);color:var(--muted-dark);margin-top:2px}
+  .speak-result-good{background:var(--feedback-good-tint);border:1px solid var(--jade);
+    color:var(--feedback-good-text);padding:12px 16px;border-radius:var(--r-sm);
+    font-weight:var(--fw-bold);margin-bottom:4px}
+  .speak-result-close{background:var(--parchment-warm);border:1px solid var(--parchment-border);
+    color:var(--ink-soft);padding:12px 16px;border-radius:var(--r-sm);
+    font-size:var(--fs-small);margin-bottom:4px}
+  .speak-breakdown{display:flex;flex-wrap:wrap;justify-content:center;gap:4px 10px;
+    margin-top:10px;padding:10px;background:var(--parchment);border-radius:var(--r-sm)}
+  .bd-col{display:flex;flex-direction:column;align-items:center;gap:2px;min-width:32px}
+  .bd-char{font-size:20px;font-weight:var(--fw-bold);line-height:1}
+  .bd-status{font-size:var(--fs-small);line-height:1;color:var(--feedback-good-text);font-weight:var(--fw-semi)}
+  .bd-jp{font-size:var(--fs-micro);line-height:1;white-space:nowrap;font-weight:var(--fw-bold)}
+  .mic-big{width:72px;height:72px;border-radius:var(--r-pill);border:1px solid var(--brand-edge);
+    background:var(--brand-tint);color:var(--brand);display:flex;align-items:center;
+    justify-content:center;margin:0 auto 8px;box-shadow:var(--elev-1);font-size:26px;cursor:pointer}
+  .speak-mic-note{font-size:var(--fs-micro);color:var(--muted);text-align:center;margin-top:6px}
+
+  /* ── new in this mockup ────────────────────────────────────────────────── */
+  .tr-speak{margin-top:12px;padding-top:12px;border-top:1px solid var(--parchment-border)}
+  .sheet-wrap{position:relative;background:rgba(28,25,23,.42);border-radius:var(--r-md);
+    padding-top:34px;overflow:hidden}
+  .sheet{background:var(--parchment-warm);border-top-left-radius:var(--r-lg);
+    border-top-right-radius:var(--r-lg);padding:0 0 var(--sp-4)}
+  .sheet-grab{width:34px;height:4px;border-radius:2px;background:var(--parchment-border);margin:9px auto 2px}
+  .sheet-head{display:flex;align-items:center;justify-content:space-between;
+    padding:var(--sp-3) var(--sp-4);border-bottom:1px solid var(--parchment-deep)}
+  .sheet-title{font-family:var(--font-display);font-size:var(--fs-lead);margin:0}
+  .sheet-body{padding:var(--sp-4)}
+  .ghost{background:transparent;border:none;color:var(--muted-dark);font-size:20px;cursor:pointer}
+  .verdict-label{font-size:var(--fs-meta);color:var(--muted);text-align:center;margin:2px 0 10px}
+</style>
+</head>
+<body>
+
+<h1>MOCK-30 — speak-back on the Translate result</h1>
+<p class="lede">
+  Three placements for “now say it yourself” on a translated sentence. The
+  feedback furniture is identical in all three and already exists; only where it
+  appears differs. Sentence shown: 我想飲杯凍檸茶
+  (ngo5 soeng2 jam2 bui1 dung3 ning4 caa4).
+</p>
+
+<!-- ══ MOCK-30-A ═══════════════════════════════════════════════════════════ -->
+<div class="opt">
+  <div class="opt-n">MOCK-30-A</div>
+  <div class="opt-h">Paired button, expands in place</div>
+  <p class="opt-note">
+    A second button beside Listen. Tapping it opens the speak area inside the
+    same card, above the breakdown. Reuses <code>.translate-action-btn</code>;
+    no sheet, no new navigation state, and the sentence is never shown twice.
+  </p>
+
+  <div class="translate-result">
+    <div class="translate-zh">我想飲杯凍檸茶</div>
+    <div class="translate-jp">ngo5 soeng2 jam2 bui1 dung3 ning4 caa4</div>
+    <div class="translate-en">I want an iced lemon tea</div>
+    <div class="translate-result-actions">
+      <button class="translate-action-btn primary">▶ Listen</button>
+      <button class="translate-action-btn">🎙 Say it</button>
+    </div>
+
+    <div class="tr-speak">
+      <div class="mic-big">🎙</div>
+      <div class="speak-mic-note">Tap and say it aloud</div>
+      <div style="margin-top:14px">
+        <div class="speak-heard">You said: 我想飲杯凍檸茶
+          <div class="speak-heard-jp">ngo5 soeng2 jam2 bui1 dung3 ning4 caa4</div>
+        </div>
+        <div class="speak-result-good">✓ Great! You said it correctly.</div>
+        <div class="speak-breakdown">
+          <div class="bd-col"><div class="bd-char">我</div><div class="bd-status">✓</div><div class="bd-jp">ngo5</div></div>
+          <div class="bd-col"><div class="bd-char">想</div><div class="bd-status">✓</div><div class="bd-jp">soeng2</div></div>
+          <div class="bd-col"><div class="bd-char">飲</div><div class="bd-status">✓</div><div class="bd-jp">jam2</div></div>
+          <div class="bd-col"><div class="bd-char">杯</div><div class="bd-status">✓</div><div class="bd-jp">bui1</div></div>
+          <div class="bd-col"><div class="bd-char">凍</div><div class="bd-status">✓</div><div class="bd-jp">dung3</div></div>
+          <div class="bd-col"><div class="bd-char">檸</div><div class="bd-status">✓</div><div class="bd-jp">ning4</div></div>
+          <div class="bd-col"><div class="bd-char">茶</div><div class="bd-status">✓</div><div class="bd-jp">caa4</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="foot">
+      <div class="section-label">Word-by-word breakdown</div>
+      <div class="bdrow"><b>我</b><i>ngo5</i><span>I / me</span></div>
+      <div class="bdrow"><b>想</b><i>soeng2</i><span>want to</span></div>
+      <div class="bdrow"><b>飲</b><i>jam2</i><span>drink</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ MOCK-30-B ═══════════════════════════════════════════════════════════ -->
+<div class="opt">
+  <div class="opt-n">MOCK-30-B</div>
+  <div class="opt-h">Bottom sheet, matching Learn</div>
+  <p class="opt-note">
+    Tapping “Say it” opens the same “Say it back” sheet the Learn sentence card
+    uses. Identical to a flow you already know, and the speak task gets the whole
+    screen. Costs a <code>NAV_FIELDS</code> flag with <code>pushNav()</code>, and
+    repeats the sentence — once behind the scrim, once inside the sheet.
+  </p>
+
+  <div class="sheet-wrap">
+    <div class="sheet">
+      <div class="sheet-grab"></div>
+      <div class="sheet-head">
+        <h3 class="sheet-title">Say it back</h3>
+        <div><button class="ghost">▶</button> <button class="ghost">✕</button></div>
+      </div>
+      <div class="sheet-body">
+        <div style="text-align:center;margin-bottom:14px">
+          <div class="translate-zh">我想飲杯凍檸茶</div>
+          <div class="translate-jp">ngo5 soeng2 jam2 bui1 dung3 ning4 caa4</div>
+          <div class="translate-en">I want an iced lemon tea</div>
+        </div>
+        <div class="mic-big">🎙</div>
+        <div class="speak-heard" style="margin-top:14px">You said: 我想飲杯凍檸茶
+          <div class="speak-heard-jp">ngo5 soeng2 jam2 bui1 dung3 ning4 caa4</div>
+        </div>
+        <div class="speak-result-good">✓ Great! You said it correctly.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ MOCK-30-C ═══════════════════════════════════════════════════════════ -->
+<div class="opt">
+  <div class="opt-n">MOCK-30-C</div>
+  <div class="opt-h">Always present, no extra tap</div>
+  <p class="opt-note">
+    The mic sits under every result, permanently. Fewest taps to practise, and
+    it makes speaking look like part of translating rather than an extra.
+    The cost is that it is there on every translation, including the many where
+    you only wanted to know what a word meant.
+  </p>
+
+  <div class="translate-result">
+    <div class="translate-zh">我想飲杯凍檸茶</div>
+    <div class="translate-jp">ngo5 soeng2 jam2 bui1 dung3 ning4 caa4</div>
+    <div class="translate-en">I want an iced lemon tea</div>
+    <div class="translate-result-actions">
+      <button class="translate-action-btn primary">▶ Listen</button>
+    </div>
+    <div class="tr-speak">
+      <div class="mic-big">🎙</div>
+      <div class="speak-mic-note">Tap and say it aloud</div>
+    </div>
+    <div class="foot">
+      <div class="section-label">Word-by-word breakdown</div>
+      <div class="bdrow"><b>我</b><i>ngo5</i><span>I / me</span></div>
+      <div class="bdrow"><b>想</b><i>soeng2</i><span>want to</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ the “close” state, common to all three ══════════════════════════════ -->
+<div class="opt">
+  <div class="opt-n">MOCK-30-close</div>
+  <div class="opt-h">What a partial match looks like</div>
+  <p class="opt-note">
+    Shown once because it is the same in every option. Note the wording is
+    “here’s what I heard”, never a pronunciation verdict — DES-38 rules out
+    the app claiming a tone judgement, and that constraint carries over here
+    unchanged. 凍 (dung3) came back as 痛 (tung3).
+  </p>
+  <div class="translate-result">
+    <div class="speak-heard">You said: 我想飲杯痛檸茶
+      <div class="speak-heard-jp">ngo5 soeng2 jam2 bui1 tung3 ning4 caa4</div>
+    </div>
+    <div class="speak-result-close">Close — here’s what I heard.</div>
+    <div class="speak-breakdown">
+      <div class="bd-col"><div class="bd-char">我</div><div class="bd-status">✓</div><div class="bd-jp">ngo5</div></div>
+      <div class="bd-col"><div class="bd-char">想</div><div class="bd-status">✓</div><div class="bd-jp">soeng2</div></div>
+      <div class="bd-col"><div class="bd-char">飲</div><div class="bd-status">✓</div><div class="bd-jp">jam2</div></div>
+      <div class="bd-col"><div class="bd-char">杯</div><div class="bd-status">✓</div><div class="bd-jp">bui1</div></div>
+      <div class="bd-col"><div class="bd-char" style="color:var(--brand-text-dark)">凍</div>
+        <div class="bd-status" style="color:var(--brand)">痛</div>
+        <div class="bd-jp" style="color:var(--brand-text-dark)">dung3</div></div>
+      <div class="bd-col"><div class="bd-char">檸</div><div class="bd-status">✓</div><div class="bd-jp">ning4</div></div>
+      <div class="bd-col"><div class="bd-char">茶</div><div class="bd-status">✓</div><div class="bd-jp">caa4</div></div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

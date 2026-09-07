@@ -75,7 +75,7 @@ const pieces = [
   grabConst(/const ICON_PATHS[\s\S]*?\n};/),
   grab(all, 'icon'), grab(all, 'iconPlay'),
   grabConst(/const TONES[\s\S]*?\n};/),
-  grab(all, 'colorJyutping'), grab(all, 'charsToJyutping'),
+  grab(all, 'colorJyutping'), grab(all, 'charJyutpingSyllables'), grab(all, 'charsToJyutping'),
   grabConst(/const ASR_DIGITS = \{[\s\S]*?\};/),
   grabConst(/const ASR_PLACES = \[[\s\S]*?\];/),
   grab(all, 'foldAsrNumerals'),

@@ -630,6 +630,14 @@
   .translate-result-actions { display: flex; gap: 8px; margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--parchment-border); }
   .translate-action-btn { flex: 1; padding: 8px 12px; border-radius: var(--r-sm); border: 1px solid var(--brand); background: transparent; color: var(--brand); font-size: var(--fs-meta); font-weight: var(--fw-bold); cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 4px; }
   .translate-action-btn.primary { background: var(--brand); color: var(--parchment); }
+  /* -- Translate speak-back (DES-49, MOCK-30-A) ------------------------------
+     Two declarations only. The panel's contents - .mic-btn, .speak-status,
+     .speak-actions, .speak-heard, .speak-result-* and .speak-breakdown - are
+     the Learn sheet's primitives, reused unchanged; the mic is deliberately
+     smaller here because it sits inside a result card rather than owning a
+     sheet, and 80px would out-weigh the sentence it belongs to. */
+  .tr-speak { margin-top: var(--sp-3); padding-top: var(--sp-3); border-top: 1px solid var(--parchment-border); text-align: center; }
+  .tr-speak .mic-btn { width: 64px; height: 64px; font-size: 24px; margin-bottom: 10px; box-shadow: var(--elev-1); }
 
   /* API key setup */
   .apikey-setup { background: var(--parchment); border-radius: var(--r-md); padding: 22px 18px; border: 1px dashed var(--brand); margin-bottom: 16px; text-align: center; }

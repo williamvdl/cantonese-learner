@@ -227,6 +227,77 @@ function renderTranslate() {
   const speaking = state.speaking === 'translate-result';
   const listening = tr.listening;
 
+  // -- Speak-back on the result (DES-49, MOCK-30-A) ---------------------------
+  // Paired with Listen and expanded in place rather than opened as a sheet: the
+  // result card already carries the sentence, its jyutping and the English, so a
+  // sheet would repeat all three and add a nav flag for nothing.
+  //
+  // The verdict furniture below is the SAME markup the Learn sheet and the
+  // checkpoint review render - .speak-heard, .speak-result-*, and
+  // renderSpeakBreakdown(). Nothing new is invented for feedback here, and the
+  // heard line folds numerals before printing exactly as the other three do
+  // (DES-48): a raw transcript prints digits the learner cannot read back.
+  //
+  // The target jyutping is derived by charJyutpingLine() rather than taken from
+  // result.jp. That is not belt-and-braces: renderSpeakBreakdown() returns empty
+  // html unless the target has exactly one syllable per Chinese character, and
+  // result.jp is free-form model output that cannot be relied on to hold that.
+  const sp = { open: tr.speakOpen, status: tr.speakStatus, heard: tr.speakHeard };
+  let speakHtml = '';
+  if (result && sp.open) {
+    const targetJp   = charJyutpingLine(result.zh);
+    const heardShown = sp.heard ? foldAsrNumerals(sp.heard) : '';
+    const heardJp    = heardShown ? charsToJyutping(heardShown) : '';
+    const heardLine  = heardShown
+      ? `<div class="speak-heard">You said: <strong>${heardShown}</strong>${heardJp ? `<div class="speak-heard-jp">${heardJp}</div>` : ''}</div>`
+      : '';
+
+    // A translation can contain Latin words, which the grid cannot align
+    // against per-character jyutping. Both branches fall back to the target's
+    // jyutping line rather than showing a bare verdict with nothing under it.
+    const verdict = sp.status === 'matched'
+      ? (() => {
+          const { html, hasDiff } = renderSpeakBreakdown(heardShown || result.zh, result.zh, targetJp, 'close');
+          return `<div class="${hasDiff ? 'speak-result-close' : 'speak-result-good'}">
+            <div>${hasDiff ? 'Close - here\u2019s what I heard.' : '\u2713 Great! You said it correctly.'}</div>
+            ${html || `<div class="speak-heard-jp">${charsToJyutping(result.zh)}</div>`}
+          </div>`;
+        })()
+      : sp.status === 'mismatch'
+      ? (() => {
+          const { html } = renderSpeakBreakdown(heardShown, result.zh, targetJp, 'bad');
+          return `<div class="speak-result-bad">
+            <div style="font-weight:700;margin-bottom:4px">Hmm, that didn't quite match.</div>
+            <div>Expected: <strong>${result.zh}</strong></div>
+            ${html || `<div class="speak-heard-jp">${charsToJyutping(result.zh)}</div>`}
+          </div>`;
+        })()
+      : '';
+
+    speakHtml = `
+      <div class="tr-speak">
+        <button class="mic-btn ${sp.status === 'listening' ? 'listening' : 'idle'}" id="translate-speak-mic"
+          aria-label="${sp.status === 'listening' ? 'Stop and check' : 'Say it back'}">
+          ${sp.status === 'listening' ? icon('stop', 22) : icon('mic', 22)}
+        </button>
+        <div class="speak-status">${
+          sp.status === 'idle'      ? 'Press the mic and say the line above'
+        : sp.status === 'listening' ? 'Listening\u2026 speak the line, then press Stop'
+        : ''}</div>
+        ${sp.status === 'listening' ? `
+          <div class="speak-actions">
+            <button class="speak-action-btn stop" id="translate-speak-stop">\u23f9 Stop &amp; Check</button>
+          </div>` : ''}
+        ${sp.status === 'idle' ? `<p class="speak-mic-note">Allow microphone access if prompted</p>` : ''}
+        ${heardLine}
+        ${verdict}
+        ${(sp.status === 'matched' || sp.status === 'mismatch') ? `
+          <div class="speak-actions">
+            <button class="speak-action-btn secondary" id="translate-speak-retry"><span class="icon-label">${icon('refresh', 14)} Try again</span></button>
+          </div>` : ''}
+      </div>`;
+  }
+
   // Show result fields based on direction
   // For en-yue: zh + jp + en (English is the original input)
   // For yue-en: zh + jp + en (English is the translation)
@@ -269,7 +340,11 @@ function renderTranslate() {
             <button class="translate-action-btn primary" id="translate-listen" data-tr-text="${result.zh}">
               <span class="icon-label">${speaking ? icon('volume',16) : iconPlay(14)} ${speaking ? 'Playing…' : 'Listen'}</span>
             </button>
+            <button class="translate-action-btn" id="translate-speak-toggle">
+              <span class="icon-label">${icon('mic',15)} Say it</span>
+            </button>
           </div>
+          ${speakHtml}
           ${bdHtml ? `
             <div class="tone-guide-foot">
               <div class="section-label" style="margin-bottom:8px">Word-by-word breakdown</div>
@@ -2494,6 +2569,9 @@ const CLICK_ACTIONS = {
       state.translate.result = null;
       state.translate.error = null;
       state.translate.inputText = '';
+      state.translate.speakOpen = false;
+      state.translate.speakStatus = 'idle';
+      state.translate.speakHeard = '';
       render();
     }
   },
@@ -2505,6 +2583,10 @@ const CLICK_ACTIONS = {
     state.translate.result = null;
     state.translate.error = null;
     state.translate.listening = false;
+    stopListening();
+    state.translate.speakOpen = false;
+    state.translate.speakStatus = 'idle';
+    state.translate.speakHeard = '';
     render();
   },
 
@@ -2514,9 +2596,13 @@ const CLICK_ACTIONS = {
   },
 
   '#translate-clear': () => {
+    stopListening();
     state.translate.inputText = '';
     state.translate.result = null;
     state.translate.error = null;
+    state.translate.speakOpen = false;
+    state.translate.speakStatus = 'idle';
+    state.translate.speakHeard = '';
     render();
   },
 
@@ -2528,6 +2614,12 @@ const CLICK_ACTIONS = {
     state.translate.loading = true;
     state.translate.error = null;
     state.translate.result = null;
+    // A verdict belongs to the sentence it was given for. Carrying one across
+    // a new translation would show a tick against a line never said.
+    stopListening();
+    state.translate.speakOpen = false;
+    state.translate.speakStatus = 'idle';
+    state.translate.speakHeard = '';
     render();
     try {
       const result = await translateText(text, state.translate.direction);
@@ -2545,8 +2637,44 @@ const CLICK_ACTIONS = {
     const text = el.dataset.trText;
     state.speaking = 'translate-result';
     render();
-    speak(text, () => { state.speaking = null; render(); });
+    speakTranslateTarget(text, () => { state.speaking = null; render(); });
     setTimeout(() => { if (state.speaking === 'translate-result') { state.speaking = null; render(); } }, 6000);
+  },
+
+  // -- Translate speak-back (DES-49, MOCK-30-A) -------------------------------
+
+  '#translate-speak-toggle': () => {
+    const tr = state.translate;
+    // Closing mid-attempt must actually stop the recogniser, not just hide the
+    // panel - an orphaned session keeps the mic hot and fires patches into a
+    // panel nobody can see.
+    if (tr.speakOpen) stopListening();
+    tr.speakOpen   = !tr.speakOpen;
+    tr.speakStatus = 'idle';
+    tr.speakHeard  = '';
+    render();
+  },
+
+  '#translate-speak-mic': () => {
+    const tr = state.translate;
+    if (tr.speakStatus === 'listening') { finishListening(); return; }
+    if (!tr.result) return;
+    // Two things could be making noise into the mic: a replay of the target, and
+    // the dictation recogniser used for the input box. Stop both. The dictation
+    // one matters most - two live recognisers on one screen is the kind of
+    // collision that presents as random unexplained behaviour.
+    stopTranslateListening();
+    tr.listening = false;
+    state.speaking = null;
+    startTranslateSpeakListening(tr.result.zh);
+  },
+
+  '#translate-speak-stop': () => finishListening(),
+
+  '#translate-speak-retry': () => {
+    state.translate.speakStatus = 'idle';
+    state.translate.speakHeard  = '';
+    render();
   },
 
   // ── Topics ─────────────────────────────────────────────────────────────────
