@@ -92,6 +92,11 @@
   .opt.sel{border-color:var(--brand);background:var(--brand-tint)}
   .opt .zh{font-size:26px;color:var(--ink);line-height:1.35}
   .opt .jp{font-size:13px;color:var(--brand-dark);font-weight:700;margin-top:3px}
+.optrow{display:flex;gap:10px;align-items:stretch;margin-bottom:10px}
+  .optrow .opt{margin-bottom:0}
+  .play{flex:0 0 auto;width:54px;border-radius:12px;border:1px solid var(--brand-edge);
+        background:var(--brand-tint);color:var(--brand);font-size:20px;cursor:pointer}
+  .play:active,.play.on{background:var(--brand);color:#fff;border-color:var(--brand)}
   .tag{display:inline-block;font-size:10px;font-weight:700;letter-spacing:.08em;
        color:var(--muted);border:1px solid var(--parchment-border);border-radius:999px;
        padding:1px 7px;margin-bottom:6px}
@@ -156,8 +161,13 @@
 <script src="../vendor/to-jyutping.js"></script>
 <script>
 function grabFn(src, name){
-  const i = src.indexOf('function ' + name + '(');
+  let i = src.indexOf('function ' + name + '(');
   if (i < 0) throw new Error('app.js no longer defines ' + name + '()');
+  // speak() is declared `async function speak(...)`. Matching on 'function
+  // speak(' starts the slice AFTER the async keyword, and the extracted body
+  // then throws on its first await — a silent decapitation that would only have
+  // surfaced on the phone. Step back over a preceding `async `.
+  if (src.slice(Math.max(0, i - 6), i) === 'async ') i -= 6;
   let d = 0;
   for (let k = src.indexOf('{', i); k < src.length; k++){
     if (src[k]==='{') d++;
@@ -173,7 +183,7 @@ function grabConst(src, re, label){
 
 const store = { charJyutping: {} };
 const $ = id => document.getElementById(id);
-let APP = null, SET = null, DATA = null, VERSION = '(unknown)';
+let APP = null, SET = null, DATA = null, VERSION = '(unknown)', VOICE = '(unknown)';
 
 async function boot(){
   const bust = '?trial=' + Date.now();
@@ -189,18 +199,43 @@ async function boot(){
   // Jyutping is rendered with the app's own layered lookup rather than the jp
   // string each model returned. Judging a model partly on jyutping it wrote
   // itself would let a model that formats prettily beat one that phrases better.
-  APP = new Function('store','window', [
+  // The voice stack is lifted, not rewritten. pickVoicePair() encodes real
+  // findings about Android — that "zh_HK_#Hant" must be normalised before it is
+  // recognised as Cantonese, and that zh-TW is the better fallback than mainland
+  // Mandarin. Reimplementing it from the settings is exactly the mistake
+  // PROBE_METHOD records from the ASR probe.
+  APP = new Function('store','window','state', [
     grabConst(appSrc, /const TONES\s*=\s*\{[\s\S]*?\n\};/, 'TONES'),
     grabFn(appSrc, 'charJyutpingSyllables'),
     grabFn(appSrc, 'charsToJyutping'),
-    'return { charsToJyutping };',
-  ].join('\n\n'))(store, window);
+    'let _voices = null;',
+    grabFn(appSrc, 'loadVoices'),
+    grabFn(appSrc, 'normLang'),
+    grabFn(appSrc, 'isCantoneseVoice'),
+    grabFn(appSrc, 'isChineseVoice'),
+    grabFn(appSrc, 'pickVoicePair'),
+    grabFn(appSrc, 'sanitizeForSpeech'),
+    grabFn(appSrc, 'speak'),
+    'return { charsToJyutping, speak, describeVoice: async () => {'
+      + ' const v = await loadVoices(); const { a } = pickVoicePair(v);'
+      + ' return a ? (a.name + " (" + a.lang + ")") : "no Chinese voice installed"; } };',
+  ].join('\n\n'))(store, window, { speed: 'normal' });
 
   DATA = json; SET = json.items || [];
   if (!SET.length) throw new Error('translate-model-set.json has no items — run the generator first');
 
   $('stamp').textContent = VERSION + ' · ' + SET.length + ' items · set generated '
     + (json.generated||'?') + ' · arms: ' + (json.arms||[]).filter(a=>a.ranInTrial).map(a=>a.id).join(' ');
+  // Name the voice on screen and in the export. A run on a device with no
+  // Cantonese voice installed would otherwise be judged partly on a Mandarin
+  // reading, and nothing afterwards could tell.
+  try {
+    VOICE = await APP.describeVoice();
+    $('stamp').textContent += ' · voice: ' + VOICE;
+    if (/no Chinese voice/.test(VOICE)) {
+      $('stamp').innerHTML += ' <b class="err">— playback is not Cantonese; judge on the text</b>';
+    }
+  } catch (e) { VOICE = '(voice lookup failed)'; }
   $('boot').style.display='none';
   $('run').style.display=''; $('tally').style.display='';
   showItem();
@@ -229,11 +264,18 @@ function showItem(){
       return `<div class="card"><span class="tag">Option ${n+1}</span>
         <div class="err">No output — this model failed on this item.</div></div>`;
     }
-    return `<button class="opt" data-arm="${armId}">
-      <span class="tag">Option ${n+1}</span>
-      <div class="zh">${o.zh}</div>
-      <div class="jp">${APP.charsToJyutping(o.zh)}</div>
-    </button>`;
+    // The play button is a SIBLING of the option, never a child. Nesting it
+    // would make every listen also cast a vote — the same shape of mistake as
+    // showing a verdict before asking for a disposition (DES-50), and it would
+    // silently record whichever option was listened to last.
+    return `<div class="optrow">
+      <button class="play" data-say="${armId}" aria-label="Listen to option ${n+1}">&#9654;</button>
+      <button class="opt" data-arm="${armId}">
+        <span class="tag">Option ${n+1}</span>
+        <div class="zh">${o.zh}</div>
+        <div class="jp">${APP.charsToJyutping(o.zh)}</div>
+      </button>
+    </div>`;
   }).join('');
 
   [...document.querySelectorAll('.opt')].forEach(b => {
@@ -243,10 +285,30 @@ function showItem(){
       toStage2();
     };
   });
+  wirePlay(it);
   renderTally();
 }
 
+// Playback wiring, shared by both stages.
+let listens = [];
+
+function wirePlay(it){
+  [...document.querySelectorAll('[data-say]')].forEach(btn => {
+    btn.onclick = e => {
+      e.stopPropagation();                 // a listen must never become a vote
+      const o = it.outputs[btn.dataset.say];
+      if (!o || !o.zh) return;
+      window.speechSynthesis && window.speechSynthesis.cancel();
+      [...document.querySelectorAll('.play')].forEach(x => x.classList.remove('on'));
+      btn.classList.add('on');
+      listens.push({ item: it.id, arm: btn.dataset.say });
+      APP.speak(o.zh, () => btn.classList.remove('on'));
+    };
+  });
+}
+
 function toStage2(){
+  window.speechSynthesis && window.speechSynthesis.cancel();
   const it = item();
   $('stagelabel').textContent = 'Preference locked. Now the meaning check.';
   $('stage1actions').style.display='none';
@@ -255,10 +317,14 @@ function toStage2(){
   $('meaning').innerHTML = it.order.map((armId, n) => {
     const o = it.outputs[armId];
     if (!o || o.error) return '';
-    return `<button class="opt" data-flag="${armId}">
-      <span class="tag">Option ${n+1}</span>
-      <div class="zh">${o.zh}</div></button>`;
+    return `<div class="optrow">
+      <button class="play" data-say="${armId}" aria-label="Listen to option ${n+1}">&#9654;</button>
+      <button class="opt" data-flag="${armId}">
+        <span class="tag">Option ${n+1}</span>
+        <div class="zh">${o.zh}</div></button>
+    </div>`;
   }).join('');
+  wirePlay(it);
   [...document.querySelectorAll('[data-flag]')].forEach(b => {
     b.onclick = () => {
       const a = b.dataset.flag;
@@ -274,8 +340,10 @@ function record(disposition){
   results.push({
     id: it.id, en: it.en, topic: it.topic, reference: it.reference,
     order: it.order, preferred: picked, meaningErrors: [...flagged],
+    played: listens.filter(l => l.item === it.id).map(l => l.arm),
     disposition, version: VERSION, at: new Date().toISOString(),
   });
+  window.speechSynthesis && window.speechSynthesis.cancel();
   idx++; showItem();
 }
 
@@ -308,7 +376,7 @@ $('export').onclick = () => {
   const arms = (DATA.arms||[]).filter(a => a.ranInTrial);
   $('out').style.display='';
   $('out').textContent = JSON.stringify({
-    probe: 'gemini-model-trial', appVersion: VERSION, ranAt: new Date().toISOString(),
+    probe: 'gemini-model-trial', appVersion: VERSION, voice: VOICE, ranAt: new Date().toISOString(),
     rule: 'switch only if preferred on >=8 of 12 AND zero meaning errors AND median latency <= 2x incumbent',
     setGenerated: DATA.generated,
     summary: arms.map(a => ({
