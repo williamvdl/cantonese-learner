@@ -4,9 +4,22 @@
 IN_PROGRESS.md when it's picked up; delete it from here once it's shipped and
 folded into STATUS.md.*
 
-Last updated: 2026-09-03 · sw.js at v139
+Last updated: 2026-09-05 · sw.js at v141
 
 ## Product
+- **Runtime Azure TTS for the Translate screen — gated on the A2 proxy.** Agreed
+  in principle: the browser voice goes, and every listen surface plays Azure.
+  Translate is the only surface still on `speechSynthesis`, because a translation
+  has no stable ID and so no pre-generated file. `speakTranslateTarget()` in
+  `app.js` exists solely so the swap is one function. **It cannot ship before the
+  server-side proxy** — unlike the Gemini key, which is the learner's own, the
+  Azure key would be ours, and an unmetered charge readable from devtools is not
+  a risk worth taking for a nicer voice. Cost is not the obstacle: at $16 per 1M
+  characters a twelve-character sentence is $0.00019, and the entire existing
+  corpus (7,110 characters, measured) would cost 11 cents to regenerate. Cache by
+  content hash when built, and check that against the service worker's catch-all
+  GET caching.
+
 
 - **Product name and logo — decide before the header is finalised.** The nameplate
   in every mockup is a placeholder: `廣東話 (gwong2 dung1 waa2) / Cantonese Learner`.
@@ -49,6 +62,21 @@ are pointers only — detail goes there, not here.*
   §Watermark; content side in CONTENT.md §5.8.
 
 ## Documentation
+- **The jyutping gloss rule applies retroactively, and the back-catalogue is now
+  clean.** Every Chinese character in any document must be immediately followed
+  by its jyutping in brackets, because William cannot read Chinese characters —
+  an unglossed one conveys nothing. Nineteen bare characters written before the
+  rule was tightened were fixed on 2026-09-05, all of them numerals plus
+  夠 (gau3). **Two things learned doing it, worth knowing before anyone writes a
+  checker for this.** A naive detector (a Han run immediately followed by a
+  bracket) reports roughly two and a half times too many gaps: it misses
+  readings given after an arrow (我*弟兄你呢 (ngo5 dai6 hing1 nei5 ni1) → …), in
+  backticks, or where a comma sits inside the phrase before the bracket. And
+  glossing must be longest-match-first, or 一百八十 (jat1 baak3 baat3 sap6)
+  becomes 一百 (jat1 baak3) followed by a bare 八十 (baat3 sap6). If this is ever
+  automated, derive the readings from `data/char-jyutping.json` and
+  `vendor/to-jyutping.js` rather than typing them.
+
 
 - **Mockup provenance table is incomplete — 18–26 missing.** `DESIGN_SYSTEM.md`
   §8 lists mockups 01–17 plus 27–28, and until 2026-08-31 claimed "all seventeen
@@ -129,6 +157,31 @@ are pointers only — detail goes there, not here.*
   stage vs. standalone episode list) undecided.
 
 ## Quality
+- **Rerun the Translate false-reject probe, disposition first.**
+  `tools/translate-reject-probe.html` asked keep-or-discard *after* showing the
+  verdict, so the disposition was contaminated by the thing being measured and
+  the run returned a meaningless 0% (DES-50). The fix is one change — ask "did
+  you say it correctly?" before revealing anything, then show the result. The
+  target set in `tools/translate-probe-set.json` is reusable as is. **Not
+  blocking anything**: the graded panel shipped at v141 on a separate argument,
+  and the fallback if it disappoints needs no measurement at all. Reuse the
+  inherited bar (false rejects ≤10% overall and ≤10% short) — do not invent a
+  second one.
+
+- **Orthographic variant fold — considered, deferred, not rejected.** Full
+  reasoning in `docs/PROPOSAL-variant-fold.md`; do not re-derive it from the
+  probe data, which is what this entry exists to prevent. Summary: the recogniser
+  sometimes writes 喺 (hai2) as 係 (hai6) and 嘅 (ge3) as 的 (dik1), and
+  `normalizeChinese()` counts each as a learner error. **The 的 (dik1) half was
+  weakened by counter-evidence** — device screenshots show
+  我嘅朋友 (ngo5 ge3 pang4 jau5) transcribed correctly, the same phrase that
+  came back as
+  我的朋友 (ngo5 dik1 pang4 jau5) in the probe, so the behaviour is intermittent
+  rather than systematic. The 係 (hai6) / 喺 (hai2) half stands on two
+  observations. **Deferred pending recurrence in ordinary use**, watched
+  organically rather than probed. A pair enters the fold only with two or more
+  recorded occurrences and its evidence written into the proposal's table.
+
 
 - **`maxAlternatives` is dead code on Android.** `startListening()` sets
   `rec.maxAlternatives = 3`, and the ASR probe measured **0 of 48 attempts
@@ -273,17 +326,17 @@ pass. These are the loose ends they left or surfaced.*
   harder and more damaging half. The script needs to cover both.
 
 - **兩 (loeng5) and the digit `2` — needs a probe, not a rule.** DES-48's numeral
-  fold is value-aware, so `2` becomes 二 (ji6). 兩 is the **second most common
+  fold is value-aware, so `2` becomes 二 (ji6). 兩 (loeng5) is the **second most common
   numeral in the corpus at 12 occurrences**, and the digit `2` is the recogniser
   declining to choose between the two — a transcription ambiguity, not a learner
-  error, and so the same shape as the 十/一零 fault DES-48 fixed. **No probe has
+  error, and so the same shape as the 十 (sap6)/一零 (jat1 ling4) fault DES-48 fixed. **No probe has
   shown it actually happening**, which is why no rule was written: building for it
   now would be guessing at a problem that may not exist, and the cheap version
-  (treat 二 and 兩 as equivalent) also excuses a genuine error, since 兩個 and 二個
+  (treat 二 (ji6) and 兩 (loeng5) as equivalent) also excuses a genuine error, since 兩個 (loeng5 go3) and 二個 (ji6 go3)
   are not interchangeable. What would settle it is a handful of device attempts on
-  sentences containing 兩, recorded as a fixture the way
+  sentences containing 兩 (loeng5), recorded as a fixture the way
   `tail-probe-numbers-t1-s03.json` was. If it does bite, it will look exactly like
-  the 十 fault: a correct utterance marked wrong on one character.
+  the 十 (sap6) fault: a correct utterance marked wrong on one character.
 
 - **Row-type icons on the path timeline — now judgeable.** With emoji gone (DES-09)
   the lesson rows have no glyph at all. Not per topic: 42 would be needed and they

@@ -13,7 +13,7 @@ not a history log. Approved design decisions and whether they were built live in
 > convention (`v121 — <what changed>`) so this file stops being load-bearing on
 > its own.
 
-Last updated: 2026-09-03 · sw.js at v140
+Last updated: 2026-09-05 · sw.js at v141
 
 ## Confirmed live and working
 - **Checkpoint sentence review** (v134, DES-44/45). Third checkpoint activity:
@@ -240,8 +240,38 @@ orphan hues `#B7861E`, `#e4d4ad`, `#8a6716`,
 
 | DES-47 | v139 | **Event delegation — `attachEvents()` is gone.** One listener on `#app` instead of 100 re-bound on every render. `attachEvents()` was 1,188 lines, 36% of `render.js`, and its length was architectural rather than neglect: rendering sets `app.innerHTML`, destroying every listener, so the function had to be the union of every screen's wiring in one scope with all 52 lookups guarded by `if (el)`. **That guard is why a broken control was silent** — rename an id and the guard steps over it and the button does nothing, with no error and no failing check. `#app` is emptied but never replaced, so the three delegated listeners are attached once and survive every render. **No markup changed**: the dispatch table is keyed on the id and data-attribute names that already exist, rather than on a new `data-action` attribute, which was the design first proposed and dropped after measuring — rewriting 39 attributes across every screen would have been the larger and far less verifiable half of the job. **DES-47 (innermost tapped control wins) is the behavioural half**, and it retires twelve local defences; see the register row and the note below. Also folded in: `freshConvoState()` replaces four hand-written copies of the conversation reset literal, and the two listen-mode auto-play blocks move into `afterRender()`, which is where everything that must happen once per render but is not a handler now lives — the easiest thing to lose in this refactor, since they only ran before because `attachEvents()` did. Verified: every control preserved one-for-one (55 ids and 47 attributes before, 55 and 47 after, none lost, none added, checked by script against the pre-refactor file); a purpose-built dispatch test proved innermost-wins, one-action-per-tap, no-op on unregistered controls, and correct resolution of all four declared nested pairs against the real table. `wiring-check.js` now reads the dispatch table — the one function it was designed to have to change — and gained a fourth assertion that neither retired convention can reappear. `sentence-review-harness.js`'s wiring assertion was updated for the same reason and re-verified to fail on a removed dispatch entry. **Ten standing checks, all green.** **Confirmed on device 2026-09-03** (Pixel/Chrome): all four nested pairs resolve to the inner control, the re-derived closures in Quiz, Word Review and Checkpoint Words follow the current word, listen-mode prompts play once per question, the Translate field keeps its caret, and the path diamonds draw on first load. |
 | DES-48 | v140 | **Two device-reported defects on the speak surfaces, one root each, shipped together.** *The Chat play button was invisible during playback, on the learner's own bubbles only.* Not missing — brand-orange drawn on a brand-orange circle; sampling the reported screenshot showed the circle a uniform `#C2410C` with no glyph in it at all. `.bubble-row.right .bubble-play` was 0,3,0 and `.bubble-play.is-playing` below it 0,2,0, so the right side took the playing *background* and kept the resting *colour*. The deleted rule set `border-color: var(--brand-edge); color: var(--brand)`, which is declaration-for-declaration what `.btn-icon--brand` already gives that button at its only call site — a duplicate whose sole effect was to outrank the state below it, so **resting appearance is unchanged and the fix is invisible until you press play**. The `.cp-convo` pair has the opposite specificity ordering and was never affected, checked rather than assumed. The v125 comment claiming this bug class was retired is corrected in place: it was not, it survived in the one rule v125 left behind. *A correctly spoken sentence was accused of an error* — see DES-48. The recogniser wrote spoken numbers as digits, the per-digit fold from DES-46 turned `10` into 一零 rather than 十 (sap6), and `charsToJyutping()` silently dropped the digits so six syllables printed under eight spoken ones. `foldAsrNumerals()` is now value-aware for 1–4 digit runs and shared by matching *and* display, and all three "You said" renderers fold before printing. Verified end-to-end on the reported sentence: 8 of 8 ticks, green panel, no red mark. **Ten standing checks green**; `asr-replay-harness.js` gains the 24-form fold table, the reported case pinned by value, and an assertion that the fold never alters an authored target; `jyutping-check.js` gains a source-level assertion that no renderer prints raw heard state. Both mutation-tested. Fixture pass rate unchanged at 3/13, as expected — the fold was never what those attempts failed on. |
+| DES-49, DES-50 | v141 | **Speak-back on the Translate screen — the fourth consumer of `startSpeechRecognition()`.** A "Say it" button paired with Listen expands the speak panel inside the result card (MOCK-30-A); the verdict furniture is the Learn sheet's, reused unchanged, so this added two CSS declarations and no new primitives. Audio for this screen now routes through one `speakTranslateTarget()` resolver — it still calls the browser's `speechSynthesis`, because a translation has no stable ID and therefore no pre-generated file, but the swap to a runtime Azure call becomes a one-function change once the A2 proxy exists. **Two things fell out of building it that were not in the plan.** *The target jyutping had to be derived rather than taken from the model's `jp` field*, because `renderSpeakBreakdown()` refuses to align unless the target holds one syllable per character and free-form model output cannot guarantee that; `charJyutpingSyllables()` was split out of `charsToJyutping()` so both consumers share one derivation. *That surfaced a live defect on every speak surface*: the Han test was `[\u4e00-\u9fff]`, which excludes CJK Extension A, where the sentence-final particle read gaa3 lives — so the "You said" line had been silently dropping its jyutping on any sentence ending in one, and the breakdown grid refused to align on them entirely. Fixed at the source, so Learn, Chat and the checkpoint review all gain it. **Invisible on those three screens unless a sentence contains such a character.** The refactor broke `jyutping-check.js` and `sentence-review-harness.js`, both of which lift functions from `app.js` by name — caught by the checks, which is what they are for. **Eleven standing checks green.** Alignment verified on out-of-corpus targets including the particle case; the Latin-word case falls back to the target's jyutping line by design rather than printing a bare verdict. |
 
 ### Notes worth carrying forward
+- **A human disposition asked after the verdict is shown is not independent of
+  it.** `tools/translate-reject-probe.html` displayed the match result and the
+  heard text, then asked the operator whether to keep or discard the attempt.
+  Every one of the five mismatches was discarded and none reached the
+  denominator, so the run returned a clean 0% that measured nothing. The two
+  judgements — *did I say it right* and *did the matcher accept it* — collapsed
+  into one. **Any probe with a person in the loop must take the self-report
+  before revealing anything**, and a result of exactly 0% or exactly 100% on a
+  human-dispositioned probe should be read as a suspected design fault first and
+  a finding second. See DES-50.
+
+- **A character-range test is a content assumption, and CJK Extension A is where
+  it fails.** `charsToJyutping()` tested `[\u4e00-\u9fff]`, which looks like
+  "is this Chinese" and is not: several everyday Cantonese particles live in
+  Extension A (U+3400–U+4DBF), the sentence-final one read gaa3 most of all. It
+  had been dropped from every jyutping surface since those surfaces were built,
+  and the failure was silent in both directions — no syllable printed, and no
+  `jp-unknown` marker either, because the character never entered the loop.
+  **This is the same shape as the v140 numeral defect**: a character the code
+  does not recognise vanishes rather than announcing itself. Any future range
+  test should be asserted against real content, not written from the block name.
+
+- **A regex closing on the wrong bracket over-grabs silently.** The probe page
+  lifted `ASR_PLACES` with a pattern ending `\};` — but it is an array, so the
+  match ran on to the next object literal's end and swallowed unrelated
+  declarations. It presented as an unrelated null reference several functions
+  away. Extraction patterns must match the literal's own closing bracket, and a
+  grab that returns far more text than the declaration is worth failing on.
+
 
 - **A rule that duplicates a primitive is not harmless — it outranks the states
   below it.** The v140 play-button defect was `.bubble-row.right .bubble-play`
@@ -267,7 +297,7 @@ orphan hues `#B7861E`, `#e4d4ad`, `#8a6716`,
   applied before display too, or the two will disagree in front of the user.**
   DES-46's digit fold was scoped "for comparison only, never for display", and
   that scoping is what produced the v140 numeral defect: the breakdown grid
-  compared against 十 while the "You said" line above it printed `10`, and the
+  compared against 十 (sap6) while the "You said" line above it printed `10`, and the
   jyutping under that printed neither. **The heard string reaches the screen
   through more than one path, and a repair applied to one of them creates a
   contradiction rather than a partial fix.** Both now route through
