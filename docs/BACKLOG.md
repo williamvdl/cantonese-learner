@@ -157,6 +157,22 @@ are pointers only — detail goes there, not here.*
   stage vs. standalone episode list) undecided.
 
 ## Quality
+- **Evaluate `gemini-3.5-transcribe` as a replacement for the Web Speech API.**
+  Found while reading the Gemini model docs for the translation trial; unrelated
+  to it and larger. Speech recognition currently runs on the browser's Web Speech
+  API, which is Chrome-only, **unavailable on iOS** (the A8 question in
+  `PRODUCTISATION_REVIEW.md`), and the reason the false-reject work was hard.
+  `gemini-3.5-transcribe` offers utterance-based language detection, speaker
+  diarization, word-level timestamps and **custom vocabulary biasing** — the last
+  being the one Web Speech cannot do at all, and the one that matters here: the
+  target sentence's own characters could bias the decode. That plausibly moves
+  the numbers the ASR probe measured, so **do not re-run leniency work on the
+  assumption Web Speech is permanent.** Two gates before this is worth costing:
+  it is an audio-upload model rather than a streaming browser API, so the "say it
+  and see words appear as you speak" behaviour would change shape; and it would
+  be our key, not the learner's, so it sits behind the same A2 proxy as runtime
+  Azure TTS. Bigger than the translation model swap — scope it separately.
+
 - **Rerun the Translate false-reject probe, disposition first.**
   `tools/translate-reject-probe.html` asked keep-or-discard *after* showing the
   verdict, so the disposition was contaminated by the thing being measured and

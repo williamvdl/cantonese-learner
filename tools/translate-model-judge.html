@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Gemini model trial — blind judging</title>
+<!--
+  tools/translate-model-judge.html — blind side-by-side judging for the Gemini
+  model trial. Run tools/translate-model-set.js first.
+
+  WHO JUDGES, AND WHY IT MATTERS THAT IT IS NOT US
+  ------------------------------------------------
+  William's wife judges. Neither William nor Claude can tell natural colloquial
+  Cantonese from confident-sounding Cantonese, and a trial decided by someone who
+  cannot hear the difference measures nothing. Everything below exists to keep
+  her judgement clean.
+
+  TWO STAGES PER ITEM, AND THE ORDER IS THE WHOLE POINT
+  -----------------------------------------------------
+  Stage 1 — preference, blind. Three unlabelled outputs in a shuffled order fixed
+  at generation time. No model names, no latency figures, no corpus reference.
+  Stage 2 — meaning check, after the preference is locked. Only now does the page
+  reveal the native-authored corpus line, and ask whether any output means
+  something WRONG.
+
+  This split is the direct lesson from DES-50. The false-reject probe showed the
+  verdict before asking the operator to keep or discard the attempt, so every
+  rejection got discarded and the run returned a meaningless 0%. The rule that
+  came out of it: **a human judgement must be taken before anything that could
+  contaminate it is displayed.** Showing the authored reference first would
+  anchor preference toward whichever output most resembles it, which is not the
+  question — three natural phrasings of one English sentence are all correct.
+
+  THE DECISION RULE, FIXED BEFORE ANY DATA EXISTS
+  -----------------------------------------------
+  A challenger replaces the incumbent (arm A, gemini-2.5-flash-lite) only if ALL
+  of the following hold:
+
+    1. It is preferred on at least 8 of the 12 judged items.
+       Chance across three arms is 4; a simple majority is 7. Eight is one clear
+       of a majority, because switching models has a cost (retesting, a changed
+       daily quota, a parameter set that differs by generation) and a one-item
+       margin does not pay for it.
+    2. It produces ZERO meaning errors.
+       This is not a tiebreak, it is a veto. A meaning error disqualifies an arm
+       outright however natural its phrasing, because natural-sounding-wrong is
+       worse than stilted-right for someone who cannot check it.
+    3. Its median latency is no worse than twice the incumbent's.
+       Translate makes the learner wait, and 3.x models think by default. A model
+       that phrases better but answers slower is not obviously an upgrade, so the
+       number is bounded rather than ignored. Latency is measured at generation
+       time and deliberately NOT shown to the judge.
+
+  This run may also conclude NO CLEAR WINNER, and that is a real outcome rather
+  than a failure: the incumbent stays, and the finding is that the generation gap
+  does not show up on this task. It may NOT conclude "run more items until one
+  wins".
+
+  DISCARDS are counted, never hidden. An item where the English gloss is
+  ambiguous, or where the judge genuinely cannot separate the three, is discarded
+  and drops out of both the numerator and the denominator — it is not evidence
+  either way, the same rule PROBE_METHOD sets for attempts that decode nothing.
+  An arm that errored on an item is shown as unavailable rather than as a
+  worst-place finish.
+
+  NO sw.js BUMP — not precached, not linked from the app, shares no CSS.
+  Cache-busted fetches: sw.js registers at the origin root and is cache-first for
+  every GET, so a plain fetch here can be answered from a stale precache.
+-->
+<style>
+  :root{
+    --ink:#1C1917; --ink-soft:#292524; --muted:#A8A29E; --muted-dark:#78716C;
+    --parchment:#fff; --parchment-warm:#FAF8F5; --parchment-deep:#F5F1EB;
+    --parchment-border:#EAE4DC;
+    --brand:#C2410C; --brand-dark:#9A3412; --brand-tint:#FEF0E9; --brand-edge:#F5D9C9;
+    --jade:#15803D; --good-tint:#DCFCE7; --bad:#A8323F;
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  body{margin:0;padding:14px;font-family:system-ui,-apple-system,"Segoe UI",sans-serif;
+       background:var(--parchment-deep);color:var(--ink-soft);line-height:1.5}
+  h1{font-size:17px;margin:0 0 2px}
+  .stamp{font-size:11px;color:var(--muted);margin-bottom:12px}
+  .card{background:var(--parchment);border:1px solid var(--parchment-border);
+        border-radius:12px;padding:14px;margin-bottom:12px}
+  .rule{font-size:12px;color:var(--ink-soft);background:var(--parchment-warm);
+        border:1px solid var(--parchment-border);border-radius:10px;padding:10px 12px;margin-bottom:12px}
+  .meta{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
+  .en{font-size:19px;margin:6px 0 2px;color:var(--ink)}
+  .opt{width:100%;text-align:left;background:var(--parchment);border:1px solid var(--parchment-border);
+       border-radius:12px;padding:14px;margin-bottom:10px;font:inherit;min-height:44px;cursor:pointer}
+  .opt:active{background:var(--brand-tint)}
+  .opt.sel{border-color:var(--brand);background:var(--brand-tint)}
+  .opt .zh{font-size:26px;color:var(--ink);line-height:1.35}
+  .opt .jp{font-size:13px;color:var(--brand-dark);font-weight:700;margin-top:3px}
+  .tag{display:inline-block;font-size:10px;font-weight:700;letter-spacing:.08em;
+       color:var(--muted);border:1px solid var(--parchment-border);border-radius:999px;
+       padding:1px 7px;margin-bottom:6px}
+  .ref{background:var(--good-tint);border:1px solid var(--jade);border-radius:10px;padding:12px}
+  .ref .zh{font-size:22px}
+  button.act{font:inherit;border-radius:10px;border:1px solid var(--parchment-border);
+             background:var(--parchment);color:var(--ink);padding:11px 14px;min-height:44px;cursor:pointer}
+  button.act.primary{background:var(--brand);border-color:var(--brand);color:#fff;font-weight:600}
+  .row{display:flex;gap:8px;margin-top:10px}.row button{flex:1}
+  .err{color:var(--bad);font-weight:600}
+  table{width:100%;border-collapse:collapse;font-size:12px}
+  td,th{padding:4px 6px;border-bottom:1px solid var(--parchment-border);text-align:left}
+  th{color:var(--muted);font-weight:600}
+  pre{white-space:pre-wrap;word-break:break-all;font-size:10px;color:var(--muted-dark);
+      background:var(--parchment-warm);padding:8px;border-radius:8px;max-height:200px;overflow:auto}
+</style>
+</head>
+<body>
+
+<h1>Gemini model trial — blind judging</h1>
+<div class="stamp" id="stamp">loading…</div>
+
+<div class="rule">
+  <b>Fixed before any data existed.</b> A new model replaces the current one only
+  if it is preferred on <b>8 or more of the 12</b> items, makes <b>no meaning
+  errors at all</b>, and is not more than twice as slow. “No clear winner” is a
+  real result — it means we keep what we have.
+</div>
+
+<div id="boot" class="card">Loading the trial set…</div>
+
+<div id="run" style="display:none">
+  <div class="card">
+    <div class="meta"><span id="pos"></span></div>
+    <div class="en" id="en"></div>
+    <div class="meta" id="stagelabel">Which sounds most natural?</div>
+  </div>
+
+  <div id="options"></div>
+
+  <div class="card" id="stage2" style="display:none">
+    <div class="meta">A native speaker wrote this for the same English</div>
+    <div class="ref"><div class="zh" id="refzh"></div><div class="jp" id="refjp"></div></div>
+    <div class="meta" style="margin-top:12px">Does any of these mean something <b>wrong</b>? Tap all that do.</div>
+    <div id="meaning"></div>
+    <div class="row"><button class="act primary" id="next">Next item</button></div>
+  </div>
+
+  <div class="row" id="stage1actions">
+    <button class="act" id="cantsay">Can't separate them</button>
+    <button class="act" id="badinput">English is ambiguous</button>
+  </div>
+</div>
+
+<div class="card" id="tally" style="display:none">
+  <div class="meta">Running result</div>
+  <table id="tallyTable"></table>
+  <div class="row"><button class="act" id="export">Export as JSON</button></div>
+  <pre id="out" style="display:none"></pre>
+</div>
+
+<script src="../vendor/to-jyutping.js"></script>
+<script>
+function grabFn(src, name){
+  const i = src.indexOf('function ' + name + '(');
+  if (i < 0) throw new Error('app.js no longer defines ' + name + '()');
+  let d = 0;
+  for (let k = src.indexOf('{', i); k < src.length; k++){
+    if (src[k]==='{') d++;
+    else if (src[k]==='}'){ d--; if(!d) return src.slice(i,k+1); }
+  }
+  throw new Error('unbalanced braces reading ' + name);
+}
+function grabConst(src, re, label){
+  const m = src.match(re);
+  if (!m) throw new Error('app.js no longer defines ' + label);
+  return m[0];
+}
+
+const store = { charJyutping: {} };
+const $ = id => document.getElementById(id);
+let APP = null, SET = null, DATA = null, VERSION = '(unknown)';
+
+async function boot(){
+  const bust = '?trial=' + Date.now();
+  const [appSrc, swSrc, json, cj] = await Promise.all([
+    fetch('../app.js' + bust, {cache:'reload'}).then(r=>r.text()),
+    fetch('../sw.js' + bust, {cache:'reload'}).then(r=>r.text()).catch(()=> ''),
+    fetch('./translate-model-set.json' + bust, {cache:'reload'}).then(r=>r.json()),
+    fetch('../data/char-jyutping.json' + bust, {cache:'reload'}).then(r=>r.json()).catch(()=>({})),
+  ]);
+  store.charJyutping = cj;
+  VERSION = (swSrc.match(/CACHE_VERSION\s*=\s*'([^']+)'/)||[,'(sw.js unreadable)'])[1];
+
+  // Jyutping is rendered with the app's own layered lookup rather than the jp
+  // string each model returned. Judging a model partly on jyutping it wrote
+  // itself would let a model that formats prettily beat one that phrases better.
+  APP = new Function('store','window', [
+    grabConst(appSrc, /const TONES\s*=\s*\{[\s\S]*?\n\};/, 'TONES'),
+    grabFn(appSrc, 'charJyutpingSyllables'),
+    grabFn(appSrc, 'charsToJyutping'),
+    'return { charsToJyutping };',
+  ].join('\n\n'))(store, window);
+
+  DATA = json; SET = json.items || [];
+  if (!SET.length) throw new Error('translate-model-set.json has no items — run the generator first');
+
+  $('stamp').textContent = VERSION + ' · ' + SET.length + ' items · set generated '
+    + (json.generated||'?') + ' · arms: ' + (json.arms||[]).filter(a=>a.ranInTrial).map(a=>a.id).join(' ');
+  $('boot').style.display='none';
+  $('run').style.display=''; $('tally').style.display='';
+  showItem();
+}
+
+let idx = 0, picked = null, flagged = new Set();
+const results = [];
+const item = () => SET[idx];
+
+function showItem(){
+  const it = item();
+  if (!it){
+    $('run').innerHTML = '<div class="card"><b>All items judged.</b> Export below.</div>';
+    renderTally(); return;
+  }
+  picked = null; flagged = new Set();
+  $('pos').textContent = 'Item ' + (idx+1) + ' of ' + SET.length;
+  $('en').textContent  = it.en;
+  $('stagelabel').textContent = 'Which sounds most natural?';
+  $('stage2').style.display='none';
+  $('stage1actions').style.display='';
+
+  $('options').innerHTML = it.order.map((armId, n) => {
+    const o = it.outputs[armId];
+    if (!o || o.error){
+      return `<div class="card"><span class="tag">Option ${n+1}</span>
+        <div class="err">No output — this model failed on this item.</div></div>`;
+    }
+    return `<button class="opt" data-arm="${armId}">
+      <span class="tag">Option ${n+1}</span>
+      <div class="zh">${o.zh}</div>
+      <div class="jp">${APP.charsToJyutping(o.zh)}</div>
+    </button>`;
+  }).join('');
+
+  [...document.querySelectorAll('.opt')].forEach(b => {
+    b.onclick = () => {
+      picked = b.dataset.arm;
+      [...document.querySelectorAll('.opt')].forEach(x => x.classList.toggle('sel', x === b));
+      toStage2();
+    };
+  });
+  renderTally();
+}
+
+function toStage2(){
+  const it = item();
+  $('stagelabel').textContent = 'Preference locked. Now the meaning check.';
+  $('stage1actions').style.display='none';
+  $('refzh').textContent = it.reference;
+  $('refjp').innerHTML   = APP.charsToJyutping(it.reference);
+  $('meaning').innerHTML = it.order.map((armId, n) => {
+    const o = it.outputs[armId];
+    if (!o || o.error) return '';
+    return `<button class="opt" data-flag="${armId}">
+      <span class="tag">Option ${n+1}</span>
+      <div class="zh">${o.zh}</div></button>`;
+  }).join('');
+  [...document.querySelectorAll('[data-flag]')].forEach(b => {
+    b.onclick = () => {
+      const a = b.dataset.flag;
+      if (flagged.has(a)) flagged.delete(a); else flagged.add(a);
+      b.classList.toggle('sel', flagged.has(a));
+    };
+  });
+  $('stage2').style.display='';
+}
+
+function record(disposition){
+  const it = item();
+  results.push({
+    id: it.id, en: it.en, topic: it.topic, reference: it.reference,
+    order: it.order, preferred: picked, meaningErrors: [...flagged],
+    disposition, version: VERSION, at: new Date().toISOString(),
+  });
+  idx++; showItem();
+}
+
+$('next').onclick     = () => record('judged');
+document.addEventListener('click', e => {
+  if (e.target.id === 'cantsay') { picked = null; record('discard-indistinguishable'); }
+  if (e.target.id === 'badinput'){ picked = null; record('discard-ambiguous-input'); }
+});
+
+function renderTally(){
+  const judged = results.filter(r => r.disposition === 'judged');
+  const arms = (DATA.arms||[]).filter(a => a.ranInTrial);
+  const rows = arms.map(a => {
+    const wins = judged.filter(r => r.preferred === a.id).length;
+    const errs = judged.filter(r => (r.meaningErrors||[]).includes(a.id)).length;
+    const hit  = wins >= 8 && errs === 0;
+    return `<tr><td>${a.id}</td><td>${a.model}</td><td>${wins}</td>`
+         + `<td class="${errs ? 'err' : ''}">${errs}</td>`
+         + `<td>${a.id === 'A' ? 'incumbent' : (hit ? 'clears the bar' : '')}</td></tr>`;
+  });
+  $('tallyTable').innerHTML =
+    '<tr><th>Arm</th><th>Model</th><th>Preferred</th><th>Meaning errors</th><th></th></tr>'
+    + rows.join('')
+    + `<tr><td colspan="5" style="color:var(--muted)">judged: ${judged.length} · discarded: `
+    + `${results.length - judged.length} — discards count toward neither side</td></tr>`;
+}
+
+$('export').onclick = () => {
+  const judged = results.filter(r => r.disposition === 'judged');
+  const arms = (DATA.arms||[]).filter(a => a.ranInTrial);
+  $('out').style.display='';
+  $('out').textContent = JSON.stringify({
+    probe: 'gemini-model-trial', appVersion: VERSION, ranAt: new Date().toISOString(),
+    rule: 'switch only if preferred on >=8 of 12 AND zero meaning errors AND median latency <= 2x incumbent',
+    setGenerated: DATA.generated,
+    summary: arms.map(a => ({
+      arm: a.id, model: a.model,
+      preferred: judged.filter(r => r.preferred === a.id).length,
+      meaningErrors: judged.filter(r => (r.meaningErrors||[]).includes(a.id)).length,
+    })),
+    judged: judged.length, discarded: results.length - judged.length,
+    items: results,
+  }, null, 2);
+};
+
+boot().catch(e => {
+  $('boot').innerHTML = '<b class="err">Load failed:</b> ' + e.message
+    + '<br><br>Serve the repo over http, and run tools/translate-model-set.js first.';
+});
+</script>
+</body>
+</html>
