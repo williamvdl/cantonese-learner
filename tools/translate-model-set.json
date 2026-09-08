@@ -1,0 +1,892 @@
+{
+  "generated": "2026-09-08T09:28:42.984Z",
+  "appVersion": "cantonese-teahouse-v141",
+  "promptFrom": "app.js buildPrompt() — lifted verbatim at generation time",
+  "arms": [
+    {
+      "id": "A",
+      "model": "gemini-2.5-flash-lite",
+      "note": "incumbent (shipped)",
+      "generationConfig": {
+        "temperature": 0.3,
+        "responseMimeType": "application/json"
+      },
+      "ranInTrial": true
+    },
+    {
+      "id": "B",
+      "model": "gemini-3.5-flash-lite",
+      "note": "generational upgrade, same tier",
+      "generationConfig": {
+        "responseMimeType": "application/json"
+      },
+      "ranInTrial": true
+    },
+    {
+      "id": "C",
+      "model": "gemini-3.6-flash",
+      "note": "tier upgrade",
+      "generationConfig": {
+        "responseMimeType": "application/json"
+      },
+      "ranInTrial": true
+    }
+  ],
+  "items": [
+    {
+      "id": "tm-01",
+      "topic": "friends",
+      "en": "If you're free, how about getting together to catch up?",
+      "reference": "如果你得閒，不如一齊去敘舊？",
+      "refJp": "jyu4 gwo2 nei5 dak1 haan4, bat1 jyu4 jat1 cai4 heoi3 zeoi6 gau6?",
+      "outputs": {
+        "A": {
+          "model": "gemini-2.5-flash-lite",
+          "zh": "如果你得閒，不如出嚟傾吓偈？",
+          "jp": "jyu4 nei5 dak1 haan4, bat1 jyu4 ceot1 lai4 king1 haa5 gai2?",
+          "en": "If you're free, how about getting together to catch up?",
+          "ms": 2086,
+          "usage": {
+            "promptTokenCount": 224,
+            "candidatesTokenCount": 256,
+            "totalTokenCount": 480,
+            "promptTokensDetails": [
+              {
+                "modality": "TEXT",
+                "tokenCount": 224
+              }
+            ],
+            "serviceTier": "standard"
+          }
+        },
+        "B": {
+          "model": "gemini-3.5-flash-lite",
+          "zh": "如果你得閒嘅話，不如約埋聚一聚，傾吓偈啦？",
+          "jp": "jyu4 gwo2 nei5 dak1 haan4 ge3 waa2, bat1 jyu4 joek3 maai4 zeoi6 jat1 zeoi6, king1 haa5 gai2 laa1?",
+          "en": "If you're free, how about getting together to catch up?",
+          "ms": 2447,
+          "usage": {
+            "promptTokenCount": 224,
+            "candidatesTokenCount": 434,
+            "totalTokenCount": 658,
+            "promptTokensDetails": [
+              {
+                "modality": "TEXT",
+                "tokenCount": 224
+              }
+            ],
+            "serviceTier": "standard"
+          }
+        },
+        "C": {
+          "model": "gemini-3.6-flash",
+          "zh": "如果你得閒嘅話，不如出嚟傾吓偈？",
+          "jp": "jyu4 gwo2 nei5 dak1 haan4 ge3 waa2, bat1 jyu4 ceot1 lai4 king1 haa5 gai2?",
+          "en": "If you're free, how about getting together to catch up?",
+          "ms": 35667,
+          "usage": {
+            "promptTokenCount": 224,
+            "candidatesTokenCount": 324,
+            "totalTokenCount": 1841,
+            "promptTokensDetails": [
+              {
+                "modality": "TEXT",
+                "tokenCount": 224
+              }
+            ],
+            "thoughtsTokenCount": 1293,
+            "serviceTier": "standard"
+          }
+        }
+      },
+      "order": [
+        "A",
+        "B",
+        "C"
+      ]
+    },
+    {
+      "id": "tm-02",
+      "topic": "body",
+      "en": "Although I'm coughing, I don't have a fever.",
+      "reference": "雖然我咳，但係冇發燒。",
+      "refJp": "seoi1 jin4 ngo5 kat1, daan6 hai6 mou5 faat3 siu1.",
+      "outputs": {
+        "A": {
+          "model": "gemini-2.5-flash-lite",
+          "zh": "雖然我咳緊，但我冇發燒。",
+          "jp": "seoi1 jin4 ngo5 hat1 gan2, daan6 si6 ngo5 mou5 faat3 siu1.",
+          "en": "Although I'm coughing, I don't have a fever.",
+          "ms": 2364,
+          "usage": {
+            "promptTokenCount": 224,
+            "candidatesTokenCount": 249,
+            "totalTokenCount": 473,
+            "promptTokensDetails": [
+              {
+                "modality": "TEXT",
+                "tokenCount": 224
+              }
+            ],
+            "serviceTier": "standard"
+          }
+        },
+        "B": {
+          "model": "gemini-3.5-flash-lite",
+          "zh": "雖然我咳緊，但係我冇發燒。",
+          "jp": "seoi1 jin4 ngo5 kat1 gan2, daan6 hai6 ngo5 mou5 faat3 siu1.",
+          "en": "Although I'm coughing, I don't have a fever.",
+          "ms": 2157,
+          "usage": {
+            "promptTokenCount": 224,
+            "candidatesTokenCount": 372,
+            "totalTokenCount": 596,
+            "promptTokensDetails": [
+              {
+                "modality": "TEXT",
+                "tokenCount": 224
+              }
+            ],
+            "serviceTier": "standard"
+          }
+        },
+        "C": {
+          "model": "gemini-3.6-flash",
+          "zh": "雖然我咳緊，但係我冇發燒。",
+          "jp": "seoi1 jin4 ngo5 kat1 gan2, daan6 hai6 ngo5 mou5 faat3 siu1.",
+          "en": "Although I'm coughing, I don't have a fever.",
+          "ms": 32131,
+          "usage": {
+            "promptTokenCount": 224,
+            "candidatesTokenCount": 321,
+            "totalTokenCount": 1137,
+            "promptTokensDetails": [
+              {
+                "modality": "TEXT",
+                "tokenCount": 224
+              }
+            ],
+            "thoughtsTokenCount": 592,
+            "serviceTier": "standard"
+          }
+        }
+      },
+      "order": [
+        "C",
+        "A",
+        "B"
+      ]
+    },
+    {
+      "id": "tm-03",
+      "topic": "transport",
+      "en": "Where does the bus stop?",
+      "reference": "巴士喺邊度停？",
+      "refJp": "baa1 si2 hai2 bin1 dou6 ting4?",
+      "outputs": {
+        "A": {
+          "model": "gemini-2.5-flash-lite",
+          "zh": "巴士喺邊度停？",
+          "jp": "baa1 si2 hai2 bin1 dou6 ting4?",
+          "en": "Where does the bus stop?",
+          "ms": 1886,
+          "usage": {
+            "promptTokenCount": 216,
+            "candidatesTokenCount": 147,
+            "totalTokenCount": 363,
+            "promptTokensDetails": [
+              {
+                "modality": "TEXT",
+                "tokenCount": 216
+              }
+            ],
+            "serviceTier": "standard"
+          }
+        },
+        "B": {
+          "model": "gemini-3.5-flash-lite",
+          "zh": "巴士喺边度停呀？",
+          "jp": "baa1 si2 hei2 bin1 dou6 ting4 aa3?",
+          "en": "Where does the bus stop?",
+          "ms": 1615,
+          "usage": {
+            "promptTokenCount": 216,
+            "candidatesTokenCount": 192,
+            "totalTokenCount": 408,
+            "promptTokensDetails": [
+              {
+                "modality": "TEXT",
+                "tokenCount": 216
+              }
+            ],
+            "serviceTier": "standard"
+          }
+        },
+        "C": {
+          "model": "gemini-3.6-flash",
+          "zh": "巴士喺邊度停？",
+          "jp": "baa1 si2 hai2 bin1 dou6 ting4?",
+          "en": "Where does the bus stop?",
+          "ms": 9790,
+          "usage": {
+            "promptTokenCount": 216,
+            "candidatesTokenCount": 122,
+            "totalTokenCount": 1196,
+            "promptTokensDetails": [
+              {
+                "modality": "TEXT",
+                "tokenCount": 216
+              }
+            ],
+            "thoughtsTokenCount": 858,
+            "serviceTier": "standard"
+          }
+        }
+      },
+      "order": [
+        "A",
+        "B",
+        "C"
+      ]
+    },
+    {
+      "id": "tm-04",
+      "topic": "pronouns",
+      "en": "This one is yours.",
+      "reference": "呢個係你嘅。",
+      "refJp": "ni1 go3 hai6 nei5 ge3.",
+      "outputs": {
+        "A": {
+          "model": "gemini-2.5-flash-lite",
+          "zh": "呢個係你嘅。",
+          "jp": "ni1 go3 hai6 nei5 ge3.",
+          "en": "This one is yours.",
+          "ms": 1956,
+          "usage": {
+            "promptTokenCount": 215,
+            "candidatesTokenCount": 139,
+            "totalTokenCount": 354,
+            "promptTokensDetails": [
+              {
+                "modality": "TEXT",
+                "tokenCount": 215
+              }
+            ],
+            "serviceTier": "standard"
+          }
+        },
+        "B": {
+          "model": "gemini-3.5-flash-lite",
+          "zh": "呢個係你嘅。",
+          "jp": "ni1 go3 hai6 nei5 ge2.",
+          "en": "This one is yours.",
+          "ms": 1646,
+          "usage": {
+            "promptTokenCount": 215,
+            "candidatesTokenCount": 153,
+            "totalTokenCount": 368,
+            "promptTokensDetails": [
+              {
+                "modality": "TEXT",
+                "tokenCount": 215
+              }
+            ],
+            "serviceTier": "standard"
+          }
+        },
+        "C": {
+          "model": "gemini-3.6-flash",
+          "zh": "呢個係你嘅。",
+          "jp": "ni1 go3 hai6 nei5 ge3",
+          "en": "This one is yours.",
+          "ms": 5543,
+          "usage": {
+            "promptTokenCount": 215,
+            "candidatesTokenCount": 103,
+            "totalTokenCount": 969,
+            "promptTokensDetails": [
+              {
+                "modality": "TEXT",
+                "tokenCount": 215
+              }
+            ],
+            "thoughtsTokenCount": 651,
+            "serviceTier": "standard"
+          }
+        }
+      },
+      "order": [
+        "C",
+        "B",
+        "A"
+      ]
+    },
+    {
+      "id": "tm-05",
+      "topic": "home",
+      "en": "I'm going home.",
+      "reference": "我返屋企。",
+      "refJp": "ngo5 faan1 uk1 kei2.",
+      "outputs": {
+        "A": {
+          "model": "gemini-2.5-flash-lite",
+          "zh": "我返屋企喇。",
+          "jp": "ngo5 faan1 uk1 kei2 laa3.",
+          "en": "I'm going home.",
+          "ms": 1738,
+          "usage": {
+            "promptTokenCount": 216,
+            "candidatesTokenCount": 150,
+            "totalTokenCount": 366,
+            "promptTokensDetails": [
+              {
+                "modality": "TEXT",
+                "tokenCount": 216
+              }
+            ],
+            "serviceTier": "standard"
+          }
+        },
+        "B": {
+          "model": "gemini-3.5-flash-lite",
+          "zh": "我返屋企喇。",
+          "jp": "ngo5 faan1 uk1 kei2 laa3.",
+          "en": "I'm going home.",
+          "ms": 1850,
+          "usage": {
+            "promptTokenCount": 216,
+            "candidatesTokenCount": 161,
+            "totalTokenCount": 377,
+            "promptTokensDetails": [
+              {
+                "modality": "TEXT",
+                "tokenCount": 216
+              }
+            ],
+            "serviceTier": "standard"
+          }
+        },
+        "C": {
+          "model": "gemini-3.6-flash",
+          "zh": "我返屋企。",
+          "jp": "ngo5 faan1 uk1 kei2.",
+          "en": "I'm going home.",
+          "ms": 9322,
+          "usage": {
+            "promptTokenCount": 216,
+            "candidatesTokenCount": 100,
+            "totalTokenCount": 861,
+            "promptTokensDetails": [
+              {
+                "modality": "TEXT",
+                "tokenCount": 216
+              }
+            ],
+            "thoughtsTokenCount": 545,
+            "serviceTier": "standard"
+          }
+        }
+      },
+      "order": [
+        "B",
+        "A",
+        "C"
+      ]
+    },
+    {
+      "id": "tm-06",
+      "topic": "attractions",
+      "en": "When does this attraction open?",
+      "reference": "呢個景點幾時開？",
+      "refJp": "ni1 go3 ging2 dim2 gei2 si4 hoi1?",
+      "outputs": {
+        "A": {
+          "model": "gemini-2.5-flash-lite",
+          "zh": "呢個景點幾時開？",
+          "jp": "ni1 go3 ging2 dim2 gei2 si4 hoi1?",
+          "en": "When does this attraction open?",
+          "ms": 2044,
+          "usage": {
+            "promptTokenCount": 216,
+            "candidatesTokenCount": 156,
+            "totalTokenCount": 372,
+            "promptTokensDetails": [
+              {
+                "modality": "TEXT",
+                "tokenCount": 216
+              }
+            ],
+            "serviceTier": "standard"
+          }
+        },
+        "B": {
+          "model": "gemini-3.5-flash-lite",
+          "zh": "呢個景點幾時開呀？",
+          "jp": "ni1 go3 ging2 dim2 gei2 si4 hoi1 aa3?",
+          "en": "When does this attraction open?",
+          "ms": 1658,
+          "usage": {
+            "promptTokenCount": 216,
+            "candidatesTokenCount": 204,
+            "totalTokenCount": 420,
+            "promptTokensDetails": [
+              {
+                "modality": "TEXT",
+                "tokenCount": 216
+              }
+            ],
+            "serviceTier": "standard"
+          }
+        },
+        "C": {
+          "model": "gemini-3.6-flash",
+          "zh": "呢個景點幾時開門？",
+          "jp": "ni1 go3 ging2 dim2 gei2 si4 hoi1 mun4?",
+          "en": "When does this attraction open?",
+          "ms": 8918,
+          "usage": {
+            "promptTokenCount": 216,
+            "candidatesTokenCount": 144,
+            "totalTokenCount": 1193,
+            "promptTokensDetails": [
+              {
+                "modality": "TEXT",
+                "tokenCount": 216
+              }
+            ],
+            "thoughtsTokenCount": 833,
+            "serviceTier": "standard"
+          }
+        }
+      },
+      "order": [
+        "A",
+        "B",
+        "C"
+      ]
+    },
+    {
+      "id": "tm-07",
+      "topic": "feelings",
+      "en": "I feel very nervous.",
+      "reference": "我覺得好緊張。",
+      "refJp": "ngo5 gok3 dak1 hou2 gan2 zoeng1.",
+      "outputs": {
+        "A": {
+          "model": "gemini-2.5-flash-lite",
+          "zh": "我好緊張呀。",
+          "jp": "ngo5 hou2 gam2 zoeng1 aa3.",
+          "en": "I feel very nervous.",
+          "ms": 1953,
+          "usage": {
+            "promptTokenCount": 215,
+            "candidatesTokenCount": 140,
+            "totalTokenCount": 355,
+            "promptTokensDetails": [
+              {
+                "modality": "TEXT",
+                "tokenCount": 215
+              }
+            ],
+            "serviceTier": "standard"
+          }
+        },
+        "B": {
+          "model": "gemini-3.5-flash-lite",
+          "zh": "我覺得好緊張。",
+          "jp": "ngo5 gok3 dak1 hou2 gan2 zoeng1.",
+          "en": "I feel very nervous.",
+          "ms": 1747,
+          "usage": {
+            "promptTokenCount": 215,
+            "candidatesTokenCount": 186,
+            "totalTokenCount": 401,
+            "promptTokensDetails": [
+              {
+                "modality": "TEXT",
+                "tokenCount": 215
+              }
+            ],
+            "serviceTier": "standard"
+          }
+        },
+        "C": {
+          "model": "gemini-3.6-flash",
+          "zh": "我覺得好緊張。",
+          "jp": "ngo5 gok3 dak1 hou2 gan2 zoeng1",
+          "en": "I feel very nervous.",
+          "ms": 12106,
+          "usage": {
+            "promptTokenCount": 215,
+            "candidatesTokenCount": 95,
+            "totalTokenCount": 842,
+            "promptTokensDetails": [
+              {
+                "modality": "TEXT",
+                "tokenCount": 215
+              }
+            ],
+            "thoughtsTokenCount": 532,
+            "serviceTier": "standard"
+          }
+        }
+      },
+      "order": [
+        "A",
+        "B",
+        "C"
+      ]
+    },
+    {
+      "id": "tm-08",
+      "topic": "comparisons",
+      "en": "Are you as clever as him?",
+      "reference": "你有冇佢咁叻㗎？",
+      "refJp": "nei5 jau5 mou5 keoi5 gam3 lek1 gaa3?",
+      "outputs": {
+        "A": {
+          "model": "gemini-2.5-flash-lite",
+          "zh": "你係咪好似佢咁叻？",
+          "jp": "nei5 haisi6 hou2 ci3 keoi5 gam3 lek1?",
+          "en": "Are you as clever as him?",
+          "ms": 1912,
+          "usage": {
+            "promptTokenCount": 217,
+            "candidatesTokenCount": 202,
+            "totalTokenCount": 419,
+            "promptTokensDetails": [
+              {
+                "modality": "TEXT",
+                "tokenCount": 217
+              }
+            ],
+            "serviceTier": "standard"
+          }
+        },
+        "B": {
+          "model": "gemini-3.5-flash-lite",
+          "zh": "你同佢一样咁聪明呀？",
+          "jp": "nei5 tung4 keoi5 jat1 joeng6 gam3 cung1 ming4 aa3?",
+          "en": "Are you as clever as him?",
+          "ms": 1972,
+          "usage": {
+            "promptTokenCount": 217,
+            "candidatesTokenCount": 294,
+            "totalTokenCount": 511,
+            "promptTokensDetails": [
+              {
+                "modality": "TEXT",
+                "tokenCount": 217
+              }
+            ],
+            "serviceTier": "standard"
+          }
+        },
+        "C": {
+          "model": "gemini-3.6-flash",
+          "zh": "你有冇佢咁叻？",
+          "jp": "nei5 jau5 mou5 keoi5 gam3 lek1?",
+          "en": "Are you as clever as him?",
+          "ms": 38080,
+          "usage": {
+            "promptTokenCount": 217,
+            "candidatesTokenCount": 228,
+            "totalTokenCount": 1834,
+            "promptTokensDetails": [
+              {
+                "modality": "TEXT",
+                "tokenCount": 217
+              }
+            ],
+            "thoughtsTokenCount": 1389,
+            "serviceTier": "standard"
+          }
+        }
+      },
+      "order": [
+        "C",
+        "B",
+        "A"
+      ]
+    },
+    {
+      "id": "tm-09",
+      "topic": "particles",
+      "en": "Let's go together.",
+      "reference": "一齊去啦。",
+      "refJp": "jat1 cai4 heoi3 laa1.",
+      "outputs": {
+        "A": {
+          "model": "gemini-2.5-flash-lite",
+          "zh": "我哋一齊去啦。",
+          "jp": "ngo5 dei6 jat1 cai4 heoi3 laa1.",
+          "en": "Let's go together.",
+          "ms": 2162,
+          "usage": {
+            "promptTokenCount": 216,
+            "candidatesTokenCount": 156,
+            "totalTokenCount": 372,
+            "promptTokensDetails": [
+              {
+                "modality": "TEXT",
+                "tokenCount": 216
+              }
+            ],
+            "serviceTier": "standard"
+          }
+        },
+        "B": {
+          "model": "gemini-3.5-flash-lite",
+          "zh": "一齊去啦。",
+          "jp": "jat1 cai4 heoi3 laa1.",
+          "en": "Let's go together.",
+          "ms": 1852,
+          "usage": {
+            "promptTokenCount": 216,
+            "candidatesTokenCount": 155,
+            "totalTokenCount": 371,
+            "promptTokensDetails": [
+              {
+                "modality": "TEXT",
+                "tokenCount": 216
+              }
+            ],
+            "serviceTier": "standard"
+          }
+        },
+        "C": {
+          "model": "gemini-3.6-flash",
+          "error": "Expected ',' or '}' after property value in JSON at position 271 (line 1 column 272)"
+        }
+      },
+      "order": [
+        "A",
+        "B",
+        "C"
+      ]
+    },
+    {
+      "id": "tm-10",
+      "topic": "restaurant",
+      "en": "Please recommend what's good to eat.",
+      "reference": "唔該你介紹下有咩好食。",
+      "refJp": "m4 goi1 nei5 gaai3 siu6 haa5 jau5 me1 hou2 sik6.",
+      "outputs": {
+        "A": {
+          "model": "gemini-2.5-flash-lite",
+          "zh": "請問有咩好食呀？",
+          "jp": "cing2 man4 jau5 me1 hou2 sik6 aa3?",
+          "en": "Please recommend what's good to eat.",
+          "ms": 1946,
+          "usage": {
+            "promptTokenCount": 219,
+            "candidatesTokenCount": 190,
+            "totalTokenCount": 409,
+            "promptTokensDetails": [
+              {
+                "modality": "TEXT",
+                "tokenCount": 219
+              }
+            ],
+            "serviceTier": "standard"
+          }
+        },
+        "B": {
+          "model": "gemini-3.5-flash-lite",
+          "zh": "唔該推薦吓有咩好食。",
+          "jp": "m4 goi1 teoi3 zin3 haa5 jau5 me1 hou2 sik6.",
+          "en": "Please recommend what's good to eat.",
+          "ms": 2060,
+          "usage": {
+            "promptTokenCount": 219,
+            "candidatesTokenCount": 242,
+            "totalTokenCount": 461,
+            "promptTokensDetails": [
+              {
+                "modality": "TEXT",
+                "tokenCount": 219
+              }
+            ],
+            "serviceTier": "standard"
+          }
+        },
+        "C": {
+          "model": "gemini-3.6-flash",
+          "zh": "唔該介紹吓有乜嘢好食。",
+          "jp": "m4 goi1 gaai3 siu6 haa5 jau5 mat1 je5 hou2 sik6.",
+          "en": "Please recommend what's good to eat.",
+          "ms": 45073,
+          "usage": {
+            "promptTokenCount": 219,
+            "candidatesTokenCount": 192,
+            "totalTokenCount": 1537,
+            "promptTokensDetails": [
+              {
+                "modality": "TEXT",
+                "tokenCount": 219
+              }
+            ],
+            "thoughtsTokenCount": 1126,
+            "serviceTier": "standard"
+          }
+        }
+      },
+      "order": [
+        "B",
+        "A",
+        "C"
+      ]
+    },
+    {
+      "id": "tm-11",
+      "topic": "drinks",
+      "en": "I want to drink a coffee.",
+      "reference": "我想飲杯咖啡。",
+      "refJp": "ngo5 soeng2 jam2 bui1 gaa3 fe1.",
+      "outputs": {
+        "A": {
+          "model": "gemini-2.5-flash-lite",
+          "zh": "我想飲杯咖啡。",
+          "jp": "ngo5 soeng2 jam2 bui1 gaa3 fe1.",
+          "en": "I want to drink a coffee.",
+          "ms": 2055,
+          "usage": {
+            "promptTokenCount": 217,
+            "candidatesTokenCount": 187,
+            "totalTokenCount": 404,
+            "promptTokensDetails": [
+              {
+                "modality": "TEXT",
+                "tokenCount": 217
+              }
+            ],
+            "serviceTier": "standard"
+          }
+        },
+        "B": {
+          "model": "gemini-3.5-flash-lite",
+          "zh": "我想飲杯咖啡。",
+          "jp": "ngo5 soeng2 jam2 bui1 kaa1 fei1.",
+          "en": "I want to drink a coffee.",
+          "ms": 1627,
+          "usage": {
+            "promptTokenCount": 217,
+            "candidatesTokenCount": 171,
+            "totalTokenCount": 388,
+            "promptTokensDetails": [
+              {
+                "modality": "TEXT",
+                "tokenCount": 217
+              }
+            ],
+            "serviceTier": "standard"
+          }
+        },
+        "C": {
+          "model": "gemini-3.6-flash",
+          "zh": "我想飲杯咖啡。",
+          "jp": "ngo5 soeng2 jam2 bui1 gaa3 fe1.",
+          "en": "I want to drink a coffee.",
+          "ms": 40904,
+          "usage": {
+            "promptTokenCount": 217,
+            "candidatesTokenCount": 221,
+            "totalTokenCount": 1172,
+            "promptTokensDetails": [
+              {
+                "modality": "TEXT",
+                "tokenCount": 217
+              }
+            ],
+            "thoughtsTokenCount": 734,
+            "serviceTier": "standard"
+          }
+        }
+      },
+      "order": [
+        "A",
+        "B",
+        "C"
+      ]
+    },
+    {
+      "id": "tm-12",
+      "topic": "emergencies",
+      "en": "Where is A&E?",
+      "reference": "急症室喺邊度？",
+      "refJp": "gap1 zing3 sat1 hai2 bin1 dou6?",
+      "outputs": {
+        "A": {
+          "model": "gemini-2.5-flash-lite",
+          "zh": "急症室喺邊度呀？",
+          "jp": "gap1 zing6 sat1 hai2 bin1 dou6 aa3?",
+          "en": "Where is A&E?",
+          "ms": 1765,
+          "usage": {
+            "promptTokenCount": 216,
+            "candidatesTokenCount": 164,
+            "totalTokenCount": 380,
+            "promptTokensDetails": [
+              {
+                "modality": "TEXT",
+                "tokenCount": 216
+              }
+            ],
+            "serviceTier": "standard"
+          }
+        },
+        "B": {
+          "model": "gemini-3.5-flash-lite",
+          "zh": "急症室喺邊度啊？",
+          "jp": "gap1 zing3 sat1 hai2 bin1 dou6 aa3?",
+          "en": "Where is A&E?",
+          "ms": 1753,
+          "usage": {
+            "promptTokenCount": 216,
+            "candidatesTokenCount": 202,
+            "totalTokenCount": 418,
+            "promptTokensDetails": [
+              {
+                "modality": "TEXT",
+                "tokenCount": 216
+              }
+            ],
+            "serviceTier": "standard"
+          }
+        },
+        "C": {
+          "model": "gemini-3.6-flash",
+          "zh": "急症室喺邊度？",
+          "jp": "gap1 zing3 sat1 hai2 bin1 dou6?",
+          "en": "Where is A&E?",
+          "ms": 6396,
+          "usage": {
+            "promptTokenCount": 216,
+            "candidatesTokenCount": 117,
+            "totalTokenCount": 891,
+            "promptTokensDetails": [
+              {
+                "modality": "TEXT",
+                "tokenCount": 216
+              }
+            ],
+            "thoughtsTokenCount": 558,
+            "serviceTier": "standard"
+          }
+        }
+      },
+      "order": [
+        "A",
+        "B",
+        "C"
+      ]
+    }
+  ],
+  "failures": [
+    {
+      "en": "Let's go together.",
+      "arm": "C",
+      "error": "Expected ',' or '}' after property value in JSON at position 271 (line 1 column 272)"
+    }
+  ]
+}
