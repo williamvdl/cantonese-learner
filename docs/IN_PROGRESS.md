@@ -4,7 +4,7 @@
 questions behind it. Meant to be short-lived — when a piece ships, fold its
 outcome into STATUS.md and clear this file back down for the next thing.*
 
-Last updated: 2026-09-11 · sw.js at v142
+Last updated: 2026-09-11 · sw.js at v143
 
 ## Nothing in progress
 
@@ -27,16 +27,15 @@ changed code.
 **The Gemini model trial ran and is closed.** Result and reasoning are in
 STATUS.md; the follow-up candidate is in BACKLOG.md. Nothing from it is open.
 
-## v142 — delivered, not yet generated or deployed
+## v143 — audio pushed, awaiting device QA
 
-**The conversation voice swap (DES-51) is code-complete and waiting on one
-local step**: `node tools/generate-audio.js --force=convos` regenerates the 484
-conversation files with the new casting. Nothing else regenerates — the narrator
-voice did not move, so words and sentences are untouched, and `--force=convos`
-matches the `audio/convos/` path segment and nothing else. **Commit the audio
-with or before `sw.js`**, never after: the audio is runtime-cached under
-`CACHE_VERSION`, so bumping first clears the cache and re-caches the old files
-under the new name.
+**The conversation voice swap (DES-51).** v142 shipped the code and docs; the
+484 regenerated conversation files follow as v143 with a fresh `CACHE_VERSION`.
+The split was not planned — v142 went up before the audio was generated, which
+is the one ordering the rule forbids, because runtime caching keys on
+`CACHE_VERSION` and any device that played a conversation line in that window
+cached the old audio under the new name. The v143 bump displaces it. Nothing is
+lost; it cost one version number.
 
 Device QA after deploy: any topic's Chat tab (the learner's bubbles should now
 be the male voice), Greetings round 1 and Questions round 1 specifically, since

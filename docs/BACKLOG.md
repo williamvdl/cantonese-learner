@@ -4,7 +4,7 @@
 IN_PROGRESS.md when it's picked up; delete it from here once it's shipped and
 folded into STATUS.md.*
 
-Last updated: 2026-09-11 · sw.js at v142
+Last updated: 2026-09-11 · sw.js at v143
 
 ## Product
 - **Runtime Azure TTS for the Translate screen — gated on the A2 proxy.** Agreed
