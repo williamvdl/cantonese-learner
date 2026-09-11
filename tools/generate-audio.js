@@ -51,9 +51,23 @@
  *
  * Azure zh-HK has exactly three voices, confirmed against the live voices/list
  * endpoint: zh-HK-WanLungNeural (male), zh-HK-HiuMaanNeural (female),
- * zh-HK-HiuGaaiNeural (female). The defaults below mirror the Google casting
- * they replaced: one male narrator who is also the other speaker, and a female
- * voice for You.
+ * zh-HK-HiuGaaiNeural (female). HiuGaai is the chosen female voice: all three
+ * were auditioned before v123 and HiuGaai was picked over HiuMaan.
+ *
+ * CASTING SWAPPED AT v142 (DES-51). Until v142 the defaults mirrored the Google
+ * casting they replaced — WanLung narrated AND played the other speaker, and
+ * HiuGaai played You. That was backwards for this learner, and it also put four
+ * conversation lines at odds with their own script: Greetings has the other
+ * speaker introduce herself as 阿梅 (aa3 mui4) "Mei" and the learner answer as
+ * "William"; Questions has the learner as "David" and the other speaker as
+ * "Sarah". Every one of those four was voiced by the opposite gender.
+ *
+ * So: WanLung (male) is the narrator AND You; HiuGaai (female) is the other
+ * speaker. The two-voice property that makes conversations legible is unchanged
+ * — the roles simply swapped sides, and the name/voice agreement fell out of it
+ * with no content edit. Regenerating ONLY the conversations is enough, because
+ * the narrator voice did not move: `--force=convos` matches the audio/convos/
+ * path segment and nothing else.
  *
  * ── USAGE ───────────────────────────────────────────────────────────────────
  *   node tools/generate-audio.js                     # everything missing
@@ -129,8 +143,8 @@ const PROVIDERS = {
     label: 'Azure AI Speech (zh-HK Neural)',
     defaults: {
       voice:      'zh-HK-WanLungNeural',   // words + sentences narrator
-      voiceYou:   'zh-HK-HiuGaaiNeural',   // the learner's own lines
-      voiceOther: 'zh-HK-WanLungNeural',   // Vendor / Friend / whoever
+      voiceYou:   'zh-HK-WanLungNeural',   // the learner's own lines (DES-51)
+      voiceOther: 'zh-HK-HiuGaaiNeural',   // Vendor / Friend / whoever (DES-51)
     },
     // Chosen to sit close to what Google's default MP3 output produced (~8kB for
     // a short item) so the corpus does not balloon — audio is runtime-cached by

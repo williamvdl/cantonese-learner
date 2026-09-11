@@ -276,7 +276,13 @@ learner's.
 conversation line needs a `tools/generate-audio.js` run and the files committed.
 Authoring without generating ships a silent lesson. The provider is **Azure AI
 Speech, `zh-HK` Neural**, since v123 — `zh-HK-WanLungNeural` for words, sentences
-and the non-learner speaker, `zh-HK-HiuGaaiNeural` for the learner's own lines.
+and **the learner's own lines**, `zh-HK-HiuGaaiNeural` for the other speaker.
+(The two conversation roles were the other way round until v142; see DES-51.)
+**A conversation line that names a speaker inherits that casting**, so a name
+written into a script is a gender commitment: the other speaker is female and
+the learner is male. Four existing lines — in `greetings.json` and
+`questions.json` — carry names and were written before this was true of the
+audio. Check any new one against it.
 Google Chirp3-HD (`yue-HK`) remains selectable as `--provider=google` but only as
 a labelled reference: it cannot produce a bare syllabic nasal, so 唔 (m4) and
 五 (ng5) come back with a vowel inserted. **That is a content-facing constraint,

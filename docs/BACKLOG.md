@@ -4,7 +4,7 @@
 IN_PROGRESS.md when it's picked up; delete it from here once it's shipped and
 folded into STATUS.md.*
 
-Last updated: 2026-09-10 · sw.js at v141
+Last updated: 2026-09-11 · sw.js at v142
 
 ## Product
 - **Runtime Azure TTS for the Translate screen — gated on the A2 proxy.** Agreed
@@ -123,26 +123,39 @@ are pointers only — detail goes there, not here.*
   start there rather than re-deriving it. It is a build-time tool, not a runtime
   dependency — the times can be computed once for the whole corpus and committed.
 
-- **Stage 3 — checkpoint activity using sentence data.** Replaces the removed
-  Patterns slot. **A direction was raised 2026-08-22 — speaking the sentences —
-  and is written up under *Checkpoint sentence activity* above; read that first.**
-  Not yet designed. Should reuse existing per-topic sentence data
-  (no new authoring), fit into the checkpoint hub as a third activity alongside
-  Words/Conversation. Sentence audio is now pre-generated, which opens up
-  listening-based activity designs worth considering. **The redesigned checkpoint
-  hub already accommodates a third activity** without layout changes — the
-  activities are numbered and the diamond progress ring scales to three segments.
-  DES-37 gives this a candidate shape: sentences drawn from the stage's topics,
-  spoken rather than tapped, with self-judged read-aloud as the fallback when mic
-  or network is unavailable. The sentence surface it was gated on is now built
-  (v130) — nothing blocks this item's own design.
 - **Intermediate checkpoint hub expansion** (data-only, after Beginner testing).
   *(The `intermediate-s3` missing-`id` fix that used to be bundled here landed at
   v127.)*
-- **Male/female voice toggle** — discussed as a future idea, not built. Architecture
-  (`speakItem`/`speakConvoLine` as the single audio-path resolvers) was kept
-  simple specifically to make this cheap to add later. Lands in the new **settings
-  sheet** behind the header cog, not in the tab bar.
+- **Narrator voice choice — words and sentences only, and it is a corpus
+  decision before it is a UI one.** *(This entry merges the two that used to sit
+  here and under Quality; they described the same unbuilt feature from different
+  angles.)* Azure `zh-HK` has three voices — WanLung (male), HiuMaan and HiuGaai
+  (female) — and all three were auditioned before v123, with HiuGaai picked as
+  the female voice. The architecture is ready: `speakItem`/`speakConvoLine` are
+  the single audio-path resolvers, kept simple specifically to make this cheap,
+  and the control lands in the **settings sheet** behind the header cog beside
+  Audio speed, not in the tab bar.
+
+  **What makes it non-trivial is the audio, not the toggle.** Paths resolve flat
+  (`./audio/{dir}/{id}.mp3`), so a second voice means a parallel tree. Scoped to
+  the narrator — words (585) and sentences (307) — that is **892 extra files and
+  roughly 12MB**, against 1,376 files and ~24MB if conversations were included
+  too. **Conversations are deliberately excluded** (William, 2026-09-11): they
+  already carry two voices by construction, so they are not where the variety is
+  missing, and a per-user swap of the DES-51 casting would re-break the four
+  name-bearing lines that casting exists to fix. The audio is runtime-cached by
+  the service worker under `CACHE_VERSION`, so the 12MB is a real on-device cost,
+  not just a repo one — and a full second set lands under the split-by-scope rule
+  logged under *A full-corpus regeneration* below.
+
+  **Open before it can be built:** whether the second narrator is HiuGaai or
+  HiuMaan (HiuGaai is already the other-speaker voice, so using it again makes
+  the choice male-vs-that-same-female rather than two genuinely new voices); what
+  the setting does to already-cached audio when switched; and the settings-sheet
+  row itself, which wants a mockup since the sheet currently holds exactly one
+  row. **Runtime TTS would remove the whole file-doubling problem** and is the
+  better long-run answer — but it sits behind the A2 proxy, same as the Translate
+  item under *Product*.
 - **Immersion/Pimsleur-style audio dialogues.** Early ideation, direction not
   chosen. Two candidate shapes: (a) pure immersion — native-speed scripted
   Cantonese, 2–4 distinct character voices, audio-drama register; (b)
@@ -298,13 +311,6 @@ are pointers only — detail goes there, not here.*
   literal out of the source file with a regex, compare both directions, and verify
   the check actually fails on drift before committing it.
 
-- **Male/female voice toggle is now cheaper than it was.** Azure `zh-HK` has
-  three voices (WanLung male, HiuMaan and HiuGaai female) against Chirp3-HD's 30,
-  so a toggle has fewer options but they are all confirmed correct. The casting
-  was reconfirmed at v123 — WanLung narrates and plays the other speaker,
-  HiuGaai plays You. **HiuMaan was never compared against HiuGaai for the You
-  role**; HiuGaai was heard, judged fine and adopted. One-word change to
-  `--voice-you` plus a regeneration if it is ever worth revisiting.
 - **Adopt a commit-message convention.** 22 of the last 25 commits are titled
   *"Add files via upload"*, GitHub Desktop's default, so the repo carries no
   changelog and STATUS.md's deploy table is the only record of what shipped when.
