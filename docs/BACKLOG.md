@@ -4,7 +4,7 @@
 IN_PROGRESS.md when it's picked up; delete it from here once it's shipped and
 folded into STATUS.md.*
 
-Last updated: 2026-09-05 · sw.js at v141
+Last updated: 2026-09-10 · sw.js at v141
 
 ## Product
 - **Runtime Azure TTS for the Translate screen — gated on the A2 proxy.** Agreed
@@ -157,6 +157,41 @@ are pointers only — detail goes there, not here.*
   stage vs. standalone episode list) undecided.
 
 ## Quality
+- **Revisit `gemini-3.5-flash-lite` for Translate — a live candidate, not a dead
+  end.** The 2026-09-10 trial kept `gemini-2.5-flash-lite`, but B finished joint
+  top on preference (7 of 12 with ties credited, one short of the bar) at
+  **median 1,850ms — marginally faster than the incumbent**, unlike
+  `gemini-3.6-flash` which was 6× slower. It is the natural successor and the
+  work to switch is a model string plus dropping `temperature` from
+  `generationConfig`, which Google deprecated for 3.x.
+  **Triggers to pick this up:** deprecation notice on 2.5 Flash-Lite (reported
+  as scheduled, so this is a when not an if); a free-tier quota change that makes
+  the incumbent impractical; or any sustained complaint about phrasing.
+  **One defect to resolve first, and it is disqualifying as it stands.** B leaked
+  simplified Mandarin twice in twelve items — 边 (bin1) for 邊 (bin1) in tm-03,
+  and 你同佢一样咁聪明呀 (nei5 tung4 keoi5 jat1 joeng6 gam3 cung1 ming4 aa3) in
+  tm-08, which was also the item it was flagged on for meaning. For a Cantonese
+  learner that is worse than a phrasing preference. Test whether the few-shot
+  examples proposed in July 2026 suppress it before considering the swap. Reuse
+  `tools/translate-model-set.js` and `tools/translate-model-judge.html`; the set
+  in `tools/translate-model-set.json` is reusable at no quota cost.
+
+- **`gemini-3.6-flash` is closed unless thinking can be turned down.** Best
+  quality in the trial, unusable latency (median 12,106ms, one call 45s, one
+  unparseable response in twelve). Gemini 3.x thinks by default. **The one
+  untested question is whether `thinking_level: minimal` brings it near two
+  seconds** — six calls would answer it. Until someone runs that, do not
+  re-propose this model on the strength of its quality score alone.
+
+- **Redo the model-trial judging with a Cantonese voice installed.** The
+  2026-09-10 session recorded `"voice": "no Chinese voice installed"`, so the
+  play buttons read Cantonese with a non-Chinese voice and the preference data
+  is contaminated to an unknown degree. **Costs no quota** — the set JSON is
+  reusable; it costs the judge ten minutes on a device with a zh-HK voice. Worth
+  doing only if the result is going to drive a decision; the trial's headline
+  conclusion (convergence on short sentences, incumbent stays) does not depend
+  on the audio.
+
 - **Evaluate `gemini-3.5-transcribe` as a replacement for the Web Speech API.**
   Found while reading the Gemini model docs for the translation trial; unrelated
   to it and larger. Speech recognition currently runs on the browser's Web Speech

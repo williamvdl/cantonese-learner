@@ -13,7 +13,7 @@ not a history log. Approved design decisions and whether they were built live in
 > convention (`v121 — <what changed>`) so this file stops being load-bearing on
 > its own.
 
-Last updated: 2026-09-05 · sw.js at v141
+Last updated: 2026-09-10 · sw.js at v141
 
 ## Confirmed live and working
 - **Checkpoint sentence review** (v134, DES-44/45). Third checkpoint activity:
@@ -243,6 +243,45 @@ orphan hues `#B7861E`, `#e4d4ad`, `#8a6716`,
 | DES-49, DES-50 | v141 | **Speak-back on the Translate screen — the fourth consumer of `startSpeechRecognition()`.** A "Say it" button paired with Listen expands the speak panel inside the result card (MOCK-30-A); the verdict furniture is the Learn sheet's, reused unchanged, so this added two CSS declarations and no new primitives. Audio for this screen now routes through one `speakTranslateTarget()` resolver — it still calls the browser's `speechSynthesis`, because a translation has no stable ID and therefore no pre-generated file, but the swap to a runtime Azure call becomes a one-function change once the A2 proxy exists. **Two things fell out of building it that were not in the plan.** *The target jyutping had to be derived rather than taken from the model's `jp` field*, because `renderSpeakBreakdown()` refuses to align unless the target holds one syllable per character and free-form model output cannot guarantee that; `charJyutpingSyllables()` was split out of `charsToJyutping()` so both consumers share one derivation. *That surfaced a live defect on every speak surface*: the Han test was `[\u4e00-\u9fff]`, which excludes CJK Extension A, where the sentence-final particle read gaa3 lives — so the "You said" line had been silently dropping its jyutping on any sentence ending in one, and the breakdown grid refused to align on them entirely. Fixed at the source, so Learn, Chat and the checkpoint review all gain it. **Invisible on those three screens unless a sentence contains such a character.** The refactor broke `jyutping-check.js` and `sentence-review-harness.js`, both of which lift functions from `app.js` by name — caught by the checks, which is what they are for. **Eleven standing checks green.** Alignment verified on out-of-corpus targets including the particle case; the Latin-word case falls back to the target's jyutping line by design rather than printing a bare verdict. |
 
 ### Notes worth carrying forward
+- **The Gemini model trial ran on 2026-09-10 and the incumbent stays.**
+  `gemini-2.5-flash-lite` remains the Translate model. Three arms, twelve
+  corpus-derived inputs, blind, judged by a fluent speaker, against a rule fixed
+  before the data existed: preferred on ≥8 of 12, zero meaning errors, median
+  latency ≤2× the incumbent. **Nobody cleared it.** After crediting ties —
+  identical output on five of twelve items, so a blind pick recorded position
+  rather than preference — A scored 5, B (`gemini-3.5-flash-lite`) 7, C
+  (`gemini-3.6-flash`) 7. **The most transferable finding is the convergence:**
+  on short everyday sentences the three models produce the *same* text; they
+  diverge only on longer or idiomatic ones. A model swap therefore buys nothing
+  on the bulk of what Translate is asked for, which is worth knowing before
+  anyone proposes one again.
+
+- **Latency, not quality, closed the strongest arm.** `gemini-3.6-flash` had the
+  best quality signal — zero meaning errors, joint top on preference — and a
+  **median of 12,106ms against the incumbent's 1,956ms**, with one call at 45
+  seconds. That is 6.2× against a 2× ceiling. It also returned unparseable JSON
+  on one of twelve. Gemini 3.x models think by default and thinking is billed and
+  timed as output, so **treat latency as a first-class criterion for any 3.x
+  model on a screen where the learner waits**, not a footnote. Untested: whether
+  `thinking_level: minimal` brings it into range.
+
+- **A probe that uses a device capability must record which capability was
+  actually present.** The judging page stamped `"voice": "no Chinese voice
+  installed"` into its export — so every play button during that session read
+  Cantonese text with a non-Chinese voice, and the `played` counts show it was
+  used heavily, up to six times on one item. The preference data is contaminated
+  to an unknown degree and **nothing but that stamp could have revealed it
+  afterwards**. Generalise: any probe depending on an installed voice, a
+  permission, a network condition or a device feature should name what it found,
+  not assume what it needed.
+
+- **`async function` defeats a naive source extractor.** The judging page lifts
+  functions from `app.js` by locating `'function ' + name + '('`. For
+  `speak()`, declared `async function speak(...)`, that starts the slice *after*
+  the `async` keyword; the extracted body then throws on its first `await`. It
+  would have surfaced only on the device, mid-session. Every extractor in
+  `tools/` should step back over a preceding `async `.
+
 - **A human disposition asked after the verdict is shown is not independent of
   it.** `tools/translate-reject-probe.html` displayed the match result and the
   heard text, then asked the operator whether to keep or discard the attempt.
