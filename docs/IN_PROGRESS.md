@@ -27,21 +27,18 @@ changed code.
 **The Gemini model trial ran and is closed.** Result and reasoning are in
 STATUS.md; the follow-up candidate is in BACKLOG.md. Nothing from it is open.
 
-## Delivered this session — v144, v145, v146
+## Nothing in progress
 
-**Delivered and awaiting deploy: v144, v145, v146.** Three pieces built in one
-session, each recorded in STATUS.md: the forgiven-particle display fix and the
-架 (gaa3) variant (DES-53), the sentence-review summary row (DES-54, MOCK-31-B),
-and the Fill-the-Gap authoring pass. **They share one cache version, v146** — if
-the earlier zips have not been pushed yet, commit them together and only v146
-matters; if v145 is already live, v146 supersedes it cleanly.
+**v144, v145 and v146 shipped and device QA is done** — the forgiven-particle
+display fix and the 架 (gaa3) variant (DES-53), the sentence-review summary row
+(DES-54, MOCK-31-B), and Fill-the-Gap options for the last nine topic
+conversations. All three confirmed on the Pixel 2026-09-12. Nothing from them is
+open; the reasoning, and the one limit on what the v144 tick actually proves,
+are in the STATUS rows.
 
-QA still outstanding on all three; the lists are in the chat handover and the
-STATUS rows. Nothing is blocked.
-
-**Next candidate work:** the cross-rule duplicate-declaration script, and the
-open question about extending the particle rule beyond the final position. Both
-are in BACKLOG.md with their measurements.
+This file is cleared down. **Next candidate work:** the cross-rule
+duplicate-declaration script, and the open question about extending the particle
+rule beyond the final position. Both are in BACKLOG.md with their measurements.
 
 **Two things carried in BACKLOG.md rather than here, because nothing waits on
 them:** a clean rerun of the Translate false-reject probe with the disposition
