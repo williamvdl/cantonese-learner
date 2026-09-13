@@ -284,6 +284,16 @@
                 "j": "jyu2",
                 "e": "fish"
               }
+            ],
+            "opts": [
+              "好呀，我要一條魚。",
+              "唔要魚，我想買啲牛肉。",
+              "條魚要幾多錢呀？"
+            ],
+            "optsJ": [
+              "hou2 aa3, ngo5 jiu3 jat1 tiu4 jyu2.",
+              "m4 jiu3 jyu2, ngo5 soeng2 maai5 di1 ngau4 juk6.",
+              "tiu4 jyu2 jiu3 gei2 do1 cin2 aa3?"
             ]
           },
           {
@@ -335,6 +345,16 @@
                 "j": "m4 goi1",
                 "e": "please"
               }
+            ],
+            "opts": [
+              "要少少，唔該。",
+              "要多啲雞，同埋啲蝦。",
+              "唔使喇，夠喇。"
+            ],
+            "optsJ": [
+              "jiu3 siu2 siu2, m4 goi1.",
+              "jiu3 do1 di1 gai1, tung4 maai4 di1 haa1.",
+              "m4 sai2 laa3, gau3 laa3."
             ]
           },
           {
@@ -391,6 +411,16 @@
                 "j": "laa1",
                 "e": "(particle)"
               }
+            ],
+            "opts": [
+              "畀埋啲蝦我啦！",
+              "太貴喇，平啲得唔得？",
+              "我冇咁多錢喺身。"
+            ],
+            "optsJ": [
+              "bei2 maai4 di1 haa1 ngo5 laa1!",
+              "taai3 gwai3 laa3, peng4 di1 dak1 m4 dak1?",
+              "ngo5 mou5 gam3 do1 cin2 hai2 san1."
             ]
           }
         ]

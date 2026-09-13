@@ -4,7 +4,7 @@
 questions behind it. Meant to be short-lived — when a piece ships, fold its
 outcome into STATUS.md and clear this file back down for the next thing.*
 
-Last updated: 2026-09-11 · sw.js at v143
+Last updated: 2026-09-12 · sw.js at v146
 
 ## Nothing in progress
 
@@ -27,24 +27,21 @@ changed code.
 **The Gemini model trial ran and is closed.** Result and reasoning are in
 STATUS.md; the follow-up candidate is in BACKLOG.md. Nothing from it is open.
 
-## v143 — audio pushed, awaiting device QA
+## Delivered this session — v144, v145, v146
 
-**The conversation voice swap (DES-51).** v142 shipped the code and docs; the
-484 regenerated conversation files follow as v143 with a fresh `CACHE_VERSION`.
-The split was not planned — v142 went up before the audio was generated, which
-is the one ordering the rule forbids, because runtime caching keys on
-`CACHE_VERSION` and any device that played a conversation line in that window
-cached the old audio under the new name. The v143 bump displaces it. Nothing is
-lost; it cost one version number.
+**Delivered and awaiting deploy: v144, v145, v146.** Three pieces built in one
+session, each recorded in STATUS.md: the forgiven-particle display fix and the
+架 (gaa3) variant (DES-53), the sentence-review summary row (DES-54, MOCK-31-B),
+and the Fill-the-Gap authoring pass. **They share one cache version, v146** — if
+the earlier zips have not been pushed yet, commit them together and only v146
+matters; if v145 is already live, v146 supersedes it cleanly.
 
-Device QA after deploy: any topic's Chat tab (the learner's bubbles should now
-be the male voice), Greetings round 1 and Questions round 1 specifically, since
-those are the four name-bearing lines this exists to fix, and one checkpoint
-conversation, which is a separate data source running the same casting logic.
+QA still outstanding on all three; the lists are in the chat handover and the
+STATUS rows. Nothing is blocked.
 
-**Next after that:** re-assess priorities. The agreed order was the voice swap
-first, then Fill-the-Gap `opts` (19 conversations with a hidden activity) and
-the cross-rule duplicate-declaration script.
+**Next candidate work:** the cross-rule duplicate-declaration script, and the
+open question about extending the particle rule beyond the final position. Both
+are in BACKLOG.md with their measurements.
 
 **Two things carried in BACKLOG.md rather than here, because nothing waits on
 them:** a clean rerun of the Translate false-reject probe with the disposition

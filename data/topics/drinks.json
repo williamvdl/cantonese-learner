@@ -280,6 +280,16 @@
                 "j": "m4 goi1",
                 "e": "please"
               }
+            ],
+            "opts": [
+              "一杯凍檸茶，唔該。",
+              "我想飲杯熱咖啡，唔該。",
+              "我唔飲嘢，多謝。"
+            ],
+            "optsJ": [
+              "jat1 bui1 dung3 ning4 caa4, m4 goi1.",
+              "ngo5 soeng2 jam2 bui1 jit6 gaa3 fe1, m4 goi1.",
+              "ngo5 m4 jam2 je5, do1 ze6."
             ]
           },
           {
@@ -321,6 +331,16 @@
                 "j": "zau2 tim4",
                 "e": "no sugar"
               }
+            ],
+            "opts": [
+              "少冰，走甜。",
+              "要多啲冰，唔該。",
+              "唔要冰，要熱嘅。"
+            ],
+            "optsJ": [
+              "siu2 bing1, zau2 tim4.",
+              "jiu3 do1 di1 bing1, m4 goi1.",
+              "m4 jiu3 bing1, jiu3 jit6 ge3."
             ]
           },
           {
@@ -367,6 +387,16 @@
                 "j": "do1 ze6",
                 "e": "thanks"
               }
+            ],
+            "opts": [
+              "唔使喇，多謝！",
+              "仲要一杯凍檸茶，唔該。",
+              "有冇咖啡飲呀？"
+            ],
+            "optsJ": [
+              "m4 sai2 laa3, do1 ze6!",
+              "zung6 jiu3 jat1 bui1 dung3 ning4 caa4, m4 goi1.",
+              "jau5 mou5 gaa3 fe1 jam2 aa3?"
             ]
           }
         ]

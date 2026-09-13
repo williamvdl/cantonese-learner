@@ -288,6 +288,16 @@
                 "j": "soeng6 min6",
                 "e": "on top"
               }
+            ],
+            "opts": [
+              "喺張枱上面。",
+              "我唔記得放咗邊。",
+              "喺我個袋入面。"
+            ],
+            "optsJ": [
+              "hai2 zoeng1 toi2 soeng6 min6.",
+              "ngo5 m4 gei3 dak1 fong3 zo2 bin1.",
+              "hai2 ngo5 go3 doi2 jap6 min6."
             ]
           },
           {
@@ -339,6 +349,16 @@
                 "j": "haa6 min6",
                 "e": "underneath"
               }
+            ],
+            "opts": [
+              "咁睇下櫈下面。",
+              "咁你自己搵下啦。",
+              "可能喺廚房度。"
+            ],
+            "optsJ": [
+              "gam2 tai2 haa5 dang3 haa6 min6.",
+              "gam2 nei5 zi6 gei2 wan2 haa5 laa1.",
+              "ho2 nang4 hai2 cyu4 fong2 dou6."
             ]
           },
           {
@@ -385,6 +405,16 @@
                 "j": "hou2 coi2",
                 "e": "lucky"
               }
+            ],
+            "opts": [
+              "好彩！",
+              "喺邊個袋呀？",
+              "我幫你搵過啦。"
+            ],
+            "optsJ": [
+              "hou2 coi2!",
+              "hai2 bin1 go3 doi2 aa3?",
+              "ngo5 bong1 nei5 wan2 gwo3 laa1."
             ]
           }
         ]

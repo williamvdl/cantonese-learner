@@ -285,6 +285,16 @@
                 "j": "faai3 di1",
                 "e": "faster"
               }
+            ],
+            "opts": [
+              "呢部平啲，不過嗰部快啲。",
+              "兩部都好貴，我買唔起。",
+              "我唔識用電話，你教我啦。"
+            ],
+            "optsJ": [
+              "ni1 bou6 peng4 di1, bat1 gwo3 go2 bou6 faai3 di1.",
+              "loeng5 bou6 dou1 hou2 gwai3, ngo5 maai5 m4 hei2.",
+              "ngo5 m4 sik1 jung6 din6 waa2, nei5 gaau3 ngo5 laa1."
             ]
           },
           {
@@ -326,6 +336,16 @@
                 "j": "caa1 m4 do1",
                 "e": "about the same"
               }
+            ],
+            "opts": [
+              "兩部差唔多。",
+              "我唔鍾意呢兩部。",
+              "邊部平啲呀？"
+            ],
+            "optsJ": [
+              "loeng5 bou6 caa1 m4 do1.",
+              "ngo5 m4 zung1 ji3 ni1 loeng5 bou6.",
+              "bin1 bou6 peng4 di1 aa3?"
             ]
           },
           {
@@ -382,6 +402,16 @@
                 "j": "ng5 baak3 man1",
                 "e": "500 dollars"
               }
+            ],
+            "opts": [
+              "呢部比嗰部平五百蚊。",
+              "兩部價錢一樣，冇分別。",
+              "我唔知價錢，你問下佢啦。"
+            ],
+            "optsJ": [
+              "ni1 bou6 bei2 go2 bou6 peng4 ng5 baak3 man1.",
+              "loeng5 bou6 gaa3 cin4 jat1 joeng6, mou5 fan1 bit6.",
+              "ngo5 m4 zi1 gaa3 cin4, nei5 man6 haa5 keoi5 laa1."
             ]
           }
         ]

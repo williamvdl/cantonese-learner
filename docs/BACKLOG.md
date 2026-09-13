@@ -4,7 +4,7 @@
 IN_PROGRESS.md when it's picked up; delete it from here once it's shipped and
 folded into STATUS.md.*
 
-Last updated: 2026-09-11 · sw.js at v144
+Last updated: 2026-09-12 · sw.js at v146
 
 ## Product
 - **Runtime Azure TTS for the Translate screen — gated on the A2 proxy.** Agreed
@@ -47,24 +47,18 @@ are pointers only — detail goes there, not here.*
   genuine gaps and the cases that are deliberately note-free are separated in
   CONTENT.md §2 — do not work from a raw percentage, several rounds are complete
   at 5/8 by design.
-- **Fill-the-Gap `opts` — nine topic conversations, 27 user turns.** Listed in
-  CONTENT.md §2. *(Recorded as 19 until 2026-09-11: the ten Beginner checkpoints
-  in that figure are not a gap, because Fill-the-Gap is suppressed on checkpoint
-  conversations entirely — DES-52. Authoring them would produce data nothing
-  renders.)* No longer "no design question attached" either — the distractor
-  rule is now written in CONTENT.md §3, and the absence of one is how the
-  existing corpus ended up gameable. Author against that rule, not against the
-  neighbouring conversations.
-
-- **Retrofit the 141 existing Fill-the-Gap turns to the distractor rule.** The
+- **Retrofit the 141 older Fill-the-Gap turns to the distractor rule.** *(The 27
+  new ones authored at v146 already comply; these are the ones that predate the
+  rule.)* The
   activity is currently winnable without reading Chinese: measured by
   `tools/gap-opts-check.js`, the correct answer is strictly the longest of the
   three options in **128 of 141 turns (91%)**, and **120 of 141 (85%)** break
   rule 3 or rule 4. For an audience assumed not to read characters, tapping the
   longest option scores about nine in ten — so the activity is largely measuring
   nothing. Not urgent and not a defect in the code; it is content debt with a
-  known size. **Do the nine new conversations first** and see how the rule reads
-  in use before rewriting 141 turns against it. Promote rules 3 and 4 in
+  known size. **The nine new conversations are done** — use them before rewriting 141 turns
+  against the rule, since they are the evidence for whether it reads better in
+  practice or merely longer. Promote rules 3 and 4 in
   `gap-opts-check.js` from report to exit code in the same commit as the
   retrofit — not before, or the check joins the ones that always fail and stop
   being read.

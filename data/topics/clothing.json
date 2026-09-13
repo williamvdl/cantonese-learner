@@ -285,6 +285,16 @@
                 "j": "ngoi6 tou3",
                 "e": "coat"
               }
+            ],
+            "opts": [
+              "我想買件外套。",
+              "呢件衫幾多錢呀？",
+              "我想買對鞋。"
+            ],
+            "optsJ": [
+              "ngo5 soeng2 maai5 gin6 ngoi6 tou3.",
+              "ni1 gin6 saam1 gei2 do1 cin2 aa3?",
+              "ngo5 soeng2 maai5 deoi3 haai4."
             ]
           },
           {
@@ -341,6 +351,16 @@
                 "j": "maa5",
                 "e": "size"
               }
+            ],
+            "opts": [
+              "有冇大啲嘅碼？",
+              "呢件有冇第二個色？",
+              "唔該，我要埋條褲。"
+            ],
+            "optsJ": [
+              "jau5 mou5 daai6 di1 ge3 maa5?",
+              "ni1 gin6 jau5 mou5 dai6 ji6 go3 sik1?",
+              "m4 goi1, ngo5 jiu3 maai4 tiu4 fu3."
             ]
           },
           {
@@ -392,6 +412,16 @@
                 "j": "ni1 gin6",
                 "e": "this one"
               }
+            ],
+            "opts": [
+              "啱嗮！我要呢件。",
+              "我下次再嚟啦，唔該。",
+              "唔啱呀，太細喇。"
+            ],
+            "optsJ": [
+              "ngaam1 saai3! ngo5 jiu3 ni1 gin6.",
+              "ngo5 haa6 ci3 zoi3 lai4 laa1, m4 goi1.",
+              "m4 ngaam1 aa3, taai3 sai3 laa3."
             ]
           }
         ]

@@ -5,7 +5,7 @@ and what is planned. Content only — the app that renders it lives in STATUS.md
 the visual rules in DESIGN_SYSTEM.md, the UX decisions in DESIGN_DECISIONS.md,
 the tier-2 authoring rules in CONTENT_SPEC_TIER2.md.*
 
-Last updated: 2026-08-10 · sw.js at v127 · inventory derived from
+Last updated: 2026-09-12 · sw.js at v146 · inventory derived from
 `node tools/content-report.js`
 
 ---
@@ -239,10 +239,22 @@ Topic conversations without: `adjectives`, `classifiers`, `clothing`,
 tier 1 — all tier 1, all pre-spec.
 
 **Checkpoint conversations without: every Beginner checkpoint except s1.** That
-is ten of the eleven Beginner checkpoints, and it is a larger gap than the old
-handovers recorded — they logged only the nine topic conversations. Every
-Intermediate checkpoint has opts, so the shape is chronological: the practice was
-established after Beginner's checkpoints were authored.
+is ten of the eleven Beginner checkpoints. Every Intermediate checkpoint has
+opts, so the shape is chronological: the practice was established after
+Beginner's checkpoints were authored.
+
+**Closed 2026-09-12 at v146 — all nine authored, 168 of 168 topic user turns now
+carry `opts`.** The nine below are kept as the record of what was missing, not as
+outstanding work.
+
+**But none of the checkpoint numbers in this table describe a user-visible gap,
+and this row has been read the wrong way since it was written.** Fill-the-Gap is
+never offered on a checkpoint conversation — `renderConversation()` suppresses
+the control whenever the checkpoint convo activity is active (DES-52), and
+`path_convos.json` is reachable from nowhere else. So the ten Beginner
+checkpoints lose nothing by lacking `opts`, and the five that have them are
+carrying data the app never reads. **The real gap is nine topic conversations,
+not nineteen.** Authoring the checkpoint ten would produce dead data.
 
 ---
 
@@ -292,6 +304,42 @@ mispronounce any new sentence containing either character.
 **Every Chinese character is immediately followed by jyutping in brackets** —
 in sentences, breakdowns, notes, conversations and chat. No exceptions. Notes may
 carry `<strong>` and `<em>`, with `<strong>` reserved for the single key term.
+
+**Fill-the-Gap distractors — the rule, and why the existing ones fail it.**
+A user turn carries `opts` and `optsJ`: three strings each, positionally
+parallel, and `opts[0]` is the line verbatim. That much is already invariant
+across all 141 authored turns and is simply recorded here rather than decided.
+Four rules govern the other two:
+
+1. **A distractor is a whole turn, not a damaged answer.** Every one must be
+   grammatical Cantonese a real speaker could say. The activity asks *which
+   reply fits*, not *spot the error* — and a deliberately broken sentence put
+   in front of a beginner is as likely to be learned as rejected.
+2. **It is wrong at the level of the conversation, not the sentence.** The test
+   is that it would be a fine thing to say somewhere else and a wrong answer to
+   *this* question.
+3. **At least one distractor is at least as long as the correct answer**, and
+   neither is shorter than half of it, counted in Chinese characters.
+   **This is the rule the existing content breaks.** Measured across the 141
+   authored turns: the correct answer is strictly the longest of the three
+   options in **128 of them (91%)**, and the median answer is **1.83×** the mean
+   length of its distractors. A learner who reads no Chinese at all scores about
+   nine in ten by tapping the longest option — which is most learners, since the
+   audience is assumed not to read characters. Only 21 turns (15%) already
+   satisfy this rule.
+4. **At most one of the two may be a contentless fallback.** 我唔知 (ngo5 m4 zi1),
+   唔該 (m4 goi1), 再見 (zoi3 gin3) and 唔知 (m4 zi1) are the house fallbacks;
+   我唔知 (ngo5 m4 zi1) alone appears as a distractor in **25 of 141 turns**. One
+   is fine — a learner really might not know. Two makes the answer the only
+   option carrying any content, which is rule 3 arriving by a different route.
+   The other distractor must engage with what was actually asked.
+
+`tools/gap-opts-check.js` reports against all four. It is a **report, not a
+standing check**, until the retrofit in BACKLOG.md lands, because rules 3 and 4
+fail most of the corpus today and a check that always fails is a check nobody
+reads.
+
+**Checkpoint conversations do not use `opts` at all** — see §2.
 
 **Conversation titles are not unique.** `beginner-s2` and `intermediate-s1` are
 both "Making weekend plans"; `body` tier 1 and tier 2 are both "At the doctor";
@@ -466,9 +514,16 @@ numbering gap.
 was refocused onto bargaining: 試吓 (si3 haa5), 尺碼 (cek3 maa5), 緊 (gan2), 鬆
 (sung1), 大碼 (daai6 maa5), 細碼 (sai3 maa5). It has a reserved home in I-4.
 
-**Fill-the-Gap `opts`** — 19 conversations, listed in §2. The nine topic ones were
-already known; the ten Beginner checkpoints were not. Authoring three options per
-user turn is mechanical work with no design question attached.
+**Fill-the-Gap `opts`** — **done at v146.** All nine topic conversations, 27 user
+turns, authored against the §3 rule; topic coverage is 168/168. What follows is
+the record of what the gap was. *(This was recorded as 19 until 2026-09-11. The ten Beginner checkpoints in
+that figure are not a gap: Fill-the-Gap is suppressed on checkpoint
+conversations entirely, so authoring them would produce data nothing renders —
+see §2.)* All nine are tier 1 and pre-spec: `adjectives`, `classifiers`,
+`clothing`, `comparisons`, `drinks`, `fruitveg`, `location`, `meatseafood`,
+`modals`. Three user turns each. The distractor rule is in §3 and is no longer
+"no design question attached" — it was, and that is how the corpus ended up
+gameable by option length.
 
 **Note-authoring** — the genuine gaps from §2, once the design-by-omission cases
 are excluded. `numbers` tier 2 (0/5) resolves with its I-2 retrofit; the tier-1
@@ -518,6 +573,11 @@ start feeling samey** — the fixed 站 (zaam6) is the deliberate default.
 ---
 
 ## 6. Checks
+
+**`tools/gap-opts-check.js`** — reports every topic user turn against the four
+Fill-the-Gap rules in §3. Structural faults (three options, `opts[0]` verbatim,
+`optsJ` parallel, no duplicates) fail the run; rules 3 and 4 report only, until
+the retrofit in BACKLOG.md lands. `--summary` for counts, `--topic=<key>` for one.
 
 `node tools/content-report.js --check` asserts eight properties and exits 1 on
 failure. It is **standing check 9**, joining the eight in IN_PROGRESS.md, and is

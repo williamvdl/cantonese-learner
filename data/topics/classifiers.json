@@ -265,6 +265,16 @@
                 "j": "ni1 go3",
                 "e": "this one"
               }
+            ],
+            "opts": [
+              "我想要呢個。",
+              "呢個幾多錢呀？",
+              "我要嗰張枱。"
+            ],
+            "optsJ": [
+              "ngo5 soeng2 jiu3 ni1 go3.",
+              "ni1 go3 gei2 do1 cin2 aa3?",
+              "ngo5 jiu3 go2 zoeng1 toi2."
             ]
           },
           {
@@ -321,6 +331,16 @@
                 "j": "toi2",
                 "e": "table"
               }
+            ],
+            "opts": [
+              "要兩個，同埋嗰張枱。",
+              "要一個就夠喇，唔該。",
+              "我想飲杯凍檸茶。"
+            ],
+            "optsJ": [
+              "jiu3 loeng5 go3, tung4 maai4 go2 zoeng1 toi2.",
+              "jiu3 jat1 go3 zau6 gau3 laa3, m4 goi1.",
+              "ngo5 soeng2 jam2 bui1 dung3 ning4 caa4."
             ]
           },
           {
@@ -387,6 +407,16 @@
                 "j": "laa3",
                 "e": "(particle)"
               }
+            ],
+            "opts": [
+              "唔使喇，呢個就夠喇。",
+              "好呀，我要多兩個杯。",
+              "呢啲杯幾多錢呀？"
+            ],
+            "optsJ": [
+              "m4 sai2 laa3, ni1 go3 zau6 gau3 laa3.",
+              "hou2 aa3, ngo5 jiu3 do1 loeng5 go3 bui1.",
+              "ni1 di1 bui1 gei2 do1 cin2 aa3?"
             ]
           }
         ]

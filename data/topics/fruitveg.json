@@ -310,6 +310,16 @@
                 "j": "hoeng1 ziu1",
                 "e": "bananas"
               }
+            ],
+            "opts": [
+              "要，我想買幾個蘋果同香蕉。",
+              "啲蘋果幾多錢一個呀？",
+              "唔要蘋果，我想買啲菜心同番茄。"
+            ],
+            "optsJ": [
+              "jiu3, ngo5 soeng2 maai5 gei2 go3 ping4 gwo2 tung4 hoeng1 ziu1.",
+              "di1 ping4 gwo2 gei2 do1 cin2 jat1 go3 aa3?",
+              "m4 jiu3 ping4 gwo2, ngo5 soeng2 maai5 di1 coi3 sam1 tung4 faan1 ke2."
             ]
           },
           {
@@ -366,6 +376,16 @@
                 "j": "faan1 ke2",
                 "e": "tomatoes"
               }
+            ],
+            "opts": [
+              "要啲菜心同番茄。",
+              "唔使菜，要多啲蘋果。",
+              "有冇魚同雞賣呀？"
+            ],
+            "optsJ": [
+              "jiu3 di1 coi3 sam1 tung4 faan1 ke2.",
+              "m4 sai2 coi3, jiu3 do1 di1 ping4 gwo2.",
+              "jau5 mou5 jyu2 tung4 gai1 maai6 aa3?"
             ]
           },
           {
@@ -407,6 +427,16 @@
                 "j": "m4 goi1 saai3",
                 "e": "thanks a lot"
               }
+            ],
+            "opts": [
+              "唔該晒！",
+              "好貴喎，平啲得唔得？",
+              "我聽日再嚟買啦。"
+            ],
+            "optsJ": [
+              "m4 goi1 saai3!",
+              "hou2 gwai3 wo3, peng4 di1 dak1 m4 dak1?",
+              "ngo5 ting1 jat6 zoi3 lai4 maai5 laa1."
             ]
           }
         ]
