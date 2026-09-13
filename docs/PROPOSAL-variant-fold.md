@@ -4,7 +4,7 @@
 Watched organically rather than probed; see the revision note below for the
 counter-evidence that halved it. Tracked from `BACKLOG.md` under Quality.
 Do not re-derive this from the probe data — that is what this file prevents.
-**Written against:** v139 · still accurate at v141
+**Written against:** v139 · still accurate at v144
 
 > ### Revision note — 2026-09-05, added after counter-evidence
 >
@@ -82,6 +82,47 @@ That is the real cost, and it is bigger than the one flipped verdict: the fold
 does not just rescue rejected attempts, it stops variants **eating the allowance
 that genuine leniency is supposed to provide.**
 
+### Sightings after the probe — 2026-09-11
+
+The probe ran on 30 Translate targets. **It was never the whole corpus**, and the
+first sighting from ordinary use is a pair the table above does not contain.
+
+| Heard → target | Times | Same sound? | Reading | Where |
+|---|---|---|---|---|
+| 架 (gaa3) → 㗎 (gaa3) | 1 | **Yes, same tone** | orthographic variant — watch | Learn sentence sheet, 嗰隻狗係邊個㗎？ (go2 zek3 gau2 hai6 bin1 go3 gaa3?), Pixel, v143 |
+
+Six of seven characters matched and the attempt scored as close, so nothing was
+rejected — but the substitution is the cleanest example in this file of the
+shape the fold exists for: **identical syllable, identical tone, different
+character**, with no phonetic difference for the recogniser to have got wrong.
+The 的 (dik1)/嘅 (ge3) pair is not even that — those differ in sound.
+
+**Its corpus exposure is larger than anything in the probe table.** 㗎 (gaa3)
+appears **119 times** across `data/`, and 架 (gaa3) appears **zero** times, so
+every one of those 119 lines can take this substitution and none can produce it
+legitimately. Counted with `grep -ro` over `data/`, not estimated.
+
+> **Resolved 2026-09-11, and not by this proposal.** 㗎 (gaa3) was already in
+> `SPEAK_FINAL_PARTICLES`, the sentence-final particle rule inside
+> `fuzzyMatch()`; 架 (gaa3) simply was not in the list. Adding one character to
+> that set closes it (DES-53, v144). **The entry below is left standing because
+> the mistake in it is instructive**: the sighting was filed here on the strength
+> of its shape — two characters, same sound, one substituted for the other —
+> without checking whether an existing mechanism already covered that shape. It
+> did. Before adding a pair to this file, check `SPEAK_FINAL_PARTICLES` first;
+> anything sentence-final probably belongs there instead, and a fold in
+> `normalizeChinese()` is the heavier instrument of the two because it applies
+> everywhere rather than to one slot.
+
+**It stays on the watch list, and one sighting is the reason.** The same bar that
+demoted 的 (dik1) → 嘅 (ge3) applies here: the counter-evidence that halved this
+proposal was the discovery that a substitution seen twice in a probe decoded
+correctly in ordinary use, and a fold justified by intermittent behaviour is a
+worse trade than the false rejection it prevents. One sighting on one sentence
+cannot distinguish systematic from intermittent. **What would move it:** the same
+substitution on a *different* sentence, which is what makes it a property of the
+character rather than of one recording.
+
 ## 3. The proposal
 
 Fold exactly two pairs, in `normalizeChinese()`, applied to both sides of the
@@ -90,8 +131,10 @@ comparison:
     的 (dik1) → 嘅 (ge3)
     係 (hai6) → 喺 (hai2)
 
-Nothing else. 都 (dou1)/度 (dou6) is on the watch list with one observation and is **not**
-included — one occurrence is not evidence, and see §6.
+Nothing else. 都 (dou1)/度 (dou6) is on the watch list with one observation and
+is **not** included — one occurrence is not evidence, and see §6. 架 (gaa3)/㗎 (gaa3)
+was briefly listed here and has been handled by `SPEAK_FINAL_PARTICLES` instead;
+see the sightings section above.
 
 ## 4. What changes, measured
 

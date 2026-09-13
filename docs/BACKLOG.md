@@ -4,7 +4,7 @@
 IN_PROGRESS.md when it's picked up; delete it from here once it's shipped and
 folded into STATUS.md.*
 
-Last updated: 2026-09-11 · sw.js at v143
+Last updated: 2026-09-11 · sw.js at v144
 
 ## Product
 - **Runtime Azure TTS for the Translate screen — gated on the A2 proxy.** Agreed
@@ -47,9 +47,27 @@ are pointers only — detail goes there, not here.*
   genuine gaps and the cases that are deliberately note-free are separated in
   CONTENT.md §2 — do not work from a raw percentage, several rounds are complete
   at 5/8 by design.
-- **Fill-the-Gap `opts`.** 19 conversations have user turns without them, so the
-  activity is hidden. Listed in CONTENT.md §2. Mechanical authoring, no design
-  question attached.
+- **Fill-the-Gap `opts` — nine topic conversations, 27 user turns.** Listed in
+  CONTENT.md §2. *(Recorded as 19 until 2026-09-11: the ten Beginner checkpoints
+  in that figure are not a gap, because Fill-the-Gap is suppressed on checkpoint
+  conversations entirely — DES-52. Authoring them would produce data nothing
+  renders.)* No longer "no design question attached" either — the distractor
+  rule is now written in CONTENT.md §3, and the absence of one is how the
+  existing corpus ended up gameable. Author against that rule, not against the
+  neighbouring conversations.
+
+- **Retrofit the 141 existing Fill-the-Gap turns to the distractor rule.** The
+  activity is currently winnable without reading Chinese: measured by
+  `tools/gap-opts-check.js`, the correct answer is strictly the longest of the
+  three options in **128 of 141 turns (91%)**, and **120 of 141 (85%)** break
+  rule 3 or rule 4. For an audience assumed not to read characters, tapping the
+  longest option scores about nine in ten — so the activity is largely measuring
+  nothing. Not urgent and not a defect in the code; it is content debt with a
+  known size. **Do the nine new conversations first** and see how the rule reads
+  in use before rewriting 141 turns against it. Promote rules 3 and 4 in
+  `gap-opts-check.js` from report to exit code in the same commit as the
+  retrofit — not before, or the check joins the ones that always fail and stop
+  being read.
 - **`clothing` tier 2.** The sizing vocabulary displaced when `shopping` tier 2
   was refocused onto bargaining. Reserved home in chapter I-4. CONTENT.md §5.4.
 - **Per-stage checkpoint watermark.** The checkpoint hero carries a fixed
@@ -232,9 +250,35 @@ are pointers only — detail goes there, not here.*
   inherited bar (false rejects ≤10% overall and ≤10% short) — do not invent a
   second one.
 
+- **Should the sentence-final particle rule extend beyond the final position?**
+  Open question, raised 2026-09-11 by a device screenshot and confirmed by two
+  speakers. 唔使喇，呢個就夠喇 (m4 sai2 laa3, ni1 go3 zau6 gau3 laa3.) came back
+  with 啦 (laa1) for **both** 喇 (laa3). The final one is free; the mid-sentence
+  one costs an edit, because `fuzzyMatch()` rule 1 looks only at the last
+  character. **Measured, not estimated:** 83 of 791 spoken items contain 喇 or
+  啦, in 28 of those the particles alone would consume the entire edit allowance
+  leaving no room for a real error, and 3 short ones — 食飯喇 (sik6 faan6 laa3),
+  報警啦 (bou3 ging2 laa1), 落雨喇帶遮啦 (lok6 jyu5 laa3 daai3 ze1 laa1) — would
+  be rejected outright if every particle were substituted.
+
+  **Not obviously right, which is why it is a question and not a task.** The
+  argument for the existing rule is that a sentence-final particle is
+  acoustically reduced; a particle followed by more speech may not be, and the
+  recogniser may have more context to get it right. Extending the rule
+  unconditionally would make every particle in a sentence free, a materially
+  larger concession than the current one. **`docs/PROBE_METHOD.md` applies before
+  anything is built** — and note that the pass bar for "is this substitution
+  systematic" was already set by the variant-fold proposal: a substitution seen
+  on more than one sentence, not on more than one recording. Inherit that bar
+  rather than inventing a second one.
+
 - **Orthographic variant fold — considered, deferred, not rejected.** Full
   reasoning in `docs/PROPOSAL-variant-fold.md`; do not re-derive it from the
-  probe data, which is what this entry exists to prevent. Summary: the recogniser
+  probe data, which is what this entry exists to prevent. **The 㗎 (gaa3) / 架 (gaa3)
+  sighting logged here on 2026-09-11 turned out not to belong to this proposal at
+  all** — it was a sentence-final particle, already handled by
+  `SPEAK_FINAL_PARTICLES`, and adding 架 (gaa3) to that set closed it at v144
+  (DES-53). Check that set before adding anything sentence-final here. Summary: the recogniser
   sometimes writes 喺 (hai2) as 係 (hai6) and 嘅 (ge3) as 的 (dik1), and
   `normalizeChinese()` counts each as a learner error. **The 的 (dik1) half was
   weakened by counter-evidence** — device screenshots show

@@ -2010,6 +2010,34 @@ function deduplicateRepeats(s, minLen) {
 // than trusted not to happen.
 const SPEAK_FINAL_PARTICLES = new Set(['喇', '啦', '呀', '嗎', '喎', '囉', '㗎', '咋', '咩', '吖']);
 
+// Spellings the recogniser emits for a particle the corpus writes differently.
+// SEPARATE FROM THE SET ABOVE ON PURPOSE. validate.js asserts that
+// SPEAK_FINAL_PARTICLES mirrors the words taught in particles.json exactly, and
+// that assertion is worth keeping — so an ASR variant cannot go in it. The
+// alternative was teaching 架 (gaa3) as a vocabulary word, which would put a
+// spelling the corpus never uses into a lesson. 架 (gaa3) appears 119 times in
+// the corpus as 㗎 (gaa3) and zero times as itself.
+const SPEAK_PARTICLE_VARIANTS = new Map([['架', '㗎']]);
+
+const canonicalParticle = c => SPEAK_PARTICLE_VARIANTS.get(c) || c;
+
+// Is this pair a sentence-final particle swap the app forgives? Both fuzzyMatch()
+// and renderSpeakBreakdown() go through here rather than testing the set
+// themselves. THAT IS THE POINT OF THE FUNCTION: the rule lived only in
+// fuzzyMatch() until v144, so the breakdown panel drew a red mark on a character
+// the matcher had already decided was fine, and the learner was shown an error
+// in a sentence the app had passed. Same shape as DES-41. A rule that decides
+// something and a panel that reports it must read from one place.
+function isForgivenParticleSwap(a, b) {
+  if (!a || !b || a === b) return false;
+  const ca = canonicalParticle(a), cb = canonicalParticle(b);
+  // Covers both cases in one test: a genuine swap between two taught particles
+  // (喇 laa3 / 啦 laa1, which differ in meaning but not reliably in the audio),
+  // and a variant spelling of the same particle (架 gaa3 for 㗎 gaa3, where the
+  // canonical forms are identical and nothing differs at all).
+  return SPEAK_FINAL_PARTICLES.has(ca) && SPEAK_FINAL_PARTICLES.has(cb);
+}
+
 function fuzzyMatch(heard, target) {
   // Leniency, sized from measured recogniser behaviour rather than picked.
   //
@@ -2034,7 +2062,7 @@ function fuzzyMatch(heard, target) {
   //    targets for the same reason. Only the final character, only when both
   //    sides are particles.
   const hLast = h[h.length - 1], tLast = t[t.length - 1];
-  if (hLast !== tLast && SPEAK_FINAL_PARTICLES.has(hLast) && SPEAK_FINAL_PARTICLES.has(tLast)) {
+  if (isForgivenParticleSwap(hLast, tLast)) {
     h = h.slice(0, -1);
     t = t.slice(0, -1);
     if (h === t) return true;
@@ -2127,6 +2155,20 @@ function renderSpeakBreakdown(heard, targetC, targetJ, variant) {
 
   const heardClean = normalizeChinese(heard);
   const marks = alignChars(heardClean, charArr.join(''));
+
+  // fuzzyMatch() rule 1 drops a differing sentence-final particle from the
+  // comparison entirely, so it never costs an edit. Show it as correct here for
+  // the same reason: marking it wrong reports an error the app has already
+  // decided is not one, which is what made a passing attempt read as a failure.
+  // Only the final slot, and only when the heard character is a particle too —
+  // the same two conditions the matcher applies.
+  const lastIdx = charArr.length - 1;
+  const lastMark = marks[lastIdx];
+  if (lastMark && lastMark.status === 'wrong'
+      && isForgivenParticleSwap(lastMark.heardChar, charArr[lastIdx])) {
+    marks[lastIdx] = { status: 'match' };
+  }
+
   const hasDiff = marks.some(m => !m || m.status !== 'match');
 
   const cols = charArr.map((c, idx) => {

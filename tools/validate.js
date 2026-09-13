@@ -214,6 +214,22 @@ if (anySid) {
           if (!inApp.has(c)) err('agreement', `particle ${c} is in particles.json but missing from app.js SPEAK_FINAL_PARTICLES`);
         for (const c of inApp)
           if (!inData.has(c)) err('agreement', `particle ${c} is in app.js SPEAK_FINAL_PARTICLES but not in particles.json`);
+
+        // SPEAK_PARTICLE_VARIANTS holds spellings the recogniser emits for a
+        // particle the corpus writes differently. They are deliberately NOT
+        // taught, so the mirror above must not absorb them — assert both halves
+        // of that: the variant stays out of the lesson, and the canonical form
+        // it maps to is a real taught particle rather than a typo.
+        const vm = src.match(/const SPEAK_PARTICLE_VARIANTS = new Map\(\[([\s\S]*?)\]\)/);
+        if (vm) {
+          const pairs = [...vm[1].matchAll(/\['([^']+)',\s*'([^']+)'\]/g)];
+          for (const [, variant, canonical] of pairs) {
+            if (inData.has(variant))
+              err('agreement', `${variant} is an ASR variant in app.js but is also taught in particles.json — one of the two is wrong`);
+            if (!inApp.has(canonical))
+              err('agreement', `ASR variant ${variant} maps to ${canonical}, which is not in SPEAK_FINAL_PARTICLES`);
+          }
+        }
       }
     }
   } catch (e) { err('agreement', `could not read app.js: ${e.message}`); }
