@@ -1235,7 +1235,12 @@ function renderSentReviewSummary() {
                 : r === 'close'    ? `<span class="sr-row-tag">close</span>`
                 : r === 'mismatch' ? `<span class="sr-row-tag" style="color:var(--brand-text-dark)">no match</span>`
                 :                    `<span class="sr-row-tag">revealed</span>`;
-    return `<div class="sr-row"><span>${item.c}</span>${badge}</div>`;
+    return `<div class="sr-row">
+      <div class="sr-row-body">
+        <div class="sentence-chinese">${item.c}</div>
+        <div class="sentence-jyutping">${colorJyutping(item.j)}</div>
+        <div class="sentence-english">${item.e || ''}</div>
+      </div>${badge}</div>`;
   }).join('');
 
   // The milestone fires only on the run that completes a full pass of the pool

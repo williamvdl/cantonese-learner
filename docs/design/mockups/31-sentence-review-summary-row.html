@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MOCK-31 — What a sentence-review summary row shows</title>
+<!--
+  MOCK-31 — the summary list at the end of a checkpoint sentence review.
+
+  WHAT IS THERE NOW: the row is Chinese only. That is not a build error — it is
+  what MOCK-28 drew and what was built faithfully from it, so this mockup
+  re-opens a design choice rather than fixing a regression. Neither DES-44 nor
+  DES-45 says anything about the row's content, so nothing recorded is being
+  overturned; the gap is that the question was never actually asked.
+
+  WHY IT MATTERS MORE HERE THAN IT LOOKS: this screen is the only place in the
+  review flow where all eight sentences appear at once, and it is where a
+  learner looks to see what they just got wrong. Chinese alone is the one form a
+  beginner cannot read, so the summary is least legible to exactly the person
+  who needs it most.
+
+  NO NEW PRIMITIVES. All three options reuse .sentence-chinese,
+  .sentence-jyutping, .sentence-english and .sentence-eng-hint, which already
+  render sentences on the Learn screen. The only new CSS in any option is
+  .sr-row.stacked (align-items:flex-start) plus a flex wrapper, because the row
+  becomes two or three lines and the badge should sit at the top rather than
+  float in the vertical middle.
+
+  Jyutping is shown here in a flat colour. In the app it goes through
+  colorJyutping() and is tone-coloured, as everywhere else — that is not a
+  choice this mockup is making.
+
+  Sentences are real, taken from data/ with their authored jyutping and English.
+-->
+<style>
+  :root{
+    --font-ui:'Inter',system-ui,sans-serif; --font-display:Georgia,serif;
+    --fs-micro:11px; --fs-meta:12px; --fs-small:13px; --fs-body:15px; --fs-lead:17px;
+    --fw-medium:500; --fw-semi:600; --fw-bold:700;
+    --sp-1:4px; --sp-2:8px; --sp-3:12px; --sp-4:16px; --sp-6:24px;
+    --r-sm:8px; --r-md:12px; --r-lg:16px; --r-pill:999px;
+    --ink:#1C1917; --ink-soft:#292524;
+    --parchment:#fff; --parchment-warm:#FAF8F5; --parchment-deep:#F5F1EB;
+    --parchment-border:#EAE4DC;
+    --brand:#C2410C; --brand-dark:#9A3412; --brand-tint:#FEF0E9;
+    --brand-edge:#F5D9C9; --brand-text-dark:#9A3412;
+    --jade:#15803D; --feedback-good-tint:#DCFCE7; --feedback-good-text:#15803D;
+    --muted:#A8A29E; --muted-dark:#78716C;
+    --border:1px solid var(--parchment-border);
+    --elev-1:0 1px 2px rgba(58,42,30,.06);
+    --tap-min:44px;
+  }
+  body{font-family:var(--font-ui);background:var(--parchment-deep);color:var(--ink-soft);
+       margin:0;padding:20px 12px 60px;font-size:var(--fs-body);line-height:1.5}
+  h1{font-family:var(--font-display);font-size:21px;margin:0 0 6px}
+  .lede{max-width:640px;color:var(--muted-dark);font-size:var(--fs-small);margin:0 0 22px}
+  .opt{max-width:420px;margin:0 auto 34px;background:var(--parchment);border:var(--border);
+       border-radius:var(--r-lg);padding:var(--sp-4);box-shadow:var(--elev-1)}
+  .opt-n{font-size:10px;font-weight:var(--fw-bold);letter-spacing:1px;text-transform:uppercase;
+         color:var(--brand);margin-bottom:2px}
+  .opt-h{font-family:var(--font-display);font-size:var(--fs-lead);margin-bottom:6px;color:var(--ink)}
+  .opt-note{font-size:var(--fs-small);color:var(--muted-dark);margin:0 0 14px}
+
+  /* ── shipped classes, unchanged ───────────────────────────────────────── */
+  .cp-convo-kick{font-size:10px;font-weight:var(--fw-bold);letter-spacing:1px;
+    text-transform:uppercase;color:var(--brand-text-dark)}
+  .cp-convo-title{font-family:var(--font-display);font-size:var(--fs-lead);color:var(--ink)}
+  .cp-head-box{background:var(--brand-tint);border:1px solid var(--brand-edge);
+    border-radius:var(--r-md);padding:var(--sp-3) var(--sp-4);margin-bottom:var(--sp-4)}
+  .sr-tally{text-align:center;padding:6px 0 14px}
+  .sr-tally-n{font-family:var(--font-display);font-size:26px;color:var(--ink);font-weight:var(--fw-semi)}
+  .sr-tally-s{font-size:var(--fs-small);color:var(--muted-dark);margin-top:4px}
+  .sr-rows{background:var(--parchment-warm);border:var(--border);border-radius:var(--r-md);
+    padding:4px 14px;margin-bottom:12px}
+  .sr-row{display:flex;justify-content:space-between;align-items:center;gap:var(--sp-3);
+    padding:9px 0;font-size:var(--fs-body);color:var(--ink)}
+  .sr-row + .sr-row{border-top:1px solid var(--parchment-border)}
+  .sr-row-mark{font-weight:var(--fw-semi);color:var(--feedback-good-text)}
+  .sr-row-tag{font-size:var(--fs-micro);font-weight:var(--fw-semi);color:var(--muted-dark);white-space:nowrap}
+  .sr-row-tag.brandish{color:var(--brand-text-dark)}
+  .sentence-chinese{font-size:var(--fs-lead);line-height:1.4;color:var(--ink);margin-bottom:var(--sp-1)}
+  .sentence-jyutping{font-size:var(--fs-meta);margin-bottom:4px;color:var(--brand-dark);font-weight:var(--fw-semi)}
+  .sentence-english{font-size:var(--fs-meta);color:var(--muted-dark)}
+  .sentence-eng-hint{font-size:var(--fs-meta);color:var(--muted);font-style:italic}
+  .cp-finish{width:100%;background:var(--brand);color:#fff;border:none;border-radius:var(--r-pill);
+    padding:14px;font-size:var(--fs-body);font-weight:var(--fw-bold);min-height:var(--tap-min);cursor:pointer}
+
+  /* ── the only new rule any option needs ───────────────────────────────── */
+  .sr-row.stacked{align-items:flex-start}
+  .sr-row-body{flex:1;min-width:0}
+</style>
+</head>
+<body>
+
+<h1>MOCK-31 — what a sentence-review summary row shows</h1>
+<p class="lede">
+  The list after a checkpoint sentence run. Today it is Chinese only. Three
+  options for what each row carries, using the sentence classes the Learn screen
+  already uses. The tally, the badges and the buttons are unchanged in all three.
+</p>
+
+
+<div class="opt">
+  <div class="opt-n">MOCK-31-A</div>
+  <div class="opt-h">Chinese and jyutping</div>
+  <p class="opt-note">The row you can read aloud. Two lines. Keeps the list short enough that eight rows still fit roughly one screen, and gives the pronunciation back for anything that went wrong. Says nothing about meaning — if you have forgotten what a sentence meant, this will not tell you.</p>
+      <div class="cp-head-box">
+        <div class="cp-convo-kick">◆ Consolidation · Building sentences</div>
+        <div class="cp-convo-title">Sentences reviewed</div>
+      </div>
+      <div class="sr-tally">
+        <div class="sr-tally-n">8 sentences</div>
+        <div class="sr-tally-s">6 matched · 1 close · 1 revealed</div>
+      </div>
+      <div class="sr-rows">
+        <div class="sr-row stacked">
+          <div class="sr-row-body">
+            <div class="sentence-chinese">我去過香港。</div>
+            <div class="sentence-jyutping">ngo5 heoi3 gwo3 hoeng1 gong2.</div>
+          </div>
+          <span class="sr-row-mark">✓</span>
+        </div>
+        <div class="sr-row stacked">
+          <div class="sr-row-body">
+            <div class="sentence-chinese">一齊去啦。</div>
+            <div class="sentence-jyutping">jat1 cai4 heoi3 laa1.</div>
+          </div>
+          <span class="sr-row-tag brandish">close</span>
+        </div>
+        <div class="sr-row stacked">
+          <div class="sr-row-body">
+            <div class="sentence-chinese">你係邊個？</div>
+            <div class="sentence-jyutping">nei5 hai6 bin1 go3?</div>
+          </div>
+          <span class="sr-row-mark">✓</span>
+        </div>
+        <div class="sr-row stacked">
+          <div class="sr-row-body">
+            <div class="sentence-chinese">呢啲生果幾錢呀？</div>
+            <div class="sentence-jyutping">ni1 di1 saang1 gwo2 gei2 cin2 aa3?</div>
+          </div>
+          <span class="sr-row-tag">revealed</span>
+        </div>
+      </div>
+      <button class="cp-finish">✓ Mark sentences reviewed</button>
+</div>
+
+
+<div class="opt">
+  <div class="opt-n">MOCK-31-B</div>
+  <div class="opt-h">Chinese, jyutping and English</div>
+  <p class="opt-note">Everything, always. Three lines per row; eight rows becomes a scroll rather than a glance. Nothing is hidden and nothing needs a tap, which matters because the testing has already happened by the time this screen appears — there is no recall left to protect.</p>
+      <div class="cp-head-box">
+        <div class="cp-convo-kick">◆ Consolidation · Building sentences</div>
+        <div class="cp-convo-title">Sentences reviewed</div>
+      </div>
+      <div class="sr-tally">
+        <div class="sr-tally-n">8 sentences</div>
+        <div class="sr-tally-s">6 matched · 1 close · 1 revealed</div>
+      </div>
+      <div class="sr-rows">
+        <div class="sr-row stacked">
+          <div class="sr-row-body">
+            <div class="sentence-chinese">我去過香港。</div>
+            <div class="sentence-jyutping">ngo5 heoi3 gwo3 hoeng1 gong2.</div>
+            <div class="sentence-english">I have been to Hong Kong.</div>
+          </div>
+          <span class="sr-row-mark">✓</span>
+        </div>
+        <div class="sr-row stacked">
+          <div class="sr-row-body">
+            <div class="sentence-chinese">一齊去啦。</div>
+            <div class="sentence-jyutping">jat1 cai4 heoi3 laa1.</div>
+            <div class="sentence-english">Let's go together.</div>
+          </div>
+          <span class="sr-row-tag brandish">close</span>
+        </div>
+        <div class="sr-row stacked">
+          <div class="sr-row-body">
+            <div class="sentence-chinese">你係邊個？</div>
+            <div class="sentence-jyutping">nei5 hai6 bin1 go3?</div>
+            <div class="sentence-english">Who are you?</div>
+          </div>
+          <span class="sr-row-mark">✓</span>
+        </div>
+        <div class="sr-row stacked">
+          <div class="sr-row-body">
+            <div class="sentence-chinese">呢啲生果幾錢呀？</div>
+            <div class="sentence-jyutping">ni1 di1 saang1 gwo2 gei2 cin2 aa3?</div>
+            <div class="sentence-english">How much is this fruit?</div>
+          </div>
+          <span class="sr-row-tag">revealed</span>
+        </div>
+      </div>
+      <button class="cp-finish">✓ Mark sentences reviewed</button>
+</div>
+
+
+<div class="opt">
+  <div class="opt-n">MOCK-31-C</div>
+  <div class="opt-h">Chinese and jyutping, English on tap</div>
+  <p class="opt-note">The Learn screen's pattern, reused exactly: jyutping visible, English behind <code>tap to reveal English</code>. Consistent with how sentences behave elsewhere in the app, and the row height sits between A and B. Costs a tap per sentence at the moment the learner is checking what they missed.</p>
+      <div class="cp-head-box">
+        <div class="cp-convo-kick">◆ Consolidation · Building sentences</div>
+        <div class="cp-convo-title">Sentences reviewed</div>
+      </div>
+      <div class="sr-tally">
+        <div class="sr-tally-n">8 sentences</div>
+        <div class="sr-tally-s">6 matched · 1 close · 1 revealed</div>
+      </div>
+      <div class="sr-rows">
+        <div class="sr-row stacked">
+          <div class="sr-row-body">
+            <div class="sentence-chinese">我去過香港。</div>
+            <div class="sentence-jyutping">ngo5 heoi3 gwo3 hoeng1 gong2.</div>
+            <div class="sentence-eng-hint">tap to reveal English</div>
+          </div>
+          <span class="sr-row-mark">✓</span>
+        </div>
+        <div class="sr-row stacked">
+          <div class="sr-row-body">
+            <div class="sentence-chinese">一齊去啦。</div>
+            <div class="sentence-jyutping">jat1 cai4 heoi3 laa1.</div>
+            <div class="sentence-eng-hint">tap to reveal English</div>
+          </div>
+          <span class="sr-row-tag brandish">close</span>
+        </div>
+        <div class="sr-row stacked">
+          <div class="sr-row-body">
+            <div class="sentence-chinese">你係邊個？</div>
+            <div class="sentence-jyutping">nei5 hai6 bin1 go3?</div>
+            <div class="sentence-eng-hint">tap to reveal English</div>
+          </div>
+          <span class="sr-row-mark">✓</span>
+        </div>
+        <div class="sr-row stacked">
+          <div class="sr-row-body">
+            <div class="sentence-chinese">呢啲生果幾錢呀？</div>
+            <div class="sentence-jyutping">ni1 di1 saang1 gwo2 gei2 cin2 aa3?</div>
+            <div class="sentence-eng-hint">tap to reveal English</div>
+          </div>
+          <span class="sr-row-tag">revealed</span>
+        </div>
+      </div>
+      <button class="cp-finish">✓ Mark sentences reviewed</button>
+</div>
+
+<div class="opt" style="background:var(--parchment-warm)">
+  <div class="opt-n">Note</div>
+  <div class="opt-h">What the options do not differ on</div>
+  <p class="opt-note">
+    Row order, the badges (✓ / close / revealed), the tally line, the milestone
+    note and both buttons are identical in all three and are unchanged from what
+    is shipped. The decision is the row's content and nothing else.
+  </p>
+</div>
+
+</body>
+</html>

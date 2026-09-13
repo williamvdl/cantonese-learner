@@ -729,7 +729,7 @@ table.spec tr:last-child td{ border-bottom:none; }
   <p class="note" style="margin-top:12px"><b>Produce mode states no verdict on a mismatch (DES-44).</b> Given only an English prompt, a learner can produce valid Cantonese that is not the stored sentence — the app cannot tell that from an error, so it asserts neither. Compare with a <i>listen</i> mismatch below, which does say so, because there the learner heard the exact sentence.</p>
   <div class="stage" style="max-width:390px" id="srdemo-produce"></div>
   <div class="stage" style="max-width:390px;margin-top:12px" id="srdemo-summary"></div>
-  <div class="cls">.sr-listen · .sr-hidden · .sr-prompt-lbl / .sr-prompt-en · .sr-skip · .sr-note &nbsp;·&nbsp; .sr-tally / .sr-rows / .sr-row / .sr-milestone</div>
+  <div class="cls">.sr-listen · .sr-hidden · .sr-prompt-lbl / .sr-prompt-en · .sr-skip · .sr-note &nbsp;·&nbsp; .sr-tally / .sr-rows / .sr-row / .sr-row-body / .sr-milestone</div>
   <div class="cls">.sheet-head-actions &nbsp;·&nbsp; .sheet-wrap › .sheet-scrim + .sheet › .speak-card › .mic-btn (+ .listening) · .speak-status · .speak-heard › .speak-heard-jp (.jp-unknown/.jp-ambiguous) · .speak-actions › .speak-action-btn (.primary/.secondary/.stop) · .speak-result-good/.speak-result-close/.speak-result-bad › .speak-breakdown › .bd-col</div>
 </section>
 
@@ -1279,9 +1279,9 @@ document.getElementById('srdemo-summary').innerHTML=`
   <div class="sr-tally"><div class="sr-tally-n">8 sentences</div><div class="sr-tally-s">6 matched · 1 close · 1 revealed</div></div>
   <div class="sr-milestone"><div class="sr-milestone-t">You've now been through all 25</div><div class="sr-milestone-s">Every sentence in this stage. Going again reshuffles them.</div></div>
   <div class="sr-rows">
-    <div class="sr-row"><span>早晨！你好嗎？</span><span class="sr-row-mark" style="color:var(--feedback-good-text)">✓</span></div>
-    <div class="sr-row"><span>多謝，再見！</span><span class="sr-row-tag">close</span></div>
-    <div class="sr-row"><span>對唔住，我遲到。</span><span class="sr-row-tag">revealed</span></div>
+    <div class="sr-row"><div class="sr-row-body"><div class="sentence-chinese">早晨！你好嗎？</div><div class="sentence-jyutping">zou2 san4! nei5 hou2 maa3?</div><div class="sentence-english">Good morning! How are you?</div></div><span class="sr-row-mark" style="color:var(--feedback-good-text)">✓</span></div>
+    <div class="sr-row"><div class="sr-row-body"><div class="sentence-chinese">多謝，再見！</div><div class="sentence-jyutping">do1 ze6, zoi3 gin3!</div><div class="sentence-english">Thank you, goodbye!</div></div><span class="sr-row-tag">close</span></div>
+    <div class="sr-row"><div class="sr-row-body"><div class="sentence-chinese">對唔住，我遲到。</div><div class="sentence-jyutping">deoi3 m4 zyu6, ngo5 ci4 dou3.</div><div class="sentence-english">Sorry, I&#39;m late.</div></div><span class="sr-row-tag">revealed</span></div>
   </div>
   <button class="cp-finish">✓ Mark sentences reviewed</button>
   <button class="sr-skip">Go again from the start</button>`;
