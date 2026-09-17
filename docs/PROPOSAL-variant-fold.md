@@ -4,7 +4,7 @@
 Watched organically rather than probed; see the revision note below for the
 counter-evidence that halved it. Tracked from `BACKLOG.md` under Quality.
 Do not re-derive this from the probe data — that is what this file prevents.
-**Written against:** v139 · still accurate at v144
+**Written against:** v139 · still accurate at v148
 
 > ### Revision note — 2026-09-05, added after counter-evidence
 >
@@ -122,6 +122,26 @@ worse trade than the false rejection it prevents. One sighting on one sentence
 cannot distinguish systematic from intermittent. **What would move it:** the same
 substitution on a *different* sentence, which is what makes it a property of the
 character rather than of one recording.
+
+### A pair that was never this proposal's to solve — 2026-09-17
+
+俾 (bei2) heard as 畀 (bei2), reported by two speakers. Same syllable, same tone,
+not sentence-final, so neither `SPEAK_FINAL_PARTICLES` nor anything in this file
+would have covered it — and a fold was still the wrong answer.
+
+**The corpus was writing the word both ways.** 畀 (bei2) in 12 items, 俾 (bei2)
+in 22, for the same word, split across topics rather than senses: a learner met
+"give" as 畀 in Shopping and as 俾 in Food with nothing to connect them. The
+recogniser agreeing with one half and not the other was a symptom. Standardising
+on 畀 (bei2) at v148 removed the mismatch without a line of matching code.
+
+**The lesson for this file, which is why it is recorded here rather than only in
+CONTENT.md:** before adding a pair to the watch list, check whether the corpus
+itself is consistent about that character. A fold makes the app tolerant of a
+disagreement between the recogniser and the corpus; it does nothing about a
+disagreement *inside* the corpus, and it hides the evidence that there is one.
+Two of the three sightings logged in this file so far have turned out to belong
+elsewhere — 架 (gaa3) to the particle set, 畀 (bei2) to the content pass.
 
 ## 3. The proposal
 

@@ -4,9 +4,18 @@
 questions behind it. Meant to be short-lived — when a piece ships, fold its
 outcome into STATUS.md and clear this file back down for the next thing.*
 
-Last updated: 2026-09-13 · sw.js at v147
+Last updated: 2026-09-17 · sw.js at v148
 
-## v147 — delivered, awaiting device QA
+## v147 and v148 — delivered, awaiting device QA
+
+**v148 — 畀 (bei2) standardisation.** Data only, no code. One version number
+covers both: if v147 has not been pushed yet, commit them together and only v148
+matters. Nothing to QA beyond confirming a lesson that used to read 俾 now reads
+畀 — Food, Modals and Shopping are the heaviest users — and that speak-back on
+唔該畀個湯同甜品我 (m4 goi1 bei2 go3 tong1 tung4 tim4 ban2 ngo5.) no longer marks
+the third character.
+
+## v147 — the tier run
 
 **The tier run (DES-55, MOCK-35-F-1) and the suppressed upward cross-reference
 (DES-56).** Both built, all six standing checks pass, styleguide updated in the

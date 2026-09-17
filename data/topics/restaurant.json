@@ -72,10 +72,10 @@
       "sentences": [
         {
           "sid": "restaurant-t1-s01",
-          "c": "唔該，俾我個餐牌。",
+          "c": "唔該，畀我個餐牌。",
           "j": "m4 goi1, bei2 ngo5 go3 caan1 paai4.",
           "e": "Excuse me, please give me the menu.",
-          "note": "俾 (bei2) \"give\" (also written 畀) — the order is give + thing + person: 俾我個餐牌 (bei2 ngo5 go3 caan1 paai4) \"give me the menu\". 餐牌 (caan1 paai4) is the menu.",
+          "note": "畀 (bei2) \"give\" (also written 畀) — the order is give + thing + person: 畀我個餐牌 (bei2 ngo5 go3 caan1 paai4) \"give me the menu\". 餐牌 (caan1 paai4) is the menu.",
           "bd": [
             {
               "c": "唔該",
@@ -83,7 +83,7 @@
               "e": "excuse me / please"
             },
             {
-              "c": "俾",
+              "c": "畀",
               "j": "bei2",
               "e": "give"
             },

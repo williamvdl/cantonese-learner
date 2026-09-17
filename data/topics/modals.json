@@ -453,17 +453,17 @@
       }
     },
     "2": {
-      "note": "Tier-2 modals shift from single-verb frames to how modals combine and how permission, willingness, and polite requests work in real situations. Key contrasts: 俾 (bei2) vs 准 (zeon2) for allowing/permitting; 唔肯 (m4 hang2) vs 唔想 (m4 soeng2) for refusal; 好似 (hou2 ci5) for hedging; 實 (sat6) for emphasis. Use 可唔可以 (ho2 m4 ho2 ji5) and 唔該 (m4 goi1) together for polite requests.",
+      "note": "Tier-2 modals shift from single-verb frames to how modals combine and how permission, willingness, and polite requests work in real situations. Key contrasts: 畀 (bei2) vs 准 (zeon2) for allowing/permitting; 唔肯 (m4 hang2) vs 唔想 (m4 soeng2) for refusal; 好似 (hou2 ci5) for hedging; 實 (sat6) for emphasis. Use 可唔可以 (ho2 m4 ho2 ji5) and 唔該 (m4 goi1) together for polite requests.",
       "words": [
         {
           "id": "modals-014",
-          "c": "俾",
+          "c": "畀",
           "j": "bei2",
           "e": "To give / to let / to allow"
         },
         {
           "id": "modals-015",
-          "c": "唔俾",
+          "c": "唔畀",
           "j": "m4 bei2",
           "e": "To not allow / won't let"
         },
@@ -553,10 +553,10 @@
         },
         {
           "sid": "modals-t2-s02",
-          "c": "媽媽唔俾我出去，所以我要留係屋企。",
+          "c": "媽媽唔畀我出去，所以我要留係屋企。",
           "j": "maa1 maa1 m4 bei2 ngo5 ceot1 heoi3, so2 ji5 ngo5 jiu3 lau4 hai2 uk1 kei2.",
           "e": "Mum won't let me go out, so I have to stay home.",
-          "note": "唔俾 (m4 bei2) + person + verb = won't let [someone] do [something]. Colloquial and personal — 唔俾我出去 (m4 bei2 ngo5 ceot1 heoi3) is what a parent says; contrast 唔准 (m4 zeon2) which is more formal, used by rules or authority.",
+          "note": "唔畀 (m4 bei2) + person + verb = won't let [someone] do [something]. Colloquial and personal — 唔畀我出去 (m4 bei2 ngo5 ceot1 heoi3) is what a parent says; contrast 唔准 (m4 zeon2) which is more formal, used by rules or authority.",
           "bd": [
             {
               "c": "媽媽",
@@ -564,7 +564,7 @@
               "e": "mum"
             },
             {
-              "c": "唔俾我",
+              "c": "唔畀我",
               "j": "m4 bei2 ngo5",
               "e": "won't let me"
             },
@@ -600,7 +600,7 @@
           "c": "呢度唔准飲食，你唔該注意吓。",
           "j": "ni1 dou6 m4 zeon2 jam2 sik6, nei5 m4 goi1 zyu3 ji3 haa5.",
           "e": "No eating or drinking here, please be mindful.",
-          "note": "唔准 (m4 zeon2) is the formal or official prohibition — signs, rules, authority contexts. 唔俾 (m4 bei2) is what a person says to another person; 唔准 (m4 zeon2) is what rules say.",
+          "note": "唔准 (m4 zeon2) is the formal or official prohibition — signs, rules, authority contexts. 唔畀 (m4 bei2) is what a person says to another person; 唔准 (m4 zeon2) is what rules say.",
           "bd": [
             {
               "c": "呢度",
@@ -1031,7 +1031,7 @@
             "opts": [
               "我好似識少少，唔該你等我一陣。",
               "唔識喎，不過我可以試吓。",
-              "我識㗎，俾我睇吓先。"
+              "我識㗎，畀我睇吓先。"
             ],
             "optsJ": [
               "ngo5 hou2 ci5 sik1 siu2 siu2, m4 goi1 nei5 dang2 ngo5 jat1 zan6.",
@@ -1079,7 +1079,7 @@
           },
           {
             "u": true,
-            "c": "呢個功能你可唔可以俾我睇吓先？",
+            "c": "呢個功能你可唔可以畀我睇吓先？",
             "j": "ni1 go3 gung1 nang4 nei5 ho2 m4 ho2 ji5 bei2 ngo5 tai2 haa5 sin1?",
             "e": "Can you let me see this function first?",
             "bd": [
@@ -1099,7 +1099,7 @@
                 "e": "could you"
               },
               {
-                "c": "俾我",
+                "c": "畀我",
                 "j": "bei2 ngo5",
                 "e": "let me"
               },
@@ -1115,8 +1115,8 @@
               }
             ],
             "opts": [
-              "呢個功能你可唔可以俾我睇吓先？",
-              "你唔該俾我睇吓個設定。",
+              "呢個功能你可唔可以畀我睇吓先？",
+              "你唔該畀我睇吓個設定。",
               "我可以自己試吓㗎，唔使擔心。"
             ],
             "optsJ": [
@@ -1207,7 +1207,7 @@
             ],
             "opts": [
               "明白㗎喇。你唔使擔心，我唔會亂改㗎。",
-              "好，我會小心㗎，唔俾你擔心。",
+              "好，我會小心㗎，唔畀你擔心。",
               "知㗎，我唔准自己改，放心啦。"
             ],
             "optsJ": [

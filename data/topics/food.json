@@ -180,10 +180,10 @@
         },
         {
           "sid": "food-t1-s04",
-          "c": "唔該俾個湯同甜品我。",
+          "c": "唔該畀個湯同甜品我。",
           "j": "m4 goi1 bei2 go3 tong1 tung4 tim4 ban2 ngo5.",
           "e": "Please give me a soup and dessert.",
-          "note": "俾 (bei2) \"give\" + object + 我 (ngo5) \"me\" is the natural ordering frame: 俾個湯我 (bei2 go3 tong1 ngo5) \"give me a soup\". 湯 (tong1) \"soup\" is often ordered alongside a main dish.",
+          "note": "畀 (bei2) \"give\" + object + 我 (ngo5) \"me\" is the natural ordering frame: 畀個湯我 (bei2 go3 tong1 ngo5) \"give me a soup\". 湯 (tong1) \"soup\" is often ordered alongside a main dish.",
           "bd": [
             {
               "c": "唔該",
@@ -191,7 +191,7 @@
               "e": "please"
             },
             {
-              "c": "俾",
+              "c": "畀",
               "j": "bei2",
               "e": "give"
             },
@@ -426,11 +426,11 @@
           },
           {
             "u": true,
-            "c": "唔該俾個湯我，甜品唔使喇。",
+            "c": "唔該畀個湯我，甜品唔使喇。",
             "j": "m4 goi1 bei2 go3 tong1 ngo5, tim4 ban2 m4 sai2 laa3.",
             "e": "A soup please — no dessert thanks.",
             "opts": [
-              "唔該俾個湯我，甜品唔使喇。",
+              "唔該畀個湯我，甜品唔使喇。",
               "要湯同甜品！",
               "湯唔使，甜品要！"
             ],
@@ -446,7 +446,7 @@
                 "e": "please"
               },
               {
-                "c": "俾",
+                "c": "畀",
                 "j": "bei2",
                 "e": "give"
               },

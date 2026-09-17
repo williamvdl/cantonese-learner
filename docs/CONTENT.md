@@ -5,7 +5,7 @@ and what is planned. Content only — the app that renders it lives in STATUS.md
 the visual rules in DESIGN_SYSTEM.md, the UX decisions in DESIGN_DECISIONS.md,
 the tier-2 authoring rules in CONTENT_SPEC_TIER2.md.*
 
-Last updated: 2026-09-12 · sw.js at v146 · inventory derived from
+Last updated: 2026-09-17 · sw.js at v148 · inventory derived from
 `node tools/content-report.js`
 
 ---
@@ -340,6 +340,24 @@ fail most of the corpus today and a check that always fails is a check nobody
 reads.
 
 **Checkpoint conversations do not use `opts` at all** — see §2.
+
+**One word, one spelling — 畀 (bei2), not 俾 (bei2).** Standardised at v148 across
+46 occurrences in ten files. Until then the corpus taught the same word both
+ways: Meatseafood, Shopping and the checkpoint conversations wrote "give" as
+畀 (bei2) while Attractions, Food, Hotels and Modals wrote it as 俾 (bei2), and
+nothing told a learner they were the same word. **That was a content fault in its
+own right**, and it surfaced only because the recogniser writes 畀 (bei2) and so
+disagreed with half the corpus. 畀 (bei2) is the orthodox written form and what
+the recogniser produces, which is why it won. The same applies to the "let /
+allow" sense — 唔畀我 (m4 bei2 ngo5) — which is the same word and takes the same
+spelling.
+
+**The general rule this is an instance of: where Cantonese admits two written
+forms of one word, the corpus picks one and uses it everywhere.** A variant that
+appears in some lessons and not others cannot be learned, and it makes every
+speak-back attempt on the minority spelling look like a mistake. Before
+introducing a character that already has a variant in the corpus, grep for the
+other form.
 
 **Conversation titles are not unique.** `beginner-s2` and `intermediate-s1` are
 both "Making weekend plans"; `body` tier 1 and tier 2 are both "At the doctor";

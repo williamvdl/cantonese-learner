@@ -4,7 +4,7 @@
 IN_PROGRESS.md when it's picked up; delete it from here once it's shipped and
 folded into STATUS.md.*
 
-Last updated: 2026-09-12 · sw.js at v146
+Last updated: 2026-09-17 · sw.js at v148
 
 ## Product
 - **Runtime Azure TTS for the Translate screen — gated on the A2 proxy.** Agreed
@@ -265,6 +265,30 @@ are pointers only — detail goes there, not here.*
   systematic" was already set by the variant-fold proposal: a substitution seen
   on more than one sentence, not on more than one recording. Inherit that bar
   rather than inventing a second one.
+
+- **`char-jyutping.json` covers 644 of the corpus's 832 distinct characters —
+  and the 188 it misses fall through to the vendored dictionary.** Measured
+  2026-09-17 while standardising 畀 (bei2). **The map is NOT stale** — rebuilding
+  it from the committed corpus reproduced the shipped file byte for byte, which
+  is the first thing checked and it disproved the suspicion that prompted the
+  check. The gap is structural instead: `build-char-jyutping.js` derives readings
+  from ALIGNED word and breakdown-chunk pairs, so a character that appears only
+  inside sentence or conversation text, whose jyutping is authored per line
+  rather than per character, never enters the map. 㗎 (gaa3) is the largest
+  absentee at 121 occurrences; others include 又 (jau6), 夠 (gau3), 租 (zou1).
+
+  **Why it matters, and why it is not urgent.** app.js is explicit that the
+  corpus must win over the dictionary wherever it has an entry, because the two
+  disagree on 44 of 644 characters — 坐 is co5 in the corpus and zo6 in the
+  dictionary, 樓 is lau2 vs lau4 — and the corpus is right for spoken Cantonese
+  every time. For the 188 absentees the dictionary wins by default, so any of
+  them that the app teaches with a colloquial reading is being printed with the
+  literary one. **Nobody has reported this**, and the fix is not obviously worth
+  it: extending the builder to derive per-character readings from line-level
+  jyutping means aligning syllables to characters, which is exactly the alignment
+  the authored `j` strings do not guarantee. **Measure first:** of the 188, how
+  many actually appear in an authored line whose jyutping disagrees with the
+  dictionary? If the answer is near zero this entry closes.
 
 - **Orthographic variant fold — considered, deferred, not rejected.** Full
   reasoning in `docs/PROPOSAL-variant-fold.md`; do not re-derive it from the

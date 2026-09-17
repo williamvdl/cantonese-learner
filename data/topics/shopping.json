@@ -167,10 +167,10 @@
         },
         {
           "sid": "shopping-t1-s05",
-          "c": "唔該俾收據我。",
+          "c": "唔該畀收據我。",
           "j": "m4 goi1 bei2 sau1 geoi3 ngo5.",
           "e": "Please give me the receipt.",
-          "note": "俾 (bei2) \"give\" can also take the order give + thing + person — 俾收據我 (bei2 sau1 geoi3 ngo5) \"give the receipt to me\". (You'll also hear 俾我收據 — both orders are fine in speech.)",
+          "note": "畀 (bei2) \"give\" can also take the order give + thing + person — 畀收據我 (bei2 sau1 geoi3 ngo5) \"give the receipt to me\". (You'll also hear 畀我收據 — both orders are fine in speech.)",
           "bd": [
             {
               "c": "唔該",
@@ -178,7 +178,7 @@
               "e": "please"
             },
             {
-              "c": "俾",
+              "c": "畀",
               "j": "bei2",
               "e": "give"
             },
@@ -316,7 +316,7 @@
           },
           {
             "u": false,
-            "c": "好，俾一百八十蚊你啦。",
+            "c": "好，畀一百八十蚊你啦。",
             "j": "hou2, bei2 jat1 baak3 baat3 sap6 man1 nei5 laa1.",
             "e": "Ok, one hundred and eighty dollars for you.",
             "bd": [
@@ -326,7 +326,7 @@
                 "e": "ok"
               },
               {
-                "c": "俾",
+                "c": "畀",
                 "j": "bei2",
                 "e": "give"
               },
