@@ -6,28 +6,19 @@ outcome into STATUS.md and clear this file back down for the next thing.*
 
 Last updated: 2026-09-17 · sw.js at v148
 
-## v147 and v148 — delivered, awaiting device QA
+## Nothing in progress
 
-**v148 — 畀 (bei2) standardisation.** Data only, no code. One version number
-covers both: if v147 has not been pushed yet, commit them together and only v148
-matters. Nothing to QA beyond confirming a lesson that used to read 俾 now reads
-畀 — Food, Modals and Shopping are the heaviest users — and that speak-back on
-唔該畀個湯同甜品我 (m4 goi1 bei2 go3 tong1 tung4 tim4 ban2 ngo5.) no longer marks
-the third character.
+**v147 and v148 shipped and device QA is done** — the tier run and the
+suppressed upward cross-reference (DES-55, DES-56), and the 畀 (bei2)
+standardisation. Confirmed on the Pixel 2026-09-17. Both open questions on the
+tier run came back fine: it reads as a statement rather than a chooser, and the
+links still read as tappable. One variant William raised and chose not to take
+is in BACKLOG.md rather than lost here.
 
-## v147 — the tier run
-
-**The tier run (DES-55, MOCK-35-F-1) and the suppressed upward cross-reference
-(DES-56).** Both built, all six standing checks pass, styleguide updated in the
-same commit. The thing to judge on device is whether the run reads as a
-statement or as a chooser — MOCK-33-E is the recorded fallback if it is the
-latter. Second thing to look at: with brand cut back to a small arrow, check the
-other tiers still read as tappable at all; that is the opposite failure to the
-one reported and it is easy to overshoot.
-
-Note that on a tier-1 path lesson with nothing else started, the foot
-cross-reference card is now absent entirely. That is DES-56 working, not a
-render failure.
+This file is cleared down. **Next candidate work:** the cross-rule
+duplicate-declaration script, the open question about extending the particle
+rule beyond the final position, and the `char-jyutping.json` coverage
+measurement. All three are in BACKLOG.md with their numbers.
 
 ## Previously
 

@@ -266,6 +266,21 @@ are pointers only — detail goes there, not here.*
   on more than one sentence, not on more than one recording. Inherit that bar
   rather than inventing a second one.
 
+- **Tier links: brand orange, smaller and not bold?** Raised by William
+  2026-09-17 while QAing v147, and deliberately left. The shipped run (DES-55)
+  gives the inactive tiers muted text plus a small brand arrow, and he confirmed
+  they still read as tappable — so this is an alternative, not a fix. The idea:
+  put the links back to brand so colour carries the affordance, but drop them a
+  size and remove the weight so `.tier-cur` still wins on mass. **The constraint
+  it has to satisfy is the one that caused the original fault** — the very first
+  version of the run gave the links brand and the current tier only ink weight,
+  and brand on parchment beat semibold ink, so the row advertised where the
+  learner was not. Smaller-and-lighter may well clear that bar; it was never
+  tested. **Not worth a deploy on its own.** Fold it into the next change that
+  touches the tier line, and judge it on device against the shipped version
+  rather than in a mockup, since the whole question is which of two things the
+  eye reaches first.
+
 - **`char-jyutping.json` covers 644 of the corpus's 832 distinct characters —
   and the 188 it misses fall through to the vendored dictionary.** Measured
   2026-09-17 while standardising 畀 (bei2). **The map is NOT stale** — rebuilding
