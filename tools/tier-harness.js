@@ -47,6 +47,14 @@ const grab = name => {
 // second. A control that renders correctly and navigates wrongly is invisible to
 // a rendering check, so the stubs below record the resulting state instead.
 let navPushes = 0;
+
+// DES-56: the upward cross-reference only renders once the destination path has
+// been started. Stubbed as a SETTABLE set rather than a constant, because a stub
+// that always returned 0 would suppress every upward row and make the rule
+// untestable while appearing to pass — the check would be asserting the stub.
+let startedPaths = new Set();
+const pathCompleteCount = k => (startedPaths.has(k) ? 1 : 0);
+
 const resetLessonViewState = () => {};
 const pushNav = () => { navPushes++; };
 const render  = () => {};
@@ -104,6 +112,27 @@ for (const [t, r, fp, label] of cases) {
   ok(!(!fp && r === 1 && t === 'greetings' && !line.includes('data-tier="2"')), `${label}: offers T2`);
 }
 
+console.log('— DES-56: the upward xref waits for its path to be started —');
+{
+  const xrefOf = (topic, tier) => {
+    state.topic = topic; state.currentRound = tier; state.fromPath = true;
+    return renderTierXref();
+  };
+  startedPaths = new Set();
+  const cold = xrefOf('greetings', 1);
+  ok(!cold.includes('data-tier="2"'), 'T1 in a path does not offer T2 before Intermediate is started');
+
+  startedPaths = new Set(['intermediate']);
+  const warm = xrefOf('greetings', 1);
+  ok(warm.includes('data-tier="2"'), 'T1 in a path offers T2 once Intermediate is started');
+
+  startedPaths = new Set();
+  const down = xrefOf('greetings', 2);
+  ok(down.includes('data-tier="1"'), 'the downward row is never suppressed');
+  console.log('  cold T1:', cold ? 'suppressed' : '(no card)', '| warm T1: offered | T2 down: offered');
+  startedPaths = new Set();
+}
+
 // three-tier simulation — no such topic exists yet, so fabricate one
 console.log('— simulated 3-tier topic (T2 of 3, standalone) —');
 idx.push({ key: '__sim', label: 'Sim', rounds: [1,2,3], wordCounts: {'1':10,'2':10,'3':12} });
@@ -113,24 +142,39 @@ paths.find(p=>p.key==='intermediate').lessons.push({topic:'__sim',round:2});
 state.topic='__sim'; state.currentRound=2; state.fromPath=false;
 const l3 = renderTierLine();
 console.log('   line:', l3.replace(/\s+/g,' ').replace(/<[^>]+>/g,'|').replace(/\|+/g,' ').trim());
-ok(l3.includes('of 3'), '3-tier: state says "of 3"');
-ok((l3.match(/data-tier/g)||[]).length === 2, '3-tier: two rungs');
-// Bare numbers means the ladder portion must not repeat the word "Tier" — the
-// state text already carries it, which is the only reason shortening is safe.
-const ladderHtml = l3.slice(l3.indexOf('<span class="ladder">'));
-ok(!/Tier/.test(ladderHtml), '3-tier: rungs are bare numbers, not "Tier N"');
-ok(/>\s*1\s*<\/button>/.test(ladderHtml.replace(/<svg\/>/g,'')), '3-tier: down rung is 1');
-ok(/>\s*3\s*</.test(ladderHtml.replace(/<svg\/>/g,'')), '3-tier: up rung is 3');
-state.fromPath = true;
-const x3 = renderTierXref();
-console.log('   xref rows:', (x3.match(/class="xref"/g)||[]).length);
-ok((x3.match(/class="xref"/g)||[]).length === 2, '3-tier: two xref rows in a path');
-ok(x3.includes('Beginner') && x3.includes('Advanced'), '3-tier: xref names both paths');
+// The run names every tier and needs no "of N" — the count IS the row (DES-55).
+// These replace the old ladder assertions ("of 3", bare numbers, one rung each
+// way), which described a shape that no longer exists.
+ok(!l3.includes('of 3'), '3-tier: no "of N" — the run shows the count itself');
+ok((l3.match(/data-tier/g)||[]).length === 2, '3-tier: the two non-current tiers are links');
+ok(/class="tier-cur">Tier 2</.test(l3), '3-tier: the current tier is stated, not a link');
+ok(/data-tier="1"/.test(l3) && /data-tier="3"/.test(l3), '3-tier: both other tiers are reachable');
+// The fault this row was rebuilt to fix: brand on an inactive tier outranked the
+// current one. Brand may appear ONLY inside .tier-chev.
+const brandOutsideChev = l3.replace(/<span class="tier-chev">.*?<\/span>/g, '');
+ok(!/tier-cur[^>]*>[^<]*<\/span>[^]*?brand/.test(brandOutsideChev), '3-tier: no brand outside the chevron');
+ok(/class="tier-go"/.test(l3), '3-tier: links use .tier-go, not the retired .rung');
 
-// And the two-tier case must NOT shorten — there is no "of N" to read against.
+state.fromPath = true;
+const x3cold = renderTierXref();
+ok(!x3cold.includes('data-tier="3"'), '3-tier: Advanced is not offered before it is started');
+startedPaths = new Set(['advanced']);
+const x3 = renderTierXref();
+console.log('   xref rows, Advanced started:', (x3.match(/class="xref"/g)||[]).length);
+ok((x3.match(/class="xref"/g)||[]).length === 2, '3-tier: two xref rows once Advanced is started');
+ok(x3.includes('Beginner') && x3.includes('Advanced'), '3-tier: xref names both paths');
+startedPaths = new Set();
+
+// Two tiers: the run is two items, the current one stated.
 state.topic='greetings'; state.currentRound=1; state.fromPath=false;
 const l2 = renderTierLine();
-ok(/Tier 2/.test(l2.slice(l2.indexOf('<span class="ladder">'))), '2-tier: single rung stays named');
+ok(/class="tier-cur">Tier 1</.test(l2), '2-tier: current tier stated');
+ok(/data-tier="2"/.test(l2) && !/data-tier="1"/.test(l2), '2-tier: only the other tier is a link');
+ok(!/class="tier-off"/.test(l2), '2-tier standalone: no greyed tiers outside a path');
+state.fromPath = true;
+const l2p = renderTierLine();
+ok(/class="tier-off">Tier 2</.test(l2p) && !/data-tier/.test(l2p), '2-tier in a path: other tier greyed, not offered');
+state.fromPath = false;
 
 // ── What the rung DOES, not just what it draws (v128) ────────────────────────
 // The destination context must follow the ORIGIN context. Both directions of

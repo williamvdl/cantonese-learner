@@ -4,9 +4,23 @@
 questions behind it. Meant to be short-lived — when a piece ships, fold its
 outcome into STATUS.md and clear this file back down for the next thing.*
 
-Last updated: 2026-09-12 · sw.js at v146
+Last updated: 2026-09-13 · sw.js at v147
 
-## Nothing in progress
+## v147 — delivered, awaiting device QA
+
+**The tier run (DES-55, MOCK-35-F-1) and the suppressed upward cross-reference
+(DES-56).** Both built, all six standing checks pass, styleguide updated in the
+same commit. The thing to judge on device is whether the run reads as a
+statement or as a chooser — MOCK-33-E is the recorded fallback if it is the
+latter. Second thing to look at: with brand cut back to a small arrow, check the
+other tiers still read as tappable at all; that is the opposite failure to the
+one reported and it is easy to overshoot.
+
+Note that on a tier-1 path lesson with nothing else started, the foot
+cross-reference card is now absent entirely. That is DES-56 working, not a
+render failure.
+
+## Previously
 
 **v138 and v139 shipped and this file is cleared down again.** A
 commercial-readiness review was written up as `docs/PRODUCTISATION_REVIEW.md` —

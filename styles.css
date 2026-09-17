@@ -443,19 +443,21 @@
      `min-height` carries the 44px target, not padding, so standing check 2 can
      see it. `.ladder` is inset by its own padding so the rung text sits flush
      with the content edge. ── */
+  /* Tier run (DES-55). One item per tier of the topic; the current one is stated,
+     the others are links. The ONLY brand in the row is `.tier-chev` — the current
+     tier must outrank the links, and colour beats weight, so the links get none.
+     Replaces `.tierline--split` / `.ladder` / `.rung`, which offered a single
+     adjacent tier and pushed it to the far edge where it read as unrelated to the
+     state beside it. */
   .tierline { display: flex; align-items: center; gap: var(--sp-2); min-height: var(--tap-min); }
-  .tierline--split { justify-content: space-between; }
+  .tierrun { gap: 0; }
   .tier-state { font-family: var(--font-ui); font-size: var(--fs-meta); font-weight: var(--fw-regular); color: var(--muted-dark); white-space: nowrap; }
-  .tier-state b { color: var(--ink-soft); font-weight: var(--fw-semi); }
-  .ladder { display: flex; align-items: center; gap: 2px; flex: none; margin-right: -9px; }
-  /* Up is brand, down is muted: the ladder has a direction, so the upward rung
-     is the offer and the downward one is the way back. This is also what keeps
-     exactly one brand-coloured interactive element above the subtabs (§3.1 in
-     spirit — the rule counts fills, but a second brand accent here would still
-     compete with the active subtab). */
-  .rung { display: inline-flex; align-items: center; gap: 4px; min-height: var(--tap-min); padding: 0 9px; border: none; background: none; font-family: var(--font-ui); font-size: var(--fs-meta); font-weight: var(--fw-medium); line-height: 1; color: var(--brand); white-space: nowrap; cursor: pointer; }
-  .rung svg { width: 12px; height: 12px; flex: none; opacity: 0.7; }
-  .rung.dn { color: var(--muted-dark); }
+  .tierrun .tier-state { margin-left: auto; padding-left: var(--sp-2); }
+  .tier-cur { font-size: var(--fs-body); font-weight: var(--fw-semi); color: var(--ink); padding: 0 2px; white-space: nowrap; }
+  .tier-go { display: inline-flex; align-items: center; min-height: var(--tap-min); padding: 0 9px; border: none; background: none; font-family: var(--font-ui); font-size: var(--fs-small); font-weight: var(--fw-medium); line-height: 1; color: var(--muted-dark); white-space: nowrap; cursor: pointer; }
+  .tier-off { font-size: var(--fs-small); font-weight: var(--fw-medium); color: var(--muted); padding: 0 9px; white-space: nowrap; }
+  .tier-chev { display: inline-flex; color: var(--brand); margin-left: 3px; }
+  .tier-sep { color: var(--parchment-border); padding: 0 2px; }
   .rung:active { transform: scale(0.96); }
 
   /* ── Tier cross-reference — the same move offered at the FOOT of a path lesson

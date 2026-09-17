@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MOCK-33 — tier prominence, second pass</title>
+<!--
+  MOCK-33 — second pass after MOCK-32 was rejected.
+
+  WHAT THE FIRST PASS GOT WRONG. MOCK-32-A, -B and -C all treated this as a type
+  problem. It is not, or not only. The real fault is that `.tierline--split`
+  justifies space-between, so "Tier 1 of 2" sits hard left and "Tier 2" hard
+  right with the whole screen width between them — the state and the move it
+  offers read as two unrelated things. Making the text bigger (A) leaves them
+  apart; moving the state above the title (B) pushes them further apart still.
+  EVERY OPTION HERE KEEPS THE TIER AND ITS MOVE ADJACENT. That is the point of
+  this pass, and it came from William, not from the mockup.
+
+  ALSO RULED OUT: putting the tier in the title lockup (MOCK-32-C). Topic titles
+  are variable length and the longest wrap, so anything baseline-aligned with the
+  title inherits that. D, E and G are unaffected by title length; F is shown
+  against the longest title to prove it.
+
+  UNCHANGED FROM MOCK-32. The architecture stands: DES-28 (the move lives in a
+  meta line outside a path) and DES-29 (inside a path, stated not offered). Every
+  option is drawn in both contexts, because `.tier-state` renders on both.
+
+  THE BADGE IS STILL OUT. Outline, fill, underline and top border are spoken for
+  by `.tab--on`, `.tabs--top .tab--on`, `.pill--on` and `.node--current`, and this
+  row sits directly on `.tabs`. G uses a filled band rather than a token AROUND
+  the tier for exactly that reason — a surface behind a whole row is not
+  selected-state language; a chip around one word is.
+
+  Drawn at the shipped type scale, so relative weight is real.
+-->
+<style>
+  :root{
+    --font-ui:'Inter',system-ui,sans-serif; --font-display:Georgia,'Times New Roman',serif;
+    --fs-micro:11px; --fs-meta:12px; --fs-small:13px; --fs-body:15px; --fs-lead:17px; --fs-h2:26px;
+    --fw-regular:400; --fw-medium:500; --fw-semi:600; --fw-bold:700;
+    --sp-1:4px; --sp-2:8px; --sp-3:12px; --sp-4:16px;
+    --r-sm:8px; --r-md:12px; --r-lg:16px;
+    --ink:#1C1917; --ink-soft:#292524;
+    --parchment:#fff; --parchment-warm:#FAF8F5; --parchment-deep:#F5F1EB;
+    --parchment-border:#EAE4DC;
+    --brand:#C2410C; --brand-dark:#9A3412;
+    --muted:#A8A29E; --muted-dark:#78716C;
+    --border:1px solid var(--parchment-border);
+    --elev-1:0 1px 2px rgba(58,42,30,.06);
+    --tap-min:44px;
+  }
+  body{font-family:var(--font-ui);background:var(--parchment-deep);color:var(--ink-soft);
+       margin:0;padding:20px 12px 60px;font-size:var(--fs-body);line-height:1.5}
+  h1{font-family:var(--font-display);font-size:21px;margin:0 0 6px;color:var(--ink)}
+  .lede{max-width:640px;color:var(--muted-dark);font-size:var(--fs-small);margin:0 0 22px}
+  .opt{max-width:420px;margin:0 auto 30px;background:var(--parchment-warm);border:var(--border);
+       border-radius:var(--r-lg);padding:var(--sp-4);box-shadow:var(--elev-1)}
+  .opt-n{font-size:10px;font-weight:var(--fw-bold);letter-spacing:1px;text-transform:uppercase;
+         color:var(--brand);margin-bottom:2px}
+  .opt-h{font-family:var(--font-display);font-size:var(--fs-lead);margin-bottom:6px;color:var(--ink)}
+  .opt-note{font-size:var(--fs-small);color:var(--muted-dark);margin:0 0 14px}
+  .cost{font-size:var(--fs-meta);color:var(--muted-dark);margin:10px 0 0;padding-top:10px;
+        border-top:1px dashed var(--parchment-border)}
+  .ctx{font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);
+       margin:14px 0 4px;font-weight:var(--fw-semi)}
+  .screen{background:var(--parchment-deep);border:var(--border);border-radius:var(--r-md);padding:14px 16px 0}
+
+  /* shipped, unchanged */
+  .lesson-title{font-family:var(--font-display);font-size:var(--fs-h2);font-weight:var(--fw-medium);
+    color:var(--ink);margin:0 0 3px;letter-spacing:-0.01em}
+  .tierline{display:flex;align-items:center;gap:var(--sp-2);min-height:var(--tap-min)}
+  .tier-state{font-family:var(--font-ui);font-size:var(--fs-meta);font-weight:var(--fw-regular);
+    color:var(--muted-dark);white-space:nowrap}
+  .tier-state b{color:var(--ink-soft);font-weight:var(--fw-semi)}
+  .rung{display:inline-flex;align-items:center;gap:4px;min-height:var(--tap-min);padding:0 9px;
+    border:none;background:none;font-family:var(--font-ui);font-size:var(--fs-meta);
+    font-weight:var(--fw-medium);line-height:1;color:var(--brand);white-space:nowrap;cursor:pointer}
+  .rung.dn{color:var(--muted-dark)}
+  .tabs{display:flex;gap:26px;border-bottom:1px solid var(--parchment-border);margin-top:2px}
+  .tab{padding:10px 0 9px;font-size:var(--fs-body);color:var(--muted-dark)}
+  .tab--on{color:var(--brand);font-weight:var(--fw-medium);box-shadow:inset 0 -2px 0 var(--brand)}
+  .hint{font-size:var(--fs-small);color:var(--muted);padding:12px 0 14px}
+
+  /* D — grouped left, above the title */
+  .d .tierline{justify-content:flex-start;gap:2px;min-height:34px;margin-bottom:1px}
+  .d .tier-state{font-size:var(--fs-small)}
+  .d .tier-state b{font-size:var(--fs-body);color:var(--ink)}
+  .d .rung{font-size:var(--fs-small);min-height:34px}
+
+  /* E — grouped left, under the title */
+  .e .tierline{justify-content:flex-start;gap:2px}
+  .e .tier-state{font-size:var(--fs-small)}
+  .e .tier-state b{font-size:var(--fs-body);color:var(--ink)}
+  .e .rung{font-size:var(--fs-small)}
+  .e .sep{color:var(--parchment-border);padding:0 2px}
+
+  /* F — the tier run */
+  .run{display:flex;align-items:center;gap:0;min-height:var(--tap-min);flex-wrap:wrap}
+  .run-i{font-size:var(--fs-body);font-weight:var(--fw-semi);color:var(--ink);padding:0 2px}
+  .run-o{font-size:var(--fs-body);font-weight:var(--fw-medium);color:var(--brand);padding:0 9px;
+    min-height:var(--tap-min);display:inline-flex;align-items:center;border:none;background:none;
+    font-family:var(--font-ui);cursor:pointer}
+  .run-d{color:var(--muted);padding:0 6px}
+  .run-w{font-size:var(--fs-meta);color:var(--muted-dark);margin-left:auto;white-space:nowrap}
+
+  /* G — the band */
+  .band{display:flex;align-items:center;justify-content:space-between;gap:var(--sp-2);
+    background:var(--parchment-warm);border:var(--border);border-radius:var(--r-sm);
+    padding:0 6px 0 12px;min-height:var(--tap-min);margin:2px 0 6px}
+  .band .tier-state{font-size:var(--fs-small)}
+  .band .tier-state b{font-size:var(--fs-body);color:var(--ink)}
+</style>
+</head>
+<body>
+
+<h1>MOCK-33 — tier prominence, second pass</h1>
+<p class="lede">
+  Four more, all built on the same correction: the tier and the link to the next
+  tier stay next to each other instead of being pushed to opposite edges. What
+  differs is where the pair sits and how much surface it gets.
+</p>
+
+
+<div class="opt">
+  <div class="opt-n">MOCK-33-D</div>
+  <div class="opt-h">The pair, above the title</div>
+  <p class="opt-note">The whole row moves above the lesson name and groups left, so it reads as one unit before the title rather than a footnote after it. Tier number at body size in ink, the move immediately beside it. Nothing sits at the far right edge any more.</p>
+  <div class="ctx">From Topics — the move is available</div>
+  <div class="screen"><div class="d"><div class="tierline"><span class="tier-state"><b>Tier 1</b> of 2 &middot; 10 words</span><button class="rung">Tier 2 &rarr;</button></div></div><h2 class="lesson-title">Greetings</h2><div class="tabs"><div class="tab tab--on">Learn</div><div class="tab">Chat</div><div class="tab">Quiz</div></div><div class="hint">Tap a card to reveal English</div></div>
+  <div class="ctx">Inside a path — stated only, no move (DES-29 unchanged)</div>
+  <div class="screen"><div class="d"><div class="tierline"><span class="tier-state"><b>Tier 1</b> of 2 &middot; 10 words</span></div></div><h2 class="lesson-title">Greetings</h2><div class="tabs"><div class="tab tab--on">Learn</div><div class="tab">Chat</div><div class="tab">Quiz</div></div><div class="hint">Tap a card to reveal English</div></div>
+  
+  <p class="cost">Cost: a moved element and four declarations. Closest to what MOCK-32-B was reaching for, with the disconnection fixed.</p>
+</div>
+
+
+<div class="opt">
+  <div class="opt-n">MOCK-33-E</div>
+  <div class="opt-h">The pair, under the title</div>
+  <p class="opt-note">The same grouping, left where the row already lives. The tier rises to body size, the move follows straight after it with a hairline divider. Least disruptive of the four — the only structural change is dropping <code>space-between</code>.</p>
+  <div class="ctx">From Topics — the move is available</div>
+  <div class="screen"><h2 class="lesson-title">Greetings</h2><div class="e"><div class="tierline"><span class="tier-state"><b>Tier 1</b> of 2 &middot; 10 words</span><span class="sep">|</span><button class="rung">Tier 2 &rarr;</button></div></div><div class="tabs"><div class="tab tab--on">Learn</div><div class="tab">Chat</div><div class="tab">Quiz</div></div><div class="hint">Tap a card to reveal English</div></div>
+  <div class="ctx">Inside a path — stated only, no move (DES-29 unchanged)</div>
+  <div class="screen"><h2 class="lesson-title">Greetings</h2><div class="e"><div class="tierline"><span class="tier-state"><b>Tier 1</b> of 2 &middot; 10 words</span></div></div><div class="tabs"><div class="tab tab--on">Learn</div><div class="tab">Chat</div><div class="tab">Quiz</div></div><div class="hint">Tap a card to reveal English</div></div>
+  
+  <p class="cost">Cost: three or four declarations, one new hairline span, nothing moves. The cheapest thing that actually addresses the complaint.</p>
+</div>
+
+
+<div class="opt">
+  <div class="opt-n">MOCK-33-F</div>
+  <div class="opt-h">The tier run</div>
+  <p class="opt-note">Both tiers named in sequence, current in ink, the other as the link — so the row states how many tiers the topic has and which one you are in, in one reading. Word count pushed to the right where it belongs, being the least important fact. In a path the other tier greys out rather than disappearing, which keeps the row identical in shape across both surfaces. <b>The honest caveat:</b> this is the closest of the four to a one-of-N chooser, which DES-28 deliberately avoided directly above the subtabs.</p>
+  <div class="ctx">From Topics — the move is available</div>
+  <div class="screen"><h2 class="lesson-title">Greetings</h2><div class="run"><span class="run-i">Tier 1</span><span class="run-d">&middot;</span><button class="run-o">Tier 2</button><span class="run-w">10 words</span></div><div class="tabs"><div class="tab tab--on">Learn</div><div class="tab">Chat</div><div class="tab">Quiz</div></div><div class="hint">Tap a card to reveal English</div></div>
+  <div class="ctx">Inside a path — stated only, no move (DES-29 unchanged)</div>
+  <div class="screen"><h2 class="lesson-title">Greetings</h2><div class="run"><span class="run-i">Tier 1</span><span class="run-d">&middot;</span><span class="run-d">Tier 2</span><span class="run-w">10 words</span></div><div class="tabs"><div class="tab tab--on">Learn</div><div class="tab">Chat</div><div class="tab">Quiz</div></div><div class="hint">Tap a card to reveal English</div></div>
+  <div class="ctx">Longest topic title</div><div class="screen"><h2 class="lesson-title">Numbers &amp; Counting</h2><div class="run"><span class="run-i">Tier 1</span><span class="run-d">&middot;</span><button class="run-o">Tier 2</button><span class="run-w">10 words</span></div><div class="tabs"><div class="tab tab--on">Learn</div><div class="tab">Chat</div><div class="tab">Quiz</div></div><div class="hint">Tap a card to reveal English</div></div>
+  <p class="cost">Cost: three new classes. Worth a second look on device before committing — if it reads as a filter rather than a statement, that is DES-28's objection landing.</p>
+</div>
+
+
+<div class="opt">
+  <div class="opt-n">MOCK-33-G</div>
+  <div class="opt-h">The pair, on its own band</div>
+  <p class="opt-note">The row keeps its position but gains a surface: a warm band with a hairline, holding the state and the move together. Prominence comes from the container rather than from type, so the tier can stay small and still be impossible to miss. It also makes the pair unmistakably one object.</p>
+  <div class="ctx">From Topics — the move is available</div>
+  <div class="screen"><h2 class="lesson-title">Greetings</h2><div class="band"><span class="tier-state"><b>Tier 1</b> of 2 &middot; 10 words</span><button class="rung">Tier 2 &rarr;</button></div><div class="tabs"><div class="tab tab--on">Learn</div><div class="tab">Chat</div><div class="tab">Quiz</div></div><div class="hint">Tap a card to reveal English</div></div>
+  <div class="ctx">Inside a path — stated only, no move (DES-29 unchanged)</div>
+  <div class="screen"><h2 class="lesson-title">Greetings</h2><div class="band"><span class="tier-state"><b>Tier 1</b> of 2 &middot; 10 words</span></div><div class="tabs"><div class="tab tab--on">Learn</div><div class="tab">Chat</div><div class="tab">Quiz</div></div><div class="hint">Tap a card to reveal English</div></div>
+  
+  <p class="cost">Cost: one new class. Heaviest of the four visually — it adds a bordered surface to a region that currently has none above the subtabs.</p>
+</div>
+
+<div class="opt" style="background:var(--parchment)">
+  <div class="opt-n">Decided separately</div>
+  <div class="opt-h">The upward cross-reference inside a path</div>
+  <p class="opt-note">
+    Settled in conversation and not part of this mockup: the foot-of-page
+    cross-reference keeps its downward row and suppresses the upward one until
+    the destination path has been started. Ten topics split Beginner tier 1 /
+    Intermediate tier 2, so ten Beginner lessons stop advertising a course the
+    learner has not reached. Gets its own DES row when built.
+  </p>
+</div>
+
+</body>
+</html>

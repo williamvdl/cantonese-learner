@@ -219,13 +219,14 @@ code{ background:#DAD4CA; padding:1px 5px; border-radius:4px; font-size:11.5px; 
 .tag--milestone{ color:var(--milestone); border-color:var(--milestone-edge); }
 .tag--done{ color:var(--jade); border-color:var(--jade-edge); }
 .tierline{ display:flex; align-items:center; gap:var(--sp-2); min-height:var(--tap-min); }
-.tierline--split{ justify-content:space-between; }
+.tierrun{ gap:0; }
 .tier-state{ font:var(--fw-regular) var(--fs-meta)/1.4 var(--font-ui); color:var(--muted-dark); white-space:nowrap; }
-.tier-state b{ color:var(--ink-soft); font-weight:var(--fw-semi); }
-.ladder{ display:flex; align-items:center; gap:2px; flex:none; margin-right:-9px; }
-.rung{ display:inline-flex; align-items:center; gap:4px; min-height:var(--tap-min); padding:0 9px; border:none; background:none; font:var(--fw-medium) var(--fs-meta)/1 var(--font-ui); color:var(--brand); white-space:nowrap; cursor:pointer; }
-.rung svg{ width:12px; height:12px; flex:none; opacity:.7; }
-.rung.dn{ color:var(--muted-dark); }
+.tierrun .tier-state{ margin-left:auto; padding-left:var(--sp-2); }
+.tier-cur{ font:var(--fw-semi) var(--fs-body)/1.4 var(--font-ui); color:var(--ink); padding:0 2px; white-space:nowrap; }
+.tier-go{ display:inline-flex; align-items:center; min-height:var(--tap-min); padding:0 9px; border:none; background:none; font:var(--fw-medium) var(--fs-small)/1 var(--font-ui); color:var(--muted-dark); white-space:nowrap; cursor:pointer; }
+.tier-off{ font:var(--fw-medium) var(--fs-small)/1 var(--font-ui); color:var(--muted); padding:0 9px; white-space:nowrap; }
+.tier-chev{ display:inline-flex; color:var(--brand); margin-left:3px; }
+.tier-sep{ color:var(--parchment-border); padding:0 2px; }
 .xref-card{ margin:var(--sp-4) 0 0; overflow:hidden; }
 .xref{ display:flex; align-items:center; gap:var(--sp-2); width:100%; min-height:var(--tap-min); padding:10px var(--sp-4); border:none; border-top:var(--border-soft); background:transparent; text-align:left; cursor:pointer; }
 .xref:first-child{ border-top:none; }
@@ -616,9 +617,9 @@ table.spec tr:last-child td{ border-bottom:none; }
 
 <section id="tierladder">
   <h2>Tier ladder</h2>
-  <p class="note">The meta line under a lesson title. <b>Deliberately not a chooser</b> (DES-28, v121): a one-of-N control here sits directly on the <code>.tabs</code> row and reads as a hierarchy between two unrelated axes — tier is content scope, the subtabs are view. So there is no selected state, and no new selected-state language enters the system. <code>.tier-state</code> states the position; <code>.rung</code> offers the adjacent tiers only. <b>Up is <code>--brand</code>, down is <code>--muted-dark</code></b> — the ladder has a direction, so the upward rung is the offer and the downward one is the way back.</p>
+  <p class="note">The meta line under a lesson title. <b>Every tier of the topic is named in one run</b> (DES-55, v147), replacing the single adjacent rung that <code>.tierline--split</code> pushed to the far edge, where it read as unrelated to the state beside it. <code>.tier-cur</code> states where you are; <code>.tier-go</code> offers the others; <code>.tier-off</code> is the same list inside a path, where tier is <b>stated, not offered</b> (DES-29) because switching tier means crossing into another path, and that move belongs at the foot as a named cross-reference. <b>The current tier must outrank the links.</b> The first version gave the links brand colour and the current tier only ink weight, and colour beats weight — so the row advertised where the learner was not. Brand is now a single small arrow, <code>.tier-chev</code>, and is the only brand in the row. <b>Still not a chooser</b> (DES-28): no outline, no fill, no selected state, so nothing here mimics <code>.tab--on</code> on the <code>.tabs</code> row directly below.</p>
   <p class="note">A single rung names its destination; two rungs shorten to bare numbers, which is only legible because the state text then reads &ldquo;Tier 2 of 3&rdquo;. <b>Inside a path the rungs are absent entirely</b> — every tier belongs to exactly one path, so a tier change crosses paths, and the move is offered at the foot by <code>.xref</code> with the destination path named.</p>
-  <div class="cls">.tierline[--split] › .tier-state + .ladder › .rung[.dn]</div>
+  <div class="cls">.tierline[.tierrun] › .tier-cur + .tier-go[.tier-chev] | .tier-off + .tier-sep + .tier-state</div>
   <div class="stage" id="tierdemo"></div>
 </section>
 
@@ -892,18 +893,12 @@ document.getElementById('tierdemo').innerHTML=`
   <div style="max-width:340px">
     <div style="font:var(--fw-bold) 9px/1 var(--font-ui);letter-spacing:.11em;text-transform:uppercase;color:var(--muted-dark);margin-bottom:4px">One tier &mdash; degrades to the count alone</div>
     <div class="tierline" style="min-height:26px"><span class="tier-state">14 words</span></div>
-    <div style="font:var(--fw-bold) 9px/1 var(--font-ui);letter-spacing:.11em;text-transform:uppercase;color:var(--muted-dark);margin:10px 0 4px">Tier 1 of 2 &mdash; one rung, named</div>
-    <div class="tierline tierline--split">
-      <span class="tier-state"><b>Tier 1</b> &middot; 10 words</span>
-      <span class="ladder"><button class="rung">Tier 2 ${I.arrow}</button></span>
-    </div>
-    <div style="font:var(--fw-bold) 9px/1 var(--font-ui);letter-spacing:.11em;text-transform:uppercase;color:var(--muted-dark);margin:10px 0 4px">Tier 2 of 3 &mdash; two rungs, bare numbers</div>
-    <div class="tierline tierline--split">
-      <span class="tier-state"><b>Tier 2</b> of 3 &middot; 10 words</span>
-      <span class="ladder"><button class="rung dn">${I.back} 1</button><button class="rung">3 ${I.arrow}</button></span>
-    </div>
+<div style="font:var(--fw-bold) 9px/1 var(--font-ui);letter-spacing:.11em;text-transform:uppercase;color:var(--muted-dark);margin:10px 0 4px">Tier 1 of 2 &mdash; every topic today</div>
+    <div class="tierline tierrun"><span class="tier-cur">Tier 1</span><span class="tier-sep">|</span><button class="tier-go">Tier 2<span class="tier-chev">${I.arrow}</span></button><span class="tier-state">10 words</span></div>
+    <div style="font:var(--fw-bold) 9px/1 var(--font-ui);letter-spacing:.11em;text-transform:uppercase;color:var(--muted-dark);margin:10px 0 4px">Tier 2 of 3 &mdash; the run simply grows</div>
+    <div class="tierline tierrun"><button class="tier-go">Tier 1<span class="tier-chev">${I.arrow}</span></button><span class="tier-sep">|</span><span class="tier-cur">Tier 2</span><span class="tier-sep">|</span><button class="tier-go">Tier 3<span class="tier-chev">${I.arrow}</span></button><span class="tier-state">10 words</span></div>
     <div style="font:var(--fw-bold) 9px/1 var(--font-ui);letter-spacing:.11em;text-transform:uppercase;color:var(--muted-dark);margin:14px 0 4px">In a path &mdash; stated only, crossing offered at the foot</div>
-    <div class="tierline"><span class="tier-state"><b>Tier 2</b> of 3 &middot; 10 words</span></div>
+    <div class="tierline tierrun"><span class="tier-off">Tier 1</span><span class="tier-sep">|</span><span class="tier-cur">Tier 2</span><span class="tier-sep">|</span><span class="tier-off">Tier 3</span><span class="tier-state">10 words</span></div>
     <div class="card xref-card">
       <button class="xref"><span class="xref-node">1</span><span class="xref-txt"><span class="xref-lb">Earlier, in the Beginner path</span><span class="xref-nm">Tier 1 &mdash; 10 words</span></span><span class="xref-go">${I.arrow}</span></button>
       <button class="xref"><span class="xref-node">3</span><span class="xref-txt"><span class="xref-lb">Next, in the Advanced path</span><span class="xref-nm">Tier 3 &mdash; 12 words</span></span><span class="xref-go">${I.arrow}</span></button>

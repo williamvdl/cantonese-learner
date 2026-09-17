@@ -1944,35 +1944,40 @@ function renderLessonHeader(lesson) {
 // number against.
 function renderTierLine() {
   const words  = getRoundWords(state.topic, state.currentRound).length;
-  const ladder = getTierLadder(state.topic, state.currentRound);
+  const rounds = getAvailableRounds(state.topic);
 
-  // Single-tier topic: no tier to state and no rung to offer, so the line
-  // degrades to the word count alone rather than disappearing. Keeping the row
-  // means the title never shifts between a one-tier and a multi-tier topic.
-  if (ladder.total <= 1) {
+  // Single-tier topic: no tier to state and nowhere to go, so the line degrades
+  // to the word count alone rather than disappearing. Keeping the row means the
+  // title never shifts between a one-tier and a multi-tier topic.
+  if (rounds.length <= 1) {
     return `<div class="tierline"><span class="tier-state">${words} words</span></div>`;
   }
 
-  const ofN  = ladder.total > 2 ? ` of ${ladder.total}` : '';
-  const stateEl = `<span class="tier-state"><b>Tier ${state.currentRound}</b>${ofN} · ${words} words</span>`;
-
-  // In a path the line is a statement, not a control.
-  if (state.fromPath) {
-    return `<div class="tierline">${stateEl}</div>`;
-  }
-
-  const bare  = ladder.rungs.length > 1;
-  const rungs = ladder.rungs.map(r => {
-    const label = bare ? String(r.tier) : `Tier ${r.tier}`;
-    return r.dir === 'down'
-      ? `<button class="rung dn" data-tier="${r.tier}">${icon('arrowLeft',12)} ${label}</button>`
-      : `<button class="rung" data-tier="${r.tier}">${label} ${icon('arrowRight',12)}</button>`;
-  }).join('');
+  // DES-55: every tier of the topic is named in one run, current first in
+  // reading order of importance. Built from getAvailableRounds() rather than
+  // getTierLadder() on purpose — the ladder returns ADJACENT tiers only, which
+  // is right for the foot-of-page cross-reference and wrong here, where the
+  // point is to show how many tiers the topic has at all.
+  //
+  // THE CURRENT TIER MUST OUTRANK THE OTHERS. The first version of this row gave
+  // the other tiers brand colour and the current one nothing but ink weight, and
+  // brand on parchment beats semibold ink every time — so the row advertised
+  // where the learner was not. Brand is now a single small arrow per link. If a
+  // future change makes an inactive tier louder than `.tier-cur`, that is the
+  // same bug returning.
+  const items = rounds.map(t => {
+    if (t === state.currentRound) return `<span class="tier-cur">Tier ${t}</span>`;
+    // In a path the other tiers are stated, not offered (DES-29) — switching
+    // tier means crossing into another path, and that move belongs at the foot
+    // as a named cross-reference, not as a control sitting on the subtabs.
+    if (state.fromPath)           return `<span class="tier-off">Tier ${t}</span>`;
+    return `<button class="tier-go" data-tier="${t}">Tier ${t}<span class="tier-chev">${icon('arrowRight',11)}</span></button>`;
+  }).join('<span class="tier-sep">|</span>');
 
   return `
-    <div class="tierline tierline--split">
-      ${stateEl}
-      <span class="ladder">${rungs}</span>
+    <div class="tierline tierrun">
+      ${items}
+      <span class="tier-state">${words} words</span>
     </div>`;
 }
 
@@ -1983,9 +1988,17 @@ function renderTierLine() {
 function renderTierXref() {
   if (!state.fromPath) return '';
   const ladder = getTierLadder(state.topic, state.currentRound);
-  if (!ladder.rungs.length) return '';
 
-  const rows = ladder.rungs.map(r => {
+  // DES-56: don't advertise a path the learner has not reached. Every multi-tier
+  // topic splits tier 1 into Beginner and tier 2 into Intermediate, so without
+  // this every Beginner lesson in those topics invited a jump into a course the
+  // learner may be weeks from starting. The DOWNWARD row always stays — a lower
+  // tier is by definition a course already in progress or behind them.
+  const rungs = ladder.rungs.filter(r =>
+    r.dir === 'down' || !r.pathKey || pathCompleteCount(r.pathKey) > 0);
+  if (!rungs.length) return '';
+
+  const rows = rungs.map(r => {
     const where = r.pathLabel
       ? `${r.dir === 'down' ? 'Earlier, in' : 'Next, in'} the ${r.pathLabel} path`
       : `${r.dir === 'down' ? 'Earlier' : 'Next'} in this topic`;
