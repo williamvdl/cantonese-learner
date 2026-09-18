@@ -79,8 +79,19 @@ const pieces = [
   grabConst(/const ASR_DIGITS = \{[\s\S]*?\};/),
   grabConst(/const ASR_PLACES = \[[\s\S]*?\];/),
   grab(all, 'foldAsrNumerals'),
-  grab(all, 'normalizeChinese'), grab(all, 'editDistance'),
+  grab(all, 'normalizeChinese'),
+  // DES-57 same-sound equality, and the particle machinery fuzzyMatch() has
+  // called since v144. The particle functions were never lifted here, so this
+  // harness threw on load and had been red from v144 to v148 without saying so —
+  // same silent failure as tools/asr-replay-harness.js, found the same way.
+  // charJyutpingSyllables() is already lifted above, which charReading() needs.
+  grab(all, 'charReading'), grab(all, 'isSameSound'),
+  grabConst(/const speakCharsEqual = [\s\S]*?;/),
+  grab(all, 'editDistance'),
   grabConst(/const SPEAK_FINAL_PARTICLES[\s\S]*?\]\);/),
+  grabConst(/const SPEAK_PARTICLE_VARIANTS[\s\S]*?\]\);/),
+  grabConst(/const canonicalParticle = [\s\S]*?;/),
+  grab(all, 'isForgivenParticleSwap'),
   grab(all, 'fuzzyMatch'), grab(all, 'alignChars'), grab(all, 'renderSpeakBreakdown'),
   grabConst(/const CHECKPOINT_ACTIVITIES[^\n]*/),
   grabConst(/const SENT_REVIEW_MIN_CHARS[^\n]*/),

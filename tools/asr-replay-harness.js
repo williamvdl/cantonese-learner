@@ -39,14 +39,35 @@ const grab = name => {
 const grabConst = re => { const m = src.match(re); if (!m) throw new Error('const not found'); return m[0]; };
 
 const env = { console };
+// `store` and `window` are what charReading() reaches for (DES-57). The real
+// corpus table is loaded so homophone folding is tested against the readings the
+// app actually ships, not a stub; the dictionary is the same vendored file.
+env.store = { charJyutping: JSON.parse(fs.readFileSync(path.join(ROOT, 'data/char-jyutping.json'), 'utf8')) };
+env.window = { ToJyutping: require(path.join(ROOT, 'vendor/to-jyutping.js')) };
 vm.createContext(env);
 vm.runInContext([
   grabConst(/const ASR_DIGITS = \{[\s\S]*?\};/),
   grabConst(/const ASR_PLACES = \[[\s\S]*?\];/),
   grab('foldAsrNumerals'),
   grab('normalizeChinese'),
+  // DES-57 same-sound equality. editDistance() below calls speakCharsEqual(),
+  // so these must be in scope before it — the whole point of the change is that
+  // the matcher and the grid share one equality test, and a harness that lifted
+  // only one of them would be testing something the app does not run.
+  grab('charJyutpingSyllables'),
+  grab('charReading'),
+  grab('isSameSound'),
+  grabConst(/const speakCharsEqual = [\s\S]*?;/),
   grab('editDistance'),
   grabConst(/const SPEAK_FINAL_PARTICLES[\s\S]*?\]\);/),
+  // Added v150. These have been called by fuzzyMatch() since v144 but were never
+  // lifted here, so this harness threw on load and had been red — silently, since
+  // nothing reads its exit code — for every release from v144 to v148. Recorded
+  // in STATUS.md notes: a standing check that fails to LOAD reports nothing, and
+  // looks the same from outside as one that was never run.
+  grabConst(/const SPEAK_PARTICLE_VARIANTS[\s\S]*?\]\);/),
+  grabConst(/const canonicalParticle = [\s\S]*?;/),
+  grab('isForgivenParticleSwap'),
   grab('fuzzyMatch'),
   grab('deduplicateRepeats'),
   grab('resolveHeard'),
@@ -166,6 +187,77 @@ for (const file of files) {
   console.log('\n— 5. the limit of what code can fix —');
   const stillFailing = rows.filter(r => !r.r.matched).length;
   ok(stillFailing + ' of ' + data.attempts.length + ' attempts still fail, and should: 二 (ji6) was heard as ji1 in most of them');
+}
+
+// ── 6. Same-sound equality (DES-57) ────────────────────────────────────────
+// Built from the two REPORTED attempts on 好，要粥同餃子。我好餓㗎！, not from
+// invented pairs. Both were graded wrong before v150 on characters the learner
+// never mispronounced.
+console.log('\n— 6. same-sound equality forgives the recogniser, not the learner (DES-57) —');
+{
+  const target = '好，要粥同餃子。我好餓㗎！';
+
+  // Forgiven: identical sound AND tone. The first three are what the recogniser
+  // actually substituted on the two reported attempts.
+  const sameSound = [
+    ['粥', '竹', 'zuk1'], ['粥', '捉', 'zuk1'], ['同', '筒', 'tung4'],
+    ['麵', '面', 'min6'], ['三', '衫', 'saam1'], ['九', '狗', 'gau2'],
+  ];
+  // NOT forgiven: a real difference in the syllable or the tone. 我 (ngo5) /
+  // 餓 (ngo6) is the learner's actual slip on attempt 1 and must survive. The
+  // rest are pairs an "any reading matches" rule would have wrongly folded —
+  // each destroys a distinction the corpus teaches, so each is a standing guard
+  // against this rule being loosened later.
+  const different = [
+    ['我', '餓', 'ngo5 vs ngo6 — the real tone slip on the reported attempt'],
+    ['心', '新', 'sam1 vs san1'], ['係', '喺', 'hai6 vs hai2'],
+    ['時', '士', 'si4 vs si2'],   ['花', '化', 'faa1 vs faa2'],
+    ['好', '蠔', 'hou2 vs hou4'], ['開', '海', 'hoi1 vs hoi2'],
+    ['食', '識', 'sik6 vs sik1'],
+  ];
+
+  let bad = 0;
+  for (const [a, b, j] of sameSound) {
+    if (!env.isSameSound(a, b)) { fail(`${a} / ${b} should fold — both ${j}`); bad++; }
+  }
+  if (!bad) ok(`${sameSound.length} homophone pairs fold, incl. 粥/竹/捉 (zuk1) and 同/筒 (tung4)`);
+
+  bad = 0;
+  for (const [a, b, why] of different) {
+    if (env.isSameSound(a, b)) { fail(`${a} / ${b} must NOT fold — ${why}`); bad++; }
+  }
+  if (!bad) ok(`${different.length} near-pairs stay distinct, incl. 我 (ngo5) / 餓 (ngo6) — tone still counts`);
+
+  // A character with no reading anywhere must never match. Guessing here would
+  // turn a coverage gap into a silent pass, which is the one direction this
+  // change must not fail in.
+  if (env.isSameSound('粥', '\u{2A6A5}') || env.isSameSound('\u{2A6A5}', '粥'))
+    fail('an unreadable character folded against a real one — coverage gaps must reject, not pass');
+  else ok('a character with no reading from either source never folds');
+
+  // End to end, on the two attempts exactly as reported.
+  const a1 = '好要竹筒餃子我好我㗎';   // 3 substitutions before v150: 竹, 筒, 我
+  const a2 = '好要捉同餃子我好餓㗎';   // 1 substitution before v150: 捉
+  if (!env.fuzzyMatch(a2, target)) fail('reported attempt 2 still fails — only 捉 (zuk1) for 粥 (zuk1) differed');
+  else ok('reported attempt 2 passes: 捉 (zuk1) folds to 粥 (zuk1), nothing else differed');
+
+  if (!env.fuzzyMatch(a1, target)) fail('reported attempt 1 still fails — 竹/筒 fold, leaving one real slip inside budget');
+  else ok('reported attempt 1 passes: 竹 (zuk1) and 筒 (tung4) fold, 我 (ngo5) for 餓 (ngo6) is the single flagged slip');
+
+  // Mutation test: the RULE must be doing the work above, not the edit budget
+  // absorbing everything regardless. Three genuine differences in a ten-
+  // character target exceed the allowance of 2 and must still fail.
+  //
+  // The first draft of this mutation used 吖 (aa1) in the final slot and passed,
+  // correctly: 吖 (aa1) and 㗎 (gaa3) are BOTH taught sentence-final particles,
+  // so that swap is free under fuzzyMatch() rule 1 and was never going to cost
+  // an edit. Kept as a note because it is an easy mistake to repeat — a mutation
+  // that lands on another forgiveness rule tests nothing. These three do not:
+  // 腰 (jiu1) for 要 (jiu3) and 姐 (ze4) for 子 (zi2) differ in tone and in
+  // syllable respectively, and neither is a particle.
+  if (env.fuzzyMatch('好腰竹筒餃姐我好我㗎', target))
+    fail('three real differences still passed — the budget is absorbing genuine errors');
+  else ok('three real differences still fail — folding frees the budget, it does not remove it');
 }
 
 console.log('');

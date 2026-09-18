@@ -1967,7 +1967,10 @@ function editDistance(a, b) {
   for (let i = 1; i <= a.length; i++) {
     curr[0] = i;
     for (let j = 1; j <= b.length; j++) {
-      const cost = a[i - 1] === b[j - 1] ? 0 : 1;
+      // speakCharsEqual(), not ===: a recogniser homophone is not an edit the
+      // learner made, so it must not consume the budget fuzzyMatch() allows for
+      // edits they DID make (DES-57).
+      const cost = speakCharsEqual(a[i - 1], b[j - 1]) ? 0 : 1;
       curr[j] = Math.min(
         curr[j - 1] + 1,       // insertion
         prev[j]   + 1,         // deletion
@@ -2002,6 +2005,80 @@ function deduplicateRepeats(s, minLen) {
   }
   return s;
 }
+
+// ── SAME-SOUND EQUALITY (DES-57) ───────────────────────────────────────────
+// Two DIFFERENT characters that the learner cannot have pronounced differently.
+//
+// WHY THIS EXISTS. The recogniser picks a character, not a sound, and for a
+// syllable with several homophones the one it picks varies between attempts on
+// the same utterance. Measured on one reported sentence: 粥 (zuk1) came back as
+// 竹 (zuk1) on one attempt and 捉 (zuk1) on the next, and 同 (tung4) came back
+// as 筒 (tung4). All are real words, all identical in sound AND tone to the
+// target. Comparing characters therefore reported three mistakes the learner
+// did not make, and — for an audience that cannot read Chinese, which is the
+// assumed audience — showed a character as the proof of an error it could not
+// read. That is a false reject on the one axis the learner is being judged on,
+// and a false reject is the expensive error here (DES-39).
+//
+// TONE STILL COUNTS, and that is the whole point of comparing READINGS rather
+// than merely folding homophones away: 我 (ngo5) against 餓 (ngo6) stays a
+// mismatch, because ngo5 and ngo6 are not the same sound. This rule forgives
+// what the recogniser chose; it forgives nothing the learner said.
+//
+// ONE READING EACH, NOT ALL OF THEM. An earlier draft accepted a match if ANY
+// reading of one character met ANY reading of the other. Measured, that was far
+// too loose: the vendored dictionary carries a long tail of rare and literary
+// alternates, and under that rule 心 (sam1) passed for 新 (san1), 係 (hai6) for
+// 喺 (hai2), 時 (si4) for 士 (si6) and 花 (faa1) for 化 (faa3) — every one of
+// them destroying a tone distinction the corpus actively teaches. The single
+// best reading per character is what makes this a homophone rule rather than a
+// general amnesty.
+//
+// THE POLYPHONE COMPROMISE, STATED. 35 of the 644 corpus characters carry more
+// than one taught reading, and data/char-jyutping.json stores only the majority
+// one plus `amb: true`. So for those, a sentence using the MINORITY reading
+// resolves its target character to the majority reading here. The effect is a
+// mismatch on a character the learner may have said correctly — a false reject,
+// which is the same direction the app already failed in before this change, and
+// never a false pass. Reading the target's own authored jyutping instead would
+// fix it, but that means threading targetJ through startSpeechRecognition(),
+// resolveHeard() and fuzzyMatch(), and a rule that two places resolve
+// DIFFERENTLY is the exact defect shape hit at v140 and again at v144. One
+// source, slightly blunt, beats two sources that can drift apart.
+// Resolve ONE character to ONE reading, through charJyutpingSyllables() rather
+// than touching window.ToJyutping here. Two reasons, both load-bearing:
+//   - The layering (corpus wins, dictionary falls back) already lives there and
+//     must not be written twice; the two sources disagree on 44 of 644
+//     characters, so a second copy that drifted would grade against a literary
+//     reading while the lesson taught the colloquial one.
+//   - The dictionary script is DEFERRED. tools/jyutping-check.js asserts that
+//     nothing outside that one function reaches for it, precisely so a new
+//     caller cannot start depending on it before it has loaded. The first draft
+//     of this function did exactly that and the check caught it.
+function charReading(ch) {
+  if (!ch) return null;
+  const syl = charJyutpingSyllables(ch);
+  return (syl[0] && syl[0].reading) || null;
+}
+
+// A character with NO reading from either source never matches anything. That
+// is deliberate: an unknown character is not evidence the learner was right,
+// and guessing would turn a coverage gap into a silent pass. tools/jyutping-
+// check.js asserts every corpus character resolves, so this path should only be
+// reachable for recogniser output from outside the corpus.
+function isSameSound(a, b) {
+  if (!a || !b || a === b) return false;
+  const ra = charReading(a);
+  if (!ra) return false;
+  return ra === charReading(b);
+}
+
+// The single equality test every speak comparison goes through. fuzzyMatch(),
+// editDistance() and alignChars() all call THIS rather than testing `===`
+// themselves, for the reason written on isForgivenParticleSwap() below: a rule
+// that decides something and a panel that reports it must read from one place,
+// or the learner is shown an error the matcher already forgave.
+const speakCharsEqual = (a, b) => a === b || isSameSound(a, b);
 
 // Sentence-final particles, for the free-particle rule in fuzzyMatch() below.
 // Kept in sync with data/topics/particles.json by a check in tools/validate.js —
@@ -2095,7 +2172,7 @@ function alignChars(heard, target) {
   for (let j = 0; j <= n; j++) dp[0][j] = j;
   for (let i = 1; i <= m; i++) {
     for (let j = 1; j <= n; j++) {
-      const cost = heard[i - 1] === target[j - 1] ? 0 : 1;
+      const cost = speakCharsEqual(heard[i - 1], target[j - 1]) ? 0 : 1;
       dp[i][j] = Math.min(
         dp[i - 1][j] + 1,         // deletion from heard
         dp[i][j - 1] + 1,         // insertion (= target char missing)
@@ -2107,7 +2184,10 @@ function alignChars(heard, target) {
   const marks = new Array(n);
   let i = m, j = n;
   while (i > 0 && j > 0) {
-    const same = heard[i - 1] === target[j - 1];
+    // Same test as the DP above, and as fuzzyMatch(). A homophone scores a
+    // plain 'match' here — no extra state, so the grid draws an ordinary tick
+    // with nothing underneath it (the decision taken with the DES-57 rule).
+    const same = speakCharsEqual(heard[i - 1], target[j - 1]);
     const diag = dp[i - 1][j - 1] + (same ? 0 : 1);
     if (dp[i][j] === diag) {
       marks[j - 1] = same ? { status: 'match' } : { status: 'wrong', heardChar: heard[i - 1] };
@@ -2212,15 +2292,31 @@ function renderSpeakBreakdown(heard, targetC, targetJ, variant) {
 // A segment is only ever ACCEPTED, never used to reject: if nothing matches,
 // the accumulation is what gets shown, because that is the fullest record of
 // what was heard.
+//
+// BEST MATCH, NOT FIRST MATCH (v150). Accumulation still wins every tie, so the
+// rule above is intact — but it no longer wins when a segment matches the target
+// MORE closely. DES-57 forced this: once homophones stop costing an edit, a
+// truncated accumulation can come in under the budget on the strength of the
+// freed allowance, and the old first-match rule then returned it and stopped.
+// The recorded case is attempt #11 in tools/fixtures/tail-probe-numbers-t1-s03
+// .json, where 一家二係 (jat1 gaa1 ji6 hai6) passed because 家 (gaa1) now folds
+// to 加 (gaa1) — and was shown to the learner in place of the segment
+// 一加二係三 (jat1 gaa1 ji6 hai6 saam1), which is what they actually said, in
+// full. Both verdicts are "pass"; only the sentence echoed back differs, and
+// showing the destroyed one is precisely the fault the segment pass exists to
+// repair.
 function resolveHeard(accumulated, segments, target) {
-  if (fuzzyMatch(accumulated, target)) return { heard: accumulated, matched: true };
+  const t = normalizeChinese(target);
+  const score = s => editDistance(normalizeChinese(s), t);
+  let best = null;
+  if (fuzzyMatch(accumulated, target)) best = { heard: accumulated, matched: true, d: score(accumulated) };
   for (const seg of (segments || [])) {
-    if (seg !== accumulated && fuzzyMatch(seg, target)) {
-      // Show the segment that matched rather than the garbled concatenation —
-      // "You said: 一加二係三" is true and useful; the appended form is neither.
-      return { heard: seg, matched: true };
-    }
+    if (seg === accumulated || !fuzzyMatch(seg, target)) continue;
+    const d = score(seg);
+    // Strictly less: an equally good segment does not displace the accumulation.
+    if (!best || d < best.d) best = { heard: seg, matched: true, d };
   }
+  if (best) return { heard: best.heard, matched: true };
   return { heard: accumulated, matched: false };
 }
 

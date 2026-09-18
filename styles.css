@@ -152,7 +152,6 @@
 
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body { font-family: var(--font-ui); background: var(--parchment-warm); min-height: 100vh; padding-bottom: var(--sp-7); font-size: var(--fs-body); line-height: var(--lh-body); color: var(--ink-soft); -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
-  button { font-family: inherit; }
   ::-webkit-scrollbar { display: none; }
 
   /* ═══════════════════════════════════════════════════════════════════════
@@ -383,7 +382,7 @@
   /* No letter-spacing here: the grouped "meta + UI labels" rule further down sets
      0.16em on this same selector and wins on source order. A 0.22em declaration
      sat here dead until v115. */
-  .header-title .en { font-size: 9px; color: var(--header-sub); text-transform: uppercase; margin-top: 1px; }
+  .header-title .en { font-size: 9px; color: var(--header-sub); margin-top: 1px; }
 
   /* The nameplate is a route Home (DES-18, MOCK-18-Thug + N1/N2, built v116).
      A <button>, not a div with a click handler, so it is keyboard-reachable and
@@ -408,7 +407,7 @@
 
   /* Topic pills */
   .topics { display: flex; gap: 8px; overflow-x: auto; padding: 14px 20px 6px; scrollbar-width: none; }
-  .topic-btn { flex-shrink: 0; padding: 7px 13px; border-radius: var(--r-pill); cursor: pointer; font-size: var(--fs-small); font-weight: var(--fw-semi); border: 1px solid var(--parchment-border); background: var(--parchment); color: var(--muted-dark); white-space: nowrap; transition: all 0.18s; }
+  .topic-btn { flex-shrink: 0; padding: 7px 13px; border-radius: var(--r-pill); cursor: pointer; font-size: var(--fs-small); background: var(--parchment); color: var(--muted-dark); white-space: nowrap; transition: all 0.18s; }
   .topic-btn { border: var(--border); }
   .topic-btn.active { background: var(--brand); border-color: var(--brand); color: #fff; }
 
@@ -428,7 +427,7 @@
      44px `.round-selector` pill row: two rows and ~101px of chrome for two
      facts. `.lesson-count` retired; the count lives in `.tier-state`. */
   .lesson-header { margin-bottom: var(--sp-3); }
-  .lesson-title { font-family: var(--font-display); font-size: var(--fs-h2); font-weight: var(--fw-medium); color: var(--ink); margin: 0 0 3px; letter-spacing: -0.01em; }
+  .lesson-title { font-size: var(--fs-h2); color: var(--ink); margin: 0 0 3px; }
 
   /* ── Tier ladder — `.tierline` › `.tier-state` + `.ladder` › `.rung`
         (§2, MOCK-24-D, DES-28, v121).
@@ -482,13 +481,13 @@
   .word-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(145px, 1fr)); gap: var(--sp-3); }
 
   /* Word card */
-  .word-card { cursor: pointer; padding: var(--sp-5) var(--sp-3) var(--sp-6); min-height: 140px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 5px; position: relative; transition: background 0.2s, box-shadow 0.2s; user-select: none; }
-  .card-chinese { font-size: var(--fs-h1); line-height: var(--lh-display); color: var(--ink); }
+  .word-card { cursor: pointer; padding: var(--sp-5) var(--sp-3) var(--sp-6); min-height: 140px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 5px; position: relative; user-select: none; }
+  .card-chinese { font-size: var(--fs-h1); color: var(--ink); }
   .card-jyutping { font-size: var(--fs-meta); margin-top: 2px; }
   .card-hint { font-size: var(--fs-micro); color: var(--muted); margin-top: 1px; }
   /* Study content wrapper — sits centred but its bottom clears the corner play button */
   .card-study-inner { display: flex; flex-direction: column; align-items: center; gap: 3px; width: 100%; transform: translateY(-6px); }
-  .card-english { font-family: var(--font-display); font-size: 19px; font-weight: var(--fw-medium); color: var(--brand); text-align: center; padding: 0 8px; }
+  .card-english { font-size: 19px; font-weight: var(--fw-medium); color: var(--brand); text-align: center; padding: 0 8px; }
   .word-card.flipped { background: var(--brand-tint); border-color: var(--brand-edge); }
   /* Speak button — bottom-right corner, clear of the centred Chinese characters.
      40px keeps a comfortable tap target while being visually distinct from the card body. */
@@ -510,8 +509,7 @@
   .cat-section-count { font-size: 10px; color: var(--muted); font-weight: var(--fw-semi); font-family: var(--font-ui); letter-spacing: 0.06em; }
 
   .topic-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: var(--sp-3); }
-  .topic-card { cursor: pointer; padding: var(--sp-4) var(--sp-3); overflow: hidden; min-height: 100px; display: flex; flex-direction: column; gap: 4px; transition: all 0.15s; position: relative; user-select: none; }
-  .topic-card:active { transform: scale(0.97); }
+  .topic-card { cursor: pointer; padding: var(--sp-4) var(--sp-3); overflow: hidden; min-height: 100px; display: flex; flex-direction: column; gap: 4px; position: relative; user-select: none; }
   .topic-card-icon { font-size: var(--fs-h2); line-height: 1; margin-bottom: 4px; }
   .topic-card-label { font-size: var(--fs-body); font-weight: var(--fw-semi); color: var(--ink); line-height: 1.3; font-family: var(--font-ui); letter-spacing: -0.005em; }
   .topic-card-meta { font-size: var(--fs-meta); color: var(--muted-dark); margin-top: auto; font-family: var(--font-ui); font-weight: var(--fw-regular); letter-spacing: 0; }
@@ -627,7 +625,7 @@
   .translate-loading { padding: 30px 16px; text-align: center; color: var(--muted-dark); font-size: var(--fs-small); }
   .translate-error { background: var(--brand-tint); border: 1px solid var(--brand); color: var(--brand-text-dark); padding: 12px 16px; border-radius: var(--r-sm); font-size: var(--fs-small); margin-bottom: 12px; }
   .translate-result { background: var(--parchment); border-radius: var(--r-md); padding: var(--sp-4); border: 1px solid var(--brand-edge); margin-top: var(--sp-4); }
-  .translate-zh { font-size: var(--fs-h3); line-height: 1.4; color: var(--ink); margin-bottom: 8px; }
+  .translate-zh { font-size: var(--fs-h3); color: var(--ink); margin-bottom: 8px; }
   .translate-jp { font-size: 14px; margin-bottom: 8px; }
   .translate-result-actions { display: flex; gap: 8px; margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--parchment-border); }
   .translate-action-btn { flex: 1; padding: 8px 12px; border-radius: var(--r-sm); border: 1px solid var(--brand); background: transparent; color: var(--brand); font-size: var(--fs-meta); font-weight: var(--fw-bold); cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 4px; }
@@ -661,9 +659,9 @@
   .sentence-card { padding: var(--sp-3) var(--sp-4); margin-bottom: var(--sp-2); display: flex; align-items: flex-start; gap: var(--sp-3); }
   .sentence-actions { display: flex; flex-direction: column; gap: 6px; flex: 0 0 auto; }
   .sentence-body { flex: 1; }
-  .sentence-chinese { font-size: var(--fs-lead); line-height: 1.4; color: var(--ink); margin-bottom: var(--sp-1); }
+  .sentence-chinese { font-size: var(--fs-lead); color: var(--ink); margin-bottom: var(--sp-1); }
   .sentence-jyutping { font-size: var(--fs-meta); margin-bottom: 4px; }
-  .sentence-english { font-size: var(--fs-meta); color: var(--muted-dark); }
+  .sentence-english { color: var(--muted-dark); }
 
   /* Sentences-as-spine: reveal line, chips, optional note */
   .sentence-reveal-line { margin-top: 12px; padding: 4px 0; cursor: pointer; }
@@ -734,7 +732,7 @@
   .bubble-row .bubble.bubble--correct { background: var(--feedback-good-tint); border: 1px solid var(--jade-edge); color: var(--feedback-good-text); }
   .bubble-row .bubble.bubble--wrong { background: var(--feedback-bad-tint); border: 1px solid var(--feedback-bad-edge); color: var(--feedback-bad); }
   .bubble--correct .bubble-chinese, .bubble--wrong .bubble-chinese { color: var(--ink); }
-  .bubble-chinese  { font-size: var(--fs-lead); line-height: 1.4; margin-bottom: var(--sp-1); }
+  .bubble-chinese  { font-size: var(--fs-lead); margin-bottom: var(--sp-1); }
   .bubble-jyutping { font-size: var(--fs-micro); margin-bottom: 3px; }
   /* opacity, not a colour, so one rule serves both bubble sides — it was tuned
      against a dark fill and reads the same against a tint. */
@@ -792,7 +790,7 @@
   /* Speak mode */
   .speak-card { background: var(--parchment); border-radius: var(--r-lg); padding: 24px 20px; border: var(--border); box-shadow: var(--elev-1); margin-bottom: 16px; text-align: center; }
   .speak-prompt { font-size: var(--fs-micro); color: var(--muted); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 8px; }
-  .speak-target-zh { font-size: var(--fs-h2); line-height: 1.3; margin-bottom: 8px; color: var(--ink); }
+  .speak-target-zh { font-size: var(--fs-h2); margin-bottom: 8px; color: var(--ink); }
   .speak-target-jp { font-size: 14px; margin-bottom: 6px; }
   .speak-target-en { font-size: var(--fs-meta); color: var(--muted-dark); margin-bottom: 18px; }
   .mic-btn { width: 80px; height: 80px; border-radius: var(--r-pill); border: 1px solid var(--brand-edge); background: var(--brand-tint); color: var(--brand); font-size: 32px; cursor: pointer; display: flex; align-items: center; justify-content: center; margin: 0 auto 14px; transition: all 0.2s; box-shadow: var(--elev-3); }
@@ -914,12 +912,12 @@
   .qr-chosen  { color: var(--feedback-bad); }
   .quiz-progress { margin-bottom: 20px; }
   .quiz-card { text-align: center; padding: var(--sp-6) var(--sp-4); margin-bottom: var(--sp-5); }
-  .quiz-label { font-size: var(--fs-micro); color: var(--muted); letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 6px; }
-  .quiz-chinese { font-size: 44px; color: var(--ink); line-height: 1.2; }
+  .quiz-label { font-size: var(--fs-micro); color: var(--muted); margin-bottom: 6px; }
+  .quiz-chinese { color: var(--ink); }
   .quiz-jyutping { font-size: var(--fs-small); margin-top: 6px; }
   .quiz-listen { margin-top: 10px; }
   .choices { display: flex; flex-direction: column; gap: var(--sp-2); margin-bottom: var(--sp-3); }
-  .choice-btn { width: 100%; text-align: left; padding: var(--sp-4); cursor: pointer; font-size: var(--fs-body); font-weight: var(--fw-medium); color: var(--ink); transition: all 0.15s; min-height: var(--tap-min); }
+  .choice-btn { width: 100%; text-align: left; padding: var(--sp-4); cursor: pointer; font-size: var(--fs-body); font-weight: var(--fw-medium); color: var(--ink); min-height: var(--tap-min); }
   .choice-btn.correct { background: var(--feedback-good-tint); border-color: var(--jade-edge); color: var(--feedback-good-text); }
   .choice-btn.wrong   { background: var(--feedback-bad-tint); border-color: var(--feedback-bad-edge); color: var(--feedback-bad); }
   .choice-btn:disabled:not(.correct):not(.wrong) { opacity: 0.45; }
@@ -947,14 +945,14 @@
   /* Unused: en-zh quiz now uses the default 2-col grid. Kept for optional single-column layout. */
 
   /* Quiz prompt for en-zh direction */
-  .quiz-prompt-en { font-size: var(--fs-h2); line-height: var(--lh-heading); color: var(--ink); font-weight: var(--fw-bold); padding: var(--sp-2) var(--sp-1); }
+  .quiz-prompt-en { font-size: var(--fs-h2); color: var(--ink); padding: var(--sp-2) var(--sp-1); }
 
   /* Wrong-answer pause panel (inside an active quiz) */
   .quiz-wrong-panel { margin-top: var(--sp-4); background: var(--brand-tint); border: var(--border); border-left: var(--edge-emph) solid var(--brand); border-radius: var(--r-md); box-shadow: var(--elev-1); padding: var(--sp-4); text-align: left; }
   .quiz-wrong-heading { font-size: var(--fs-small); font-weight: var(--fw-bold); color: var(--brand-text-dark); margin-bottom: var(--sp-2); }
-  .quiz-wrong-chinese { font-size: 32px; color: var(--ink); line-height: 1.2; }
-  .quiz-wrong-jp { font-size: var(--fs-small); margin-top: 4px; }
-  .quiz-wrong-en { font-size: var(--fs-body); color: var(--jade); font-weight: var(--fw-bold); margin-top: 4px; }
+  .quiz-wrong-chinese { font-size: 32px; color: var(--ink); }
+  .quiz-wrong-jp { font-size: var(--fs-small); }
+  .quiz-wrong-en { font-size: var(--fs-body); color: var(--jade); font-weight: var(--fw-bold); }
   .quiz-wrong-actions { display: flex; gap: var(--sp-2); justify-content: center; margin-top: var(--sp-4); flex-wrap: wrap; }
 
   /* Correct-answer row (Option 2 — light touch). Shown in place of the wrong
@@ -962,8 +960,8 @@
   .quiz-correct-row { margin-top: 16px; display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 4px 2px; }
   .quiz-correct-msg { font-size: 16px; font-weight: var(--fw-bold); color: var(--feedback-good-text); display: inline-flex; align-items: center; }
   .quiz-correct-tick { display: inline-flex; width: 22px; height: 22px; border-radius: var(--r-pill); background: var(--jade); color: #fff; align-items: center; justify-content: center; margin-right: 7px; }
-  .quiz-replay { background: transparent; border-radius: var(--r-pill); padding: 8px 14px; min-height: var(--tap-min); cursor: pointer; font-size: var(--fs-small); font-weight: var(--fw-medium); border: var(--border); color: var(--ink-soft); }
-  .quiz-next   { background: var(--brand); color: #fff; border-radius: var(--r-pill); padding: 8px 18px; cursor: pointer; font-size: var(--fs-small); font-weight: var(--fw-bold); border: none; }
+  .quiz-replay { background: transparent; border-radius: var(--r-pill); cursor: pointer; font-size: var(--fs-small); font-weight: var(--fw-medium); border: var(--border); color: var(--ink-soft); }
+  .quiz-next   { background: var(--brand); color: #fff; border-radius: var(--r-pill); cursor: pointer; font-size: var(--fs-small); border: none; }
   /* ── Checkpoint variant of the shared quiz core. renderCheckpointWords reuses
         renderQuizCore, so milestone chrome is applied by one class on the
         wrapper rather than by a colour argument (§3.5). Error red stays its own
@@ -1009,14 +1007,14 @@
 
   /* End-of-quiz review list */
   .quiz-review-wrap { margin-top: var(--sp-6); text-align: left; }
-  .quiz-review-title  { font-size: var(--fs-meta); color: var(--muted-dark); letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 10px; text-align: center; }
+  .quiz-review-title  { font-size: var(--fs-meta); color: var(--muted-dark); text-align: center; }
   .quiz-review-item { display: flex; gap: var(--sp-3); align-items: flex-start; padding: var(--sp-3) var(--sp-4); margin-bottom: var(--sp-2); }
   .quiz-review-body   { flex: 1 1 auto; min-width: 0; }
-  .quiz-review-chinese{ font-size: var(--fs-h3); color: var(--ink); line-height: 1.2; }
+  .quiz-review-chinese{ font-size: var(--fs-h3); color: var(--ink); }
   .quiz-review-jp     { font-size: var(--fs-meta); margin-top: 2px; }
   .quiz-review-en     { font-size: var(--fs-small); margin-top: 4px; font-weight: var(--fw-semi); }
   .quiz-review-chose  { font-size: var(--fs-micro); color: var(--muted-dark); margin-top: 2px; }
-  .quiz-retry-btn     { display: block; width: 100%; margin-top: 14px; background: var(--brand); color: #fff; padding: 12px; border-radius: var(--r-md); border: none; font-size: 14px; font-weight: var(--fw-bold); cursor: pointer; }
+  .quiz-retry-btn     { display: block; width: 100%; background: var(--brand); color: #fff; border-radius: var(--r-md); border: none; font-size: 14px; cursor: pointer; }
 
   /* Quiz result */
   .result { text-align: center; padding: var(--sp-7) var(--sp-5); }
@@ -1030,20 +1028,19 @@
   .result-mark--good { color: var(--jade); }
   .result-score { font-size: 26px; font-weight: var(--fw-medium); color: var(--ink); margin-top: var(--sp-2); font-family: var(--font-display); letter-spacing: -0.01em; }
   .result-msg { font-size: 14px; color: var(--muted-dark); margin-top: var(--sp-2); }
-  .back-btn { margin-top: 24px; padding: 10px 28px; background: var(--brand); color: #fff; border: none; border-radius: var(--r-pill); font-size: 14px; cursor: pointer; font-weight: var(--fw-bold); }
+  .back-btn { background: var(--brand); color: #fff; border: none; border-radius: var(--r-pill); font-size: 14px; cursor: pointer; }
 
   /* Lesson note panel (intro context above words) */
   .lesson-note { padding: var(--sp-4) 0 var(--sp-4) var(--sp-4); margin-bottom: 14px; border-left: 2px solid var(--brand); }
   .lesson-note-title { font-size: 10.5px; font-weight: var(--fw-medium); color: var(--brand); letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: var(--sp-2); }
-  .lesson-note-body { font-size: var(--fs-small); line-height: 1.5; color: var(--ink-soft); }
+  .lesson-note-body { color: var(--ink-soft); }
   .lesson-note-body strong { color: var(--ink); }
 
   /* Learning Path */
   .path-list { padding: 12px 20px 40px; max-width: var(--measure); margin: 0 auto; gap: var(--sp-3); }
   .path-level-header { font-size: var(--fs-micro); font-weight: var(--fw-bold); letter-spacing: 2px; text-transform: uppercase; color: var(--muted-dark); margin: 18px 4px 10px; }
   .path-level-header:first-child { margin-top: 4px; }
-  .path-card { padding: var(--sp-4); cursor: pointer; transition: all 0.15s; user-select: none; margin-bottom: 12px; }
-  .path-card:active { transform: scale(0.98); }
+  .path-card { padding: var(--sp-4); cursor: pointer; user-select: none; margin-bottom: 12px; }
   .path-card.locked { border-color: var(--parchment-border); cursor: default; opacity: 0.7; }
   .path-card.locked:active { transform: none; }
   /* DES-27: .path-card-icon retired with the emoji. The row is now title +
@@ -1059,7 +1056,7 @@
      stylesheet, which is a separate request from the data that failed. */
   .boot-msg { padding: 60px 20px; text-align: center; color: var(--muted-dark); font-family: var(--font-ui); font-size: var(--fs-small); }
   .boot-msg.error { color: var(--feedback-bad); }
-  .path-card-desc { font-size: var(--fs-meta); color: var(--muted-dark); margin-bottom: 10px; line-height: 1.4; }
+  .path-card-desc { font-size: var(--fs-meta); color: var(--muted-dark); margin-bottom: 10px; }
   .path-card-progress { display: flex; align-items: center; gap: 10px; }
   .path-progress-bar { flex: 1; height: 6px; background: var(--parchment-border); border-radius: var(--r-pill); overflow: hidden; }
   .path-progress-fill { height: 100%; background: var(--brand); transition: width 0.3s; }
@@ -1091,8 +1088,7 @@
   .path-step.done .path-step-line { background: var(--jade); }
 
   .path-step-body { flex: 1; padding-bottom: 14px; }
-  .path-step-card { padding: var(--sp-3); cursor: pointer; transition: all 0.15s; user-select: none; }
-  .path-step-card:active { transform: scale(0.98); }
+  .path-step-card { padding: var(--sp-3); cursor: pointer; user-select: none; }
   /* Next-up emphasis is an edge, not a shadow (§3.2, MOCK-06-C). The 2px
      padding trim keeps the row's text aligned with its neighbours once the
      hairline becomes a 3px rule. */
@@ -1316,9 +1312,13 @@
   }
 
   /* Consistent press feedback — one scale value everywhere (was 0.9–0.99 ad-hoc) */
+  /* .topic-card:active, .path-card:active, .path-step-card:active removed —
+     the 0.98 rule below already wins for all three, at the same value this
+     rule was contributing, so nothing changes for them; this was a dead
+     write on every press for three card types until the sweep caught it. */
   button:active,
-  .topic-card:active, .word-card:active, .sentence-card:active,
-  .choice-btn:active, .path-card:active, .path-step-card:active {
+  .word-card:active, .sentence-card:active,
+  .choice-btn:active {
     transform: scale(0.97);
   }
   /* Disabled buttons never animate */
