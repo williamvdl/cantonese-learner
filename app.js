@@ -1956,7 +1956,13 @@ function normalizeChinese(text) {
 }
 
 // Edit-distance (Levenshtein) between two strings. Order-sensitive.
-function editDistance(a, b) {
+// `eq(i, j, a, b)` decides whether heard character a at position i equals target
+// character b at position j. It takes POSITIONS because a character's reading
+// depends on the word it sits in (DES-57), so it cannot be decided from the two
+// characters alone. Defaults to identity, so any caller that does not opt in
+// compares exactly as it did before DES-57.
+function editDistance(a, b, eq) {
+  eq = eq || IDENTITY_EQ;
   if (a === b) return 0;
   if (!a.length) return b.length;
   if (!b.length) return a.length;
@@ -1967,10 +1973,10 @@ function editDistance(a, b) {
   for (let i = 1; i <= a.length; i++) {
     curr[0] = i;
     for (let j = 1; j <= b.length; j++) {
-      // speakCharsEqual(), not ===: a recogniser homophone is not an edit the
-      // learner made, so it must not consume the budget fuzzyMatch() allows for
-      // edits they DID make (DES-57).
-      const cost = speakCharsEqual(a[i - 1], b[j - 1]) ? 0 : 1;
+      // eq(), not ===: a recogniser homophone is not an edit the learner made,
+      // so it must not consume the budget fuzzyMatch() allows for edits they
+      // DID make (DES-57).
+      const cost = eq(i - 1, j - 1, a[i - 1], b[j - 1]) ? 0 : 1;
       curr[j] = Math.min(
         curr[j - 1] + 1,       // insertion
         prev[j]   + 1,         // deletion
@@ -2040,45 +2046,77 @@ function deduplicateRepeats(s, minLen) {
 // resolves its target character to the majority reading here. The effect is a
 // mismatch on a character the learner may have said correctly — a false reject,
 // which is the same direction the app already failed in before this change, and
-// never a false pass. Reading the target's own authored jyutping instead would
-// fix it, but that means threading targetJ through startSpeechRecognition(),
-// resolveHeard() and fuzzyMatch(), and a rule that two places resolve
-// DIFFERENTLY is the exact defect shape hit at v140 and again at v144. One
-// source, slightly blunt, beats two sources that can drift apart.
-// Resolve ONE character to ONE reading, through charJyutpingSyllables() rather
-// than touching window.ToJyutping here. Two reasons, both load-bearing:
-//   - The layering (corpus wins, dictionary falls back) already lives there and
-//     must not be written twice; the two sources disagree on 44 of 644
-//     characters, so a second copy that drifted would grade against a literary
-//     reading while the lesson taught the colloquial one.
-//   - The dictionary script is DEFERRED. tools/jyutping-check.js asserts that
-//     nothing outside that one function reaches for it, precisely so a new
-//     caller cannot start depending on it before it has loaded. The first draft
-//     of this function did exactly that and the check caught it.
-function charReading(ch) {
-  if (!ch) return null;
-  const syl = charJyutpingSyllables(ch);
-  return (syl[0] && syl[0].reading) || null;
+// never a false pass.
+//
+// ── READ THE WHOLE STRING, NEVER ONE CHARACTER (v151) ──────────────────────
+// The v150 version of this rule resolved ONE character at a time, and that was
+// wrong in a way worth keeping written down, because the correct version looks
+// more complicated and someone will be tempted to simplify it back.
+//
+// charJyutpingSyllables() asks the dictionary for the WHOLE string at once so it
+// can segment words and pick each character's reading IN CONTEXT. Handing it a
+// single character destroys exactly that. Reported case: the recogniser returned
+// 蕃茄 (faan1 ke2) for the corpus's 番茄 (faan1 ke2) — a real variant spelling of
+// "tomato", correctly pronounced. In the word 蕃茄 the dictionary reads 蕃 as
+// faan1; ALONE it reads faan4, a different word. So the v150 code compared faan1
+// against faan4 and drew a cross on a character the learner had said perfectly.
+//
+// The same screenshot showed the bug in one view: the "You said" line printed
+// faan1 under 蕃, because that line resolves the whole sentence, while the grid
+// beside it marked the character wrong. **Two resolutions of one rule
+// disagreeing is the v140 and v144 defect shape**, arrived at a third time by
+// the very change meant to apply its lesson.
+//
+// Not rare, and not confined to variant spellings: 355 of 7,506 corpus
+// characters (4.7%) read differently alone than in their word, including 呢
+// (ni1 in context, ne1 alone), 生 (sang1 / saang1) and 坐 (co5 / zo6).
+//
+// So readings are resolved per STRING, once, and compared by position. Both the
+// heard text and the target text go through the same function the display uses,
+// which is what makes the panel and the matcher incapable of disagreeing.
+
+// Readings for one whole string, indexed by position among its HAN characters
+// only — the same indexing charJyutpingSyllables() returns and
+// renderSpeakBreakdown() aligns against, so a Han-only string (which is what
+// normalizeChinese() produces for comparison) indexes 1:1 with its characters.
+function readingsFor(text) {
+  return charJyutpingSyllables(text || '').map(s => s.reading || null);
 }
 
-// A character with NO reading from either source never matches anything. That
-// is deliberate: an unknown character is not evidence the learner was right,
-// and guessing would turn a coverage gap into a silent pass. tools/jyutping-
-// check.js asserts every corpus character resolves, so this path should only be
-// reachable for recogniser output from outside the corpus.
-function isSameSound(a, b) {
-  if (!a || !b || a === b) return false;
-  const ra = charReading(a);
-  if (!ra) return false;
-  return ra === charReading(b);
+// Build the equality test for ONE comparison of two whole strings. Returns a
+// function taking POSITIONS, not characters, because a character's reading is
+// only meaningful alongside its neighbours.
+//
+// A character with no reading from either source never matches anything. That
+// is deliberate: an unknown character is not evidence the learner was right, and
+// guessing would turn a coverage gap into a silent pass. tools/jyutping-check.js
+// asserts every corpus character resolves, so this should only be reachable for
+// recogniser output from outside the corpus.
+function sameSoundAt(heardText, targetText) {
+  const hr = readingsFor(heardText), tr = readingsFor(targetText);
+  return (i, j) => {
+    const a = hr[i], b = tr[j];
+    return !!a && a === b;
+  };
 }
 
 // The single equality test every speak comparison goes through. fuzzyMatch(),
-// editDistance() and alignChars() all call THIS rather than testing `===`
-// themselves, for the reason written on isForgivenParticleSwap() below: a rule
-// that decides something and a panel that reports it must read from one place,
-// or the learner is shown an error the matcher already forgave.
-const speakCharsEqual = (a, b) => a === b || isSameSound(a, b);
+// editDistance() and alignChars() all take one of these rather than testing
+// `===` themselves, for the reason written on isForgivenParticleSwap() below: a
+// rule that decides something and a panel that reports it must read from one
+// place, or the learner is shown an error the matcher already forgave.
+//
+// The default, used when no reading context was supplied, is plain identity —
+// so a caller that has not opted in behaves exactly as it did before DES-57
+// rather than silently getting a weaker comparison.
+const IDENTITY_EQ = (i, j, a, b) => a === b;
+
+// Wrap a positional same-sound test into the (i, j, a, b) shape the comparison
+// functions use, falling back to identity for a character pair with no reading.
+function speakEqFor(heardText, targetText) {
+  const same = sameSoundAt(heardText, targetText);
+  return (i, j, a, b) => a === b || same(i, j);
+}
 
 // Sentence-final particles, for the free-particle rule in fuzzyMatch() below.
 // Kept in sync with data/topics/particles.json by a check in tools/validate.js —
@@ -2153,7 +2191,11 @@ function fuzzyMatch(heard, target) {
   //    vocabulary-length targets strict while sentences get room.
   const allowance = Math.floor(t.length / 4);
   if (!allowance) return false;
-  return editDistance(h, t) <= allowance;
+  // The eq is built from h and t AS THEY ARE NOW — after normalisation and after
+  // any particle slice above — because the readings are indexed by position in
+  // the string actually being compared. Building it from the raw arguments would
+  // shift every index by whatever those steps removed (DES-57, v151).
+  return editDistance(h, t, speakEqFor(h, t)) <= allowance;
 }
 
 // Align heard text against target text and return per-target-char status:
@@ -2163,7 +2205,9 @@ function fuzzyMatch(heard, target) {
 //
 // Standard Needleman-Wunsch / Levenshtein DP, then backtrack the optimal path.
 // Both inputs should be normalized (punctuation/whitespace stripped) before calling.
-function alignChars(heard, target) {
+// `eq` as on editDistance() — positional, defaults to identity.
+function alignChars(heard, target, eq) {
+  eq = eq || IDENTITY_EQ;
   const m = heard.length, n = target.length;
   if (!n) return [];
   // DP matrix: dp[i][j] = min edits to turn heard[0..i] into target[0..j]
@@ -2172,7 +2216,7 @@ function alignChars(heard, target) {
   for (let j = 0; j <= n; j++) dp[0][j] = j;
   for (let i = 1; i <= m; i++) {
     for (let j = 1; j <= n; j++) {
-      const cost = speakCharsEqual(heard[i - 1], target[j - 1]) ? 0 : 1;
+      const cost = eq(i - 1, j - 1, heard[i - 1], target[j - 1]) ? 0 : 1;
       dp[i][j] = Math.min(
         dp[i - 1][j] + 1,         // deletion from heard
         dp[i][j - 1] + 1,         // insertion (= target char missing)
@@ -2187,7 +2231,7 @@ function alignChars(heard, target) {
     // Same test as the DP above, and as fuzzyMatch(). A homophone scores a
     // plain 'match' here — no extra state, so the grid draws an ordinary tick
     // with nothing underneath it (the decision taken with the DES-57 rule).
-    const same = speakCharsEqual(heard[i - 1], target[j - 1]);
+    const same = eq(i - 1, j - 1, heard[i - 1], target[j - 1]);
     const diag = dp[i - 1][j - 1] + (same ? 0 : 1);
     if (dp[i][j] === diag) {
       marks[j - 1] = same ? { status: 'match' } : { status: 'wrong', heardChar: heard[i - 1] };
@@ -2234,7 +2278,10 @@ function renderSpeakBreakdown(heard, targetC, targetJ, variant) {
   if (!charArr.length || charArr.length !== jpArr.length) return { html: '', hasDiff: false };   // alignment-impossible — caller handles fallback
 
   const heardClean = normalizeChinese(heard);
-  const marks = alignChars(heardClean, charArr.join(''));
+  const targetClean = charArr.join('');
+  // Same eq, same two strings the matcher compares — this is what makes the grid
+  // incapable of marking a character the matcher already forgave (DES-57).
+  const marks = alignChars(heardClean, targetClean, speakEqFor(heardClean, targetClean));
 
   // fuzzyMatch() rule 1 drops a differing sentence-final particle from the
   // comparison entirely, so it never costs an edit. Show it as correct here for

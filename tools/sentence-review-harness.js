@@ -85,8 +85,9 @@ const pieces = [
   // harness threw on load and had been red from v144 to v148 without saying so —
   // same silent failure as tools/asr-replay-harness.js, found the same way.
   // charJyutpingSyllables() is already lifted above, which charReading() needs.
-  grab(all, 'charReading'), grab(all, 'isSameSound'),
-  grabConst(/const speakCharsEqual = [\s\S]*?;/),
+  grab(all, 'readingsFor'), grab(all, 'sameSoundAt'),
+  grabConst(/const IDENTITY_EQ = [\s\S]*?;/),
+  grab(all, 'speakEqFor'),
   grab(all, 'editDistance'),
   grabConst(/const SPEAK_FINAL_PARTICLES[\s\S]*?\]\);/),
   grabConst(/const SPEAK_PARTICLE_VARIANTS[\s\S]*?\]\);/),

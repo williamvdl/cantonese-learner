@@ -55,9 +55,10 @@ vm.runInContext([
   // the matcher and the grid share one equality test, and a harness that lifted
   // only one of them would be testing something the app does not run.
   grab('charJyutpingSyllables'),
-  grab('charReading'),
-  grab('isSameSound'),
-  grabConst(/const speakCharsEqual = [\s\S]*?;/),
+  grab('readingsFor'),
+  grab('sameSoundAt'),
+  grabConst(/const IDENTITY_EQ = [\s\S]*?;/),
+  grab('speakEqFor'),
   grab('editDistance'),
   grabConst(/const SPEAK_FINAL_PARTICLES[\s\S]*?\]\);/),
   // Added v150. These have been called by fuzzyMatch() since v144 but were never
@@ -190,74 +191,101 @@ for (const file of files) {
 }
 
 // ── 6. Same-sound equality (DES-57) ────────────────────────────────────────
-// Built from the two REPORTED attempts on 好，要粥同餃子。我好餓㗎！, not from
-// invented pairs. Both were graded wrong before v150 on characters the learner
-// never mispronounced.
+// EVERY CASE HERE IS A WHOLE SENTENCE, and that is not stylistic. The v150
+// version of this section tested isolated character pairs, which is the SAME
+// mistake the v150 code made — a character's reading depends on the word it sits
+// in, so a test built from bare characters agrees with a bug built from bare
+// characters and reports green. It did: 蕃茄 (faan1 ke2) for 番茄 (faan1 ke2)
+// shipped broken with this section passing. A test written from the same wrong
+// assumption as the code can only ever confirm it.
 console.log('\n— 6. same-sound equality forgives the recogniser, not the learner (DES-57) —');
 {
-  const target = '好，要粥同餃子。我好餓㗎！';
-
-  // Forgiven: identical sound AND tone. The first three are what the recogniser
-  // actually substituted on the two reported attempts.
-  const sameSound = [
-    ['粥', '竹', 'zuk1'], ['粥', '捉', 'zuk1'], ['同', '筒', 'tung4'],
-    ['麵', '面', 'min6'], ['三', '衫', 'saam1'], ['九', '狗', 'gau2'],
-  ];
-  // NOT forgiven: a real difference in the syllable or the tone. 我 (ngo5) /
-  // 餓 (ngo6) is the learner's actual slip on attempt 1 and must survive. The
-  // rest are pairs an "any reading matches" rule would have wrongly folded —
-  // each destroys a distinction the corpus teaches, so each is a standing guard
-  // against this rule being loosened later.
-  const different = [
-    ['我', '餓', 'ngo5 vs ngo6 — the real tone slip on the reported attempt'],
-    ['心', '新', 'sam1 vs san1'], ['係', '喺', 'hai6 vs hai2'],
-    ['時', '士', 'si4 vs si2'],   ['花', '化', 'faa1 vs faa2'],
-    ['好', '蠔', 'hou2 vs hou4'], ['開', '海', 'hoi1 vs hoi2'],
-    ['食', '識', 'sik6 vs sik1'],
+  // [target, heard, shouldPass, note]. Targets are real corpus sentences; heard
+  // strings are real recogniser output where reported, and otherwise a single
+  // deliberate substitution into one.
+  const cases = [
+    ['好，要粥同餃子。我好餓㗎！', '好要捉同餃子我好餓㗎',  true,
+     'reported: 捉 (zuk1) for 粥 (zuk1), nothing else differed'],
+    ['好，要粥同餃子。我好餓㗎！', '好要竹筒餃子我好我㗎',  true,
+     'reported: 竹 (zuk1) and 筒 (tung4) fold; 我 (ngo5) for 餓 (ngo6) is one real slip, inside budget'],
+    ['好，要粥同餃子。我好餓㗎！', '好要祝同餃子我好餓㗎',  true,
+     'device QA: 祝 (zuk1), a third substitute the build never saw'],
+    ['我想買啲薯仔同番茄。',       '我想買啲薯仔同蕃茄',    true,
+     'reported v150 REGRESSION: 蕃 reads faan1 in 蕃茄 but faan4 alone — the whole-string fix'],
+    ['好，要粥同餃子。我好餓㗎！', '好腰竹筒餃姐我好我㗎',  false,
+     'three real differences (腰 jiu1, 姐 ze4, 我 ngo5) exceed the allowance of 2'],
   ];
 
-  let bad = 0;
-  for (const [a, b, j] of sameSound) {
-    if (!env.isSameSound(a, b)) { fail(`${a} / ${b} should fold — both ${j}`); bad++; }
+  for (const [target, heard, shouldPass, note] of cases) {
+    const got = env.fuzzyMatch(heard, target);
+    if (got !== shouldPass) fail(`${heard} vs ${target} → ${got}, expected ${shouldPass} — ${note}`);
+    else ok(`${shouldPass ? 'passes' : 'fails'}: ${note}`);
   }
-  if (!bad) ok(`${sameSound.length} homophone pairs fold, incl. 粥/竹/捉 (zuk1) and 同/筒 (tung4)`);
 
-  bad = 0;
-  for (const [a, b, why] of different) {
-    if (env.isSameSound(a, b)) { fail(`${a} / ${b} must NOT fold — ${why}`); bad++; }
+  // Tone must survive. Asserted on the EQ DIRECTLY, at the position that
+  // differs, rather than through a fuzzyMatch() verdict — the first draft of
+  // this block went through fuzzyMatch() on four-character targets and reported
+  // green because the allowance of 1 was absorbing the substitution, so it was
+  // measuring the budget and calling it the rule. Where a pass could come from
+  // either, the test proves nothing.
+  const mustNotFold = [
+    ['我好餓喇',       '我好我喇',       2, '餓 (ngo6) vs 我 (ngo5) — the reported learner slip'],
+    ['我好開心喇',     '我好開新喇',     3, '心 (sam1) vs 新 (san1)'],
+    ['我係學生喇',     '我喺學生喇',     1, '係 (hai6) vs 喺 (hai2)'],
+    ['我想食嘢喇',     '我想識嘢喇',     2, '食 (sik6) vs 識 (sik1)'],
+    ['佢好好人喇',     '佢好蠔人喇',     2, '好 (hou2) vs 蠔 (hou4)'],
+  ];
+  for (const [target, heard, pos, why] of mustNotFold) {
+    // An off-by-one in `pos` compares a character with itself and the assertion
+    // becomes vacuous — it happened while writing this. Fail loudly instead.
+    if (heard[pos] === target[pos]) { fail(`test bug: position ${pos} is identical in both strings — ${why}`); continue; }
+    const eqf = env.speakEqFor(heard, target);
+    if (eqf(pos, pos, heard[pos], target[pos]))
+      fail(`${heard[pos]} folded into ${target[pos]} in context — ${why} must stay distinct`);
+    else ok(`stays distinct in context: ${why}`);
   }
-  if (!bad) ok(`${different.length} near-pairs stay distinct, incl. 我 (ngo5) / 餓 (ngo6) — tone still counts`);
 
-  // A character with no reading anywhere must never match. Guessing here would
-  // turn a coverage gap into a silent pass, which is the one direction this
-  // change must not fail in.
-  if (env.isSameSound('粥', '\u{2A6A5}') || env.isSameSound('\u{2A6A5}', '粥'))
+  // And the positive control on the same mechanism: the reported substitutions
+  // DO fold at their position, in their sentence.
+  const mustFold = [
+    ['我想買啲薯仔同番茄', '我想買啲薯仔同蕃茄', 7, '蕃 → 番, both faan1 in 蕃茄/番茄'],
+    ['好要粥同餃子我好餓㗎', '好要捉同餃子我好餓㗎', 2, '捉 → 粥, both zuk1'],
+    ['好要粥同餃子我好餓㗎', '好要祝同餃子我好餓㗎', 2, '祝 → 粥, both zuk1'],
+    ['好要粥同餃子我好餓㗎', '好要粥筒餃子我好餓㗎', 3, '筒 → 同, both tung4'],
+  ];
+  for (const [target, heard, pos, why] of mustFold) {
+    if (heard[pos] === target[pos]) { fail(`test bug: position ${pos} is identical in both strings — ${why}`); continue; }
+    const eqf = env.speakEqFor(heard, target);
+    if (!eqf(pos, pos, heard[pos], target[pos]))
+      fail(`${heard[pos]} did not fold into ${target[pos]} in context — ${why}`);
+    else ok(`folds in context: ${why}`);
+  }
+
+  // The context dependency itself, asserted directly rather than only through a
+  // verdict. If these two ever agree, readings are being resolved per character
+  // again and the v150 regression is back.
+  const inWord = env.readingsFor('蕃茄')[0];
+  const alone  = env.readingsFor('蕃')[0];
+  if (inWord !== 'faan1') fail(`蕃 in 蕃茄 read as ${inWord}, expected faan1`);
+  else if (inWord === alone) fail('蕃 reads the same alone as in 蕃茄 — the context dependency this guards has gone');
+  else ok(`context is honoured: 蕃 reads ${inWord} in 蕃茄 but ${alone} alone`);
+
+  // A character with no reading anywhere must never fold. Guessing would turn a
+  // coverage gap into a silent pass, the one direction this must not fail in.
+  const eq = env.speakEqFor('\u{2A6A5}', '粥');
+  if (eq(0, 0, '\u{2A6A5}', '粥'))
     fail('an unreadable character folded against a real one — coverage gaps must reject, not pass');
   else ok('a character with no reading from either source never folds');
 
-  // End to end, on the two attempts exactly as reported.
-  const a1 = '好要竹筒餃子我好我㗎';   // 3 substitutions before v150: 竹, 筒, 我
-  const a2 = '好要捉同餃子我好餓㗎';   // 1 substitution before v150: 捉
-  if (!env.fuzzyMatch(a2, target)) fail('reported attempt 2 still fails — only 捉 (zuk1) for 粥 (zuk1) differed');
-  else ok('reported attempt 2 passes: 捉 (zuk1) folds to 粥 (zuk1), nothing else differed');
-
-  if (!env.fuzzyMatch(a1, target)) fail('reported attempt 1 still fails — 竹/筒 fold, leaving one real slip inside budget');
-  else ok('reported attempt 1 passes: 竹 (zuk1) and 筒 (tung4) fold, 我 (ngo5) for 餓 (ngo6) is the single flagged slip');
-
-  // Mutation test: the RULE must be doing the work above, not the edit budget
-  // absorbing everything regardless. Three genuine differences in a ten-
-  // character target exceed the allowance of 2 and must still fail.
-  //
-  // The first draft of this mutation used 吖 (aa1) in the final slot and passed,
-  // correctly: 吖 (aa1) and 㗎 (gaa3) are BOTH taught sentence-final particles,
-  // so that swap is free under fuzzyMatch() rule 1 and was never going to cost
-  // an edit. Kept as a note because it is an easy mistake to repeat — a mutation
-  // that lands on another forgiveness rule tests nothing. These three do not:
-  // 腰 (jiu1) for 要 (jiu3) and 姐 (ze4) for 子 (zi2) differ in tone and in
-  // syllable respectively, and neither is a particle.
-  if (env.fuzzyMatch('好腰竹筒餃姐我好我㗎', target))
-    fail('three real differences still passed — the budget is absorbing genuine errors');
-  else ok('three real differences still fail — folding frees the budget, it does not remove it');
+  // The grid and the matcher must agree on the reported regression, since the
+  // screenshot showed them disagreeing: the heard line printed faan1 while the
+  // grid marked the character wrong.
+  const bd = env.renderSpeakBreakdown
+    ? env.renderSpeakBreakdown('我想買啲薯仔同蕃茄', '我想買啲薯仔同番茄。', 'ngo5 soeng2 maai5 di1 syu4 zai2 tung4 faan1 ke2.', 'close')
+    : null;
+  if (!bd) ok('(breakdown not lifted into this harness — covered by sentence-review-harness)');
+  else if (bd.hasDiff) fail('the grid still marks 蕃 wrong while the matcher passes it — panel and matcher disagree');
+  else ok('the grid marks every character correct on the reported case, matching the matcher');
 }
 
 console.log('');

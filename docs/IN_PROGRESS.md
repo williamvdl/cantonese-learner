@@ -4,21 +4,53 @@
 questions behind it. Meant to be short-lived — when a piece ships, fold its
 outcome into STATUS.md and clear this file back down for the next thing.*
 
-Last updated: 2026-09-17 · sw.js at v148
+Last updated: 2026-09-20 · sw.js at v151
 
 ## Nothing in progress
 
-**v147 and v148 shipped and device QA is done** — the tier run and the
-suppressed upward cross-reference (DES-55, DES-56), and the 畀 (bei2)
-standardisation. Confirmed on the Pixel 2026-09-17. Both open questions on the
-tier run came back fine: it reads as a statement rather than a chooser, and the
-links still read as tappable. One variant William raised and chose not to take
-is in BACKLOG.md rather than lost here.
+**v151 shipped — a same-day correction to v150, awaiting device QA.** DES-57
+resolved each character's reading in isolation, which threw away the word context
+the dictionary needs: 蕃茄 (faan1 ke2) for 番茄 (faan1 ke2) was marked wrong
+because 蕃 reads faan1 in that word but faan4 alone. Readings are now resolved
+per string and compared by position. **The v150 harness section passed while this
+was broken** — it tested isolated character pairs, the same assumption as the
+bug. Rewritten at sentence level. See STATUS.md for both notes.
 
-This file is cleared down. **Next candidate work:** the cross-rule
-duplicate-declaration script, the open question about extending the particle
-rule beyond the final position, and the `char-jyutping.json` coverage
-measurement. All three are in BACKLOG.md with their numbers.
+**v150 shipped and its device QA is done.** Two threads landed in one deploy, at
+William's request, since v149 was never pushed:
+
+- **Same-sound equality on the speak matcher (DES-57)** — the recogniser's
+  homophone substitutions no longer count as learner errors, while tone
+  differences still do. Confirmed on the Pixel 2026-09-19, including a
+  substitution the build never saw (祝 for 粥, both zuk1), which is the rule
+  generalising rather than matching the cases it was built against. The 我 (ngo5)
+  for 餓 (ngo6) flag on that run is a real learner slip and correctly marked.
+- **Cross-rule duplicate-declaration script** — `tools/dup-css.js` built, and 47
+  of 51 same-selector duplicates swept out of `styles.css`. Invisible by design;
+  every value removed was already overridden.
+
+**Two standing checks were found dead during this work** —
+`asr-replay-harness.js` and `sentence-review-harness.js` had both been failing to
+load since v144. Repaired here, and the pattern is in STATUS.md's carry-forward
+notes because the shape will recur.
+
+This file is cleared down. **Next candidate work:** the 164 Check B structural
+candidates from `dup-css.js` (needs William's judgement, several look
+deliberate), the 4 remaining Check A cases that need a shared rule split, an
+aggregating runner for the standing checks, the open question about extending the
+particle rule beyond the final position, and the `char-jyutping.json` coverage
+measurement. All are in BACKLOG.md.
+
+### Standing checks — twelve, all green
+
+`validate.js`, `jyutping-check.js`, `wiring-check.js`, `nav-harness.js`,
+`tier-harness.js`, `dead-css.js`, `sentence-pool-harness.js`,
+`sentence-review-harness.js`, `snapshot-harness.js`, `gap-opts-check.js`,
+`asr-replay-harness.js`, and **`dup-css.js` (new at v150)**. `dup-css.js` is a
+standing check, not a probe — it asserts an invariant and is meant to run before
+every deploy, rather than answering one question and dying. Its Check A gates
+(exit 1 on any same-selector duplicate); its Check B is informational and
+deliberately never gates, because it is a heuristic that cannot reach zero.
 
 ## Previously
 
