@@ -214,6 +214,28 @@ console.log('\n— 6. same-sound equality forgives the recogniser, not the learn
      'reported v150 REGRESSION: 蕃 reads faan1 in 蕃茄 but faan4 alone — the whole-string fix'],
     ['好，要粥同餃子。我好餓㗎！', '好腰竹筒餃姐我好我㗎',  false,
      'three real differences (腰 jiu1, 姐 ze4, 我 ngo5) exceed the allowance of 2'],
+
+    // ── Below the four-character floor (v152) ──────────────────────────────
+    // Eleven corpus conversation lines are this short. A fold must still be
+    // free here; a real edit must still be fatal. The v151 code returned false
+    // before either could be decided.
+    ['唔該晒！',   '唔該曬',   true,
+     'reported v151: 曬 and 晒 are both saai3 — a fold is not an edit, so the allowance of 0 must not block it'],
+    // The cost of the single-reading rule, asserted rather than left implicit.
+    // 哂 IS used colloquially for saai3, but the dictionary's PRIMARY reading is
+    // can2 and saai3 is its secondary — so under DES-57 it does not fold and
+    // this is a false reject. Accepted deliberately: the "any reading matches"
+    // alternative was measured and folded 心 (sam1) into 新 (san1) and 係 (hai6)
+    // into 喺 (hai2), which is far worse. Asserted as FAILING so that if the
+    // rule is ever loosened, this line is the first place it shows up.
+    ['唔該晒！',   '唔該哂',   false,
+     'KNOWN LIMIT: 哂 reads can2 primary (saai3 secondary), so it does not fold — the price of one-reading-each'],
+    ['多謝你！',   '多謝妳',   true,
+     '妳 and 你 are both nei5'],
+    ['好彩！',     '好菜',     false,
+     '菜 (coi3) is not 彩 (coi2) — a real tone difference at three characters must still fail'],
+    ['多謝你！',   '多謝佢',   false,
+     '佢 (keoi5) for 你 (nei5) is a different word, and the allowance of 0 must still reject it'],
   ];
 
   for (const [target, heard, shouldPass, note] of cases) {

@@ -2189,8 +2189,27 @@ function fuzzyMatch(heard, target) {
   //    two-character word IS the word (媽媽 maa1 maa1 heard as 嫲嫲 maa4 maa4 is
   //    a different word, not a glitch). The short-string floor is what keeps
   //    vocabulary-length targets strict while sentences get room.
+  //
+  // A FOLD IS NOT AN EDIT (v152). The early return below used to be
+  // `if (!allowance) return false`, which short-circuited before the comparison
+  // ran — so on a target under four characters a DES-57 homophone could never be
+  // forgiven, however identical it sounded. Reported case: 唔該晒 (m4 goi1
+  // saai3) heard as 唔該曬 (m4 goi1 saai3), three characters, allowance 0. The
+  // grid applied the fold and drew three green ticks; the matcher never got that
+  // far and returned false, so the learner was told the attempt failed while
+  // being shown that every character was right. **The fourth instance of the
+  // matcher and the panel disagreeing (v140, v144, v151, this).**
+  //
+  // Letting the comparison run instead costs no strictness. With allowance 0
+  // only a distance of ZERO passes, which means every character either matched
+  // outright or folded — a real substitution still scores 1 and still fails, so
+  // 媽媽 (maa1 maa1) heard as 嫲嫲 (maa4 maa4) is rejected exactly as before. The
+  // floor still governs EDITS; it simply no longer governs things that were
+  // never edits.
+  //
+  // Eleven corpus conversation lines sit under the floor, including both
+  // 唔該晒 (m4 goi1 saai3) variants.
   const allowance = Math.floor(t.length / 4);
-  if (!allowance) return false;
   // The eq is built from h and t AS THEY ARE NOW — after normalisation and after
   // any particle slice above — because the readings are indexed by position in
   // the string actually being compared. Building it from the raw arguments would

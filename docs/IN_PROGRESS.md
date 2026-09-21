@@ -4,11 +4,18 @@
 questions behind it. Meant to be short-lived — when a piece ships, fold its
 outcome into STATUS.md and clear this file back down for the next thing.*
 
-Last updated: 2026-09-20 · sw.js at v151
+Last updated: 2026-09-20 · sw.js at v152
 
 ## Nothing in progress
 
-**v151 shipped — a same-day correction to v150, awaiting device QA.** DES-57
+**v152 shipped — a second correction, awaiting device QA.** On a target under
+four characters the edit allowance is 0, and `fuzzyMatch()` returned false before
+the homophone fold could apply, while the grid applied it anyway — so 唔該晒！
+(m4 goi1 saai3!) heard as 唔該曬 (m4 goi1 saai3) showed a red panel over three
+green ticks. The floor governs edits; a fold is not an edit. 11 corpus
+conversation lines sit under the floor.
+
+**v151 shipped — a same-day correction to v150, device QA not separately done.** DES-57
 resolved each character's reading in isolation, which threw away the word context
 the dictionary needs: 蕃茄 (faan1 ke2) for 番茄 (faan1 ke2) was marked wrong
 because 蕃 reads faan1 in that word but faan4 alone. Readings are now resolved
