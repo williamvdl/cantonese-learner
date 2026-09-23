@@ -4,43 +4,46 @@
 questions behind it. Meant to be short-lived — when a piece ships, fold its
 outcome into STATUS.md and clear this file back down for the next thing.*
 
-Last updated: 2026-09-23 · sw.js at v153
+Last updated: 2026-09-23 · sw.js at v154
 
-## v153 — Jyut: name, nameplate, icon, status bar — awaiting deploy and device QA
+## v154 — replay while speaking, and the icon file rename — awaiting deploy and device QA
 
-The product is named **Jyut** (DES-58), and the header, app icon and status bar
-now come from the design system: the nameplate is MOCK-36-pair, the icon
-MOCK-36-plain, the status bar MOCK-37-deep. The detail is in the STATUS row and
-the DESIGN_DECISIONS rows. **Built and checked in the sandbox, not yet on the
-Pixel.** Clear this section once device QA passes.
+A play button top-right of the speak card in the checkpoint's sentence review
+and in Chat's Speak mode (MOCK-38-corner). In the checkpoint it appears only
+after an attempt or *Show me the answer* (DES-59). The detail is in the STATUS
+row. **Built and checked in a browser, not yet on the Pixel.**
 
-**Device QA — worth knowing before judging it:** Android caches a PWA's icon and
-name, so an installed app may keep the old 廣 (gwong2) icon and 廣東話 (gwong2 dung1
-waa2) label after the deploy. If it does, remove the app from the home screen and
-install it again from Chrome; the header and status bar update without that.
+**The v153 icon should arrive with this deploy.** The PNGs are renamed, so
+Chrome sees an icon URL it hasn't fetched before. Open the installed app once
+after deploying, then close it; Chrome may ask you to confirm the new icon. If
+the old icon is still there a day later with the phone charged on Wi-Fi, remove
+and reinstall. **v153 is otherwise confirmed on the device** — nameplate, status
+bar and the *Jyut* label, from William's screenshots and report on 2026-09-23.
 
-**Blocked on nothing.** The follow-ups for the name (domain, store names,
-trademark advice) are in BACKLOG § Product.
+**Blocked on nothing.**
 
-**Next candidate work after QA:** an aggregating runner for the standing checks
-(the cheapest, and it guards against the silent load failures found at v150), the
-164 Check B structural candidates from `dup-css.js` (needs William's judgement),
-the 4 remaining Check A rule-splits, the open question about extending the
-particle rule beyond the final position, and the `char-jyutping.json` coverage
-measurement. All are in BACKLOG.md.
+**Next candidate work after QA:** styling the styleguide's speak demos (new, in
+BACKLOG), an aggregating runner for the standing checks, the 168 Check B
+structural candidates from `dup-css.js` (needs William's judgement), the 4
+remaining Check A rule-splits, the open particle-rule question, and the
+`char-jyutping.json` coverage measurement. All in BACKLOG.md.
 
 ### Standing checks — twelve: eleven exit 0, `dup-css.js` exits 1 on four known
 
 `validate.js` (now also asserting the chrome colours), `jyutping-check.js`,
 `wiring-check.js`, `nav-harness.js`, `tier-harness.js`, `dead-css.js`,
 `sentence-pool-harness.js`, `sentence-review-harness.js`, `snapshot-harness.js`,
-`gap-opts-check.js` and `asr-replay-harness.js` all exit 0 at v153. **`dup-css.js`
+`gap-opts-check.js` and `asr-replay-harness.js` all exit 0 at v154. **`dup-css.js`
 exits 1**, and did at v152 too: its Check A gates on any same-selector duplicate,
-and the four it finds are the known rule-splits in BACKLOG. The count is 4 before
-and after v153. This section used to say *"all green"*, which was wrong; see
+and the four it finds are the known rule-splits in BACKLOG. The count is still 4
+at v154; Check B structural rose from 164 to 168 with v154's four contextual
+`.cp-convo` recolours, the same shape as the group they joined. This section used to say *"all green"*, which was wrong; see
 STATUS § Notes worth carrying forward. Check B is informational and never gates.
 
 ## Previously
+
+**v153 shipped (2026-09-23)** — the product named *Jyut*, its nameplate, icon and
+status bar. Confirmed on the device except the icon, which v154 re-delivers.
 
 **v152 shipped and device QA is done (2026-09-20).** The DES-57 same-sound rule
 is closed out across three deploys, all confirmed on the Pixel: v150 the rule

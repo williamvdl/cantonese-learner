@@ -1291,7 +1291,22 @@ function renderCheckpointSentences() {
   // ── Prompt block — the only thing that differs between the two modes ──
   let prompt;
   if (showTarget) {
+    // MOCK-38-corner (v154): replay the sentence, top right of the card, as the
+    // Say it back sheet does in its header. It exists only here, once the target
+    // is on screen after an attempt or a reveal — never before, in either mode,
+    // so 'produce' still makes the learner have a go first (DES-44, DES-59).
+    // Disabled while listening: played-back audio would reach the recogniser
+    // as a trivially correct match.
+    const playing = state.speaking === 'sr-' + sr.idx;
     prompt = `
+      <div class="speak-card-head">
+        <span></span><span></span>
+        <button class="btn-icon btn-icon--brand" data-sr-play aria-label="Listen to the sentence"
+          ${listening ? 'disabled aria-disabled="true"' : ''}
+          title="${listening ? 'Not while listening' : 'Listen to the sentence'}">
+          ${playing ? icon('volume', 18) : iconPlay(16)}
+        </button>
+      </div>
       <div class="speak-target-zh">${item.c}</div>
       <div class="speak-target-jp">${colorJyutping(item.j)}</div>
       <div class="speak-target-en">${item.e}</div>`;
@@ -2126,7 +2141,16 @@ function renderConversation() {
         <span class="speak-turn">${isUser?'Your turn':'Listen'}</span>
       </div>
       <div class="speak-card">
-        <div class="speak-prompt">${spkName}</div>
+        <div class="speak-card-head">
+          <span></span>
+          <div class="speak-prompt">${spkName}</div>
+          ${isUser ? `
+          <button class="btn-icon btn-icon--brand" id="speak-line-play" aria-label="Listen to the line"
+            ${status === 'listening' ? 'disabled aria-disabled="true"' : ''}
+            title="${status === 'listening' ? 'Not while listening' : 'Listen to the line'}">
+            ${playing ? icon('volume', 18) : iconPlay(16)}
+          </button>` : '<span></span>'}
+        </div>
         <div class="speak-target-zh">${line.c}</div>
         <div class="speak-target-jp">${colorJyutping(line.j)}</div>
         ${englishEl}
@@ -2477,6 +2501,18 @@ function renderQuiz(lesson) {
 //
 // Adding a control: add one entry here and emit its attribute. There is no
 // second place to remember, and wiring-check.js fails if either half is missing.
+
+// Plays the conversation line at the current Speak-mode step. Shared by the
+// other speaker's big Listen button and, from v154, the play button on the
+// learner's own line (MOCK-38-corner). Does nothing while the mic is live:
+// played-back audio would reach the recogniser as a trivially correct match.
+function playSpeakStep() {
+  const cv = state.convo;
+  if (cv.speakStatus === 'listening') return;
+  cv.playingLine = cv.speakStep;
+  render();
+  speakConvoLine(cv.speakStep, () => { cv.playingLine = null; render(); });
+}
 
 // Handlers receive (el, e): `el` is the matched control, `e` the raw event.
 // Anything a handler needs is read from `state` or from el.dataset at call time
@@ -2897,17 +2933,21 @@ const CLICK_ACTIONS = {
   },
 
   '#mic-btn': () => {
-    if (state.convo.speakStatus === 'listening') finishListening();
-    else startListening();
+    if (state.convo.speakStatus === 'listening') { finishListening(); return; }
+    // A replay still in flight would bleed into the mic — the Say it back
+    // sheet and the checkpoint already stopped it here; Chat never did, which
+    // mattered little until v154 put a play button on the learner's own line.
+    stopAudioFile();
+    state.convo.playingLine = null;
+    startListening();
   },
 
   '#speak-stop-btn': () => finishListening(),
 
-  '#speak-listen-btn': () => {
-    state.convo.playingLine = state.convo.speakStep;
-    render();
-    speakConvoLine(state.convo.speakStep, () => { state.convo.playingLine = null; render(); });
-  },
+  '#speak-listen-btn': () => playSpeakStep(),
+
+  // MOCK-38-corner (v154): the same playback on the learner's own line.
+  '#speak-line-play': () => playSpeakStep(),
 
   '#speak-next': () => {
     stopListening();
@@ -3398,7 +3438,11 @@ const CLICK_ACTIONS = {
     if (!sr || sr.status === 'listening') return;
     const item = currentSentReviewItem();
     if (!item) return;
-    speakItem('sentence', item.sid);
+    const key = 'sr-' + sr.idx;
+    state.speaking = key;
+    render();
+    speakItem('sentence', item.sid, () => { if (state.speaking === key) { state.speaking = null; render(); } });
+    setTimeout(() => { if (state.speaking === key) { state.speaking = null; render(); } }, 6000);
   },
 
   'data-sr-mic': () => {
@@ -3408,6 +3452,7 @@ const CLICK_ACTIONS = {
     if (sr.status === 'listening') { finishListening(); return; }
     stopAudioFile();
     window.speechSynthesis.cancel();
+    state.speaking = null;
     startSentReviewListening(item.c);
   },
 
@@ -3435,6 +3480,7 @@ const CLICK_ACTIONS = {
 
   'data-sr-next': () => {
     stopListening(); stopAudioFile();
+    state.speaking = null;
     sentReviewNext();
     window.scrollTo(0, 0);
     render();

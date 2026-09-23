@@ -17,9 +17,16 @@
       the master automatically from ../docs/design/app-icon.svg.
     - Opened straight from disk (file://), browsers refuse to let a canvas export
       an image loaded from another file, so pick the SVG with the button instead.
-  Then download the three PNGs and replace the files of the same name at the
-  repo root. Any change to the icon needs a sw.js version bump like any other
-  shell change, because index.html and manifest.json point at these files.
+  Then download the three PNGs and put them at the repo root.
+
+  IF THE ICON'S LOOK CHANGES, CHANGE ITS FILE NAMES TOO — in manifest.json and
+  in SIZES above. Chrome on Android treats a manifest icon URL as immutable: it
+  does not re-download an icon whose URL it already has, so a new picture under
+  an old name never reaches an installed app. v153 learned this the hard way:
+  the "Jyut" label updated on the phone and the old icon stayed, until v154
+  renamed icon-192/512.png to icon-jyut-192/512.png. The Apple icon has no such
+  update path at all; iOS picks it up on a fresh add to the home screen.
+  Any icon change also needs a sw.js version bump, like any other shell change.
 
   The glyph in the master is an outline, not text, so no font is needed here.
 -->
@@ -41,8 +48,8 @@
 <div class="row" id="out"></div>
 <script>
   const SIZES = [
-    { file: 'icon-512.png',         px: 512 },
-    { file: 'icon-192.png',         px: 192 },
+    { file: 'icon-jyut-512.png',    px: 512 },
+    { file: 'icon-jyut-192.png',    px: 192 },
     { file: 'apple-touch-icon.png', px: 180 },
   ];
   const status = document.getElementById('status');

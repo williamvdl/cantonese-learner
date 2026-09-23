@@ -4,7 +4,7 @@
 IN_PROGRESS.md when it's picked up; delete it from here once it's shipped and
 folded into STATUS.md.*
 
-Last updated: 2026-09-23 · sw.js at v153
+Last updated: 2026-09-23 · sw.js at v154
 
 ## Product
 - **Runtime Azure TTS for the Translate screen — gated on the A2 proxy.** Agreed
@@ -31,6 +31,14 @@ Last updated: 2026-09-23 · sw.js at v153
   way a mark for *Français* on French lessons would struggle. A composite mark,
   the 粵 (jyut6) icon with the wordmark, is likely easier to register than the bare
   word. Not legal advice; a question for whoever files it.
+
+- **Style the styleguide's speak demos.** Found at v154: `docs/design/styleguide.html`
+  has no `.speak-card`, `.mic-btn`, `.speak-status`, `.speak-heard`,
+  `.speak-result-*`, `.speak-breakdown`, `.speak-actions` or `.sr-*` rules, so
+  the Say it back sheet and checkpoint sentence review demos render as unstyled
+  text, and the v154 replay row can't be shown there either. Copy the rules from
+  `styles.css` into the page's style block, as the tab bar and continuation
+  sections already do, and add a `.speak-card-head` demo. Invisible in the app.
 
 ## Content
 

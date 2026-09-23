@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>A play button while speaking — mockup 38, on v153</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Noto+Serif+TC:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+    /* Tokens transcribed from styles.css v153 — only the ones this page uses. */
+    --font-serif:   'Noto Serif TC', 'Noto Serif CJK TC', 'Fraunces', Georgia, serif;
+    --font-ui:      'Inter', 'Noto Serif TC', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+    --font-display: 'Fraunces', 'Noto Serif TC', 'Noto Serif CJK TC', Georgia, serif;
+    --fs-micro: 11px; --fs-meta: 12px; --fs-small: 13px; --fs-lead: 17px; --fs-h2: 28px;
+    --fw-medium: 500; --fw-semi: 600; --fw-bold: 700;
+    --r-sm: 8px; --r-md: 12px; --r-lg: 16px; --r-pill: 999px; --tap-min: 44px;
+    --elev-1: 0 1px 2px rgba(58, 42, 30, 0.04), 0 1px 3px rgba(58, 42, 30, 0.06);
+    --elev-3: 0 4px 8px rgba(58, 42, 30, 0.06), 0 8px 20px rgba(58, 42, 30, 0.10);
+    --ink: #1C1917; --ink-soft: #292524;
+    --parchment: #FFFFFF; --parchment-warm: #FAF8F5; --parchment-deep: #F0EBE4; --parchment-border: #EAE4DC;
+    --brand: #C2410C; --brand-tint: #FEF0E9; --brand-edge: #F5D9C9; --brand-text-dark: #9A3412;
+    --jade: #15803D; --feedback-good-tint: #DCFCE7; --feedback-good-text: #15803D;
+    --muted: #A8A29E; --muted-dark: #78716C;
+    --milestone: #6E2639; --milestone-tint: #FBF0F2; --milestone-edge: #EBD3D9;
+    --border: 1px solid var(--parchment-border);
+}
+body { margin:0; background:var(--parchment-deep); font-family:var(--font-ui); color:var(--ink); padding:24px 16px 64px; }
+.wrap { max-width:1260px; margin:0 auto; }
+h1 { font-family:var(--font-display); font-size:var(--fs-h2); font-weight:var(--fw-medium); margin:0 0 6px; }
+h2 { font-family:var(--font-display); font-size:var(--fs-lead); font-weight:var(--fw-medium); margin:40px 0 4px; }
+.lede { font-size:var(--fs-small); line-height:1.55; color:var(--muted-dark); margin:0 0 8px; max-width:74ch; }
+.note { font-size:var(--fs-meta); line-height:1.6; color:var(--muted-dark); margin:6px 0 0; max-width:74ch; }
+.note b, .lede b { color:var(--ink-soft); }
+.frames { display:flex; gap:22px; flex-wrap:wrap; align-items:flex-start; margin-top:14px; }
+.frame { width:390px; max-width:100%; background:var(--parchment-warm); padding:14px 16px 4px; border-radius:var(--r-md); box-sizing:border-box; }
+.frame > .cap { font-size:var(--fs-micro); font-weight:var(--fw-semi); letter-spacing:.1em; text-transform:uppercase; color:var(--muted-dark); margin:0 0 10px; }
+.frame > .cap em { font-style:normal; color:var(--brand); }
+code { font-family:ui-monospace,Menlo,monospace; font-size:11px; background:var(--parchment-deep); padding:1px 5px; border-radius:4px; }
+.rec { display:inline-block; background:var(--feedback-good-tint); color:var(--feedback-good-text); font:var(--fw-semi) 9px var(--font-ui); letter-spacing:.1em; text-transform:uppercase; padding:3px 6px; border-radius:4px; vertical-align:3px; }
+.no  { display:inline-block; background:#EDE7DE; color:var(--muted-dark); font:var(--fw-semi) 9px var(--font-ui); letter-spacing:.1em; text-transform:uppercase; padding:3px 6px; border-radius:4px; vertical-align:3px; }
+.icon-label { display:inline-flex; align-items:center; gap:6px; }
+
+/* ══ Transcribed from styles.css v153 ══ */
+.segs { display:flex; gap:5px; margin-bottom:16px; }
+.segs > i { flex:1; height:3px; display:block; border-radius:var(--r-pill); background:var(--milestone-edge); }
+.segs > i.on { background:var(--milestone); }
+.btn-icon { position:relative; flex:0 0 auto; width:var(--tap-min); height:var(--tap-min); padding:0; border-radius:var(--r-pill); border:var(--border); background:transparent; color:var(--muted-dark); display:inline-flex; align-items:center; justify-content:center; cursor:pointer; }
+.btn-icon--brand { border-color:var(--brand-edge); color:var(--brand); }
+.speak-card { background:var(--parchment); border-radius:var(--r-lg); padding:24px 20px; border:var(--border); box-shadow:var(--elev-1); margin-bottom:16px; text-align:center; }
+.speak-prompt { font-size:var(--fs-micro); color:var(--muted); text-transform:uppercase; letter-spacing:1.5px; margin-bottom:8px; }
+.speak-target-zh { font-family:var(--font-serif); font-size:var(--fs-h2); margin-bottom:8px; color:var(--ink); }
+.speak-target-jp { font-size:14px; margin-bottom:6px; }
+.speak-target-en { font-size:var(--fs-meta); color:var(--muted-dark); margin-bottom:18px; }
+.mic-btn { width:80px; height:80px; border-radius:var(--r-pill); border:1px solid var(--brand-edge); background:var(--brand-tint); color:var(--brand); cursor:pointer; display:flex; align-items:center; justify-content:center; margin:0 auto 14px; box-shadow:var(--elev-3); }
+.speak-status { font-size:var(--fs-small); color:var(--muted-dark); min-height:20px; margin-bottom:14px; }
+.speak-heard { background:var(--parchment-warm); border-radius:var(--r-sm); padding:10px 14px; margin-bottom:14px; font-size:18px; color:var(--ink); }
+.speak-heard strong { font-family:var(--font-serif); }
+.speak-heard-jp { font-size:var(--fs-meta); color:var(--muted-dark); margin-top:2px; }
+.speak-result-bad { background:var(--brand-tint); border:1px solid var(--brand); color:var(--brand-text-dark); padding:12px 16px; border-radius:var(--r-sm); margin-bottom:14px; font-size:var(--fs-small); }
+.speak-result-close { background:var(--parchment-warm); border:1px solid var(--parchment-border); color:var(--ink-soft); padding:12px 16px; border-radius:var(--r-sm); margin-bottom:14px; font-size:var(--fs-small); }
+.speak-result-bad strong, .speak-result-close strong { font-family:var(--font-serif); }
+.sr-note { margin-top:8px; padding-top:8px; border-top:1px solid var(--parchment-border); font-size:11.5px; color:var(--muted-dark); line-height:1.55; }
+.speak-breakdown { display:flex; flex-wrap:wrap; justify-content:center; gap:4px 10px; margin-top:10px; padding:10px; background:var(--parchment); border-radius:var(--r-sm); }
+.speak-breakdown .bd-col { display:flex; flex-direction:column; align-items:center; gap:2px; min-width:32px; }
+.speak-breakdown .bd-char { font-family:var(--font-serif); font-size:20px; font-weight:var(--fw-bold); line-height:1; }
+.speak-breakdown .bd-status { font-size:var(--fs-small); line-height:1; }
+.speak-breakdown .bd-jp { font-size:var(--fs-micro); line-height:1; white-space:nowrap; }
+.speak-actions { display:flex; gap:12px; justify-content:center; flex-wrap:wrap; margin-top:14px; }
+.speak-action-btn { padding:10px 22px; min-height:var(--tap-min); border-radius:var(--r-pill); border:none; font-family:inherit; font-size:var(--fs-small); font-weight:var(--fw-medium); cursor:pointer; display:inline-flex; align-items:center; justify-content:center; }
+.speak-action-btn.primary { flex:1; min-width:130px; background:var(--brand); color:#fff; }
+.speak-action-btn.secondary { flex:1; min-width:130px; background:transparent; border:var(--border); color:var(--muted-dark); }
+.speak-nav { display:flex; justify-content:space-between; align-items:center; font-size:var(--fs-meta); color:var(--muted); margin-bottom:12px; }
+.speak-turn { color:var(--brand); font-weight:var(--fw-semi); }
+.speak-eng-hint { font-style:italic; color:var(--muted); }
+/* checkpoint context recolours to milestone, as .cp-convo does today */
+.cp-convo .speak-turn { color:var(--milestone); }
+.cp-convo .speak-action-btn.primary { background:var(--milestone); }
+.cp-convo .mic-btn { background:var(--milestone-tint); border-color:var(--milestone-edge); color:var(--milestone); }
+
+/* ══ The new part — per option ══ */
+.speak-card-head { display:grid; grid-template-columns:var(--tap-min) 1fr var(--tap-min); align-items:center; margin:-14px -8px 6px; }   /* corner */
+.speak-card-head .speak-prompt { margin:0; }
+.cp-convo .btn-icon--brand { border-color:var(--milestone-edge); color:var(--milestone); }  /* joins the existing cp-convo recolour group */
+.mic-row { display:grid; grid-template-columns:1fr 80px 1fr; align-items:center; gap:18px; margin-bottom:14px; }   /* pair */
+.mic-row .mic-btn { margin:0; }
+.mic-row .mr-l { justify-self:end; }
+.speak-actions > .play { align-self:center; }                        /* row */
+</style>
+</head>
+<body>
+<div class="wrap">
+<h1>A play button while speaking</h1>
+<p class="lede">Two speaking surfaces have no way to hear the line: the checkpoint's sentence review
+after an attempt, and the conversation's <i>your turn</i> step. The Say it back sheet on topic
+sentences already has one, in its header beside the close button. This page draws three places to
+put it, each on both surfaces, using the real v153 card.</p>
+<p class="note"><b>Behaviour is the same whichever placement you choose.</b> It plays the line with
+the audio the rest of the app uses, shows the speaker icon while playing like the sheet does, and is
+disabled while the mic is listening, since played-back audio would feed straight into the recogniser
+as a trivially correct match. <b>In the checkpoint it appears only once the sentence is on screen</b>,
+after an attempt or <i>Show me the answer</i>. DES-44 kept audio out of <i>Say it in Cantonese</i>
+before an attempt because hearing it first hands over the answer, and this keeps that intact. The
+conversation shows the line before you speak, so there it's available from the start, like the sheet.</p>
+<p class="note">The checkpoint frames are in the checkpoint's oxblood (<code>--milestone</code>) and the
+conversation frames in the path's orange, as each screen is today.</p>
+<h2>MOCK-38-corner · in the card's top-right corner <span class="rec">recommended</span></h2>
+<p class="note">One position on every speaking surface: top right, where the Say it back sheet already keeps its play button in the header. It is there before an attempt and after one, never competes with the mic, and adds nothing to the action row. <b>It gets a slim top row of its own</b>, shared with the conversation's <i>You</i> label, because a first draft floated it over the card and a long line such as 我想買蘋果。有幾多個？ (ngo5 soeng2 maai5 ping4 gwo2. jau5 gei2 do1 go3?) ran underneath it. On the checkpoint card, which has no label, that row costs about 36px of height.</p>
+<div class="frames"><div class="frame"><p class="cap">Checkpoint · <em>Say it in Cantonese, after a miss</em></p><div class="cp-convo"><div class="speak-nav"><span>Sentence 1 of 8</span><span class="speak-turn">Result</span></div>
+<div class="segs"><i class="on"></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+<div class="speak-card"><div class="speak-card-head"><span></span><span></span><button class="btn-icon btn-icon--brand play" title="Listen to the sentence"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="6 3 20 12 6 21 6 3"/></svg></button></div>
+<div class="speak-target-zh">凍檸茶唔該！</div><div class="speak-target-jp"><span style="color:#c8a200;font-weight:700">dung3</span> <span style="color:#27AE60;font-weight:700">ning4</span> <span style="color:#27AE60;font-weight:700">caa4</span> <span style="color:#27AE60;font-weight:700">m4</span> <span style="color:#E74C3C;font-weight:700">goi1!</span></div><div class="speak-target-en">Iced lemon tea, please!</div>
+<button class="mic-btn idle"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" x2="12" y1="19" y2="22"/></svg></button><div class="speak-status"></div>
+<div class="speak-heard">You said: <strong>當年揸唔該</strong><div class="speak-heard-jp"><span style="color:#E74C3C;font-weight:700">dong1</span> <span style="color:#27AE60;font-weight:700">nin4</span> <span style="color:#E74C3C;font-weight:700">zaa1</span> <span style="color:#27AE60;font-weight:700">m4</span> <span style="color:#E74C3C;font-weight:700">goi1</span></div></div>
+<div class="speak-result-close"><div style="font-weight:700;margin-bottom:4px">Here's the sentence we had</div><div><strong>凍檸茶唔該！</strong> (<span style="color:#c8a200;font-weight:700">dung3</span> <span style="color:#27AE60;font-weight:700">ning4</span> <span style="color:#27AE60;font-weight:700">caa4</span> <span style="color:#27AE60;font-weight:700">m4</span> <span style="color:#E74C3C;font-weight:700">goi1!</span>)</div>
+<div class="sr-note">凍 (dung3) means "cold / iced" — 凍檸茶 (dung3 ning4 caa4) "iced lemon tea", a cha chaan teng classic.</div></div>
+<div class="speak-actions"><button class="speak-action-btn secondary">Try again</button><button class="speak-action-btn primary">Next ›</button></div>
+</div></div></div>
+<div class="frame"><p class="cap">Conversation · <em>your turn, after a miss</em></p><div><div class="speak-nav"><span>Line 2 of 6</span><span class="speak-turn">Your turn</span></div>
+<div class="speak-card"><div class="speak-card-head"><span></span><div class="speak-prompt">You</div><button class="btn-icon btn-icon--brand play" title="Listen to the sentence"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="6 3 20 12 6 21 6 3"/></svg></button></div>
+<div class="speak-target-zh">我想買蘋果。有幾多個？</div><div class="speak-target-jp"><span style="color:#2980B9;font-weight:700">ngo5</span> <span style="color:#E67E22;font-weight:700">soeng2</span> <span style="color:#2980B9;font-weight:700">maai5</span> <span style="color:#27AE60;font-weight:700">ping4</span> <span style="color:#E67E22;font-weight:700">gwo2.</span> <span style="color:#2980B9;font-weight:700">jau5</span> <span style="color:#E67E22;font-weight:700">gei2</span> <span style="color:#E74C3C;font-weight:700">do1</span> <span style="color:#c8a200;font-weight:700">go3?</span></div>
+<div class="speak-target-en speak-eng-hint">tap to see English</div>
+<button class="mic-btn idle"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" x2="12" y1="19" y2="22"/></svg></button><div class="speak-status"></div>
+<div class="speak-heard">You said: <strong>我識買蘋果</strong><div class="speak-heard-jp"><span style="color:#2980B9;font-weight:700">ngo5</span> <span style="color:#E74C3C;font-weight:700">sik1</span> <span style="color:#2980B9;font-weight:700">maai5</span> <span style="color:#27AE60;font-weight:700">ping4</span> <span style="color:#E67E22;font-weight:700">gwo2</span></div></div>
+<div class="speak-result-bad"><div style="font-weight:700;margin-bottom:4px">Hmm, that didn't quite match.</div><div>Expected: <strong>我想買蘋果。有幾多個？</strong></div><div class="speak-breakdown"><div class="bd-col"><div class="bd-char" style="color:#1C1917">我</div><div class="bd-status"><span style="color:#15803D">√</span></div><div class="bd-jp" style="color:#2980B9;font-weight:700">ngo5</div></div><div class="bd-col"><div class="bd-char" style="color:#B42318">想</div><div class="bd-status"><span style="color:#B42318;font-size:13px">識</span></div><div class="bd-jp" style="color:#B42318;font-weight:700">soeng2</div></div><div class="bd-col"><div class="bd-char" style="color:#1C1917">買</div><div class="bd-status"><span style="color:#15803D">√</span></div><div class="bd-jp" style="color:#2980B9;font-weight:700">maai5</div></div><div class="bd-col"><div class="bd-char" style="color:#1C1917">蘋</div><div class="bd-status"><span style="color:#15803D">√</span></div><div class="bd-jp" style="color:#27AE60;font-weight:700">ping4</div></div><div class="bd-col"><div class="bd-char" style="color:#1C1917">果</div><div class="bd-status"><span style="color:#15803D">√</span></div><div class="bd-jp" style="color:#E67E22;font-weight:700">gwo2</div></div><div class="bd-col"><div class="bd-char" style="color:#B42318">有</div><div class="bd-status"><span style="color:#B42318">·</span></div><div class="bd-jp" style="color:#B42318;font-weight:700">jau5</div></div><div class="bd-col"><div class="bd-char" style="color:#B42318">幾</div><div class="bd-status"><span style="color:#B42318">·</span></div><div class="bd-jp" style="color:#B42318;font-weight:700">gei2</div></div><div class="bd-col"><div class="bd-char" style="color:#B42318">多</div><div class="bd-status"><span style="color:#B42318">·</span></div><div class="bd-jp" style="color:#B42318;font-weight:700">do1</div></div><div class="bd-col"><div class="bd-char" style="color:#B42318">個</div><div class="bd-status"><span style="color:#B42318">·</span></div><div class="bd-jp" style="color:#B42318;font-weight:700">go3</div></div></div></div>
+<div class="speak-actions"><button class="speak-action-btn secondary"><span class="icon-label"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M8 16H3v5"/></svg> Try Again</span></button><button class="speak-action-btn primary"><span class="icon-label">Skip <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span></button></div></div></div></div>
+<div class="frame"><p class="cap">Conversation · <em>your turn, before speaking</em></p><div><div class="speak-nav"><span>Line 2 of 6</span><span class="speak-turn">Your turn</span></div>
+<div class="speak-card"><div class="speak-card-head"><span></span><div class="speak-prompt">You</div><button class="btn-icon btn-icon--brand play" title="Listen to the sentence"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="6 3 20 12 6 21 6 3"/></svg></button></div>
+<div class="speak-target-zh">我想買蘋果。有幾多個？</div><div class="speak-target-jp"><span style="color:#2980B9;font-weight:700">ngo5</span> <span style="color:#E67E22;font-weight:700">soeng2</span> <span style="color:#2980B9;font-weight:700">maai5</span> <span style="color:#27AE60;font-weight:700">ping4</span> <span style="color:#E67E22;font-weight:700">gwo2.</span> <span style="color:#2980B9;font-weight:700">jau5</span> <span style="color:#E67E22;font-weight:700">gei2</span> <span style="color:#E74C3C;font-weight:700">do1</span> <span style="color:#c8a200;font-weight:700">go3?</span></div>
+<div class="speak-target-en speak-eng-hint">tap to see English</div>
+<button class="mic-btn idle"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" x2="12" y1="19" y2="22"/></svg></button><div class="speak-status">Press the mic and say the line above</div></div></div></div></div>
+<h2>MOCK-38-pair · beside the mic </h2>
+<p class="note">Listen and speak side by side, the pairing Translate uses (DES-49). It reads well before an attempt, when the mic is the focus. After an attempt the pair is stranded mid-card, above the result the learner is now reading, so the button is furthest from where the eye is. The mic stays centred, with an empty slot on its right to balance the play button.</p>
+<div class="frames"><div class="frame"><p class="cap">Checkpoint · <em>Say it in Cantonese, after a miss</em></p><div class="cp-convo"><div class="speak-nav"><span>Sentence 1 of 8</span><span class="speak-turn">Result</span></div>
+<div class="segs"><i class="on"></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+<div class="speak-card">
+<div class="speak-target-zh">凍檸茶唔該！</div><div class="speak-target-jp"><span style="color:#c8a200;font-weight:700">dung3</span> <span style="color:#27AE60;font-weight:700">ning4</span> <span style="color:#27AE60;font-weight:700">caa4</span> <span style="color:#27AE60;font-weight:700">m4</span> <span style="color:#E74C3C;font-weight:700">goi1!</span></div><div class="speak-target-en">Iced lemon tea, please!</div>
+<div class="mic-row"><span class="mr-l"><button class="btn-icon btn-icon--brand play" title="Listen to the sentence"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="6 3 20 12 6 21 6 3"/></svg></button></span><button class="mic-btn idle"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" x2="12" y1="19" y2="22"/></svg></button><span></span></div><div class="speak-status"></div>
+<div class="speak-heard">You said: <strong>當年揸唔該</strong><div class="speak-heard-jp"><span style="color:#E74C3C;font-weight:700">dong1</span> <span style="color:#27AE60;font-weight:700">nin4</span> <span style="color:#E74C3C;font-weight:700">zaa1</span> <span style="color:#27AE60;font-weight:700">m4</span> <span style="color:#E74C3C;font-weight:700">goi1</span></div></div>
+<div class="speak-result-close"><div style="font-weight:700;margin-bottom:4px">Here's the sentence we had</div><div><strong>凍檸茶唔該！</strong> (<span style="color:#c8a200;font-weight:700">dung3</span> <span style="color:#27AE60;font-weight:700">ning4</span> <span style="color:#27AE60;font-weight:700">caa4</span> <span style="color:#27AE60;font-weight:700">m4</span> <span style="color:#E74C3C;font-weight:700">goi1!</span>)</div>
+<div class="sr-note">凍 (dung3) means "cold / iced" — 凍檸茶 (dung3 ning4 caa4) "iced lemon tea", a cha chaan teng classic.</div></div>
+<div class="speak-actions"><button class="speak-action-btn secondary">Try again</button><button class="speak-action-btn primary">Next ›</button></div>
+</div></div></div>
+<div class="frame"><p class="cap">Conversation · <em>your turn, after a miss</em></p><div><div class="speak-nav"><span>Line 2 of 6</span><span class="speak-turn">Your turn</span></div>
+<div class="speak-card"><div class="speak-prompt">You</div>
+<div class="speak-target-zh">我想買蘋果。有幾多個？</div><div class="speak-target-jp"><span style="color:#2980B9;font-weight:700">ngo5</span> <span style="color:#E67E22;font-weight:700">soeng2</span> <span style="color:#2980B9;font-weight:700">maai5</span> <span style="color:#27AE60;font-weight:700">ping4</span> <span style="color:#E67E22;font-weight:700">gwo2.</span> <span style="color:#2980B9;font-weight:700">jau5</span> <span style="color:#E67E22;font-weight:700">gei2</span> <span style="color:#E74C3C;font-weight:700">do1</span> <span style="color:#c8a200;font-weight:700">go3?</span></div>
+<div class="speak-target-en speak-eng-hint">tap to see English</div>
+<div class="mic-row"><span class="mr-l"><button class="btn-icon btn-icon--brand play" title="Listen to the sentence"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="6 3 20 12 6 21 6 3"/></svg></button></span><button class="mic-btn idle"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" x2="12" y1="19" y2="22"/></svg></button><span></span></div><div class="speak-status"></div>
+<div class="speak-heard">You said: <strong>我識買蘋果</strong><div class="speak-heard-jp"><span style="color:#2980B9;font-weight:700">ngo5</span> <span style="color:#E74C3C;font-weight:700">sik1</span> <span style="color:#2980B9;font-weight:700">maai5</span> <span style="color:#27AE60;font-weight:700">ping4</span> <span style="color:#E67E22;font-weight:700">gwo2</span></div></div>
+<div class="speak-result-bad"><div style="font-weight:700;margin-bottom:4px">Hmm, that didn't quite match.</div><div>Expected: <strong>我想買蘋果。有幾多個？</strong></div><div class="speak-breakdown"><div class="bd-col"><div class="bd-char" style="color:#1C1917">我</div><div class="bd-status"><span style="color:#15803D">√</span></div><div class="bd-jp" style="color:#2980B9;font-weight:700">ngo5</div></div><div class="bd-col"><div class="bd-char" style="color:#B42318">想</div><div class="bd-status"><span style="color:#B42318;font-size:13px">識</span></div><div class="bd-jp" style="color:#B42318;font-weight:700">soeng2</div></div><div class="bd-col"><div class="bd-char" style="color:#1C1917">買</div><div class="bd-status"><span style="color:#15803D">√</span></div><div class="bd-jp" style="color:#2980B9;font-weight:700">maai5</div></div><div class="bd-col"><div class="bd-char" style="color:#1C1917">蘋</div><div class="bd-status"><span style="color:#15803D">√</span></div><div class="bd-jp" style="color:#27AE60;font-weight:700">ping4</div></div><div class="bd-col"><div class="bd-char" style="color:#1C1917">果</div><div class="bd-status"><span style="color:#15803D">√</span></div><div class="bd-jp" style="color:#E67E22;font-weight:700">gwo2</div></div><div class="bd-col"><div class="bd-char" style="color:#B42318">有</div><div class="bd-status"><span style="color:#B42318">·</span></div><div class="bd-jp" style="color:#B42318;font-weight:700">jau5</div></div><div class="bd-col"><div class="bd-char" style="color:#B42318">幾</div><div class="bd-status"><span style="color:#B42318">·</span></div><div class="bd-jp" style="color:#B42318;font-weight:700">gei2</div></div><div class="bd-col"><div class="bd-char" style="color:#B42318">多</div><div class="bd-status"><span style="color:#B42318">·</span></div><div class="bd-jp" style="color:#B42318;font-weight:700">do1</div></div><div class="bd-col"><div class="bd-char" style="color:#B42318">個</div><div class="bd-status"><span style="color:#B42318">·</span></div><div class="bd-jp" style="color:#B42318;font-weight:700">go3</div></div></div></div>
+<div class="speak-actions"><button class="speak-action-btn secondary"><span class="icon-label"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M8 16H3v5"/></svg> Try Again</span></button><button class="speak-action-btn primary"><span class="icon-label">Skip <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span></button></div></div></div></div>
+</div>
+<h2>MOCK-38-row · in the result action row <span class="no">not recommended</span></h2>
+<p class="note">Beside Try again, where the eye lands after a miss. But it only exists once there is a result, so it can't serve the conversation before an attempt, which you asked for. It also puts a third control into a row built for two: on a phone-width card the two buttons' 130px minimum plus the play button don't fit, so the row wraps and Next drops onto a line of its own, as the checkpoint frame shows.</p>
+<div class="frames"><div class="frame"><p class="cap">Checkpoint · <em>Say it in Cantonese, after a miss</em></p><div class="cp-convo"><div class="speak-nav"><span>Sentence 1 of 8</span><span class="speak-turn">Result</span></div>
+<div class="segs"><i class="on"></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+<div class="speak-card">
+<div class="speak-target-zh">凍檸茶唔該！</div><div class="speak-target-jp"><span style="color:#c8a200;font-weight:700">dung3</span> <span style="color:#27AE60;font-weight:700">ning4</span> <span style="color:#27AE60;font-weight:700">caa4</span> <span style="color:#27AE60;font-weight:700">m4</span> <span style="color:#E74C3C;font-weight:700">goi1!</span></div><div class="speak-target-en">Iced lemon tea, please!</div>
+<button class="mic-btn idle"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" x2="12" y1="19" y2="22"/></svg></button><div class="speak-status"></div>
+<div class="speak-heard">You said: <strong>當年揸唔該</strong><div class="speak-heard-jp"><span style="color:#E74C3C;font-weight:700">dong1</span> <span style="color:#27AE60;font-weight:700">nin4</span> <span style="color:#E74C3C;font-weight:700">zaa1</span> <span style="color:#27AE60;font-weight:700">m4</span> <span style="color:#E74C3C;font-weight:700">goi1</span></div></div>
+<div class="speak-result-close"><div style="font-weight:700;margin-bottom:4px">Here's the sentence we had</div><div><strong>凍檸茶唔該！</strong> (<span style="color:#c8a200;font-weight:700">dung3</span> <span style="color:#27AE60;font-weight:700">ning4</span> <span style="color:#27AE60;font-weight:700">caa4</span> <span style="color:#27AE60;font-weight:700">m4</span> <span style="color:#E74C3C;font-weight:700">goi1!</span>)</div>
+<div class="sr-note">凍 (dung3) means "cold / iced" — 凍檸茶 (dung3 ning4 caa4) "iced lemon tea", a cha chaan teng classic.</div></div>
+<div class="speak-actions"><button class="btn-icon btn-icon--brand play" title="Listen to the sentence"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="6 3 20 12 6 21 6 3"/></svg></button><button class="speak-action-btn secondary">Try again</button><button class="speak-action-btn primary">Next ›</button></div>
+</div></div></div>
+<div class="frame"><p class="cap">Conversation · <em>your turn, after a miss</em></p><div><div class="speak-nav"><span>Line 2 of 6</span><span class="speak-turn">Your turn</span></div>
+<div class="speak-card"><div class="speak-prompt">You</div>
+<div class="speak-target-zh">我想買蘋果。有幾多個？</div><div class="speak-target-jp"><span style="color:#2980B9;font-weight:700">ngo5</span> <span style="color:#E67E22;font-weight:700">soeng2</span> <span style="color:#2980B9;font-weight:700">maai5</span> <span style="color:#27AE60;font-weight:700">ping4</span> <span style="color:#E67E22;font-weight:700">gwo2.</span> <span style="color:#2980B9;font-weight:700">jau5</span> <span style="color:#E67E22;font-weight:700">gei2</span> <span style="color:#E74C3C;font-weight:700">do1</span> <span style="color:#c8a200;font-weight:700">go3?</span></div>
+<div class="speak-target-en speak-eng-hint">tap to see English</div>
+<button class="mic-btn idle"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" x2="12" y1="19" y2="22"/></svg></button><div class="speak-status"></div>
+<div class="speak-heard">You said: <strong>我識買蘋果</strong><div class="speak-heard-jp"><span style="color:#2980B9;font-weight:700">ngo5</span> <span style="color:#E74C3C;font-weight:700">sik1</span> <span style="color:#2980B9;font-weight:700">maai5</span> <span style="color:#27AE60;font-weight:700">ping4</span> <span style="color:#E67E22;font-weight:700">gwo2</span></div></div>
+<div class="speak-result-bad"><div style="font-weight:700;margin-bottom:4px">Hmm, that didn't quite match.</div><div>Expected: <strong>我想買蘋果。有幾多個？</strong></div><div class="speak-breakdown"><div class="bd-col"><div class="bd-char" style="color:#1C1917">我</div><div class="bd-status"><span style="color:#15803D">√</span></div><div class="bd-jp" style="color:#2980B9;font-weight:700">ngo5</div></div><div class="bd-col"><div class="bd-char" style="color:#B42318">想</div><div class="bd-status"><span style="color:#B42318;font-size:13px">識</span></div><div class="bd-jp" style="color:#B42318;font-weight:700">soeng2</div></div><div class="bd-col"><div class="bd-char" style="color:#1C1917">買</div><div class="bd-status"><span style="color:#15803D">√</span></div><div class="bd-jp" style="color:#2980B9;font-weight:700">maai5</div></div><div class="bd-col"><div class="bd-char" style="color:#1C1917">蘋</div><div class="bd-status"><span style="color:#15803D">√</span></div><div class="bd-jp" style="color:#27AE60;font-weight:700">ping4</div></div><div class="bd-col"><div class="bd-char" style="color:#1C1917">果</div><div class="bd-status"><span style="color:#15803D">√</span></div><div class="bd-jp" style="color:#E67E22;font-weight:700">gwo2</div></div><div class="bd-col"><div class="bd-char" style="color:#B42318">有</div><div class="bd-status"><span style="color:#B42318">·</span></div><div class="bd-jp" style="color:#B42318;font-weight:700">jau5</div></div><div class="bd-col"><div class="bd-char" style="color:#B42318">幾</div><div class="bd-status"><span style="color:#B42318">·</span></div><div class="bd-jp" style="color:#B42318;font-weight:700">gei2</div></div><div class="bd-col"><div class="bd-char" style="color:#B42318">多</div><div class="bd-status"><span style="color:#B42318">·</span></div><div class="bd-jp" style="color:#B42318;font-weight:700">do1</div></div><div class="bd-col"><div class="bd-char" style="color:#B42318">個</div><div class="bd-status"><span style="color:#B42318">·</span></div><div class="bd-jp" style="color:#B42318;font-weight:700">go3</div></div></div></div>
+<div class="speak-actions"><button class="btn-icon btn-icon--brand play" title="Listen to the sentence"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="6 3 20 12 6 21 6 3"/></svg></button><button class="speak-action-btn secondary"><span class="icon-label"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M8 16H3v5"/></svg> Try Again</span></button><button class="speak-action-btn primary"><span class="icon-label">Skip <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span></button></div></div></div></div>
+</div>
+</div>
+</body>
+</html>

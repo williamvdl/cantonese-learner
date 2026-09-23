@@ -776,7 +776,14 @@
   .cp-convo .bubble.is-playing        { box-shadow: 0 0 0 3px var(--milestone-edge); }
   .cp-convo .convo-ctrl-btn.on        { background: var(--milestone); border-color: var(--milestone); }
   .cp-convo .bubble-play,
-  .cp-convo .breakdown-btn            { border-color: var(--milestone-edge); color: var(--milestone); }
+  .cp-convo .breakdown-btn,
+  .cp-convo .speak-card-head .btn-icon { border-color: var(--milestone-edge); color: var(--milestone); }
+  /* .btn-icon--brand's hover fill is brand orange, and Android keeps :hover on
+     a tapped button until the next tap elsewhere — so an oxblood checkpoint
+     button showed an orange wash after every tap. Found at v154 on the new
+     replay button; the bubble play button had the same wash all along. */
+  .cp-convo .bubble-play:hover,
+  .cp-convo .speak-card-head .btn-icon:hover { background: var(--milestone-tint); }
   /* v125: the three rules that used to live here — a white-on-dark resting form
      for the user-side play button, a white-on-dark breakdown label, and the
      0,4,0 tie-breaker added at v122 to stop a white icon rendering on a white
@@ -797,7 +804,14 @@
 
   /* Speak mode */
   .speak-card { background: var(--parchment); border-radius: var(--r-lg); padding: 24px 20px; border: var(--border); box-shadow: var(--elev-1); margin-bottom: 16px; text-align: center; }
-  .speak-prompt { font-size: var(--fs-micro); color: var(--muted); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 8px; }
+  .speak-prompt { font-size: var(--fs-micro); color: var(--muted); text-transform: uppercase; letter-spacing: 1.5px; margin: 0; }
+  /* MOCK-38-corner (v154): the top row of a speak card — the speaker label
+     centred, a replay button on the right, an empty cell on the left so the
+     label stays centred on the card. A grid row rather than a button floated
+     over the card: floated, a long line ran underneath it. The negative
+     margin pulls the row into the card's padding so the button sits near the
+     corner without the card growing by a full 44px. */
+  .speak-card-head { display: grid; grid-template-columns: var(--tap-min) 1fr var(--tap-min); align-items: center; margin: -14px -8px 6px; }
   .speak-target-zh { font-size: var(--fs-h2); margin-bottom: 8px; color: var(--ink); }
   .speak-target-jp { font-size: 14px; margin-bottom: 6px; }
   .speak-target-en { font-size: var(--fs-meta); color: var(--muted-dark); margin-bottom: 18px; }

@@ -459,6 +459,16 @@ Content is `.speak-card`, unchanged from Chat's conversation Speak mode:
 target sentence, `.mic-btn`, `.speak-status`, and on a result, `.speak-result-good`
 / `.speak-result-bad` with `renderSpeakBreakdown()`'s per-syllable grid.
 
+**Every speak surface can replay the line** (v154, MOCK-38-corner). The sheet
+does it from its header; the two surfaces without a sheet header — the
+checkpoint's sentence review and Chat's Speak mode — use `.speak-card-head`, a
+three-cell grid row at the top of the card (empty cell, centred `.speak-prompt`,
+play button). A row, not a floated button: floated, a long line ran under it.
+The rules are the sheet's: disabled while listening, speaker icon while playing,
+and the mic stops any replay still in flight before it opens. **In the checkpoint
+the button exists only once the target is on screen** (DES-59), so the learner
+has to have a go first; in Chat it is on the learner's own lines from the start.
+
 **`.speak-heard` — the "You said" line — shows the heard text folded, not raw
 (DES-48, v140).** The recogniser writes spoken numbers as Arabic digits, so 十
 (sap6) comes back as `10`. All three surfaces that render this line (this sheet,
