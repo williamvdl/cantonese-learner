@@ -8,45 +8,27 @@ Last updated: 2026-09-20 · sw.js at v152
 
 ## Nothing in progress
 
-**v152 shipped — a second correction, awaiting device QA.** On a target under
-four characters the edit allowance is 0, and `fuzzyMatch()` returned false before
-the homophone fold could apply, while the grid applied it anyway — so 唔該晒！
-(m4 goi1 saai3!) heard as 唔該曬 (m4 goi1 saai3) showed a red panel over three
-green ticks. The floor governs edits; a fold is not an edit. 11 corpus
-conversation lines sit under the floor.
+**v152 shipped and device QA is done (2026-09-20).** The DES-57 same-sound rule
+is closed out across three deploys, all confirmed on the Pixel:
 
-**v151 shipped — a same-day correction to v150, device QA not separately done.** DES-57
-resolved each character's reading in isolation, which threw away the word context
-the dictionary needs: 蕃茄 (faan1 ke2) for 番茄 (faan1 ke2) was marked wrong
-because 蕃 reads faan1 in that word but faan4 alone. Readings are now resolved
-per string and compared by position. **The v150 harness section passed while this
-was broken** — it tested isolated character pairs, the same assumption as the
-bug. Rewritten at sentence level. See STATUS.md for both notes.
+- **v150** — the rule itself: a recogniser homophone with identical sound and
+  tone counts as a match, shown as a plain tick; tone differences still fail.
+  Shipped together with the `dup-css.js` script and the 47-declaration CSS sweep.
+- **v151** — readings resolved per whole string rather than per character, so a
+  character is read in its word's context (蕃 is faan1 in 蕃茄, faan4 alone).
+- **v152** — a fold is not an edit, so the four-character floor no longer blocks
+  it on short targets like 唔該晒 (m4 goi1 saai3).
 
-**v150 shipped and its device QA is done.** Two threads landed in one deploy, at
-William's request, since v149 was never pushed:
+Three defects in three deploys, each from a premise not measured before building
+on it. The notes are in STATUS.md. If a fourth surfaces on this rule, the right
+move is to instrument the matcher end to end rather than patch the next symptom.
 
-- **Same-sound equality on the speak matcher (DES-57)** — the recogniser's
-  homophone substitutions no longer count as learner errors, while tone
-  differences still do. Confirmed on the Pixel 2026-09-19, including a
-  substitution the build never saw (祝 for 粥, both zuk1), which is the rule
-  generalising rather than matching the cases it was built against. The 我 (ngo5)
-  for 餓 (ngo6) flag on that run is a real learner slip and correctly marked.
-- **Cross-rule duplicate-declaration script** — `tools/dup-css.js` built, and 47
-  of 51 same-selector duplicates swept out of `styles.css`. Invisible by design;
-  every value removed was already overridden.
-
-**Two standing checks were found dead during this work** —
-`asr-replay-harness.js` and `sentence-review-harness.js` had both been failing to
-load since v144. Repaired here, and the pattern is in STATUS.md's carry-forward
-notes because the shape will recur.
-
-This file is cleared down. **Next candidate work:** the 164 Check B structural
-candidates from `dup-css.js` (needs William's judgement, several look
-deliberate), the 4 remaining Check A cases that need a shared rule split, an
-aggregating runner for the standing checks, the open question about extending the
-particle rule beyond the final position, and the `char-jyutping.json` coverage
-measurement. All are in BACKLOG.md.
+This file is cleared down. **Next candidate work:** an aggregating runner for the
+standing checks (the cheapest, and it guards against the silent load failures
+found at v150), the 164 Check B structural candidates from `dup-css.js` (needs
+William's judgement), the 4 remaining Check A rule-splits, the open question
+about extending the particle rule beyond the final position, and the
+`char-jyutping.json` coverage measurement. All are in BACKLOG.md.
 
 ### Standing checks — twelve, all green
 
