@@ -4,7 +4,7 @@
 IN_PROGRESS.md when it's picked up; delete it from here once it's shipped and
 folded into STATUS.md.*
 
-Last updated: 2026-09-17 · sw.js at v148
+Last updated: 2026-09-23 · sw.js at v153
 
 ## Product
 - **Runtime Azure TTS for the Translate screen — gated on the A2 proxy.** Agreed
@@ -21,17 +21,16 @@ Last updated: 2026-09-17 · sw.js at v148
   GET caching.
 
 
-- **Product name and logo — decide before the header is finalised.** The nameplate
-  in every mockup is a placeholder: `廣東話 (gwong2 dung1 waa2) / Cantonese Learner`.
-  It's descriptive rather than ownable — hard to trademark, impossible to rank for,
-  and it says what the app does rather than what it's like. The repo name "Tea
-  House" is already a better instinct. Directions raised but not chosen: the
-  tea-house / yum cha register (飲茶 (jam2 caa4) — warm, specific, memorable),
-  茶記 (caa4 gei3) (very Hong Kong, needs explaining to anyone outside it), or the
-  Scholar register the app is already themed around. **The name gates the logo,
-  which gates the final header treatment** — the tone-contour glyph in
-  `03-header-solid-options.html` was placeholder only. Matters more now that the
-  long-term goal is a paid subscription product.
+- **Secure the Jyut name before any public launch.** Named at v153 (DES-58).
+  Three follow-ups, none blocking the app today: register `jyut.app`, which was
+  unregistered on 2026-09-23; check App Store and Play Store name availability
+  when a native or store listing is on the table, since store names must be
+  unique; and take trademark advice before a paid launch. **One genuine risk to
+  raise there:** *Jyut* is the jyutping reading of the language's own name, and an
+  examiner may treat a language name as descriptive of teaching that language, the
+  way a mark for *Français* on French lessons would struggle. A composite mark,
+  the 粵 (jyut6) icon with the wordmark, is likely easier to register than the bare
+  word. Not legal advice; a question for whoever files it.
 
 ## Content
 
@@ -386,7 +385,9 @@ are pointers only — detail goes there, not here.*
   v129** — `SPEAK_FINAL_PARTICLES` in `app.js` against `data/topics/particles.json`,
   in `tools/validate.js` — and it is the shape the rest should follow: read the
   literal out of the source file with a regex, compare both directions, and verify
-  the check actually fails on drift before committing it.
+  the check actually fails on drift before committing it. **A second was built at
+  v153**: the chrome colours, `index.html` `theme-color` against `manifest.json`
+  `theme_color`, and the manifest's `background_color` against `--header-bg`.
 
 - **Adopt a commit-message convention.** 22 of the last 25 commits are titled
   *"Add files via upload"*, GitHub Desktop's default, so the repo carries no

@@ -235,6 +235,29 @@ if (anySid) {
   } catch (e) { err('agreement', `could not read app.js: ${e.message}`); }
 }
 
+// ── AGREEMENT: chrome colours across index.html, manifest.json and styles.css ──
+// The status bar and splash colours can't read CSS variables, so they are hex
+// literals in two files that must agree with each other and with the palette.
+// Before v153 they had drifted three ways (#1A1815, #1a1a2e, and the oxblood
+// header) with nothing to notice. Same shape as the particle mirror above: a
+// hand-copied value, asserted rather than trusted.
+{
+  try {
+    const html = fs.readFileSync(path.join(ROOT, 'index.html'), 'utf8');
+    const css  = fs.readFileSync(path.join(ROOT, 'styles.css'), 'utf8');
+    const man  = readJSON(path.join(ROOT, 'manifest.json'));
+    const norm = v => (v || '').trim().toLowerCase();
+    const meta = (html.match(/<meta name="theme-color" content="([^"]+)"/) || [])[1];
+    const headerBg = (css.match(/--header-bg:\s*(#[0-9A-Fa-f]{6})/) || [])[1];
+    if (!meta) err('agreement', 'index.html: <meta name="theme-color"> not found');
+    else if (norm(meta) !== norm(man.theme_color))
+      err('agreement', `status bar colour disagrees: index.html theme-color ${meta}, manifest.json theme_color ${man.theme_color}`);
+    if (!headerBg) err('agreement', 'styles.css: --header-bg not found');
+    else if (norm(man.background_color) !== norm(headerBg))
+      err('agreement', `splash colour ${man.background_color} (manifest.json background_color) is not --header-bg ${headerBg} — the icon ground and splash should match`);
+  } catch (e) { err('agreement', `could not check chrome colours: ${e.message}`); }
+}
+
 // ── Report ────────────────────────────────────────────────────────────────────
 const phase = anyWid ? 'Phase 2+ (ids + wids present)' : anyId ? 'Phase 1 (ids present, no wids)' : 'baseline (no ids)';
 console.log(`Cantonese data validator — ${phase}`);

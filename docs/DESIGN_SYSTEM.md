@@ -44,8 +44,8 @@ the scale, and no border width outside 1px/2px/`--edge-emph`.
 
 | Token | Value | Job |
 |---|---|---|
-| `--font-display` | Fraunces | Page and section titles, score values, English reveals |
-| `--font-serif` | Noto Serif TC | All Chinese text, the nameplate, watermarks. **Never a Latin title.** |
+| `--font-display` | Fraunces | Page and section titles, score values, English reveals, the nameplate's *Jyut* |
+| `--font-serif` | Noto Serif TC | All Chinese text, the nameplate's 粵 (jyut6), watermarks. **Never a Latin title.** |
 | `--font-ui` | Inter | Everything else — labels, body, buttons, jyutping |
 
 > **`--font-serif` on Latin is a silent failure (DES-26, corrected v121).** Noto
@@ -182,17 +182,31 @@ phases: the app shipped the plate left-aligned with both icons sharing the right
 corner, leaving the left empty — the exact condition "an icon in each corner"
 exists to prevent. Each corner control sits in a `.header-slot` of fixed
 `--tap-min` width so the plate centres on the **row**, not on the space the icons
-leave; unequal slots drift the plate by half the difference, and the two controls
-are 44px and 36px today. `.header-actions`, which grouped two right-corner
-buttons, is retired.
+leave; unequal slots drift the plate by half any difference in the controls'
+widths, which is what happened while the right corner held a 36px hamburger.
+`.header-actions`, which grouped two right-corner buttons, is retired.
 
-**Nameplate type is out of scope here.** Size, weight and face are gated on the
-product-naming decision, which gates the logo (BACKLOG). §2 governs the plate's
-*position*; what it is made of is not settled.
+**The nameplate is the wordmark, Jyut** (DES-58, MOCK-36-pair, built v153).
+`.nameplate-mark` sets 粵 (jyut6) in `--font-serif` bold at 22px beside *Jyut* in
+`--font-display` semibold at 25px, on a shared baseline; the `.en` label beneath
+reads *Learn Cantonese*. Each half is set in the face §1.1 gives its script. **This
+is the one deliberate exception to the jyutping rule**: the character is followed
+by its reading, but as a brand, without brackets or the tone number. Everywhere
+else the rule stays absolute. The name was chosen in conversation rather than
+from a mockup; mockup 36 drew it in place.
+
+**Two chrome colours sit outside the stylesheet**, because a meta tag and
+`manifest.json` can't read a CSS variable. The **status bar** (`theme-color`,
+and the manifest's `theme_color`) is `#481925`, a darker shade of `--header-bg`
+(MOCK-37-deep): a bar the same colour as the header merges into one block and
+leaves the nameplate reading 12px low. The **install splash** (`background_color`)
+is `--header-bg`, matching the icon's ground. `tools/validate.js` asserts both.
+The **app icon** is 粵 (jyut6) in `--header-text` on `--header-bg` (MOCK-36-plain),
+from the master `docs/design/app-icon.svg`, exported by `tools/build-icons.html`.
 
 **The nameplate is a route Home** (`.nameplate`, DES-18, built v116). A
 `<button>` — keyboard-reachable and announced as a control — that **hugs its
-text** rather than filling the centre slot: about 128px of wordmark against the
+text** rather than filling the centre slot: about 110px of wordmark against the
 238px the slot would give it. A full-width invisible target on a header that is
 sticky on every screen catches stray thumbs mid-scroll and navigates out of the
 lesson. Nothing marks it at rest; pressing drops its opacity, the language
@@ -929,10 +943,9 @@ scheduled as phase 4, a few lines in the context builder rather than new data
 
 ## 7. Open decisions
 
-- **Product name and nameplate.** `廣東話 (gwong2 dung1 waa2) / Cantonese
-  Learner` is placeholder. The name gates the logo, which gates the final header
-  treatment.
-- **Logo.** No mark exists.
+- ~~**Product name, nameplate and logo.**~~ **Settled at v153**: the product is
+  *Jyut*, with *Learn Cantonese* as its descriptor (DES-58); the nameplate is
+  MOCK-36-pair and the icon MOCK-36-plain. See §2 Header.
 - **Dashboard density — now due.** The converged Home reads quieter than its
   predecessor. Not adjusted at the time because it was the only fully converged
   screen in a half-converged app, so the comparison was unfair. **The rest of the

@@ -1,6 +1,6 @@
 /* ===================================================================
    styles.css — all application styles
-   Part of the Cantonese Learner app. Loaded by index.html.
+   Part of the Jyut app (Tea House Cantonese Learner repo). Loaded by index.html.
    =================================================================== */
 
   /* ── Type System ─────────────────────────────────────────────────────────── */
@@ -373,12 +373,10 @@
      the plate off-centre as soon as the two controls differ in width, which they
      did before v117, when the right corner was a 36px hamburger against the
      44px info button.
-     Nameplate TYPE is deliberately untouched: size, weight and face are gated on
-     the product-naming decision, which gates the logo (see BACKLOG). This deploy
-     moves the plate; it does not restyle it. */
+     Nameplate TYPE was held back until the product was named. It was named at
+     v153 — Jyut — and the type is set below with the nameplate. */
   .header-slot { flex: 0 0 var(--tap-min); display: flex; align-items: center; justify-content: center; }
   .header-title { flex: 1 1 auto; min-width: 0; display: flex; align-items: center; gap: 0; flex-direction: column; }
-  .header-title .zh { font-size: 24px; color: var(--header-text); font-family: var(--font-display); font-weight: var(--fw-bold); letter-spacing: 0.06em; line-height: 1.1; }
   /* No letter-spacing here: the grouped "meta + UI labels" rule further down sets
      0.16em on this same selector and wins on source order. A 0.22em declaration
      sat here dead until v115. */
@@ -390,9 +388,10 @@
      padding, all cleared here.
      T-hug: the button hugs its text rather than filling the centre slot.
      `.header-title` stays the centring container and this sits inside it, so the
-     live area is ~128px of wordmark rather than ~238px of mostly-blank band. An
-     invisible full-width target on a sticky header catches stray thumbs mid-scroll
-     and navigates away from the lesson.
+     live area is ~110px of wordmark (Jyut, v153; it was ~128px on the placeholder)
+     rather than ~238px of mostly-blank band. An invisible full-width target on a
+     sticky header catches stray thumbs mid-scroll and navigates away from the
+     lesson.
      N1: nothing marks it at rest — a wordmark centred between two corner icons
      reads as a logo slot, and a logo goes home. N2: an opacity drop on press,
      which is the language .btn-icon--header already speaks, so no new one is
@@ -401,6 +400,15 @@
   .nameplate { display: flex; flex-direction: column; align-items: center; gap: 0; min-height: var(--tap-min); justify-content: center; font-family: inherit; background: transparent; border: none; padding: 0; margin: 0; cursor: pointer; -webkit-tap-highlight-color: transparent; transition: opacity 0.12s ease; }
   .nameplate:active { opacity: 0.55; }
   .nameplate:focus-visible { outline: 2px solid var(--header-text); outline-offset: 3px; border-radius: var(--r-sm); }
+  /* The wordmark (MOCK-36-pair, v153): 粵 (jyut6) beside its reading, "Jyut", on
+     one line, with the descriptor beneath in the .en label. Each half is set in
+     the face §1 gives its script — the character in --font-serif, the Latin word
+     in --font-display — so this is two faces meeting on a baseline, not one face
+     stretched over both. The mark adds no width: the descriptor line below is the
+     wider of the two, measured at 110px either way. */
+  .nameplate-mark { display: flex; align-items: baseline; gap: 7px; color: var(--header-text); line-height: 1.05; }
+  .nameplate-glyph { font-family: var(--font-serif); font-size: 22px; font-weight: var(--fw-bold); }
+  .nameplate-word { font-family: var(--font-display); font-size: 25px; font-weight: var(--fw-semi); letter-spacing: 0.01em; font-variation-settings: 'opsz' 72; }
   .tone-key { display: flex; gap: var(--sp-3) var(--sp-3); flex-wrap: wrap; margin-top: 8px; align-items: center; padding-bottom: var(--sp-2); }
   .tone-key span { font-size: var(--fs-micro); font-weight: var(--fw-bold); }
   .tone-key .label { color: var(--muted-dark); font-weight: var(--fw-regular); }

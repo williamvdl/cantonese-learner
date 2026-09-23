@@ -1577,6 +1577,11 @@ function renderPageHeader(title, subtitle) {
     </div>`;
 }
 
+// The nameplate is the product wordmark, Jyut (MOCK-36-pair, v153): 粵 (jyut6)
+// beside its reading, "Learn Cantonese" beneath. It is the ONE deliberate
+// exception to the rule that every Chinese character is followed by bracketed
+// jyutping — "Jyut" is the reading, written as a brand rather than a lesson.
+// Don't "fix" it to 粵 (jyut6); see DESIGN_DECISIONS.md, DES-58.
 function renderHeader() {
   const toneKeys = Object.entries(TONES).map(([t,d]) =>
     `<span style="color:${d.color}">● T${t}</span>`
@@ -1592,8 +1597,8 @@ function renderHeader() {
         </div>
         <div class="header-title">
           <button class="nameplate" id="nameplate-home" aria-label="Go to Home">
-            <span class="zh">廣東話</span>
-            <span class="en">Cantonese Learner</span>
+            <span class="nameplate-mark"><span class="nameplate-glyph" lang="zh-HK">粵</span><span class="nameplate-word">Jyut</span></span>
+            <span class="en">Learn Cantonese</span>
           </button>
         </div>
         <div class="header-slot">

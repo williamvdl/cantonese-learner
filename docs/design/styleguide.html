@@ -6,7 +6,7 @@
 <title>Tea House — Styleguide</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Noto+Serif+TC:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Noto+Serif+TC:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 /* ═══════════════════════════════════════════════════════════════════════
    FOUNDATIONS — token set
@@ -144,9 +144,11 @@ code{ background:#DAD4CA; padding:1px 5px; border-radius:4px; font-size:11.5px; 
 }
 .sg-header .icon.left{ left:4px; } .sg-header .icon.right{ right:4px; }
 .sg-header .icon svg{ width:17px; height:17px; }
-.sg-plate{ display:flex; flex-direction:column; align-items:center; gap:4px; max-width:var(--measure); margin:0 auto; }
-.sg-plate .zh{ font:var(--fw-medium) 16px/1 var(--font-serif); letter-spacing:.04em; }
-.sg-plate .en{ font:var(--fw-medium) 8.5px/1 var(--font-ui); letter-spacing:.24em; text-transform:uppercase; opacity:.72; }
+.sg-plate{ display:flex; flex-direction:column; align-items:center; gap:1px; max-width:var(--measure); margin:0 auto; }
+.sg-plate .mark{ display:flex; align-items:baseline; gap:7px; line-height:1.05; }
+.sg-plate .glyph{ font:var(--fw-bold) 22px/1.05 var(--font-serif); }
+.sg-plate .word{ font:var(--fw-semi) 25px/1.05 var(--font-display); letter-spacing:.01em; font-variation-settings:'opsz' 72; }
+.sg-plate .en{ font:var(--fw-bold) 9px/1.2 var(--font-ui); letter-spacing:.16em; text-transform:uppercase; color:var(--header-sub); }
 
 /* contextual row */
 .ctx{ background:var(--parchment-warm); border-bottom:var(--border-soft); }
@@ -508,15 +510,17 @@ table.spec tr:last-child td{ border-bottom:none; }
 
 <!-- ══════════ PRIMITIVES ══════════ -->
 <section id="header">
-  <h2>Header <span class="tag-new">built &middot; v115</span></h2>
+  <h2>Header <span class="tag-new">built &middot; v115 &middot; wordmark v153</span></h2>
   <p class="note">Solid Oxblood band, centred nameplate, an icon in each corner so the bar never reads as empty. Retheming means swapping the <code>--header-*</code> block only.</p>
   <div class="stage deep" style="padding:0;overflow:hidden;border-radius:var(--r-md)">
     <div class="sg-header" id="hdr"></div>
   </div>
   <div class="cls">.header › .header-row › .header-slot + .header-title › .nameplate (+ .header-slot)</div>
   <p class="note"><b>This section was right and unbuildable for four phases.</b> It described the centred plate correctly while the app shipped it left-aligned with both icons sharing the right corner — and nothing caught the gap, because the demo below is drawn with styleguide-local classes (<code>.sg-header</code>, <code>.icon.left</code> — and a <code>.nameplate</code> that meant something else entirely) that appear nowhere in <code>styles.css</code>. A section written in private vocabulary cannot be diffed against the code it documents. The class line above now names the real thing.</p>
-  <p class="note"><b>The two corner controls are not the same width</b> — the info button is 44px, the hamburger 36px — so each sits in a fixed <code>--tap-min</code> slot and the plate centres on the <i>row</i> rather than on the space the icons happen to leave. Without the fixed slots the plate drifts off-centre by half the difference, and would drift again when the hamburger becomes the settings cog. <b>Nameplate type is deliberately untouched:</b> size, weight and face wait on the product-naming decision, which gates the logo.</p>
-  <p class="note"><b>The nameplate is a route Home</b> (DES-18, built v116). It is a <code>&lt;button&gt;</code> that <i>hugs its text</i> rather than filling the centre slot — ~128px of wordmark, not ~238px of mostly-blank band, because an invisible full-width target on a sticky header catches stray thumbs mid-scroll. Nothing marks it at rest: a wordmark centred between two corner icons reads as a logo slot, and a logo goes home. Pressing drops its opacity, the same language the corner icons already use. <b>This page previously used <code>.nameplate</code> as a local demo class</b> meaning something unrelated; it is now <code>.sg-plate</code>, since the name belongs to a real component.</p>
+  <p class="note"><b>Each corner control sits in a fixed <code>--tap-min</code> slot</b>, so the plate centres on the <i>row</i> rather than on the space the icons happen to leave. Without the fixed slots the plate drifts off-centre by half any difference in the controls' widths — which is how it was drawn while the right corner held a 36px hamburger, before the settings cog replaced it at v117.</p>
+  <p class="note"><b>The nameplate is the wordmark, Jyut</b> (MOCK-36-pair, DES-58, v153). 粵 (jyut6) in <code>--font-serif</code> beside its reading in <code>--font-display</code>, with <i>Learn Cantonese</i> beneath in the meta-label style. It is the <b>one deliberate exception</b> to the rule that a Chinese character is followed by bracketed jyutping: <i>Jyut</i> is the reading, written as a brand rather than a lesson. The plate is 110×44px — the descriptor line sets its width, so the mark adds none.</p>
+  <p class="note"><b>Two chrome colours live outside the stylesheet</b>, because a meta tag and the manifest can't read a CSS variable. The <b>status bar</b> is <code>#481925</code>, a darker shade of <code>--header-bg</code> (MOCK-37-deep): the step in tone keeps the bar reading as separate, so the nameplate reads as centred on the header rather than 12px low in one merged block. The <b>install splash</b> is <code>--header-bg</code> itself, matching the icon's ground. <code>tools/validate.js</code> asserts both, since they drifted three ways before v153.</p>
+  <p class="note"><b>The nameplate is a route Home</b> (DES-18, built v116). It is a <code>&lt;button&gt;</code> that <i>hugs its text</i> rather than filling the centre slot — ~110px of wordmark (it was ~128px on the placeholder), not ~238px of mostly-blank band, because an invisible full-width target on a sticky header catches stray thumbs mid-scroll. Nothing marks it at rest: a wordmark centred between two corner icons reads as a logo slot, and a logo goes home. Pressing drops its opacity, the same language the corner icons already use. <b>This page previously used <code>.nameplate</code> as a local demo class</b> meaning something unrelated; it is now <code>.sg-plate</code>, since the name belongs to a real component.</p>
 </section>
 
 <section id="context">
@@ -847,6 +851,7 @@ table.spec tr:last-child td{ border-bottom:none; }
 <script>
 const I={
   info:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>',
+  cog:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3.2"/><path d="M19.1 14.5a1.6 1.6 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.6 1.6 0 0 0-1.8-.3 1.6 1.6 0 0 0-1 1.5v.2a2 2 0 1 1-4 0v-.1a1.6 1.6 0 0 0-1-1.5 1.6 1.6 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.6 1.6 0 0 0 .3-1.8 1.6 1.6 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.6 1.6 0 0 0 1.5-1 1.6 1.6 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.6 1.6 0 0 0 1.8.3h.1a1.6 1.6 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.6 1.6 0 0 0 1 1.5 1.6 1.6 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.6 1.6 0 0 0-.3 1.8v.1a1.6 1.6 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.6 1.6 0 0 0-1.5 1z"/></svg>',
   menu:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M3 6h18M3 12h18M3 18h18"/></svg>',
   back:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M15 18l-6-6 6-6"/></svg>',
   check:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M20 6L9 17l-5-5"/></svg>',
@@ -886,8 +891,8 @@ document.getElementById('radii').innerHTML=[['sm','8px'],['md','12px'],['lg','16
 
 document.getElementById('hdr').innerHTML=`
   <button class="icon left">${I.info}</button>
-  <div class="sg-plate"><span class="zh">廣東話</span><span class="en">Cantonese Learner</span></div>
-  <button class="icon right">${I.menu}</button>`;
+  <div class="sg-plate"><span class="mark"><span class="glyph">粵</span><span class="word">Jyut</span></span><span class="en">Learn Cantonese</span></div>
+  <button class="icon right">${I.cog}</button>`;
 
 document.getElementById('tierdemo').innerHTML=`
   <div style="max-width:340px">

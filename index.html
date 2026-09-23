@@ -3,14 +3,20 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#1A1815">
+<!-- Status bar colour (MOCK-37-deep, v153): a darker shade of --header-bg, so the
+     bar reads as separate from the header and the nameplate reads as centred on
+     it. CSS variables can't reach a meta tag, so this is a literal — and it must
+     equal manifest.json's theme_color. tools/validate.js asserts that. -->
+<meta name="theme-color" content="#481925">
 <link rel="manifest" href="./manifest.json">
+<!-- iOS ignores manifest icons and would otherwise use a screenshot. -->
+<link rel="apple-touch-icon" href="./apple-touch-icon.png">
 
 <!-- Font system: Fraunces (English display — titles, score values), Inter (English UI), Noto Serif TC (Chinese, nameplate, watermarks). Matches --font-display / --font-ui / --font-serif in styles.css. -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Noto+Serif+TC:wght@400;500;600;700&display=swap" rel="stylesheet">
-<title>廣東話 Cantonese Learner</title>
+<title>Jyut — Learn Cantonese</title>
 
 <!-- Application styles -->
 <link rel="stylesheet" href="./styles.css">

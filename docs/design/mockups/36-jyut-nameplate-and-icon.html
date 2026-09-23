@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Jyut — the nameplate and the app icon (mockup 36, on v152)</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Noto+Serif+TC:wght@400;600;700;900&display=swap" rel="stylesheet">
+<style>
+:root {
+    /* Tokens transcribed from styles.css v152 — only the ones this page uses. */
+    --font-serif:   'Noto Serif TC', 'Noto Serif CJK TC', 'Fraunces', Georgia, serif;
+    --font-ui:      'Inter', 'Noto Serif TC', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+    --font-display: 'Fraunces', 'Noto Serif TC', 'Noto Serif CJK TC', Georgia, serif;
+
+    --fs-micro: 11px; --fs-meta: 12px; --fs-small: 13px; --fs-body: 15px; --fs-lead: 17px; --fs-h2: 28px;
+    --fw-regular: 400; --fw-medium: 500; --fw-semi: 600; --fw-bold: 700;
+    --sp-1: 4px; --sp-2: 8px; --sp-3: 12px; --sp-4: 16px; --sp-5: 24px;
+    --r-sm: 8px; --r-md: 12px; --r-pill: 999px;
+    --tap-min: 44px;
+    --elev-2: 0 2px 4px rgba(58, 42, 30, 0.05), 0 4px 8px rgba(58, 42, 30, 0.07);
+
+    --ink:            #1C1917;
+    --ink-soft:       #292524;
+    --parchment:      #FFFFFF;
+    --parchment-warm: #FAF8F5;
+    --parchment-deep: #F0EBE4;
+    --parchment-border: #EAE4DC;
+    --brand:          #C2410C;
+    --brand-edge:     #F5D9C9;
+    --muted-dark:     #78716C;
+    --feedback-good-tint: #DCFCE7;
+    --feedback-good-text: #15803D;
+    --header-bg:      #6E2639;   /* oxblood */
+    --header-text:    #F7EEE8;
+    --header-sub:     rgba(255,255,255,0.6);
+    --header-icon:    #F7EEE8;
+    --border-soft:    1px solid var(--parchment-deep);
+}
+
+/* ── page chrome (mockup only) ── */
+body { margin:0; background:var(--parchment-deep); font-family:var(--font-ui); color:var(--ink); padding:24px 16px 64px; }
+.wrap { max-width:860px; margin:0 auto; }
+h1 { font-family:var(--font-display); font-size:var(--fs-h2); font-weight:var(--fw-medium); margin:0 0 6px; }
+h2 { font-family:var(--font-display); font-size:var(--fs-lead); font-weight:var(--fw-medium); margin:40px 0 4px; }
+.lede { font-size:var(--fs-small); line-height:1.55; color:var(--muted-dark); margin:0 0 8px; max-width:66ch; }
+.note { font-size:var(--fs-meta); line-height:1.6; color:var(--muted-dark); margin:8px 0 0; max-width:66ch; }
+.note b, .lede b { color:var(--ink-soft); }
+.frames { display:flex; gap:22px; flex-wrap:wrap; align-items:flex-start; margin-top:14px; }
+.frame { width:390px; max-width:100%; }
+.frame > .cap { font-size:var(--fs-micro); font-weight:var(--fw-semi); letter-spacing:.1em; text-transform:uppercase; color:var(--muted-dark); margin:0 0 8px; }
+.frame > .cap em { font-style:normal; color:var(--brand); }
+.frame > .sub { font-size:var(--fs-meta); line-height:1.55; color:var(--muted-dark); margin:8px 0 0; }
+table { border-collapse:collapse; font-size:var(--fs-meta); margin-top:12px; width:100%; }
+th,td { text-align:left; padding:7px 10px; border-bottom:var(--border-soft); vertical-align:top; line-height:1.5; }
+th { font-size:var(--fs-micro); letter-spacing:.08em; text-transform:uppercase; color:var(--muted-dark); font-weight:var(--fw-semi); }
+code { font-family:ui-monospace,Menlo,monospace; font-size:11px; background:var(--parchment-deep); padding:1px 5px; border-radius:4px; }
+.rec { display:inline-block; background:var(--feedback-good-tint); color:var(--feedback-good-text); font-size:9px; font-weight:var(--fw-semi); letter-spacing:.1em; text-transform:uppercase; padding:3px 6px; border-radius:4px; vertical-align:2px; }
+.no  { display:inline-block; background:#EDE7DE; color:var(--muted-dark); font-size:9px; font-weight:var(--fw-semi); letter-spacing:.1em; text-transform:uppercase; padding:3px 6px; border-radius:4px; vertical-align:2px; }
+.toolbar { margin:18px 0 0; font-size:var(--fs-meta); color:var(--muted-dark); display:flex; align-items:center; gap:10px; flex-wrap:wrap; }
+.toolbar button { font:inherit; font-weight:var(--fw-semi); color:var(--brand); background:transparent; border:1px solid var(--brand-edge); border-radius:var(--r-pill); padding:5px 12px; cursor:pointer; }
+.toolbar button[aria-pressed="true"] { background:var(--brand); color:#fff; border-color:var(--brand); }
+
+/* ══ The real header, transcribed from styles.css v152 ══ */
+.statusbar { height:24px; background:var(--sb, var(--header-bg)); display:flex; align-items:center; justify-content:space-between; padding:0 14px; font-size:11px; font-weight:var(--fw-semi); color:rgba(255,255,255,.85); }
+.header { background:var(--header-bg); padding:var(--sp-3) var(--sp-5); box-shadow:var(--elev-2); }
+.header-row { display:flex; align-items:center; gap:var(--sp-2); }
+.header-slot { flex:0 0 var(--tap-min); display:flex; align-items:center; justify-content:center; }
+.header-title { flex:1 1 auto; min-width:0; display:flex; align-items:center; flex-direction:column; }
+.btn-icon { width:var(--tap-min); height:var(--tap-min); padding:0; border-radius:var(--r-pill); border:1px solid transparent; background:transparent; color:var(--header-icon); opacity:.72; display:inline-flex; align-items:center; justify-content:center; }
+.nameplate { display:flex; flex-direction:column; align-items:center; min-height:var(--tap-min); justify-content:center; font-family:inherit; background:transparent; border:none; padding:0; margin:0; cursor:pointer; }
+.nameplate:active { opacity:.55; }
+/* today's two lines, unchanged */
+.nameplate .zh { font-size:24px; color:var(--header-text); font-family:var(--font-display); font-weight:var(--fw-bold); letter-spacing:0.06em; line-height:1.1; }
+.nameplate .en { font-size:9px; color:var(--header-sub); text-transform:uppercase; margin-top:1px; font-family:var(--font-ui); font-weight:var(--fw-bold); letter-spacing:0.16em; }
+/* the Latin wordmark — Fraunces, per §1: --font-display is the Latin title face */
+.nameplate .word { font-family:var(--font-display); font-size:25px; font-weight:var(--fw-semi); color:var(--header-text); line-height:1.05; letter-spacing:0.01em; font-variation-settings:'opsz' 72; }
+/* MOCK-36-pair: the character and its reading on one line */
+.nameplate .line { display:flex; align-items:baseline; gap:7px; }
+.nameplate .glyph { font-family:var(--font-serif); font-size:22px; font-weight:var(--fw-bold); color:var(--header-text); line-height:1.05; }
+
+/* ══ The app icon ══
+   One element, sized by --s. The glyph and the rule are sized in proportion so
+   the same markup draws the 512px master and the 56px home-screen icon. */
+.ico { --s:120px; width:var(--s); height:var(--s); position:relative; overflow:hidden; display:grid; place-items:center; flex:none; }
+.ico .g { font-family:var(--font-serif); font-weight:700; line-height:1; font-size:calc(var(--s) * .48); transform:translateY(calc(var(--s) * -.01)); }
+.ico--plain { background:var(--header-bg); color:var(--header-text); }
+.ico--paper { background:var(--parchment-warm); color:var(--header-bg); box-shadow:inset 0 0 0 1px var(--parchment-border); }
+.ico--rule  { background:var(--header-bg); color:var(--header-text); }
+.ico--rule .g { font-size:calc(var(--s) * .44); transform:translateY(calc(var(--s) * -.035)); }
+.ico--rule::after { content:''; position:absolute; left:50%; bottom:calc(var(--s) * .245); width:calc(var(--s) * .16); height:max(2px, calc(var(--s) * .022)); background:var(--brand); transform:translateX(-50%); border-radius:1px; }
+/* today's icon, redrawn for comparison: navy, gold, a frame near the edge */
+.ico--today { background:#1A1A2E; color:#E8C77E; }
+.ico--today .g { font-family:'Noto Sans CJK TC','Noto Sans TC',system-ui,sans-serif; font-weight:900; font-size:calc(var(--s) * .58); }
+.ico--today::before { content:''; position:absolute; inset:calc(var(--s) * .06); border:max(1px, calc(var(--s) * .008)) solid #E8C77E; }
+/* masks */
+.m-circle   { border-radius:50%; }
+.m-squircle { border-radius:23%; }
+.m-square   { border-radius:0; }
+/* the maskable safe zone: a centred circle, 80% of the canvas */
+.ico .safe { position:absolute; inset:10%; border-radius:50%; border:1.5px dashed rgba(194,65,12,.95); display:none; pointer-events:none; }
+.showsafe .ico .safe { display:block; }
+
+.masks { display:flex; gap:14px; align-items:flex-end; flex-wrap:wrap; }
+.masks figure { margin:0; text-align:center; }
+.masks figcaption { font-size:var(--fs-micro); color:var(--muted-dark); margin-top:6px; }
+
+/* home screen */
+.home { border-radius:var(--r-md); padding:22px 14px 18px; display:grid; grid-template-columns:repeat(5, 1fr); gap:18px 6px; background:linear-gradient(160deg,#5B6B7A 0%,#3E4A56 55%,#2F3740 100%); }
+.lightwall .home { background:linear-gradient(160deg,#EDE9E3 0%,#DCD6CD 60%,#CFC7BC 100%); }
+.app { display:flex; flex-direction:column; align-items:center; gap:6px; min-width:0; }
+.app .ico { --s:54px; }
+.app .lbl { font-family:system-ui,-apple-system,'Roboto',sans-serif; font-size:11.5px; color:#fff; text-shadow:0 1px 2px rgba(0,0,0,.35); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:64px; }
+.lightwall .app .lbl { color:#222; text-shadow:none; }
+.filler { --s:54px; width:54px; height:54px; border-radius:50%; background:rgba(255,255,255,.22); }
+.lightwall .filler { background:rgba(0,0,0,.10); }
+.filler.sq { border-radius:30%; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<h1>Jyut — the nameplate and the app icon</h1>
+<p class="lede">The naming direction is <b>Jyut</b>, from 粵 (jyut6), the character that means
+Cantonese itself, as in 粵語 (jyut6 jyu5). The purpose goes in a descriptor, <i>Learn Cantonese</i>,
+rather than into a compound name. This page draws the name in the two places it lives: the header
+nameplate, on every screen, and the home-screen icon with its label.</p>
+<p class="note">It replaces the placeholder 廣東話 (gwong2 dung1 waa2) / <i>Cantonese Learner</i> and
+the navy-and-gold 廣 (gwong2) icon, which predates the oxblood system and uses none of its colours.
+<b>Nothing here is settled until it is approved</b>; the naming decision and whichever options are
+picked then get one DES row each in <code>DESIGN_DECISIONS.md</code>.</p>
+
+<div class="toolbar">
+  <button id="lowerbtn" type="button" aria-pressed="false">Lowercase wordmark</button>
+  <button id="safebtn" type="button" aria-pressed="false">Show safe zone</button>
+  <button id="wallbtn" type="button" aria-pressed="false">Light wallpaper</button>
+  <button id="sbbtn" type="button" aria-pressed="false">Status bar as today</button>
+</div>
+<p class="note">Lowercase follows how jyutping is written (<i>jyut6</i>), and gives the wordmark two
+descenders. The safe zone is the circle Android guarantees to keep; everything outside it may be
+cropped. The status bar toggle shows today's <code>#1A1815</code> against the proposed oxblood.</p>
+
+<!-- ═══════════════════════════ PART 1 ═══════════════════════════ -->
+<h2>Part 1 · The nameplate</h2>
+<p class="note">All three keep §2's three-slot header and DES-18's hugging nameplate button. Only the
+contents of the button change. Info and settings sit in the corners exactly as today.</p>
+
+<div class="frames" id="plates">
+  <div class="frame">
+    <p class="cap">MOCK-36-word &middot; <em>wordmark over descriptor</em></p>
+    <div class="statusbar"><span>9:41</span><span>●●●</span></div>
+    <div class="header"><div class="header-row">
+      <div class="header-slot"><span class="btn-icon"><svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg></span></div>
+      <div class="header-title"><button class="nameplate" type="button">
+        <span class="word" data-w>Jyut</span>
+        <span class="en">Learn Cantonese</span>
+      </button></div>
+      <div class="header-slot"><span class="btn-icon"><svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3.2"/><path d="M19.1 14.5a1.6 1.6 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.6 1.6 0 0 0-1.8-.3 1.6 1.6 0 0 0-1 1.5v.2a2 2 0 1 1-4 0v-.1a1.6 1.6 0 0 0-1-1.5 1.6 1.6 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.6 1.6 0 0 0 .3-1.8 1.6 1.6 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.6 1.6 0 0 0 1.5-1 1.6 1.6 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.6 1.6 0 0 0 1.8.3h.1a1.6 1.6 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.6 1.6 0 0 0 1 1.5 1.6 1.6 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.6 1.6 0 0 0-.3 1.8v.1a1.6 1.6 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.6 1.6 0 0 0-1.5 1z"/></svg></span></div>
+    </div></div>
+    <p class="sub">The same structure as today, with the Latin name leading, which suits an
+    English-speaking audience. It's the cleanest of the three. The drawback is that the header then
+    carries no Chinese at all, and the link between the name and 粵 (jyut6) lives only in the icon.</p>
+  </div>
+
+  <div class="frame">
+    <p class="cap">MOCK-36-pair &middot; <em>character and reading, side by side</em> <span class="rec">recommended</span></p>
+    <div class="statusbar"><span>9:41</span><span>●●●</span></div>
+    <div class="header"><div class="header-row">
+      <div class="header-slot"><span class="btn-icon"><svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg></span></div>
+      <div class="header-title"><button class="nameplate" type="button">
+        <span class="line"><span class="glyph">粵</span><span class="word" data-w>Jyut</span></span>
+        <span class="en">Learn Cantonese</span>
+      </button></div>
+      <div class="header-slot"><span class="btn-icon"><svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3.2"/><path d="M19.1 14.5a1.6 1.6 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.6 1.6 0 0 0-1.8-.3 1.6 1.6 0 0 0-1 1.5v.2a2 2 0 1 1-4 0v-.1a1.6 1.6 0 0 0-1-1.5 1.6 1.6 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.6 1.6 0 0 0 .3-1.8 1.6 1.6 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.6 1.6 0 0 0 1.5-1 1.6 1.6 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.6 1.6 0 0 0 1.8.3h.1a1.6 1.6 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.6 1.6 0 0 0 1 1.5 1.6 1.6 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.6 1.6 0 0 0-.3 1.8v.1a1.6 1.6 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.6 1.6 0 0 0-1.5 1z"/></svg></span></div>
+    </div></div>
+    <p class="sub"><b>The only option where the brand explains itself</b>: the character, then how it
+    is read, which is exactly the pattern every other screen of the app teaches. It also ties the
+    header to the icon on the home screen. Measured, it is no wider than MOCK-36-word: both plates are
+    110px, because the descriptor line is the widest thing in either.</p>
+  </div>
+
+  <div class="frame">
+    <p class="cap">MOCK-36-stack &middot; <em>character over name, no descriptor</em> <span class="no">not recommended</span></p>
+    <div class="statusbar"><span>9:41</span><span>●●●</span></div>
+    <div class="header"><div class="header-row">
+      <div class="header-slot"><span class="btn-icon"><svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg></span></div>
+      <div class="header-title"><button class="nameplate" type="button">
+        <span class="zh">粵</span>
+        <span class="en" data-w-en>Jyut</span>
+      </button></div>
+      <div class="header-slot"><span class="btn-icon"><svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3.2"/><path d="M19.1 14.5a1.6 1.6 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.6 1.6 0 0 0-1.8-.3 1.6 1.6 0 0 0-1 1.5v.2a2 2 0 1 1-4 0v-.1a1.6 1.6 0 0 0-1-1.5 1.6 1.6 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.6 1.6 0 0 0 .3-1.8 1.6 1.6 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.6 1.6 0 0 0 1.5-1 1.6 1.6 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.6 1.6 0 0 0 1.8.3h.1a1.6 1.6 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.6 1.6 0 0 0 1 1.5 1.6 1.6 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.6 1.6 0 0 0-.3 1.8v.1a1.6 1.6 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.6 1.6 0 0 0-1.5 1z"/></svg></span></div>
+    </div></div>
+    <p class="sub">Today's exact two-line structure with new contents, so it's the smallest change.
+    Drawn because it's the obvious minimal move, but it drops the descriptor, which you wanted in the
+    header, and the name shrinks to a 9px label beneath a character most learners can't yet read. It
+    also measures 30px wide, which puts the route home under the 44px <code>--tap-min</code>.</p>
+  </div>
+</div>
+
+<p class="note"><b>One rule needs a ruling for MOCK-36-pair.</b> The standing rule is that every Chinese
+character is followed immediately by its jyutping in brackets. The pair puts the reading beside the
+character, but as <i>Jyut</i>, without brackets or the tone number. My proposal is to treat the
+nameplate as a wordmark rather than content, record that as the one exception in the same DES row, and
+keep the rule absolute everywhere else. <i>粵 (jyut6)</i> in the header would read as a lesson rather
+than a name.</p>
+
+<!-- ═══════════════════════════ PART 2 ═══════════════════════════ -->
+<h2>Part 2 · The app icon</h2>
+<p class="note">Each option is drawn at the three shapes launchers cut it to: the circle your Pixel
+uses, the rounded square iOS and Samsung use, and the full square, which shows the whole canvas.
+<b>Turn the safe zone on.</b> The manifest marks the icon <code>maskable</code>, so only the dashed
+circle is guaranteed to survive.</p>
+
+<div class="frames" id="icons">
+  <div class="frame">
+    <p class="cap">Today &middot; <em>for comparison</em></p>
+    <div class="masks">
+      <figure><div class="ico ico--today m-circle"><span class="g">廣</span><i class="safe"></i></div><figcaption>Circle</figcaption></figure>
+      <figure><div class="ico ico--today m-squircle"><span class="g">廣</span><i class="safe"></i></div><figcaption>Rounded</figcaption></figure>
+      <figure><div class="ico ico--today m-square"><span class="g">廣</span><i class="safe"></i></div><figcaption>Full canvas</figcaption></figure>
+    </div>
+    <p class="sub">On the circle, the gold frame loses its corners and survives only as four
+    disconnected lines along the sides. That is what your Pixel shows today. The frame sits at 6% from the edge, while the
+    safe zone starts at 10%.</p>
+  </div>
+
+  <div class="frame">
+    <p class="cap">MOCK-36-plain &middot; <em>off-white 粵 (jyut6) on oxblood</em> <span class="rec">recommended</span></p>
+    <div class="masks">
+      <figure><div class="ico ico--plain m-circle"><span class="g">粵</span><i class="safe"></i></div><figcaption>Circle</figcaption></figure>
+      <figure><div class="ico ico--plain m-squircle"><span class="g">粵</span><i class="safe"></i></div><figcaption>Rounded</figcaption></figure>
+      <figure><div class="ico ico--plain m-square"><span class="g">粵</span><i class="safe"></i></div><figcaption>Full canvas</figcaption></figure>
+    </div>
+    <p class="sub">The header's own two colours, <code>--header-bg</code> and <code>--header-text</code>,
+    with the glyph in Noto Serif TC, the face §1 reserves for Chinese. There is no frame, so no shape
+    can cut anything off. Opening the app is continuous: an oxblood icon, an oxblood splash screen, then
+    an oxblood header.</p>
+  </div>
+
+  <div class="frame">
+    <p class="cap">MOCK-36-rule &middot; <em>plain, with a brand rule beneath</em></p>
+    <div class="masks">
+      <figure><div class="ico ico--rule m-circle"><span class="g">粵</span><i class="safe"></i></div><figcaption>Circle</figcaption></figure>
+      <figure><div class="ico ico--rule m-squircle"><span class="g">粵</span><i class="safe"></i></div><figcaption>Rounded</figcaption></figure>
+      <figure><div class="ico ico--rule m-square"><span class="g">粵</span><i class="safe"></i></div><figcaption>Full canvas</figcaption></figure>
+    </div>
+    <p class="sub">The short burnt-orange rule borrows the app's emphasis language: the 2px
+    <code>--brand</code> rule under an active tab. It adds the second brand colour, but the glyph has
+    to shrink about 8% to make room, and at home-screen size the rule reads more like an underline
+    than a signature.</p>
+  </div>
+
+  <div class="frame">
+    <p class="cap">MOCK-36-paper &middot; <em>oxblood 粵 (jyut6) on parchment</em> <span class="no">not recommended</span></p>
+    <div class="masks">
+      <figure><div class="ico ico--paper m-circle"><span class="g">粵</span><i class="safe"></i></div><figcaption>Circle</figcaption></figure>
+      <figure><div class="ico ico--paper m-squircle"><span class="g">粵</span><i class="safe"></i></div><figcaption>Rounded</figcaption></figure>
+      <figure><div class="ico ico--paper m-square"><span class="g">粵</span><i class="safe"></i></div><figcaption>Full canvas</figcaption></figure>
+    </div>
+    <p class="sub">The inverse: the app's body colours rather than its header colours. It's calm and
+    reads like ink on paper, but on a light wallpaper or in a light app drawer it loses its edge
+    entirely. Try the light wallpaper below.</p>
+  </div>
+</div>
+
+<!-- ═══════════════════════════ PART 3 ═══════════════════════════ -->
+<h2>Part 3 · On the home screen, at real size</h2>
+<p class="note">Everything at the size a phone draws it, around 54px, among neighbouring apps. The
+label under each icon is the manifest's <code>short_name</code>. Today it is 廣東話 (gwong2 dung1 waa2),
+characters an English-speaking learner can't read. It would become <i>Jyut</i>.</p>
+
+<div class="frames">
+  <div class="frame" style="width:100%;max-width:520px">
+    <div class="home" id="home">
+      <div class="app"><div class="filler"></div><span class="lbl">Photos</span></div>
+      <div class="app"><div class="filler"></div><span class="lbl">Maps</span></div>
+      <div class="app"><div class="ico ico--today m-circle"><span class="g">廣</span></div><span class="lbl">廣東話</span></div>
+      <div class="app"><div class="filler"></div><span class="lbl">Camera</span></div>
+      <div class="app"><div class="filler"></div><span class="lbl">Clock</span></div>
+      <div class="app"><div class="ico ico--plain m-circle"><span class="g">粵</span></div><span class="lbl">Jyut</span></div>
+      <div class="app"><div class="ico ico--rule m-circle"><span class="g">粵</span></div><span class="lbl">Jyut</span></div>
+      <div class="app"><div class="ico ico--paper m-circle"><span class="g">粵</span></div><span class="lbl">Jyut</span></div>
+      <div class="app"><div class="filler"></div><span class="lbl">Calendar</span></div>
+      <div class="app"><div class="filler"></div><span class="lbl">Settings</span></div>
+    </div>
+    <p class="sub">Top row: today, circled. Second row, left to right: MOCK-36-plain, MOCK-36-rule and
+    MOCK-36-paper. 粵 (jyut6) has thirteen strokes, which is dense, so this row is the real test of
+    whether it holds up small. In the heavy serif it reads as a confident shape even where the
+    individual strokes blur, and that is all an icon needs.</p>
+  </div>
+</div>
+
+<!-- ═══════════════════════════ PART 4 ═══════════════════════════ -->
+<h2>Part 4 · What building it would touch</h2>
+<p class="note">For scope only. None of this is changed by this mockup.</p>
+<table>
+  <tr><th>Where</th><th>Today</th><th>Would become</th></tr>
+  <tr><td><code>render.js</code> <code>renderHeader()</code></td><td>廣東話 (gwong2 dung1 waa2) / <i>Cantonese Learner</i></td><td>The chosen nameplate. There's one call site, and the nameplate rules in <code>styles.css</code> gain the wordmark styles rather than a new component.</td></tr>
+  <tr><td><code>manifest.json</code></td><td><code>short_name</code> 廣東話 (gwong2 dung1 waa2); name <i>廣東話 (gwong2 dung1 waa2) Cantonese Learner</i>; colours <code>#1a1a2e</code></td><td><code>short_name</code> <i>Jyut</i>, <code>name</code> <i>Jyut — Learn Cantonese</i>, both colours <code>#6E2639</code>, and a description that no longer says "personal".</td></tr>
+  <tr><td><code>index.html</code></td><td><code>theme-color</code> <code>#1A1815</code>; <code>&lt;title&gt;</code>; no Apple touch icon</td><td><code>theme-color</code> to match the manifest (see the open question below), a new title, and an <code>apple-touch-icon</code>. Without that, iOS ignores the manifest icons and uses a screenshot.</td></tr>
+  <tr><td><code>icon-192.png</code>, <code>icon-512.png</code></td><td>Navy and gold 廣 (gwong2), frame outside the safe zone</td><td>Regenerated from one SVG master kept in <code>docs/design/</code>, so the icon can be re-exported rather than redrawn. A 180px Apple icon is added.</td></tr>
+  <tr><td><code>sw.js</code></td><td>v152</td><td>v153, plus the precache list if a new icon file is added.</td></tr>
+  <tr><td><code>DESIGN_SYSTEM.md</code> §7, BACKLOG § Product</td><td>Name and logo marked open</td><td>Closed, pointing at the new DES rows. The styleguide's header section updated in the same commit.</td></tr>
+</table>
+
+<p class="note"><b>Open question, the status bar.</b> <code>theme-color</code> paints the phone's status
+bar. Today that's a near-black <code>#1A1815</code> above an oxblood header, and I can't find a
+decision behind it. The frames above draw the bar in oxblood, so the bar and the header read as one
+band. Toggle <i>Status bar as today</i> to compare.</p>
+
+</div>
+
+<script>
+  const toggle = (id, fn) => {
+    const b = document.getElementById(id);
+    b.addEventListener('click', () => {
+      const on = b.getAttribute('aria-pressed') !== 'true';
+      b.setAttribute('aria-pressed', String(on));
+      fn(on);
+    });
+  };
+  toggle('lowerbtn', on => {
+    document.querySelectorAll('[data-w]').forEach(el => el.textContent = on ? 'jyut' : 'Jyut');
+  });
+  toggle('safebtn', on => document.body.classList.toggle('showsafe', on));
+  toggle('wallbtn', on => document.body.classList.toggle('lightwall', on));
+  toggle('sbbtn', on => document.querySelectorAll('.statusbar').forEach(el => el.style.setProperty('--sb', on ? '#1A1815' : '')));
+</script>
+</body>
+</html>

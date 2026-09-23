@@ -1,12 +1,12 @@
 {
-  "name": "廣東話 Cantonese Learner",
-  "short_name": "廣東話",
-  "description": "Personal Cantonese learning app with vocabulary, sentences and conversations",
+  "name": "Jyut — Learn Cantonese",
+  "short_name": "Jyut",
+  "description": "Learn Cantonese through words, sentences and conversations, with jyutping and audio for every word.",
   "start_url": "./index.html",
   "display": "standalone",
   "orientation": "portrait",
-  "background_color": "#1a1a2e",
-  "theme_color": "#1a1a2e",
+  "background_color": "#6E2639",
+  "theme_color": "#481925",
   "icons": [
     {
       "src": "./icon-192.png",

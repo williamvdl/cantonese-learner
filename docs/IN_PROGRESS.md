@@ -4,44 +4,49 @@
 questions behind it. Meant to be short-lived — when a piece ships, fold its
 outcome into STATUS.md and clear this file back down for the next thing.*
 
-Last updated: 2026-09-20 · sw.js at v152
+Last updated: 2026-09-23 · sw.js at v153
 
-## Nothing in progress
+## v153 — Jyut: name, nameplate, icon, status bar — awaiting deploy and device QA
 
-**v152 shipped and device QA is done (2026-09-20).** The DES-57 same-sound rule
-is closed out across three deploys, all confirmed on the Pixel:
+The product is named **Jyut** (DES-58), and the header, app icon and status bar
+now come from the design system: the nameplate is MOCK-36-pair, the icon
+MOCK-36-plain, the status bar MOCK-37-deep. The detail is in the STATUS row and
+the DESIGN_DECISIONS rows. **Built and checked in the sandbox, not yet on the
+Pixel.** Clear this section once device QA passes.
 
-- **v150** — the rule itself: a recogniser homophone with identical sound and
-  tone counts as a match, shown as a plain tick; tone differences still fail.
-  Shipped together with the `dup-css.js` script and the 47-declaration CSS sweep.
-- **v151** — readings resolved per whole string rather than per character, so a
-  character is read in its word's context (蕃 is faan1 in 蕃茄, faan4 alone).
-- **v152** — a fold is not an edit, so the four-character floor no longer blocks
-  it on short targets like 唔該晒 (m4 goi1 saai3).
+**Device QA — worth knowing before judging it:** Android caches a PWA's icon and
+name, so an installed app may keep the old 廣 (gwong2) icon and 廣東話 (gwong2 dung1
+waa2) label after the deploy. If it does, remove the app from the home screen and
+install it again from Chrome; the header and status bar update without that.
 
-Three defects in three deploys, each from a premise not measured before building
-on it. The notes are in STATUS.md. If a fourth surfaces on this rule, the right
-move is to instrument the matcher end to end rather than patch the next symptom.
+**Blocked on nothing.** The follow-ups for the name (domain, store names,
+trademark advice) are in BACKLOG § Product.
 
-This file is cleared down. **Next candidate work:** an aggregating runner for the
-standing checks (the cheapest, and it guards against the silent load failures
-found at v150), the 164 Check B structural candidates from `dup-css.js` (needs
-William's judgement), the 4 remaining Check A rule-splits, the open question
-about extending the particle rule beyond the final position, and the
-`char-jyutping.json` coverage measurement. All are in BACKLOG.md.
+**Next candidate work after QA:** an aggregating runner for the standing checks
+(the cheapest, and it guards against the silent load failures found at v150), the
+164 Check B structural candidates from `dup-css.js` (needs William's judgement),
+the 4 remaining Check A rule-splits, the open question about extending the
+particle rule beyond the final position, and the `char-jyutping.json` coverage
+measurement. All are in BACKLOG.md.
 
-### Standing checks — twelve, all green
+### Standing checks — twelve: eleven exit 0, `dup-css.js` exits 1 on four known
 
-`validate.js`, `jyutping-check.js`, `wiring-check.js`, `nav-harness.js`,
-`tier-harness.js`, `dead-css.js`, `sentence-pool-harness.js`,
-`sentence-review-harness.js`, `snapshot-harness.js`, `gap-opts-check.js`,
-`asr-replay-harness.js`, and **`dup-css.js` (new at v150)**. `dup-css.js` is a
-standing check, not a probe — it asserts an invariant and is meant to run before
-every deploy, rather than answering one question and dying. Its Check A gates
-(exit 1 on any same-selector duplicate); its Check B is informational and
-deliberately never gates, because it is a heuristic that cannot reach zero.
+`validate.js` (now also asserting the chrome colours), `jyutping-check.js`,
+`wiring-check.js`, `nav-harness.js`, `tier-harness.js`, `dead-css.js`,
+`sentence-pool-harness.js`, `sentence-review-harness.js`, `snapshot-harness.js`,
+`gap-opts-check.js` and `asr-replay-harness.js` all exit 0 at v153. **`dup-css.js`
+exits 1**, and did at v152 too: its Check A gates on any same-selector duplicate,
+and the four it finds are the known rule-splits in BACKLOG. The count is 4 before
+and after v153. This section used to say *"all green"*, which was wrong; see
+STATUS § Notes worth carrying forward. Check B is informational and never gates.
 
 ## Previously
+
+**v152 shipped and device QA is done (2026-09-20).** The DES-57 same-sound rule
+is closed out across three deploys, all confirmed on the Pixel: v150 the rule
+itself, v151 readings resolved per whole string, v152 a fold no longer blocked by
+the four-character floor. The notes are in STATUS.md. If a fourth defect surfaces
+on this rule, instrument the matcher end to end rather than patch the next symptom.
 
 **v138 and v139 shipped and this file is cleared down again.** A
 commercial-readiness review was written up as `docs/PRODUCTISATION_REVIEW.md` —

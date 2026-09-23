@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>build-icons — export the app icon PNGs from the SVG master</title>
+<!--
+  build-icons.html — re-exports the three app icon PNGs from
+  docs/design/app-icon.svg, so the icon is re-exported rather than redrawn.
+
+  Why an HTML page rather than a Node script: rasterising an SVG in Node needs a
+  dependency, and the tools here are zero-dependency by rule. A browser already
+  has a rasteriser.
+
+  How to use:
+    - Served over http(s) (GitHub Pages, or any local static server), it loads
+      the master automatically from ../docs/design/app-icon.svg.
+    - Opened straight from disk (file://), browsers refuse to let a canvas export
+      an image loaded from another file, so pick the SVG with the button instead.
+  Then download the three PNGs and replace the files of the same name at the
+  repo root. Any change to the icon needs a sw.js version bump like any other
+  shell change, because index.html and manifest.json point at these files.
+
+  The glyph in the master is an outline, not text, so no font is needed here.
+-->
+<style>
+  body { font-family: system-ui, sans-serif; margin: 24px; color: #1C1917; background: #FAF8F5; max-width: 720px; }
+  h1 { font-size: 20px; margin: 0 0 6px; }
+  p { font-size: 14px; line-height: 1.5; color: #57534E; }
+  .row { display: flex; gap: 24px; align-items: flex-end; flex-wrap: wrap; margin-top: 16px; }
+  figure { margin: 0; text-align: center; font-size: 12px; color: #57534E; }
+  canvas { display: block; margin-bottom: 6px; background: #EAE4DC; }
+  a { color: #C2410C; font-weight: 600; }
+  #status { font-size: 13px; }
+</style>
+</head>
+<body>
+<h1>Export app icons</h1>
+<p>Loads <code>docs/design/app-icon.svg</code> and draws it at the three sizes the app uses.</p>
+<p><input type="file" id="pick" accept=".svg,image/svg+xml"> <span id="status">Loading the master…</span></p>
+<div class="row" id="out"></div>
+<script>
+  const SIZES = [
+    { file: 'icon-512.png',         px: 512 },
+    { file: 'icon-192.png',         px: 192 },
+    { file: 'apple-touch-icon.png', px: 180 },
+  ];
+  const status = document.getElementById('status');
+
+  function render(src) {
+    const img = new Image();
+    img.onload = () => {
+      const out = document.getElementById('out');
+      out.innerHTML = '';
+      try {
+        for (const { file, px } of SIZES) {
+          const c = document.createElement('canvas');
+          c.width = c.height = px;
+          const ctx = c.getContext('2d');
+          ctx.imageSmoothingQuality = 'high';
+          ctx.drawImage(img, 0, 0, px, px);
+          const url = c.toDataURL('image/png');   // throws if the canvas is tainted
+          const fig = document.createElement('figure');
+          c.style.width = c.style.height = Math.min(px, 160) + 'px';
+          fig.append(c);
+          const a = document.createElement('a');
+          a.href = url; a.download = file; a.textContent = `${file} (${px}px)`;
+          fig.append(a);
+          out.append(fig);
+        }
+        status.textContent = 'Ready. Download all three and replace the files at the repo root.';
+      } catch (e) {
+        out.innerHTML = '';
+        status.textContent = 'The browser blocked the export (opened from disk). Pick the SVG with the button instead.';
+      }
+    };
+    img.onerror = () => { status.textContent = 'Could not load the master. Pick docs/design/app-icon.svg with the button.'; };
+    img.src = src;
+  }
+
+  document.getElementById('pick').addEventListener('change', e => {
+    const f = e.target.files[0];
+    if (!f) return;
+    const r = new FileReader();
+    r.onload = () => render(r.result);   // a data: URL never taints the canvas
+    r.readAsDataURL(f);
+  });
+
+  render('../docs/design/app-icon.svg');
+</script>
+</body>
+</html>

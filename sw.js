@@ -1,4 +1,4 @@
-// ── Cantonese Learner — Service Worker ──────────────────────────────────────
+// ── Jyut (Tea House Cantonese Learner) — Service Worker ─────────────────────────
 // Cache-first strategy with stale-while-revalidate. Caches the app shell and
 // all data files on install, so the app works fully offline.
 //
@@ -6,7 +6,7 @@
 // up a new service worker when this string changes. If you forget to bump it,
 // users will keep serving the old index.html from cache.
 
-const CACHE_VERSION = 'cantonese-teahouse-v152';
+const CACHE_VERSION = 'cantonese-teahouse-v153';
 
 // App shell — fetched at install time.
 // NOTE: when adding a new .js or .css file to the app, add it here too,

@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Status bar colour — mockup 37, on the MOCK-36-pair nameplate</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Noto+Serif+TC:wght@400;600;700;900&display=swap" rel="stylesheet">
+<style>
+:root {
+    /* Tokens transcribed from styles.css v152 — only the ones this page uses. */
+    --font-serif:   'Noto Serif TC', 'Noto Serif CJK TC', 'Fraunces', Georgia, serif;
+    --font-ui:      'Inter', 'Noto Serif TC', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+    --font-display: 'Fraunces', 'Noto Serif TC', 'Noto Serif CJK TC', Georgia, serif;
+    --fs-micro: 11px; --fs-meta: 12px; --fs-small: 13px; --fs-lead: 17px; --fs-h2: 28px;
+    --fw-medium: 500; --fw-semi: 600; --fw-bold: 700;
+    --sp-2: 8px; --sp-3: 12px; --sp-4: 16px; --sp-5: 24px;
+    --r-md: 12px; --r-pill: 999px; --tap-min: 44px;
+    --elev-1: 0 1px 2px rgba(58, 42, 30, 0.04), 0 1px 3px rgba(58, 42, 30, 0.06);
+    --elev-2: 0 2px 4px rgba(58, 42, 30, 0.05), 0 4px 8px rgba(58, 42, 30, 0.07);
+    --ink: #1C1917; --ink-soft: #292524;
+    --parchment: #FFFFFF; --parchment-warm: #FAF8F5; --parchment-deep: #F0EBE4; --parchment-border: #EAE4DC;
+    --brand: #C2410C; --brand-edge: #F5D9C9; --muted-dark: #78716C;
+    --feedback-good-tint: #DCFCE7; --feedback-good-text: #15803D;
+    --header-bg: #6E2639; --header-text: #F7EEE8; --header-sub: rgba(255,255,255,0.6); --header-icon: #F7EEE8;
+    --border-soft: 1px solid var(--parchment-deep);
+}
+body { margin:0; background:var(--parchment-deep); font-family:var(--font-ui); color:var(--ink); padding:24px 16px 64px; }
+.wrap { max-width:860px; margin:0 auto; }
+h1 { font-family:var(--font-display); font-size:var(--fs-h2); font-weight:var(--fw-medium); margin:0 0 6px; }
+h2 { font-family:var(--font-display); font-size:var(--fs-lead); font-weight:var(--fw-medium); margin:40px 0 4px; }
+.lede { font-size:var(--fs-small); line-height:1.55; color:var(--muted-dark); margin:0 0 8px; max-width:66ch; }
+.note { font-size:var(--fs-meta); line-height:1.6; color:var(--muted-dark); margin:8px 0 0; max-width:66ch; }
+.note b, .lede b, .sub b { color:var(--ink-soft); }
+.frames { display:flex; gap:22px; flex-wrap:wrap; align-items:flex-start; margin-top:14px; }
+.frame { width:390px; max-width:100%; }
+.frame > .cap { font-size:var(--fs-micro); font-weight:var(--fw-semi); letter-spacing:.1em; text-transform:uppercase; color:var(--muted-dark); margin:0 0 8px; min-height:30px; }
+.frame > .cap em { font-style:normal; color:var(--brand); }
+.frame > .sub { font-size:var(--fs-meta); line-height:1.55; color:var(--muted-dark); margin:8px 0 0; }
+code { font-family:ui-monospace,Menlo,monospace; font-size:11px; background:var(--parchment-deep); padding:1px 5px; border-radius:4px; }
+.rec { display:inline-block; background:var(--feedback-good-tint); color:var(--feedback-good-text); font-size:9px; font-weight:var(--fw-semi); letter-spacing:.1em; text-transform:uppercase; padding:3px 6px; border-radius:4px; vertical-align:2px; }
+.no  { display:inline-block; background:#EDE7DE; color:var(--muted-dark); font-size:9px; font-weight:var(--fw-semi); letter-spacing:.1em; text-transform:uppercase; padding:3px 6px; border-radius:4px; vertical-align:2px; }
+.toolbar { margin:18px 0 0; font-size:var(--fs-meta); color:var(--muted-dark); display:flex; align-items:center; gap:10px; flex-wrap:wrap; }
+.toolbar button { font:inherit; font-weight:var(--fw-semi); color:var(--brand); background:transparent; border:1px solid var(--brand-edge); border-radius:var(--r-pill); padding:5px 12px; cursor:pointer; }
+.toolbar button[aria-pressed="true"] { background:var(--brand); color:#fff; border-color:var(--brand); }
+
+/* ── a phone top: status bar, the real header, a little of the page ── */
+.phone { position:relative; border-radius:18px 18px 0 0; overflow:hidden; background:var(--parchment-warm); box-shadow:var(--elev-1); }
+.statusbar { height:24px; display:flex; align-items:center; justify-content:space-between; padding:0 16px; font-size:11px; font-weight:var(--fw-semi); }
+.sbi { display:flex; gap:4px; align-items:center; }
+.sbi i { display:block; width:9px; height:9px; border-radius:2px; background:currentColor; }
+.sbi i:first-child { border-radius:50%; }
+/* header — transcribed from styles.css v152, nameplate as MOCK-36-pair */
+.header { background:var(--header-bg); padding:var(--sp-3) var(--sp-5); box-shadow:var(--elev-2); }
+.header-row { display:flex; align-items:center; gap:var(--sp-2); }
+.header-slot { flex:0 0 var(--tap-min); display:flex; align-items:center; justify-content:center; }
+.header-title { flex:1 1 auto; min-width:0; display:flex; align-items:center; flex-direction:column; }
+.btn-icon { width:var(--tap-min); height:var(--tap-min); border-radius:var(--r-pill); color:var(--header-icon); opacity:.72; display:inline-flex; align-items:center; justify-content:center; }
+.nameplate { display:flex; flex-direction:column; align-items:center; min-height:var(--tap-min); justify-content:center; font-family:inherit; background:transparent; border:none; padding:0; margin:0; cursor:pointer; }
+.nameplate .line { display:flex; align-items:baseline; gap:7px; }
+.nameplate .glyph { font-family:var(--font-serif); font-size:22px; font-weight:var(--fw-bold); color:var(--header-text); line-height:1.05; }
+.nameplate .word { font-family:var(--font-display); font-size:25px; font-weight:var(--fw-semi); color:var(--header-text); line-height:1.05; letter-spacing:0.01em; font-variation-settings:'opsz' 72; }
+.nameplate .en { font-size:9px; color:var(--header-sub); text-transform:uppercase; margin-top:1px; font-family:var(--font-ui); font-weight:var(--fw-bold); letter-spacing:0.16em; }
+.body { padding:18px 20px 22px; }
+.pt { font-family:var(--font-display); font-size:22px; font-weight:var(--fw-semi); margin:0 0 12px; color:var(--ink); }
+.card { height:46px; border-radius:var(--r-md); background:var(--parchment); border:1px solid var(--parchment-border); margin-bottom:10px; }
+.card.short { width:62%; }
+/* centre-line overlay: where the nameplate sits vs the middle of the coloured block */
+.ln { position:absolute; left:0; right:0; height:0; display:none; pointer-events:none; }
+.ln-plate { border-top:1.5px solid rgba(255,214,110,.95); }
+.ln-band  { border-top:1.5px dashed rgba(120,220,255,.95); }
+.showlines .ln { display:block; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<h1>Status bar colour</h1>
+<p class="lede">The status bar is the strip at the top of the phone showing the time and battery. An
+installed web app picks its colour through <code>theme-color</code>. Today it is <code>#1A1815</code>,
+which isn't a token, above the oxblood header. Mockup 36 drew it in oxblood, and on device-sized frames
+that made the nameplate look low. This page compares five colours from the palette, all on the approved
+MOCK-36-pair nameplate.</p>
+
+<div class="toolbar">
+  <button id="linebtn" type="button" aria-pressed="false">Show centre lines</button>
+  <span>Solid gold = the nameplate's centre. Dashed blue = the middle of the block the eye reads as one colour.</span>
+</div>
+<p class="note"><b>Why oxblood looks off centre.</b> The status bar sits outside the app, so the
+header can only centre the nameplate on its own 68px. When the bar is the same colour, the eye reads
+one 92px block instead, and the nameplate sits about 12px below that block's middle. Any colour that
+reads as <i>different</i> from the header puts the two lines back together. Turn the lines on to
+see it.</p>
+
+<h2>Five options</h2>
+<div class="frames">
+  <div class="frame">
+    <p class="cap">MOCK-37-oxblood &middot; <em>the same as the header</em> </p>
+    <div class="phone" data-merged="true">
+      <div class="statusbar" style="background:var(--header-bg);color:rgba(255,255,255,.88)"><span>9:41</span><span class="sbi"><i></i><i></i><i></i></span></div>
+      <div class="header"><div class="header-row">
+        <div class="header-slot"><span class="btn-icon"><svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg></span></div>
+        <div class="header-title"><button class="nameplate" type="button">
+          <span class="line"><span class="glyph">粵</span><span class="word">Jyut</span></span>
+          <span class="en">Learn Cantonese</span>
+        </button></div>
+        <div class="header-slot"><span class="btn-icon"><svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3.2"/><path d="M19.1 14.5a1.6 1.6 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.6 1.6 0 0 0-1.8-.3 1.6 1.6 0 0 0-1 1.5v.2a2 2 0 1 1-4 0v-.1a1.6 1.6 0 0 0-1-1.5 1.6 1.6 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.6 1.6 0 0 0 .3-1.8 1.6 1.6 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.6 1.6 0 0 0 1.5-1 1.6 1.6 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.6 1.6 0 0 0 1.8.3h.1a1.6 1.6 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.6 1.6 0 0 0 1 1.5 1.6 1.6 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.6 1.6 0 0 0-.3 1.8v.1a1.6 1.6 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.6 1.6 0 0 0-1.5 1z"/></svg></span></div>
+      </div></div>
+      <div class="body"><p class="pt">Good evening</p><div class="card"></div><div class="card short"></div></div>
+      <i class="ln ln-plate"></i><i class="ln ln-band"></i>
+    </div>
+    <p class="sub"><b><code>--header-bg</code> <code>#6E2639</code>.</b> The bar and the header become one 92px block, but the nameplate is still centred on the 68px header, so it sits about 12px below the block's middle. That is the effect you noticed. The only fix inside this option is unequal header padding, which would then look wrong anywhere the bar isn't oxblood, such as in a browser tab.</p>
+  </div>
+  <div class="frame">
+    <p class="cap">MOCK-37-deep &middot; <em>a darker oxblood</em> <span class="rec">recommended</span></p>
+    <div class="phone" data-merged="false">
+      <div class="statusbar" style="background:#481925;color:rgba(255,255,255,.88)"><span>9:41</span><span class="sbi"><i></i><i></i><i></i></span></div>
+      <div class="header"><div class="header-row">
+        <div class="header-slot"><span class="btn-icon"><svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg></span></div>
+        <div class="header-title"><button class="nameplate" type="button">
+          <span class="line"><span class="glyph">粵</span><span class="word">Jyut</span></span>
+          <span class="en">Learn Cantonese</span>
+        </button></div>
+        <div class="header-slot"><span class="btn-icon"><svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3.2"/><path d="M19.1 14.5a1.6 1.6 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.6 1.6 0 0 0-1.8-.3 1.6 1.6 0 0 0-1 1.5v.2a2 2 0 1 1-4 0v-.1a1.6 1.6 0 0 0-1-1.5 1.6 1.6 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.6 1.6 0 0 0 .3-1.8 1.6 1.6 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.6 1.6 0 0 0 1.5-1 1.6 1.6 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.6 1.6 0 0 0 1.8.3h.1a1.6 1.6 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.6 1.6 0 0 0 1 1.5 1.6 1.6 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.6 1.6 0 0 0-.3 1.8v.1a1.6 1.6 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.6 1.6 0 0 0-1.5 1z"/></svg></span></div>
+      </div></div>
+      <div class="body"><p class="pt">Good evening</p><div class="card"></div><div class="card short"></div></div>
+      <i class="ln ln-plate"></i><i class="ln ln-band"></i>
+    </div>
+    <p class="sub"><b><code>#481925</code>, a darker shade of <code>--header-bg</code>. New value, as <code>--header-deep</code>.</b> The same colour family, one step darker. The change in tone is enough for the eye to separate the bar from the header, so the nameplate reads as centred again, and the top of the screen still reads as one family of colour. The cost is one new token: a shade of an existing colour rather than a new hue, the way <code>--brand-dark</code> relates to <code>--brand</code>.</p>
+  </div>
+  <div class="frame">
+    <p class="cap">MOCK-37-ink &middot; <em>black</em> </p>
+    <div class="phone" data-merged="false">
+      <div class="statusbar" style="background:var(--ink);color:rgba(255,255,255,.88)"><span>9:41</span><span class="sbi"><i></i><i></i><i></i></span></div>
+      <div class="header"><div class="header-row">
+        <div class="header-slot"><span class="btn-icon"><svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg></span></div>
+        <div class="header-title"><button class="nameplate" type="button">
+          <span class="line"><span class="glyph">粵</span><span class="word">Jyut</span></span>
+          <span class="en">Learn Cantonese</span>
+        </button></div>
+        <div class="header-slot"><span class="btn-icon"><svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3.2"/><path d="M19.1 14.5a1.6 1.6 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.6 1.6 0 0 0-1.8-.3 1.6 1.6 0 0 0-1 1.5v.2a2 2 0 1 1-4 0v-.1a1.6 1.6 0 0 0-1-1.5 1.6 1.6 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.6 1.6 0 0 0 .3-1.8 1.6 1.6 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.6 1.6 0 0 0 1.5-1 1.6 1.6 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.6 1.6 0 0 0 1.8.3h.1a1.6 1.6 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.6 1.6 0 0 0 1 1.5 1.6 1.6 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.6 1.6 0 0 0-.3 1.8v.1a1.6 1.6 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.6 1.6 0 0 0-1.5 1z"/></svg></span></div>
+      </div></div>
+      <div class="body"><p class="pt">Good evening</p><div class="card"></div><div class="card short"></div></div>
+      <i class="ln ln-plate"></i><i class="ln ln-band"></i>
+    </div>
+    <p class="sub"><b><code>--ink</code> <code>#1C1917</code>.</b> Effectively what you have today. Today's <code>#1A1815</code> isn't a token, but it is visually identical to <code>--ink</code>, so choosing this just points it at the token. It gives the strongest, most neutral separation and is how most apps look. The only cost is that it adds a colour to the chrome that the header itself doesn't use.</p>
+  </div>
+  <div class="frame">
+    <p class="cap">MOCK-37-brand &middot; <em>brand orange</em> <span class="no">not recommended</span></p>
+    <div class="phone" data-merged="false">
+      <div class="statusbar" style="background:var(--brand);color:rgba(255,255,255,.88)"><span>9:41</span><span class="sbi"><i></i><i></i><i></i></span></div>
+      <div class="header"><div class="header-row">
+        <div class="header-slot"><span class="btn-icon"><svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg></span></div>
+        <div class="header-title"><button class="nameplate" type="button">
+          <span class="line"><span class="glyph">粵</span><span class="word">Jyut</span></span>
+          <span class="en">Learn Cantonese</span>
+        </button></div>
+        <div class="header-slot"><span class="btn-icon"><svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3.2"/><path d="M19.1 14.5a1.6 1.6 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.6 1.6 0 0 0-1.8-.3 1.6 1.6 0 0 0-1 1.5v.2a2 2 0 1 1-4 0v-.1a1.6 1.6 0 0 0-1-1.5 1.6 1.6 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.6 1.6 0 0 0 .3-1.8 1.6 1.6 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.6 1.6 0 0 0 1.5-1 1.6 1.6 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.6 1.6 0 0 0 1.8.3h.1a1.6 1.6 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.6 1.6 0 0 0 1 1.5 1.6 1.6 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.6 1.6 0 0 0-.3 1.8v.1a1.6 1.6 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.6 1.6 0 0 0-1.5 1z"/></svg></span></div>
+      </div></div>
+      <div class="body"><p class="pt">Good evening</p><div class="card"></div><div class="card short"></div></div>
+      <i class="ln ln-plate"></i><i class="ln ln-band"></i>
+    </div>
+    <p class="sub"><b><code>--brand</code> <code>#C2410C</code>.</b> It separates clearly, but it becomes the loudest thing on the screen, above everything. §4 gives <code>--brand</code> one meaning, <i>the thing to do next</i>, and spending it on permanent chrome weakens that meaning everywhere else. Orange against oxblood is also the least calm pairing here.</p>
+  </div>
+  <div class="frame">
+    <p class="cap">MOCK-37-paper &middot; <em>parchment</em> <span class="no">not recommended</span></p>
+    <div class="phone" data-merged="false">
+      <div class="statusbar" style="background:var(--parchment-deep);color:rgba(28,25,23,.85)"><span>9:41</span><span class="sbi"><i></i><i></i><i></i></span></div>
+      <div class="header"><div class="header-row">
+        <div class="header-slot"><span class="btn-icon"><svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg></span></div>
+        <div class="header-title"><button class="nameplate" type="button">
+          <span class="line"><span class="glyph">粵</span><span class="word">Jyut</span></span>
+          <span class="en">Learn Cantonese</span>
+        </button></div>
+        <div class="header-slot"><span class="btn-icon"><svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3.2"/><path d="M19.1 14.5a1.6 1.6 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.6 1.6 0 0 0-1.8-.3 1.6 1.6 0 0 0-1 1.5v.2a2 2 0 1 1-4 0v-.1a1.6 1.6 0 0 0-1-1.5 1.6 1.6 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.6 1.6 0 0 0 .3-1.8 1.6 1.6 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.6 1.6 0 0 0 1.5-1 1.6 1.6 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.6 1.6 0 0 0 1.8.3h.1a1.6 1.6 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.6 1.6 0 0 0 1 1.5 1.6 1.6 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.6 1.6 0 0 0-.3 1.8v.1a1.6 1.6 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.6 1.6 0 0 0-1.5 1z"/></svg></span></div>
+      </div></div>
+      <div class="body"><p class="pt">Good evening</p><div class="card"></div><div class="card short"></div></div>
+      <i class="ln ln-plate"></i><i class="ln ln-band"></i>
+    </div>
+    <p class="sub"><b><code>--parchment-deep</code> <code>#F0EBE4</code>, with dark icons.</b> The app's paper colour, so the header reads as a band laid across the page. It separates strongly, but a light strip above a dark header looks upside down, and it becomes a bright bar on an OLED screen at night.</p>
+  </div>
+</div>
+
+<p class="note"><b>What Android does with the icons.</b> The time and battery icons switch between
+light and dark on their own, based on how light the chosen colour is. Only MOCK-37-paper gets dark
+icons. Nothing else about the header changes in any option.</p>
+
+</div>
+<script>
+  document.getElementById('linebtn').addEventListener('click', e => {
+    const b = e.currentTarget, on = b.getAttribute('aria-pressed') !== 'true';
+    b.setAttribute('aria-pressed', String(on));
+    document.body.classList.toggle('showlines', on);
+    if (on) placeLines();
+  });
+  function placeLines() {
+    document.querySelectorAll('.phone').forEach(ph => {
+      const top = ph.getBoundingClientRect().top;
+      const sb = ph.querySelector('.statusbar').getBoundingClientRect();
+      const hd = ph.querySelector('.header').getBoundingClientRect();
+      const np = ph.querySelector('.nameplate').getBoundingClientRect();
+      const bandTop = ph.dataset.merged === 'true' ? sb.top : hd.top;
+      ph.querySelector('.ln-plate').style.top = (np.top + np.height / 2 - top) + 'px';
+      ph.querySelector('.ln-band').style.top = ((bandTop + hd.bottom) / 2 - top) + 'px';
+    });
+  }
+  window.addEventListener('resize', () => document.body.classList.contains('showlines') && placeLines());
+</script>
+</body>
+</html>
