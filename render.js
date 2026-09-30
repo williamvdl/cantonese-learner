@@ -1936,9 +1936,9 @@ function renderLessonHeader(lesson) {
   // element to work against rather than an anonymous text node.
   const segTabs = `
     <div class="tabs">
-      <button class="tab${wordsActive?' tab--on':''}" id="tab-words">${icon('bookOpen',15)}<span>Learn</span></button>
-      <button class="tab${convoActive?' tab--on':''}" id="tab-convo">${icon('messageCircle',15)}<span>Chat</span></button>
-      <button class="tab${isQuiz?' tab--on':''}" id="tab-quiz">${icon('quiz',15)}<span>Quiz</span></button>
+      <button class="tab${wordsActive?' tab--on':''}" id="tab-words">${icon('bookOpen',19)}<span>Learn</span></button>
+      <button class="tab${convoActive?' tab--on':''}" id="tab-convo">${icon('messageCircle',19)}<span>Chat</span></button>
+      <button class="tab${isQuiz?' tab--on':''}" id="tab-quiz">${icon('quiz',19)}<span>Quiz</span></button>
     </div>`;
   return `
     <div class="lesson-header">
@@ -2380,7 +2380,7 @@ function renderStudy(lesson) {
       const note = getRoundNote(state.topic, state.currentRound);
       return note
         ? `<div class="lesson-note">
-             <div class="lesson-note-title">About this lesson</div>
+             <div class="eyebrow">About this lesson</div>
              <div class="lesson-note-body">${note}</div>
            </div>`
         : '';

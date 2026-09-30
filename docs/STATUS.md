@@ -13,7 +13,7 @@ not a history log. Approved design decisions and whether they were built live in
 > convention (`v121 — <what changed>`) so this file stops being load-bearing on
 > its own.
 
-Last updated: 2026-09-23 · sw.js at v154
+Last updated: 2026-09-23 · sw.js at v155
 
 ## Confirmed live and working
 - **Checkpoint sentence review** (v134, DES-44/45). Third checkpoint activity:
@@ -253,8 +253,23 @@ orphan hues `#B7861E`, `#e4d4ad`, `#8a6716`,
 | — | v152 | **A homophone fold was being blocked by the edit budget on short targets.** Reported the same evening as v151: 唔該晒！(m4 goi1 saai3!) heard as 唔該曬 (m4 goi1 saai3) — a true homophone, correctly said — came back "Hmm, that didn't quite match" **while the grid beneath it drew three green ticks**. `fuzzyMatch()` bailed at `if (!allowance) return false` before the comparison ran, because a three-character target gets an allowance of 0; `alignChars()` had no such gate and applied the fold. So the learner was told the attempt failed while being shown every character was right. **The fourth instance of the matcher and the panel disagreeing** (v140, v144, v151, this). The fix is one line and rests on a distinction that was implicit and should not have been: **the four-character floor exists to stop EDITS being forgiven in short strings, and a fold is not an edit.** Letting the comparison run costs no strictness — with an allowance of 0 only a distance of zero passes, so every character must either match outright or fold, and a real substitution still scores 1 and still fails: 媽媽 (maa1 maa1) heard as 嫲嫲 (maa4 maa4) is rejected exactly as before, and so is 好彩 (hou2 coi2) heard as 好菜 (hou2 coi3). **Eleven corpus conversation lines sit under the floor**, including both 唔該晒 variants, so this was reachable content rather than a theoretical edge — see the note below, because it had been dismissed as theoretical in the same session. **Twelve standing checks green. Device QA 2026-09-20: confirmed on the Pixel.** |
 | DES-58, MOCK-36-pair, MOCK-36-plain, MOCK-37-deep | v153 | **The product is named Jyut, and the header, icon and status bar now come from the design system.** The name replaces the placeholder 廣東話 (gwong2 dung1 waa2) / *Cantonese Learner*: the nameplate is 粵 (jyut6) beside *Jyut* with *Learn Cantonese* beneath (`.nameplate-mark`, which retires `.header-title .zh`), the manifest `short_name` is *Jyut*, so the home-screen label is readable English, and the page title follows. The icon is 粵 (jyut6) in `--header-text` on `--header-bg`, replacing a navy-and-gold 廣 (gwong2) whose frame the Pixel's circle mask cut into four stray lines; it is exported from an outlined SVG master (`docs/design/app-icon.svg`) by a new zero-dependency page, `tools/build-icons.html`, and an `apple-touch-icon.png` is added because iOS ignores manifest icons. The status bar becomes `#481925`, a darker oxblood, because a bar matching the header merged into one block and left the nameplate reading 12px low. **Three chrome colours had drifted three ways** — `theme-color` `#1A1815`, manifest `#1a1a2e`, header oxblood — and `validate.js` now asserts the manifest against `index.html` and `--header-bg`, mutation-tested in both directions. **Invisible on screen:** nothing below the header changes. Clearance for the name is recorded in DES-58. |
 | MOCK-38-corner, DES-59 | v154 | **The line can be replayed while speaking, in the checkpoint and in Chat.** Reported from the device: neither the checkpoint's *Say it in Cantonese* nor a conversation's *your turn* step could play the line, which the Say it back sheet always could. A play button now sits top-right of the speak card in a slim head row (`.speak-card-head`), disabled while the mic listens and showing the speaker icon while playing. Both screens already had a playback path, so this is a button and guards, not new audio code: the checkpoint reuses `data-sr-play` and now tracks `state.speaking`; Chat's Listen button and the new one share `playSpeakStep()`. **In the checkpoint it appears only after an attempt or a reveal** (DES-59), so the learner still has to have a go first. **Two things fixed on the way:** Chat's mic never stopped a replay in flight before opening — the other speak surfaces did — so a replay would have reached the recogniser; and a tapped oxblood checkpoint button kept an orange hover wash on Android, which the bubble play button had shown all along. **Also, the v153 icon:** the *Jyut* label reached the phone and the old icon did not, because Chrome treats a manifest icon URL as immutable. The PNGs are renamed `icon-jyut-192/512.png` so the new icon has a URL Chrome hasn't seen. Verified in a browser against the live renderers: before and after an attempt, before and after a reveal, while listening, on both kinds of conversation line. |
+| MOCK-39-t17, MOCK-39-r3, MOCK-39-semi, MOCK-39-l12 | v155 | **The Learn / Chat / Quiz switch and the small-caps labels are larger.** William found the switch understated and *About this lesson* small. Subtab labels go from 14px to `--fs-lead` (17px) with 19px icons, semibold when active; the active rule goes from 2px to `--edge-emph` (3px) on both the subtabs and the bottom tab bar, whose active label stays medium. The label family, *Next up*, *To review*, *Word-by-word breakdown* and the rest, eight sites on Home, Translate and a lesson, goes from an off-scale 10.5px to `--fs-meta` (12px); *About this lesson* was a hand copy of `.eyebrow` and is now one, retiring `.lesson-note-title`. **`--tabbar-h` corrected from 46px to 51px.** Measured, the bar was 49px before this change, not the 46 the token claimed, so the docked action bar sat 3px down behind it; the label line-height is now fixed so the bar is an exact sum, measured at 51px in a browser. Screens that clear the bar gain 5px of bottom padding, which reads as nothing. |
 
 ### Notes worth carrying forward
+- **A `min-height` in a sum is a floor, not a term.** `--tabbar-h` was derived at
+  v118 as `--tap-min` (44) + the 2px rule = 46px. But the tab's content — padding,
+  a 19px icon, a gap and a label line — adds up to more than 44, so `min-height`
+  never applied, and the bar measured 49px. Found at v155 by measuring the bar in
+  a browser before changing its rule, rather than adding 1 to the token. Any
+  layout token derived from a component should be measured from the built thing,
+  and where the sum depends on a font's line box, pin the line-height so the sum
+  is exact. `--bar-h` (52px) is derived the same way and has not been
+  re-measured.
+- **A doc edit delivered is not a doc edit committed.** The v154 close-out
+  (STATUS, BACKLOG, IN_PROGRESS) was delivered as three files and never reached
+  the repo; found when the v155 clone still said v154 was awaiting QA. It rides
+  in the v155 commit. The start-of-chat version check compares `sw.js` against
+  STATUS and would not catch this, since a docs-only change moves neither.
 - **An asset that changes must change its URL — and not only for the service
   worker.** v153 replaced the icon PNGs under their old names. The page updated,
   the manifest's name reached the installed app, and the icon never did: Chrome
@@ -263,6 +278,14 @@ orphan hues `#B7861E`, `#e4d4ad`, `#8a6716`,
   day or two, was wrong for exactly this reason. v154 renamed the files. The same
   shape as the `sw.js` version bump, one layer further out, where no bump reaches.
   `tools/build-icons.html` now says so where the file names are set.
+  **The rename was necessary and still not enough.** On the Pixel, after v154,
+  `chrome://webapks` reported the update as *Succeeded* with the new name and
+  colours, and the old icon stayed through a forced update and a phone restart.
+  Only uninstalling and reinstalling delivered it. Progress survived the
+  reinstall, because it lives in Chrome's storage for the site, not in the
+  installed app. **Practical rule: once people have the app installed, assume a
+  changed icon reaches new installs only.** Recorded 2026-09-23 from one device;
+  a second Android device, or a later Chrome, may behave differently.
 - **Four consumers of one mechanism, and one missing a guard.** Every speak
   surface calls `startSpeechRecognition()`; three stopped any audio still playing
   before opening the mic and Chat's `#mic-btn` did not. It was harmless while a

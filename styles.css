@@ -142,9 +142,15 @@
        value here is invisible: it over- or under-reserves scroll clearance, and
        over-reserving just looks like generous spacing. --tabbar-h said 58px from
        the mockup while the bar computes to 46px (44px --tap-min + 2px top rule),
-       so every wrapper was over-clearing by 12px. */
+       so every wrapper was over-clearing by 12px.
+       That 46px was itself wrong, found at v155 by measuring rather than adding:
+       the tab's content (7 + 19 + 3 + a ~11.5px label line + 6) is taller than
+       --tap-min, so min-height never applied and the bar measured 49px. The
+       docked .bar sat 3px down behind it. v155 fixes the label's line-height so
+       the sum is exact, and the token is that sum:
+       1px bar border + 3px rule + 7 + 19px icon + 3 gap + 12px label + 6 = 51. */
     --bar-h:        52px;        /* docked action bar: 36px button + 2×--sp-2 */
-    --tabbar-h:     46px;        /* bottom tab bar: --tap-min + 2px top rule */
+    --tabbar-h:     51px;        /* bottom tab bar, measured — see above */
     --edge-emph:    3px;         /* the emphasis left rule — §3.2 */
     --border:       1px solid var(--parchment-border);
     --border-soft:  1px solid var(--parchment-deep);
@@ -179,8 +185,8 @@
   .list-row:first-child { border-top: none; }
 
   /* ── Labels — same metrics, different colour ── */
-  .section-label { display: block; font-family: var(--font-ui); font-size: 10.5px; font-weight: var(--fw-medium); line-height: 1; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); }
-  .eyebrow { font-family: var(--font-ui); font-size: 10.5px; font-weight: var(--fw-medium); line-height: 1; letter-spacing: 0.12em; text-transform: uppercase; color: var(--brand); }
+  .section-label { display: block; font-family: var(--font-ui); font-size: var(--fs-meta); font-weight: var(--fw-medium); line-height: 1; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); }
+  .eyebrow { font-family: var(--font-ui); font-size: var(--fs-meta); font-weight: var(--fw-medium); line-height: 1; letter-spacing: 0.12em; text-transform: uppercase; color: var(--brand); }
   .eyebrow--milestone { color: var(--milestone); }
 
   /* ── Nodes — one shape family for every position marker (§2). Circles for
@@ -282,7 +288,7 @@
   .wm { position: absolute; right: -0.06em; top: -0.16em; font-family: var(--font-serif); font-size: clamp(110px, 38vw, 160px); line-height: 1; color: var(--ink); opacity: 0.035; user-select: none; pointer-events: none; }
 
   /* ── Subtabs & tab bar — ONE primitive, two consumers (§2, MOCK-17-fill).
-        The 2px brand rule sits on the edge nearest the content: bottom here,
+        The brand rule sits on the edge nearest the content: bottom here,
         top for the phase 6 tab bar via `.tabs--top`. That modifier ALSO flips
         the axis (column), the gap, the padding and the type scale — it is not
         only an edge swap, despite what §2 and styleguide.html both said until
@@ -294,11 +300,16 @@
         solid brand fill on the active one.
         `min-height` is declared rather than left to padding so standing check 2
         can see it — mockup 04's own drawing computes to ~27px and would have
-        reported clean. Ported from styleguide.html § Subtabs. ── */
+        reported clean. Ported from styleguide.html § Subtabs.
+        v155 (MOCK-39-t17, -r3, -semi): the subtab label is --fs-lead with a
+        19px icon, the size the tab bar's icon already was; the active tab is
+        semibold; and the rule is --edge-emph, 3px, on BOTH consumers — the
+        weight the emphasis edge on a Home card already uses, so the app keeps
+        one emphasis weight rather than gaining a second. ── */
   .tabs { display: flex; border-bottom: var(--border-soft); padding: var(--sp-2) 0 0; margin-bottom: var(--sp-4); }
-  .tab { flex: 1; display: flex; align-items: center; justify-content: center; gap: 7px; min-height: var(--tap-min); padding: 0 0 10px; margin-bottom: -1px; font-family: var(--font-ui); font-size: 14px; font-weight: var(--fw-medium); border: none; background: transparent; color: var(--muted-dark); cursor: pointer; border-bottom: 2px solid transparent; }
-  .tab svg { width: 15px; height: 15px; flex: none; }
-  .tab--on { color: var(--brand); border-bottom-color: var(--brand); }
+  .tab { flex: 1; display: flex; align-items: center; justify-content: center; gap: 7px; min-height: var(--tap-min); padding: 0 0 10px; margin-bottom: -1px; font-family: var(--font-ui); font-size: var(--fs-lead); font-weight: var(--fw-medium); border: none; background: transparent; color: var(--muted-dark); cursor: pointer; border-bottom: var(--edge-emph) solid transparent; }
+  .tab svg { width: 19px; height: 19px; flex: none; }
+  .tab--on { color: var(--brand); border-bottom-color: var(--brand); font-weight: var(--fw-semi); }
 
 
   /* ── Docked action bar — `.bar` › `.bar-inner` (§2, MOCK-20-B2, DES-22, v118).
@@ -348,16 +359,18 @@
         and had sat with zero call sites since.
         Consumes `.tabs--top`, the modifier on the shared subtabs primitive built
         at v114 — the emphasis language is identical (muted label, brand when
-        active, a 2px brand rule on the edge nearest the content) and only the
+        active, a brand rule on the edge nearest the content) and only the
         edge, axis and type scale differ. Shown on EVERY screen, including topics
         and checkpoints; see §3.10, amended 2026-08-01.
         `padding-bottom` carries the iOS home-indicator inset so the labels are
         not sat on by the system gesture bar. ── */
   .tabs--top { position: fixed; left: 0; right: 0; bottom: 0; z-index: 20; background: var(--parchment); border-top: var(--border-soft); border-bottom: none; margin: 0; padding: 0 0 env(safe-area-inset-bottom, 0px); box-shadow: var(--elev-2); }
-  .tabs--top .tab { flex-direction: column; gap: 3px; padding: 7px 0 6px; margin: 0; border-bottom: none; border-top: 2px solid transparent; }
-  .tabs--top .tab svg { width: 19px; height: 19px; }
-  .tabs--top .tab > span:last-child { font-size: 9.5px; letter-spacing: 0.06em; text-transform: uppercase; }
-  .tabs--top .tab--on { border-bottom-color: transparent; border-top-color: var(--brand); }
+  .tabs--top .tab { flex-direction: column; gap: 3px; padding: 7px 0 6px; margin: 0; border-bottom: none; border-top: var(--edge-emph) solid transparent; }
+  .tabs--top .tab > span:last-child { font-size: 9.5px; line-height: 12px; letter-spacing: 0.06em; text-transform: uppercase; }
+  /* The bar keeps medium weight on its active label. MOCK-39-semi was chosen
+     for the subtabs, and mockup 39 drew the bar at medium; without this line
+     the bar would inherit the subtabs' semibold from `.tab--on`. */
+  .tabs--top .tab--on { border-bottom-color: transparent; border-top-color: var(--brand); font-weight: var(--fw-medium); }
   /* The icon is the badge's positioning context, so the count sits on the glyph
      rather than the whole tab — which would put it in the corner of a 78px cell. */
   .tab-ic { position: relative; display: inline-flex; }
@@ -1054,7 +1067,10 @@
 
   /* Lesson note panel (intro context above words) */
   .lesson-note { padding: var(--sp-4) 0 var(--sp-4) var(--sp-4); margin-bottom: 14px; border-left: 2px solid var(--brand); }
-  .lesson-note-title { font-size: 10.5px; font-weight: var(--fw-medium); color: var(--brand); letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: var(--sp-2); }
+  /* The note's label is an .eyebrow (v155). Until then it was .lesson-note-title,
+     a hand copy of .eyebrow's four metrics — so resizing the label family would
+     have missed it, which is how the family would have split. */
+  .lesson-note > .eyebrow { margin-bottom: var(--sp-2); }
   .lesson-note-body { color: var(--ink-soft); }
   .lesson-note-body strong { color: var(--ink); }
 

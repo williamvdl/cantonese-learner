@@ -4,46 +4,44 @@
 questions behind it. Meant to be short-lived — when a piece ships, fold its
 outcome into STATUS.md and clear this file back down for the next thing.*
 
-Last updated: 2026-09-23 · sw.js at v154
+Last updated: 2026-09-23 · sw.js at v155
 
-## v154 — replay while speaking, and the icon file rename — awaiting deploy and device QA
+## v155 — larger tabs and labels — awaiting deploy and device QA
 
-A play button top-right of the speak card in the checkpoint's sentence review
-and in Chat's Speak mode (MOCK-38-corner). In the checkpoint it appears only
-after an attempt or *Show me the answer* (DES-59). The detail is in the STATUS
-row. **Built and checked in a browser, not yet on the Pixel.**
+The Learn / Chat / Quiz switch at 17px with 19px icons and a semibold active
+tab, a 3px active rule on it and on the bottom tab bar, and the small-caps label
+family at 12px (mockup 39). `--tabbar-h` corrected to the bar's measured 51px.
+The detail is in the STATUS row. **Built and measured in a browser, not yet on
+the Pixel.**
 
-**The v153 icon should arrive with this deploy.** The PNGs are renamed, so
-Chrome sees an icon URL it hasn't fetched before. Open the installed app once
-after deploying, then close it; Chrome may ask you to confirm the new icon. If
-the old icon is still there a day later with the phone charged on Wi-Fi, remove
-and reinstall. **v153 is otherwise confirmed on the device** — nameplate, status
-bar and the *Jyut* label, from William's screenshots and report on 2026-09-23.
+**v154 shipped and device QA is done (2026-09-23)** — the replay buttons, and the
+new icon after an uninstall and reinstall. Its close-out docs were delivered but
+never committed, so they ride in this commit.
 
-**Blocked on nothing.**
-
-**Next candidate work after QA:** styling the styleguide's speak demos (new, in
-BACKLOG), an aggregating runner for the standing checks, the 168 Check B
-structural candidates from `dup-css.js` (needs William's judgement), the 4
-remaining Check A rule-splits, the open particle-rule question, and the
-`char-jyutping.json` coverage measurement. All in BACKLOG.md.
+**Next candidate work:** reordering the topic intros' reversed jyutping (new, in
+BACKLOG § Content), styling the styleguide's speak demos, an aggregating runner
+for the standing checks, the 169 Check B structural candidates from
+`dup-css.js` (needs William's judgement), the 4 remaining Check A rule-splits,
+the open particle-rule question, and the `char-jyutping.json` coverage
+measurement. All in BACKLOG.md.
 
 ### Standing checks — twelve: eleven exit 0, `dup-css.js` exits 1 on four known
 
 `validate.js` (now also asserting the chrome colours), `jyutping-check.js`,
 `wiring-check.js`, `nav-harness.js`, `tier-harness.js`, `dead-css.js`,
 `sentence-pool-harness.js`, `sentence-review-harness.js`, `snapshot-harness.js`,
-`gap-opts-check.js` and `asr-replay-harness.js` all exit 0 at v154. **`dup-css.js`
+`gap-opts-check.js` and `asr-replay-harness.js` all exit 0 at v155. **`dup-css.js`
 exits 1**, and did at v152 too: its Check A gates on any same-selector duplicate,
 and the four it finds are the known rule-splits in BACKLOG. The count is still 4
-at v154; Check B structural rose from 164 to 168 with v154's four contextual
-`.cp-convo` recolours, the same shape as the group they joined. This section used to say *"all green"*, which was wrong; see
+at v155; Check B structural is 169 — up from 164 with v154's four contextual
+`.cp-convo` recolours and v155's `.lesson-note > .eyebrow`, all the same shape
+as rules already accepted. This section used to say *"all green"*, which was wrong; see
 STATUS § Notes worth carrying forward. Check B is informational and never gates.
 
 ## Previously
 
 **v153 shipped (2026-09-23)** — the product named *Jyut*, its nameplate, icon and
-status bar. Confirmed on the device except the icon, which v154 re-delivers.
+status bar. Confirmed on the device; the icon needed v154 and a reinstall.
 
 **v152 shipped and device QA is done (2026-09-20).** The DES-57 same-sound rule
 is closed out across three deploys, all confirmed on the Pixel: v150 the rule

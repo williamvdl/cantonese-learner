@@ -204,13 +204,13 @@ code{ background:#DAD4CA; padding:1px 5px; border-radius:4px; font-size:11.5px; 
 .list-row:first-child{ border-top:none; }
 
 /* section label / eyebrow */
-.section-label{ font:var(--fw-medium) 10.5px/1 var(--font-ui); letter-spacing:.12em; text-transform:uppercase; color:var(--muted); display:block; }
-.eyebrow{ font:var(--fw-medium) 10.5px/1 var(--font-ui); letter-spacing:.12em; text-transform:uppercase; color:var(--brand); }
+.section-label{ font:var(--fw-medium) var(--fs-meta)/1 var(--font-ui); letter-spacing:.12em; text-transform:uppercase; color:var(--muted); display:block; }
+.eyebrow{ font:var(--fw-medium) var(--fs-meta)/1 var(--font-ui); letter-spacing:.12em; text-transform:uppercase; color:var(--brand); }
 .eyebrow--milestone{ color:var(--milestone); }
 
 /* note */
 .note-block{ padding:var(--sp-4) 0 var(--sp-4) var(--sp-4); border-left:2px solid var(--brand); }
-.note-title{ font:var(--fw-medium) 10.5px/1 var(--font-ui); letter-spacing:.12em; text-transform:uppercase; color:var(--brand); margin-bottom:var(--sp-2); }
+.note-title{ font:var(--fw-medium) var(--fs-meta)/1 var(--font-ui); letter-spacing:.12em; text-transform:uppercase; color:var(--brand); margin-bottom:var(--sp-2); }
 .note-body{ font:var(--fw-regular) 14px/1.65 var(--font-ui); color:var(--ink-soft); max-width:var(--measure-text); }
 
 /* pills */
@@ -312,15 +312,15 @@ code{ background:#DAD4CA; padding:1px 5px; border-radius:4px; font-size:11.5px; 
    itself, and the prose is what got copied outward.
    An active tab is never a fill (DES-19). */
 .tabs{ display:flex; border-bottom:var(--border-soft); padding:var(--sp-2) 0 0; margin-bottom:var(--sp-4); }
-.tab{ flex:1; display:flex; align-items:center; justify-content:center; gap:7px; min-height:var(--tap-min); padding:0 0 10px; margin-bottom:-1px; font-family:var(--font-ui); font-size:14px; font-weight:var(--fw-medium); border:none; background:transparent; color:var(--muted-dark); cursor:pointer; border-bottom:2px solid transparent; }
-.tab svg{ width:15px; height:15px; flex:none; }
-.tab--on{ color:var(--brand); border-bottom-color:var(--brand); }
+.tab{ flex:1; display:flex; align-items:center; justify-content:center; gap:7px; min-height:var(--tap-min); padding:0 0 10px; margin-bottom:-1px; font-family:var(--font-ui); font-size:var(--fs-lead); font-weight:var(--fw-medium); border:none; background:transparent; color:var(--muted-dark); cursor:pointer; border-bottom:var(--edge-emph) solid transparent; }
+.tab svg{ width:19px; height:19px; flex:none; }
+.tab--on{ color:var(--brand); border-bottom-color:var(--brand); font-weight:var(--fw-semi); }
 /* --top: rule on the edge nearest the content, because the bar sits at the bottom */
 .tabs--top{ border-bottom:none; border-top:var(--border); padding:0; background:var(--parchment); }
-.tabs--top .tab{ flex-direction:column; gap:3px; padding:7px 0 9px; margin:-1px 0 0; border-bottom:none; border-top:2px solid transparent; }
+.tabs--top .tab{ flex-direction:column; gap:3px; padding:7px 0 9px; margin:-1px 0 0; border-bottom:none; border-top:var(--edge-emph) solid transparent; }
 .tabs--top .tab svg{ width:19px; height:19px; }
 .tabs--top .tab span{ font-size:9.5px; font-weight:var(--fw-semi); letter-spacing:.06em; text-transform:uppercase; }
-.tabs--top .tab--on{ border-top-color:var(--brand); }
+.tabs--top .tab--on{ border-top-color:var(--brand); font-weight:var(--fw-medium); }
 
 /* Continuation — the built component. Mirrors styles.css; only the differences
    from .card are declared. */
@@ -362,10 +362,10 @@ code{ background:#DAD4CA; padding:1px 5px; border-radius:4px; font-size:11.5px; 
    rather than a full-width border, and --muted rather than --muted-dark — it
    predated the shared primitive and would have shipped a near-match. */
 .tabs--top{ background:var(--parchment); border-top:var(--border-soft); border-bottom:none; margin:0; padding:0; box-shadow:var(--elev-2); }
-.tabs--top .tab{ flex-direction:column; gap:3px; padding:7px 0 6px; margin:0; border-bottom:none; border-top:2px solid transparent; }
+.tabs--top .tab{ flex-direction:column; gap:3px; padding:7px 0 6px; margin:0; border-bottom:none; border-top:var(--edge-emph) solid transparent; }
 .tabs--top .tab svg{ width:19px; height:19px; }
-.tabs--top .tab > span:last-child{ font-size:9.5px; letter-spacing:.06em; text-transform:uppercase; }
-.tabs--top .tab--on{ border-bottom-color:transparent; border-top-color:var(--brand); }
+.tabs--top .tab > span:last-child{ font-size:9.5px; line-height:12px; letter-spacing:.06em; text-transform:uppercase; }
+.tabs--top .tab--on{ border-bottom-color:transparent; border-top-color:var(--brand); font-weight:var(--fw-medium); }
 .tab-ic{ position:relative; display:inline-flex; }
 .tab-badge{ position:absolute; top:-5px; left:11px; background:var(--brand); color:var(--parchment); font-family:var(--font-ui); font-size:9px; line-height:1; font-weight:var(--fw-bold); min-width:15px; height:15px; border-radius:var(--r-pill); padding:0 4px; display:inline-flex; align-items:center; justify-content:center; box-shadow:0 0 0 2px var(--parchment); }
 
@@ -665,7 +665,8 @@ table.spec tr:last-child td{ border-bottom:none; }
 </section>
 
 <section id="tabs">
-  <h2>Subtabs &amp; tab bar <span class="tag-new">subtabs built &middot; v114</span> <span class="tag-todo">--top not built &middot; phase 6</span></h2>
+  <h2>Subtabs &amp; tab bar <span class="tag-new">subtabs built &middot; v114</span> <span class="tag-new">--top built &middot; v117</span> <span class="tag-new">resized &middot; v155</span></h2>
+  <p class="note"><b>v155 (mockup 39):</b> subtab labels at <code>--fs-lead</code> (17px) with 19px icons (MOCK-39-t17), semibold when active (MOCK-39-semi), and the active rule at <code>--edge-emph</code>, 3px, on <i>both</i> consumers (MOCK-39-r3) — the weight is part of the shared language, so it moved on the tab bar too. The tab bar keeps its active label at medium. Its label line-height is now fixed at 12px, which makes the bar an exact 51px and <code>--tabbar-h</code> a true sum; it measured 49px against a token of 46 before.</p>
   <p class="note"><b>One primitive, two consumers.</b> The topic's view switch (Learn / Chat / Quiz) and the bottom tab bar carry the same emphasis language: muted label, brand label when active, and a 2px brand rule on the edge nearest the content &mdash; bottom for the subtabs, top for the bar.</p>
   <p class="note"><b>The edge is not the only difference</b>, and this note said it was until v114 while the CSS beside it always disagreed. <code>--top</code> also flips the axis to a column, and changes the gap, the padding, the icon size and the label's whole type scale &mdash; 9.5px uppercase over a 19px glyph, against 14px beside a 15px one. What the two consumers genuinely share is the <i>emphasis language</i>, not the geometry, and that is enough to make them one primitive. The modifier sits on the container (<code>.tabs--top</code>) rather than the tab, so it can reach both.</p>
   <p class="note"><b>An active tab is never a fill</b> (DES-19). A tab is a selector, not an action, and the screen's one filled element belongs to the thing to do next. The pre-system subtabs were three separately bordered boxes with a solid brand fill on the active one, which made the view switch the loudest thing on the Learn screen &mdash; visible in the app through v113.</p>

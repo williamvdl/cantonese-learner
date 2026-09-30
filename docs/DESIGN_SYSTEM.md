@@ -154,8 +154,12 @@ colour interpolations in `render.js`, and that is correct.
 
 - `--measure: 680px` — the content column. One value; there is no second.
 - `--measure-text: 68ch` — prose line-length cap.
-- `--bar-h: 60px` — docked action bar. `--tabbar-h: 58px` — tab bar.
-- `--edge-emph: 3px` — the emphasis rule width.
+- `--bar-h: 52px` — docked action bar. `--tabbar-h: 51px` — tab bar, **measured**
+  at v155 (1px border + 3px rule + 7 + 19px icon + 3 + 12px label + 6). This line
+  said 60 and 58 long after the code said 52 and 46; and 46 was itself a
+  `min-height` mistaken for a height. See `styles.css` and STATUS notes.
+- `--edge-emph: 3px` — the emphasis rule width: a card's emphasis edge, and
+  since v155 the active tab's rule on both tab consumers (MOCK-39-r3).
 - `--border` 1px `--parchment-border` · `--border-soft` 1px `--parchment-deep`
 
 ---
@@ -320,9 +324,13 @@ cards competing (see §2 Dashboard).
 
 ### Labels — `.section-label` / `.eyebrow` (+ `--milestone`)
 Same metrics, different colour. Muted for section labels, brand for eyebrows,
-milestone in checkpoint contexts.
+milestone in checkpoint contexts. **Size is `--fs-meta` (12px) since v155**
+(MOCK-39-l12), up from an off-scale 10.5px; medium weight, 0.12em tracking,
+uppercase. Eight sites across Home, Translate and a lesson's Learn view. A label
+that wants these metrics uses one of these classes rather than copying them —
+`.lesson-note-title` did, and was retired at v155 for it.
 
-### Note — `.lesson-note` › `.lesson-note-title` + `.lesson-note-body`
+### Note — `.lesson-note` › `.eyebrow` + `.lesson-note-body`
 Teaching notes only. 2px brand left rule, not a tinted card and not a shadow.
 
 ### Pills & tags — `.pill` `.pill--on` / `.tag` / `.pill-solid`
@@ -385,13 +393,19 @@ three are always emitted on the user side.
 ### Subtabs & tab bar — `.tabs` › `.tab` (+ `--on`) · `.tabs--top` *(subtabs built v114; `.tabs--top` built v117 with the tab bar)*
 **One primitive, two consumers.** The topic's view switch (Learn / Chat / Quiz) and
 the bottom tab bar carry the same emphasis language: muted label, brand label when
-active, and a **2px brand rule** on the edge nearest the content — bottom for the
-subtabs, top for the tab bar.
+active, and a **brand rule at `--edge-emph` (3px)** on the edge nearest the
+content — bottom for the subtabs, top for the tab bar. It was 2px until v155
+(MOCK-39-r3); it moved on both consumers together, because the weight is part
+of the shared language.
+
+**Subtab size (v155, MOCK-39-t17, MOCK-39-semi):** labels at `--fs-lead` with
+a 19px icon, the tab bar's icon size; the active subtab is `--fw-semi`. The tab
+bar keeps its active label at medium.
 
 **The edge is not the only difference**, and this section said it was until v114.
-`--top` also flips the axis to a column and changes the gap, the padding, the icon
-size and the label's type scale — 9.5px uppercase over a 19px glyph, against 14px
-beside a 15px one. What the two consumers share is the *emphasis language*, not the
+`--top` also flips the axis to a column and changes the gap, the padding and the
+label's type scale — 9.5px uppercase under a 19px glyph, against 17px beside a
+glyph of the same size (v155; until then 14px beside a 15px glyph). What the two consumers share is the *emphasis language*, not the
 geometry, and that is enough to make them one primitive. The modifier sits on the
 **container** (`.tabs--top`) rather than the tab, so it can reach both. **Built into
 `styles.css` at v117** when the tab bar became its consumer — until then it lived
@@ -417,7 +431,7 @@ The five top-level destinations, fixed to the viewport bottom, **visible on ever
 screen** (§3.10). Built v117; replaced the right-hand nav drawer entirely.
 
 It is the `--top` modifier on the subtabs primitive, not a component of its own —
-same emphasis language (muted label, brand when active, a 2px brand rule on the
+same emphasis language (muted label, brand when active, a 3px brand rule on the
 edge nearest the content), with the modifier carrying the edge, the axis and the
 type scale. Icons are `ICON_PATHS` entries, **not emoji**: the drawer used emoji,
 which cannot take `currentColor`, so an active destination could not have turned

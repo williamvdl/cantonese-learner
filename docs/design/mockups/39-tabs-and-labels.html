@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tabs and labels — mockup 39 (revised), on v154</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Noto+Serif+TC:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+    /* Tokens transcribed from styles.css v154 — only the ones this page uses. */
+    --font-serif:   'Noto Serif TC', 'Noto Serif CJK TC', 'Fraunces', Georgia, serif;
+    --font-ui:      'Inter', 'Noto Serif TC', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+    --font-display: 'Fraunces', 'Noto Serif TC', 'Noto Serif CJK TC', Georgia, serif;
+    --fs-micro: 11px; --fs-meta: 12px; --fs-small: 13px; --fs-body: 15px; --fs-lead: 17px; --fs-h2: 28px;
+    --fw-regular: 400; --fw-medium: 500; --fw-semi: 600; --fw-bold: 700;
+    --sp-1: 4px; --sp-2: 8px; --sp-3: 12px; --sp-4: 16px; --sp-5: 24px;
+    --r-sm: 8px; --r-md: 12px; --r-pill: 999px; --tap-min: 44px;
+    --elev-1: 0 1px 2px rgba(58, 42, 30, 0.04), 0 1px 3px rgba(58, 42, 30, 0.06);
+    --elev-2: 0 2px 4px rgba(58, 42, 30, 0.05), 0 4px 8px rgba(58, 42, 30, 0.07);
+    --ink: #1C1917; --ink-soft: #292524;
+    --parchment: #FFFFFF; --parchment-warm: #FAF8F5; --parchment-deep: #F0EBE4; --parchment-border: #EAE4DC;
+    --brand: #C2410C; --brand-edge: #F5D9C9; --muted: #A8A29E; --muted-dark: #78716C;
+    --milestone: #6E2639; --milestone-tint: #FBF0F2;
+    --feedback-good-tint: #DCFCE7; --feedback-good-text: #15803D;
+    --edge-emph: 3px;
+    --border: 1px solid var(--parchment-border); --border-soft: 1px solid var(--parchment-deep);
+}
+body { margin:0; background:var(--parchment-deep); font-family:var(--font-ui); color:var(--ink); padding:24px 16px 64px; }
+.wrap { max-width:860px; margin:0 auto; }
+h1 { font-family:var(--font-display); font-size:var(--fs-h2); font-weight:var(--fw-medium); margin:0 0 6px; }
+h2 { font-family:var(--font-display); font-size:var(--fs-lead); font-weight:var(--fw-medium); margin:40px 0 4px; }
+.lede, .note { font-size:var(--fs-small); line-height:1.55; color:var(--muted-dark); margin:0 0 8px; max-width:70ch; }
+.note { font-size:var(--fs-meta); line-height:1.6; margin-top:6px; }
+.note b, .lede b { color:var(--ink-soft); }
+.frames { display:flex; gap:22px; flex-wrap:wrap; align-items:flex-start; margin-top:14px; }
+.frame { width:390px; max-width:100%; }
+.frame > .cap { font-size:var(--fs-micro); font-weight:var(--fw-semi); letter-spacing:.1em; text-transform:uppercase; color:var(--muted-dark); margin:0 0 8px; }
+.frame > .cap em { font-style:normal; color:var(--brand); }
+.frame > .sub { font-size:var(--fs-meta); line-height:1.55; color:var(--muted-dark); margin:8px 0 0; }
+.screen { background:var(--parchment-warm); padding:20px 20px 12px; border-radius:var(--r-md); box-shadow:var(--elev-1); }
+code { font-family:ui-monospace,Menlo,monospace; font-size:11px; background:var(--parchment-deep); padding:1px 5px; border-radius:4px; }
+table { border-collapse:collapse; font-size:var(--fs-meta); margin-top:14px; width:100%; }
+th,td { text-align:left; padding:7px 10px; border-bottom:var(--border-soft); vertical-align:top; line-height:1.5; }
+th { font-size:var(--fs-micro); letter-spacing:.08em; text-transform:uppercase; color:var(--muted-dark); font-weight:var(--fw-semi); }
+.toolbar { position:sticky; top:0; z-index:5; background:var(--parchment-deep); padding:10px 0; margin-top:14px; display:flex; flex-direction:column; gap:8px; font-size:var(--fs-meta); color:var(--muted-dark); border-bottom:var(--border); }
+.tb-row { display:flex; align-items:center; gap:8px; flex-wrap:wrap; }
+.tb-row > span:first-child { width:92px; font-weight:var(--fw-semi); color:var(--ink-soft); }
+.toolbar button { font:inherit; font-weight:var(--fw-semi); color:var(--brand); background:transparent; border:1px solid var(--brand-edge); border-radius:var(--r-pill); padding:5px 12px; cursor:pointer; }
+.toolbar button[aria-pressed="true"] { background:var(--brand); color:#fff; border-color:var(--brand); }
+
+/* ── the three decisions, as variables ── */
+.frame.today    { --tab-fs:14px; --tab-ic:15px; --rule:2px; --tab-fw-on:var(--fw-medium); --lbl:10.5px; }
+.frame.proposed { --tab-fs:17px; --tab-ic:19px; --rule:2px; --tab-fw-on:var(--fw-medium); --lbl:10.5px; }
+body.t15 .frame.proposed { --tab-fs:15px; --tab-ic:17px; }
+body.r3  .frame.proposed { --rule:3px; }
+body.semi .frame.proposed { --tab-fw-on:var(--fw-semi); }
+body.l11 .frame.proposed { --lbl:11px; }
+body.l12 .frame.proposed { --lbl:12px; }
+
+/* ══ Transcribed from styles.css v154, with the three values as variables ══ */
+.lesson-header { margin-bottom:var(--sp-3); }
+.lesson-title { font-family:var(--font-display); font-size:var(--fs-h2); font-weight:var(--fw-semi); color:var(--ink); margin:0 0 3px; line-height:1.15; }
+.tierline { display:flex; align-items:center; gap:var(--sp-2); min-height:var(--tap-min); }
+.tier-state { font-size:var(--fs-meta); color:var(--muted-dark); }
+.tabs { display:flex; border-bottom:var(--border-soft); padding:var(--sp-2) 0 0; margin-bottom:var(--sp-4); }
+.tab { flex:1; display:flex; align-items:center; justify-content:center; gap:7px; min-height:var(--tap-min); padding:0 0 10px; margin-bottom:-1px; font-family:var(--font-ui); font-size:var(--tab-fs); font-weight:var(--fw-medium); border:none; background:transparent; color:var(--muted-dark); border-bottom:var(--rule) solid transparent; }
+.tab svg { width:var(--tab-ic); height:var(--tab-ic); flex:none; }
+.tab--on { color:var(--brand); border-bottom-color:var(--brand); font-weight:var(--tab-fw-on); }
+.tabs--top { background:var(--parchment); border-top:var(--border-soft); border-bottom:none; margin:0; padding:0; box-shadow:var(--elev-2); border-radius:0 0 var(--r-md) var(--r-md); }
+.tabs--top .tab { flex-direction:column; gap:3px; padding:7px 0 6px; margin:0; border-bottom:none; border-top:var(--rule) solid transparent; font-size:14px; font-weight:var(--fw-medium); }
+.tabs--top .tab svg { width:19px; height:19px; }
+.tabs--top .tab > span:last-child { font-size:9.5px; letter-spacing:0.06em; text-transform:uppercase; }
+.tabs--top .tab--on { border-top-color:var(--brand); }
+.hint { font-size:var(--fs-micro); color:var(--muted); margin-bottom:12px; }
+.lesson-note { padding:var(--sp-4) 0 var(--sp-4) var(--sp-4); margin-bottom:14px; border-left:2px solid var(--brand); }
+.lesson-note-body { font-size:var(--fs-small); line-height:1.55; color:var(--ink-soft); }
+.lesson-note-body strong { color:var(--ink); }
+/* the label family — .eyebrow / .section-label / .lesson-note-title, one set of metrics */
+.lbl { display:block; font-family:var(--font-ui); font-size:var(--lbl); font-weight:var(--fw-medium); line-height:1; letter-spacing:0.12em; text-transform:uppercase; }
+.lesson-note .lbl { margin-bottom:var(--sp-2); }
+.lbl--brand { color:var(--brand); } .lbl--muted { color:var(--muted); } .lbl--milestone { color:var(--milestone); }
+.lbl.sec { margin:var(--sp-5) 0 var(--sp-2); }
+.card { background:var(--parchment); border:var(--border); border-radius:var(--r-md); box-shadow:var(--elev-1); }
+.card--emph { border-left:var(--edge-emph) solid var(--brand); }
+.card--milestone { border-left:var(--edge-emph) solid var(--milestone); background:var(--milestone-tint); }
+.card.list { padding:0 var(--sp-4); }
+.list-row { padding:var(--sp-4) 0; border-top:var(--border-soft); font-size:var(--fs-small); color:var(--ink-soft); }
+.list-row:first-child { border-top:none; }
+.dash-hero { position:relative; overflow:hidden; padding:var(--sp-5) var(--sp-4) var(--sp-4); }
+.dash-hero > *:not(.wm) { position:relative; }
+.wm { position:absolute; right:-0.06em; top:-0.16em; font-family:var(--font-serif); font-size:140px; line-height:1; color:var(--ink); opacity:0.035; }
+.dash-hero--cp .wm { color:var(--milestone); opacity:0.075; }
+.dash-hero-stage { font-size:var(--fs-meta); color:var(--muted-dark); margin-top:var(--sp-3); }
+.dash-hero-title { font-family:var(--font-display); font-size:27px; font-weight:var(--fw-medium); line-height:1.15; margin:var(--sp-1) 0 var(--sp-4); }
+.btn { display:inline-flex; align-items:center; gap:7px; min-height:var(--tap-min); padding:0 var(--sp-5); border-radius:var(--r-pill); font-family:var(--font-ui); font-size:var(--fs-small); font-weight:var(--fw-semi); }
+.btn--primary { background:var(--brand); border:1px solid var(--brand); color:#fff; }
+.bd { font-family:var(--font-serif); font-size:20px; } .bd span { font-family:var(--font-ui); font-size:var(--fs-meta); color:var(--muted-dark); }
+</style>
+</head>
+<body class="r3 l12">
+<div class="wrap">
+<h1>Tabs and labels</h1>
+<p class="lede">Three adjustments to the Learn screen: <b>larger Learn / Chat / Quiz tabs</b>, a <b>thicker
+line under the active tab</b>, and a <b>larger <i>About this lesson</i> label</b>. The first is
+self-contained. The other two are shared styles, so this page also draws everywhere else they
+would change.</p>
+
+<div class="toolbar">
+  <div class="tb-row"><span>Tabs</span>
+    <button type="button" data-set="tabs" data-v="t15" aria-pressed="false">MOCK-39-t15 · 15px, first draft</button>
+    <button type="button" data-set="tabs" data-v="" aria-pressed="true">MOCK-39-t17 · 17px</button></div>
+  <div class="tb-row"><span>Active line</span>
+    <button type="button" data-set="rule" data-v="" aria-pressed="false">MOCK-39-r2 · 2px, as today</button>
+    <button type="button" data-set="rule" data-v="r3" aria-pressed="true">MOCK-39-r3 · 3px</button></div>
+  <div class="tb-row"><span>Active tab</span>
+    <button type="button" data-set="wt" data-v="" aria-pressed="true">Medium, as today</button>
+    <button type="button" data-set="wt" data-v="semi" aria-pressed="false">MOCK-39-semi · semibold</button></div>
+  <div class="tb-row"><span>Labels</span>
+    <button type="button" data-set="lbl" data-v="" aria-pressed="false">10.5px, as today</button>
+    <button type="button" data-set="lbl" data-v="l11" aria-pressed="false">MOCK-39-l11 · 11px</button>
+    <button type="button" data-set="lbl" data-v="l12" aria-pressed="true">MOCK-39-l12 · 12px</button></div>
+</div>
+<p class="note"><b>Revised 2026-09-23:</b> Parts 2 and 3 were approved as drawn; Part 1's tabs went one step up the scale, from 15px to 17px. The page opens on the revised set: 17px tabs, a 3px line and 12px labels. <b>3px isn't a new
+value</b>: it's the weight of <code>--edge-emph</code>, the line down the left of the Home <i>Next up</i>
+card. The 2px line down the left of <i>About this lesson</i> is not part of this change and stays as it
+is, which Part 1 lets you judge next to a 3px tab line. 11px is the smallest step on the type scale;
+today's 10.5px is between steps.</p>
+
+<h2>Part 1 · The Learn screen</h2>
+<p class="note">Left is today, transcribed from <code>styles.css</code> v154. Right follows the toolbar,
+so each decision can be judged on its own. The tabs open at <b>MOCK-39-t17</b>, the revision asked for
+after the first draft: 17px labels (<code>--fs-lead</code>) and 19px icons, up from 14px and 15px.
+The 19px icon is the size the bottom tab bar already uses. <b>MOCK-39-t15</b>, the first draft's 15px
+labels and 17px icons, stays in the toolbar for comparison. Both sizes are steps on the type scale.</p>
+<div class="frames">
+<div class="frame today">
+  <p class="cap">Today · <em>v154</em></p>
+  <div class="screen">
+    <div class="lesson-header"><h2 class="lesson-title">Cooking &amp; Kitchen</h2><div class="tierline"><span class="tier-state">10 words</span></div></div>
+    <div class="tabs">
+      <button class="tab tab--on"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 7v14"/><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"/></svg><span>Learn</span></button>
+      <button class="tab"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22z"/></svg><span>Chat</span></button>
+      <button class="tab"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21.42 10.922a1 1 0 0 0-.019-1.838L12.83 5.18a2 2 0 0 0-1.66 0L2.6 9.08a1 1 0 0 0 0 1.832l8.57 3.908a2 2 0 0 0 1.66 0z"/><path d="M22 10v6"/><path d="M6 12.5V16a6 3 0 0 0 12 0v-3.5"/></svg><span>Quiz</span></button>
+    </div>
+    <div class="hint">Tap a card to reveal English · <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><polygon points="6 3 20 12 6 21 6 3"/></svg> to hear pronunciation</div>
+    <div class="lesson-note"><div class="lbl lbl--brand">About this lesson</div><div class="lesson-note-body">Cantonese cooking has three signature methods. <strong>zyu2</strong> (煮) is general cooking — boiling, simmering. <strong>caau2</strong> (炒) is stir-frying in a wok — high heat, quick motion. <strong>zing1</strong> (蒸) is steaming.</div></div>
+  </div>
+  <p class="sub">14px tabs, 15px icons, a 2px line, a 10.5px label.</p>
+</div>
+<div class="frame proposed">
+  <p class="cap">Proposed · <em>follows the toolbar</em></p>
+  <div class="screen">
+    <div class="lesson-header"><h2 class="lesson-title">Cooking &amp; Kitchen</h2><div class="tierline"><span class="tier-state">10 words</span></div></div>
+    <div class="tabs">
+      <button class="tab tab--on"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 7v14"/><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"/></svg><span>Learn</span></button>
+      <button class="tab"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22z"/></svg><span>Chat</span></button>
+      <button class="tab"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21.42 10.922a1 1 0 0 0-.019-1.838L12.83 5.18a2 2 0 0 0-1.66 0L2.6 9.08a1 1 0 0 0 0 1.832l8.57 3.908a2 2 0 0 0 1.66 0z"/><path d="M22 10v6"/><path d="M6 12.5V16a6 3 0 0 0 12 0v-3.5"/></svg><span>Quiz</span></button>
+    </div>
+    <div class="hint">Tap a card to reveal English · <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><polygon points="6 3 20 12 6 21 6 3"/></svg> to hear pronunciation</div>
+    <div class="lesson-note"><div class="lbl lbl--brand">About this lesson</div><div class="lesson-note-body">Cantonese cooking has three signature methods. <strong>zyu2</strong> (煮) is general cooking — boiling, simmering. <strong>caau2</strong> (炒) is stir-frying in a wok — high heat, quick motion. <strong>zing1</strong> (蒸) is steaming.</div></div>
+  </div>
+  <p class="sub">Tabs, line, active weight and label size as set above.</p>
+</div>
+</div>
+
+<h2>Part 2 · The bottom tab bar, which shares the line</h2>
+<p class="note">The design system treats the Learn/Chat/Quiz switch and the bottom tab bar as <b>one
+component with one emphasis language</b>: a brand line on the edge nearest the content. So the line
+weight changes on both or on neither. Only the line changes here; the bar's labels stay as they are.
+<b>At 3px the bar is 1px taller</b>, so the <code>--tabbar-h</code> token, which six rules use to
+keep content clear of the bar, goes from 46px to 47px in the same change.</p>
+<div class="frames">
+<div class="frame today"><p class="cap">Today · <em>2px</em></p><div class="tabs tabs--top"><button class="tab"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 10.5 12 3l9 7.5"/><path d="M5.5 9.5V20h13V9.5"/></svg><span>Home</span></button><button class="tab"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 19c4-1 4-7 8-7s4-6 8-7"/><circle cx="4" cy="19" r="1.6"/><circle cx="20" cy="5" r="1.6"/></svg><span>Path</span></button><button class="tab tab--on"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5.5A2 2 0 0 1 6 4h5v16H6a2 2 0 0 1-2-1.5z"/><path d="M20 5.5A2 2 0 0 0 18 4h-5v16h5a2 2 0 0 0 2-1.5z"/></svg><span>Topics</span></button><button class="tab"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h6l2 2h8v10H4z"/></svg><span>Review</span></button><button class="tab"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18"/><path d="M12 3c2.5 2.7 2.5 15.3 0 18"/><path d="M12 3c-2.5 2.7-2.5 15.3 0 18"/></svg><span>Translate</span></button></div></div>
+<div class="frame proposed"><p class="cap">Proposed · <em>follows the line toggle</em></p><div class="tabs tabs--top"><button class="tab"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 10.5 12 3l9 7.5"/><path d="M5.5 9.5V20h13V9.5"/></svg><span>Home</span></button><button class="tab"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 19c4-1 4-7 8-7s4-6 8-7"/><circle cx="4" cy="19" r="1.6"/><circle cx="20" cy="5" r="1.6"/></svg><span>Path</span></button><button class="tab tab--on"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5.5A2 2 0 0 1 6 4h5v16H6a2 2 0 0 1-2-1.5z"/><path d="M20 5.5A2 2 0 0 0 18 4h-5v16h5a2 2 0 0 0 2-1.5z"/></svg><span>Topics</span></button><button class="tab"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h6l2 2h8v10H4z"/></svg><span>Review</span></button><button class="tab"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18"/><path d="M12 3c2.5 2.7 2.5 15.3 0 18"/><path d="M12 3c-2.5 2.7-2.5 15.3 0 18"/></svg><span>Translate</span></button></div></div>
+</div>
+
+<h2>Part 3 · Everywhere else the label appears</h2>
+<p class="note">The small capitalised label is <b>one family of three classes with identical
+metrics</b>: 10.5px, medium weight, 0.12em tracking, uppercase. Brand orange as
+<code>.eyebrow</code>, grey as <code>.section-label</code>, and <code>.lesson-note-title</code>, a hand
+copy of <code>.eyebrow</code>. The label toggle resizes all of them, as it would in the app.</p>
+<div class="frames">
+<div class="frame proposed">
+  <p class="cap">Home · <em>eyebrow and section labels</em></p>
+  <div class="screen">
+    <div class="card card--emph dash-hero"><div class="wm">煮</div>
+      <div class="lbl lbl--brand">Next up</div>
+      <div class="dash-hero-stage">Beginner</div>
+      <div class="dash-hero-title">Cooking &amp; Kitchen</div>
+      <button class="btn btn--primary">Resume lesson <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></button>
+    </div>
+    <div class="lbl lbl--muted sec">To review</div>
+    <div class="card list"><div class="list-row">12 words due</div></div>
+    <div class="lbl lbl--muted sec">Path progress</div>
+    <div class="card list"><div class="list-row">Beginner · 2 of 3</div><div class="list-row">Intermediate · not started</div></div>
+  </div>
+</div>
+<div class="frame proposed">
+  <p class="cap">Translate · <em>a section label inside a result</em></p>
+  <div class="screen">
+    <div class="card" style="padding:16px">
+      <div class="lbl lbl--muted" style="margin-bottom:8px">Word-by-word breakdown</div>
+      <div class="bd">炒 <span>caau2</span> · 飯 <span>faan6</span></div>
+    </div>
+    <div class="card card--milestone dash-hero dash-hero--cp" style="margin-top:16px"><div class="wm">站</div>
+      <div class="lbl lbl--milestone">Next up</div>
+      <div class="dash-hero-stage">Beginner · Checkpoint</div>
+      <div class="dash-hero-title">Eating Out &amp; Shopping</div>
+    </div>
+  </div>
+  <p class="sub">The checkpoint version of <i>Next up</i> on Home, in oxblood, uses the same label.</p>
+</div>
+</div>
+<table>
+<tr><th>Screen</th><th>Label</th><th>Class</th></tr>
+<tr><td>Home</td><td>Next up (orange); Next up (oxblood, when a checkpoint is next); All caught up</td><td><code>.eyebrow</code>, <code>.eyebrow--milestone</code></td></tr>
+<tr><td>Home</td><td>To review · Jump to · Path progress</td><td><code>.section-label</code></td></tr>
+<tr><td>Translate</td><td>Word-by-word breakdown</td><td><code>.section-label</code></td></tr>
+<tr><td>A lesson's Learn view</td><td>About this lesson</td><td><code>.lesson-note-title</code></td></tr>
+</table>
+<p class="note"><b>Eight places in total, across three screens.</b> Measured by declaration: every rule
+in <code>styles.css</code> with those four metrics, then every place <code>render.js</code> uses one of
+those classes. <b>Three near-relatives are not in the family</b> and would not change: the checkpoint's
+<i>◆ Consolidation · …</i> kicker (10px bold, its own tracking), the Topics category headers (12px bold,
+dark) and tags (9.5px). The checkpoint kicker is a candidate to join the family later.</p>
+
+</div>
+<script>
+  const groups = { tabs:['t15'], rule:['r3'], wt:['semi'], lbl:['l11','l12'] };
+  document.querySelectorAll('.toolbar button').forEach(b => b.addEventListener('click', () => {
+    const g = b.dataset.set;
+    groups[g].forEach(c => document.body.classList.remove(c));
+    if (b.dataset.v) document.body.classList.add(b.dataset.v);
+    document.querySelectorAll(`.toolbar button[data-set="${g}"]`).forEach(x => x.setAttribute('aria-pressed', String(x === b)));
+  }));
+</script>
+</body>
+</html>

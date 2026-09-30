@@ -4,7 +4,7 @@
 IN_PROGRESS.md when it's picked up; delete it from here once it's shipped and
 folded into STATUS.md.*
 
-Last updated: 2026-09-23 · sw.js at v154
+Last updated: 2026-09-23 · sw.js at v155
 
 ## Product
 - **Runtime Azure TTS for the Translate screen — gated on the A2 proxy.** Agreed
@@ -31,6 +31,11 @@ Last updated: 2026-09-23 · sw.js at v154
   way a mark for *Français* on French lessons would struggle. A composite mark,
   the 粵 (jyut6) icon with the wordmark, is likely easier to register than the bare
   word. Not legal advice; a question for whoever files it.
+- **Treat the app icon as fixed once the app is public.** At v154 a changed icon
+  did not reach an installed app on Android even with renamed files and a
+  successful update; only a reinstall delivered it (STATUS § Notes worth
+  carrying forward). Any further change to the icon should happen before anyone
+  else installs Jyut, or be accepted as reaching new installs only.
 
 - **Style the styleguide's speak demos.** Found at v154: `docs/design/styleguide.html`
   has no `.speak-card`, `.mic-btn`, `.speak-status`, `.speak-heard`,
@@ -41,6 +46,21 @@ Last updated: 2026-09-23 · sw.js at v154
   sections already do, and add a `.speak-card-head` demo. Invisible in the app.
 
 ## Content
+
+- **Topic intro notes write jyutping before the character, 36+ times.** Found
+  2026-09-23 on *Cooking & Kitchen*: "**zyu2** (煮) is general cooking" puts the
+  reading first and the character in brackets, the reverse of the rule that every
+  character is followed by its jyutping. A pattern search finds at least 36 such
+  spots across 15 topic files (work, animals, school, hotels, emergencies,
+  numbers, friends, restaurant, attractions, tech, money, cooking, hobbies, home,
+  sports); an italic form, *wok6*, 鑊, is not counted. `jyutping-check.js` passes
+  them because the jyutping is present, just in the wrong order. Reorder to
+  煮 (zyu2), then add the order to the check, verified to fail on a planted
+  reversal before it is trusted.
+- **Optional wording tweak: 你識唔識炒飯？ (nei5 sik1 m4 sik1 caau2 faan6?).** Its
+  English, *Can you make fried rice?*, is correct. *Do you know how to make fried
+  rice?* would reinforce its own note, which contrasts 識 (sik1), a learned skill,
+  with 可以 (ho2 ji5), permission. William's call; not yet decided.
 
 *The corpus register, the full Intermediate chapter plan, and the tier-2
 authoring spec live in `docs/CONTENT.md` and `docs/CONTENT_SPEC_TIER2.md`. These
