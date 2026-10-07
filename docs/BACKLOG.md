@@ -4,7 +4,7 @@
 IN_PROGRESS.md when it's picked up; delete it from here once it's shipped and
 folded into STATUS.md.*
 
-Last updated: 2026-09-23 · sw.js at v155
+Last updated: 2026-10-07 · sw.js at v156
 
 ## Product
 - **Runtime Azure TTS for the Translate screen — gated on the A2 proxy.** Agreed
@@ -61,6 +61,8 @@ Last updated: 2026-09-23 · sw.js at v155
   English, *Can you make fried rice?*, is correct. *Do you know how to make fried
   rice?* would reinforce its own note, which contrasts 識 (sik1), a learned skill,
   with 可以 (ho2 ji5), permission. William's call; not yet decided.
+- **Re-set the Saying More checkpoint conversation.** *Choosing a coat* rests on
+  clothing nouns taught five stages later. Detail and fix in CONTENT.md §4 *Open*.
 
 *The corpus register, the full Intermediate chapter plan, and the tier-2
 authoring spec live in `docs/CONTENT.md` and `docs/CONTENT_SPEC_TIER2.md`. These

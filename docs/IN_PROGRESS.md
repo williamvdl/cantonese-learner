@@ -4,7 +4,22 @@
 questions behind it. Meant to be short-lived — when a piece ships, fold its
 outcome into STATUS.md and clear this file back down for the next thing.*
 
-Last updated: 2026-09-23 · sw.js at v155
+Last updated: 2026-10-07 · sw.js at v156
+
+## v156 — Saying More moved ahead of Food & Drink — awaiting deploy and device QA
+
+The Beginner path now walks First Words → Building Sentences → **Saying More** →
+Food & Drink → Eating Out & Shopping → the rest unchanged. Data only:
+`learning_paths.json`, plus the `sw.js` bump. Ids are kept, so `beginner-s5` walks
+third and no progress moves. The reasoning and the measurement are in CONTENT.md
+§2 *Paths*; the row is in STATUS.md. **Verified against the lifted sequencing
+functions, not yet on the Pixel.**
+
+**Watch in use:** the first food lesson is now 14th rather than 11th, after eight
+function-word topics in a row. That is the cost the counts can't see.
+
+**Follow-up in BACKLOG:** re-set the Saying More checkpoint conversation, whose
+coat-shop scene uses clothing nouns from five stages later.
 
 ## v155 — larger tabs and labels — awaiting deploy and device QA
 

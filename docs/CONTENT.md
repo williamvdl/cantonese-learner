@@ -5,7 +5,7 @@ and what is planned. Content only — the app that renders it lives in STATUS.md
 the visual rules in DESIGN_SYSTEM.md, the UX decisions in DESIGN_DECISIONS.md,
 the tier-2 authoring rules in CONTENT_SPEC_TIER2.md.*
 
-Last updated: 2026-09-17 · sw.js at v148 · inventory derived from
+Last updated: 2026-10-07 · sw.js at v156 · inventory derived from
 `node tools/content-report.js`
 
 ---
@@ -152,15 +152,48 @@ checkpoint and conversation, every topic at tier 1.
 |---|---|---|
 | beginner-s1 | First Words | pronouns, greetings, yesno, numbers, phrases |
 | beginner-s2 | Building Sentences | questions, particles, tense, time, classifiers |
+| beginner-s5 | Saying More | modals, adjectives, comparisons |
 | beginner-s3 | Food & Drink | food, meatseafood, fruitveg, drinks |
 | beginner-s4 | Eating Out & Shopping | restaurant, cooking, shopping |
-| beginner-s5 | Saying More | modals, adjectives, comparisons |
 | beginner-s6 | Describing the World | colors, animals, weather |
 | beginner-s7 | Me & My People | family, friends, feelings, body |
 | beginner-s8 | Home & Surroundings | home, clothing, location |
 | beginner-s9 | Out & About | directions, transport, attractions, hotels |
 | beginner-s10 | Daily Life & Work | work, school, tech, money |
 | beginner-s11 | Activity & Safety | hobbies, sports, emergencies |
+
+**Rows are in walking order, and since v156 that is not id order.** Saying More
+(`beginner-s5`) moved from fifth to third, ahead of Food & Drink and Eating Out &
+Shopping. The ids were kept rather than renumbered: checkpoint completion is
+stored against the checkpoint id and lesson completion against `topic-tN`, so
+renumbering would have orphaned learners' progress, while a reorder loses none.
+**Read a stage's position from `learning_paths.json`, never from its id.**
+
+*Why it moved.* Saying More teaches the sentence frames the two food stages are
+practised in — 想 (soeng2, want to), 鍾意 (zung1 ji3, like), 可以 (ho2 ji5, can),
+識 (sik1, know how to), 好 (hou2) + adjective, 啲 (di1, a bit more), 最 (zeoi3,
+most) — and the old order taught the food words first. Measured by counting the
+practice sentences and checkpoint-conversation lines that use a word the learner
+has not yet been taught (substring match against each later-taught word;
+同 (tung4) and 水 (seoi2) excluded as false hits):
+
+| Stage | Items | Forward references, old order | After v156 |
+|---|---|---|---|
+| Food & Drink | 30 | 20 | 7 |
+| Eating Out & Shopping | 25 | 13 | 1 |
+| Saying More | 25 | 6 | 9 |
+| **Whole path** | | **83** | **61** |
+
+Saying More's own sentences are nearly food-free, which is why it loses little by
+going first; its three new forward references are 咖啡 (gaa3 fe1, coffee),
+凍 (dung3, cold) and 買 (maai5, buy). Intermediate already ran Saying More (I-3)
+before Food, Dining & Shopping (I-4), so the two paths now agree. A side effect:
+貴 (gwai3, expensive) and 平 (peng4, cheap) are taught in both `comparisons` and
+`shopping`, and Comparisons now teaches them first.
+
+*The cost, accepted rather than measured:* the first food lesson moves from 11th
+to 14th, after eight consecutive function-word topics (questions through
+comparisons). That is a pacing risk to watch in use, not one the counts can see.
 
 **Intermediate is four chapters of six**, tracked against the plan in §5.
 
@@ -411,6 +444,21 @@ the stage's 19 words.
 
 All three of the above were authored in the same session that shipped I-3, and
 all three are the *last* step of a sequence. See §7.
+
+### Open
+
+**The Saying More checkpoint conversation is set in a clothes shop the learner
+has not reached.** `beginner-s5`, *Choosing a coat*, is built around 外套 (ngoi6
+tou3, coat) and 褲 (fu3, trousers), both taught in `clothing` — five stages later
+since v156, three before it. The move widened the gap; it did not create it. The
+scene's grammar is right for the stage: it exercises 想 (soeng2), 可以 (ho2 ji5),
+應該 (jing1 goi1), comparison with 過 (gwo3) and 啲 (di1), and 最 (zeoi3). Only its
+nouns are early. The rest of its untaught chunks, such as 不過 (bat1 gwo3, but) and
+而且 (ji4 ce2, and also), are ordinary glossed conversation vocabulary and not
+the issue. **Fix:** re-set the same ten-line exchange around things taught by
+stage 3, keeping its grammar, then regenerate its audio with
+`node tools/generate-audio.js --convo=beginner-s5` — conversation-voice files
+only, so the DES-51 voice casting applies.
 
 ### Open by design
 

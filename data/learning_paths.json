@@ -48,6 +48,18 @@
           "round": 1
         },
         {
+          "topic": "modals",
+          "round": 1
+        },
+        {
+          "topic": "adjectives",
+          "round": 1
+        },
+        {
+          "topic": "comparisons",
+          "round": 1
+        },
+        {
           "topic": "food",
           "round": 1
         },
@@ -73,18 +85,6 @@
         },
         {
           "topic": "shopping",
-          "round": 1
-        },
-        {
-          "topic": "modals",
-          "round": 1
-        },
-        {
-          "topic": "adjectives",
-          "round": 1
-        },
-        {
-          "topic": "comparisons",
           "round": 1
         },
         {
@@ -206,6 +206,20 @@
           }
         },
         {
+          "id": "beginner-s5",
+          "name": "Saying More",
+          "topics": [
+            "modals",
+            "adjectives",
+            "comparisons"
+          ],
+          "checkpoint": {
+            "id": "beginner-s5-cp",
+            "wordCap": 25,
+            "convo": "beginner-s5"
+          }
+        },
+        {
           "id": "beginner-s3",
           "name": "Food & Drink",
           "topics": [
@@ -232,20 +246,6 @@
             "id": "beginner-s4-cp",
             "wordCap": 25,
             "convo": "beginner-s4"
-          }
-        },
-        {
-          "id": "beginner-s5",
-          "name": "Saying More",
-          "topics": [
-            "modals",
-            "adjectives",
-            "comparisons"
-          ],
-          "checkpoint": {
-            "id": "beginner-s5-cp",
-            "wordCap": 25,
-            "convo": "beginner-s5"
           }
         },
         {
