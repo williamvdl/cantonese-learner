@@ -266,9 +266,9 @@
           },
           {
             "u": true,
-            "c": "我想學游水，但係我唔識。",
-            "j": "ngo5 soeng2 hok6 jau4 seoi2, daan6 hai6 ngo5 m4 sik1.",
-            "e": "I want to learn to swim, but I don't know how.",
+            "c": "我想學游水，我仲未識游。",
+            "j": "ngo5 soeng2 hok6 jau4 seoi2, ngo5 zung6 mei6 sik1 jau4.",
+            "e": "I want to learn to swim — I still can't.",
             "bd": [
               {
                 "c": "我想",
@@ -286,28 +286,33 @@
                 "e": "swim"
               },
               {
-                "c": "但係",
-                "j": "daan6 hai6",
-                "e": "but"
-              },
-              {
                 "c": "我",
                 "j": "ngo5",
                 "e": "I"
               },
               {
-                "c": "唔識",
-                "j": "m4 sik1",
-                "e": "don't know how"
+                "c": "仲未",
+                "j": "zung6 mei6",
+                "e": "still not yet"
+              },
+              {
+                "c": "識",
+                "j": "sik1",
+                "e": "know how to (a skill)"
+              },
+              {
+                "c": "游",
+                "j": "jau4",
+                "e": "swim"
               }
             ],
             "opts": [
-              "我想學游水，但係我唔識。",
+              "我想學游水，我仲未識游。",
               "我想去睇戲，你去唔去呀？",
               "我聽日要返工，去唔到。"
             ],
             "optsJ": [
-              "ngo5 soeng2 hok6 jau4 seoi2, daan6 hai6 ngo5 m4 sik1.",
+              "ngo5 soeng2 hok6 jau4 seoi2, ngo5 zung6 mei6 sik1 jau4.",
               "ngo5 soeng2 heoi3 tai2 hei3, nei5 heoi3 m4 heoi3 aa3?",
               "ngo5 ting1 jat6 jiu3 faan1 gung1, heoi3 m4 dou2."
             ]
@@ -337,9 +342,9 @@
           },
           {
             "u": true,
-            "c": "真係？你會游咩？",
-            "j": "zan1 hai6? nei5 wui5 jau4 me1?",
-            "e": "Really? You can swim?",
+            "c": "真係？你聽日可唔可以教我？",
+            "j": "zan1 hai6? nei5 ting1 jat6 ho2 m4 ho2 ji5 gaau3 ngo5?",
+            "e": "Really? Could you teach me tomorrow?",
             "bd": [
               {
                 "c": "真係",
@@ -352,37 +357,47 @@
                 "e": "you"
               },
               {
-                "c": "會游",
-                "j": "wui5 jau4",
-                "e": "can swim"
+                "c": "聽日",
+                "j": "ting1 jat6",
+                "e": "tomorrow"
               },
               {
-                "c": "咩",
-                "j": "me1",
-                "e": "(question particle)"
+                "c": "可唔可以",
+                "j": "ho2 m4 ho2 ji5",
+                "e": "can or can't (could you)"
+              },
+              {
+                "c": "教",
+                "j": "gaau3",
+                "e": "teach"
+              },
+              {
+                "c": "我",
+                "j": "ngo5",
+                "e": "me"
               }
             ],
             "opts": [
-              "真係？你會游咩？",
+              "真係？你聽日可唔可以教我？",
               "唔使喇，我自己學得嚟。",
-              "幾時教呀？聽日得唔得？"
+              "真係？但係我聽日要返工，唔得閒。"
             ],
             "optsJ": [
-              "zan1 hai6? nei5 wui5 jau4 me1?",
+              "zan1 hai6? nei5 ting1 jat6 ho2 m4 ho2 ji5 gaau3 ngo5?",
               "m4 sai2 laa3, ngo5 zi6 gei2 hok6 dak1 lai4.",
-              "gei2 si4 gaau3 aa3? ting1 jat6 dak1 m4 dak1?"
+              "zan1 hai6? daan6 hai6 ngo5 ting1 jat6 jiu3 faan1 gung1, m4 dak1 haan4."
             ]
           },
           {
             "u": false,
-            "c": "會呀，不過你要早啲起身。",
-            "j": "wui5 aa3, bat1 gwo3 nei5 jiu3 zou2 di1 hei2 san1.",
-            "e": "Yes, but you need to get up earlier.",
+            "c": "可以呀，不過要好早去，你應該早啲瞓。",
+            "j": "ho2 ji5 aa3, bat1 gwo3 jiu3 hou2 zou2 heoi3, nei5 jing1 goi1 zou2 di1 fan3.",
+            "e": "Sure, but we have to go really early — you should get to bed early.",
             "bd": [
               {
-                "c": "會呀",
-                "j": "wui5 aa3",
-                "e": "yes (can)"
+                "c": "可以呀",
+                "j": "ho2 ji5 aa3",
+                "e": "sure (I can)"
               },
               {
                 "c": "不過",
@@ -390,9 +405,29 @@
                 "e": "but"
               },
               {
-                "c": "你要",
-                "j": "nei5 jiu3",
-                "e": "you need to"
+                "c": "要",
+                "j": "jiu3",
+                "e": "have to"
+              },
+              {
+                "c": "好早",
+                "j": "hou2 zou2",
+                "e": "very early"
+              },
+              {
+                "c": "去",
+                "j": "heoi3",
+                "e": "go"
+              },
+              {
+                "c": "你",
+                "j": "nei5",
+                "e": "you"
+              },
+              {
+                "c": "應該",
+                "j": "jing1 goi1",
+                "e": "should"
               },
               {
                 "c": "早啲",
@@ -400,17 +435,17 @@
                 "e": "earlier"
               },
               {
-                "c": "起身",
-                "j": "hei2 san1",
-                "e": "get up"
+                "c": "瞓",
+                "j": "fan3",
+                "e": "sleep / go to bed"
               }
             ]
           },
           {
             "u": true,
-            "c": "冇問題，我應該得㗎。",
-            "j": "mou5 man6 tai4, ngo5 jing1 goi1 dak1 gaa3.",
-            "e": "No problem, I should be fine.",
+            "c": "冇問題，我今晚會早啲瞓。",
+            "j": "mou5 man6 tai4, ngo5 gam1 maan5 wui5 zou2 di1 fan3.",
+            "e": "No problem, I'll go to bed early tonight.",
             "bd": [
               {
                 "c": "冇問題",
@@ -423,29 +458,34 @@
                 "e": "I"
               },
               {
-                "c": "應該",
-                "j": "jing1 goi1",
-                "e": "should"
+                "c": "今晚",
+                "j": "gam1 maan5",
+                "e": "tonight"
               },
               {
-                "c": "得",
-                "j": "dak1",
-                "e": "be ok"
+                "c": "會",
+                "j": "wui5",
+                "e": "will"
               },
               {
-                "c": "㗎",
-                "j": "gaa3",
-                "e": "(particle)"
+                "c": "早啲",
+                "j": "zou2 di1",
+                "e": "earlier"
+              },
+              {
+                "c": "瞓",
+                "j": "fan3",
+                "e": "sleep / go to bed"
               }
             ],
             "opts": [
-              "冇問題，我應該得㗎。",
-              "我一定起唔到身㗎。",
+              "冇問題，我今晚會早啲瞓。",
+              "我鍾意游水，我游得好快㗎。",
               "咁我唔去喇，太早喇。"
             ],
             "optsJ": [
-              "mou5 man6 tai4, ngo5 jing1 goi1 dak1 gaa3.",
-              "ngo5 jat1 ding6 hei2 m4 dou2 san1 gaa3.",
+              "mou5 man6 tai4, ngo5 gam1 maan5 wui5 zou2 di1 fan3.",
+              "ngo5 zung1 ji3 jau4 seoi2, ngo5 jau4 dak1 hou2 faai3 gaa3.",
               "gam2 ngo5 m4 heoi3 laa3, taai3 zou2 laa3."
             ]
           }

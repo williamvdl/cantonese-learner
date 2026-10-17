@@ -4,7 +4,38 @@
 questions behind it. Meant to be short-lived — when a piece ships, fold its
 outcome into STATUS.md and clear this file back down for the next thing.*
 
-Last updated: 2026-10-07 · sw.js at v156
+Last updated: 2026-10-15 · sw.js at v157
+
+## v157 — an Adjectives sentence and the Modal Verbs chat — awaiting audio, deploy and device QA
+
+Two content corrections, one deploy. `adjectives-t1-s04` is now 佢哋好高 (keoi5
+dei6 hou2 gou1), "They're very tall", replacing 今日人好多 (gam1 jat6 jan4 hou2
+do1), which a native speaker flagged as a phrasing nobody uses. The Modal Verbs
+chat, *Learning to swim*, has lines 2, 4, 5 and 6 rewritten: the learner now
+accepts the friend's offer instead of being surprised that they can swim. Detail
+is in the STATUS row.
+
+**Deploy steps, in this order:**
+
+1. Delete these five files. The generator skips files that already exist, so
+   without this the old recordings stay:
+   - `audio/sentences/adjectives-t1-s04.mp3`
+   - `audio/convos/topic-modals-r1-line02.mp3`
+   - `audio/convos/topic-modals-r1-line04.mp3`
+   - `audio/convos/topic-modals-r1-line05.mp3`
+   - `audio/convos/topic-modals-r1-line06.mp3`
+2. Run `node tools/generate-audio.js --topic=adjectives`, then
+   `node tools/generate-audio.js --topic=modals`. Only the five missing files are
+   generated; the chat lines take the DES-51 voices automatically.
+3. Commit the five new MP3s together with `adjectives.json`, `modals.json` and
+   `sw.js`. The version bump must land with or after the audio, never before it
+   (DES-51).
+
+**QA, screens that changed:** the Adjectives lesson's sentence 4, its text, play
+button and note; the Modal Verbs Chat, played through in Listen and in Fill the
+Gap, checking lines 2, 4, 5 and 6 and their voices.
+**Screens sharing the changed code, to confirm only:** the Saying More
+checkpoint's sentence review.
 
 ## v156 — Saying More moved ahead of Food & Drink — awaiting deploy and device QA
 

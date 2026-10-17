@@ -167,25 +167,20 @@
         },
         {
           "sid": "adjectives-t1-s04",
-          "c": "今日人好多。",
-          "j": "gam1 jat6 jan4 hou2 do1.",
-          "e": "There are a lot of people today.",
-          "note": "An adjective can be the whole predicate — no \"is\" needed. 人好多 (jan4 hou2 do1) \"(the) people are very many = it's crowded\". 係 (hai6) \"to be\" is dropped before adjectives; you just say 好 (hou2) + adjective.",
+          "c": "佢哋好高。",
+          "j": "keoi5 dei6 hou2 gou1.",
+          "e": "They're very tall.",
+          "note": "An adjective can be the whole predicate — no \"is\" needed. 佢哋好高 (keoi5 dei6 hou2 gou1) is literally \"they very tall\". 係 (hai6) \"to be\" is dropped before adjectives; you just say 好 (hou2) + adjective. That 好 (hou2) often adds little more than \"is\", so 好高 (hou2 gou1) can mean plain \"tall\" as well as \"very tall\".",
           "bd": [
             {
-              "c": "今日",
-              "j": "gam1 jat6",
-              "e": "today"
+              "c": "佢哋",
+              "j": "keoi5 dei6",
+              "e": "they"
             },
             {
-              "c": "人",
-              "j": "jan4",
-              "e": "people"
-            },
-            {
-              "c": "好多",
-              "j": "hou2 do1",
-              "e": "very many"
+              "c": "好高",
+              "j": "hou2 gou1",
+              "e": "very tall"
             }
           ]
         },
