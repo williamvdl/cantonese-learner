@@ -3579,28 +3579,32 @@ function afterRender() {
 // Listen-mode prompts auto-play once per question, not on every re-render — the
 // index guard is what makes it once. The delay lets the previous question's
 // feedback audio finish before the new prompt starts.
+//
+// One rule for every quiz drawn by renderQuizCore(), listed in `sessions`. Until
+// v158 each quiz carried its own copy of this block, and the third consumer —
+// the checkpoint's Words activity — never got one, so its listen questions
+// waited for a tap while the topic quiz and Word Review played on their own.
+// **A new caller of renderQuizCore() needs a row here**, or its listen mode is
+// silent. The table lives inside the function so the rule can be lifted whole.
 function autoPlayListenPrompts() {
-  const q = state.quiz;
-  if (q && !q.done && q.direction === 'listen-en' && q._listenAutoPlayed !== q.idx) {
-    q._listenAutoPlayed = q.idx;
+  const sessions = [
+    { get: () => state.quiz,       word: s => s.queue[s.idx] },
+    { get: () => state.wordReview, word: s => s.queue[s.idx].word },
+    // Gated on the activity, as the checkpoint's own choice handler is.
+    { get: () => (state.checkpointAct === 'words' ? state.checkpointQuiz : null),
+      word: s => s.pool[s.idx] },
+  ];
+  sessions.forEach(({ get, word }) => {
+    const s = get();
+    if (!s || s.done || s.direction !== 'listen-en' || s._listenAutoPlayed === s.idx) return;
+    s._listenAutoPlayed = s.idx;
     setTimeout(() => {
-      const cur = state.quiz;
+      const cur = get();
       if (cur && !cur.done && cur.direction === 'listen-en' && cur._listenAutoPlayed === cur.idx) {
-        speakItem('word', cur.queue[cur.idx].id);
+        speakItem('word', word(cur).id);
       }
     }, 900);
-  }
-
-  const wr = state.wordReview;
-  if (wr && !wr.done && wr.direction === 'listen-en' && wr._listenAutoPlayed !== wr.idx) {
-    wr._listenAutoPlayed = wr.idx;
-    setTimeout(() => {
-      const cur = state.wordReview;
-      if (cur && !cur.done && cur.direction === 'listen-en' && cur._listenAutoPlayed === cur.idx) {
-        speakItem('word', cur.queue[cur.idx].word.id);
-      }
-    }, 900);
-  }
+  });
 }
 
 // ── Small shared derivations ──────────────────────────────────────────────────

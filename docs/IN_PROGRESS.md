@@ -4,9 +4,24 @@
 questions behind it. Meant to be short-lived — when a piece ships, fold its
 outcome into STATUS.md and clear this file back down for the next thing.*
 
-Last updated: 2026-10-15 · sw.js at v157
+Last updated: 2026-10-17 · sw.js at v158
 
-## v157 — an Adjectives sentence and the Modal Verbs chat — awaiting audio, deploy and device QA
+## v158 — checkpoint Words quiz plays its listen prompts — awaiting deploy and device QA
+
+Reported by William: in the audio-only quiz direction, a topic's quiz plays each
+new word by itself, but the checkpoint's Words activity waited for a tap every
+time. The checkpoint quiz is the third quiz drawn by `renderQuizCore()`, and
+auto-play was wired per quiz, so it never got a copy. All three now share one
+rule in `autoPlayListenPrompts()`. Code only: `render.js` and the `sw.js` bump.
+Detail is in the STATUS row. **Verified by a lifted test, not yet on the Pixel.**
+
+**QA, screens that changed:** a checkpoint's Words activity in the listen
+direction — the first word plays by itself, each Next plays the next word, and
+switching to listen mid-question plays once.
+**Screens sharing the changed code, to confirm only:** a topic's Quiz and Word
+Review in the listen direction, which should behave exactly as before.
+
+## v157 — an Adjectives sentence and the Modal Verbs chat — deployed, awaiting device QA confirmation
 
 Two content corrections, one deploy. `adjectives-t1-s04` is now 佢哋好高 (keoi5
 dei6 hou2 gou1), "They're very tall", replacing 今日人好多 (gam1 jat6 jan4 hou2
