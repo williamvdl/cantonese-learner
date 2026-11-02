@@ -4,9 +4,24 @@
 questions behind it. Meant to be short-lived — when a piece ships, fold its
 outcome into STATUS.md and clear this file back down for the next thing.*
 
-Last updated: 2026-10-17 · sw.js at v158
+Last updated: 2026-10-22 · sw.js at v159
 
-## v158 — checkpoint Words quiz plays its listen prompts — awaiting deploy and device QA
+## v159 — quiz results show the whole word you chose — awaiting deploy and device QA
+
+The topic Quiz's "You chose" line now shows the picked word's Chinese, jyutping
+and English in every direction (DES-60), where it showed the character alone, or
+the English alone. Found on the way: the checkpoint Words summary's play buttons
+had never worked, and now play. Code only: `render.js` and the `sw.js` bump.
+Detail is in the STATUS row. **Verified by a lifted test and a rendered preview,
+not yet on the Pixel.**
+
+**QA, screens that changed:** a topic Quiz finished with at least one miss, in
+each of the three directions — the "You chose" line; a checkpoint's Words
+activity finished with a miss — the play buttons under *Worth another look*.
+**Screens sharing the changed code, to confirm only:** the topic Quiz's play and
+*Retry missed words* buttons on the same screen.
+
+## v158 — checkpoint Words quiz plays its listen prompts — deployed, awaiting device QA confirmation
 
 Reported by William: in the audio-only quiz direction, a topic's quiz plays each
 new word by itself, but the checkpoint's Words activity waited for a tap every

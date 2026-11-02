@@ -1100,7 +1100,10 @@ function renderCheckpointWords() {
       total,
       stage,
       missedTopicKeys: q.missed.map(w => wordTopicInStage(cpState.pathKey, stage, w)).filter(Boolean),
-      missedItems: q.missed.map(w => ({ c:w.c, j:w.j, e:w.e })),
+      // `id` is what the row's play button reads (`data-cp-say`). Until v159 it
+      // was left out, so every button asked for audio/words/undefined.mp3 and
+      // showed "Audio not generated" instead of playing the word.
+      missedItems: q.missed.map(w => ({ id:w.id, c:w.c, j:w.j, e:w.e })),
       activity: 'words',
     });
   }
@@ -2404,14 +2407,18 @@ function renderQuiz(lesson) {
     const msg   = pct >= 0.75 ? "Excellent! You're a natural!" : pct >= 0.5 ? "Good effort! Keep practising." : "Keep going — practice makes perfect!";
 
     // Build the missed-word review list (only when there were misses).
-    // Direction-aware: "You chose" shows English or Chinese depending on what the choice buttons displayed.
+    // "You chose" shows the picked word's Chinese, jyutping AND English, in every
+    // direction (DES-60). Until v159 it was direction-aware and showed only what
+    // the choice button had shown: the Chinese alone after an English→Chinese
+    // question, the English alone otherwise — so a learner who mixed up two words
+    // could not see the one they picked. Same rule as DES-54's summary row.
     // w.chosen is the actual option object that was picked (not a string), so no lookup is needed.
     const reviewList = q.wrongAnswers.length
       ? `<div class="quiz-review-wrap">
           <div class="quiz-review-title">Words to review (${q.wrongAnswers.length})</div>
           ${q.wrongAnswers.map(w => {
             const chosenLabel = w.chosen
-              ? (q.direction === 'en-zh' ? w.chosen.c : w.chosen.e)
+              ? `<span class="qr-chosen">${w.chosen.c}</span> ${colorJyutping(w.chosen.j)} ·&nbsp;${w.chosen.e}`
               : '—';
             return `
             <div class="card quiz-review-item">
@@ -2420,7 +2427,7 @@ function renderQuiz(lesson) {
                 <div class="quiz-review-chinese">${w.word.c}</div>
                 <div class="quiz-review-jp">${colorJyutping(w.word.j)}</div>
                 <div class="quiz-review-en"><span class="qr-correct">${w.word.e}</span></div>
-                <div class="quiz-review-chose">You chose: <span class="qr-chosen">${chosenLabel}</span></div>
+                <div class="quiz-review-chose">You chose: ${chosenLabel}</div>
               </div>
             </div>`;
           }).join('')}
