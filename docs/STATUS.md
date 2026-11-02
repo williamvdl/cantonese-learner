@@ -13,7 +13,7 @@ not a history log. Approved design decisions and whether they were built live in
 > convention (`v121 — <what changed>`) so this file stops being load-bearing on
 > its own.
 
-Last updated: 2026-10-22 · sw.js at v159
+Last updated: 2026-11-02 · sw.js at v159
 
 ## Confirmed live and working
 - **Checkpoint sentence review** (v134, DES-44/45). Third checkpoint activity:
@@ -260,6 +260,16 @@ orphan hues `#B7861E`, `#e4d4ad`, `#8a6716`,
 | DES-60 | v159 | **Two fixes on the quiz results screens, one reported and one found while checking the checkpoint as asked.** *Reported by William, from a screenshot:* the topic Quiz's "Words to review" list showed only the character of the word picked — "You chose: 羊 (joeng4)" for 養 (joeng5), with no jyutping or meaning, so the tone confusion behind the miss was invisible. The line was deliberately direction-aware and showed the English alone in the other two directions. It now shows Chinese, jyutping and English in all three (DES-60). *Found:* the checkpoint Words summary's *Worth another look* rows have never played. `renderCheckpointWords()` mapped missed words to `{ c, j, e }` and dropped `id`, which the row's play button interpolates, so every button carried `data-cp-say="undefined"` and asked for `audio/words/undefined.mp3` — the toast "Audio not generated for this yet" instead of the word. `id` is now carried. Neither screen is in DESIGN_SYSTEM.md or the styleguide, so neither needed updating. Verified by lifting `renderQuiz()`, `renderCheckpointWords()`, `renderCheckpointDone()` and `colorJyutping()` verbatim: v159 passes all eight cases and v158 fails six, reproducing both defects. Rendered with the real stylesheet at phone width to check wrapping. All twelve standing checks and `content-report.js` give output identical to v158. |
 
 ### Notes worth carrying forward
+
+- **`continuous = true` does not survive a pause on Chrome for Android, and two
+  probe comments say it does (2026-11-02).** `tools/asr-probe.html` says
+  *"Continuous recognition does not stop by itself"* and `app.js` says *"keep
+  listening until user stops"*. Our own tail-probe controls contradict both: the
+  6000ms attempts ended themselves at 4.6s and 4.9s. Nobody noticed in August
+  because every probe stopped sessions on a timer, so the natural end was never
+  the thing being watched. **A setting in the code records what was asked for,
+  not what the platform does.** The work this opens is the NEXT UP item in
+  BACKLOG.md § Features.
 
 - **A missing field interpolates as the string "undefined", which defeats a
   falsy guard (v159).** `speakItem()` returns early on `!id`, but the checkpoint

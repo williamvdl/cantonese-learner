@@ -4,9 +4,22 @@
 questions behind it. Meant to be short-lived — when a piece ships, fold its
 outcome into STATUS.md and clear this file back down for the next thing.*
 
-Last updated: 2026-10-22 · sw.js at v159
+Last updated: 2026-11-02 · sw.js at v159
 
-## v159 — quiz results show the whole word you chose — awaiting deploy and device QA
+## Next up — the listening cut-off: an Azure probe
+
+Nothing is being built right now. The next piece of work is the **NEXT UP** item
+at the top of BACKLOG.md § Features: the mic stops at a pause because Chrome on
+Android does not honour `continuous = true`, and the candidate fix, Azure
+record-then-transcribe, is probed before anything is built. That item is a
+complete brief for a new session: the evidence, the options ruled out, the probe
+design and its inherited pass bar.
+
+**Deployed and awaiting device QA confirmation: v155 to v159**, below. Each
+keeps its QA list until William confirms it on the Pixel; then it folds into
+STATUS.md and leaves this file.
+
+## v159 — quiz results show the whole word you chose — deployed, awaiting device QA confirmation
 
 The topic Quiz's "You chose" line now shows the picked word's Chinese, jyutping
 and English in every direction (DES-60), where it showed the character alone, or
@@ -67,7 +80,7 @@ Gap, checking lines 2, 4, 5 and 6 and their voices.
 **Screens sharing the changed code, to confirm only:** the Saying More
 checkpoint's sentence review.
 
-## v156 — Saying More moved ahead of Food & Drink — awaiting deploy and device QA
+## v156 — Saying More moved ahead of Food & Drink — deployed, awaiting device QA confirmation
 
 The Beginner path now walks First Words → Building Sentences → **Saying More** →
 Food & Drink → Eating Out & Shopping → the rest unchanged. Data only:
@@ -82,7 +95,7 @@ function-word topics in a row. That is the cost the counts can't see.
 **Follow-up in BACKLOG:** re-set the Saying More checkpoint conversation, whose
 coat-shop scene uses clothing nouns from five stages later.
 
-## v155 — larger tabs and labels — awaiting deploy and device QA
+## v155 — larger tabs and labels — deployed, awaiting device QA confirmation
 
 The Learn / Chat / Quiz switch at 17px with 19px icons and a semibold active
 tab, a 3px active rule on it and on the bottom tab bar, and the small-caps label
@@ -94,8 +107,8 @@ the Pixel.**
 new icon after an uninstall and reinstall. Its close-out docs were delivered but
 never committed, so they ride in this commit.
 
-**Next candidate work:** reordering the topic intros' reversed jyutping (new, in
-BACKLOG § Content), styling the styleguide's speak demos, an aggregating runner
+**Next candidate work, after the Azure probe at the top of this file:** reordering
+the topic intros' reversed jyutping (in BACKLOG § Content), styling the styleguide's speak demos, an aggregating runner
 for the standing checks, the 169 Check B structural candidates from
 `dup-css.js` (needs William's judgement), the 4 remaining Check A rule-splits,
 the open particle-rule question, and the `char-jyutping.json` coverage
