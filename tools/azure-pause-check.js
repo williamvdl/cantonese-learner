@@ -171,7 +171,7 @@
  * seconds per call, so a free Gemini key may make the run slower, not fail it.
  *
  * Output: a summary on screen, and every raw response, round-trip time and the
- * construction timings in tools/fixtures/azure-pause-check-<date>.json. The raw
+ * construction timings in tools/runs/azure-pause-check-<date>[-<only>].json. The raw
  * responses are what make a surprising result readable afterwards.
  *
  * Not a standing check: it asserts no invariant, and once answered it is dead.
@@ -183,7 +183,7 @@ const fs = require('fs');
 const os = require('os');
 const path = require('path');
 
-const CHECK_VERSION = 'azure-pause-check 2 · 2026-11-03';   // 2: gemini arm added
+const CHECK_VERSION = 'azure-pause-check 4 · 2026-11-03';   // 2: gemini arm · 3: --only names its own export · 4: writes to tools/runs/
 
 const ROOT = path.join(__dirname, '..');
 const DATA = path.join(ROOT, 'data');
@@ -517,9 +517,16 @@ async function main() {
     }
   }
 
-  const outDir = path.join(__dirname, 'fixtures');
+  // tools/runs/, NOT tools/fixtures/. asr-replay-harness.js (a standing check)
+  // reads every .json in tools/fixtures/ as a recorded Web Speech trace, and
+  // this file is not one: dropped there, it crashed the harness (found
+  // 2026-11-03, before the file was committed). Probe evidence lives apart.
+  const outDir = path.join(__dirname, 'runs');
   fs.mkdirSync(outDir, { recursive: true });
-  const outFile = path.join(outDir, `azure-pause-check-${run.startedAt.slice(0, 10)}.json`);
+  // One file per day AND per endpoint set, so a same-day --only rerun cannot
+  // overwrite an earlier run's raw responses (found 2026-11-03, before it bit).
+  const suffix = ONLY ? `-${ONLY}` : '';
+  const outFile = path.join(outDir, `azure-pause-check-${run.startedAt.slice(0, 10)}${suffix}.json`);
   fs.writeFileSync(outFile, JSON.stringify(run, null, 2) + '\n');
   console.log(`\nRaw responses: ${path.relative(ROOT, outFile)}`);
   if (audioDir) console.log(`Audio: ${audioDir}`);

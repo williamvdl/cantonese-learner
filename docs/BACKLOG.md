@@ -4,7 +4,7 @@
 IN_PROGRESS.md when it's picked up; delete it from here once it's shipped and
 folded into STATUS.md.*
 
-Last updated: 2026-11-02 · sw.js at v159
+Last updated: 2026-11-03 · sw.js at v159
 
 ## Product
 - **Runtime Azure TTS for the Translate screen — gated on the A2 proxy.** Agreed
@@ -131,83 +131,6 @@ are pointers only — detail goes there, not here.*
 
 ## Features
 
-- **NEXT UP — Listening cuts out at a pause: probe Azure record-then-transcribe.**
-  Reported by William 2026-11-02 and researched the same day; this item is the
-  brief for the session that runs the probe. On every speak surface the mic stops
-  when he pauses mid-sentence, which forces sentences to be rushed.
-  **The app sets no limit.** `startSpeechRecognition()` and
-  `startTranslateListening()` both set `continuous = true`, which by design keeps
-  listening through pauses. **Chrome on Android does not honour it.** Our own data
-  shows it: in `tools/fixtures/tail-probe-numbers-t1-s03.json` the two 6000ms
-  control attempts, which nothing stopped before six seconds, ended by themselves
-  at 4,644ms and 4,935ms, each within 1ms of its last final result. Others report
-  roughly 3–4 seconds of silence (WebAudio/web-speech-api issue #99). The exact
-  silence length on the Pixel has not been measured.
-
-  *Ruled out (searched 2026-11-02):*
-  - **No Web Speech setting controls silence.** The full property list on MDN
-    has none, including the newest additions, `phrases` and `processLocally`.
-  - **Chrome's on-device recognition has no Cantonese.** It lists 18 locales;
-    the only Chinese ones are zh-CN and zh-TW, both Mandarin.
-  - **Android's own silence settings are for native apps only.** Repackaging
-    Jyut as one is out of proportion to this problem.
-  - **Auto-restart on `onend`**, the usual workaround, works on desktop, but on
-    Android each restart plays a connect/disconnect sound (issue #99): a chime at
-    every pause. Worth testing only if the Pixel turns out not to chime.
-  - **A "Continue" button** that resumes and appends is simple and safe, but it
-    still interrupts at every pause. **It is the fallback if the probe fails.**
-
-  *The candidate.* The learner taps to start; `getUserMedia` holds the mic open
-  with no endpointer; the learner taps to stop; the clip goes to Azure's
-  short-audio REST recognition with `language=zh-HK`. Nothing ends the recording
-  but the learner. Already established, in STATUS § Notes (the Azure
-  pronunciation investigation): the REST endpoint **is reachable from a browser
-  origin** (CORS permits it; no SDK or CDN), and zh-HK is a supported
-  speech-to-text locale. **A trap already paid for:** the endpoint accepts
-  WAV/PCM and OGG/OPUS only, and Chrome's default WebM comes back as **HTTP 200
-  with an empty recognition**. Encode WAV from PCM, and judge success on the
-  payload, never the status code. Free tier: 5 audio hours of real-time speech
-  to text a month. **Key:** entered in Settings and held in local storage exactly
-  as the Gemini key is, never in the repo; the A2 proxy in
-  `PRODUCTISATION_REVIEW.md` replaces it if other learners use the app. The other
-  Azure route, the Speech SDK's continuous recognition with a configurable
-  `Speech_SegmentationSilenceTimeoutMs`, gives live text but adds the SDK as a
-  dependency; consider it only if live text turns out to matter.
-
-  *Costs to weigh.* There is no live text while speaking; the result arrives
-  after stop. A different engine also means different spellings, so every
-  matching rule tuned on Google's output is untested against Azure:
-  `fuzzyMatch()`, the particle swaps (DES-53), the same-sound fold (DES-57) and
-  the numeral fold (DES-46, DES-48).
-
-  *The probe.* **The question:** on the Pixel, do correct readings of corpus
-  sentences, spoken with natural pauses and transcribed by Azure, pass the app's
-  real matcher? **Pass bar, inherited from `tools/translate-reject-probe.html`
-  (which took it from `tools/asr-probe.html`), not invented:** false rejects ≤10%
-  of valid attempts. Read `docs/PROBE_METHOD.md` and work its checklist first. In
-  particular:
-  - Derive the sentences from the corpus, and include two-clause sentences with
-    a comma to pause at, such as 冇問題，我今晚會早啲瞓 (mou5 man6 tai4, ngo5
-    gam1 maan5 wui5 zou2 di1 fan3).
-  - Lift `normalizeChinese()`, `fuzzyMatch()` and `resolveHeard()` verbatim.
-  - Ask "did you say it correctly?" **before** showing any result (the DES-50
-    lesson).
-  - Count no-decodes apart from rejects.
-  - Version-stamp every attempt.
-  - Keep raw responses in the export, and log round-trip time, since it replaces
-    live feedback.
-
-  The probe may conclude BUILD (the bar holds), FALLBACK to the Continue button
-  (it fails), or STOP. It may not conclude "loosen the matcher until it passes":
-  the matcher is shared with four live surfaces. **When built:** correct the
-  `// keep listening until user stops` comment on `continuous` in `app.js`,
-  which is not true on Android.
-
-  *Relationship to the Gemini item below:* both candidates record then upload, so
-  the recording front end (tap to start and stop, WAV capture) is shared and only
-  the back end differs. Azure goes first because the key, the account and the
-  browser reachability are already proven.
-
 - **Tone feedback by pitch measurement — investigated and closed, 2026-08-17.**
   Kept as a warning, not as work. **Read alongside the ASR closure above**: pitch
   was the first candidate path to tone feedback and recognition was the second,
@@ -328,8 +251,7 @@ are pointers only — detail goes there, not here.*
   to it and larger. Speech recognition currently runs on the browser's Web Speech
   API, which is **untested on iOS** (A8 in `PRODUCTISATION_REVIEW.md`; this line
   said *unavailable* until 2026-11-02, but A8 was corrected on 2026-09-03 — Safari
-  has supported it since iOS 14.5), cuts out at a pause on Android (the NEXT UP
-  item above), and was the reason the false-reject work was hard.
+  has supported it since iOS 14.5), cuts out at a pause on Android (the listening cut-off, now in IN_PROGRESS.md), and was the reason the false-reject work was hard.
   `gemini-3.5-transcribe` offers utterance-based language detection, speaker
   diarization, word-level timestamps and **custom vocabulary biasing** — the last
   being the one Web Speech cannot do at all, and the one that matters here: the
@@ -340,6 +262,13 @@ are pointers only — detail goes there, not here.*
   and see words appear as you speak" behaviour would change shape; and it would
   be our key, not the learner's, so it sits behind the same A2 proxy as runtime
   Azure TTS. Bigger than the translation model swap — scope it separately.
+  **Since 2026-11-03 it is also the named fallback for the listening cut-off**
+  (IN_PROGRESS.md) if Azure fails the phone probe. `node
+  tools/azure-pause-check.js --only=gemini` asks it the pause question; built and
+  mock-tested, not yet run, because Azure passed. **One premise above is worth
+  re-checking before it is costed:** Translate already calls Gemini with the
+  learner's OWN key from Settings, so transcription might use that key too and
+  not need the A2 proxy at all.
 
 - **Rerun the Translate false-reject probe, disposition first.**
   `tools/translate-reject-probe.html` asked keep-or-discard *after* showing the
@@ -351,6 +280,12 @@ are pointers only — detail goes there, not here.*
   and the fallback if it disappoints needs no measurement at all. Reuse the
   inherited bar (false rejects ≤10% overall and ≤10% short) — do not invent a
   second one.
+  **Its lift list is stale, so refresh it first (found 2026-11-03).** The page
+  lifts `fuzzyMatch()` but not `isForgivenParticleSwap()`, `speakEqFor()`,
+  `sameSoundAt()`, `readingsFor()`, `IDENTITY_EQ`, `SPEAK_PARTICLE_VARIANTS` or
+  `canonicalParticle`, all called by the matcher since v144–v152, so it would
+  throw on its first graded attempt. Take the list from
+  `tools/asr-replay-harness.js`, as `tools/listen-probe.html` does.
 
 - **Should the sentence-final particle rule extend beyond the final position?**
   Open question, raised 2026-09-11 by a device screenshot and confirmed by two
