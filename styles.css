@@ -831,6 +831,25 @@
   .mic-btn { width: 80px; height: 80px; border-radius: var(--r-pill); border: 1px solid var(--brand-edge); background: var(--brand-tint); color: var(--brand); font-size: 32px; cursor: pointer; display: flex; align-items: center; justify-content: center; margin: 0 auto 14px; transition: all 0.2s; box-shadow: var(--elev-3); }
   .mic-btn.idle { background: var(--brand-tint); }
   .mic-btn.listening { background: var(--feedback-bad-tint); border-color: var(--feedback-bad-edge); color: var(--feedback-bad); animation: micPulse 1s infinite; box-shadow: 0 0 0 0 currentColor; }
+  /* v160 (DES-61, mockup 40): between Stop and the result the mic stands down
+     to neutral — no longer live, not yet the next action — and shows that
+     work is happening. Not brand (§3.1) and not red (nothing is recording). */
+  .mic-btn.checking { background: var(--parchment-warm); border-color: var(--parchment-border); color: var(--muted-dark); box-shadow: var(--elev-1); cursor: default; }
+  .dots { display: inline-flex; gap: 5px; }
+  .dots i { width: 7px; height: 7px; border-radius: 50%; background: currentColor; opacity: .25; animation: speakDot 1.1s infinite; }
+  .dots i:nth-child(2) { animation-delay: .18s; }
+  .dots i:nth-child(3) { animation-delay: .36s; }
+  @keyframes speakDot { 0%, 60%, 100% { opacity: .25; } 30% { opacity: 1; } }
+  /* MOCK-40-B: five-bar input level under a recording mic, in its live red.
+     Heights are written by app.js from the microphone itself, so the bars move
+     only when sound arrives — the honest "it can hear you" that live text used
+     to give. 4px is silence. */
+  .speak-level { display: flex; gap: 4px; justify-content: center; align-items: flex-end; height: 18px; margin: -4px 0 10px; color: var(--feedback-bad); }
+  .speak-level i { width: 4px; height: 4px; border-radius: 2px; background: currentColor; opacity: .85; transition: height 80ms linear; }
+  .speak-timer { font-variant-numeric: tabular-nums; font-weight: var(--fw-semi); color: var(--feedback-bad); }
+  /* While checking, the recording block is kept but held invisible, so the
+     card is exactly as tall as it was and nothing moves during the wait. */
+  .is-held { visibility: hidden; }
   @keyframes micPulse { 0% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--feedback-bad) 60%, transparent); } 100% { box-shadow: 0 0 0 18px rgba(231,76,60,0); } }
   .speak-status { font-size: var(--fs-small); color: var(--muted-dark); min-height: 20px; margin-bottom: 14px; }
   .speak-heard { background: var(--parchment-warm); border-radius: var(--r-sm); padding: 10px 14px; margin-bottom: 14px; font-size: 18px; color: var(--ink); }
@@ -1295,6 +1314,18 @@
   .set-row:last-child { border-bottom: none; }
   .set-label { font-family: var(--font-ui); font-size: var(--fs-small); font-weight: var(--fw-semi); color: var(--ink); }
   .set-help { font-family: var(--font-ui); font-size: var(--fs-meta); color: var(--muted-dark); margin: 2px 0 var(--sp-3); line-height: 1.45; }
+  /* Speech key row (DES-62, mockup 40 §4). The field is .apikey-input, the
+     Translate key's; Save and Remove are .btn. Only the row layout is new. */
+  .key-row { display: flex; gap: var(--sp-2); align-items: center; }
+  .key-row .apikey-input { flex: 1; margin-bottom: 0; min-height: var(--tap-min); }
+  .key-state { flex: 1; }
+  .key-ok { display: inline-flex; align-items: center; gap: 4px; font-size: var(--fs-meta); font-weight: var(--fw-semi); color: var(--feedback-good-text); }
+  .key-meta { font-size: var(--fs-meta); color: var(--muted-dark); }
+  .key-region { margin-top: var(--sp-2); }
+  .key-region-in { display: inline-block; width: 12em; margin: 0 0 0 4px; padding: 4px 8px; }
+  /* A wrong entry is the nearest thing this screen has to a wrong answer (§4). */
+  .key-bad { font-size: var(--fs-meta); color: var(--feedback-bad); line-height: 1.45; margin-top: 6px; }
+  .set-link { background: none; border: none; padding: 12px 4px; margin: -12px 0; font: inherit; color: var(--muted-dark); text-decoration: underline; cursor: pointer; }   /* padding widens the tap target to ~44px without moving the line */
   /* Segmented control. Ghost-and-outline per §3.1 — an active segment is a
      selector, not the screen's next action, so it takes brand text and a brand
      edge rather than a fill (the same reasoning as DES-19 for tabs). */

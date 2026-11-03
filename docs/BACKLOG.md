@@ -37,13 +37,17 @@ Last updated: 2026-11-03 · sw.js at v159
   carrying forward). Any further change to the icon should happen before anyone
   else installs Jyut, or be accepted as reaching new installs only.
 
-- **Style the styleguide's speak demos.** Found at v154: `docs/design/styleguide.html`
-  has no `.speak-card`, `.mic-btn`, `.speak-status`, `.speak-heard`,
-  `.speak-result-*`, `.speak-breakdown`, `.speak-actions` or `.sr-*` rules, so
-  the Say it back sheet and checkpoint sentence review demos render as unstyled
-  text, and the v154 replay row can't be shown there either. Copy the rules from
-  `styles.css` into the page's style block, as the tab bar and continuation
-  sections already do, and add a `.speak-card-head` demo. Invisible in the app.
+- **Style the rest of the styleguide's speak demos, and its Settings demo.**
+  Found at v154; **narrowed at v160**, when the speak card's own rules
+  (`.speak-card`, `.mic-btn` and its states, `.speak-status`, `.speak-heard`,
+  `.speak-result-*`, `.speak-actions`) were copied into
+  `docs/design/styleguide.html` for the record-then-check demos. Still missing:
+  `.speak-breakdown` and the `.sr-*` rules, so the breakdown grids and the
+  checkpoint review's own parts render unstyled, and the v154 replay row
+  (`.speak-card-head`) still has no demo. **Also found at v160:** the Settings
+  demo's `.set-row`, `.seg` and `.seg-btn` rules on that page are stale (the row
+  is laid out as a flex line and the segmented buttons are unstyled), unlike the
+  app's. Copy the current rules from `styles.css`. Invisible in the app.
 
 ## Content
 
@@ -287,6 +291,32 @@ are pointers only — detail goes there, not here.*
   throw on its first graded attempt. Take the list from
   `tools/asr-replay-harness.js`, as `tools/listen-probe.html` does.
 
+- **Spellings Azure uses that the matcher does not fold (found 2026-11-03).**
+  From `tools/azure-corpus-check.js`'s full run: 1,228 recognitions of correct
+  corpus audio, both Azure endpoints, two voices. Raw data in
+  `tools/runs/azure-corpus-check-2026-11-03.json`. Both endpoints passed the bar
+  comfortably (1.6% and 1.0% false rejects), so **none of this blocks the
+  listening work**; it is the evidence for a later matcher review, and
+  `docs/PROBE_METHOD.md` applies before any of it becomes a rule. Systematic
+  means more than one sentence, the bar inherited from the variant-fold
+  proposal.
+  - **Digits fold to 二 (ji6), never 兩 (loeng5).** 我兩歲 (ngo5 loeng5 seoi3)
+    came back as 我2歲 (ngo5 2 seoi3) on both endpoints and both voices, and `foldAsrNumerals()`
+    turned the 2 into 二 (ji6), so all four were rejected. Seen in 2 sentences. Not an
+    Azure problem: the fold has no way to know a counted 2 is said 兩 (loeng5). **Worth
+    checking whether Chrome already returns 2 here**, which would make it a live
+    false reject today.
+  - **啲 (di1) written as the letter D**, the informal Hong Kong spelling. 3
+    sentences, forgiven by the edit allowance every time so far; a short
+    sentence with 啲 (di1) would not be.
+  - **冇 (mou5) written as 無 (mou4).** 5 sentences. A different tone, so the
+    same-sound rule rightly does not fold it; whether Azure is mis-hearing the
+    tone or just choosing the standard written form is the question.
+  - **喇 (laa3) written as 啦 (laa1)** mid-sentence: see the particle question
+    below, which this adds evidence to.
+  - Not systematic (one sentence each): 加 (gaa1) written as +, 咳 (kat1)
+    written as the English word "high".
+
 - **Should the sentence-final particle rule extend beyond the final position?**
   Open question, raised 2026-09-11 by a device screenshot and confirmed by two
   speakers. 唔使喇，呢個就夠喇 (m4 sai2 laa3, ni1 go3 zau6 gau3 laa3.) came back
@@ -308,6 +338,14 @@ are pointers only — detail goes there, not here.*
   systematic" was already set by the variant-fold proposal: a substitution seen
   on more than one sentence, not on more than one recording. Inherit that bar
   rather than inventing a second one.
+
+  **Azure evidence, 2026-11-03 — it would be systematic by that bar.** In
+  `tools/azure-corpus-check.js`'s full run (correct audio, both Azure endpoints,
+  two voices), Azure wrote 啦 (laa1) for 喇 (laa3) 32 times across **12 different
+  sentences**, and the swap was part of 6 of the run's 16 rejects. One of those
+  is the very sentence predicted above: 落雨喇，帶遮啦 (lok6 jyu5 laa3, daai3 ze1
+  laa1). If speak feedback moves to Azure this question gets more pressing, not
+  less. Raw data: `tools/runs/azure-corpus-check-2026-11-03.json`.
 
 - **Tier links: brand orange, smaller and not bold?** Raised by William
   2026-09-17 while QAing v147, and deliberately left. The shipped run (DES-55)

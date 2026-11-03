@@ -447,8 +447,9 @@ work waiting was the one number you could not see.
 Behind the header cog. Built v117 (MOCK-19-sheet, DES-11: settings live in the
 header corner, never as a tab — a tab is a destination and settings is not one).
 
-A bottom sheet **sized to its contents**, not to the viewport: it holds one
-setting today and a full-height surface would only advertise that. When account
+A bottom sheet **sized to its contents**, not to the viewport: it holds two
+settings today — audio speed, and from v160 the speech key — and a full-height
+surface would only advertise that. When account
 and subscription arrive it becomes a full screen by changing the wrapper — the
 `.set-row` markup inside is identical either way.
 
@@ -461,6 +462,19 @@ because settings is somewhere you now are.
 `.seg` / `.seg-btn` is the segmented control. An active segment takes brand text
 and a brand edge, never a fill — the same reasoning as DES-19 for tabs: a
 selector is not the screen's next action (§3.1).
+
+**Speech checking row (built v160, DES-62, mockup 40 §4).** The Azure speech key
+that lets every speak surface keep listening through pauses, stored on the phone
+only, in its own storage area. Composed from what existed: the field is
+Translate's `.apikey-input`, Save is `.btn--primary` (the sheet's only filled
+button, and only while there is no key), Remove is a ghost `.btn`. New: `.key-row`
+(field or state beside its button), `.key-state` › `.key-ok` + `.key-meta`,
+`.key-bad`, and `.set-link` for the region's *change* — an underlined text button
+whose padding widens the tap target without moving the line. The key is checked
+**before** it is saved; a rejected key shows `.key-bad` in `--feedback-bad`, the
+nearest thing this screen has to a wrong answer, keeps what was typed, and stores
+nothing. Saved, it reads *Key saved*, not *Key works*: it was checked when saved,
+not on every visit.
 
 ### Sentence speak sheet — `.sheet-wrap` › `.sheet-scrim` + `.sheet` › `.speak-card`
 Behind a sentence card's mic button, in Learn only. **Built v130** (MOCK-27-sheet,
@@ -516,6 +530,37 @@ through `closeSentSpeak()`. `goToDestination()` also force-closes it (and
 aborts any live recognition) on any top-level navigation, same as it already
 did for the settings sheet — a sentence sheet has no business surviving a tab
 switch.
+
+**Record, then check (built v160, DES-61, MOCK-40-B).** With a speech key saved,
+every speak surface — this sheet, Chat's Speak mode, the checkpoint review and
+Translate's speak-back — records until the learner taps Stop, and Azure checks
+the clip; Chrome on Android ends its own listener at a pause, which is what this
+replaces. The parts that changed live once, in shared helpers in `render.js`
+(`renderSpeakLive()`, `renderSpeakNote()`, `renderSpeakNotice()`,
+`renderSpeakCapped()`, `speakMicClass/Inner/Attrs()`), so the four surfaces
+cannot drift — DES-40's content-layer reuse, applied to the new states.
+
+- **Recording:** `.speak-level`, five bars under the mic in its live red, and
+  `.speak-timer` in the status line. The bars are driven by the microphone
+  itself and move only when sound arrives — the honest "it can hear you" that
+  live text used to give; during a pause they settle while the timer runs, which
+  is the new behaviour made visible. Both are written by `app.js` straight to
+  their elements, not through `render()`.
+- **Checking** (new, typically under a second): `.mic-btn.checking` with `.dots` —
+  neutral, because nothing is live any more and nothing is yet the next action
+  (§3.1, §4) — and *Checking what you said…*. The recording block is kept and held
+  invisible with `.is-held`, so the card is exactly as tall as it was and nothing
+  moves during the wait. The mic and replay are disabled.
+- **Nothing heard / couldn't check:** `.speak-result-close`, the neutral panel,
+  never the error red — neither is a wrong answer, and neither is ever graded.
+  *Try again* is the one filled button. A refused key points to Settings.
+- **The idle line** replaces *Allow microphone access if prompted* (the
+  browser's own prompt says that): *Take your time — it keeps listening until you
+  press Stop*, or on the fallback, that pausing may cut you off.
+- **The 30-second safety stop** ends a forgotten recording; the clip is checked
+  as normal, with one muted `.speak-mic-note` saying why it stopped.
+
+With no key, every surface keeps the browser's listener exactly as before v160.
 
 **`.sheet-head-actions` (built v131, DES-41 context)** — a listen-again
 control sits in the sheet head, left of close, so the learner can hear the

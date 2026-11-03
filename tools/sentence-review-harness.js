@@ -70,6 +70,13 @@ env.stopAudioFile = () => {};
 env.stopListening = () => {};
 env.finishListening = () => {};
 env.startSpeechRecognition = () => {};
+// v160 (DES-61): the speak card's shared parts read which engine is in use.
+// Both are driven from here — a saved key plus a browser that can record means
+// Azure, otherwise the browser's listener — so every state renders both ways.
+env.__speechKey = { key: '', region: 'australiaeast' };
+env.storage = { getSpeechKey: () => env.__speechKey };
+env.navigator = { mediaDevices: { getUserMedia() {} } };
+env.MediaRecorder = function () {};
 
 const pieces = [
   grabConst(/const ICON_PATHS[\s\S]*?\n};/),
@@ -110,6 +117,15 @@ const pieces = [
   grab(all, 'sentReviewModeAt'), grab(all, 'currentSentReviewItem'),
   grab(all, 'startSentReviewRun'), grab(all, 'gradeSentReviewAttempt'),
   grab(all, 'sentReviewNext'), grab(all, 'sentReviewTally'),
+  // v160 shared speak parts: the engine test from app.js, the rendering helpers
+  // from render.js — lifted, not stubbed, because they are what is under test.
+  'let _azure = null;',
+  grab(all, 'getSpeechCreds'), grab(all, 'canRecordSpeech'), grab(all, 'speechEngine'),
+  grab(all, 'speakBusy'), grab(all, 'speechElapsedLabel'),
+  grab(renderSrc, 'speakMicClass'), grab(renderSrc, 'speakMicInner'), grab(renderSrc, 'speakMicAttrs'),
+  grabConst(/const SPEAK_LEVEL_BARS = [^\n]*/),
+  grab(renderSrc, 'renderSpeakLive'), grab(renderSrc, 'renderSpeakNote'),
+  grab(renderSrc, 'isSpeakNotice'), grab(renderSrc, 'renderSpeakNotice'), grab(renderSrc, 'renderSpeakCapped'),
   grab(renderSrc, 'renderSentReviewPicker'),
   grab(renderSrc, 'renderSentReviewSummary'),
   grab(renderSrc, 'renderCheckpointSentences'),
@@ -172,13 +188,17 @@ console.log('\n— 2. every screen renders in every state —');
       env.startSentReviewRun(mode);
       const sr = env.state.sentReview;
       if (!sr || sr.items.length !== RUN) { fail(`${stage.id}/${mode}: run has ${sr ? sr.items.length : 0} items, expected ${RUN}`); bad++; continue; }
-      for (const status of ['idle', 'listening', 'matched', 'mismatch']) {
-        sr.status = status;
-        sr.heard = (status === 'matched') ? sr.items[0].c : (status === 'mismatch' ? '我聽日返工喇' : '');
-        if (status === 'matched' || status === 'mismatch') env.gradeSentReviewAttempt(sr.heard);
-        try { const h = env.renderCheckpointSentences(); rendered++; if (!h || h.length < 100) { fail(`${stage.id}/${mode}/${status}: suspiciously short output`); bad++; } }
-        catch (e) { fail(`${stage.id}/${mode}/${status} threw — ${e.message}`); bad++; }
+      for (const engineKey of ['', 'k']) {
+        env.__speechKey = { key: engineKey, region: 'australiaeast' };
+        for (const status of ['idle', 'listening', 'checking', 'matched', 'mismatch', 'nothing', 'failed']) {
+          sr.status = status; sr.fail = status === 'failed' ? 'network' : ''; sr.capped = false;
+          sr.heard = (status === 'matched') ? sr.items[0].c : (status === 'mismatch' ? '我聽日返工喇' : '');
+          if (status === 'matched' || status === 'mismatch') env.gradeSentReviewAttempt(sr.heard);
+          try { const h = env.renderCheckpointSentences(); rendered++; if (!h || h.length < 100) { fail(`${stage.id}/${mode}/${status}: suspiciously short output`); bad++; } }
+          catch (e) { fail(`${stage.id}/${mode}/${status}${engineKey ? '/azure' : ''} threw — ${e.message}`); bad++; }
+        }
       }
+      env.__speechKey = { key: '', region: 'australiaeast' };
       // summary
       sr.finished = true;
       try { const h = env.renderCheckpointSentences(); rendered++; if (!h.includes('data-cp-act-done="sentences"')) { fail(`${stage.id}/${mode}: summary missing the done button`); bad++; } }
@@ -271,13 +291,17 @@ console.log('\n— 7. every control the renderer emits is wired —');
     emitted.add('data-sr-mode');
     env.startSentReviewRun(mode);
     const sr = env.state.sentReview;
-    for (const status of ['idle', 'listening', 'matched', 'mismatch']) {
-      sr.status = status;
-      sr.heard = status === 'matched' ? sr.items[0].c : (status === 'mismatch' ? '我聽日返工喇' : '');
-      if (status === 'matched' || status === 'mismatch') env.gradeSentReviewAttempt(sr.heard);
-      const h = env.renderCheckpointSentences();
-      for (const m of h.matchAll(/data-sr-[a-z]+/g)) emitted.add(m[0]);
+    for (const engineKey of ['', 'k']) {
+      env.__speechKey = { key: engineKey, region: 'australiaeast' };
+      for (const status of ['idle', 'listening', 'checking', 'matched', 'mismatch', 'nothing', 'failed']) {
+        sr.status = status; sr.fail = status === 'failed' ? 'key' : '';
+        sr.heard = status === 'matched' ? sr.items[0].c : (status === 'mismatch' ? '我聽日返工喇' : '');
+        if (status === 'matched' || status === 'mismatch') env.gradeSentReviewAttempt(sr.heard);
+        const h = env.renderCheckpointSentences();
+        for (const m of h.matchAll(/data-sr-[a-z]+/g)) emitted.add(m[0]);
+      }
     }
+    env.__speechKey = { key: '', region: 'australiaeast' };
     sr.finished = true;
     for (const m of env.renderCheckpointSentences().matchAll(/data-sr-[a-z]+/g)) emitted.add(m[0]);
   }
@@ -296,6 +320,51 @@ console.log('\n— 7. every control the renderer emits is wired —');
     }
   }
   if (!unwired) ok(`all ${emitted.size} emitted controls have handlers: ${[...emitted].sort().join(', ')}`);
+}
+
+// ── 8. Record-then-transcribe states (v160, DES-61, MOCK-40-B) ─────────────
+console.log('\n— 8. the Azure speak states render as mockup 40 draws them —');
+{
+  const { pathKey, stage } = stages[0];
+  setup(pathKey, stage);
+  env.startSentReviewRun('produce');
+  const sr = env.state.sentReview;
+  const render = (status, key, extra) => {
+    env.__speechKey = { key, region: 'australiaeast' };
+    Object.assign(sr, { status, heard: '', fail: '', capped: false, revealed: false }, extra || {});
+    return env.renderCheckpointSentences();
+  };
+  let h = render('listening', 'k');
+  if (!h.includes('class="speak-level"') || !h.includes('speak-timer')) fail('azure recording: level meter or timer missing');
+  else if (!h.includes('data-sr-stop')) fail('azure recording: Stop missing');
+  else ok('azure recording: level meter, timer and Stop');
+  h = render('listening', '');
+  if (h.includes('speak-level') || h.includes('speak-timer')) fail('browser recording: shows Azure-only indicators');
+  else ok('browser recording: unchanged, no level or timer');
+  h = render('checking', 'k');
+  if (!/mic-btn checking"[^>]*disabled/.test(h)) fail('checking: mic is not disabled');
+  else if (!/class="is-held"[^>]*>\s*<div class="speak-actions"><button class="speak-action-btn stop"/.test(h)) fail('checking: the Stop row is not held in place, so the card would change height');
+  else if (!h.includes('Checking what you said')) fail('checking: status line missing');
+  else ok('checking: mic disabled, Stop held invisible, status shown');
+  h = render('nothing', 'k');
+  if (!h.includes('speak-result-close') || h.includes('speak-result-bad')) fail('nothing heard: not the neutral panel');
+  else if (!h.includes('data-sr-retry')) fail('nothing heard: no Try again');
+  else ok('nothing heard: neutral panel and Try again, no verdict');
+  h = render('failed', 'k', { fail: 'key' });
+  if (!h.includes('check it in Settings')) fail('failed/key: does not point to Settings');
+  else ok('failed/key: points to Settings');
+  for (const status of ['nothing', 'failed']) {
+    render(status, 'k');
+    if (sr.results[sr.idx] === 'mismatch' || sr.results[sr.idx] === 'matched') fail(`${status}: was graded`);
+  }
+  ok('nothing and failed are never graded');
+  h = render('idle', 'k');
+  if (!h.includes('Take your time')) fail('azure idle: the "take your time" line is missing');
+  else ok('azure idle: says it keeps listening');
+  h = render('idle', '');
+  if (!h.includes('browser\'s listener')) fail('browser idle: the fallback line is missing');
+  else ok('browser idle: says pausing may cut you off');
+  env.__speechKey = { key: '', region: 'australiaeast' };
 }
 
 console.log('');

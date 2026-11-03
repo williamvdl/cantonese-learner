@@ -188,6 +188,7 @@ const STORAGE_KEYS = {
   quizDirection: 'cantonese:quizDirection',
   apiKey:        'cantonese:apiKey',
   pathProgress:  'cantonese:pathProgress',
+  speechKey:     'cantonese:speechKey',      // v160, DES-62
 };
 
 // Current schema version per area. Bump when the stored shape of an area changes,
@@ -197,6 +198,7 @@ const STORAGE_SCHEMA = {
   quizDirection: 1,
   apiKey:        1,
   pathProgress:  1,
+  speechKey:     1,
 };
 
 // Legacy keys from before the storage module existed. _hydrate() does a one-time
@@ -273,6 +275,7 @@ const storage = {
       quizDirection: 'zh-en',
       apiKey:        '',
       pathProgress:  {},
+      speechKey:     { key: '', region: 'australiaeast' },
     };
     Object.keys(STORAGE_KEYS).forEach(area => {
       const newKeyPresent = localStorage.getItem(STORAGE_KEYS[area]) != null;
@@ -315,6 +318,13 @@ const storage = {
   getApiKey()        { return this._cache.apiKey; },
   async setApiKey(v) { this._cache.apiKey = v; this._persist('apiKey', v); },
   async clearApiKey() { this._cache.apiKey = ''; this._persist('apiKey', ''); },
+
+  // Azure speech key (DES-62): { key, region }. Separate from the Gemini key
+  // above and never interchangeable with it — different vendor, different job.
+  // No legacy key: this area is new at v160, so _hydrate() finds no
+  // STORAGE_LEGACY_KEYS entry and simply takes the default.
+  getSpeechKey()        { return this._cache.speechKey; },
+  async setSpeechKey(v) { this._cache.speechKey = v; this._persist('speechKey', v); },
 
   // Path progress: { pathKey: { lessonKey: true } }
   getPathProgress()        { return this._cache.pathProgress; },

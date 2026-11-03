@@ -468,6 +468,10 @@ let state = {
   speed: 'normal',
   nav: 'dashboard',               // app opens on the new Dashboard homepage
   settingsOpen: false,           // the settings sheet (header cog), v117
+  // The speech-key row in Settings (DES-62, v160). UI only — the key itself
+  // lives in storage.speechKey. draftKey survives the re-render while a key is
+  // being checked, so a rejected key can be corrected rather than retyped.
+  speechKeyUi: { checking: false, error: '', editRegion: false, draftKey: '' },
   // Renamed from `homeView` at v119. The old name predated the Dashboard: when
   // Topics WAS the home screen, "home view" meant its landing list. Since the
   // Dashboard became Home the name pointed at the wrong screen — this flag has
@@ -1646,6 +1650,10 @@ function goToDestination(target) {
     (target !== 'path'   || state.pathView === 'list');
   if (alreadyThere) return false;
 
+  // Cost guard 1 (DES-61): a recording never survives leaving its screen. Chat
+  // and Translate had no teardown here — harmless when the browser's listener
+  // ended itself within seconds, not with a recorder that runs until told.
+  abandonSpeech();
   state.checkpoint = null;
   state.checkpointAct = null;
   state.checkpointQuiz = null;
@@ -2386,6 +2394,341 @@ function resolveHeard(accumulated, segments, target) {
   return { heard: accumulated, matched: false };
 }
 
+// ── AZURE RECORD-THEN-TRANSCRIBE (DES-61, MOCK-40-B, v160) ──────────────────
+// Why this exists: Chrome on Android does not honour `continuous = true` — it
+// ends a recognition session at a pause of roughly three to four seconds, so a
+// learner who stops to think mid-sentence is cut off (STATUS § Notes,
+// 2026-11-02). With a speech key saved, every speak surface instead RECORDS
+// until the learner taps Stop, and the clip is sent to Azure's fast
+// transcription. Nothing ends a recording but the learner, or the 30-second
+// safety stop below.
+//
+// It was measured before it was built (IN_PROGRESS.md, the listening cut-off):
+// fast transcription returned both halves of every sentence through pauses of
+// up to 8 seconds; across the whole corpus in two voices it was rejected by the
+// app's own matcher 1.0% of the time against a 10% bar; a native speaker on the
+// Pixel scored 10 of 10; the wait after Stop was a median 0.83s. The probes are
+// tools/azure-pause-check.js, tools/azure-corpus-check.js and
+// tools/listen-probe.html, with their raw results in tools/runs/.
+//
+// THE CONTRACT IS startSpeechRecognition()'s, UNCHANGED. Same getTarget /
+// getStatus / applyPatch / onMatch; same 'listening' → 'matched' | 'mismatch'
+// statuses, graded by the same resolveHeard(). Three statuses are added, all
+// rendered by shared helpers in render.js:
+//   'checking'  between Stop and the result (typically under a second)
+//   'nothing'   no speech in the clip, or Azure returned no words — never sent
+//               if the clip was silent, and never graded either way
+//   'failed'    the clip could not be checked: failReason 'key' (Azure refused
+//               the key), 'mic' (no microphone), or 'network' (anything else)
+//
+// THREE COST GUARDS, agreed with William 2026-11-03. Azure bills per second of
+// audio sent, so:
+//   1. Leaving discards. abandonSpeech() — called on top-level navigation, the
+//      back button, the app being hidden (screen lock, app switch) and page
+//      unload — stops the recorder and sends nothing.
+//   2. A silent clip is never sent. analyseSpeech() finds the speech in the
+//      clip; with less than SPEECH_MIN_VOICED_MS of it, the result is
+//      'nothing' and no request is made.
+//   3. Only the speech is sent: silence before and after it is trimmed, with
+//      a small margin either side so a soft first consonant is not clipped.
+// Plus the safety stop: SPEECH_MAX_MS, after which the clip is checked as
+// normal and the result says it stopped automatically.
+//
+// ABORT SEMANTICS MATCH THE BROWSER PATH. stopListening() discards silently and
+// patches nothing, because every caller resets its own status afterwards — the
+// browser path relies on the same thing, so its late onend sees "not listening"
+// and does nothing. A session token makes that true here too: anything async
+// that resolves after an abort finds its token stale and drops its result.
+// abandonSpeech() is the one path that DOES reset the screen, because nothing
+// else will when the phone is simply locked.
+
+const AZURE_FAST_API_VERSION = '2024-11-15';   // as the probes used
+const SPEECH_MAX_MS = 30000;                   // safety stop (mockup 40 §3)
+const SPEECH_TIMEOUT_MS = 20000;               // a request that takes longer is 'failed', not hung
+const SPEECH_RATE = 16000;                     // Azure wants 16 kHz mono PCM
+const SPEECH_FRAME = 320;                      // 20 ms at 16 kHz
+// Calibrated on the eleven native-speaker recordings from the Pixel
+// (tools/runs/listen-probe-native-*.json, AGC off as here): room noise floor
+// about 0.0005 RMS, speech frames comfortably above 0.008, and every clip held
+// at least 1.2 s of speech. tools/speech-silence-harness.js pins all eleven.
+const SPEECH_RMS_FLOOR = 0.008;
+const SPEECH_NOISE_MULT = 3;
+const SPEECH_MIN_VOICED_MS = 160;
+const SPEECH_TRIM_PAD_BEFORE_MS = 300;
+const SPEECH_TRIM_PAD_AFTER_MS = 400;
+
+let _azure = null;          // the live session, or null
+let _speechToken = 0;       // bumped on every start and every abort
+let _speechCtx = null;      // one AudioContext, reused — Android caps how many exist
+
+function getSpeechCreds() {
+  const v = storage.getSpeechKey && storage.getSpeechKey();
+  return v && v.key ? { key: v.key, region: (v.region || 'australiaeast').toLowerCase() } : null;
+}
+function canRecordSpeech() {
+  return !!(navigator.mediaDevices && navigator.mediaDevices.getUserMedia && window.MediaRecorder);
+}
+// 'azure' when a key is saved and the browser can record; otherwise the
+// browser's own listener, exactly as before v160 (DES-61's fallback).
+function speechEngine() {
+  return getSpeechCreds() && canRecordSpeech() ? 'azure' : 'browser';
+}
+// Is speaking possible at all on this browser, by either engine?
+function speechSupported() {
+  return speechEngine() === 'azure' || !!(window.SpeechRecognition || window.webkitSpeechRecognition);
+}
+// A speak surface is busy while recording or checking: replay and the mic are
+// unavailable, for the reason the replay rule already gives — played audio
+// would be recorded.
+function speakBusy(status) { return status === 'listening' || status === 'checking'; }
+
+function speechAudioContext() {
+  if (!_speechCtx || _speechCtx.state === 'closed') {
+    const Ctx = window.AudioContext || window.webkitAudioContext;
+    _speechCtx = Ctx ? new Ctx() : null;
+  }
+  if (_speechCtx && _speechCtx.state === 'suspended') _speechCtx.resume().catch(() => {});
+  return _speechCtx;
+}
+
+// Find the speech in a clip. Pure, so tools/speech-silence-harness.js can lift
+// it and pin it against real recordings. `pcm` is Float32 at SPEECH_RATE.
+// Returns { voicedMs, start, end } — sample offsets of the trimmed span, padded,
+// clamped to the clip — or voicedMs 0 when nothing in it is speech.
+function analyseSpeech(pcm) {
+  const frames = Math.floor(pcm.length / SPEECH_FRAME);
+  if (!frames) return { voicedMs: 0, start: 0, end: 0 };
+  const rms = new Array(frames);
+  for (let f = 0; f < frames; f++) {
+    let sum = 0;
+    for (let i = f * SPEECH_FRAME, e = i + SPEECH_FRAME; i < e; i++) sum += pcm[i] * pcm[i];
+    rms[f] = Math.sqrt(sum / SPEECH_FRAME);
+  }
+  // The clip's own noise floor, so a noisy room raises the bar with it.
+  const floor = rms.slice().sort((a, b) => a - b)[Math.floor(frames * 0.1)];
+  const thr = Math.max(SPEECH_RMS_FLOOR, floor * SPEECH_NOISE_MULT);
+  let first = -1, last = -1, voiced = 0;
+  for (let f = 0; f < frames; f++) {
+    if (rms[f] > thr) { voiced++; if (first < 0) first = f; last = f; }
+  }
+  const frameMs = SPEECH_FRAME * 1000 / SPEECH_RATE;
+  if (voiced * frameMs < SPEECH_MIN_VOICED_MS) return { voicedMs: voiced * frameMs, start: 0, end: 0 };
+  const padB = Math.round(SPEECH_TRIM_PAD_BEFORE_MS * SPEECH_RATE / 1000);
+  const padA = Math.round(SPEECH_TRIM_PAD_AFTER_MS * SPEECH_RATE / 1000);
+  return {
+    voicedMs: voiced * frameMs,
+    start: Math.max(0, first * SPEECH_FRAME - padB),
+    end: Math.min(pcm.length, (last + 1) * SPEECH_FRAME + padA),
+  };
+}
+
+// 16 kHz mono 16-bit WAV. Azure's short-audio endpoint answers WebM with HTTP
+// 200 and an EMPTY result rather than an error (STATUS § Notes), so the clip is
+// always rebuilt as PCM — fast transcription accepts WAV too, and it keeps the
+// documented fallback (the short-audio endpoint) one URL away.
+function pcmToWav(pcm) {
+  const buf = new ArrayBuffer(44 + pcm.length * 2);
+  const v = new DataView(buf);
+  const str = (o, s) => { for (let i = 0; i < s.length; i++) v.setUint8(o + i, s.charCodeAt(i)); };
+  str(0, 'RIFF'); v.setUint32(4, 36 + pcm.length * 2, true); str(8, 'WAVE'); str(12, 'fmt ');
+  v.setUint32(16, 16, true); v.setUint16(20, 1, true); v.setUint16(22, 1, true);
+  v.setUint32(24, SPEECH_RATE, true); v.setUint32(28, SPEECH_RATE * 2, true);
+  v.setUint16(32, 2, true); v.setUint16(34, 16, true);
+  str(36, 'data'); v.setUint32(40, pcm.length * 2, true);
+  for (let i = 0; i < pcm.length; i++) {
+    const s = Math.max(-1, Math.min(1, pcm[i]));
+    v.setInt16(44 + i * 2, s < 0 ? s * 0x8000 : s * 0x7fff, true);
+  }
+  return new Blob([buf], { type: 'audio/wav' });
+}
+
+// Recorder output (webm/opus on Android) → Float32 PCM at 16 kHz mono.
+async function decodeToSpeechPcm(blob) {
+  const ctx = speechAudioContext();
+  const decoded = await ctx.decodeAudioData(await blob.arrayBuffer());
+  const frames = Math.max(1, Math.ceil(decoded.duration * SPEECH_RATE));
+  const off = new OfflineAudioContext(1, frames, SPEECH_RATE);
+  const src = off.createBufferSource();
+  src.buffer = decoded; src.connect(off.destination); src.start();
+  return (await off.startRendering()).getChannelData(0);
+}
+
+// One request to fast transcription. Resolves to { text } or { fail }.
+async function transcribeAzure(wavBlob, creds) {
+  const url = 'https://' + creds.region + '.api.cognitive.microsoft.com'
+            + '/speechtotext/transcriptions:transcribe?api-version=' + AZURE_FAST_API_VERSION;
+  const form = new FormData();
+  form.append('audio', wavBlob, 'clip.wav');
+  form.append('definition', JSON.stringify({ locales: ['zh-HK'] }));
+  const ctl = new AbortController();
+  const timer = setTimeout(() => ctl.abort(), SPEECH_TIMEOUT_MS);
+  try {
+    const res = await fetch(url, { method: 'POST', headers: { 'Ocp-Apim-Subscription-Key': creds.key, 'Accept': 'application/json' }, body: form, signal: ctl.signal });
+    if (res.status === 401 || res.status === 403) return { fail: 'key' };
+    if (!res.ok) return { fail: 'network' };
+    const json = await res.json().catch(() => null);
+    // Judge the payload, never the status code.
+    const text = json && Array.isArray(json.combinedPhrases) ? json.combinedPhrases.map(p => p.text || '').join('') : '';
+    return { text };
+  } catch (e) {
+    return { fail: 'network' };
+  } finally {
+    clearTimeout(timer);
+  }
+}
+
+// Check a key on Save (DES-62). Tries the token endpoint first, which sends no
+// audio. If the browser cannot reach it, falls back to fast transcription with
+// half a second of silence — the one Azure path proven reachable from this
+// origin. Resolves 'ok' | 'key' | 'network'.
+async function checkSpeechKey(creds) {
+  try {
+    const res = await fetch('https://' + creds.region + '.api.cognitive.microsoft.com/sts/v1.0/issueToken',
+      { method: 'POST', headers: { 'Ocp-Apim-Subscription-Key': creds.key } });
+    if (res.ok) return 'ok';
+    if (res.status === 401 || res.status === 403) return 'key';
+  } catch (e) { /* unreachable from this origin — try the proven path */ }
+  const r = await transcribeAzure(pcmToWav(new Float32Array(SPEECH_RATE / 2)), creds);
+  return r.fail ? r.fail : 'ok';
+}
+
+// The two live indicators write to their own elements rather than re-rendering
+// the app every 250 ms. render() rebuilds them each time it runs; the next tick
+// simply finds the new ones.
+// m:ss since the live recording started — also what render() prints, so a
+// re-render mid-recording shows the true time rather than flashing 0:00.
+function speechElapsedLabel() {
+  const sec = _azure && _azure.recorder ? Math.floor((Date.now() - _azure.startedAt) / 1000) : 0;
+  return Math.floor(sec / 60) + ':' + String(sec % 60).padStart(2, '0');
+}
+function speechTick(session) {
+  const t = speechElapsedLabel();
+  document.querySelectorAll('.speak-timer').forEach(el => { if (el.textContent !== t) el.textContent = t; });
+}
+function speechLevelFrame(session) {
+  if (!_azure || _azure !== session || !session.analyser) return;
+  const a = session.analyser, data = session.levelData;
+  a.getByteFrequencyData(data);
+  // Five bands across roughly 190 Hz – 3.7 kHz, where speech lives.
+  const bands = [[2, 5], [5, 9], [9, 15], [15, 25], [25, 40]];
+  const bars = document.querySelectorAll('.speak-level i');
+  bands.forEach(([lo, hi], k) => {
+    let sum = 0; for (let i = lo; i < hi; i++) sum += data[i];
+    const v = sum / (hi - lo) / 255;
+    const h = 4 + Math.round(14 * Math.max(0, (v - 0.15) / 0.85));
+    if (bars[k]) bars[k].style.height = h + 'px';
+  });
+  session.raf = requestAnimationFrame(() => speechLevelFrame(session));
+}
+
+function releaseSpeechSession(session) {
+  if (!session) return;
+  clearInterval(session.tick); clearTimeout(session.cap);
+  if (session.raf) cancelAnimationFrame(session.raf);
+  try { if (session.source) session.source.disconnect(); } catch (e) {}
+  // Release the mic between attempts, so Android's mic indicator goes off.
+  if (session.stream) session.stream.getTracks().forEach(t => t.stop());
+  session.stream = null;
+}
+
+async function startAzureRecording(getTarget, getStatus, applyPatch, onMatch) {
+  abortAzureSession();
+  if (_recognition) { try { _recognition.abort(); } catch (e) {} _recognition = null; }
+  const token = ++_speechToken;
+  const session = { token, getStatus, applyPatch, capped: false, chunks: [], startedAt: Date.now() };
+  _azure = session;
+  const alive = () => _azure === session && _speechToken === token;
+  // Created inside the tap, before any await, so mobile browsers let it run.
+  const ctx = speechAudioContext();
+  applyPatch({ status: 'listening', heard: '', capped: false, failReason: '' });
+
+  try {
+    session.stream = await navigator.mediaDevices.getUserMedia({
+      audio: { channelCount: 1, echoCancellation: false, noiseSuppression: false, autoGainControl: false },
+    });
+  } catch (e) {
+    if (!alive()) return;
+    releaseSpeechSession(session); _azure = null;
+    applyPatch({ status: 'failed', failReason: 'mic' });
+    return;
+  }
+  if (!alive()) { releaseSpeechSession(session); return; }
+
+  const type = ['audio/webm;codecs=opus', 'audio/ogg;codecs=opus', 'audio/webm', 'audio/mp4']
+    .find(t => MediaRecorder.isTypeSupported(t)) || '';
+  const rec = type ? new MediaRecorder(session.stream, { mimeType: type }) : new MediaRecorder(session.stream);
+  session.recorder = rec;
+  rec.ondataavailable = e => { if (e.data && e.data.size) session.chunks.push(e.data); };
+  rec.onstop = () => finishAzureSession(session, type, getTarget, onMatch);
+  rec.onstart = () => {
+    session.startedAt = Date.now();
+    session.tick = setInterval(() => speechTick(session), 250);
+    session.cap = setTimeout(() => { session.capped = true; finishListening(); }, SPEECH_MAX_MS);
+    if (ctx) {
+      try {
+        session.source = ctx.createMediaStreamSource(session.stream);
+        session.analyser = ctx.createAnalyser();
+        session.analyser.fftSize = 512;
+        session.levelData = new Uint8Array(session.analyser.frequencyBinCount);
+        session.source.connect(session.analyser);
+        speechLevelFrame(session);
+      } catch (e) { /* the meter is a reassurance, not a requirement */ }
+    }
+  };
+  rec.start();
+}
+
+async function finishAzureSession(session, mimeType, getTarget, onMatch) {
+  releaseSpeechSession(session);
+  if (_azure !== session || _speechToken !== session.token || session.aborted) return;
+  const alive = () => _azure === session && _speechToken === session.token;
+  const patch = p => { if (alive()) session.applyPatch(p); };
+  const done = p => { if (alive()) { _azure = null; session.applyPatch(p); } };
+  patch({ status: 'checking' });
+
+  let pcm;
+  try { pcm = await decodeToSpeechPcm(new Blob(session.chunks, mimeType ? { type: mimeType } : undefined)); }
+  catch (e) { return done({ status: 'nothing', capped: session.capped }); }
+  if (!alive()) return;
+
+  // Guards 2 and 3: a silent clip is never sent; only the speech is.
+  const span = analyseSpeech(pcm);
+  if (!span.voicedMs || span.end <= span.start) return done({ status: 'nothing', capped: session.capped });
+
+  const creds = getSpeechCreds();
+  if (!creds) return done({ status: 'failed', failReason: 'key' });
+  const r = await transcribeAzure(pcmToWav(pcm.subarray(span.start, span.end)), creds);
+  if (!alive()) return;
+  if (r.fail) return done({ status: 'failed', failReason: r.fail });
+  const text = (r.text || '').trim();
+  if (!text) return done({ status: 'nothing', capped: session.capped });
+  const g = resolveHeard(text, [], getTarget());
+  done({ status: g.matched ? 'matched' : 'mismatch', heard: g.heard, capped: session.capped });
+  if (g.matched && onMatch) onMatch();
+}
+
+// Silent discard: stops the recorder and drops anything in flight. Callers
+// reset their own status (see ABORT SEMANTICS above).
+function abortAzureSession() {
+  const s = _azure;
+  if (!s) return null;
+  s.aborted = true;
+  _azure = null;
+  _speechToken++;
+  try { if (s.recorder && s.recorder.state !== 'inactive') s.recorder.stop(); } catch (e) {}
+  releaseSpeechSession(s);
+  return s;
+}
+
+// Guard 1: leaving discards, and resets the screen it came from, because when
+// the phone is simply locked no caller is there to do it.
+function abandonSpeech() {
+  const s = abortAzureSession();
+  if (s) { try { s.applyPatch({ status: 'idle', heard: '' }); } catch (e) {} }
+}
+document.addEventListener('visibilitychange', () => { if (document.hidden) abandonSpeech(); });
+window.addEventListener('pagehide', () => abandonSpeech());
+
 // Shared speech-recognition core for both conversation Speak mode and the
 // sentence "Say it back" sheet (DES-38/40). Do NOT duplicate this — the
 // Android quirk-handling below (cumulative finals, dedup) took five failed
@@ -2397,13 +2740,20 @@ function resolveHeard(accumulated, segments, target) {
 // behaviour — it reads whichever line/sentence is current at the moment
 // recognition actually ends, not the one at the moment it began.
 function startSpeechRecognition(getTarget, getStatus, applyPatch, onMatch) {
+  // v160 (DES-61): with a speech key saved, record-then-transcribe instead.
+  // Everything below this line is the browser path, unchanged.
+  if (speechEngine() === 'azure') { startAzureRecording(getTarget, getStatus, applyPatch, onMatch); return; }
   const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
   if (!SpeechRec) return;
   if (_recognition) { try { _recognition.abort(); } catch(e){} }
 
   const rec = new SpeechRec();
   rec.lang = 'yue-Hant-HK';
-  rec.continuous = true;        // keep listening until user stops
+  // Asks to keep listening through pauses. Chrome on Android does NOT honour
+  // it: a session ends by itself at a pause of roughly 3–4 seconds (tail-probe
+  // controls ended at 4.6s and 4.9s unprompted). That is why v160 added the
+  // Azure path above (DES-61); this one remains the fallback with no key.
+  rec.continuous = true;
   rec.interimResults = true;    // capture words as they're heard
   rec.maxAlternatives = 3;
 
@@ -2475,6 +2825,8 @@ function startSpeechRecognition(getTarget, getStatus, applyPatch, onMatch) {
 function applyConvoSpeakPatch(patch) {
   if ('status' in patch) state.convo.speakStatus = patch.status;
   if ('heard'  in patch) state.convo.speakHeard  = patch.heard;
+  if ('capped' in patch) state.convo.speakCapped = patch.capped;          // v160
+  if ('failReason' in patch) state.convo.speakFail = patch.failReason;    // v160
   render();
 }
 function startListening() {
@@ -2492,6 +2844,8 @@ function startListening() {
 function applySentSpeakPatch(patch) {
   if ('status' in patch) state.sentSpeak.status = patch.status;
   if ('heard'  in patch) state.sentSpeak.heard  = patch.heard;
+  if ('capped' in patch) state.sentSpeak.capped = patch.capped;          // v160
+  if ('failReason' in patch) state.sentSpeak.fail = patch.failReason;    // v160
   render();
 }
 function startSentSpeakListening(target) {
@@ -2508,6 +2862,8 @@ function applySentReviewPatch(patch) {
   if (!sr) return;
   if ('status' in patch) sr.status = patch.status;
   if ('heard' in patch) sr.heard = patch.heard;
+  if ('capped' in patch) sr.capped = patch.capped;          // v160
+  if ('failReason' in patch) sr.fail = patch.failReason;    // v160
   // The final verdict is graded, not taken from the recogniser's own status:
   // 'produce' mode must never record a mismatch as wrong (DES-44).
   if (patch.status === 'matched' || patch.status === 'mismatch') {
@@ -2534,6 +2890,8 @@ function applyTranslateSpeakPatch(patch) {
   const tr = state.translate;
   if ('status' in patch) tr.speakStatus = patch.status;
   if ('heard'  in patch) tr.speakHeard  = patch.heard;
+  if ('capped' in patch) tr.speakCapped = patch.capped;          // v160
+  if ('failReason' in patch) tr.speakFail = patch.failReason;    // v160
   render();
 }
 
@@ -2560,11 +2918,21 @@ function speakTranslateTarget(text, onDone) {
 
 
 function stopListening() {
+  abortAzureSession();
   if (_recognition) { try { _recognition.abort(); } catch(e){} _recognition = null; }
 }
 
 // User pressed stop — gracefully end so onend fires and processes result
 function finishListening() {
+  // Azure: stopping the recorder hands the clip to finishAzureSession().
+  if (_azure && _azure.recorder && _azure.recorder.state === 'recording') {
+    clearTimeout(_azure.cap);
+    try { _azure.recorder.stop(); } catch (e) {}
+    return;
+  }
+  // Stop tapped before the recorder started (the mic permission prompt was
+  // still open): there is nothing to check, so this is a cancel.
+  if (_azure && !_azure.recorder) { abandonSpeech(); return; }
   if (_recognition) { try { _recognition.stop(); } catch(e){} }
 }
 

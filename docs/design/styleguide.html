@@ -55,6 +55,7 @@
   --milestone-edge:#EBD3D9;                  /* NEW */
   --jade-edge:#C9E7D3;                       /* NEW */
   --brand-edge:#F5D9C9;                      /* NEW */
+  --brand-text-dark:#9A3412;                 /* brand text on --brand-tint (styles.css; added here v160 for the speak rules) */
 
   /* header block — swap as a unit to retheme */
   --header-bg:#6E2639;                       /* CHANGE was #0369A1 */
@@ -399,6 +400,50 @@ table.spec{ border-collapse:collapse; width:100%; max-width:760px; margin:var(--
 table.spec th, table.spec td{ text-align:left; padding:7px 10px; border-bottom:var(--border); vertical-align:top; }
 table.spec th{ font-weight:600; font-size:10px; letter-spacing:.08em; text-transform:uppercase; color:var(--muted-dark); }
 table.spec tr:last-child td{ border-bottom:none; }
+/* Speak card and speech-key row — copied verbatim from styles.css v160, as the
+   tab bar section above is. Until v160 this page carried none of the speak rules
+   and its speak demos rendered as plain text (BACKLOG). The .sr-* and
+   .speak-breakdown rules are still absent, so those demos remain unstyled. */
+.apikey-input { width: 100%; padding: 10px 12px; border: 1px solid var(--parchment-border); border-radius: var(--r-sm); font-size: var(--fs-small); font-family: monospace; margin-bottom: 10px; box-sizing: border-box; }
+.speak-card { background: var(--parchment); border-radius: var(--r-lg); padding: 24px 20px; border: var(--border); box-shadow: var(--elev-1); margin-bottom: 16px; text-align: center; }
+.speak-target-zh { font-size: var(--fs-h2); margin-bottom: 8px; color: var(--ink); }
+.speak-target-jp { font-size: 14px; margin-bottom: 6px; }
+.speak-target-en { font-size: var(--fs-meta); color: var(--muted-dark); margin-bottom: 18px; }
+.mic-btn { width: 80px; height: 80px; border-radius: var(--r-pill); border: 1px solid var(--brand-edge); background: var(--brand-tint); color: var(--brand); font-size: 32px; cursor: pointer; display: flex; align-items: center; justify-content: center; margin: 0 auto 14px; transition: all 0.2s; box-shadow: var(--elev-3); }
+.mic-btn.idle { background: var(--brand-tint); }
+.mic-btn.listening { background: var(--feedback-bad-tint); border-color: var(--feedback-bad-edge); color: var(--feedback-bad); animation: micPulse 1s infinite; box-shadow: 0 0 0 0 currentColor; }
+.mic-btn.checking { background: var(--parchment-warm); border-color: var(--parchment-border); color: var(--muted-dark); box-shadow: var(--elev-1); cursor: default; }
+.dots { display: inline-flex; gap: 5px; }
+.dots i { width: 7px; height: 7px; border-radius: 50%; background: currentColor; opacity: .25; animation: speakDot 1.1s infinite; }
+.dots i:nth-child(2) { animation-delay: .18s; }
+.dots i:nth-child(3) { animation-delay: .36s; }
+@keyframes speakDot { 0%, 60%, 100% { opacity: .25; } 30% { opacity: 1; } }
+.speak-level { display: flex; gap: 4px; justify-content: center; align-items: flex-end; height: 18px; margin: -4px 0 10px; color: var(--feedback-bad); }
+.speak-level i { width: 4px; height: 4px; border-radius: 2px; background: currentColor; opacity: .85; transition: height 80ms linear; }
+.speak-timer { font-variant-numeric: tabular-nums; font-weight: var(--fw-semi); color: var(--feedback-bad); }
+.is-held { visibility: hidden; }
+@keyframes micPulse { 0% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--feedback-bad) 60%, transparent); } 100% { box-shadow: 0 0 0 18px rgba(231,76,60,0); } }
+.speak-status { font-size: var(--fs-small); color: var(--muted-dark); min-height: 20px; margin-bottom: 14px; }
+.speak-heard { background: var(--parchment-warm); border-radius: var(--r-sm); padding: 10px 14px; margin-bottom: 14px; font-size: 18px; color: var(--ink); }
+.speak-result-good { background: var(--feedback-good-tint); border: 1px solid var(--jade); color: var(--feedback-good-text); padding: 12px 16px; border-radius: var(--r-sm); font-weight: var(--fw-bold); margin-bottom: 14px; }
+.speak-result-bad  { background: var(--brand-tint); border: 1px solid var(--brand); color: var(--brand-text-dark); padding: 12px 16px; border-radius: var(--r-sm); margin-bottom: 14px; font-size: var(--fs-small); }
+.speak-result-close { background: var(--parchment-warm); border: 1px solid var(--parchment-border); color: var(--ink-soft); padding: 12px 16px; border-radius: var(--r-sm); margin-bottom: 14px; font-size: var(--fs-small); }
+.speak-actions { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-top: 14px; }
+.speak-action-btn { padding: 10px 22px; min-height: var(--tap-min); border-radius: var(--r-pill); border: none; font-size: var(--fs-small); font-weight: var(--fw-medium); cursor: pointer; text-align: center; display: inline-flex; align-items: center; justify-content: center; }
+.speak-action-btn.primary { flex: 1; min-width: 130px; background: var(--brand); color: #fff; }
+.speak-action-btn.secondary { flex: 1; min-width: 130px; background: transparent; border: var(--border); color: var(--muted-dark); font-weight: var(--fw-medium); }
+.speak-action-btn.stop { flex: 1; min-width: 130px; background: transparent; border: 1px solid var(--feedback-bad-edge); color: var(--feedback-bad); margin-bottom: 14px; }
+.speak-mic-note { font-size: var(--fs-micro); color: var(--muted); text-align: center; margin-top: 6px; }
+.speak-heard-jp { font-size: var(--fs-meta); color: var(--muted-dark); margin-top: 2px; }
+.key-row { display: flex; gap: var(--sp-2); align-items: center; }
+.key-row .apikey-input { flex: 1; margin-bottom: 0; min-height: var(--tap-min); }
+.key-state { flex: 1; }
+.key-ok { display: inline-flex; align-items: center; gap: 4px; font-size: var(--fs-meta); font-weight: var(--fw-semi); color: var(--feedback-good-text); }
+.key-meta { font-size: var(--fs-meta); color: var(--muted-dark); }
+.key-region { margin-top: var(--sp-2); }
+.key-region-in { display: inline-block; width: 12em; margin: 0 0 0 4px; padding: 4px 8px; }
+.key-bad { font-size: var(--fs-meta); color: var(--feedback-bad); line-height: 1.45; margin-top: 6px; }
+.set-link { background: none; border: none; padding: 12px 4px; margin: -12px 0; font: inherit; color: var(--muted-dark); text-decoration: underline; cursor: pointer; }   /* padding widens the tap target to ~44px without moving the line */
 </style>
 </head>
 <body>
@@ -707,8 +752,9 @@ table.spec tr:last-child td{ border-bottom:none; }
   <h3>Settings sheet <span class="tag-new">built &middot; v117</span></h3>
   <p class="note">Behind the header cog, not in the tab bar. <b>Tabs hold destinations, not features</b> (DES-11) — this is where anything occasional lives, and where account and subscription go later. The cog lights while the sheet is open because it is the sheet's origin, <b>not</b> because settings is somewhere you now are; it never takes an active state the way a tab does.</p>
   <p class="note"><b>Sized to its contents, not to the viewport</b> (MOCK-19-sheet). It holds one setting today — audio speed — and a full-height surface would only advertise that. When account and subscription arrive it becomes a full screen by changing the wrapper: the <code>.set-row</code> markup inside is the same either way, so nothing here has to be rebuilt to get there. Opening pushes a history entry, so phone BACK closes the sheet rather than leaving the screen underneath, and the &times; and the scrim both route through that same step-back.</p>
+  <p class="note"><b>Speech checking <span class="tag-new">built &middot; v160</span></b> (DES-62, mockup 40 §4) — the second row: the Azure speech key that lets the mic keep listening through pauses, stored on the phone only. The field reuses Translate's <code>.apikey-input</code> and the buttons are <code>.btn</code> / <code>.btn--primary</code>; only the row layout (<code>.key-row</code>, <code>.key-state</code>, <code>.key-meta</code>) and <code>.set-link</code> are new. The key is checked before it is saved, so a rejected key shows <code>.key-bad</code> in <code>--feedback-bad</code> — the nearest thing this screen has to a wrong answer — and nothing is stored. Once saved it reads <i>Key saved</i>, not mockup 40's <i>Key works</i>: it was checked when saved, not on every visit. Remove is a ghost and returns every speak surface to the browser's listener.</p>
   <div class="stage" style="max-width:390px" id="setdemo"></div>
-  <div class="cls">.tabs.tabs--top › .tab (+ .tab--on) › .tab-ic › .tab-badge &nbsp;·&nbsp; .sheet-wrap › .sheet-scrim + .sheet › .set-row › .seg › .seg-btn</div>
+  <div class="cls">.tabs.tabs--top › .tab (+ .tab--on) › .tab-ic › .tab-badge &nbsp;·&nbsp; .sheet-wrap › .sheet-scrim + .sheet › .set-row › .seg › .seg-btn &nbsp;·&nbsp; .set-row › .key-row › .apikey-input + .btn--primary · .key-state › .key-ok + .key-meta · .key-bad · .key-region › .set-link</div>
   <h3>Sentence speak sheet <span class="tag-new">built &middot; v131</span></h3>
   <p class="note">Behind a sentence card's mic button, in Learn only (DES-38/40, MOCK-27-sheet). The <b>second consumer</b> of the sheet host above — Settings paid for <code>.sheet-wrap</code>/<code>.sheet-scrim</code>/<code>.sheet</code> once, and this reuses it unchanged. New here is only the trigger and the content.</p>
   <p class="note">Content is <code>.speak-card</code>, unchanged from Chat's conversation Speak mode: target sentence, <code>.mic-btn</code>, <code>.speak-status</code>, and on a result, <code>.speak-result-good</code> / <code>.speak-result-bad</code> with <code>renderSpeakBreakdown()</code>'s per-syllable grid. <b>Chat's own screen is not replaced</b> (DES-40) — a sentence in Learn is one independent item a sheet suits; a Chat walk is sequential and already owns a dedicated screen for that shape. Reuse is at the content layer, not the surface.</p>
@@ -717,6 +763,13 @@ table.spec tr:last-child td{ border-bottom:none; }
   <p class="note"><b>The "You said" line carries jyutping (v131, DES-41)</b> — <code>charsToJyutping()</code> looks up each heard character against a table derived from the corpus itself, not an API call. Two marker classes say what the lookup isn't sure of rather than hiding it: <code>.jp-unknown</code> — a boxed "?" — for a character outside the corpus, and <code>.jp-ambiguous</code> — a dotted underline — for one with more than one reading in it (35 of 644 characters). Same instinct as DES-38's tone-verdict rule: showing a guess as fact would be worse than showing nothing.</p>
   <div class="stage" style="max-width:390px" id="sentspeakdemo-idle"></div>
   <div class="stage" style="max-width:390px;margin-top:12px" id="sentspeakdemo-mismatch"></div>
+  <h4 style="margin:22px 0 4px">Record, then check <span class="tag-new">built &middot; v160</span></h4>
+  <p class="note"><b>DES-61, MOCK-40-B.</b> With a speech key saved, every speak surface records until the learner taps Stop and Azure checks the clip, because Chrome on Android ends the browser's listener at a pause. Shared by all four surfaces through helpers in <code>render.js</code>, so they cannot drift. Three additions: <b><code>.speak-level</code></b>, five bars under a recording mic in its live red, driven by the microphone itself so they move only when sound arrives — the honest "it can hear you" that live text used to give; <b><code>.speak-timer</code></b> in the status line; and the <b>checking</b> state, <code>.mic-btn.checking</code> with <code>.dots</code>, neutral because nothing is live and nothing is yet the next action. While checking, the recording block is kept but held invisible with <code>.is-held</code>, so the card is exactly as tall as it was and nothing moves during the wait. <b>Nothing heard</b> and <b>couldn't check</b> use the neutral <code>.speak-result-close</code>, never the error red: neither is a wrong answer, and neither is graded. With no key, every surface keeps the browser's listener, unchanged, and the idle line says pausing may cut you off.</p>
+  <div style="display:flex;gap:16px;flex-wrap:wrap">
+    <div class="stage" style="max-width:300px;flex:1;min-width:260px"><div class="cls" style="margin-bottom:6px">recording · .speak-level + .speak-timer</div><div id="recdemo-rec"></div></div>
+    <div class="stage" style="max-width:300px;flex:1;min-width:260px"><div class="cls" style="margin-bottom:6px">checking · .mic-btn.checking + .is-held</div><div id="recdemo-chk"></div></div>
+    <div class="stage" style="max-width:300px;flex:1;min-width:260px"><div class="cls" style="margin-bottom:6px">nothing heard · .speak-result-close</div><div id="recdemo-none"></div></div>
+  </div>
   <h4 style="margin:22px 0 4px">The "Close" panel <span class="tag-new">built &middot; v132</span></h4>
   <p class="note"><b>DES-42.</b> A forgiven near-miss (DES-39 accepts it) still gets its own panel, distinct from a plain correct match and from a genuine reject — this is the fix for the contradiction found while building MOCK-27: the differing syllable used to render in <code>--feedback-bad</code> <i>inside</i> the green "you got it right" panel below. <b>MOCK-27 §3's own proposal needed correcting once checked against the live CSS</b> — it called for <code>--brand-tint</code> on the whole panel, on the assumption the colour was unclaimed. It wasn't: <code>.speak-result-bad</code> (below) already uses it for a genuine mismatch, so reusing it here would have made an accepted attempt look like a rejected one. <code>.speak-result-close</code> uses <code>--parchment-warm</code>/<code>--parchment-border</code>/<code>--ink-soft</code> instead — neutral, and distinct from both siblings. <code>--brand</code>/<code>--brand-text-dark</code> still carry the fix, scoped to just the differing syllable. Real <code>renderSpeakBreakdown()</code> output below, run with <code>variant: 'close'</code> against 仲 (zung6) heard as 中 (zung1) — the same example DES-39 was written against.</p>
   <div class="stage" style="max-width:390px" id="sentspeakdemo-close"></div>
@@ -729,7 +782,7 @@ table.spec tr:last-child td{ border-bottom:none; }
   <div class="stage" style="max-width:390px" id="sentspeakdemo-markers"></div>
   <h3>Checkpoint sentence review <span class="tag-new">built &middot; v134</span></h3>
   <p class="note"><b><code>.speak-card-head</code> (v154, MOCK-38-corner, DES-59)</b> — the replay control for the two speak surfaces that have no sheet header: the checkpoint's sentence review and Chat's Speak mode. A three-cell grid row at the top of the card: an empty <code>--tap-min</code> cell, the centred <code>.speak-prompt</code> label (or nothing, in the checkpoint), and a <code>.btn-icon--brand</code> play button, recoloured to <code>--milestone</code> inside <code>.cp-convo</code>. A row rather than a button floated over the card, because a floated button let a long line run underneath it. Disabled while listening, speaker icon while playing — the sheet header's rules. <b>In the checkpoint it renders only once the target is on screen</b>, so the learner has a go first; in Chat, on the learner's own lines from the start.</p>
-  <p class="note"><b>Known gap: the demos in this section and the next render unstyled.</b> This page never received the <code>.speak-card</code>, <code>.mic-btn</code>, <code>.speak-result-*</code> or <code>.sr-*</code> rules, so the markup below shows as plain text. Found at v154; see BACKLOG.</p>
+  <p class="note"><b>Known gap, narrowed at v160.</b> The speak card's own rules (<code>.speak-card</code>, <code>.mic-btn</code>, <code>.speak-result-*</code>, <code>.speak-actions</code>) were copied in at v160, so those parts now render. The <code>.sr-*</code> and <code>.speak-breakdown</code> rules are still absent, so the review-specific parts below and the breakdown grids show unstyled. See BACKLOG.</p>
   <p class="note">The third checkpoint activity (DES-44/45, MOCK-28). Mostly assembled from parts that already existed — <code>.cp-convo-head</code>, <code>.cp-act-card</code>, <code>.segs</code>, <code>.speak-card</code> and its result panels, <code>.cp-finish</code>. Five additions below.</p>
   <p class="note"><b><code>.sr-listen</code> inverts the speak sheet's hierarchy.</b> In listen mode the <i>audio</i> is the task, so it is the larger control and the mic sits under it. Milestone palette rather than <code>--brand</code>, so two circular controls on one screen read as different actions rather than a pair. Disabled while the mic is live — played-back audio would feed straight back into the recogniser.</p>
   <p class="note"><b><code>.sr-hidden</code></b> is the withheld-text placeholder: dashed and muted italic, so it reads as <i>deliberately not shown yet</i> rather than as an empty slot. It is what separates this from in-topic sentence practice, where the text is always visible.</p>
@@ -1075,7 +1128,29 @@ document.getElementById('setdemo').innerHTML=`
       <button class="seg-btn on">Normal</button>
       <button class="seg-btn">Fast</button>
     </div>
+  </div>
+  <div class="set-row" style="display:block">
+    <div class="set-label">Speech checking</div>
+    <div class="set-help">An Azure Speech key lets the mic keep listening through pauses. Stored on this phone only.</div>
+    <div class="key-row"><div class="key-state"><div class="key-ok"><span style="display:inline-flex;width:13px;height:13px">${I.check}</span> Key saved</div><div class="key-meta">Ends …1A2B · australiaeast</div></div><button class="btn">Remove</button></div>
   </div>`;
+
+// v160 (DES-61, MOCK-40-B): the record-then-check states, built markup.
+const REC_T = `<div class="speak-target-zh" style="font-size:22px">今日好凍，著多件。</div>
+  <div class="speak-target-jp"><span style="color:#E74C3C;font-weight:700">gam1</span> <span style="color:#8E44AD;font-weight:700">jat6</span> <span style="color:#E67E22;font-weight:700">hou2</span> <span style="color:#c8a200;font-weight:700">dung3</span>, <span style="color:#c8a200;font-weight:700">zoek3</span> <span style="color:#E74C3C;font-weight:700">do1</span> <span style="color:#8E44AD;font-weight:700">gin6</span>.</div>`;
+const REC_STOP = `<div class="speak-actions"><button class="speak-action-btn stop">⏹ Stop &amp; Check</button></div>`;
+document.getElementById('recdemo-rec').innerHTML = `<div class="speak-card">${REC_T}
+  <button class="mic-btn listening">${I.stop || '■'}</button>
+  <div class="speak-level"><i style="height:9px"></i><i style="height:15px"></i><i style="height:13px"></i><i style="height:8px"></i><i style="height:5px"></i></div>
+  <div class="speak-status"><span class="speak-timer">0:04</span> · press Stop when you've finished</div>${REC_STOP}</div>`;
+document.getElementById('recdemo-chk').innerHTML = `<div class="speak-card">${REC_T}
+  <button class="mic-btn checking" disabled><span class="dots"><i></i><i></i><i></i></span></button>
+  <div class="speak-level is-held"><i></i><i></i><i></i><i></i><i></i></div>
+  <div class="speak-status">Checking what you said…</div><div class="is-held">${REC_STOP}</div></div>`;
+document.getElementById('recdemo-none').innerHTML = `<div class="speak-card">${REC_T}
+  <button class="mic-btn idle"><span style="display:inline-flex;width:22px;height:22px">${I.mic}</span></button>
+  <div class="speak-result-close"><b>I didn't catch anything.</b><br>Check the mic isn't covered, then try again a little closer.</div>
+  <div class="speak-actions"><button class="speak-action-btn secondary">Close</button><button class="speak-action-btn primary">Try again</button></div></div>`;
 
 // Built markup, v130 (DES-38/40). Two states of the same sheet: idle (the
 // resting state a learner opens into) and mismatch (the richest state —
@@ -1090,7 +1165,7 @@ document.getElementById('sentspeakdemo-idle').innerHTML=`
     <div class="speak-target-en">I ate, and I also had some tea</div>
     <button class="mic-btn idle">${I.mic}</button>
     <div class="speak-status">Press the mic and say the line above</div>
-    <p class="speak-mic-note">Allow microphone access if prompted</p>
+    <p class="speak-mic-note">Take your time — it keeps listening until you press Stop.</p>
   </div>`;
 // "You said" jyutping is charsToJyutping()'s real output for this exact heard
 // string, run against the actual data/char-jyutping.json — not approximated.

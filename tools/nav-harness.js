@@ -9,6 +9,10 @@ global.getReviewStats = async () => ({});
 global.pushNav = () => history_.push('PUSH:' + snap());
 global.navReplace = () => { history_.pop(); history_.push('REPL:' + snap()); };
 global.window = { scrollTo: () => {} };
+// v160: goToDestination() discards any live recording (DES-61, cost guard 1).
+// A side effect, stubbed like render() and pushNav() above — this harness tests
+// where navigation lands, not the recorder.
+global.abandonSpeech = () => {};
 
 function snap() {
   return [state.nav, state.topicsView, state.pathView, state.fromPath, !!state.checkpoint].join('|');

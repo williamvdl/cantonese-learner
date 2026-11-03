@@ -4,7 +4,7 @@
 questions behind it. Meant to be short-lived — when a piece ships, fold its
 outcome into STATUS.md and clear this file back down for the next thing.*
 
-Last updated: 2026-11-03 · sw.js at v159
+Last updated: 2026-11-03 · sw.js at v160
 
 ## In progress — the listening cut-off: Azure record-then-transcribe
 
@@ -57,6 +57,17 @@ split so that no learner disposition is ever counted.
   evidence any later rule change would need. Limit: Azure hearing its own voice
   is the friendliest case, so a pass is necessary, not sufficient. Chrome cannot
   be tested the same way, because Web Speech only takes a live mic.
+  **Result, 2026-11-03: both endpoints PASS, with a wide margin.** 1,228
+  recognitions, no no-decodes, no errors. rest: 10/614 rejected (1.6%), paused
+  3/198 (1.5%). fast: 6/614 (1.0%), paused 4/198 (2.0%). Both voices alike.
+  **fast is ahead on both counts**: fewer rejects, and a median round trip of
+  0.30s against rest's 0.68s. The 16 rejects were read one by one: 4 are a
+  matcher gap rather than Azure (我兩歲 (ngo5 loeng5 seoi3) came back as
+  我2歲 (ngo5 2 seoi3),
+  and digits fold to 二 (ji6), never 兩 (loeng5)); 6 involve 喇 (laa3) written as
+  啦 (laa1) mid-sentence; the rest are ordinary misrecognitions. The systematic
+  spellings are logged in BACKLOG § Quality for a later matcher review; none
+  blocks this work. Raw data: `tools/runs/azure-corpus-check-2026-11-03.json`.
 - **2b, `tools/listen-probe.html` (Pixel, native speaker, about 5 minutes).**
   Choose "Native speaker" for 10 sentences (5 paused, 5 single). Tap Start,
   speak, tap Stop; "did you say it correctly?" before anything shows; the same
@@ -68,8 +79,7 @@ split so that no learner disposition is ever counted.
   Verified headless with a fake mic and scripted Azure: every outcome path,
   disposition-before-result, per-speaker progress, export with audio, and
   matcher parity with the standing harness on 19 pairs.
-- **To run 2a:** `node tools/azure-corpus-check.js --limit=6` as a smoke test,
-  then `node tools/azure-corpus-check.js`. **To run 2b:** commit, open
+- **To run 2b:** commit, open
   `.../tools/listen-probe.html` on the Pixel from the deployed site, paste the
   free resource's key, choose the speaker. Exports go in `tools/runs/`, never
   `tools/fixtures/` (STATUS § Notes).
@@ -77,9 +87,42 @@ split so that no learner disposition is ever counted.
   shorter wait), BUILD ON rest, FALLBACK to the Continue button, or STOP. Not
   "loosen the matcher until it passes".
 
-**When built** (unchanged from the brief): correct the `// keep listening until
-user stops` comment on `continuous` in `app.js`; mock up the tap-to-stop control
-and the wait before writing code.
+**2b result, 2026-11-03: both pass; fast is the better of the two.** Native
+speaker (William's wife), Pixel, one build throughout, 11 attempts, all with
+audio (`tools/runs/listen-probe-native-2026-11-03-10-18-21.json`). Kept: 10.
+Discarded: 1, and its retry passed. **fast: 10 of 10 accepted.** rest: 9 of 10;
+its one reject was 我想入住 (ngo5 soeng2 jap6 zyu6) returned as 我想 (ngo5
+soeng2) alone, where fast got the same recording right. **fast is reachable from
+the browser**: no unreachable calls, so CORS is not a problem. Paused clips ran to
+9.8 seconds and all passed. Wait after tapping Stop (encode plus round trip):
+median 0.83s for fast, 1.34s for rest, worst 1.5s and 2.4s.
+
+**Concluded 2026-11-03: BUILD ON fast transcription.** It passed every bar in
+both runs, had fewer rejects than rest in both (1.0% against 1.6% in the
+corpus; 0 against 1 here), and roughly halves the wait. rest also passed and is
+the named fallback if fast ever stops being reachable or available on the free
+tier. The listening probes are now closed; their pages stay in `tools/` until
+the build ships, then go, per PROBE_METHOD.
+
+**Step 3, design: mockup 40 drawn and settled 2026-11-03.** William
+approved the three scope picks the same evening, now DES-61 and DES-62 in
+DESIGN_DECISIONS.md: all four speak surfaces switch together; with no speech key
+the browser's listener stays, unchanged; the key goes in the Settings sheet as a
+second row (not beside the Gemini key, which lives on Translate's setup; an
+earlier note here said otherwise). `docs/design/mockups/40-tap-to-stop.html`
+draws the flow (ready, recording, the new *checking* state, result), the four
+edge cases (nothing heard, can't reach the checker, the 30-second safety stop,
+the no-key fallback line) and the Settings row in three states. **Chosen
+2026-11-03: MOCK-40-B, the timer plus a five-bar input level.** Nothing in the
+design now blocks the build.
+
+**Step 4, built 2026-11-03 as v160: deployed, awaiting device QA** — the v160
+section below has the QA list. DES-61, DES-62 and MOCK-40-B, plus three cost
+guards and a 30-second safety stop. The `continuous` comment in `app.js` is
+corrected. **When the Pixel confirms it:** fold this section into STATUS.md
+and delete the three probes (`tools/azure-pause-check.js`,
+`tools/azure-corpus-check.js`, `tools/listen-probe.html`), per PROBE_METHOD; their
+results in `tools/runs/` stay, and one of them is now a standing check's input.
 
 ### The brief, as moved from BACKLOG.md
 
@@ -160,9 +203,55 @@ the recording front end (tap to start and stop, WAV capture) is shared and only
 the back end differs. Azure goes first because the key, the account and the
 browser reachability are already proven.
 
-**Deployed and awaiting device QA confirmation: v155 to v159**, below. Each
+**Deployed and awaiting device QA confirmation: v155 to v160**, below. Each
 keeps its QA list until William confirms it on the Pixel; then it folds into
 STATUS.md and leaves this file.
+
+## v160 — speaking keeps listening through pauses — deployed, awaiting device QA confirmation
+
+With a speech key saved in Settings, every speak surface records until you tap
+Stop and Azure checks the clip; with no key, nothing changes. Code: `app.js`,
+`render.js`, `data.js`, `styles.css`, `sw.js`; a new standing check,
+`tools/speech-silence-harness.js`. Detail is in the STATUS row. **Verified end to
+end in a headless browser with a real recording as the mic and Azure scripted,
+not yet on the Pixel.**
+
+**Deploy steps, in this order:**
+
+1. Unzip the delivery over the clone. It creates `tools/runs/` and puts the
+   native export `listen-probe-native-2026-11-03-10-18-21.json` there — **required**,
+   because the new standing check reads its recordings. Then move the gate's
+   `azure-pause-check-2026-11-03.json` out of `tools/fixtures/` into `tools/runs/`
+   (in `fixtures/` it crashes a standing check), and make sure the corpus run's
+   `azure-corpus-check-2026-11-03.json` is in `tools/runs/` too.
+2. Run `node tools/speech-silence-harness.js`. It should end *all assertions pass*.
+3. Commit everything together and push. On the Pixel, reload until the
+   version is v160.
+4. Settings (cog) → **Speech checking** → paste KEY 1 of the **free** resource →
+   Save.
+
+**QA, screens that changed:**
+- **Settings:** first save a deliberately wrong key — a red message, and nothing
+  saved. Then the real one — *Key saved · Ends …* with Remove.
+- **Learn → a sentence's mic (Say it back):** the idle line reads *Take your
+  time*. Recording: the timer runs and the bars move when you speak and settle
+  when you stop. **Pause for 4–5 seconds mid-sentence**, then finish — it must
+  still be recording. Stop → *Checking what you said…* (three dots) → the result.
+- **Chat → Speak** on your own lines: the same flow; a match still moves on to
+  the next line as before.
+- **Checkpoint → sentence review**, listen mode and produce mode: the same flow.
+- **Translate → a result → Say it:** the same flow.
+- **The guards:** lock the phone mid-recording and unlock — back to idle, no
+  result. Tap Stop having said nothing — *I didn't catch anything*. In airplane
+  mode — *Couldn't check that one*. Optional: let one run past 30 seconds — it
+  stops itself and says so.
+
+**Screens sharing the changed code, to confirm only:**
+- Remove the key in Settings: all four speak surfaces go back to the browser's
+  listener, with the line saying pausing may cut you off — otherwise exactly as
+  before v160.
+- Chat's Read and Fill-the-Gap modes, the Learn sheet's replay button, and the
+  audio-speed setting: unchanged.
 
 ## v159 — quiz results show the whole word you chose — deployed, awaiting device QA confirmation
 
@@ -259,17 +348,22 @@ for the standing checks, the 169 Check B structural candidates from
 the open particle-rule question, and the `char-jyutping.json` coverage
 measurement. All in BACKLOG.md.
 
-### Standing checks — twelve: eleven exit 0, `dup-css.js` exits 1 on four known
+### Standing checks — thirteen: twelve exit 0, `dup-css.js` exits 1 on four known
 
 `validate.js` (now also asserting the chrome colours), `jyutping-check.js`,
 `wiring-check.js`, `nav-harness.js`, `tier-harness.js`, `dead-css.js`,
 `sentence-pool-harness.js`, `sentence-review-harness.js`, `snapshot-harness.js`,
-`gap-opts-check.js` and `asr-replay-harness.js` all exit 0 at v155. **`dup-css.js`
+`gap-opts-check.js` and `asr-replay-harness.js` all exit 0 at v155, and all
+of them plus `tools/speech-silence-harness.js` (new at v160: the silence guard,
+pinned against eleven real recordings) exit 0 at v160. **`dup-css.js`
 exits 1**, and did at v152 too: its Check A gates on any same-selector duplicate,
 and the four it finds are the known rule-splits in BACKLOG. The count is still 4
 at v155; Check B structural is 169 — up from 164 with v154's four contextual
 `.cp-convo` recolours and v155's `.lesson-note > .eyebrow`, all the same shape
-as rules already accepted. This section used to say *"all green"*, which was wrong; see
+as rules already accepted. **At v160 Check A is still 4; Check B structural is
+179**: the ten new ones are `.mic-btn.checking` refining `.mic-btn`, the same
+state-modifier shape as `.mic-btn.listening`, and `.key-row .apikey-input`, one
+contextual margin. This section used to say *"all green"*, which was wrong; see
 STATUS § Notes worth carrying forward. Check B is informational and never gates.
 
 ## Previously

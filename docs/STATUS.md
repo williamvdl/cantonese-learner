@@ -13,7 +13,7 @@ not a history log. Approved design decisions and whether they were built live in
 > convention (`v121 — <what changed>`) so this file stops being load-bearing on
 > its own.
 
-Last updated: 2026-11-03 · sw.js at v159
+Last updated: 2026-11-03 · sw.js at v160
 
 ## Confirmed live and working
 - **Checkpoint sentence review** (v134, DES-44/45). Third checkpoint activity:
@@ -258,8 +258,35 @@ orphan hues `#B7861E`, `#e4d4ad`, `#8a6716`,
 | — | v157 | **One Adjectives sentence replaced: 今日人好多 (gam1 jat6 jan4 hou2 do1) becomes 佢哋好高 (keoi5 dei6 hou2 gou1), "They're very tall."** Reported by William's wife, a fluent speaker, who has never heard the old phrasing. People say 今日好多人 (gam1 jat6 hou2 do1 jan4), and the corpus agreed with her six to one: 好多人 (hou2 do1 jan4) appears six times across Restaurant, Shopping and two checkpoint conversations, and 人好多 (jan4 hou2 do1) only here. The structure was grammatical but a poor model for a beginner to copy. The replacement keeps the sentence's teaching point, an adjective as the whole predicate with 好 (hou2) and no 係 (hai6), and keeps its id `adjectives-t1-s04`, which is used only to name the audio file and to avoid repeats, so no learner state moves. **Four characters, not three:** 佢好高 (keoi5 hou2 gou1) was the first suggestion, but `SENT_REVIEW_MIN_CHARS` (DES-44) drops anything under four from the checkpoint sentence review, which would have cost the Saying More pool a sentence. `tools/asr-testset.json` still holds the old sentence and was deliberately left alone: it is the frozen input of the closed tone probe, nothing live reads it, and it already predates v148. Checks: all twelve standing checks and `content-report.js` produce output identical to v156, except `jyutping-check.js` counting 3,292 corpus characters instead of 3,293; `char-jyutping.json` rebuilds byte for byte the same. **The audio must be regenerated before this deploys** (see IN_PROGRESS). **Also in v157: the Modal Verbs chat (*Learning to swim*) rewritten, lines 2, 4, 5 and 6.** Reported by William: the learner said "I want to learn to swim, but I don't know how", a 但係 (daan6 hai6, but) with nothing to contrast, then answered the friend's offer to teach with surprise, 你會游咩 (nei5 wui5 jau4 me1, you can swim?). That line also used 會 (wui5) for a learned skill, which Cantonese marks with 識 (sik1); the lesson's own note says so. The new chat accepts the offer and fixes a time — 你聽日可唔可以教我 (nei5 ting1 jat6 ho2 m4 ho2 ji5 gaau3 ngo5, could you teach me tomorrow?) — and lines 5 and 6 were rewritten too so the chat still carries 應該 (jing1 goi1, should) and now uses 會 (wui5) correctly, as "will". Without that, 會 (wui5) would have appeared nowhere in the lesson, since none of its five sentences uses it. **One of the old wrong answers was a better reply than the right one:** 幾時教呀？聽日得唔得？ (gei2 si4 gaau3 aa3? ting1 jat6 dak1 m4 dak1?) was replaced, since under the new line 4 it is also correct. Two distractors are new, both written to the CONTENT.md §3 rules; `gap-opts-check.js` output is unchanged. Every breakdown was asserted to rebuild its line in both characters and jyutping. New untaught word: 瞓 (fan3, sleep), glossed. Approved by William. |
 | — | v158 | **The checkpoint's Words activity now plays its listen prompts by itself, as a topic's Quiz and Word Review always have.** Reported by William: in the audio-only direction the checkpoint waited for a tap on every word. `renderQuizCore()` draws three quizzes — the topic Quiz, Word Review and the checkpoint's Words activity (`state.checkpointQuiz`) — but builds markup only, so each caller wires its own behaviour. `autoPlayListenPrompts()` held one copy of the auto-play block per quiz and had copies for the first two only; the third consumer has never auto-played since the checkpoint was built. **Consolidated rather than given a third copy:** one rule over a table of the three sessions, kept inside the function so it can be lifted whole, with a comment that a new caller of `renderQuizCore()` needs a row. The checkpoint row is gated on `state.checkpointAct === 'words'`, matching its own choice handler, so a leftover quiz cannot play under another activity. Verified by lifting the function verbatim against stubbed audio and timers, ten cases: v158 passes all ten, and v157 fails exactly the four checkpoint auto-play cases while passing the topic Quiz and Word Review ones, so those two behave as before. All twelve standing checks and `content-report.js` give output identical to v157. **Pre-existing, unchanged and unreachable by hand:** leaving a question inside the 900ms delay lets both timers fire on the current word, so it plays twice; it never plays the old word. |
 | DES-60 | v159 | **Two fixes on the quiz results screens, one reported and one found while checking the checkpoint as asked.** *Reported by William, from a screenshot:* the topic Quiz's "Words to review" list showed only the character of the word picked — "You chose: 羊 (joeng4)" for 養 (joeng5), with no jyutping or meaning, so the tone confusion behind the miss was invisible. The line was deliberately direction-aware and showed the English alone in the other two directions. It now shows Chinese, jyutping and English in all three (DES-60). *Found:* the checkpoint Words summary's *Worth another look* rows have never played. `renderCheckpointWords()` mapped missed words to `{ c, j, e }` and dropped `id`, which the row's play button interpolates, so every button carried `data-cp-say="undefined"` and asked for `audio/words/undefined.mp3` — the toast "Audio not generated for this yet" instead of the word. `id` is now carried. Neither screen is in DESIGN_SYSTEM.md or the styleguide, so neither needed updating. Verified by lifting `renderQuiz()`, `renderCheckpointWords()`, `renderCheckpointDone()` and `colorJyutping()` verbatim: v159 passes all eight cases and v158 fails six, reproducing both defects. Rendered with the real stylesheet at phone width to check wrapping. All twelve standing checks and `content-report.js` give output identical to v158. |
+| DES-61, DES-62, MOCK-40-B | v160 | **Speaking no longer cuts out at a pause: with a speech key saved, every speak surface records until the learner taps Stop, and Azure checks the clip.** The Learn *Say it back* sheet, Chat's Speak mode, the checkpoint sentence review and Translate's speak-back all switch together (DES-61), because they share `startSpeechRecognition()` — which keeps its name and contract and now hands off to a new Azure recorder when a key is saved; the browser path below it is byte-for-byte unchanged and is the fallback with no key. **Measured before it was built** (IN_PROGRESS.md): Azure's fast transcription returned both halves of every sentence through pauses up to 8 s; across the whole corpus in two voices the app's own matcher rejected it 1.0% of the time against a 10% bar; a native speaker on the Pixel scored 10 of 10; the wait after Stop was a median 0.83 s. **What the learner sees** (mockup 40): a running timer and a five-bar input level under the mic while recording (MOCK-40-B — the level moves only when sound arrives, the honest "it can hear you" that live text used to give); a new *checking* state, a neutral mic with three dots, for the under-a-second wait, drawn as the recording layout held invisible so the card's height does not change; and two new neutral panels, *I didn't catch anything* and *Couldn't check that one*, never graded and never in the error red. **Three cost guards**, agreed with William: leaving the screen, the back button, locking the phone or switching apps discards a recording and sends nothing; a clip with no speech in it is never sent (`analyseSpeech()`, calibrated on the eleven native recordings); and silence either side of the speech is trimmed before sending. Plus a **30-second safety stop**, after which the clip is checked as normal with one muted line saying why it ended. The key is entered in Settings as a second row (DES-62), checked before it is saved, and stored on the phone only in a new `speechKey` storage area. **Personal use only until the A2 proxy exists.** Verified: all four surfaces end to end in a headless browser with a real recording as the microphone and Azure scripted, including the lock-screen and tab-away discards, the silent mic (no request made), a refused key, Remove, and the safety stop; the recording and checking cards measured identical in height. **Thirteen standing checks**: `tools/speech-silence-harness.js` joins, pinning the silence guard against the real recordings in both directions, mutation-tested; `sentence-review-harness.js` now renders 690 states including the three new statuses under both engines, and its new section 8 was mutation-tested; `nav-harness.js` stubs the new discard. **Device QA pending.** |
 
 ### Notes worth carrying forward
+
+- **A destructured parameter breaks every brace-matching lifter in `tools/` (v160).**
+  The harnesses and probes lift a function by finding the first `{` after its
+  name and matching braces. `renderSpeakLive(status, { idleText, … })` put that
+  first `{` in the signature, so the lift ended half-way through it and the
+  harness died with a syntax error rather than a test failure. Caught by
+  `sentence-review-harness.js` on its first run. Fixed by taking a plain `opts`
+  parameter and destructuring inside; no other function in the app has the
+  shape. **Write functions the checks can lift**, or the checks quietly stop
+  covering them.
+
+- **A recorder that only stops when told needs teardown the browser listener never
+  did (v160).** `goToDestination()` stopped the Learn sheet and the checkpoint
+  review but not Chat or Translate. With Web Speech that was harmless — Chrome
+  ends a session within seconds on its own. With a recorder that runs until
+  Stop, the same gap would have recorded against a screen that was gone, and
+  billed for it. `abandonSpeech()` now runs on navigation, BACK, the page being
+  hidden and unload. **When a component's lifetime changes from self-ending to
+  open-ended, audit every exit, not just the ones that already had cleanup.**
+
+- **Real recordings are the calibration set, not a guessed threshold (v160).** The
+  silence guard's numbers come from the eleven native-speaker clips the
+  listening probe exported with audio (room floor ~0.0005 RMS; every clip held
+  1.2 s or more above 0.008). Those clips are now a standing check's inputs.
+  Keeping the audio in the probe export, which cost nothing, is what made that
+  possible a day later.
 
 - **A control that checks the verdict but not each signal lets a dead signal
   through (2026-11-03).** `tools/azure-pause-check.js` scored each attempt on two
@@ -1272,8 +1299,8 @@ leaves no trace, and the next reader to notice that no formal QA sweep has ever
 run will propose one. It has been considered and declined. What carries the load
 instead:
 
-- **The twelve standing checks** (IN_PROGRESS.md; eleven exit 0, and `dup-css.js`
-  exits 1 on four known duplicates), which cover what is mechanically
+- **The thirteen standing checks** (IN_PROGRESS.md; twelve exit 0, and `dup-css.js`
+  exits 1 on four known duplicates; `speech-silence-harness.js` joined at v160), which cover what is mechanically
   checkable — CSS, navigation, storage migration, tier data and behaviour, and
   content coherence. `validate.js` gained an **agreement check** at v129 tying
   `SPEAK_FINAL_PARTICLES` in `app.js` to `particles.json` — the first of the
@@ -1306,9 +1333,12 @@ UX and visual design. It may be worth a line in the project instructions.)*
 ## Architecture worth knowing
 - Persistence routes through an async storage abstraction layer, built ahead of
   an eventual Supabase migration.
-- Two separate, non-interchangeable credentials: a **Gemini** key (Google AI
-  Studio) for the Translate feature, and **Azure AI Speech** (`SPEECH_KEY` +
-  `SPEECH_REGION` environment variables) for TTS generation. The Azure key must
+- Three credentials, none interchangeable: a **Gemini** key (Google AI
+  Studio) for the Translate feature, entered on Translate's setup; **Azure AI
+  Speech** (`SPEECH_KEY` + `SPEECH_REGION` environment variables) for TTS
+  generation; and, from v160, an **Azure speech key entered in Settings**
+  (storage area `speechKey`) for checking speech on the phone (DES-62). Since
+  2026-11-03 the last two can be the same free (F0) Speech resource. The Azure key must
   never enter the repo — it is public, and git history keeps a key after the line
   is deleted. *Changed at v123: TTS generation was Google Cloud via `gcloud` CLI
   auth until then. `tools/generate-audio.js` keeps the Google backend behind

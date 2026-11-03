@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tap to stop, then a short wait — mockup 40, on v159</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Noto+Serif+TC:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+    /* Tokens transcribed from styles.css v159 — only the ones this page uses. */
+    --font-serif:   'Noto Serif TC', 'Noto Serif CJK TC', 'Fraunces', Georgia, serif;
+    --font-ui:      'Inter', 'Noto Serif TC', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+    --font-display: 'Fraunces', 'Noto Serif TC', 'Noto Serif CJK TC', Georgia, serif;
+    --fs-micro: 11px; --fs-meta: 12px; --fs-small: 13px; --fs-lead: 17px; --fs-h2: 28px;
+    --fw-medium: 500; --fw-semi: 600; --fw-bold: 700;
+    --sp-2: 8px; --sp-3: 12px; --sp-4: 16px;
+    --r-sm: 8px; --r-md: 12px; --r-lg: 16px; --r-pill: 999px; --tap-min: 44px;
+    --elev-1: 0 1px 2px rgba(58, 42, 30, 0.04), 0 1px 3px rgba(58, 42, 30, 0.06);
+    --elev-3: 0 4px 8px rgba(58, 42, 30, 0.06), 0 8px 20px rgba(58, 42, 30, 0.10);
+    --ink: #1C1917; --ink-soft: #292524;
+    --parchment: #FFFFFF; --parchment-warm: #FAF8F5; --parchment-deep: #F0EBE4; --parchment-border: #EAE4DC;
+    --brand: #C2410C; --brand-tint: #FEF0E9; --brand-edge: #F5D9C9; --brand-text-dark: #9A3412;
+    --jade: #15803D; --feedback-good-tint: #DCFCE7; --feedback-good-text: #15803D;
+    --feedback-bad: #B42318; --feedback-bad-tint: #FEF3F2; --feedback-bad-edge: #F5CFCB;
+    --muted: #A8A29E; --muted-dark: #78716C;
+    --border: 1px solid var(--parchment-border); --border-soft: 1px solid var(--parchment-deep);
+}
+body { margin:0; background:var(--parchment-deep); font-family:var(--font-ui); color:var(--ink); padding:24px 16px 64px; }
+.wrap { max-width:1300px; margin:0 auto; }
+h1 { font-family:var(--font-display); font-size:var(--fs-h2); font-weight:var(--fw-medium); margin:0 0 6px; }
+h2 { font-family:var(--font-display); font-size:var(--fs-lead); font-weight:var(--fw-medium); margin:44px 0 4px; }
+.lede { font-size:var(--fs-small); line-height:1.55; color:var(--muted-dark); margin:0 0 8px; max-width:78ch; }
+.note { font-size:var(--fs-meta); line-height:1.6; color:var(--muted-dark); margin:6px 0 0; max-width:78ch; }
+.note b, .lede b { color:var(--ink-soft); }
+.frames { display:flex; gap:22px; flex-wrap:wrap; align-items:flex-start; margin-top:14px; }
+.frame { width:360px; max-width:100%; background:var(--parchment-warm); padding:14px 14px 4px; border-radius:var(--r-md); box-sizing:border-box; }
+.frame > .cap { font-size:var(--fs-micro); font-weight:var(--fw-semi); letter-spacing:.1em; text-transform:uppercase; color:var(--muted-dark); margin:0 0 10px; }
+.frame > .cap em { font-style:normal; color:var(--brand); }
+.frame > .why { font-size:var(--fs-meta); line-height:1.5; color:var(--muted-dark); margin:8px 2px 12px; }
+.tag-new { display:inline-block; background:var(--brand-tint); color:var(--brand-text-dark); font:var(--fw-semi) 9px var(--font-ui); letter-spacing:.1em; text-transform:uppercase; padding:3px 6px; border-radius:4px; vertical-align:2px; }
+.tag-same { display:inline-block; background:#EDE7DE; color:var(--muted-dark); font:var(--fw-semi) 9px var(--font-ui); letter-spacing:.1em; text-transform:uppercase; padding:3px 6px; border-radius:4px; vertical-align:2px; }
+code { font-family:ui-monospace,Menlo,monospace; font-size:11px; background:var(--parchment-deep); padding:1px 5px; border-radius:4px; }
+.icon-label { display:inline-flex; align-items:center; gap:6px; }
+svg.i { width:22px; height:22px; fill:none; stroke:currentColor; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; }
+svg.i.sm { width:16px; height:16px; }
+
+/* ══ Transcribed from styles.css v159 ══ */
+.sheet { background:var(--parchment); border-top-left-radius:var(--r-lg); border-top-right-radius:var(--r-lg); box-shadow:var(--elev-3); padding-bottom:var(--sp-4); }
+.sheet-grab { width:34px; height:4px; border-radius:2px; background:var(--parchment-border); margin:9px auto 2px; }
+.sheet-head { display:flex; align-items:center; justify-content:space-between; padding:var(--sp-3) var(--sp-4); border-bottom:var(--border-soft); }
+.sheet-head-actions { display:flex; align-items:center; gap:2px; }
+.sheet-title { font-family:var(--font-display); font-size:var(--fs-lead); font-weight:var(--fw-medium); margin:0; }
+.btn-icon { width:var(--tap-min); height:var(--tap-min); padding:0; border-radius:var(--r-pill); border:var(--border); background:transparent; color:var(--muted-dark); display:inline-flex; align-items:center; justify-content:center; }
+.btn-icon[disabled] { opacity:.4; }
+.speak-card { background:var(--parchment); border-radius:var(--r-lg); padding:22px 18px; margin:12px; border:var(--border); box-shadow:var(--elev-1); text-align:center; }
+.speak-target-zh { font-family:var(--font-serif); font-size:24px; margin-bottom:8px; color:var(--ink); }
+.speak-target-jp { font-size:13px; margin-bottom:6px; }
+.speak-target-en { font-size:var(--fs-meta); color:var(--muted-dark); margin-bottom:18px; }
+.mic-btn { width:80px; height:80px; border-radius:var(--r-pill); border:1px solid var(--brand-edge); background:var(--brand-tint); color:var(--brand); display:flex; align-items:center; justify-content:center; margin:0 auto 14px; box-shadow:var(--elev-3); }
+.mic-btn.listening { background:var(--feedback-bad-tint); border-color:var(--feedback-bad-edge); color:var(--feedback-bad); animation:micPulse 1s infinite; }
+@keyframes micPulse { 0% { box-shadow:0 0 0 0 color-mix(in srgb, var(--feedback-bad) 60%, transparent); } 100% { box-shadow:0 0 0 18px rgba(231,76,60,0); } }
+.speak-status { font-size:var(--fs-small); color:var(--muted-dark); min-height:20px; margin-bottom:14px; }
+.speak-mic-note { font-size:var(--fs-micro); color:var(--muted); text-align:center; margin-top:6px; }
+.speak-heard { background:var(--parchment-warm); border-radius:var(--r-sm); padding:10px 14px; margin-bottom:14px; font-size:18px; color:var(--ink); }
+.speak-heard strong { font-family:var(--font-serif); }
+.speak-heard-jp { font-size:var(--fs-meta); color:var(--muted-dark); margin-top:2px; }
+.speak-result-good { background:var(--feedback-good-tint); border:1px solid var(--jade); color:var(--feedback-good-text); padding:12px 16px; border-radius:var(--r-sm); font-weight:var(--fw-bold); margin-bottom:14px; font-size:var(--fs-small); }
+.speak-result-close { background:var(--parchment-warm); border:1px solid var(--parchment-border); color:var(--ink-soft); padding:12px 16px; border-radius:var(--r-sm); margin-bottom:14px; font-size:var(--fs-small); text-align:left; }
+.speak-actions { display:flex; gap:12px; justify-content:center; flex-wrap:wrap; margin-top:14px; }
+.speak-action-btn { padding:10px 22px; min-height:var(--tap-min); border-radius:var(--r-pill); border:none; font-size:var(--fs-small); font-weight:var(--fw-medium); display:inline-flex; align-items:center; justify-content:center; font-family:var(--font-ui); }
+.speak-action-btn.primary { flex:1; min-width:120px; background:var(--brand); color:#fff; }
+.speak-action-btn.secondary { flex:1; min-width:120px; background:transparent; border:var(--border); color:var(--muted-dark); }
+.speak-action-btn.stop { flex:1; min-width:120px; background:transparent; border:1px solid var(--feedback-bad-edge); color:var(--feedback-bad); margin-bottom:14px; }
+.set-row { padding:var(--sp-3) var(--sp-4); border-bottom:var(--border-soft); text-align:left; }
+.set-row:last-child { border-bottom:none; }
+.set-label { font-size:var(--fs-small); font-weight:var(--fw-semi); color:var(--ink); }
+.set-help { font-size:var(--fs-meta); color:var(--muted-dark); margin:2px 0 var(--sp-3); line-height:1.45; }
+.seg { display:flex; gap:var(--sp-2); }
+.seg-btn { flex:1; min-height:var(--tap-min); border-radius:var(--r-pill); border:var(--border); background:transparent; color:var(--muted-dark); font:var(--fw-medium) var(--fs-meta) var(--font-ui); }
+.seg-btn.on { border-color:var(--brand); color:var(--brand); box-shadow:inset 0 0 0 1px var(--brand); }
+
+/* ══ NEW in this mockup ══ */
+/* Checking: the mic stands down to neutral and shows that work is happening.
+   Not brand (it is not the next action), not red (nothing is live any more). */
+.mic-btn.checking { background:var(--parchment-warm); border-color:var(--parchment-border); color:var(--muted-dark); box-shadow:var(--elev-1); }
+.dots { display:inline-flex; gap:5px; }
+.dots i { width:7px; height:7px; border-radius:50%; background:currentColor; opacity:.25; animation:dot 1.1s infinite; }
+.dots i:nth-child(2) { animation-delay:.18s; } .dots i:nth-child(3) { animation-delay:.36s; }
+@keyframes dot { 0%,60%,100% { opacity:.25; } 30% { opacity:1; } }
+/* MOCK-40-B: a five-bar input level under the mic, in the mic's live colour.
+   It replaces what live text used to tell the learner: "it can hear me". */
+.speak-level { display:flex; gap:4px; justify-content:center; align-items:flex-end; height:18px; margin:-4px 0 10px; color:var(--feedback-bad); }
+.speak-level i { width:4px; border-radius:2px; background:currentColor; opacity:.85; animation:lvl 0.9s infinite ease-in-out; }
+.speak-level i:nth-child(1){ animation-delay:-.2s } .speak-level i:nth-child(2){ animation-delay:-.5s } .speak-level i:nth-child(3){ animation-delay:-.1s } .speak-level i:nth-child(4){ animation-delay:-.7s } .speak-level i:nth-child(5){ animation-delay:-.35s }
+@keyframes lvl { 0%,100% { height:4px; } 50% { height:18px; } }
+.speak-level.quiet i { animation:none; height:4px; opacity:.35; }
+/* The timer sits in the existing status line; tabular figures so it does not jiggle. */
+.speak-timer { font-variant-numeric:tabular-nums; font-weight:var(--fw-semi); color:var(--feedback-bad); }
+/* Settings: the key field. Reuses the app's input look; no new colour. */
+.key-in { width:100%; box-sizing:border-box; font:var(--fs-small) var(--font-ui); padding:10px 12px; min-height:var(--tap-min); border-radius:var(--r-sm); border:var(--border); background:var(--parchment-warm); color:var(--ink); }
+.key-row { display:flex; gap:var(--sp-2); align-items:center; margin-top:var(--sp-2); }
+.key-row .key-in { flex:1; }
+.key-meta { font-size:var(--fs-meta); color:var(--muted-dark); }
+.key-ok { font-size:var(--fs-meta); color:var(--feedback-good-text); font-weight:var(--fw-semi); }
+.key-bad { font-size:var(--fs-meta); color:var(--feedback-bad); line-height:1.45; margin-top:6px; }
+.region { font-size:var(--fs-meta); color:var(--muted-dark); margin-top:6px; }
+.region u { text-decoration-color:var(--parchment-border); }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<h1>Tap to stop, then a short wait</h1>
+<p class="lede"><b>Why this exists.</b> Speaking is moving from the browser's listener to Azure (IN_PROGRESS, "the listening cut-off").
+Two things change for the learner, and only two. <b>Nothing stops the recording but them</b> — no more being cut off at a
+pause, but also no automatic finish. And <b>there is no live text while they speak</b>: the words arrive after Stop,
+typically under a second later (median 0.83&nbsp;s on the Pixel, worst 1.5&nbsp;s). Everything else on the speak card — the
+sentence, the "You said" line, the result panels, the breakdown — is unchanged and is shown here only for context.</p>
+<p class="lede"><b>Scope, settled 2026-11-03:</b> all four speak surfaces switch together (they share one listening
+function); with no speech key the app keeps the browser's listener, unchanged; the key is entered in Settings, stored on
+the phone only. Frames use the Learn "Say it back" sheet; Chat, the checkpoint review and Translate reuse the same card
+contents (DES-40), and the checkpoint keeps its milestone palette exactly as it does today.</p>
+<p class="note"><span class="tag-new">new</span> marks what this mockup adds. <span class="tag-same">unchanged</span> marks
+what is shown only for context. One genuine choice is offered as two options, <b>MOCK-40-A</b> and <b>MOCK-40-B</b>;
+everything else is a single proposal.</p>
+
+<!-- ══════════════════════════════════════════════════════════════════════ -->
+<h2>1 · The flow, start to finish (with MOCK-40-B's level meter)</h2>
+<p class="note">Four states, as today: idle, recording, checking, result. <b>Checking is the one new state</b>, and it is
+short. <b>Recording and checking are the same height</b>, so nothing on screen moves while the learner waits; the
+result then grows the card exactly as it does today.</p>
+<div class="frames">
+
+  <div class="frame"><p class="cap">1 · Ready <span class="tag-new">one new line</span></p>
+    <div class="sheet"><div class="sheet-grab"></div>
+      <div class="sheet-head"><h2 class="sheet-title">Say it back</h2>
+        <div class="sheet-head-actions"><button class="btn-icon" data-ic="play-sm"></button><button class="btn-icon" data-ic="close-sm"></button></div></div>
+      <div class="speak-card">
+        <div class="speak-target-zh" data-zh></div><div class="speak-target-jp" data-jp></div><div class="speak-target-en" data-en></div>
+        <div class="mic-btn" data-ic="mic"></div>
+        <div class="speak-status">Press the mic and say the line above</div>
+        <p class="speak-mic-note">Take your time — it keeps listening until you press Stop.</p>
+      </div></div>
+    <p class="why">The one added line sets the new expectation before the first attempt: pausing is fine, and finishing is
+    the learner's job. It replaces "Allow microphone access if prompted", which the browser's own prompt already covers.</p>
+  </div>
+
+  <div class="frame"><p class="cap">2 · Recording <span class="tag-new">timer + level</span></p>
+    <div class="sheet"><div class="sheet-grab"></div>
+      <div class="sheet-head"><h2 class="sheet-title">Say it back</h2>
+        <div class="sheet-head-actions"><button class="btn-icon" disabled data-ic="play-sm"></button><button class="btn-icon" data-ic="close-sm"></button></div></div>
+      <div class="speak-card">
+        <div class="speak-target-zh" data-zh></div><div class="speak-target-jp" data-jp></div><div class="speak-target-en" data-en></div>
+        <div class="mic-btn listening" data-ic="stop"></div>
+        <div class="speak-level"><i></i><i></i><i></i><i></i><i></i></div>
+        <div class="speak-status"><span class="speak-timer">0:04</span> · press Stop when you've finished</div>
+        <div class="speak-actions"><button class="speak-action-btn stop">⏹ Stop &amp; Check</button></div>
+      </div></div>
+    <p class="why">The red ghost mic and <i>Stop &amp; Check</i> are today's, unchanged (§4: Stop is a ghost with red text, never
+    a fill). New: the timer in the status line, and the level bars that show the mic is hearing them, in the mic's own live
+    red. Replay stays disabled while recording, as now — played audio would be recorded.</p>
+  </div>
+
+  <div class="frame"><p class="cap">3 · Checking <span class="tag-new">new state</span></p>
+    <div class="sheet"><div class="sheet-grab"></div>
+      <div class="sheet-head"><h2 class="sheet-title">Say it back</h2>
+        <div class="sheet-head-actions"><button class="btn-icon" disabled data-ic="play-sm"></button><button class="btn-icon" data-ic="close-sm"></button></div></div>
+      <div class="speak-card">
+        <div class="speak-target-zh" data-zh></div><div class="speak-target-jp" data-jp></div><div class="speak-target-en" data-en></div>
+        <div class="mic-btn checking"><span class="dots"><i></i><i></i><i></i></span></div>
+        <div class="speak-status">Checking what you said…</div>
+        <div style="height:82px"></div>
+      </div></div>
+    <p class="why">The mic stands down to neutral — no longer live, not yet the next action — and is not tappable. No
+    buttons: under a second is too short to need a cancel, and the ✕ still closes the sheet. The card keeps the
+    recording state's height, so the wait itself causes no movement.</p>
+  </div>
+
+  <div class="frame"><p class="cap">4 · Result <span class="tag-same">unchanged</span></p>
+    <div class="sheet"><div class="sheet-grab"></div>
+      <div class="sheet-head"><h2 class="sheet-title">Say it back</h2>
+        <div class="sheet-head-actions"><button class="btn-icon" data-ic="play-sm"></button><button class="btn-icon" data-ic="close-sm"></button></div></div>
+      <div class="speak-card">
+        <div class="speak-target-zh" data-zh></div><div class="speak-target-jp" data-jp></div><div class="speak-target-en" data-en></div>
+        <div class="mic-btn" data-ic="mic"></div>
+        <div class="speak-heard">You said: <strong data-zh-plain></strong><div class="speak-heard-jp" data-jp></div></div>
+        <div class="speak-result-good">✓ Great! You said it correctly.</div>
+        <div class="speak-actions"><button class="speak-action-btn primary"><span class="icon-label" data-ic-label="check-sm">Done</span></button></div>
+      </div></div>
+    <p class="why">Exactly today's result: same "You said" line with jyutping, same panels, same breakdown on a near miss,
+    same matcher. Only where the words came from has changed.</p>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════════════ -->
+<h2>2 · The one real choice: what replaces the live text</h2>
+<p class="note">Today the words appear as you speak, which also quietly tells you the mic is working. That goes. If
+nothing replaces it, a dead mic (permission revoked, another app holding it) is only discovered after Stop, as "I didn't
+catch anything". <b>MOCK-40-A</b> adds the minimum; <b>MOCK-40-B</b> adds one small new primitive to keep that reassurance.</p>
+<div class="frames">
+
+  <div class="frame"><p class="cap"><em>MOCK-40-A</em> · Timer only</p>
+    <div class="speak-card" style="margin:0 0 4px">
+      <div class="speak-target-zh" data-zh></div><div class="speak-target-jp" data-jp></div>
+      <div class="mic-btn listening" data-ic="stop"></div>
+      <div class="speak-status"><span class="speak-timer">0:04</span> · press Stop when you've finished</div>
+      <div class="speak-actions"><button class="speak-action-btn stop">⏹ Stop &amp; Check</button></div>
+    </div>
+    <p class="why"><b>For:</b> no new primitive at all; the pulsing mic already says "recording". <b>Against:</b> the pulse
+    is decoration — it pulses whether or not any sound is arriving, so it cannot tell a working mic from a silent one.</p>
+  </div>
+
+  <div class="frame"><p class="cap"><em>MOCK-40-B</em> · Timer + level <span class="tag-new">recommended</span></p>
+    <div class="speak-card" style="margin:0 0 4px">
+      <div class="speak-target-zh" data-zh></div><div class="speak-target-jp" data-jp></div>
+      <div class="mic-btn listening" data-ic="stop"></div>
+      <div class="speak-level"><i></i><i></i><i></i><i></i><i></i></div>
+      <div class="speak-status"><span class="speak-timer">0:04</span> · press Stop when you've finished</div>
+      <div class="speak-actions"><button class="speak-action-btn stop">⏹ Stop &amp; Check</button></div>
+    </div>
+    <p class="why"><b>For:</b> it moves only when sound arrives, so it is the one honest signal that the mic hears you —
+    what live text used to give for free. <b>Cost:</b> one primitive, <code>.speak-level</code>, five bars driven by the
+    recording's own input level; no new colour (it takes the live red).</p>
+  </div>
+
+  <div class="frame"><p class="cap"><em>MOCK-40-B</em> · Level while you pause</p>
+    <div class="speak-card" style="margin:0 0 4px">
+      <div class="speak-target-zh" data-zh></div><div class="speak-target-jp" data-jp></div>
+      <div class="mic-btn listening" data-ic="stop"></div>
+      <div class="speak-level quiet"><i></i><i></i><i></i><i></i><i></i></div>
+      <div class="speak-status"><span class="speak-timer">0:07</span> · press Stop when you've finished</div>
+      <div class="speak-actions"><button class="speak-action-btn stop">⏹ Stop &amp; Check</button></div>
+    </div>
+    <p class="why">During a pause the bars settle low while the timer keeps running. That is the new behaviour made
+    visible: <b>silence no longer ends anything</b>. The learner can see they are still being recorded.</p>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════════════ -->
+<h2>3 · When it does not go to plan</h2>
+<p class="note">Four cases. None uses the error red, because none is a wrong answer (§4): nothing heard is <b>absence</b>
+(muted, like a missing syllable in the breakdown), and a failed connection is not the learner's doing at all. Each has
+exactly one filled button (§3.1).</p>
+<div class="frames">
+
+  <div class="frame"><p class="cap">Nothing heard <span class="tag-new">new copy</span></p>
+    <div class="speak-card" style="margin:0 0 4px">
+      <div class="speak-target-zh" data-zh></div><div class="speak-target-jp" data-jp></div>
+      <div class="mic-btn" data-ic="mic"></div>
+      <div class="speak-result-close"><b>I didn't catch anything.</b><br>Check the mic isn't covered, then try again a little closer.</div>
+      <div class="speak-actions"><button class="speak-action-btn secondary">Close</button><button class="speak-action-btn primary"><span class="icon-label" data-ic-label="refresh-sm">Try again</span></button></div>
+    </div>
+    <p class="why">Azure returned no words. Uses <code>.speak-result-close</code>, the neutral panel, not a mismatch: there
+    is nothing to compare, so no verdict is stated. Recorded as nothing, never as a wrong attempt.</p>
+  </div>
+
+  <div class="frame"><p class="cap">Can't reach the checker <span class="tag-new">new copy</span></p>
+    <div class="speak-card" style="margin:0 0 4px">
+      <div class="speak-target-zh" data-zh></div><div class="speak-target-jp" data-jp></div>
+      <div class="mic-btn" data-ic="mic"></div>
+      <div class="speak-result-close"><b>Couldn't check that one.</b><br>The speech checker didn't answer — check your connection. Your attempt wasn't marked either way.</div>
+      <div class="speak-actions"><button class="speak-action-btn secondary">Close</button><button class="speak-action-btn primary"><span class="icon-label" data-ic-label="refresh-sm">Try again</span></button></div>
+    </div>
+    <p class="why">No network, a timeout, or Azure refusing the key. It says plainly that the attempt was not graded, so
+    a learner never reads silence as failure. Try again records afresh; it does not quietly switch to the browser's
+    listener mid-attempt. <b>When Azure refuses the key</b>, trying again cannot help, so the second line reads
+    instead: <i>Your speech key wasn't accepted — check it in Settings.</i></p>
+  </div>
+
+  <div class="frame"><p class="cap">The 30-second stop <span class="tag-new">new rule</span></p>
+    <div class="speak-card" style="margin:0 0 4px">
+      <div class="speak-target-zh" data-zh></div><div class="speak-target-jp" data-jp></div>
+      <div class="mic-btn" data-ic="mic"></div>
+      <div class="speak-heard">You said: <strong data-zh-plain></strong><div class="speak-heard-jp" data-jp></div></div>
+      <div class="speak-result-good">✓ Great! You said it correctly.</div>
+      <p class="speak-mic-note" style="margin-top:-6px">Stopped automatically at 30 seconds.</p>
+      <div class="speak-actions"><button class="speak-action-btn primary"><span class="icon-label" data-ic-label="check-sm">Done</span></button></div>
+    </div>
+    <p class="why">A safety stop, so a forgotten Stop cannot record on indefinitely — and it keeps every clip well inside
+    the 60-second limit of the short-audio fallback. The longest real attempt so far was under 10 seconds, so 30 leaves
+    room for slow, paused speech. The clip is checked as normal, with one muted
+    line saying why it ended.</p>
+  </div>
+
+  <div class="frame"><p class="cap">No speech key: browser's listener <span class="tag-new">one line</span></p>
+    <div class="speak-card" style="margin:0 0 4px">
+      <div class="speak-target-zh" data-zh></div><div class="speak-target-jp" data-jp></div>
+      <div class="mic-btn" data-ic="mic"></div>
+      <div class="speak-status">Press the mic and say the line above</div>
+      <p class="speak-mic-note">Using the browser's listener, which may stop when you pause. Add a speech key in Settings to fix that.</p>
+    </div>
+    <p class="why">The fallback, settled: with no key, everything works exactly as it does today, and this one muted line
+    replaces the "take your time" line from frame 1 — because on this path, pausing <i>will</i> cut you off.</p>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════════════ -->
+<h2>4 · Settings: the speech key</h2>
+<p class="note">A second <code>.set-row</code> in the existing Settings sheet, below Audio speed. The sheet is sized to
+its contents (MOCK-19-sheet), so it simply grows by one row. The key is stored on the phone only, like the Gemini key on
+Translate. <b>Proposed: on Save the key is checked straight away</b> with a tiny request that uses no audio, so a
+mistyped key is caught here rather than on the first sentence. Whether the browser can make that request is confirmed at
+build time; if it cannot, the first sentence catches a bad key instead, through the "Couldn't check that one" panel.</p>
+<div class="frames">
+
+  <div class="frame"><p class="cap">No key yet</p>
+    <div class="sheet"><div class="sheet-grab"></div>
+      <div class="sheet-head"><h2 class="sheet-title">Settings</h2><button class="btn-icon" data-ic="close-sm"></button></div>
+      <div class="set-row"><div class="set-label">Audio speed</div><div class="set-help">Applies to every word and sentence.</div>
+        <div class="seg"><button class="seg-btn">Slow</button><button class="seg-btn on">Normal</button><button class="seg-btn">Fast</button></div></div>
+      <div class="set-row"><div class="set-label">Speech checking</div>
+        <div class="set-help">An Azure Speech key lets the mic keep listening through pauses. Stored on this phone only.</div>
+        <div class="key-row"><input class="key-in" type="password" placeholder="Paste KEY 1"><button class="speak-action-btn primary" style="flex:0 0 auto;min-width:0">Save</button></div>
+        <div class="region">Region: australiaeast · <u>change</u></div>
+      </div></div>
+  </div>
+
+  <div class="frame"><p class="cap">Saved and working</p>
+    <div class="sheet"><div class="sheet-grab"></div>
+      <div class="sheet-head"><h2 class="sheet-title">Settings</h2><button class="btn-icon" data-ic="close-sm"></button></div>
+      <div class="set-row"><div class="set-label">Audio speed</div><div class="set-help">Applies to every word and sentence.</div>
+        <div class="seg"><button class="seg-btn">Slow</button><button class="seg-btn on">Normal</button><button class="seg-btn">Fast</button></div></div>
+      <div class="set-row"><div class="set-label">Speech checking</div>
+        <div class="set-help">An Azure Speech key lets the mic keep listening through pauses. Stored on this phone only.</div>
+        <div class="key-row"><div style="flex:1"><div class="key-ok">✓ Key works</div><div class="key-meta">Ends …1A2B · australiaeast</div></div>
+          <button class="speak-action-btn secondary" style="flex:0 0 auto;min-width:0">Remove</button></div>
+      </div></div>
+    <p class="why">No filled button once saved: nothing here is the next action. Remove is a ghost and returns the app to
+    the browser's listener.</p>
+  </div>
+
+  <div class="frame"><p class="cap">Key not accepted</p>
+    <div class="sheet"><div class="sheet-grab"></div>
+      <div class="sheet-head"><h2 class="sheet-title">Settings</h2><button class="btn-icon" data-ic="close-sm"></button></div>
+      <div class="set-row"><div class="set-label">Audio speed</div><div class="set-help">Applies to every word and sentence.</div>
+        <div class="seg"><button class="seg-btn">Slow</button><button class="seg-btn on">Normal</button><button class="seg-btn">Fast</button></div></div>
+      <div class="set-row"><div class="set-label">Speech checking</div>
+        <div class="set-help">An Azure Speech key lets the mic keep listening through pauses. Stored on this phone only.</div>
+        <div class="key-row"><input class="key-in" type="password" value="xxxxxxxxxxxxxxxx"><button class="speak-action-btn primary" style="flex:0 0 auto;min-width:0">Save</button></div>
+        <div class="key-bad">Azure didn't accept that key. Use KEY 1 from the Speech resource, and check the region matches.</div>
+        <div class="region">Region: australiaeast · <u>change</u></div>
+      </div></div>
+    <p class="why">Not saved. The red here is the one place it appears, and it is the closest thing to a wrong answer the
+    screen has: a value the learner entered that is not right. Nothing about it is stored.</p>
+  </div>
+</div>
+
+<h2>What this asks William to decide</h2>
+<p class="note"><b>MOCK-40-A or MOCK-40-B</b> for the recording state — the timer alone, or the timer with the level meter.
+Recommended: MOCK-40-B. Everything else on this page is a single proposal; say if any of it is wrong rather than
+choosing between versions of it.</p>
+
+</div>
+<script>
+// Example sentence, taken verbatim from data/topics/food.json (food-t1-s03).
+const S = { zh:'我好餓，想食點心同餃子。', jp:'ngo5 hou2 ngo6, soeng2 sik6 dim2 sam1 tung4 gaau2 zi2.', en:'I’m hungry — I want dim sum and dumplings.' };
+const TONE = { 1:'#E74C3C', 2:'#E67E22', 3:'#c8a200', 4:'#27AE60', 5:'#2980B9', 6:'#8E44AD' };   // TONES, app.js
+const colour = j => j.replace(/[a-z]+([1-6])/g, (m, t) => `<span style="color:${TONE[t]};font-weight:700">${m}</span>`);
+const ICONS = {   // ICON_PATHS, data.js
+  mic:'<path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" x2="12" y1="19" y2="22"/>',
+  stop:'<rect x="5" y="5" width="14" height="14" rx="2"/>', play:'<polygon points="6 3 20 12 6 21 6 3"/>',
+  close:'<path d="M18 6 6 18"/><path d="m6 6 12 12"/>', check:'<path d="M20 6 9 17l-5-5"/>',
+  refresh:'<path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M8 16H3v5"/>',
+};
+const svg = (name) => { const [n, sz] = name.split('-'); return `<svg class="i${sz ? ' sm' : ''}" viewBox="0 0 24 24">${ICONS[n]}</svg>`; };
+document.querySelectorAll('[data-zh]').forEach(e => e.textContent = S.zh);
+document.querySelectorAll('[data-zh-plain]').forEach(e => e.textContent = S.zh);
+document.querySelectorAll('[data-jp]').forEach(e => e.innerHTML = colour(S.jp));
+document.querySelectorAll('[data-en]').forEach(e => e.textContent = S.en);
+document.querySelectorAll('[data-ic]').forEach(e => e.innerHTML = svg(e.dataset.ic));
+document.querySelectorAll('[data-ic-label]').forEach(e => e.innerHTML = svg(e.dataset.icLabel) + ' ' + e.textContent);
+</script>
+</body>
+</html>

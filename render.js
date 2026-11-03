@@ -77,8 +77,121 @@ function renderSettingsSheet() {
           <div class="set-help">Applies to every word and sentence.</div>
           <div class="seg">${speedBtns}</div>
         </div>
+        ${renderSpeechKeyRow()}
       </div>
     </div>`;
+}
+
+// The speech key (DES-62, mockup 40 §4). Three states: no key, saved, and
+// not accepted. Stored on this phone only, through the storage module like the
+// Gemini key — but a separate area: the two keys are never interchangeable.
+// "Key saved", not mockup 40's "Key works": the key was checked when it was
+// saved, not on every visit, and this line should not claim more than that.
+function renderSpeechKeyRow() {
+  const ui = state.speechKeyUi;
+  const stored = (storage.getSpeechKey && storage.getSpeechKey()) || { key: '', region: 'australiaeast' };
+  const region = stored.region || 'australiaeast';
+  const esc = v => String(v || '').replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+  const body = stored.key && !ui.checking
+    ? `<div class="key-row">
+         <div class="key-state"><div class="key-ok">${icon('check', 13)} Key saved</div>
+           <div class="key-meta">Ends …${esc(stored.key.slice(-4))} · ${esc(region)}</div></div>
+         <button class="btn" id="speech-key-remove">Remove</button>
+       </div>`
+    : `<div class="key-row">
+         <input type="password" id="speech-key-input" class="apikey-input" placeholder="Paste KEY 1"
+           autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" value="${esc(ui.draftKey)}" ${ui.checking ? 'disabled' : ''}>
+         <button class="btn btn--primary" id="speech-key-save" ${ui.checking ? 'disabled' : ''}>${ui.checking ? 'Checking…' : 'Save'}</button>
+       </div>
+       ${ui.error ? `<div class="key-bad">${ui.error}</div>` : ''}
+       <div class="key-meta key-region">${ui.editRegion
+         ? `Region: <input type="text" id="speech-region-input" class="apikey-input key-region-in" value="${esc(region)}"
+              autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">`
+         : `Region: ${esc(region)} · <button class="set-link" id="speech-region-edit">change</button>`}</div>`;
+  return `
+        <div class="set-row">
+          <div class="set-label">Speech checking</div>
+          <div class="set-help">An Azure Speech key lets the mic keep listening through pauses. Stored on this phone only.</div>
+          ${body}
+        </div>`;
+}
+
+// ── Shared by every speak surface (v160, DES-61, MOCK-40-B) ─────────────────
+// The Learn sheet, Chat's Speak mode, the checkpoint sentence review and
+// Translate's speak-back each draw their own card, but the parts that changed
+// with record-then-transcribe live here once, so the four cannot drift apart —
+// the same reasoning as DES-40's content-layer reuse.
+
+function speakMicClass(status) {
+  return status === 'listening' ? 'listening' : status === 'checking' ? 'checking' : 'idle';
+}
+function speakMicInner(status) {
+  if (status === 'listening') return icon('stop', 22);
+  if (status === 'checking') return '<span class="dots" aria-hidden="true"><i></i><i></i><i></i></span>';
+  return icon('mic', 22);
+}
+// Not tappable while checking: the clip has gone, and a second tap would start
+// a new recording over a result that is about to land.
+function speakMicAttrs(status) {
+  return status === 'checking' ? 'disabled aria-disabled="true"' : '';
+}
+
+const SPEAK_LEVEL_BARS = '<i></i><i></i><i></i><i></i><i></i>';
+
+// The block under the mic. Browser path: exactly as before v160. Azure path,
+// recording: the five-bar level (MOCK-40-B) and the timer, both kept live by
+// app.js writing to them directly. Checking: the SAME markup held invisible, so
+// the card is the same height while the learner waits and nothing moves.
+// `opts` is a plain parameter, destructured inside, NOT in the signature: the
+// harnesses and probes lift functions by matching braces from the first `{`
+// after the name, and a destructured parameter's brace would end the lift
+// half-way through the signature (found building v160).
+function renderSpeakLive(status, opts) {
+  const { idleText, listeningText, stopHtml } = opts;
+  if (status === 'listening') {
+    if (speechEngine() !== 'azure') return `<div class="speak-status">${listeningText}</div>${stopHtml}`;
+    return `<div class="speak-level">${SPEAK_LEVEL_BARS}</div>
+      <div class="speak-status"><span class="speak-timer">${speechElapsedLabel()}</span> · press Stop when you've finished</div>
+      ${stopHtml}`;
+  }
+  if (status === 'checking') {
+    return `<div class="speak-level is-held" aria-hidden="true">${SPEAK_LEVEL_BARS}</div>
+      <div class="speak-status">Checking what you said…</div>
+      <div class="is-held" aria-hidden="true">${stopHtml}</div>`;
+  }
+  return `<div class="speak-status">${status === 'idle' ? idleText : ''}</div>`;
+}
+
+// The one line under an idle mic. It replaced "Allow microphone access if
+// prompted", which the browser's own prompt already says. On the fallback it
+// tells the truth: pausing will cut you off (mockup 40 §3).
+function renderSpeakNote(status) {
+  if (status !== 'idle') return '';
+  return speechEngine() === 'azure'
+    ? `<p class="speak-mic-note">Take your time — it keeps listening until you press Stop.</p>`
+    : `<p class="speak-mic-note">Using the browser's listener, which may stop when you pause. Add a speech key in Settings to fix that.</p>`;
+}
+
+// Nothing heard / couldn't check. The neutral panel, never the error red:
+// neither is a wrong answer (§4), and neither is ever graded.
+function isSpeakNotice(status) { return status === 'nothing' || status === 'failed'; }
+function renderSpeakNotice(status, failReason) {
+  if (status === 'nothing') {
+    return `<div class="speak-result-close"><b>I didn't catch anything.</b><br>Check the mic isn't covered, then try again a little closer.</div>`;
+  }
+  if (status === 'failed') {
+    const line = failReason === 'key' ? 'Your speech key wasn’t accepted — check it in Settings.'
+      : failReason === 'mic' ? 'The microphone isn’t available — allow it for this site, then try again.'
+      : 'The speech checker didn’t answer — check your connection. Your attempt wasn’t marked either way.';
+    return `<div class="speak-result-close"><b>Couldn’t check that one.</b><br>${line}</div>`;
+  }
+  return '';
+}
+
+// The 30-second safety stop, said once, quietly, under whatever the result was.
+function renderSpeakCapped(capped, status) {
+  return capped && (status === 'matched' || status === 'mismatch' || status === 'nothing')
+    ? `<p class="speak-mic-note">Stopped automatically at 30 seconds.</p>` : '';
 }
 
 // The sentence "Say it back" sheet (DES-38/40, MOCK-27-sheet). Speak feedback
@@ -149,8 +262,8 @@ function renderSentSpeakSheet() {
           <h2 class="sheet-title">Say it back</h2>
           <div class="sheet-head-actions">
             <button class="btn-icon" id="sent-speak-listen"
-              ${status === 'listening' ? 'disabled aria-disabled="true"' : ''}
-              title="${status === 'listening' ? 'Not while listening' : 'Listen to the sentence'}">
+              ${speakBusy(status) ? 'disabled aria-disabled="true"' : ''}
+              title="${speakBusy(status) ? 'Not while listening' : 'Listen to the sentence'}">
               ${speaking ? icon('volume', 18) : iconPlay(16)}
             </button>
             <button class="btn-icon sheet-close" id="sent-speak-close" aria-label="Close">${icon('close', 17)}</button>
@@ -160,17 +273,21 @@ function renderSentSpeakSheet() {
           <div class="speak-target-zh">${sentence.c}</div>
           <div class="speak-target-jp">${colorJyutping(sentence.j)}</div>
           <div class="speak-target-en">${sentence.e}</div>
-          <button class="mic-btn ${status === 'listening' ? 'listening' : 'idle'}" id="sent-speak-mic">
-            ${status === 'listening' ? icon('stop', 22) : icon('mic', 22)}
+          <button class="mic-btn ${speakMicClass(status)}" id="sent-speak-mic" ${speakMicAttrs(status)}>
+            ${speakMicInner(status)}
           </button>
-          <div class="speak-status">${statusText}</div>
-          ${status === 'listening' ? `
-            <div class="speak-actions">
+          ${renderSpeakLive(status, {
+            idleText: statusText,
+            listeningText: 'Listening… speak the line, then press Stop',
+            stopHtml: `<div class="speak-actions">
               <button class="speak-action-btn stop" id="sent-speak-stop-btn">⏹ Stop &amp; Check</button>
-            </div>` : ''}
-          ${status === 'idle' ? `<p class="speak-mic-note">Allow microphone access if prompted</p>` : ''}
+            </div>`,
+          })}
+          ${renderSpeakNote(status)}
           ${heardLine}
           ${result}
+          ${renderSpeakNotice(status, sp.fail)}
+          ${renderSpeakCapped(sp.capped, status)}
           ${status === 'matched' ? `
             <div class="speak-actions">
               <button class="speak-action-btn primary" id="sent-speak-done"><span class="icon-label">${icon('check', 14)} Done</span></button>
@@ -179,6 +296,11 @@ function renderSentSpeakSheet() {
             <div class="speak-actions">
               <button class="speak-action-btn secondary" id="sent-speak-retry"><span class="icon-label">${icon('refresh', 14)} Try Again</span></button>
               <button class="speak-action-btn primary" id="sent-speak-done">Close</button>
+            </div>` : ''}
+          ${isSpeakNotice(status) ? `
+            <div class="speak-actions">
+              <button class="speak-action-btn secondary" id="sent-speak-done">Close</button>
+              <button class="speak-action-btn primary" id="sent-speak-retry"><span class="icon-label">${icon('refresh', 14)} Try again</span></button>
             </div>` : ''}
         </div>
       </div>
@@ -276,24 +398,29 @@ function renderTranslate() {
 
     speakHtml = `
       <div class="tr-speak">
-        <button class="mic-btn ${sp.status === 'listening' ? 'listening' : 'idle'}" id="translate-speak-mic"
-          aria-label="${sp.status === 'listening' ? 'Stop and check' : 'Say it back'}">
-          ${sp.status === 'listening' ? icon('stop', 22) : icon('mic', 22)}
+        <button class="mic-btn ${speakMicClass(sp.status)}" id="translate-speak-mic" ${speakMicAttrs(sp.status)}
+          aria-label="${sp.status === 'listening' ? 'Stop and check' : sp.status === 'checking' ? 'Checking' : 'Say it back'}">
+          ${speakMicInner(sp.status)}
         </button>
-        <div class="speak-status">${
-          sp.status === 'idle'      ? 'Press the mic and say the line above'
-        : sp.status === 'listening' ? 'Listening\u2026 speak the line, then press Stop'
-        : ''}</div>
-        ${sp.status === 'listening' ? `
-          <div class="speak-actions">
+        ${renderSpeakLive(sp.status, {
+          idleText: 'Press the mic and say the line above',
+          listeningText: 'Listening\u2026 speak the line, then press Stop',
+          stopHtml: `<div class="speak-actions">
             <button class="speak-action-btn stop" id="translate-speak-stop">\u23f9 Stop &amp; Check</button>
-          </div>` : ''}
-        ${sp.status === 'idle' ? `<p class="speak-mic-note">Allow microphone access if prompted</p>` : ''}
+          </div>`,
+        })}
+        ${renderSpeakNote(sp.status)}
         ${heardLine}
         ${verdict}
+        ${renderSpeakNotice(sp.status, tr.speakFail)}
+        ${renderSpeakCapped(tr.speakCapped, sp.status)}
         ${(sp.status === 'matched' || sp.status === 'mismatch') ? `
           <div class="speak-actions">
             <button class="speak-action-btn secondary" id="translate-speak-retry"><span class="icon-label">${icon('refresh', 14)} Try again</span></button>
+          </div>` : ''}
+        ${isSpeakNotice(sp.status) ? `
+          <div class="speak-actions">
+            <button class="speak-action-btn primary" id="translate-speak-retry"><span class="icon-label">${icon('refresh', 14)} Try again</span></button>
           </div>` : ''}
       </div>`;
   }
@@ -1286,6 +1413,7 @@ function renderCheckpointSentences() {
   if (!item) return renderSentReviewPicker();
   const mode = sentReviewModeAt(sr, sr.idx);
   const listening = sr.status === 'listening';
+  const busy = speakBusy(sr.status);          // recording or checking (v160)
   const showTarget = sr.revealed || sr.status === 'matched' || sr.status === 'mismatch';
 
   const segs = `<div class="segs sr-segs">${sr.items.map((_, i) =>
@@ -1305,8 +1433,8 @@ function renderCheckpointSentences() {
       <div class="speak-card-head">
         <span></span><span></span>
         <button class="btn-icon btn-icon--brand" data-sr-play aria-label="Listen to the sentence"
-          ${listening ? 'disabled aria-disabled="true"' : ''}
-          title="${listening ? 'Not while listening' : 'Listen to the sentence'}">
+          ${busy ? 'disabled aria-disabled="true"' : ''}
+          title="${busy ? 'Not while listening' : 'Listen to the sentence'}">
           ${playing ? icon('volume', 18) : iconPlay(16)}
         </button>
       </div>
@@ -1318,8 +1446,8 @@ function renderCheckpointSentences() {
     // IS the task, which is what makes it different in kind from in-topic
     // practice where the text is always on screen.
     prompt = `
-      <button class="sr-listen" data-sr-play ${listening ? 'disabled aria-disabled="true"' : ''}>${icon('volume', 30)}</button>
-      <div class="speak-status">${listening ? '' : 'Tap to hear it again'}</div>
+      <button class="sr-listen" data-sr-play ${busy ? 'disabled aria-disabled="true"' : ''}>${icon('volume', 30)}</button>
+      <div class="speak-status">${busy ? '' : 'Tap to hear it again'}</div>
       <div class="sr-hidden">The sentence is hidden — listen, then say it back</div>`;
   } else {
     // C: no audio control at all — offering "listen" before producing would
@@ -1374,8 +1502,16 @@ function renderCheckpointSentences() {
         <button class="speak-action-btn secondary" data-sr-retry>Try again</button>
         <button class="speak-action-btn primary" data-sr-next>${last ? 'Finish' : 'Next ›'}</button>
       </div>`;
-  } else if (listening) {
-    actions = `<div class="speak-actions"><button class="speak-action-btn stop" data-sr-stop>⏹ Stop &amp; Check</button></div>`;
+  } else if (isSpeakNotice(sr.status)) {
+    // Not graded either way (DES-61): offer the retry, and keep the usual
+    // escape hatch beneath it.
+    actions = `
+      <div class="speak-actions">
+        <button class="speak-action-btn primary" data-sr-retry>Try again</button>
+      </div>
+      <button class="sr-skip" data-sr-reveal>${mode === 'listen' ? 'Show me the sentence' : 'Show me the answer'}</button>`;
+  } else if (busy) {
+    actions = '';   // the Stop button lives in renderSpeakLive() while recording
   } else {
     actions = `<button class="sr-skip" data-sr-reveal>${mode === 'listen' ? 'Show me the sentence' : 'Show me the answer'}</button>`;
   }
@@ -1389,14 +1525,21 @@ function renderCheckpointSentences() {
       </div>
       <div class="speak-nav">
         <span>Sentence ${sr.idx + 1} of ${sr.items.length}</span>
-        <span class="speak-turn">${listening ? 'Listening…' : (showTarget ? 'Result' : (mode === 'listen' ? 'Listen first' : 'Your turn'))}</span>
+        <span class="speak-turn">${listening ? 'Listening…' : sr.status === 'checking' ? 'Checking…' : (showTarget ? 'Result' : (mode === 'listen' ? 'Listen first' : 'Your turn'))}</span>
       </div>
       ${segs}
       <div class="speak-card">
         ${prompt}
-        <button class="mic-btn ${listening ? 'listening' : 'idle'}" data-sr-mic>${listening ? icon('stop', 22) : icon('mic', 22)}</button>
-        <div class="speak-status">${listening ? 'Listening… speak, then press Stop' : (showTarget ? '' : 'Press the mic and say it')}</div>
+        <button class="mic-btn ${speakMicClass(sr.status)}" data-sr-mic ${speakMicAttrs(sr.status)}>${speakMicInner(sr.status)}</button>
+        ${renderSpeakLive(sr.status, {
+          idleText: showTarget ? '' : 'Press the mic and say it',
+          listeningText: 'Listening… speak, then press Stop',
+          stopHtml: `<div class="speak-actions"><button class="speak-action-btn stop" data-sr-stop>⏹ Stop &amp; Check</button></div>`,
+        })}
+        ${showTarget ? '' : renderSpeakNote(sr.status)}
         ${result}
+        ${renderSpeakNotice(sr.status, sr.fail)}
+        ${renderSpeakCapped(sr.capped, sr.status)}
         ${actions}
       </div>
     </div>`;
@@ -2073,8 +2216,9 @@ function renderConversation() {
 
   // ── Speak mode ──
   if (speakOn) {
-    const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
-    if (!SpeechRec) {
+    // Either engine will do (v160): a saved speech key works on a browser with
+    // no Web Speech at all.
+    if (!speechSupported()) {
       return `
         <div class="convo-scenario">${convo.title}</div>
         ${controls}
@@ -2149,8 +2293,8 @@ function renderConversation() {
           <div class="speak-prompt">${spkName}</div>
           ${isUser ? `
           <button class="btn-icon btn-icon--brand" id="speak-line-play" aria-label="Listen to the line"
-            ${status === 'listening' ? 'disabled aria-disabled="true"' : ''}
-            title="${status === 'listening' ? 'Not while listening' : 'Listen to the line'}">
+            ${speakBusy(status) ? 'disabled aria-disabled="true"' : ''}
+            title="${speakBusy(status) ? 'Not while listening' : 'Listen to the line'}">
             ${playing ? icon('volume', 18) : iconPlay(16)}
           </button>` : '<span></span>'}
         </div>
@@ -2158,17 +2302,18 @@ function renderConversation() {
         <div class="speak-target-jp">${colorJyutping(line.j)}</div>
         ${englishEl}
         ${isUser ? `
-          <button class="mic-btn ${status==='listening'?'listening':'idle'}" id="mic-btn">
-            ${status==='listening'? icon('stop',22) : icon('mic',22)}
+          <button class="mic-btn ${speakMicClass(status)}" id="mic-btn" ${speakMicAttrs(status)}>
+            ${speakMicInner(status)}
           </button>
-          <div class="speak-status">${statusText}</div>
-          ${status==='listening' ? `
-            <button class="speak-action-btn stop" id="speak-stop-btn">
-              ⏹ Stop & Check
-            </button>
-          ` : ''}
+          ${renderSpeakLive(status, {
+            idleText: statusText,
+            listeningText: 'Listening… speak the line, then press Stop',
+            stopHtml: `<button class="speak-action-btn stop" id="speak-stop-btn">⏹ Stop & Check</button>`,
+          })}
           ${heard}
           ${result}
+          ${renderSpeakNotice(status, cv.speakFail)}
+          ${renderSpeakCapped(cv.speakCapped, status)}
         ` : `
           <div class="speak-actions">
             <button class="speak-action-btn primary${playing?' playing':''}" id="speak-listen-btn">
@@ -2176,8 +2321,12 @@ function renderConversation() {
             </button>
           </div>
         `}
-        ${(isUser && (status === 'mismatch' || status === 'matched')) || !isUser ? `
+        ${(isUser && (status === 'mismatch' || status === 'matched' || isSpeakNotice(status))) || !isUser ? `
         <div class="speak-actions">
+          ${isUser && isSpeakNotice(status) ? `
+            <button class="speak-action-btn secondary" id="speak-skip"><span class="icon-label">Skip ${icon('arrowRight',14)}</span></button>
+            <button class="speak-action-btn primary" id="speak-retry"><span class="icon-label">${icon('refresh',14)} Try again</span></button>
+          ` : ''}
           ${isUser && status === 'mismatch' ? `
             <button class="speak-action-btn secondary" id="speak-retry"><span class="icon-label">${icon('refresh',14)} Try Again</span></button>
             <button class="speak-action-btn primary" id="speak-skip"><span class="icon-label">Skip ${icon('arrowRight',14)}</span></button>
@@ -2190,7 +2339,7 @@ function renderConversation() {
         </div>
         ` : ''}
       </div>
-      ${isUser && status === 'idle' ? `<p class="speak-mic-note">Allow microphone access if prompted</p>` : ''}`;
+      ${isUser ? renderSpeakNote(status) : ''}`;
   }
 
   // ── Read / Gap mode ──
@@ -2553,6 +2702,41 @@ const CLICK_ACTIONS = {
   // removal bound to controls nothing emitted; both were removed at v138.
   'data-speed': el => { state.speed = el.dataset.speed; render(); },
 
+  // Speech key (DES-62). Checked before it is saved, so a mistyped key is
+  // caught here rather than on the first sentence; nothing is stored unless
+  // Azure accepts it.
+  '#speech-key-save': async () => {
+    const ui = state.speechKeyUi;
+    const input = document.getElementById('speech-key-input');
+    const regionIn = document.getElementById('speech-region-input');
+    const key = (input ? input.value : ui.draftKey).trim();
+    const stored = storage.getSpeechKey() || {};
+    const region = ((regionIn ? regionIn.value : stored.region) || 'australiaeast').trim().toLowerCase();
+    if (!key) { ui.error = 'Paste KEY 1 from the Speech resource first.'; render(); return; }
+    ui.draftKey = key; ui.checking = true; ui.error = '';
+    render();
+    const verdict = await checkSpeechKey({ key, region });
+    ui.checking = false;
+    if (verdict === 'ok') {
+      await storage.setSpeechKey({ key, region });
+      ui.draftKey = ''; ui.editRegion = false;
+    } else {
+      ui.error = verdict === 'key'
+        ? 'Azure didn\u2019t accept that key. Use KEY 1 from the Speech resource, and check the region matches.'
+        : 'Couldn\u2019t reach Azure in that region \u2014 check the region and your connection.';
+    }
+    render();
+  },
+
+  '#speech-key-remove': async () => {
+    const stored = storage.getSpeechKey() || {};
+    stopListening();
+    await storage.setSpeechKey({ key: '', region: stored.region || 'australiaeast' });
+    render();
+  },
+
+  '#speech-region-edit': () => { state.speechKeyUi.editRegion = true; render(); },
+
   // Tab bar — the five top-level destinations. The state reset lives in
   // goToDestination() so this and the nameplate cannot drift. Tapping the tab
   // you are already on is a no-op: no re-render, no history entry, so repeat
@@ -2724,6 +2908,7 @@ const CLICK_ACTIONS = {
   '#translate-speak-mic': () => {
     const tr = state.translate;
     if (tr.speakStatus === 'listening') { finishListening(); return; }
+    if (tr.speakStatus === 'checking') return;     // the clip is already on its way
     if (!tr.result) return;
     // Two things could be making noise into the mic: a replay of the target, and
     // the dictation recogniser used for the input box. Stop both. The dictation
@@ -2867,6 +3052,7 @@ const CLICK_ACTIONS = {
   '#sent-speak-scrim': () => closeSentSpeak(),
 
   '#sent-speak-mic': () => {
+    if (state.sentSpeak.status === 'checking') return;   // the clip is already on its way
     if (state.sentSpeak.status === 'listening') {
       finishListening();
     } else {
@@ -2883,7 +3069,7 @@ const CLICK_ACTIONS = {
   // played-back audio would otherwise feed straight back into the recogniser as
   // a trivially "correct" match.
   '#sent-speak-listen': () => {
-    if (state.sentSpeak.status === 'listening') return;
+    if (speakBusy(state.sentSpeak.status)) return;
     const idx = state.sentSpeak.idx;
     const sentence = getRoundSentences(state.topic, state.currentRound)[idx];
     if (!sentence) return;
@@ -2941,6 +3127,7 @@ const CLICK_ACTIONS = {
 
   '#mic-btn': () => {
     if (state.convo.speakStatus === 'listening') { finishListening(); return; }
+    if (state.convo.speakStatus === 'checking') return;   // the clip is already on its way
     // A replay still in flight would bleed into the mic — the Say it back
     // sheet and the checkpoint already stopped it here; Chat never did, which
     // mattered little until v154 put a play button on the learner's own line.
@@ -2954,7 +3141,7 @@ const CLICK_ACTIONS = {
   '#speak-listen-btn': () => playSpeakStep(),
 
   // MOCK-38-corner (v154): the same playback on the learner's own line.
-  '#speak-line-play': () => playSpeakStep(),
+  '#speak-line-play': () => { if (!speakBusy(state.convo.speakStatus)) playSpeakStep(); },
 
   '#speak-next': () => {
     stopListening();
@@ -3442,7 +3629,7 @@ const CLICK_ACTIONS = {
   // trivially correct match, the same reason the Learn sheet disables it.
   'data-sr-play': () => {
     const sr = state.sentReview;
-    if (!sr || sr.status === 'listening') return;
+    if (!sr || speakBusy(sr.status)) return;
     const item = currentSentReviewItem();
     if (!item) return;
     const key = 'sr-' + sr.idx;
@@ -3457,6 +3644,7 @@ const CLICK_ACTIONS = {
     const item = currentSentReviewItem();
     if (!sr || !item) return;
     if (sr.status === 'listening') { finishListening(); return; }
+    if (sr.status === 'checking') return;   // the clip is already on its way
     stopAudioFile();
     window.speechSynthesis.cancel();
     state.speaking = null;
@@ -3686,6 +3874,7 @@ function currentCheckpointWord() {
     // entry we moved to. Restore it and re-render.
     window.speechSynthesis.cancel();   // stop any audio when leaving a screen
     stopAudioFile();
+    abandonSpeech();                    // and any recording (DES-61, cost guard 1)
 
     const snap = e.state;
     if (snap) {
