@@ -534,4 +534,7 @@ async function main() {
 }
 
 if (require.main === module) main().catch(e => fail(e.stack || String(e)));
-module.exports = { deriveSentences, buildClip, classify, endpointVerdict, heardCount, hanCount, secondsToMs, recogniseGemini };
+// recogniseRest, recogniseFast, wavFromPcm, withRetry and escapeXml are reused by
+// tools/azure-corpus-check.js, so both scripts call Azure the same way.
+module.exports = { deriveSentences, buildClip, classify, endpointVerdict, heardCount, hanCount, secondsToMs, recogniseGemini,
+  recogniseRest, recogniseFast, wavFromPcm, withRetry, escapeXml, msToBytes, bytesToMs };

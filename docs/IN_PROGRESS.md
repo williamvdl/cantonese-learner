@@ -9,9 +9,9 @@ Last updated: 2026-11-03 · sw.js at v159
 ## In progress — the listening cut-off: Azure record-then-transcribe
 
 Picked up 2026-11-03. The brief moved here from BACKLOG.md § Features and is kept
-in full below the progress log. Nothing in the app has changed yet; both pieces
-so far are diagnostics under `tools/`, not standing checks, and neither needs an
-`sw.js` bump.
+in full below the progress log. Nothing in the app has changed yet; all three
+pieces so far are diagnostics under `tools/`, not standing checks, and none needs
+an `sw.js` bump.
 
 **Step 1, the gate: done 2026-11-03. Azure passes.** `tools/azure-pause-check.js`
 asked the question that could have killed the idea before any recording code
@@ -40,24 +40,42 @@ also cover audio generation (a whole-corpus run is about 7,110). The old paid
 (S0) resource is kept, unused, until William decides to delete it; it costs
 nothing idle.
 
-**Step 2, the phone probe: built 2026-11-03, awaiting a run on the Pixel.**
-`tools/listen-probe.html`. 32 corpus sentences, 16 with a comma to pause at and
-16 without, interleaved. Tap Start, speak, tap Stop; answer "did you say it
-correctly?" before anything is shown; the same WAV then goes to both Azure
-endpoints and is graded by `resolveHeard()` lifted from `app.js` at load.
-**Pass bar, inherited:** per endpoint, false rejects ≤10% of valid attempts
-overall AND on the paused items. Wait time is recorded as calibration, with no
-bar. Whether fast transcription is reachable from a browser (CORS) is answered
-as a side effect. Verified headless with a fake mic and scripted Azure: every
-outcome path, disposition-before-result, reload-resume, export with audio, and
-matcher parity with the standing harness on 19 pairs.
-- **To run:** commit it, open `.../tools/listen-probe.html` on the Pixel from the
-  deployed site, paste the free resource's key, work through the 32 items, and
-  export. The export goes in `tools/runs/` (not `tools/fixtures/` — see STATUS §
-  Notes).
-- **It may conclude:** BUILD ON fast (preferred if both pass, for the shorter
-  wait), BUILD ON rest, FALLBACK to the Continue button, or STOP. It may not
-  conclude "loosen the matcher until it passes".
+**Step 2: does the matcher accept Azure's spellings? Two runs, both built
+2026-11-03, neither run yet.** Redesigned before any data existed: William
+pointed out that, as a learner, he cannot reliably judge whether his own reading
+was correct, so his rejects cannot be read as Azure's fault. The evidence is now
+split so that no learner disposition is ever counted.
+- **2a, `tools/azure-corpus-check.js` (desktop, nobody speaks; run first).**
+  Every corpus sentence (307) in two Azure voices (WanLung, HiuGaai), with a
+  2-second break at every comma (99 sentences), sent to both endpoints and graded
+  by `resolveHeard()` lifted from `app.js`. Correct by construction, so every
+  reject is a spelling disagreement. 1,228 recognitions, about an hour of the
+  free tier's 5 audio hours; 30–60 minutes unattended, resumable, TTS cached
+  outside the repo. **Bar, inherited:** per endpoint, false rejects ≤10% overall
+  AND on sentences with a comma. It also writes a substitution table (which
+  target characters Azure writes as something else, with counts), which is the
+  evidence any later rule change would need. Limit: Azure hearing its own voice
+  is the friendliest case, so a pass is necessary, not sufficient. Chrome cannot
+  be tested the same way, because Web Speech only takes a live mic.
+- **2b, `tools/listen-probe.html` (Pixel, native speaker, about 5 minutes).**
+  Choose "Native speaker" for 10 sentences (5 paused, 5 single). Tap Start,
+  speak, tap Stop; "did you say it correctly?" before anything shows; the same
+  WAV goes to both endpoints. **Bar:** at most one false reject per endpoint
+  across the kept attempts, each read individually; the paused bar is carried
+  by 2a, because five items cannot tell 0% from 20% apart. Also answers whether
+  fast transcription is reachable from a browser (CORS), and records the wait
+  as calibration with no bar. "Learner" gives the full 32 and is never counted.
+  Verified headless with a fake mic and scripted Azure: every outcome path,
+  disposition-before-result, per-speaker progress, export with audio, and
+  matcher parity with the standing harness on 19 pairs.
+- **To run 2a:** `node tools/azure-corpus-check.js --limit=6` as a smoke test,
+  then `node tools/azure-corpus-check.js`. **To run 2b:** commit, open
+  `.../tools/listen-probe.html` on the Pixel from the deployed site, paste the
+  free resource's key, choose the speaker. Exports go in `tools/runs/`, never
+  `tools/fixtures/` (STATUS § Notes).
+- **The pair may conclude:** BUILD ON fast (preferred if both pass, for the
+  shorter wait), BUILD ON rest, FALLBACK to the Continue button, or STOP. Not
+  "loosen the matcher until it passes".
 
 **When built** (unchanged from the brief): correct the `// keep listening until
 user stops` comment on `continuous` in `app.js`; mock up the tap-to-stop control

@@ -35,6 +35,25 @@
   recognition at a time. The order alternates by item so neither endpoint is
   always second.
 
+  WHOSE ATTEMPTS COUNT — changed 2026-11-03, before any data existed
+  -------------------------------------------------------------------
+  The bar below is only meaningful if "I said it correctly" is TRUE, and a
+  learner cannot reliably judge that of their own Cantonese (William, raising
+  it before the first run). A learner's rejects would mix Azure's errors with
+  his own and could not be read as either. So the evidence is now split:
+
+    tools/azure-corpus-check.js  — the WHOLE corpus, two Azure voices, correct
+        by construction. Carries the statistical weight and the paused-bucket
+        bar (99 comma sentences x 2 voices). No speaker in it at all.
+    this page, speaker = NATIVE  — 10 sentences (5 paused, 5 single), about
+        five minutes. The check that the corpus result transfers to a real human
+        voice on the real phone mic. This is the run the bar below applies to.
+    this page, speaker = LEARNER — the full 32. INFORMATIONAL ONLY, never
+        barred: "does this feel better than today?" Kept in the export, labelled.
+
+  The speaker is chosen before the first item and stamped on every attempt.
+  Progress and the tally are kept per speaker, so the two can never mix.
+
   THE PASS BAR — declared before any data exists, and binding
   -----------------------------------------------------------
   Inherited, not invented. tools/asr-probe.html set it for this class of
@@ -75,7 +94,15 @@
   run reports the wait (encode + round trip, per endpoint) and sets no bar on
   it. It may inform a later decision; it cannot by itself decide this one.
 
-  THIS RUN MAY CONCLUDE:
+  ON THE NATIVE RUN the same 10% is applied to its 10 items: at most ONE reject
+  per endpoint across the kept attempts, and every reject is read individually
+  in the export rather than trusted as a rate. Its paused bucket is five items,
+  where a percentage cannot tell 0% from 20% apart, so the paused bar is
+  carried by the corpus run instead and the native run reports its paused
+  rejects without barring them. This departs from the two-number shape for one
+  reason — sample size — and only on this run.
+
+  THE PAIR OF RUNS (corpus + native) MAY CONCLUDE:
     BUILD ON fast  fast passes both bars and was reachable. Preferred over
                    rest when both pass, because its wait is shorter.
     BUILD ON rest  rest passes both bars and fast did not (or was unreachable).
@@ -133,12 +160,14 @@
   2. Paste the Azure key of the FREE resource and check the region. Tick
      "remember on this phone" if you want it kept in this browser's storage;
      otherwise it lives in memory until the tab closes.
-  3. For each sentence: Listen if you want, tap Start, say it, tap Stop. On
+  3. Choose who is speaking. NATIVE gives the 10-item set; LEARNER the 32.
+     (?n=<per bucket> in the URL overrides either.)
+  4. For each sentence: Listen if you want, tap Start, say it, tap Stop. On
      two-clause items PAUSE two or three seconds at the comma — the pause is
      the point. Then answer "did you say it correctly?" BEFORE the result
      appears (the DES-50 lesson: a disposition given after seeing the verdict
      is not independent of it).
-  4. Export at the end, or at any point. Progress (not audio) survives a
+  5. Export at the end, or at any point. Progress (not audio) survives a
      reload; the audio only lives in memory, so export before closing the tab.
 -->
 <style>
@@ -199,11 +228,12 @@
 <div class="stamp" id="stamp">loading…</div>
 
 <div class="bar">
-  <b>Pass bar, fixed before this page had data.</b> Per Azure endpoint: false
-  rejects ≤ 10% of valid attempts overall <i>and</i> ≤ 10% on the paused
-  (two-clause) items. Discards, no-decodes, refusals, unreachable calls and
-  errors are counted separately and excluded from both sides. Wait time is
-  measured but has no bar on this run.
+  <b>Pass bar, fixed before this page had data.</b> Native-speaker run: at most
+  one false reject per Azure endpoint across the 10 sentences (≤ 10%), each read
+  individually. The paused-sentence bar is carried by the whole-corpus run. Learner
+  runs are recorded for interest and never counted. Discards, no-decodes,
+  refusals, unreachable calls and errors are counted separately and excluded.
+  Wait time is measured but has no bar on this run.
 </div>
 
 <div id="boot" class="card">Loading app.js, the corpus and the jyutping dictionary…</div>
@@ -214,6 +244,12 @@
   <label for="region">Region</label>
   <input type="text" id="region" autocomplete="off" autocapitalize="off" spellcheck="false" value="australiaeast">
   <label><input type="checkbox" id="remember"> Remember on this phone (this browser's storage only)</label>
+  <label for="speaker" style="display:block;margin-top:8px">Who is speaking?</label>
+  <select id="speaker" style="font:inherit;width:100%;padding:10px;border-radius:8px;border:1px solid var(--parchment-border);margin:4px 0 8px">
+    <option value="">Choose…</option>
+    <option value="native">Native speaker — 10 sentences, about 5 minutes (this run counts)</option>
+    <option value="learner">Learner — 32 sentences (for interest; never counted)</option>
+  </select>
   <div class="row"><button class="primary" id="saveKey">Use this key</button></div>
   <div class="small" id="credStatus"></div>
 </div>
@@ -262,10 +298,13 @@
 <script src="../vendor/to-jyutping.js"></script>
 <script>
 'use strict';
-const PROBE_BUILD = 'listen-probe 1 · 2026-11-03';
-const RUN_STORE = 'listenProbe.run.v1';        // progress, no audio
+const PROBE_BUILD = 'listen-probe 2 · 2026-11-03';   // 2: speaker label, native 10-item set
+const RUN_STORE_PREFIX = 'listenProbe.run.v2';  // + speaker + set size; progress only, no audio
 const KEY_STORE = 'listenProbe.azure.v1';      // only if the learner ticks "remember"
-const N_PER_BUCKET = 16;
+// Items per bucket by speaker; ?n= in the URL overrides. Native is short on
+// purpose: five minutes is what a native speaker can reasonably be asked for.
+const N_BY_SPEAKER = { native: 5, learner: 16 };
+const N_OVERRIDE = (() => { const v = Number(new URLSearchParams(location.search).get('n')); return v >= 1 && v <= 40 ? Math.floor(v) : 0; })();
 const FAST_API_VERSION = '2024-11-15';         // as tools/azure-pause-check.js
 const BAR_PCT = 10;
 const ENDPOINTS = ['rest', 'fast'];
@@ -331,7 +370,7 @@ function spread(pool, n) {
   return out;
 }
 
-function deriveItems(sentences, minChars) {
+function deriveItems(sentences, minChars, nPerBucket) {
   const bySid = (a, b) => a.sid < b.sid ? -1 : a.sid > b.sid ? 1 : 0;
   // Two-clause: exactly one full-width comma, three or more characters each
   // side — the rule tools/azure-pause-check.js used, so these are the same
@@ -343,8 +382,8 @@ function deriveItems(sentences, minChars) {
   // Single-clause: no comma at all, and at least the app's own minimum length
   // for a speakable sentence (SENT_REVIEW_MIN_CHARS, lifted).
   const single = sentences.filter(s => !String(s.c).includes('，') && hanCount(s.c) >= minChars).sort(bySid);
-  const a = spread(paused, N_PER_BUCKET).map(s => ({ ...s, bucket: 'paused' }));
-  const b = spread(single, N_PER_BUCKET).map(s => ({ ...s, bucket: 'single' }));
+  const a = spread(paused, nPerBucket).map(s => ({ ...s, bucket: 'paused' }));
+  const b = spread(single, nPerBucket).map(s => ({ ...s, bucket: 'single' }));
   // Interleaved, so fatigue late in the session does not land on one bucket.
   const items = [];
   for (let i = 0; i < Math.max(a.length, b.length); i++) { if (a[i]) items.push(a[i]); if (b[i]) items.push(b[i]); }
@@ -352,7 +391,8 @@ function deriveItems(sentences, minChars) {
 }
 
 // ── State ───────────────────────────────────────────────────────────────────
-let APP = null, VERSION = '(unknown)', ITEMS = [], POOLS = null, SIGNATURE = '';
+let APP = null, VERSION = '(unknown)', ITEMS = [], POOLS = null, SIGNATURE = '', SENTENCES = [];
+let SPEAKER = '', N_PER_BUCKET = 0;
 let CREDS = { key: null, region: null };
 let idx = 0;
 let results = [];               // finished attempts, no audio
@@ -362,8 +402,10 @@ let stream = null, recorder = null, chunks = [], recStart = 0, recTimer = null;
 
 function item() { return ITEMS[idx]; }
 
+function runStoreKey() { return RUN_STORE_PREFIX + '.' + SPEAKER + '.n' + N_PER_BUCKET; }
 function saveRun() {
-  try { localStorage.setItem(RUN_STORE, JSON.stringify({ signature: SIGNATURE, idx, results })); } catch (e) { /* storage full or blocked: export still works */ }
+  if (!SPEAKER) return;
+  try { localStorage.setItem(runStoreKey(), JSON.stringify({ signature: SIGNATURE, idx, results })); } catch (e) { /* storage full or blocked: export still works */ }
 }
 
 // ── Boot ────────────────────────────────────────────────────────────────────
@@ -384,29 +426,18 @@ async function boot() {
   VERSION = vm ? vm[1] : '(sw.js unreadable)';
 
   const topics = await Promise.all((index.topics || []).map(t => get('../data/topics/' + t.key + '.json').then(j => ({ key: t.key, j }))));
-  const sentences = [];
-  for (const { key, j } of topics) for (const round of Object.values(j.rounds || {})) for (const s of (round.sentences || [])) sentences.push({ sid: s.sid, c: s.c, j: s.j, e: s.e, topic: key });
-  const d = deriveItems(sentences, APP.SENT_REVIEW_MIN_CHARS);
-  ITEMS = d.items; POOLS = d.pools;
-  if (ITEMS.length < 2) throw new Error('item selection found almost nothing — the corpus shape has changed');
-  SIGNATURE = ITEMS.map(i => i.sid).join(',');
+  for (const { key, j } of topics) for (const round of Object.values(j.rounds || {})) for (const s of (round.sentences || [])) SENTENCES.push({ sid: s.sid, c: s.c, j: s.j, e: s.e, topic: key });
+  if (SENTENCES.length < 10) throw new Error('the corpus loaded almost nothing — check the data files');
 
-  try {
-    const saved = JSON.parse(localStorage.getItem(RUN_STORE) || 'null');
-    if (saved && saved.signature === SIGNATURE) { idx = saved.idx || 0; results = saved.results || []; }
-  } catch (e) { /* a corrupt store starts fresh */ }
   try {
     const k = JSON.parse(localStorage.getItem(KEY_STORE) || 'null');
     if (k && k.key) { CREDS = k; $('remember').checked = true; }
   } catch (e) { /* ignore */ }
 
-  $('stamp').textContent = PROBE_BUILD + ' · app ' + VERSION + ' · ' + ITEMS.length + ' items from '
-    + POOLS.paused + ' two-clause and ' + POOLS.single + ' single-clause corpus sentences';
+  $('stamp').textContent = PROBE_BUILD + ' · app ' + VERSION + ' · ' + SENTENCES.length + ' corpus sentences loaded';
   $('boot').style.display = 'none';
   $('creds').style.display = '';
-  $('tally').style.display = '';
-  if (CREDS.key) { $('region').value = CREDS.region; showCredStatus(); startRun(); }
-  renderTally();
+  if (CREDS.key) { $('region').value = CREDS.region; showCredStatus(); }
 }
 
 // ── Credentials ─────────────────────────────────────────────────────────────
@@ -426,6 +457,7 @@ $('saveKey').onclick = () => {
   showCredStatus();
   startRun();
 };
+$('speaker').onchange = () => startRun();
 $('remember').onchange = () => {
   try {
     if (!$('remember').checked) localStorage.removeItem(KEY_STORE);
@@ -434,7 +466,33 @@ $('remember').onchange = () => {
   if (CREDS.key) showCredStatus();
 };
 
-function startRun() { $('run').style.display = ''; showItem(); }
+// The run starts only once there is a key AND a speaker. Choosing a different
+// speaker switches to that speaker's own item set, progress and tally — the
+// native and learner runs are never mixed.
+function startRun() {
+  const sp = $('speaker').value;
+  if (!CREDS.key || !sp) {
+    $('run').style.display = 'none'; $('tally').style.display = 'none';
+    if (CREDS.key && !sp) $('credStatus').textContent += ' · now choose who is speaking';
+    return;
+  }
+  if (current && !current.disposition) return;          // never switch mid-attempt
+  SPEAKER = sp;
+  N_PER_BUCKET = N_OVERRIDE || N_BY_SPEAKER[sp];
+  const d = deriveItems(SENTENCES, APP.SENT_REVIEW_MIN_CHARS, N_PER_BUCKET);
+  ITEMS = d.items; POOLS = d.pools;
+  if (ITEMS.length < 2) { $('credStatus').innerHTML = '<span class="err">Item selection found almost nothing — the corpus shape has changed.</span>'; return; }
+  SIGNATURE = ITEMS.map(i => i.sid).join(',');
+  idx = 0; results = [];
+  try {
+    const saved = JSON.parse(localStorage.getItem(runStoreKey()) || 'null');
+    if (saved && saved.signature === SIGNATURE) { idx = saved.idx || 0; results = saved.results || []; }
+  } catch (e) { /* a corrupt store starts fresh */ }
+  $('stamp').textContent = PROBE_BUILD + ' · app ' + VERSION + ' · speaker ' + SPEAKER + ' · ' + ITEMS.length
+    + ' items from ' + POOLS.paused + ' two-clause and ' + POOLS.single + ' single-clause corpus sentences';
+  $('run').style.display = ''; $('tally').style.display = '';
+  showItem();
+}
 
 // ── One item ────────────────────────────────────────────────────────────────
 function showItem() {
@@ -451,7 +509,7 @@ function showItem() {
     renderTally();
     return;
   }
-  $('pos').textContent = 'Item ' + (idx + 1) + ' of ' + ITEMS.length;
+  $('pos').textContent = (SPEAKER === 'native' ? 'Native' : 'Learner') + ' · item ' + (idx + 1) + ' of ' + ITEMS.length;
   $('bucket').textContent = it.bucket === 'paused' ? 'two clauses — pause' : 'one clause';
   $('target').textContent = it.c;
   $('tjp').innerHTML = APP.charsToJyutping(it.c);
@@ -567,7 +625,7 @@ async function onRecorded(mimeType) {
   current = {
     id: it.sid + '@' + new Date(stoppedAt).toISOString(),
     sid: it.sid, target: it.c, bucket: it.bucket, item: idx + 1,
-    build: PROBE_BUILD, appVersion: VERSION, region: CREDS.region,
+    build: PROBE_BUILD, appVersion: VERSION, region: CREDS.region, speaker: SPEAKER,
     recordedMs: stoppedAt - recStart, mimeType, at: new Date(stoppedAt).toISOString(),
     disposition: null, endpoints: {}, order: null,
   };
@@ -720,9 +778,10 @@ function rate(list) {
   const rej = list.filter(r => r.outcome === 'rejected').length;
   return { n: list.length, rej, pct: list.length ? rej / list.length * 100 : null };
 }
-function cell(r) {
+function cell(r, barred) {
   if (r.pct === null) return '<td>—</td>';
-  return '<td class="' + (r.pct > BAR_PCT ? 'fail' : 'pass') + '">' + r.rej + '/' + r.n + ' · ' + r.pct.toFixed(0) + '%</td>';
+  const cls = !barred ? '' : r.rej > 1 ? 'fail' : 'pass';
+  return '<td class="' + cls + '">' + r.rej + '/' + r.n + ' · ' + r.pct.toFixed(0) + '%</td>';
 }
 function summary() {
   const kept = results.filter(a => a.disposition === 'keep');
@@ -741,7 +800,9 @@ function summary() {
       overall, paused, single: rate(valid.filter(r => r.bucket === 'single')),
       noDecode: count('no-decode'), unreachable: count('unreachable'), refused: count('refused'), error: count('error'),
       medianWaitMs: waits.length ? waits[Math.floor(waits.length / 2)] : null,
-      passes: overall.pct !== null && paused.pct !== null && overall.pct <= BAR_PCT && paused.pct <= BAR_PCT,
+      // Native: at most one reject across the kept attempts (the header's rule;
+      // the paused bar is carried by the corpus run). Learner: never barred.
+      passes: SPEAKER === 'native' ? (overall.n > 0 && overall.rej <= 1) : null,
     };
   }
   return out;
@@ -751,16 +812,18 @@ function renderTally() {
   const discards = results.filter(a => a.disposition === 'discard').length;
   const builds = [...new Set(results.map(a => a.build + ' / ' + a.appVersion))];
   let html = '<table><tr><th></th>' + ENDPOINTS.map(ep => '<th>' + ep + '</th>').join('') + '</tr>'
-    + '<tr><td>Overall rejects</td>' + ENDPOINTS.map(ep => cell(s[ep].overall)).join('') + '</tr>'
-    + '<tr><td>Paused rejects</td>' + ENDPOINTS.map(ep => cell(s[ep].paused)).join('') + '</tr>'
-    + '<tr><td>Single rejects</td>' + ENDPOINTS.map(ep => cell(s[ep].single)).join('') + '</tr>'
+    + '<tr><td>Rejects — counted</td>' + ENDPOINTS.map(ep => cell(s[ep].overall, SPEAKER === 'native')).join('') + '</tr>'
+    + '<tr><td>of which paused</td>' + ENDPOINTS.map(ep => cell(s[ep].paused, false)).join('') + '</tr>'
+    + '<tr><td>of which single</td>' + ENDPOINTS.map(ep => cell(s[ep].single, false)).join('') + '</tr>'
     + '<tr><td>No-decode (all attempts)</td>' + ENDPOINTS.map(ep => '<td>' + s[ep].noDecode + '</td>').join('') + '</tr>'
     + '<tr><td>Unreachable (all)</td>' + ENDPOINTS.map(ep => '<td>' + s[ep].unreachable + '</td>').join('') + '</tr>'
     + '<tr><td>Refused / error (all)</td>' + ENDPOINTS.map(ep => '<td>' + s[ep].refused + ' / ' + s[ep].error + '</td>').join('') + '</tr>'
     + '<tr><td>Median wait</td>' + ENDPOINTS.map(ep => '<td>' + (s[ep].medianWaitMs == null ? '—' : (s[ep].medianWaitMs / 1000).toFixed(1) + 's') + '</td>').join('') + '</tr>'
     + '</table>';
+  if (SPEAKER === 'learner') html += '<div class="small" style="margin-top:6px"><b>Learner run — for interest only, never counted.</b></div>';
+  else html += '<div class="small" style="margin-top:6px"><b>Native run — counts.</b> At most one reject per endpoint across the kept sentences.</div>';
   html += '<div class="small" style="margin-top:6px">Attempts ' + results.length + ' · discarded (fluffed) ' + discards
-    + ' · items done ' + Math.min(idx, ITEMS.length) + ' of ' + ITEMS.length + '. The single-clause row is reported, not barred.</div>';
+    + ' · items done ' + Math.min(idx, ITEMS.length) + ' of ' + ITEMS.length + '. Only the first row is barred, and only on a native run.</div>';
   if (builds.length > 1) html += '<div class="err small">This run mixes builds: ' + builds.map(esc).join(' | ') + '</div>';
   $('tallyBody').innerHTML = html;
 }
@@ -770,8 +833,11 @@ $('export').onclick = () => {
   const withAudio = results.filter(a => audioById[a.id]).length;
   const payload = {
     probe: 'listen-probe', build: PROBE_BUILD, appVersion: VERSION, exportedAt: new Date().toISOString(),
+    speaker: SPEAKER, counts: SPEAKER === 'native', nPerBucket: N_PER_BUCKET,
     userAgent: navigator.userAgent,
-    bar: 'per endpoint: false rejects <= ' + BAR_PCT + '% of valid attempts overall AND on the paused (two-clause) items',
+    bar: SPEAKER === 'native'
+      ? 'native run: at most one false reject per endpoint across the kept attempts (<= ' + BAR_PCT + '%), each read individually; paused bar carried by tools/azure-corpus-check.js'
+      : 'learner run: informational, never barred',
     graded: 'resolveHeard(text, [], target) lifted from app.js; rest grades DisplayText, fast grades combinedPhrases text',
     items: ITEMS.map(i => ({ sid: i.sid, c: i.c, j: i.j, bucket: i.bucket })), pools: POOLS,
     summary: summary(),
@@ -781,7 +847,7 @@ $('export').onclick = () => {
   const blob = new Blob([JSON.stringify(payload, null, 1)], { type: 'application/json' });
   const a = document.createElement('a');
   a.href = URL.createObjectURL(blob);
-  a.download = 'listen-probe-' + new Date().toISOString().slice(0, 19).replace(/[:T]/g, '-') + '.json';
+  a.download = 'listen-probe-' + SPEAKER + '-' + new Date().toISOString().slice(0, 19).replace(/[:T]/g, '-') + '.json';
   document.body.appendChild(a); a.click(); a.remove();
   $('exportStatus').textContent = 'Saved ' + a.download + ' (' + (blob.size / 1048576).toFixed(1) + ' MB) to Downloads.';
 };
