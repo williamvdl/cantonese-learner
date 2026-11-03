@@ -1,0 +1,474 @@
+{
+ "check": "azure-corpus-check 1 · 2026-11-03",
+ "startedAt": "2026-11-03T09:33:49.260Z",
+ "region": "australiaeast",
+ "node": "v24.18.0",
+ "config": {
+  "voices": [
+   "WanLung",
+   "HiuGaai"
+  ],
+  "pauseMs": 2000,
+  "endpoints": [
+   "rest",
+   "fast"
+  ],
+  "limit": 6
+ },
+ "attempts": [
+  {
+   "sid": "adjectives-t1-s01",
+   "voice": "WanLung",
+   "endpoint": "rest",
+   "commas": 0,
+   "target": "呢間屋好大。",
+   "http": 200,
+   "rttMs": 876,
+   "at": "2026-11-03T09:33:51.322Z",
+   "text": "呢間屋好大。",
+   "outcome": "accepted",
+   "subs": [],
+   "missing": [],
+   "lexical": "呢 間 屋 好 大",
+   "lexicalOutcome": "accepted"
+  },
+  {
+   "sid": "adjectives-t1-s01",
+   "voice": "WanLung",
+   "endpoint": "fast",
+   "commas": 0,
+   "target": "呢間屋好大。",
+   "http": 200,
+   "rttMs": 740,
+   "at": "2026-11-03T09:33:52.065Z",
+   "text": "呢間屋好大。",
+   "outcome": "accepted",
+   "subs": [],
+   "missing": []
+  },
+  {
+   "sid": "adjectives-t1-s01",
+   "voice": "HiuGaai",
+   "endpoint": "rest",
+   "commas": 0,
+   "target": "呢間屋好大。",
+   "http": 200,
+   "rttMs": 544,
+   "at": "2026-11-03T09:33:53.186Z",
+   "text": "呢間屋好大。",
+   "outcome": "accepted",
+   "subs": [],
+   "missing": [],
+   "lexical": "呢 間 屋 好 大",
+   "lexicalOutcome": "accepted"
+  },
+  {
+   "sid": "adjectives-t1-s01",
+   "voice": "HiuGaai",
+   "endpoint": "fast",
+   "commas": 0,
+   "target": "呢間屋好大。",
+   "http": 200,
+   "rttMs": 531,
+   "at": "2026-11-03T09:33:53.718Z",
+   "text": "呢間屋好大。",
+   "outcome": "accepted",
+   "subs": [],
+   "missing": []
+  },
+  {
+   "sid": "connectives-t1-s06",
+   "voice": "WanLung",
+   "endpoint": "rest",
+   "commas": 1,
+   "target": "雖然好凍，但係我都想去。",
+   "http": 200,
+   "rttMs": 1252,
+   "at": "2026-11-03T09:33:55.964Z",
+   "text": "雖然好凍。但係我都想去。",
+   "outcome": "accepted",
+   "subs": [],
+   "missing": [],
+   "lexical": "雖 然 好 凍 但 係 我 都 想 去",
+   "lexicalOutcome": "accepted"
+  },
+  {
+   "sid": "connectives-t1-s06",
+   "voice": "WanLung",
+   "endpoint": "fast",
+   "commas": 1,
+   "target": "雖然好凍，但係我都想去。",
+   "http": 200,
+   "rttMs": 621,
+   "at": "2026-11-03T09:33:56.585Z",
+   "text": "雖然好凍，但係我都想去。",
+   "outcome": "accepted",
+   "subs": [],
+   "missing": []
+  },
+  {
+   "sid": "connectives-t1-s06",
+   "voice": "HiuGaai",
+   "endpoint": "rest",
+   "commas": 1,
+   "target": "雖然好凍，但係我都想去。",
+   "http": 200,
+   "rttMs": 1247,
+   "at": "2026-11-03T09:33:58.628Z",
+   "text": "雖然好動。但係我都想去。",
+   "outcome": "accepted",
+   "subs": [
+    [
+     "凍",
+     "動"
+    ]
+   ],
+   "missing": [],
+   "lexical": "雖 然 好 動 但 係 我 都 想 去",
+   "lexicalOutcome": "accepted"
+  },
+  {
+   "sid": "connectives-t1-s06",
+   "voice": "HiuGaai",
+   "endpoint": "fast",
+   "commas": 1,
+   "target": "雖然好凍，但係我都想去。",
+   "http": 200,
+   "rttMs": 617,
+   "at": "2026-11-03T09:33:59.247Z",
+   "text": "雖然好凍，但係我都想去。",
+   "outcome": "accepted",
+   "subs": [],
+   "missing": []
+  },
+  {
+   "sid": "food-t2-s10",
+   "voice": "WanLung",
+   "endpoint": "rest",
+   "commas": 1,
+   "target": "我而家好肚餓，想快啲食飯。",
+   "http": 200,
+   "rttMs": 1252,
+   "at": "2026-11-03T09:34:01.853Z",
+   "text": "我而家，好肚餓。想快啲食飯。",
+   "outcome": "accepted",
+   "subs": [],
+   "missing": [],
+   "lexical": "我 而 家 好 肚 餓 想 快 啲 食 飯",
+   "lexicalOutcome": "accepted"
+  },
+  {
+   "sid": "food-t2-s10",
+   "voice": "WanLung",
+   "endpoint": "fast",
+   "commas": 1,
+   "target": "我而家好肚餓，想快啲食飯。",
+   "http": 200,
+   "rttMs": 663,
+   "at": "2026-11-03T09:34:02.517Z",
+   "text": "我而家好肚餓，想快啲食飯。",
+   "outcome": "accepted",
+   "subs": [],
+   "missing": []
+  },
+  {
+   "sid": "food-t2-s10",
+   "voice": "HiuGaai",
+   "endpoint": "rest",
+   "commas": 1,
+   "target": "我而家好肚餓，想快啲食飯。",
+   "http": 200,
+   "rttMs": 1224,
+   "at": "2026-11-03T09:34:04.533Z",
+   "text": "我而家，好肚餓。想快啲食飯。",
+   "outcome": "accepted",
+   "subs": [],
+   "missing": [],
+   "lexical": "我 而 家 好 肚 餓 想 快 啲 食 飯",
+   "lexicalOutcome": "accepted"
+  },
+  {
+   "sid": "food-t2-s10",
+   "voice": "HiuGaai",
+   "endpoint": "fast",
+   "commas": 1,
+   "target": "我而家好肚餓，想快啲食飯。",
+   "http": 200,
+   "rttMs": 507,
+   "at": "2026-11-03T09:34:05.042Z",
+   "text": "我而家好肚餓，想快啲食飯。",
+   "outcome": "accepted",
+   "subs": [],
+   "missing": []
+  },
+  {
+   "sid": "modals-t1-s04",
+   "voice": "WanLung",
+   "endpoint": "rest",
+   "commas": 0,
+   "target": "聽日你要返工。",
+   "http": 200,
+   "rttMs": 578,
+   "at": "2026-11-03T09:34:06.243Z",
+   "text": "聽日，你要返工。",
+   "outcome": "accepted",
+   "subs": [],
+   "missing": [],
+   "lexical": "聽 日 你 要 返 工",
+   "lexicalOutcome": "accepted"
+  },
+  {
+   "sid": "modals-t1-s04",
+   "voice": "WanLung",
+   "endpoint": "fast",
+   "commas": 0,
+   "target": "聽日你要返工。",
+   "http": 200,
+   "rttMs": 191,
+   "at": "2026-11-03T09:34:06.439Z",
+   "text": "聽日，你要返工。",
+   "outcome": "accepted",
+   "subs": [],
+   "missing": []
+  },
+  {
+   "sid": "modals-t1-s04",
+   "voice": "HiuGaai",
+   "endpoint": "rest",
+   "commas": 0,
+   "target": "聽日你要返工。",
+   "http": 200,
+   "rttMs": 617,
+   "at": "2026-11-03T09:34:07.543Z",
+   "text": "聽日，你要返工。",
+   "outcome": "accepted",
+   "subs": [],
+   "missing": [],
+   "lexical": "聽 日 你 要 返 工",
+   "lexicalOutcome": "accepted"
+  },
+  {
+   "sid": "modals-t1-s04",
+   "voice": "HiuGaai",
+   "endpoint": "fast",
+   "commas": 0,
+   "target": "聽日你要返工。",
+   "http": 200,
+   "rttMs": 616,
+   "at": "2026-11-03T09:34:08.160Z",
+   "text": "聽日，你要返工。",
+   "outcome": "accepted",
+   "subs": [],
+   "missing": []
+  },
+  {
+   "sid": "school-t1-s01",
+   "voice": "WanLung",
+   "endpoint": "rest",
+   "commas": 0,
+   "target": "我去學校。",
+   "http": 200,
+   "rttMs": 490,
+   "at": "2026-11-03T09:34:09.381Z",
+   "text": "我去學校。",
+   "outcome": "accepted",
+   "subs": [],
+   "missing": [],
+   "lexical": "我 去 學 校",
+   "lexicalOutcome": "accepted"
+  },
+  {
+   "sid": "school-t1-s01",
+   "voice": "WanLung",
+   "endpoint": "fast",
+   "commas": 0,
+   "target": "我去學校。",
+   "http": 200,
+   "rttMs": 369,
+   "at": "2026-11-03T09:34:09.751Z",
+   "text": "我去學校。",
+   "outcome": "accepted",
+   "subs": [],
+   "missing": []
+  },
+  {
+   "sid": "school-t1-s01",
+   "voice": "HiuGaai",
+   "endpoint": "rest",
+   "commas": 0,
+   "target": "我去學校。",
+   "http": 200,
+   "rttMs": 582,
+   "at": "2026-11-03T09:34:10.918Z",
+   "text": "我去學校。",
+   "outcome": "accepted",
+   "subs": [],
+   "missing": [],
+   "lexical": "我 去 學 校",
+   "lexicalOutcome": "accepted"
+  },
+  {
+   "sid": "school-t1-s01",
+   "voice": "HiuGaai",
+   "endpoint": "fast",
+   "commas": 0,
+   "target": "我去學校。",
+   "http": 200,
+   "rttMs": 520,
+   "at": "2026-11-03T09:34:11.438Z",
+   "text": "我去學校。",
+   "outcome": "accepted",
+   "subs": [],
+   "missing": []
+  },
+  {
+   "sid": "yesno-t1-s05",
+   "voice": "WanLung",
+   "endpoint": "rest",
+   "commas": 0,
+   "target": "歡迎你嚟。",
+   "http": 200,
+   "rttMs": 461,
+   "at": "2026-11-03T09:34:12.509Z",
+   "text": "歡迎你嚟。",
+   "outcome": "accepted",
+   "subs": [],
+   "missing": [],
+   "lexical": "歡 迎 你 嚟",
+   "lexicalOutcome": "accepted"
+  },
+  {
+   "sid": "yesno-t1-s05",
+   "voice": "WanLung",
+   "endpoint": "fast",
+   "commas": 0,
+   "target": "歡迎你嚟。",
+   "http": 200,
+   "rttMs": 274,
+   "at": "2026-11-03T09:34:12.783Z",
+   "text": "歡迎你嚟。",
+   "outcome": "accepted",
+   "subs": [],
+   "missing": []
+  },
+  {
+   "sid": "yesno-t1-s05",
+   "voice": "HiuGaai",
+   "endpoint": "rest",
+   "commas": 0,
+   "target": "歡迎你嚟。",
+   "http": 200,
+   "rttMs": 534,
+   "at": "2026-11-03T09:34:13.791Z",
+   "text": "歡迎你嚟。",
+   "outcome": "accepted",
+   "subs": [],
+   "missing": [],
+   "lexical": "歡 迎 你 嚟",
+   "lexicalOutcome": "accepted"
+  },
+  {
+   "sid": "yesno-t1-s05",
+   "voice": "HiuGaai",
+   "endpoint": "fast",
+   "commas": 0,
+   "target": "歡迎你嚟。",
+   "http": 200,
+   "rttMs": 417,
+   "at": "2026-11-03T09:34:14.208Z",
+   "text": "歡迎你嚟。",
+   "outcome": "accepted",
+   "subs": [],
+   "missing": []
+  }
+ ],
+ "updatedAt": "2026-11-03T09:34:14.210Z",
+ "summary": {
+  "rest": {
+   "overall": {
+    "n": 12,
+    "rej": 0,
+    "pct": 0
+   },
+   "paused": {
+    "n": 4,
+    "rej": 0,
+    "pct": 0
+   },
+   "single": {
+    "n": 8,
+    "rej": 0,
+    "pct": 0
+   },
+   "byVoice": {
+    "WanLung": {
+     "n": 6,
+     "rej": 0,
+     "pct": 0
+    },
+    "HiuGaai": {
+     "n": 6,
+     "rej": 0,
+     "pct": 0
+    }
+   },
+   "noDecode": 0,
+   "refused": 0,
+   "error": 0,
+   "passes": true,
+   "lexicalUnbarred": {
+    "n": 12,
+    "rej": 0,
+    "pct": 0
+   },
+   "medianRttMs": 617
+  },
+  "fast": {
+   "overall": {
+    "n": 12,
+    "rej": 0,
+    "pct": 0
+   },
+   "paused": {
+    "n": 4,
+    "rej": 0,
+    "pct": 0
+   },
+   "single": {
+    "n": 8,
+    "rej": 0,
+    "pct": 0
+   },
+   "byVoice": {
+    "WanLung": {
+     "n": 6,
+     "rej": 0,
+     "pct": 0
+    },
+    "HiuGaai": {
+     "n": 6,
+     "rej": 0,
+     "pct": 0
+    }
+   },
+   "noDecode": 0,
+   "refused": 0,
+   "error": 0,
+   "passes": true,
+   "medianRttMs": 531
+  }
+ },
+ "substitutions": [
+  {
+   "target": "凍",
+   "targetJ": "dung3",
+   "heard": "動",
+   "heardJ": "dung6",
+   "count": 1,
+   "inRejected": 0,
+   "endpoints": [
+    "rest"
+   ]
+  }
+ ]
+}
