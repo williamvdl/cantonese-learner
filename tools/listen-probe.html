@@ -1,0 +1,804 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Listening probe — Azure record-then-transcribe</title>
+<!--
+  tools/listen-probe.html — on the Pixel, do correct readings of corpus
+  sentences, spoken WITH PAUSES and transcribed by Azure, pass the app's real
+  matcher?
+
+  WHY THIS EXISTS
+  ---------------
+  On every speak surface the mic stops when the learner pauses, because Chrome
+  on Android does not honour `continuous = true` (BACKLOG/IN_PROGRESS, "the
+  listening cut-off"). The candidate fix is record-then-transcribe: hold the
+  mic open with no endpointer, the learner taps to stop, and the clip goes to
+  Azure. tools/azure-pause-check.js already answered the question that could
+  have killed it outright: both Azure endpoints transcribed BOTH clauses
+  through pauses of up to 8 seconds (tools/runs/azure-pause-check-2026-11-03.json).
+  What that could not answer, because it used a synthetic voice, is the
+  question here: a real learner, a real phone mic, and the app's own matcher,
+  which was tuned on GOOGLE's spellings. Azure spells differently — the gate
+  already showed 攪笑 (gaau2 siu3) for the corpus's 搞笑 (gaau2 siu3) — so every
+  rule in fuzzyMatch() is untested against it.
+
+  BOTH Azure endpoints are asked, with the SAME recording:
+    rest  short-audio REST. Proven reachable from a browser origin (STATUS §
+          Notes, the Azure pronunciation work). Slower: median 1.5s on desktop,
+          growing with clip length.
+    fast  fast transcription. About three times quicker in the gate, and flat
+          with clip length, but NEVER yet called from a browser. Whether it is
+          reachable (CORS) is answered here as a side effect, at no extra cost.
+  Calls run one after the other, never together: the free (F0) tier allows one
+  recognition at a time. The order alternates by item so neither endpoint is
+  always second.
+
+  THE PASS BAR — declared before any data exists, and binding
+  -----------------------------------------------------------
+  Inherited, not invented. tools/asr-probe.html set it for this class of
+  question and tools/translate-reject-probe.html reused it:
+
+      false rejects <= 10% of valid attempts.
+
+  Applied per endpoint to two numbers, both of which must hold — exactly the
+  shape translate-reject-probe.html used, where the second number is the
+  bucket that carries the risk:
+
+      OVERALL    <= 10% of that endpoint's valid attempts rejected
+      PAUSED     <= 10% within the two-clause items, where the learner pauses
+                 deliberately at the comma
+
+  The paused bucket is held to the bar separately because pausing is the whole
+  point of the change. An overall number could pass on sixteen easy single-
+  clause items while the paused ones failed. Same number, applied to the risk.
+
+  A "valid attempt" is one the learner kept as said correctly AND that came
+  back with a transcript. Excluded from both sides of every rate, and counted
+  separately: discards (I fluffed it), no-decodes (Azure returned no text),
+  refusals (HTTP 400/401/403/404), unreachable (the browser could not make the
+  call — a CORS block shows up here), and other errors (429, 5xx).
+
+  WHICH ERROR IS WORSE: a false reject. It costs trust; a missed error costs
+  nothing the app was catching anyway (DES-39). So the false-reject rate binds,
+  and detection of genuine errors is NOT measured. That is a deliberate
+  departure from PROBE_METHOD's "include inputs whose right answer is known
+  by construction" as it applies to WRONG readings, made the same way and for
+  the same reason as translate-reject-probe.html: a missed error is not a cost
+  this probe could act on. The correct readings are still known by
+  construction — the learner declares each one before seeing any result.
+
+  WAIT TIME IS CALIBRATION, NOT A BAR. With record-then-transcribe there is no
+  live text, so the wait between tapping stop and seeing a result replaces the
+  live feedback. No honest threshold can be guessed before seeing it, so this
+  run reports the wait (encode + round trip, per endpoint) and sets no bar on
+  it. It may inform a later decision; it cannot by itself decide this one.
+
+  THIS RUN MAY CONCLUDE:
+    BUILD ON fast  fast passes both bars and was reachable. Preferred over
+                   rest when both pass, because its wait is shorter.
+    BUILD ON rest  rest passes both bars and fast did not (or was unreachable).
+    FALLBACK       neither passes. Build the Continue button the brief names.
+    STOP           the recogniser returns nothing usable often enough that
+                   there is no surface to build — judged from the no-decode
+                   count, which is reported separately and never counted as
+                   a rejection.
+  It may NOT conclude "build it, but loosen fuzzyMatch() until it passes". The
+  matcher is shared with four live surfaces (Learn sheet, Chat, checkpoint
+  review, Translate). If the numbers argue for a rule change, that is a
+  separate decision with its own evidence — and the raw transcripts and audio
+  in the export are what would let it be made without re-recording.
+
+  IT GRADES WITH THE APP'S OWN CODE, NOT A COPY
+  ----------------------------------------------
+  Every function that touches a verdict is lifted verbatim out of ../app.js at
+  page load by brace-matched extraction. The lift list is the one
+  tools/asr-replay-harness.js carries (a standing check, so it is known to be
+  current), plus charsToJyutping() and TONES for display, and
+  SENT_REVIEW_MIN_CHARS for item selection. If app.js renames any of them this
+  page fails loudly on load rather than quietly grading with a stale copy.
+
+  NOTE: tools/translate-reject-probe.html's lift list predates DES-57 and the
+  v144 particle work. It lifts fuzzyMatch() without isForgivenParticleSwap(),
+  speakEqFor() and their dependencies, so it would now throw on its first
+  graded attempt. Recorded in BACKLOG against the item that reruns it.
+
+  The verdict path is resolveHeard(text, [], target) — the same call
+  startSpeechRecognition() makes at onend. Azure returns one final transcript,
+  so there are no extra segments to pass; the segments argument exists to
+  defend against Web Speech's Android revisions, which Azure does not emit.
+
+  WHICH TEXT IS GRADED. rest: DisplayText — punctuation, digits for numerals —
+  the closest analogue of the Web Speech transcript the matcher was tuned on
+  (normalizeChinese() strips punctuation and folds digits). fast: the
+  combinedPhrases text, its only full-text field. Every other field (Lexical,
+  ITN, NBest, phrases) is kept raw in the export, so a different choice can be
+  re-graded offline.
+
+  AUDIO. Recorded with MediaRecorder (Chrome on Android: webm/opus), then
+  decoded and resampled to 16 kHz mono WAV in the page. That conversion is
+  lifted from tools/pron-probe.html, where it was proven on this phone, and it
+  exists because Azure's REST endpoint answers WebM with HTTP 200 and an EMPTY
+  recognition rather than an error. Success is judged on the payload, never the
+  status code. Browser AGC, noise suppression and echo cancellation are
+  switched off, as in pron-probe.html.
+
+  NO sw.js BUMP — not precached, not linked from the app, shares no CSS.
+
+  RUNNING IT
+  ----------
+  1. Commit this file. Open .../tools/listen-probe.html on the Pixel from the
+     deployed site — the mic needs https.
+  2. Paste the Azure key of the FREE resource and check the region. Tick
+     "remember on this phone" if you want it kept in this browser's storage;
+     otherwise it lives in memory until the tab closes.
+  3. For each sentence: Listen if you want, tap Start, say it, tap Stop. On
+     two-clause items PAUSE two or three seconds at the comma — the pause is
+     the point. Then answer "did you say it correctly?" BEFORE the result
+     appears (the DES-50 lesson: a disposition given after seeing the verdict
+     is not independent of it).
+  4. Export at the end, or at any point. Progress (not audio) survives a
+     reload; the audio only lives in memory, so export before closing the tab.
+-->
+<style>
+  :root {
+    --ink:#2b2724; --ink-soft:#5b544e; --muted:#8c837b; --muted-dark:#6b635c;
+    --parchment:#faf7f2; --parchment-warm:#f5efe6; --parchment-border:#e2d8c8;
+    --brand:#8c2f39; --brand-tint:#f6ecec;
+    --feedback-good-text:#2f6b3a; --feedback-bad:#a8323f;
+  }
+  * { box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+  body { margin:0; padding:14px; font-family:system-ui,-apple-system,"Segoe UI",sans-serif;
+         background:var(--parchment); color:var(--ink); line-height:1.5; }
+  h1 { font-size:17px; margin:0 0 2px; }
+  .stamp { font-size:11px; color:var(--muted); margin-bottom:12px; word-break:break-all; }
+  .card { background:#fff; border:1px solid var(--parchment-border); border-radius:12px;
+          padding:14px; margin-bottom:12px; }
+  .bar { font-size:12px; color:var(--ink-soft); background:var(--parchment-warm);
+         border:1px solid var(--parchment-border); border-radius:10px; padding:10px 12px;
+         margin-bottom:12px; }
+  .meta { font-size:11px; color:var(--muted); text-transform:uppercase; letter-spacing:.06em; }
+  .target { font-size:30px; line-height:1.35; margin:8px 0 4px; }
+  .tjp { font-size:14px; margin-bottom:4px; }
+  .ten { font-size:13px; color:var(--muted-dark); }
+  .howto { font-size:13px; margin-top:8px; padding:8px 10px; border-radius:8px; background:var(--brand-tint); }
+  button { font:inherit; border-radius:10px; border:1px solid var(--parchment-border);
+           background:#fff; color:var(--ink); padding:11px 14px; min-height:44px; }
+  button:disabled { opacity:.45; }
+  .primary { background:var(--brand); border-color:var(--brand); color:#fff; font-weight:600; }
+  .wide { width:100%; }
+  .row { display:flex; gap:8px; margin-top:10px; }
+  .row button { flex:1; }
+  input[type=text], input[type=password] { font:inherit; width:100%; padding:10px; border-radius:8px;
+           border:1px solid var(--parchment-border); margin:4px 0 8px; }
+  label { font-size:13px; }
+  .ep { border-top:1px solid var(--parchment-border); padding-top:10px; margin-top:10px; }
+  .ep:first-child { border-top:0; padding-top:0; margin-top:0; }
+  .heard { font-size:22px; min-height:28px; margin:2px 0; }
+  .verdict { font-weight:700; }
+  .ok  { color:var(--feedback-good-text); }
+  .no  { color:var(--feedback-bad); }
+  .nul { color:var(--muted-dark); }
+  .small { font-size:12px; color:var(--muted-dark); }
+  .jp-unknown { display:inline-block; border:1px solid var(--parchment-border);
+                border-radius:3px; padding:0 3px; color:var(--muted); font-size:11px; }
+  .jp-ambiguous { border-bottom:1px dotted currentColor; }
+  table { width:100%; border-collapse:collapse; font-size:12px; }
+  td,th { padding:4px 6px; border-bottom:1px solid var(--parchment-border); text-align:left; }
+  th { color:var(--muted); font-weight:600; }
+  .fail { color:var(--feedback-bad); font-weight:600; }
+  .pass { color:var(--feedback-good-text); font-weight:600; }
+  .err { color:var(--feedback-bad); }
+  .rec { color:var(--feedback-bad); font-weight:600; }
+</style>
+</head>
+<body>
+
+<h1>Listening probe · Azure record-then-transcribe</h1>
+<div class="stamp" id="stamp">loading…</div>
+
+<div class="bar">
+  <b>Pass bar, fixed before this page had data.</b> Per Azure endpoint: false
+  rejects ≤ 10% of valid attempts overall <i>and</i> ≤ 10% on the paused
+  (two-clause) items. Discards, no-decodes, refusals, unreachable calls and
+  errors are counted separately and excluded from both sides. Wait time is
+  measured but has no bar on this run.
+</div>
+
+<div id="boot" class="card">Loading app.js, the corpus and the jyutping dictionary…</div>
+
+<div id="creds" class="card" style="display:none">
+  <div class="meta">Azure key — the free resource</div>
+  <input type="password" id="key" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="KEY 1">
+  <label for="region">Region</label>
+  <input type="text" id="region" autocomplete="off" autocapitalize="off" spellcheck="false" value="australiaeast">
+  <label><input type="checkbox" id="remember"> Remember on this phone (this browser's storage only)</label>
+  <div class="row"><button class="primary" id="saveKey">Use this key</button></div>
+  <div class="small" id="credStatus"></div>
+</div>
+
+<div id="run" style="display:none">
+  <div class="card">
+    <div class="meta"><span id="pos"></span> · <span id="bucket"></span></div>
+    <div class="target" id="target"></div>
+    <div class="tjp" id="tjp"></div>
+    <div class="ten" id="en"></div>
+    <div class="howto" id="howto"></div>
+    <div class="row">
+      <button id="listen">▶ Listen</button>
+      <button class="primary" id="mic">Start</button>
+    </div>
+    <div class="small" id="recStatus"></div>
+  </div>
+
+  <div class="card" id="askCard" style="display:none">
+    <div class="meta">Before you see anything</div>
+    <div style="margin:6px 0 2px">Did you say it correctly?</div>
+    <div class="row">
+      <button id="keep">Yes — I said it right</button>
+      <button id="discard">No — I fluffed it</button>
+    </div>
+  </div>
+
+  <div class="card" id="resultCard" style="display:none">
+    <div class="meta">What Azure heard</div>
+    <div id="results"></div>
+    <div class="row">
+      <button id="retry" style="display:none">Try this one again</button>
+      <button class="primary" id="next">Next sentence</button>
+    </div>
+  </div>
+</div>
+
+<div class="card" id="tally" style="display:none">
+  <div class="meta">Running result</div>
+  <div id="tallyBody"></div>
+  <div class="row"><button id="export">Export run (JSON)</button></div>
+  <div class="row"><button id="restart">Start over</button></div>
+  <div class="small" id="exportStatus"></div>
+</div>
+
+<script src="../vendor/to-jyutping.js"></script>
+<script>
+'use strict';
+const PROBE_BUILD = 'listen-probe 1 · 2026-11-03';
+const RUN_STORE = 'listenProbe.run.v1';        // progress, no audio
+const KEY_STORE = 'listenProbe.azure.v1';      // only if the learner ticks "remember"
+const N_PER_BUCKET = 16;
+const FAST_API_VERSION = '2024-11-15';         // as tools/azure-pause-check.js
+const BAR_PCT = 10;
+const ENDPOINTS = ['rest', 'fast'];
+
+const $ = id => document.getElementById(id);
+
+// ── Lift the real implementation out of app.js ──────────────────────────────
+// Brace-matched extraction, as translate-reject-probe.html and the standing
+// harnesses do it. See the header for why a copy would not do.
+function grabFn(src, name) {
+  const i = src.indexOf('function ' + name + '(');
+  if (i < 0) throw new Error('app.js no longer defines ' + name + '()');
+  let d = 0;
+  for (let k = src.indexOf('{', i); k < src.length; k++) {
+    if (src[k] === '{') d++;
+    else if (src[k] === '}') { d--; if (!d) return src.slice(i, k + 1); }
+  }
+  throw new Error('unbalanced braces reading ' + name);
+}
+function grabConst(src, re, label) {
+  const m = src.match(re);
+  if (!m) throw new Error('app.js no longer defines ' + label);
+  return m[0];
+}
+
+function liftApp(appSrc, store) {
+  const pieces = [
+    grabConst(appSrc, /const TONES\s*=\s*\{[\s\S]*?\n\};/, 'TONES'),
+    grabConst(appSrc, /const ASR_DIGITS = \{[\s\S]*?\};/, 'ASR_DIGITS'),
+    grabConst(appSrc, /const ASR_PLACES = \[[\s\S]*?\];/, 'ASR_PLACES'),
+    grabFn(appSrc, 'foldAsrNumerals'),
+    grabFn(appSrc, 'normalizeChinese'),
+    // DES-57 same-sound equality, in the order asr-replay-harness.js lifts it:
+    // editDistance() takes speakEqFor()'s test, so these come first.
+    grabFn(appSrc, 'charJyutpingSyllables'),
+    grabFn(appSrc, 'readingsFor'),
+    grabFn(appSrc, 'sameSoundAt'),
+    grabConst(appSrc, /const IDENTITY_EQ = [\s\S]*?;/, 'IDENTITY_EQ'),
+    grabFn(appSrc, 'speakEqFor'),
+    grabFn(appSrc, 'editDistance'),
+    grabConst(appSrc, /const SPEAK_FINAL_PARTICLES[\s\S]*?\]\);/, 'SPEAK_FINAL_PARTICLES'),
+    grabConst(appSrc, /const SPEAK_PARTICLE_VARIANTS[\s\S]*?\]\);/, 'SPEAK_PARTICLE_VARIANTS'),
+    grabConst(appSrc, /const canonicalParticle = [\s\S]*?;/, 'canonicalParticle'),
+    grabFn(appSrc, 'isForgivenParticleSwap'),
+    grabFn(appSrc, 'fuzzyMatch'),
+    grabFn(appSrc, 'resolveHeard'),
+    grabFn(appSrc, 'charsToJyutping'),
+    grabConst(appSrc, /const SENT_REVIEW_MIN_CHARS\s*=\s*\d+;/, 'SENT_REVIEW_MIN_CHARS'),
+    'return { fuzzyMatch, normalizeChinese, resolveHeard, charsToJyutping, SENT_REVIEW_MIN_CHARS };',
+  ];
+  return new Function('store', 'window', pieces.join('\n\n'))(store, window);
+}
+
+// ── Item selection — derived from the corpus, never hand-typed ───────────────
+const HAN = /[㐀-䶿一-鿿]/g;        // Extension A included: 㗎 (gaa3)
+const hanCount = s => (String(s || '').match(HAN) || []).length;
+
+function spread(pool, n) {
+  // An even spread by sid, as azure-pause-check.js picks, so a run crosses
+  // topics rather than taking the first n from one file.
+  const k = Math.min(n, pool.length), out = [];
+  for (let i = 0; i < k; i++) out.push(pool[k === 1 ? 0 : Math.round(i * (pool.length - 1) / (k - 1))]);
+  return out;
+}
+
+function deriveItems(sentences, minChars) {
+  const bySid = (a, b) => a.sid < b.sid ? -1 : a.sid > b.sid ? 1 : 0;
+  // Two-clause: exactly one full-width comma, three or more characters each
+  // side — the rule tools/azure-pause-check.js used, so these are the same
+  // population the gate passed.
+  const paused = sentences.filter(s => {
+    const p = String(s.c).split('，');
+    return p.length === 2 && hanCount(p[0]) >= 3 && hanCount(p[1]) >= 3;
+  }).sort(bySid);
+  // Single-clause: no comma at all, and at least the app's own minimum length
+  // for a speakable sentence (SENT_REVIEW_MIN_CHARS, lifted).
+  const single = sentences.filter(s => !String(s.c).includes('，') && hanCount(s.c) >= minChars).sort(bySid);
+  const a = spread(paused, N_PER_BUCKET).map(s => ({ ...s, bucket: 'paused' }));
+  const b = spread(single, N_PER_BUCKET).map(s => ({ ...s, bucket: 'single' }));
+  // Interleaved, so fatigue late in the session does not land on one bucket.
+  const items = [];
+  for (let i = 0; i < Math.max(a.length, b.length); i++) { if (a[i]) items.push(a[i]); if (b[i]) items.push(b[i]); }
+  return { items, pools: { paused: paused.length, single: single.length } };
+}
+
+// ── State ───────────────────────────────────────────────────────────────────
+let APP = null, VERSION = '(unknown)', ITEMS = [], POOLS = null, SIGNATURE = '';
+let CREDS = { key: null, region: null };
+let idx = 0;
+let results = [];               // finished attempts, no audio
+const audioById = {};           // attempt id -> base64 WAV, memory only
+let current = null;             // the attempt in flight
+let stream = null, recorder = null, chunks = [], recStart = 0, recTimer = null;
+
+function item() { return ITEMS[idx]; }
+
+function saveRun() {
+  try { localStorage.setItem(RUN_STORE, JSON.stringify({ signature: SIGNATURE, idx, results })); } catch (e) { /* storage full or blocked: export still works */ }
+}
+
+// ── Boot ────────────────────────────────────────────────────────────────────
+async function boot() {
+  // Every fetch is cache-busted. sw.js is cache-first for all GETs and this page
+  // sits inside its scope, so a plain fetch('../app.js') could grade with a
+  // precached copy while the stamp claimed another build (translate-reject-probe.html
+  // explains the incident this prevents).
+  const bust = '?probe=' + Date.now();
+  const get = (p, as) => fetch(p + bust, { cache: 'reload' }).then(r => { if (!r.ok) throw new Error(p + ' ' + r.status); return as === 'text' ? r.text() : r.json(); });
+  const [appSrc, swSrc, index, cj] = await Promise.all([
+    get('../app.js', 'text'), get('../sw.js', 'text').catch(() => ''),
+    get('../data/topics_index.json'), get('../data/char-jyutping.json').catch(() => ({})),
+  ]);
+  const store = { charJyutping: cj };
+  APP = liftApp(appSrc, store);
+  const vm = swSrc.match(/CACHE_VERSION\s*=\s*'([^']+)'/);
+  VERSION = vm ? vm[1] : '(sw.js unreadable)';
+
+  const topics = await Promise.all((index.topics || []).map(t => get('../data/topics/' + t.key + '.json').then(j => ({ key: t.key, j }))));
+  const sentences = [];
+  for (const { key, j } of topics) for (const round of Object.values(j.rounds || {})) for (const s of (round.sentences || [])) sentences.push({ sid: s.sid, c: s.c, j: s.j, e: s.e, topic: key });
+  const d = deriveItems(sentences, APP.SENT_REVIEW_MIN_CHARS);
+  ITEMS = d.items; POOLS = d.pools;
+  if (ITEMS.length < 2) throw new Error('item selection found almost nothing — the corpus shape has changed');
+  SIGNATURE = ITEMS.map(i => i.sid).join(',');
+
+  try {
+    const saved = JSON.parse(localStorage.getItem(RUN_STORE) || 'null');
+    if (saved && saved.signature === SIGNATURE) { idx = saved.idx || 0; results = saved.results || []; }
+  } catch (e) { /* a corrupt store starts fresh */ }
+  try {
+    const k = JSON.parse(localStorage.getItem(KEY_STORE) || 'null');
+    if (k && k.key) { CREDS = k; $('remember').checked = true; }
+  } catch (e) { /* ignore */ }
+
+  $('stamp').textContent = PROBE_BUILD + ' · app ' + VERSION + ' · ' + ITEMS.length + ' items from '
+    + POOLS.paused + ' two-clause and ' + POOLS.single + ' single-clause corpus sentences';
+  $('boot').style.display = 'none';
+  $('creds').style.display = '';
+  $('tally').style.display = '';
+  if (CREDS.key) { $('region').value = CREDS.region; showCredStatus(); startRun(); }
+  renderTally();
+}
+
+// ── Credentials ─────────────────────────────────────────────────────────────
+function showCredStatus() {
+  $('credStatus').textContent = 'Using key ending …' + CREDS.key.slice(-4) + ' in ' + CREDS.region
+    + ($('remember').checked ? ' · remembered on this phone' : ' · memory only');
+}
+$('saveKey').onclick = () => {
+  const k = $('key').value.trim(), r = ($('region').value.trim() || 'australiaeast').toLowerCase();
+  if (!k) { $('credStatus').innerHTML = '<span class="err">Paste the key first.</span>'; return; }
+  CREDS = { key: k, region: r };
+  $('key').value = '';
+  try {
+    if ($('remember').checked) localStorage.setItem(KEY_STORE, JSON.stringify(CREDS));
+    else localStorage.removeItem(KEY_STORE);
+  } catch (e) { /* storage blocked: memory only */ }
+  showCredStatus();
+  startRun();
+};
+$('remember').onchange = () => {
+  try {
+    if (!$('remember').checked) localStorage.removeItem(KEY_STORE);
+    else if (CREDS.key) localStorage.setItem(KEY_STORE, JSON.stringify(CREDS));
+  } catch (e) { /* ignore */ }
+  if (CREDS.key) showCredStatus();
+};
+
+function startRun() { $('run').style.display = ''; showItem(); }
+
+// ── One item ────────────────────────────────────────────────────────────────
+function showItem() {
+  const it = item();
+  $('askCard').style.display = 'none';
+  $('resultCard').style.display = 'none';
+  $('recStatus').textContent = '';
+  current = null;
+  if (!it) {
+    $('target').textContent = 'Set complete';
+    $('tjp').textContent = ''; $('en').textContent = 'Export the run below.';
+    $('howto').style.display = 'none'; $('pos').textContent = ''; $('bucket').textContent = '';
+    setMic('done'); $('listen').disabled = true;
+    renderTally();
+    return;
+  }
+  $('pos').textContent = 'Item ' + (idx + 1) + ' of ' + ITEMS.length;
+  $('bucket').textContent = it.bucket === 'paused' ? 'two clauses — pause' : 'one clause';
+  $('target').textContent = it.c;
+  $('tjp').innerHTML = APP.charsToJyutping(it.c);
+  $('en').textContent = it.e || '';
+  $('howto').style.display = '';
+  $('howto').innerHTML = it.bucket === 'paused'
+    ? '<b>Pause for two or three seconds at the comma</b>, then finish the sentence. The pause is the point.'
+    : 'Say it at your own pace. A pause anywhere is fine.';
+  $('listen').disabled = false;
+  setMic('ready');
+  renderTally();
+}
+
+$('listen').onclick = () => {
+  const it = item(); if (!it) return;
+  try { new Audio('../audio/sentences/' + it.sid + '.mp3').play(); } catch (e) { /* no audio is not fatal */ }
+};
+
+// SINGLE OWNER OF THE MIC BUTTON — label, enabled state and handler together.
+// translate-reject-probe.html records why: set in scattered places, they
+// drifted, and the button looked ready while doing nothing.
+function setMic(mode) {                        // 'ready' | 'starting' | 'recording' | 'busy' | 'done'
+  const b = $('mic');
+  b.disabled = mode === 'starting' || mode === 'busy' || mode === 'done';
+  b.textContent = mode === 'ready' ? 'Start' : mode === 'starting' ? 'Starting…'
+                : mode === 'recording' ? '■ Stop' : mode === 'busy' ? 'Sent' : 'Done';
+  b.onclick = mode === 'ready' ? startRecording : mode === 'recording' ? stopRecording : null;
+}
+
+// ── Microphone and recording (lifted from tools/pron-probe.html) ────────────
+const CANDIDATE_TYPES = ['audio/webm;codecs=opus', 'audio/ogg;codecs=opus', 'audio/webm', 'audio/mp4'];
+const TARGET_RATE = 16000;
+
+async function ensureMic() {
+  // A granted permission is not a live stream, and Android can end a track on
+  // its own (a call, another app) — so a previous stream is re-checked.
+  if (stream && stream.getAudioTracks().some(t => t.readyState === 'live')) return stream;
+  stream = await navigator.mediaDevices.getUserMedia({
+    audio: { channelCount: 1, echoCancellation: false, noiseSuppression: false, autoGainControl: false },
+  });
+  return stream;
+}
+
+async function startRecording() {
+  setMic('starting');
+  $('listen').disabled = true;
+  try { await ensureMic(); }
+  catch (e) {
+    $('recStatus').innerHTML = '<span class="err">Mic unavailable: ' + e.name + '</span>';
+    setMic('ready'); $('listen').disabled = false; return;
+  }
+  const type = CANDIDATE_TYPES.find(t => window.MediaRecorder && MediaRecorder.isTypeSupported(t)) || '';
+  chunks = [];
+  recorder = type ? new MediaRecorder(stream, { mimeType: type }) : new MediaRecorder(stream);
+  recorder.ondataavailable = e => { if (e.data && e.data.size) chunks.push(e.data); };
+  recorder.onstop = () => onRecorded(type);
+  // The UI flips to "recording" only when the recorder reports it has started,
+  // so the first syllable is not lost to start-up latency.
+  recorder.onstart = () => {
+    recStart = Date.now();
+    setMic('recording');
+    $('recStatus').innerHTML = '<span class="rec">● Recording</span> — nothing stops this but you.';
+    recTimer = setInterval(() => {
+      $('recStatus').innerHTML = '<span class="rec">● Recording ' + ((Date.now() - recStart) / 1000).toFixed(0) + 's</span> — nothing stops this but you.';
+    }, 500);
+  };
+  recorder.start();
+}
+
+function stopRecording() {
+  if (recorder && recorder.state === 'recording') recorder.stop();
+  clearInterval(recTimer);
+  setMic('busy');
+}
+
+async function toWav16kMono(blob) {
+  const bytes = await blob.arrayBuffer();
+  const Ctx = window.AudioContext || window.webkitAudioContext;
+  const decoded = await new Ctx().decodeAudioData(bytes);
+  const frames = Math.ceil(decoded.duration * TARGET_RATE);
+  const off = new OfflineAudioContext(1, frames, TARGET_RATE);
+  const src = off.createBufferSource();
+  src.buffer = decoded; src.connect(off.destination); src.start();
+  const pcm = (await off.startRendering()).getChannelData(0);
+  const buf = new ArrayBuffer(44 + pcm.length * 2);
+  const view = new DataView(buf);
+  const str = (o, s) => { for (let i = 0; i < s.length; i++) view.setUint8(o + i, s.charCodeAt(i)); };
+  str(0, 'RIFF'); view.setUint32(4, 36 + pcm.length * 2, true);
+  str(8, 'WAVE'); str(12, 'fmt ');
+  view.setUint32(16, 16, true); view.setUint16(20, 1, true); view.setUint16(22, 1, true);
+  view.setUint32(24, TARGET_RATE, true); view.setUint32(28, TARGET_RATE * 2, true);
+  view.setUint16(32, 2, true); view.setUint16(34, 16, true);
+  str(36, 'data'); view.setUint32(40, pcm.length * 2, true);
+  let peak = 0;
+  for (let i = 0; i < pcm.length; i++) {
+    const s = Math.max(-1, Math.min(1, pcm[i]));
+    if (Math.abs(s) > peak) peak = Math.abs(s);
+    view.setInt16(44 + i * 2, s < 0 ? s * 0x8000 : s * 0x7fff, true);
+  }
+  return { bytes: new Uint8Array(buf), peak, seconds: decoded.duration };
+}
+
+function b64(u8) {
+  let s = '';
+  for (let i = 0; i < u8.length; i += 0x8000) s += String.fromCharCode.apply(null, u8.subarray(i, i + 0x8000));
+  return btoa(s);
+}
+
+// ── After stop: ask first, call Azure in the background ────────────────────
+async function onRecorded(mimeType) {
+  const it = item();
+  const stoppedAt = Date.now();
+  current = {
+    id: it.sid + '@' + new Date(stoppedAt).toISOString(),
+    sid: it.sid, target: it.c, bucket: it.bucket, item: idx + 1,
+    build: PROBE_BUILD, appVersion: VERSION, region: CREDS.region,
+    recordedMs: stoppedAt - recStart, mimeType, at: new Date(stoppedAt).toISOString(),
+    disposition: null, endpoints: {}, order: null,
+  };
+  // The question comes BEFORE any result can be shown (DES-50).
+  $('askCard').style.display = '';
+  $('recStatus').textContent = 'Converting and sending to Azure… (hidden until you answer)';
+
+  const attempt = current;
+  let wav;
+  const t0 = performance.now();
+  try {
+    const blob = new Blob(chunks, mimeType ? { type: mimeType } : undefined);
+    wav = await toWav16kMono(blob);
+  } catch (e) {
+    attempt.encodeError = e.name + ': ' + e.message;
+    for (const ep of ENDPOINTS) attempt.endpoints[ep] = { outcome: 'error', detail: 'encode failed' };
+    return maybeShow(attempt);
+  }
+  attempt.encodeMs = Math.round(performance.now() - t0);
+  attempt.seconds = +wav.seconds.toFixed(2);
+  attempt.peak = +wav.peak.toFixed(3);
+  audioById[attempt.id] = b64(wav.bytes);
+
+  // Alternate which endpoint goes first, so neither is always the second call.
+  const order = idx % 2 ? ['fast', 'rest'] : ['rest', 'fast'];
+  attempt.order = order;
+  for (const ep of order) {
+    attempt.endpoints[ep] = await (ep === 'rest' ? callRest(wav.bytes) : callFast(wav.bytes));
+    grade(attempt, ep);
+  }
+  maybeShow(attempt);
+}
+
+const REFUSED = new Set([400, 401, 403, 404]);
+const TIMEOUT_MS = 30000;
+
+// One place that turns a failed fetch into an outcome. A timeout is an ERROR,
+// not 'unreachable': unreachable is reserved for a request that never got an
+// HTTP answer at all, which is where a CORS block lands, and the two must not
+// be confused when reading whether fast transcription works from a browser.
+async function post(url, init) {
+  const ctl = new AbortController();
+  const timer = setTimeout(() => ctl.abort(), TIMEOUT_MS);
+  const t0 = performance.now();
+  try {
+    const res = await fetch(url, { ...init, signal: ctl.signal });
+    const body = await res.text();
+    return { res, body, rttMs: Math.round(performance.now() - t0) };
+  } catch (e) {
+    const rttMs = Math.round(performance.now() - t0);
+    if (e.name === 'AbortError') return { fail: { outcome: 'error', detail: 'timed out after ' + TIMEOUT_MS / 1000 + 's', rttMs } };
+    return { fail: { outcome: 'unreachable', detail: e.name + ': ' + e.message, rttMs } };
+  } finally { clearTimeout(timer); }
+}
+
+async function callRest(bytes) {
+  const url = 'https://' + CREDS.region + '.stt.speech.microsoft.com'
+            + '/speech/recognition/conversation/cognitiveservices/v1?language=zh-HK&format=detailed';
+  const p = await post(url, { method: 'POST', headers: {
+    'Ocp-Apim-Subscription-Key': CREDS.key,
+    'Content-Type': 'audio/wav; codecs=audio/pcm; samplerate=16000',
+    'Accept': 'application/json' }, body: bytes });
+  if (p.fail) return p.fail;
+  const { res, body, rttMs } = p;
+  let json = null; try { json = JSON.parse(body); } catch (e) { /* raw kept */ }
+  if (!res.ok) return { outcome: REFUSED.has(res.status) ? 'refused' : 'error', http: res.status, rttMs, raw: json || body };
+  // Payload, never status: 200 with RecognitionStatus other than Success, or no
+  // text, is a no-decode.
+  const text = json && json.RecognitionStatus === 'Success' ? (json.DisplayText || '') : '';
+  return { http: res.status, rttMs, raw: json || body, status: json && json.RecognitionStatus, text };
+}
+
+async function callFast(bytes) {
+  const url = 'https://' + CREDS.region + '.api.cognitive.microsoft.com'
+            + '/speechtotext/transcriptions:transcribe?api-version=' + FAST_API_VERSION;
+  const form = new FormData();
+  form.append('audio', new Blob([bytes], { type: 'audio/wav' }), 'clip.wav');
+  form.append('definition', JSON.stringify({ locales: ['zh-HK'] }));
+  const p = await post(url, { method: 'POST', headers: { 'Ocp-Apim-Subscription-Key': CREDS.key, 'Accept': 'application/json' }, body: form });
+  if (p.fail) return p.fail;
+  const { res, body, rttMs } = p;
+  let json = null; try { json = JSON.parse(body); } catch (e) { /* raw kept */ }
+  if (!res.ok) return { outcome: REFUSED.has(res.status) ? 'refused' : 'error', http: res.status, rttMs, raw: json || body };
+  const combined = json && Array.isArray(json.combinedPhrases) ? json.combinedPhrases.map(p => p.text || '').join('') : '';
+  return { http: res.status, rttMs, raw: json || body, status: combined ? 'Success' : 'Empty', text: combined };
+}
+
+// Grades through resolveHeard(), the call startSpeechRecognition() makes at onend.
+function grade(attempt, ep) {
+  const r = attempt.endpoints[ep];
+  if (r.rttMs != null) r.waitMs = (attempt.encodeMs || 0) + r.rttMs;
+  if (r.outcome) return;                              // unreachable / refused / error
+  if (!r.text || !r.text.trim()) { r.outcome = 'no-decode'; return; }
+  const g = APP.resolveHeard(r.text, [], attempt.target);
+  r.graded = g.heard;
+  r.outcome = g.matched ? 'accepted' : 'rejected';
+}
+
+// ── Disposition ─────────────────────────────────────────────────────────────
+function answer(kind) {
+  if (!current || current.disposition) return;
+  current.disposition = kind;
+  $('askCard').style.display = 'none';
+  maybeShow(current);
+}
+$('keep').onclick = () => answer('keep');
+$('discard').onclick = () => answer('discard');
+
+function done(attempt) { return ENDPOINTS.every(ep => attempt.endpoints[ep] && attempt.endpoints[ep].outcome); }
+
+function maybeShow(attempt) {
+  if (attempt !== current || !attempt.disposition) return;   // still waiting on the learner
+  if (!done(attempt)) { $('recStatus').textContent = 'Waiting for Azure…'; return; }
+  $('recStatus').textContent = '';
+  results.push(attempt);
+  saveRun();
+  renderResults(attempt);
+  renderTally();
+}
+
+const OUTCOME_LABEL = {
+  accepted: ['ok', 'ACCEPTED by the app’s matcher'], rejected: ['no', 'REJECTED by the app’s matcher'],
+  'no-decode': ['nul', 'Nothing decoded — excluded from the count'],
+  unreachable: ['nul', 'Could not be reached from this browser — excluded'],
+  refused: ['nul', 'Refused by Azure — excluded'], error: ['nul', 'Error — excluded'],
+};
+
+function esc(s) { return String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c])); }
+
+function renderResults(a) {
+  $('results').innerHTML = ENDPOINTS.map(ep => {
+    const r = a.endpoints[ep] || {};
+    const [cls, label] = OUTCOME_LABEL[r.outcome] || ['nul', r.outcome || '?'];
+    const heard = r.text ? '<div class="heard">' + esc(r.text) + '</div><div class="tjp">' + APP.charsToJyutping(r.text) + '</div>' : '';
+    const why = r.detail ? ' · ' + esc(r.detail) : r.http && r.outcome !== 'accepted' && r.outcome !== 'rejected' && r.outcome !== 'no-decode' ? ' · HTTP ' + r.http : '';
+    const wait = r.waitMs != null ? 'wait ' + (r.waitMs / 1000).toFixed(1) + 's' : r.rttMs != null ? 'round trip ' + (r.rttMs / 1000).toFixed(1) + 's' : '';
+    return '<div class="ep"><div class="meta">' + ep + (wait ? ' · ' + wait : '') + '</div>' + heard
+         + '<div class="verdict ' + cls + '">' + label + '</div><div class="small">' + why + '</div></div>';
+  }).join('') + '<div class="small" style="margin-top:8px">You said: ' + (a.disposition === 'keep' ? 'correct' : 'fluffed — a discard, not counted')
+    + ' · clip ' + (a.seconds != null ? a.seconds + 's' : '?') + ' · peak ' + (a.peak != null ? Math.round(a.peak * 100) + '%' : '?') + '</div>';
+  $('resultCard').style.display = '';
+  $('retry').style.display = a.disposition === 'discard' ? '' : 'none';
+}
+
+$('next').onclick = () => { idx++; saveRun(); showItem(); };
+$('retry').onclick = () => showItem();
+
+// ── Tally ───────────────────────────────────────────────────────────────────
+function rate(list) {
+  const rej = list.filter(r => r.outcome === 'rejected').length;
+  return { n: list.length, rej, pct: list.length ? rej / list.length * 100 : null };
+}
+function cell(r) {
+  if (r.pct === null) return '<td>—</td>';
+  return '<td class="' + (r.pct > BAR_PCT ? 'fail' : 'pass') + '">' + r.rej + '/' + r.n + ' · ' + r.pct.toFixed(0) + '%</td>';
+}
+function summary() {
+  const kept = results.filter(a => a.disposition === 'keep');
+  const out = {};
+  for (const ep of ENDPOINTS) {
+    const per = kept.map(a => ({ bucket: a.bucket, ...(a.endpoints[ep] || {}) }));
+    const valid = per.filter(r => r.outcome === 'accepted' || r.outcome === 'rejected');
+    // Failure counts span EVERY attempt, discards included: whether an endpoint
+    // could be reached, or decoded anything, does not depend on whether the
+    // learner said the sentence well. The reject rates above stay kept-only.
+    const all = results.map(a => a.endpoints[ep] || {});
+    const count = k => all.filter(r => r.outcome === k).length;
+    const waits = valid.map(r => r.waitMs).filter(Number.isFinite).sort((x, y) => x - y);
+    const overall = rate(valid), paused = rate(valid.filter(r => r.bucket === 'paused'));
+    out[ep] = {
+      overall, paused, single: rate(valid.filter(r => r.bucket === 'single')),
+      noDecode: count('no-decode'), unreachable: count('unreachable'), refused: count('refused'), error: count('error'),
+      medianWaitMs: waits.length ? waits[Math.floor(waits.length / 2)] : null,
+      passes: overall.pct !== null && paused.pct !== null && overall.pct <= BAR_PCT && paused.pct <= BAR_PCT,
+    };
+  }
+  return out;
+}
+function renderTally() {
+  const s = summary();
+  const discards = results.filter(a => a.disposition === 'discard').length;
+  const builds = [...new Set(results.map(a => a.build + ' / ' + a.appVersion))];
+  let html = '<table><tr><th></th>' + ENDPOINTS.map(ep => '<th>' + ep + '</th>').join('') + '</tr>'
+    + '<tr><td>Overall rejects</td>' + ENDPOINTS.map(ep => cell(s[ep].overall)).join('') + '</tr>'
+    + '<tr><td>Paused rejects</td>' + ENDPOINTS.map(ep => cell(s[ep].paused)).join('') + '</tr>'
+    + '<tr><td>Single rejects</td>' + ENDPOINTS.map(ep => cell(s[ep].single)).join('') + '</tr>'
+    + '<tr><td>No-decode (all attempts)</td>' + ENDPOINTS.map(ep => '<td>' + s[ep].noDecode + '</td>').join('') + '</tr>'
+    + '<tr><td>Unreachable (all)</td>' + ENDPOINTS.map(ep => '<td>' + s[ep].unreachable + '</td>').join('') + '</tr>'
+    + '<tr><td>Refused / error (all)</td>' + ENDPOINTS.map(ep => '<td>' + s[ep].refused + ' / ' + s[ep].error + '</td>').join('') + '</tr>'
+    + '<tr><td>Median wait</td>' + ENDPOINTS.map(ep => '<td>' + (s[ep].medianWaitMs == null ? '—' : (s[ep].medianWaitMs / 1000).toFixed(1) + 's') + '</td>').join('') + '</tr>'
+    + '</table>';
+  html += '<div class="small" style="margin-top:6px">Attempts ' + results.length + ' · discarded (fluffed) ' + discards
+    + ' · items done ' + Math.min(idx, ITEMS.length) + ' of ' + ITEMS.length + '. The single-clause row is reported, not barred.</div>';
+  if (builds.length > 1) html += '<div class="err small">This run mixes builds: ' + builds.map(esc).join(' | ') + '</div>';
+  $('tallyBody').innerHTML = html;
+}
+
+// ── Export ──────────────────────────────────────────────────────────────────
+$('export').onclick = () => {
+  const withAudio = results.filter(a => audioById[a.id]).length;
+  const payload = {
+    probe: 'listen-probe', build: PROBE_BUILD, appVersion: VERSION, exportedAt: new Date().toISOString(),
+    userAgent: navigator.userAgent,
+    bar: 'per endpoint: false rejects <= ' + BAR_PCT + '% of valid attempts overall AND on the paused (two-clause) items',
+    graded: 'resolveHeard(text, [], target) lifted from app.js; rest grades DisplayText, fast grades combinedPhrases text',
+    items: ITEMS.map(i => ({ sid: i.sid, c: i.c, j: i.j, bucket: i.bucket })), pools: POOLS,
+    summary: summary(),
+    attempts: results.map(a => ({ ...a, audioWavBase64: audioById[a.id] || null })),
+    audioNote: withAudio + ' of ' + results.length + ' attempts carry audio; audio lives in memory only, so attempts from before a reload have none.',
+  };
+  const blob = new Blob([JSON.stringify(payload, null, 1)], { type: 'application/json' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'listen-probe-' + new Date().toISOString().slice(0, 19).replace(/[:T]/g, '-') + '.json';
+  document.body.appendChild(a); a.click(); a.remove();
+  $('exportStatus').textContent = 'Saved ' + a.download + ' (' + (blob.size / 1048576).toFixed(1) + ' MB) to Downloads.';
+};
+
+$('restart').onclick = () => {
+  if (!confirm('Clear this run’s progress and start from item 1? Export first if you want to keep it.')) return;
+  results = []; idx = 0;
+  for (const k of Object.keys(audioById)) delete audioById[k];
+  saveRun(); showItem();
+};
+
+window.addEventListener('pagehide', () => { if (stream) stream.getTracks().forEach(t => t.stop()); });
+
+boot().catch(e => {
+  $('boot').innerHTML = '<b class="fail">Load failed:</b> ' + esc(e.message)
+    + '<br><br>Open this page from the deployed site (https), or serve the repo root over http.';
+});
+</script>
+</body>
+</html>

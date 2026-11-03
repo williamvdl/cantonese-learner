@@ -13,7 +13,7 @@ not a history log. Approved design decisions and whether they were built live in
 > convention (`v121 — <what changed>`) so this file stops being load-bearing on
 > its own.
 
-Last updated: 2026-11-02 · sw.js at v159
+Last updated: 2026-11-03 · sw.js at v159
 
 ## Confirmed live and working
 - **Checkpoint sentence review** (v134, DES-44/45). Third checkpoint activity:
@@ -261,6 +261,33 @@ orphan hues `#B7861E`, `#e4d4ad`, `#8a6716`,
 
 ### Notes worth carrying forward
 
+- **A control that checks the verdict but not each signal lets a dead signal
+  through (2026-11-03).** `tools/azure-pause-check.js` scored each attempt on two
+  signals, the transcript and Azure's reported speech end, with pause 0 as the
+  control. The control was required to come back COVERED, and it did — on the
+  transcript. Its timing already disagreed, on every control, and nothing treated
+  that as a broken signal: REST's `Offset` + `Duration` was about 2.5s whether
+  the pause was 0 or 8 seconds, with the confidence identical to eight decimal
+  places. **A signal that does not move with the variable you control is not
+  measuring it.** Run every signal against the control and against a sweep of
+  the variable before trusting any verdict built on it. Cost here was one
+  INCONCLUSIVE read correctly from the raw export, which is the case for keeping
+  raw responses in every export.
+
+- **Probe output dropped in `tools/fixtures/` breaks a standing check
+  (2026-11-03).** `asr-replay-harness.js` reads EVERY `.json` there as a recorded
+  Web Speech trace, so the gate's results file crashed it (exit 1) — found before
+  it was committed, after the instruction to commit it there had already been
+  given. Probe evidence now goes in `tools/runs/`. A folder a standing check
+  reads wholesale is an input to that check, not a place to keep things.
+
+- **A probe's lifted function list goes stale as silently as a harness's
+  (2026-11-03).** `tools/translate-reject-probe.html` lifts `fuzzyMatch()` but
+  none of the seven things it has called since v144–v152, so it would throw on
+  its first graded attempt — the same shape as `asr-replay-harness.js` failing to
+  load from v144 to v148, below. Nothing runs a probe between uses, so nothing
+  noticed. Before reusing any probe that lifts from `app.js`, load it once.
+
 - **`continuous = true` does not survive a pause on Chrome for Android, and two
   probe comments say it does (2026-11-02).** `tools/asr-probe.html` says
   *"Continuous recognition does not stop by itself"* and `app.js` says *"keep
@@ -268,8 +295,8 @@ orphan hues `#B7861E`, `#e4d4ad`, `#8a6716`,
   6000ms attempts ended themselves at 4.6s and 4.9s. Nobody noticed in August
   because every probe stopped sessions on a timer, so the natural end was never
   the thing being watched. **A setting in the code records what was asked for,
-  not what the platform does.** The work this opens is the NEXT UP item in
-  BACKLOG.md § Features.
+  not what the platform does.** The work this opens is in progress: see the
+  listening cut-off in IN_PROGRESS.md.
 
 - **A missing field interpolates as the string "undefined", which defeats a
   falsy guard (v159).** `speakItem()` returns early on `!id`, but the checkpoint
