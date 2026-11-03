@@ -1,0 +1,3117 @@
+{
+  "check": "azure-pause-check 2 · 2026-11-03",
+  "startedAt": "2026-11-03T07:47:37.952Z",
+  "region": "australiaeast",
+  "node": "v24.18.0",
+  "voice": "zh-HK-WanLungNeural",
+  "leadMs": 300,
+  "tailMs": 600,
+  "pauses": [
+    0,
+    1000,
+    2000,
+    3000,
+    5000,
+    8000
+  ],
+  "scoredWindowMs": [
+    1000,
+    5000
+  ],
+  "fastApiVersion": "2024-11-15",
+  "geminiModel": "gemini-3.5-transcribe",
+  "geminiLanguage": "yue-Hant-HK",
+  "corpusPool": 79,
+  "sentences": [
+    {
+      "sid": "body-t2-s06",
+      "c": "我頭痛，而且有啲發燒。",
+      "j": "ngo5 tau4 tung3, ji4 ce2 jau5 di1 faat3 siu1.",
+      "e": "I have a headache, and also a slight fever.",
+      "clause1": "我頭痛，",
+      "clause2": "而且有啲發燒。",
+      "j1": "ngo5 tau4 tung3",
+      "j2": "ji4 ce2 jau5 di1 faat3 siu1.",
+      "han1": 3,
+      "han2": 6
+    },
+    {
+      "sid": "feelings-t2-s07",
+      "c": "雖然佢有啲懶，但係真係好搞笑。",
+      "j": "seoi1 jin4 keoi5 jau5 di1 laan5, daan6 hai6 zan1 hai6 hou2 gaau2 siu3.",
+      "e": "Although he is a bit lazy, he is genuinely hilarious.",
+      "clause1": "雖然佢有啲懶，",
+      "clause2": "但係真係好搞笑。",
+      "j1": "seoi1 jin4 keoi5 jau5 di1 laan5",
+      "j2": "daan6 hai6 zan1 hai6 hou2 gaau2 siu3.",
+      "han1": 6,
+      "han2": 7
+    },
+    {
+      "sid": "greetings-t2-s07",
+      "c": "好耐冇見，你近排點呀？",
+      "j": "hou2 noi6 mou5 gin3, nei5 gan6 paai2 dim2 aa3?",
+      "e": "Long time no see — how you have been lately?",
+      "clause1": "好耐冇見，",
+      "clause2": "你近排點呀？",
+      "j1": "hou2 noi6 mou5 gin3",
+      "j2": "nei5 gan6 paai2 dim2 aa3?",
+      "han1": 4,
+      "han2": 5
+    },
+    {
+      "sid": "weather-t1-s04",
+      "c": "今日好凍，著多件。",
+      "j": "gam1 jat6 hou2 dung3, zoek3 do1 gin6.",
+      "e": "It's cold today, wear extra layers.",
+      "clause1": "今日好凍，",
+      "clause2": "著多件。",
+      "j1": "gam1 jat6 hou2 dung3",
+      "j2": "zoek3 do1 gin6.",
+      "han1": 4,
+      "han2": 3
+    }
+  ],
+  "attempts": [
+    {
+      "endpoint": "rest",
+      "sid": "body-t2-s06",
+      "pauseMs": 0,
+      "timing": {
+        "c1Start": 300,
+        "c1End": 2075,
+        "c2Start": 2075,
+        "c2End": 4275,
+        "totalMs": 4875
+      },
+      "verdict": "COVERED",
+      "heard": 9,
+      "reachesC2": false,
+      "disagree": true,
+      "text": "我 頭 痛 而 且 有 啲 發 燒",
+      "status": "Success",
+      "http": 200,
+      "rttMs": 1348,
+      "endMs": 2510,
+      "raw": {
+        "RecognitionStatus": "Success",
+        "Offset": 5500000,
+        "Duration": 19600000,
+        "DisplayText": "我頭痛。而且有啲發燒。",
+        "NBest": [
+          {
+            "Confidence": 0.85115457,
+            "Lexical": "我 頭 痛 而 且 有 啲 發 燒",
+            "ITN": "我 頭 痛 而 且 有 啲 發 燒",
+            "MaskedITN": "我頭痛 而且有啲發燒",
+            "Display": "我頭痛。 而且有啲發燒。"
+          }
+        ]
+      },
+      "at": "2026-11-03T07:47:41.485Z"
+    },
+    {
+      "endpoint": "fast",
+      "sid": "body-t2-s06",
+      "pauseMs": 0,
+      "timing": {
+        "c1Start": 300,
+        "c1End": 2075,
+        "c2Start": 2075,
+        "c2End": 4275,
+        "totalMs": 4875
+      },
+      "verdict": "COVERED",
+      "heard": 9,
+      "reachesC2": true,
+      "disagree": false,
+      "text": "我頭痛，而且有啲發燒。",
+      "status": "Success",
+      "http": 200,
+      "rttMs": 815,
+      "endMs": 3600,
+      "phraseCount": 1,
+      "raw": {
+        "durationMilliseconds": 4875,
+        "combinedPhrases": [
+          {
+            "text": "我頭痛，而且有啲發燒。"
+          }
+        ],
+        "phrases": [
+          {
+            "offsetMilliseconds": 400,
+            "durationMilliseconds": 3200,
+            "text": "我頭痛，而且有啲發燒。",
+            "words": [
+              {
+                "text": "我",
+                "offsetMilliseconds": 400,
+                "durationMilliseconds": 320
+              },
+              {
+                "text": "頭",
+                "offsetMilliseconds": 720,
+                "durationMilliseconds": 240
+              },
+              {
+                "text": "痛，",
+                "offsetMilliseconds": 960,
+                "durationMilliseconds": 1280
+              },
+              {
+                "text": "而",
+                "offsetMilliseconds": 2240,
+                "durationMilliseconds": 240
+              },
+              {
+                "text": "且",
+                "offsetMilliseconds": 2480,
+                "durationMilliseconds": 160
+              },
+              {
+                "text": "有",
+                "offsetMilliseconds": 2640,
+                "durationMilliseconds": 160
+              },
+              {
+                "text": "啲",
+                "offsetMilliseconds": 2800,
+                "durationMilliseconds": 160
+              },
+              {
+                "text": "發",
+                "offsetMilliseconds": 2960,
+                "durationMilliseconds": 240
+              },
+              {
+                "text": "燒。",
+                "offsetMilliseconds": 3200,
+                "durationMilliseconds": 400
+              }
+            ],
+            "locale": "zh-HK",
+            "confidence": 0.99343026
+          }
+        ]
+      },
+      "at": "2026-11-03T07:47:42.301Z"
+    },
+    {
+      "endpoint": "rest",
+      "sid": "body-t2-s06",
+      "pauseMs": 1000,
+      "timing": {
+        "c1Start": 300,
+        "c1End": 2075,
+        "c2Start": 3075,
+        "c2End": 5275,
+        "totalMs": 5875
+      },
+      "verdict": "COVERED",
+      "heard": 9,
+      "reachesC2": false,
+      "disagree": true,
+      "text": "我 頭 痛 而 且 有 啲 發 燒",
+      "status": "Success",
+      "http": 200,
+      "rttMs": 1226,
+      "endMs": 2550,
+      "raw": {
+        "RecognitionStatus": "Success",
+        "Offset": 5500000,
+        "Duration": 20000000,
+        "DisplayText": "我頭痛。而且有啲發燒。",
+        "NBest": [
+          {
+            "Confidence": 0.85115457,
+            "Lexical": "我 頭 痛 而 且 有 啲 發 燒",
+            "ITN": "我 頭 痛 而 且 有 啲 發 燒",
+            "MaskedITN": "我頭痛 而且有啲發燒",
+            "Display": "我頭痛。 而且有啲發燒。"
+          }
+        ]
+      },
+      "at": "2026-11-03T07:47:43.528Z"
+    },
+    {
+      "endpoint": "fast",
+      "sid": "body-t2-s06",
+      "pauseMs": 1000,
+      "timing": {
+        "c1Start": 300,
+        "c1End": 2075,
+        "c2Start": 3075,
+        "c2End": 5275,
+        "totalMs": 5875
+      },
+      "verdict": "COVERED",
+      "heard": 9,
+      "reachesC2": true,
+      "disagree": false,
+      "text": "我頭痛，而且有啲發燒。",
+      "status": "Success",
+      "http": 200,
+      "rttMs": 506,
+      "endMs": 4560,
+      "phraseCount": 1,
+      "raw": {
+        "durationMilliseconds": 5875,
+        "combinedPhrases": [
+          {
+            "text": "我頭痛，而且有啲發燒。"
+          }
+        ],
+        "phrases": [
+          {
+            "offsetMilliseconds": 400,
+            "durationMilliseconds": 4160,
+            "text": "我頭痛，而且有啲發燒。",
+            "words": [
+              {
+                "text": "我",
+                "offsetMilliseconds": 400,
+                "durationMilliseconds": 320
+              },
+              {
+                "text": "頭",
+                "offsetMilliseconds": 720,
+                "durationMilliseconds": 240
+              },
+              {
+                "text": "痛，",
+                "offsetMilliseconds": 960,
+                "durationMilliseconds": 2320
+              },
+              {
+                "text": "而",
+                "offsetMilliseconds": 3280,
+                "durationMilliseconds": 160
+              },
+              {
+                "text": "且",
+                "offsetMilliseconds": 3440,
+                "durationMilliseconds": 240
+              },
+              {
+                "text": "有",
+                "offsetMilliseconds": 3680,
+                "durationMilliseconds": 160
+              },
+              {
+                "text": "啲",
+                "offsetMilliseconds": 3840,
+                "durationMilliseconds": 160
+              },
+              {
+                "text": "發",
+                "offsetMilliseconds": 4000,
+                "durationMilliseconds": 160
+              },
+              {
+                "text": "燒。",
+                "offsetMilliseconds": 4160,
+                "durationMilliseconds": 400
+              }
+            ],
+            "locale": "zh-HK",
+            "confidence": 0.99523425
+          }
+        ]
+      },
+      "at": "2026-11-03T07:47:44.036Z"
+    },
+    {
+      "endpoint": "rest",
+      "sid": "body-t2-s06",
+      "pauseMs": 2000,
+      "timing": {
+        "c1Start": 300,
+        "c1End": 2075,
+        "c2Start": 4075,
+        "c2End": 6275,
+        "totalMs": 6875
+      },
+      "verdict": "COVERED",
+      "heard": 9,
+      "reachesC2": false,
+      "disagree": true,
+      "text": "我 頭 痛 而 且 有 啲 發 燒",
+      "status": "Success",
+      "http": 200,
+      "rttMs": 1424,
+      "endMs": 2550,
+      "raw": {
+        "RecognitionStatus": "Success",
+        "Offset": 5500000,
+        "Duration": 20000000,
+        "DisplayText": "我頭痛。而且有啲發燒。",
+        "NBest": [
+          {
+            "Confidence": 0.85115457,
+            "Lexical": "我 頭 痛 而 且 有 啲 發 燒",
+            "ITN": "我 頭 痛 而 且 有 啲 發 燒",
+            "MaskedITN": "我頭痛 而且有啲發燒",
+            "Display": "我頭痛。 而且有啲發燒。"
+          }
+        ]
+      },
+      "at": "2026-11-03T07:47:45.461Z"
+    },
+    {
+      "endpoint": "fast",
+      "sid": "body-t2-s06",
+      "pauseMs": 2000,
+      "timing": {
+        "c1Start": 300,
+        "c1End": 2075,
+        "c2Start": 4075,
+        "c2End": 6275,
+        "totalMs": 6875
+      },
+      "verdict": "COVERED",
+      "heard": 9,
+      "reachesC2": true,
+      "disagree": false,
+      "text": "我頭痛，而且有啲發燒。",
+      "status": "Success",
+      "http": 200,
+      "rttMs": 494,
+      "endMs": 5600,
+      "phraseCount": 1,
+      "raw": {
+        "durationMilliseconds": 6875,
+        "combinedPhrases": [
+          {
+            "text": "我頭痛，而且有啲發燒。"
+          }
+        ],
+        "phrases": [
+          {
+            "offsetMilliseconds": 400,
+            "durationMilliseconds": 5200,
+            "text": "我頭痛，而且有啲發燒。",
+            "words": [
+              {
+                "text": "我",
+                "offsetMilliseconds": 400,
+                "durationMilliseconds": 320
+              },
+              {
+                "text": "頭",
+                "offsetMilliseconds": 720,
+                "durationMilliseconds": 240
+              },
+              {
+                "text": "痛，",
+                "offsetMilliseconds": 960,
+                "durationMilliseconds": 3280
+              },
+              {
+                "text": "而",
+                "offsetMilliseconds": 4240,
+                "durationMilliseconds": 240
+              },
+              {
+                "text": "且",
+                "offsetMilliseconds": 4480,
+                "durationMilliseconds": 160
+              },
+              {
+                "text": "有",
+                "offsetMilliseconds": 4640,
+                "durationMilliseconds": 160
+              },
+              {
+                "text": "啲",
+                "offsetMilliseconds": 4800,
+                "durationMilliseconds": 160
+              },
+              {
+                "text": "發",
+                "offsetMilliseconds": 4960,
+                "durationMilliseconds": 240
+              },
+              {
+                "text": "燒。",
+                "offsetMilliseconds": 5200,
+                "durationMilliseconds": 400
+              }
+            ],
+            "locale": "zh-HK",
+            "confidence": 0.9956572
+          }
+        ]
+      },
+      "at": "2026-11-03T07:47:45.955Z"
+    },
+    {
+      "endpoint": "rest",
+      "sid": "body-t2-s06",
+      "pauseMs": 3000,
+      "timing": {
+        "c1Start": 300,
+        "c1End": 2075,
+        "c2Start": 5075,
+        "c2End": 7275,
+        "totalMs": 7875
+      },
+      "verdict": "COVERED",
+      "heard": 9,
+      "reachesC2": false,
+      "disagree": true,
+      "text": "我 頭 痛 而 且 有 啲 發 燒",
+      "status": "Success",
+      "http": 200,
+      "rttMs": 1568,
+      "endMs": 2510,
+      "raw": {
+        "RecognitionStatus": "Success",
+        "Offset": 5500000,
+        "Duration": 19600000,
+        "DisplayText": "我頭痛。而且有啲發燒。",
+        "NBest": [
+          {
+            "Confidence": 0.85115457,
+            "Lexical": "我 頭 痛 而 且 有 啲 發 燒",
+            "ITN": "我 頭 痛 而 且 有 啲 發 燒",
+            "MaskedITN": "我頭痛 而且有啲發燒",
+            "Display": "我頭痛。 而且有啲發燒。"
+          }
+        ]
+      },
+      "at": "2026-11-03T07:47:47.524Z"
+    },
+    {
+      "endpoint": "fast",
+      "sid": "body-t2-s06",
+      "pauseMs": 3000,
+      "timing": {
+        "c1Start": 300,
+        "c1End": 2075,
+        "c2Start": 5075,
+        "c2End": 7275,
+        "totalMs": 7875
+      },
+      "verdict": "COVERED",
+      "heard": 9,
+      "reachesC2": true,
+      "disagree": false,
+      "text": "我頭痛，而且有啲發燒。",
+      "status": "Success",
+      "http": 200,
+      "rttMs": 295,
+      "endMs": 6640,
+      "phraseCount": 1,
+      "raw": {
+        "durationMilliseconds": 7875,
+        "combinedPhrases": [
+          {
+            "text": "我頭痛，而且有啲發燒。"
+          }
+        ],
+        "phrases": [
+          {
+            "offsetMilliseconds": 400,
+            "durationMilliseconds": 6240,
+            "text": "我頭痛，而且有啲發燒。",
+            "words": [
+              {
+                "text": "我",
+                "offsetMilliseconds": 400,
+                "durationMilliseconds": 320
+              },
+              {
+                "text": "頭",
+                "offsetMilliseconds": 720,
+                "durationMilliseconds": 240
+              },
+              {
+                "text": "痛，",
+                "offsetMilliseconds": 960,
+                "durationMilliseconds": 4320
+              },
+              {
+                "text": "而",
+                "offsetMilliseconds": 5280,
+                "durationMilliseconds": 160
+              },
+              {
+                "text": "且",
+                "offsetMilliseconds": 5440,
+                "durationMilliseconds": 240
+              },
+              {
+                "text": "有",
+                "offsetMilliseconds": 5680,
+                "durationMilliseconds": 160
+              },
+              {
+                "text": "啲",
+                "offsetMilliseconds": 5840,
+                "durationMilliseconds": 160
+              },
+              {
+                "text": "發",
+                "offsetMilliseconds": 6000,
+                "durationMilliseconds": 160
+              },
+              {
+                "text": "燒。",
+                "offsetMilliseconds": 6160,
+                "durationMilliseconds": 480
+              }
+            ],
+            "locale": "zh-HK",
+            "confidence": 0.99595344
+          }
+        ]
+      },
+      "at": "2026-11-03T07:47:47.820Z"
+    },
+    {
+      "endpoint": "rest",
+      "sid": "body-t2-s06",
+      "pauseMs": 5000,
+      "timing": {
+        "c1Start": 300,
+        "c1End": 2075,
+        "c2Start": 7075,
+        "c2End": 9275,
+        "totalMs": 9875
+      },
+      "verdict": "COVERED",
+      "heard": 9,
+      "reachesC2": false,
+      "disagree": true,
+      "text": "我 頭 痛 而 且 有 啲 發 燒",
+      "status": "Success",
+      "http": 200,
+      "rttMs": 1839,
+      "endMs": 2550,
+      "raw": {
+        "RecognitionStatus": "Success",
+        "Offset": 5500000,
+        "Duration": 20000000,
+        "DisplayText": "我頭痛。而且有啲發燒。",
+        "NBest": [
+          {
+            "Confidence": 0.85115457,
+            "Lexical": "我 頭 痛 而 且 有 啲 發 燒",
+            "ITN": "我 頭 痛 而 且 有 啲 發 燒",
+            "MaskedITN": "我頭痛 而且有啲發燒",
+            "Display": "我頭痛。 而且有啲發燒。"
+          }
+        ]
+      },
+      "at": "2026-11-03T07:47:49.661Z"
+    },
+    {
+      "endpoint": "fast",
+      "sid": "body-t2-s06",
+      "pauseMs": 5000,
+      "timing": {
+        "c1Start": 300,
+        "c1End": 2075,
+        "c2Start": 7075,
+        "c2End": 9275,
+        "totalMs": 9875
+      },
+      "verdict": "COVERED",
+      "heard": 9,
+      "reachesC2": true,
+      "disagree": false,
+      "text": "我頭痛，而且有啲發燒。",
+      "status": "Success",
+      "http": 200,
+      "rttMs": 631,
+      "endMs": 8560,
+      "phraseCount": 1,
+      "raw": {
+        "durationMilliseconds": 9875,
+        "combinedPhrases": [
+          {
+            "text": "我頭痛，而且有啲發燒。"
+          }
+        ],
+        "phrases": [
+          {
+            "offsetMilliseconds": 400,
+            "durationMilliseconds": 8160,
+            "text": "我頭痛，而且有啲發燒。",
+            "words": [
+              {
+                "text": "我",
+                "offsetMilliseconds": 400,
+                "durationMilliseconds": 320
+              },
+              {
+                "text": "頭",
+                "offsetMilliseconds": 720,
+                "durationMilliseconds": 240
+              },
+              {
+                "text": "痛，",
+                "offsetMilliseconds": 960,
+                "durationMilliseconds": 1350
+              },
+              {
+                "text": "而",
+                "offsetMilliseconds": 7280,
+                "durationMilliseconds": 160
+              },
+              {
+                "text": "且",
+                "offsetMilliseconds": 7440,
+                "durationMilliseconds": 240
+              },
+              {
+                "text": "有",
+                "offsetMilliseconds": 7680,
+                "durationMilliseconds": 160
+              },
+              {
+                "text": "啲",
+                "offsetMilliseconds": 7840,
+                "durationMilliseconds": 160
+              },
+              {
+                "text": "發",
+                "offsetMilliseconds": 8000,
+                "durationMilliseconds": 160
+              },
+              {
+                "text": "燒。",
+                "offsetMilliseconds": 8160,
+                "durationMilliseconds": 400
+              }
+            ],
+            "locale": "zh-HK",
+            "confidence": 0.99523425
+          }
+        ]
+      },
+      "at": "2026-11-03T07:47:50.292Z"
+    },
+    {
+      "endpoint": "rest",
+      "sid": "body-t2-s06",
+      "pauseMs": 8000,
+      "timing": {
+        "c1Start": 300,
+        "c1End": 2075,
+        "c2Start": 10075,
+        "c2End": 12275,
+        "totalMs": 12875
+      },
+      "verdict": "COVERED",
+      "heard": 9,
+      "reachesC2": false,
+      "disagree": true,
+      "text": "我 頭 痛 而 且 有 啲 發 燒",
+      "status": "Success",
+      "http": 200,
+      "rttMs": 2332,
+      "endMs": 2550,
+      "raw": {
+        "RecognitionStatus": "Success",
+        "Offset": 5500000,
+        "Duration": 20000000,
+        "DisplayText": "我頭痛。而且有啲發燒。",
+        "NBest": [
+          {
+            "Confidence": 0.85115457,
+            "Lexical": "我 頭 痛 而 且 有 啲 發 燒",
+            "ITN": "我 頭 痛 而 且 有 啲 發 燒",
+            "MaskedITN": "我頭痛 而且有啲發燒",
+            "Display": "我頭痛。 而且有啲發燒。"
+          }
+        ]
+      },
+      "at": "2026-11-03T07:47:52.625Z"
+    },
+    {
+      "endpoint": "fast",
+      "sid": "body-t2-s06",
+      "pauseMs": 8000,
+      "timing": {
+        "c1Start": 300,
+        "c1End": 2075,
+        "c2Start": 10075,
+        "c2End": 12275,
+        "totalMs": 12875
+      },
+      "verdict": "COVERED",
+      "heard": 9,
+      "reachesC2": true,
+      "disagree": false,
+      "text": "我頭痛，而且有啲發燒。",
+      "status": "Success",
+      "http": 200,
+      "rttMs": 331,
+      "endMs": 11560,
+      "phraseCount": 1,
+      "raw": {
+        "durationMilliseconds": 12875,
+        "combinedPhrases": [
+          {
+            "text": "我頭痛，而且有啲發燒。"
+          }
+        ],
+        "phrases": [
+          {
+            "offsetMilliseconds": 400,
+            "durationMilliseconds": 11160,
+            "text": "我頭痛，而且有啲發燒。",
+            "words": [
+              {
+                "text": "我",
+                "offsetMilliseconds": 400,
+                "durationMilliseconds": 320
+              },
+              {
+                "text": "頭",
+                "offsetMilliseconds": 720,
+                "durationMilliseconds": 240
+              },
+              {
+                "text": "痛，",
+                "offsetMilliseconds": 960,
+                "durationMilliseconds": 1350
+              },
+              {
+                "text": "而",
+                "offsetMilliseconds": 10280,
+                "durationMilliseconds": 160
+              },
+              {
+                "text": "且",
+                "offsetMilliseconds": 10440,
+                "durationMilliseconds": 240
+              },
+              {
+                "text": "有",
+                "offsetMilliseconds": 10680,
+                "durationMilliseconds": 160
+              },
+              {
+                "text": "啲",
+                "offsetMilliseconds": 10840,
+                "durationMilliseconds": 160
+              },
+              {
+                "text": "發",
+                "offsetMilliseconds": 11000,
+                "durationMilliseconds": 160
+              },
+              {
+                "text": "燒。",
+                "offsetMilliseconds": 11160,
+                "durationMilliseconds": 400
+              }
+            ],
+            "locale": "zh-HK",
+            "confidence": 0.99523425
+          }
+        ]
+      },
+      "at": "2026-11-03T07:47:52.957Z"
+    },
+    {
+      "endpoint": "rest",
+      "sid": "feelings-t2-s07",
+      "pauseMs": 0,
+      "timing": {
+        "c1Start": 300,
+        "c1End": 2600,
+        "c2Start": 2600,
+        "c2End": 5062.5,
+        "totalMs": 5662.5
+      },
+      "verdict": "COVERED",
+      "heard": 13,
+      "reachesC2": false,
+      "disagree": true,
+      "text": "雖 然 佢 有 啲 懶 但 係 真 係 好 搞 笑",
+      "status": "Success",
+      "http": 200,
+      "rttMs": 1184,
+      "endMs": 3310,
+      "raw": {
+        "RecognitionStatus": "Success",
+        "Offset": 5500000,
+        "Duration": 27600000,
+        "DisplayText": "雖然佢有啲懶？但係真係好搞笑。",
+        "NBest": [
+          {
+            "Confidence": 0.85731226,
+            "Lexical": "雖 然 佢 有 啲 懶 但 係 真 係 好 搞 笑",
+            "ITN": "雖 然 佢 有 啲 懶 但 係 真 係 好 搞 笑",
+            "MaskedITN": "雖然佢有啲懶 但係真係好搞笑",
+            "Display": "雖然佢有啲懶？ 但係真係好搞笑。"
+          }
+        ]
+      },
+      "at": "2026-11-03T07:47:55.634Z"
+    },
+    {
+      "endpoint": "fast",
+      "sid": "feelings-t2-s07",
+      "pauseMs": 0,
+      "timing": {
+        "c1Start": 300,
+        "c1End": 2600,
+        "c2Start": 2600,
+        "c2End": 5062.5,
+        "totalMs": 5662.5
+      },
+      "verdict": "COVERED",
+      "heard": 13,
+      "reachesC2": true,
+      "disagree": false,
+      "text": "雖然佢有啲懶，但係真係好攪笑。",
+      "status": "Success",
+      "http": 200,
+      "rttMs": 558,
+      "endMs": 4400,
+      "phraseCount": 1,
+      "raw": {
+        "durationMilliseconds": 5662,
+        "combinedPhrases": [
+          {
+            "text": "雖然佢有啲懶，但係真係好攪笑。"
+          }
+        ],
+        "phrases": [
+          {
+            "offsetMilliseconds": 480,
+            "durationMilliseconds": 3920,
+            "text": "雖然佢有啲懶，但係真係好攪笑。",
+            "words": [
+              {
+                "text": "雖",
+                "offsetMilliseconds": 480,
+                "durationMilliseconds": 240
+              },
+              {
+                "text": "然",
+                "offsetMilliseconds": 720,
+                "durationMilliseconds": 240
+              },
+              {
+                "text": "佢",
+                "offsetMilliseconds": 960,
+                "durationMilliseconds": 160
+              },
+              {
+                "text": "有",
+                "offsetMilliseconds": 1120,
+                "durationMilliseconds": 160
+              },
+              {
+                "text": "啲",
+                "offsetMilliseconds": 1280,
+                "durationMilliseconds": 160
+              },
+              {
+                "text": "懶，",
+                "offsetMilliseconds": 1440,
+                "durationMilliseconds": 1040
+              },
+              {
+                "text": "但",
+                "offsetMilliseconds": 2480,
+                "durationMilliseconds": 480
+              },
+              {
+                "text": "係",
+                "offsetMilliseconds": 2960,
+                "durationMilliseconds": 160
+              },
+              {
+                "text": "真",
+                "offsetMilliseconds": 3120,
+                "durationMilliseconds": 240
+              },
+              {
+                "text": "係",
+                "offsetMilliseconds": 3360,
+                "durationMilliseconds": 160
+              },
+              {
+                "text": "好",
+                "offsetMilliseconds": 3520,
+                "durationMilliseconds": 240
+              },
+              {
+                "text": "攪",
+                "offsetMilliseconds": 3760,
+                "durationMilliseconds": 160
+              },
+              {
+                "text": "笑。",
+                "offsetMilliseconds": 3920,
+                "durationMilliseconds": 480
+              }
+            ],
+            "locale": "zh-HK",
+            "confidence": 0.89818704
+          }
+        ]
+      },
+      "at": "2026-11-03T07:47:56.193Z"
+    },
+    {
+      "endpoint": "rest",
+      "sid": "feelings-t2-s07",
+      "pauseMs": 1000,
+      "timing": {
+        "c1Start": 300,
+        "c1End": 2600,
+        "c2Start": 3600,
+        "c2End": 6062.5,
+        "totalMs": 6662.5
+      },
+      "verdict": "COVERED",
+      "heard": 13,
+      "reachesC2": false,
+      "disagree": true,
+      "text": "雖 然 佢 有 啲 懶 但 係 真 係 好 搞 笑",
+      "status": "Success",
+      "http": 200,
+      "rttMs": 1341,
+      "endMs": 3310,
+      "raw": {
+        "RecognitionStatus": "Success",
+        "Offset": 5500000,
+        "Duration": 27600000,
+        "DisplayText": "雖然佢有啲懶？但係真係好搞笑。",
+        "NBest": [
+          {
+            "Confidence": 0.85731226,
+            "Lexical": "雖 然 佢 有 啲 懶 但 係 真 係 好 搞 笑",
+            "ITN": "雖 然 佢 有 啲 懶 但 係 真 係 好 搞 笑",
+            "MaskedITN": "雖然佢有啲懶 但係真係好搞笑",
+            "Display": "雖然佢有啲懶？ 但係真係好搞笑。"
+          }
+        ]
+      },
+      "at": "2026-11-03T07:47:57.535Z"
+    },
+    {
+      "endpoint": "fast",
+      "sid": "feelings-t2-s07",
+      "pauseMs": 1000,
+      "timing": {
+        "c1Start": 300,
+        "c1End": 2600,
+        "c2Start": 3600,
+        "c2End": 6062.5,
+        "totalMs": 6662.5
+      },
+      "verdict": "COVERED",
+      "heard": 13,
+      "reachesC2": true,
+      "disagree": false,
+      "text": "雖然佢有啲懶，但係真係好攪笑。",
+      "status": "Success",
+      "http": 200,
+      "rttMs": 521,
+      "endMs": 5440,
+      "phraseCount": 1,
+      "raw": {
+        "durationMilliseconds": 6662,
+        "combinedPhrases": [
+          {
+            "text": "雖然佢有啲懶，但係真係好攪笑。"
+          }
+        ],
+        "phrases": [
+          {
+            "offsetMilliseconds": 480,
+            "durationMilliseconds": 4960,
+            "text": "雖然佢有啲懶，但係真係好攪笑。",
+            "words": [
+              {
+                "text": "雖",
+                "offsetMilliseconds": 480,
+                "durationMilliseconds": 240
+              },
+              {
+                "text": "然",
+                "offsetMilliseconds": 720,
+                "durationMilliseconds": 240
+              },
+              {
+                "text": "佢",
+                "offsetMilliseconds": 960,
+                "durationMilliseconds": 160
+              },
+              {
+                "text": "有",
+                "offsetMilliseconds": 1120,
+                "durationMilliseconds": 160
+              },
+              {
+                "text": "啲",
+                "offsetMilliseconds": 1280,
+                "durationMilliseconds": 160
+              },
+              {
+                "text": "懶，",
+                "offsetMilliseconds": 1440,
+                "durationMilliseconds": 2080
+              },
+              {
+                "text": "但",
+                "offsetMilliseconds": 3520,
+                "durationMilliseconds": 480
+              },
+              {
+                "text": "係",
+                "offsetMilliseconds": 4000,
+                "durationMilliseconds": 160
+              },
+              {
+                "text": "真",
+                "offsetMilliseconds": 4160,
+                "durationMilliseconds": 240
+              },
+              {
+                "text": "係",
+                "offsetMilliseconds": 4400,
+                "durationMilliseconds": 160
+              },
+              {
+                "text": "好",
+                "offsetMilliseconds": 4560,
+                "durationMilliseconds": 160
+              },
+              {
+                "text": "攪",
+                "offsetMilliseconds": 4720,
+                "durationMilliseconds": 240
+              },
+              {
+                "text": "笑。",
+                "offsetMilliseconds": 4960,
+                "durationMilliseconds": 480
+              }
+            ],
+            "locale": "zh-HK",
+            "confidence": 0.9118242
+          }
+        ]
+      },
+      "at": "2026-11-03T07:47:58.056Z"
+    },
+    {
+      "endpoint": "rest",
+      "sid": "feelings-t2-s07",
+      "pauseMs": 2000,
+      "timing": {
+        "c1Start": 300,
+        "c1End": 2600,
+        "c2Start": 4600,
+        "c2End": 7062.5,
+        "totalMs": 7662.5
+      },
+      "verdict": "COVERED",
+      "heard": 13,
+      "reachesC2": false,
+      "disagree": true,
+      "text": "雖 然 佢 有 啲 懶 但 係 真 係 好 搞 笑",
+      "status": "Success",
+      "http": 200,
+      "rttMs": 1549,
+      "endMs": 3310,
+      "raw": {
+        "RecognitionStatus": "Success",
+        "Offset": 5500000,
+        "Duration": 27600000,
+        "DisplayText": "雖然佢有啲懶？但係真係好搞笑。",
+        "NBest": [
+          {
+            "Confidence": 0.85731226,
+            "Lexical": "雖 然 佢 有 啲 懶 但 係 真 係 好 搞 笑",
+            "ITN": "雖 然 佢 有 啲 懶 但 係 真 係 好 搞 笑",
+            "MaskedITN": "雖然佢有啲懶 但係真係好搞笑",
+            "Display": "雖然佢有啲懶？ 但係真係好搞笑。"
+          }
+        ]
+      },
+      "at": "2026-11-03T07:47:59.607Z"
+    },
+    {
+      "endpoint": "fast",
+      "sid": "feelings-t2-s07",
+      "pauseMs": 2000,
+      "timing": {
+        "c1Start": 300,
+        "c1End": 2600,
+        "c2Start": 4600,
+        "c2End": 7062.5,
+        "totalMs": 7662.5
+      },
+      "verdict": "COVERED",
+      "heard": 13,
+      "reachesC2": true,
+      "disagree": false,
+      "text": "雖然佢有啲懶，但係真係好攪笑。",
+      "status": "Success",
+      "http": 200,
+      "rttMs": 612,
+      "endMs": 6400,
+      "phraseCount": 1,
+      "raw": {
+        "durationMilliseconds": 7662,
+        "combinedPhrases": [
+          {
+            "text": "雖然佢有啲懶，但係真係好攪笑。"
+          }
+        ],
+        "phrases": [
+          {
+            "offsetMilliseconds": 480,
+            "durationMilliseconds": 5920,
+            "text": "雖然佢有啲懶，但係真係好攪笑。",
+            "words": [
+              {
+                "text": "雖",
+                "offsetMilliseconds": 480,
+                "durationMilliseconds": 240
+              },
+              {
+                "text": "然",
+                "offsetMilliseconds": 720,
+                "durationMilliseconds": 240
+              },
+              {
+                "text": "佢",
+                "offsetMilliseconds": 960,
+                "durationMilliseconds": 160
+              },
+              {
+                "text": "有",
+                "offsetMilliseconds": 1120,
+                "durationMilliseconds": 160
+              },
+              {
+                "text": "啲",
+                "offsetMilliseconds": 1280,
+                "durationMilliseconds": 160
+              },
+              {
+                "text": "懶，",
+                "offsetMilliseconds": 1440,
+                "durationMilliseconds": 3040
+              },
+              {
+                "text": "但",
+                "offsetMilliseconds": 4480,
+                "durationMilliseconds": 480
+              },
+              {
+                "text": "係",
+                "offsetMilliseconds": 4960,
+                "durationMilliseconds": 160
+              },
+              {
+                "text": "真",
+                "offsetMilliseconds": 5120,
+                "durationMilliseconds": 240
+              },
+              {
+                "text": "係",
+                "offsetMilliseconds": 5360,
+                "durationMilliseconds": 160
+              },
+              {
+                "text": "好",
+                "offsetMilliseconds": 5520,
+                "durationMilliseconds": 240
+              },
+              {
+                "text": "攪",
+                "offsetMilliseconds": 5760,
+                "durationMilliseconds": 160
+              },
+              {
+                "text": "笑。",
+                "offsetMilliseconds": 5920,
+                "durationMilliseconds": 480
+              }
+            ],
+            "locale": "zh-HK",
+            "confidence": 0.88994503
+          }
+        ]
+      },
+      "at": "2026-11-03T07:48:00.220Z"
+    },
+    {
+      "endpoint": "rest",
+      "sid": "feelings-t2-s07",
+      "pauseMs": 3000,
+      "timing": {
+        "c1Start": 300,
+        "c1End": 2600,
+        "c2Start": 5600,
+        "c2End": 8062.5,
+        "totalMs": 8662.5
+      },
+      "verdict": "COVERED",
+      "heard": 13,
+      "reachesC2": false,
+      "disagree": true,
+      "text": "雖 然 佢 有 啲 懶 但 係 真 係 好 搞 笑",
+      "status": "Success",
+      "http": 200,
+      "rttMs": 1672,
+      "endMs": 3310,
+      "raw": {
+        "RecognitionStatus": "Success",
+        "Offset": 5500000,
+        "Duration": 27600000,
+        "DisplayText": "雖然佢有啲懶？但係真係好搞笑。",
+        "NBest": [
+          {
+            "Confidence": 0.85731226,
+            "Lexical": "雖 然 佢 有 啲 懶 但 係 真 係 好 搞 笑",
+            "ITN": "雖 然 佢 有 啲 懶 但 係 真 係 好 搞 笑",
+            "MaskedITN": "雖然佢有啲懶 但係真係好搞笑",
+            "Display": "雖然佢有啲懶？ 但係真係好搞笑。"
+          }
+        ]
+      },
+      "at": "2026-11-03T07:48:01.892Z"
+    },
+    {
+      "endpoint": "fast",
+      "sid": "feelings-t2-s07",
+      "pauseMs": 3000,
+      "timing": {
+        "c1Start": 300,
+        "c1End": 2600,
+        "c2Start": 5600,
+        "c2End": 8062.5,
+        "totalMs": 8662.5
+      },
+      "verdict": "COVERED",
+      "heard": 13,
+      "reachesC2": true,
+      "disagree": false,
+      "text": "雖然佢有啲懶，但係真係好攪笑。",
+      "status": "Success",
+      "http": 200,
+      "rttMs": 1022,
+      "endMs": 7360,
+      "phraseCount": 1,
+      "raw": {
+        "durationMilliseconds": 8662,
+        "combinedPhrases": [
+          {
+            "text": "雖然佢有啲懶，但係真係好攪笑。"
+          }
+        ],
+        "phrases": [
+          {
+            "offsetMilliseconds": 480,
+            "durationMilliseconds": 6880,
+            "text": "雖然佢有啲懶，但係真係好攪笑。",
+            "words": [
+              {
+                "text": "雖",
+                "offsetMilliseconds": 480,
+                "durationMilliseconds": 240
+              },
+              {
+                "text": "然",
+                "offsetMilliseconds": 720,
+                "durationMilliseconds": 240
+              },
+              {
+                "text": "佢",
+                "offsetMilliseconds": 960,
+                "durationMilliseconds": 160
+              },
+              {
+                "text": "有",
+                "offsetMilliseconds": 1120,
+                "durationMilliseconds": 160
+              },
+              {
+                "text": "啲",
+                "offsetMilliseconds": 1280,
+                "durationMilliseconds": 160
+              },
+              {
+                "text": "懶，",
+                "offsetMilliseconds": 1440,
+                "durationMilliseconds": 4000
+              },
+              {
+                "text": "但",
+                "offsetMilliseconds": 5440,
+                "durationMilliseconds": 560
+              },
+              {
+                "text": "係",
+                "offsetMilliseconds": 6000,
+                "durationMilliseconds": 160
+              },
+              {
+                "text": "真",
+                "offsetMilliseconds": 6160,
+                "durationMilliseconds": 240
+              },
+              {
+                "text": "係",
+                "offsetMilliseconds": 6400,
+                "durationMilliseconds": 160
+              },
+              {
+                "text": "好",
+                "offsetMilliseconds": 6560,
+                "durationMilliseconds": 160
+              },
+              {
+                "text": "攪",
+                "offsetMilliseconds": 6720,
+                "durationMilliseconds": 240
+              },
+              {
+                "text": "笑。",
+                "offsetMilliseconds": 6960,
+                "durationMilliseconds": 400
+              }
+            ],
+            "locale": "zh-HK",
+            "confidence": 0.9155783
+          }
+        ]
+      },
+      "at": "2026-11-03T07:48:02.917Z"
+    },
+    {
+      "endpoint": "rest",
+      "sid": "feelings-t2-s07",
+      "pauseMs": 5000,
+      "timing": {
+        "c1Start": 300,
+        "c1End": 2600,
+        "c2Start": 7600,
+        "c2End": 10062.5,
+        "totalMs": 10662.5
+      },
+      "verdict": "COVERED",
+      "heard": 13,
+      "reachesC2": false,
+      "disagree": true,
+      "text": "雖 然 佢 有 啲 懶 但 係 真 係 好 搞 笑",
+      "status": "Success",
+      "http": 200,
+      "rttMs": 2015,
+      "endMs": 3310,
+      "raw": {
+        "RecognitionStatus": "Success",
+        "Offset": 5500000,
+        "Duration": 27600000,
+        "DisplayText": "雖然佢有啲懶？但係真係好搞笑。",
+        "NBest": [
+          {
+            "Confidence": 0.85731226,
+            "Lexical": "雖 然 佢 有 啲 懶 但 係 真 係 好 搞 笑",
+            "ITN": "雖 然 佢 有 啲 懶 但 係 真 係 好 搞 笑",
+            "MaskedITN": "雖然佢有啲懶 但係真係好搞笑",
+            "Display": "雖然佢有啲懶？ 但係真係好搞笑。"
+          }
+        ]
+      },
+      "at": "2026-11-03T07:48:04.934Z"
+    },
+    {
+      "endpoint": "fast",
+      "sid": "feelings-t2-s07",
+      "pauseMs": 5000,
+      "timing": {
+        "c1Start": 300,
+        "c1End": 2600,
+        "c2Start": 7600,
+        "c2End": 10062.5,
+        "totalMs": 10662.5
+      },
+      "verdict": "COVERED",
+      "heard": 13,
+      "reachesC2": true,
+      "disagree": false,
+      "text": "雖然佢有啲懶，但係真係好攪笑。",
+      "status": "Success",
+      "http": 200,
+      "rttMs": 945,
+      "endMs": 9400,
+      "phraseCount": 1,
+      "raw": {
+        "durationMilliseconds": 10662,
+        "combinedPhrases": [
+          {
+            "text": "雖然佢有啲懶，但係真係好攪笑。"
+          }
+        ],
+        "phrases": [
+          {
+            "offsetMilliseconds": 480,
+            "durationMilliseconds": 8920,
+            "text": "雖然佢有啲懶，但係真係好攪笑。",
+            "words": [
+              {
+                "text": "雖",
+                "offsetMilliseconds": 480,
+                "durationMilliseconds": 240
+              },
+              {
+                "text": "然",
+                "offsetMilliseconds": 720,
+                "durationMilliseconds": 240
+              },
+              {
+                "text": "佢",
+                "offsetMilliseconds": 960,
+                "durationMilliseconds": 160
+              },
+              {
+                "text": "有",
+                "offsetMilliseconds": 1120,
+                "durationMilliseconds": 160
+              },
+              {
+                "text": "啲",
+                "offsetMilliseconds": 1280,
+                "durationMilliseconds": 160
+              },
+              {
+                "text": "懶，",
+                "offsetMilliseconds": 1440,
+                "durationMilliseconds": 1380
+              },
+              {
+                "text": "但",
+                "offsetMilliseconds": 7480,
+                "durationMilliseconds": 480
+              },
+              {
+                "text": "係",
+                "offsetMilliseconds": 7960,
+                "durationMilliseconds": 160
+              },
+              {
+                "text": "真",
+                "offsetMilliseconds": 8120,
+                "durationMilliseconds": 240
+              },
+              {
+                "text": "係",
+                "offsetMilliseconds": 8360,
+                "durationMilliseconds": 160
+              },
+              {
+                "text": "好",
+                "offsetMilliseconds": 8520,
+                "durationMilliseconds": 240
+              },
+              {
+                "text": "攪",
+                "offsetMilliseconds": 8760,
+                "durationMilliseconds": 160
+              },
+              {
+                "text": "笑。",
+                "offsetMilliseconds": 8920,
+                "durationMilliseconds": 480
+              }
+            ],
+            "locale": "zh-HK",
+            "confidence": 0.886394
+          }
+        ]
+      },
+      "at": "2026-11-03T07:48:05.879Z"
+    },
+    {
+      "endpoint": "rest",
+      "sid": "feelings-t2-s07",
+      "pauseMs": 8000,
+      "timing": {
+        "c1Start": 300,
+        "c1End": 2600,
+        "c2Start": 10600,
+        "c2End": 13062.5,
+        "totalMs": 13662.5
+      },
+      "verdict": "COVERED",
+      "heard": 13,
+      "reachesC2": false,
+      "disagree": true,
+      "text": "雖 然 佢 有 啲 懶 但 係 真 係 好 搞 笑",
+      "status": "Success",
+      "http": 200,
+      "rttMs": 2536,
+      "endMs": 3310,
+      "raw": {
+        "RecognitionStatus": "Success",
+        "Offset": 5500000,
+        "Duration": 27600000,
+        "DisplayText": "雖然佢有啲懶？但係真係好搞笑。",
+        "NBest": [
+          {
+            "Confidence": 0.85731226,
+            "Lexical": "雖 然 佢 有 啲 懶 但 係 真 係 好 搞 笑",
+            "ITN": "雖 然 佢 有 啲 懶 但 係 真 係 好 搞 笑",
+            "MaskedITN": "雖然佢有啲懶 但係真係好搞笑",
+            "Display": "雖然佢有啲懶？ 但係真係好搞笑。"
+          }
+        ]
+      },
+      "at": "2026-11-03T07:48:08.416Z"
+    },
+    {
+      "endpoint": "fast",
+      "sid": "feelings-t2-s07",
+      "pauseMs": 8000,
+      "timing": {
+        "c1Start": 300,
+        "c1End": 2600,
+        "c2Start": 10600,
+        "c2End": 13062.5,
+        "totalMs": 13662.5
+      },
+      "verdict": "COVERED",
+      "heard": 13,
+      "reachesC2": true,
+      "disagree": false,
+      "text": "雖然佢有啲懶，但係真係好攪笑。",
+      "status": "Success",
+      "http": 200,
+      "rttMs": 1120,
+      "endMs": 12410,
+      "phraseCount": 1,
+      "raw": {
+        "durationMilliseconds": 13662,
+        "combinedPhrases": [
+          {
+            "text": "雖然佢有啲懶，但係真係好攪笑。"
+          }
+        ],
+        "phrases": [
+          {
+            "offsetMilliseconds": 480,
+            "durationMilliseconds": 11930,
+            "text": "雖然佢有啲懶，但係真係好攪笑。",
+            "words": [
+              {
+                "text": "雖",
+                "offsetMilliseconds": 480,
+                "durationMilliseconds": 240
+              },
+              {
+                "text": "然",
+                "offsetMilliseconds": 720,
+                "durationMilliseconds": 240
+              },
+              {
+                "text": "佢",
+                "offsetMilliseconds": 960,
+                "durationMilliseconds": 160
+              },
+              {
+                "text": "有",
+                "offsetMilliseconds": 1120,
+                "durationMilliseconds": 160
+              },
+              {
+                "text": "啲",
+                "offsetMilliseconds": 1280,
+                "durationMilliseconds": 160
+              },
+              {
+                "text": "懶，",
+                "offsetMilliseconds": 1440,
+                "durationMilliseconds": 1380
+              },
+              {
+                "text": "但",
+                "offsetMilliseconds": 10490,
+                "durationMilliseconds": 480
+              },
+              {
+                "text": "係",
+                "offsetMilliseconds": 10970,
+                "durationMilliseconds": 160
+              },
+              {
+                "text": "真",
+                "offsetMilliseconds": 11130,
+                "durationMilliseconds": 240
+              },
+              {
+                "text": "係",
+                "offsetMilliseconds": 11370,
+                "durationMilliseconds": 160
+              },
+              {
+                "text": "好",
+                "offsetMilliseconds": 11530,
+                "durationMilliseconds": 240
+              },
+              {
+                "text": "攪",
+                "offsetMilliseconds": 11770,
+                "durationMilliseconds": 160
+              },
+              {
+                "text": "笑。",
+                "offsetMilliseconds": 11930,
+                "durationMilliseconds": 480
+              }
+            ],
+            "locale": "zh-HK",
+            "confidence": 0.877643
+          }
+        ]
+      },
+      "at": "2026-11-03T07:48:09.537Z"
+    },
+    {
+      "endpoint": "rest",
+      "sid": "greetings-t2-s07",
+      "pauseMs": 0,
+      "timing": {
+        "c1Start": 300,
+        "c1End": 2325,
+        "c2Start": 2325,
+        "c2End": 4287.5,
+        "totalMs": 4887.5
+      },
+      "verdict": "COVERED",
+      "heard": 9,
+      "reachesC2": false,
+      "disagree": true,
+      "text": "好 耐 冇 見 你 近 排 點 呀",
+      "status": "Success",
+      "http": 200,
+      "rttMs": 1170,
+      "endMs": 2430,
+      "raw": {
+        "RecognitionStatus": "Success",
+        "Offset": 5500000,
+        "Duration": 18800000,
+        "DisplayText": "好耐冇見。你近排點呀。",
+        "NBest": [
+          {
+            "Confidence": 0.749179,
+            "Lexical": "好 耐 冇 見 你 近 排 點 呀",
+            "ITN": "好 耐 冇 見 你 近 排 點 呀",
+            "MaskedITN": "好耐冇見 你近排點呀",
+            "Display": "好耐冇見。 你近排點呀。"
+          }
+        ]
+      },
+      "at": "2026-11-03T07:48:12.165Z"
+    },
+    {
+      "endpoint": "fast",
+      "sid": "greetings-t2-s07",
+      "pauseMs": 0,
+      "timing": {
+        "c1Start": 300,
+        "c1End": 2325,
+        "c2Start": 2325,
+        "c2End": 4287.5,
+        "totalMs": 4887.5
+      },
+      "verdict": "COVERED",
+      "heard": 9,
+      "reachesC2": true,
+      "disagree": false,
+      "text": "好耐冇見你近排點呀。",
+      "status": "Success",
+      "http": 200,
+      "rttMs": 409,
+      "endMs": 4080,
+      "phraseCount": 1,
+      "raw": {
+        "durationMilliseconds": 4887,
+        "combinedPhrases": [
+          {
+            "text": "好耐冇見你近排點呀。"
+          }
+        ],
+        "phrases": [
+          {
+            "offsetMilliseconds": 320,
+            "durationMilliseconds": 3760,
+            "text": "好耐冇見你近排點呀。",
+            "words": [
+              {
+                "text": "好",
+                "offsetMilliseconds": 320,
+                "durationMilliseconds": 400
+              },
+              {
+                "text": "耐",
+                "offsetMilliseconds": 720,
+                "durationMilliseconds": 240
+              },
+              {
+                "text": "冇",
+                "offsetMilliseconds": 960,
+                "durationMilliseconds": 160
+              },
+              {
+                "text": "見",
+                "offsetMilliseconds": 1120,
+                "durationMilliseconds": 1280
+              },
+              {
+                "text": "你",
+                "offsetMilliseconds": 2400,
+                "durationMilliseconds": 320
+              },
+              {
+                "text": "近",
+                "offsetMilliseconds": 2720,
+                "durationMilliseconds": 240
+              },
+              {
+                "text": "排",
+                "offsetMilliseconds": 2960,
+                "durationMilliseconds": 160
+              },
+              {
+                "text": "點",
+                "offsetMilliseconds": 3120,
+                "durationMilliseconds": 240
+              },
+              {
+                "text": "呀。",
+                "offsetMilliseconds": 3360,
+                "durationMilliseconds": 720
+              }
+            ],
+            "locale": "zh-HK",
+            "confidence": 0.871534
+          }
+        ]
+      },
+      "at": "2026-11-03T07:48:12.576Z"
+    },
+    {
+      "endpoint": "rest",
+      "sid": "greetings-t2-s07",
+      "pauseMs": 1000,
+      "timing": {
+        "c1Start": 300,
+        "c1End": 2325,
+        "c2Start": 3325,
+        "c2End": 5287.5,
+        "totalMs": 5887.5
+      },
+      "verdict": "COVERED",
+      "heard": 9,
+      "reachesC2": false,
+      "disagree": true,
+      "text": "好 耐 冇 見 你 近 排 點 吖",
+      "status": "Success",
+      "http": 200,
+      "rttMs": 1254,
+      "endMs": 2510,
+      "raw": {
+        "RecognitionStatus": "Success",
+        "Offset": 5500000,
+        "Duration": 19600000,
+        "DisplayText": "好耐冇見。你近排點吖？",
+        "NBest": [
+          {
+            "Confidence": 0.749179,
+            "Lexical": "好 耐 冇 見 你 近 排 點 吖",
+            "ITN": "好 耐 冇 見 你 近 排 點 吖",
+            "MaskedITN": "好耐冇見 你近排點吖",
+            "Display": "好耐冇見。 你近排點吖？"
+          }
+        ]
+      },
+      "at": "2026-11-03T07:48:13.830Z"
+    },
+    {
+      "endpoint": "fast",
+      "sid": "greetings-t2-s07",
+      "pauseMs": 1000,
+      "timing": {
+        "c1Start": 300,
+        "c1End": 2325,
+        "c2Start": 3325,
+        "c2End": 5287.5,
+        "totalMs": 5887.5
+      },
+      "verdict": "COVERED",
+      "heard": 9,
+      "reachesC2": true,
+      "disagree": false,
+      "text": "好耐冇見你近排點呀。",
+      "status": "Success",
+      "http": 200,
+      "rttMs": 523,
+      "endMs": 4960,
+      "phraseCount": 1,
+      "raw": {
+        "durationMilliseconds": 5887,
+        "combinedPhrases": [
+          {
+            "text": "好耐冇見你近排點呀。"
+          }
+        ],
+        "phrases": [
+          {
+            "offsetMilliseconds": 400,
+            "durationMilliseconds": 4560,
+            "text": "好耐冇見你近排點呀。",
+            "words": [
+              {
+                "text": "好",
+                "offsetMilliseconds": 400,
+                "durationMilliseconds": 320
+              },
+              {
+                "text": "耐",
+                "offsetMilliseconds": 720,
+                "durationMilliseconds": 240
+              },
+              {
+                "text": "冇",
+                "offsetMilliseconds": 960,
+                "durationMilliseconds": 160
+              },
+              {
+                "text": "見",
+                "offsetMilliseconds": 1120,
+                "durationMilliseconds": 2240
+              },
+              {
+                "text": "你",
+                "offsetMilliseconds": 3360,
+                "durationMilliseconds": 320
+              },
+              {
+                "text": "近",
+                "offsetMilliseconds": 3680,
+                "durationMilliseconds": 240
+              },
+              {
+                "text": "排",
+                "offsetMilliseconds": 3920,
+                "durationMilliseconds": 240
+              },
+              {
+                "text": "點",
+                "offsetMilliseconds": 4160,
+                "durationMilliseconds": 160
+              },
+              {
+                "text": "呀。",
+                "offsetMilliseconds": 4320,
+                "durationMilliseconds": 640
+              }
+            ],
+            "locale": "zh-HK",
+            "confidence": 0.8895629
+          }
+        ]
+      },
+      "at": "2026-11-03T07:48:14.354Z"
+    },
+    {
+      "endpoint": "rest",
+      "sid": "greetings-t2-s07",
+      "pauseMs": 2000,
+      "timing": {
+        "c1Start": 300,
+        "c1End": 2325,
+        "c2Start": 4325,
+        "c2End": 6287.5,
+        "totalMs": 6887.5
+      },
+      "verdict": "COVERED",
+      "heard": 9,
+      "reachesC2": false,
+      "disagree": true,
+      "text": "好 耐 冇 見 你 近 排 點 呀",
+      "status": "Success",
+      "http": 200,
+      "rttMs": 1370,
+      "endMs": 2430,
+      "raw": {
+        "RecognitionStatus": "Success",
+        "Offset": 5500000,
+        "Duration": 18800000,
+        "DisplayText": "好耐冇見。你近排點呀。",
+        "NBest": [
+          {
+            "Confidence": 0.749179,
+            "Lexical": "好 耐 冇 見 你 近 排 點 呀",
+            "ITN": "好 耐 冇 見 你 近 排 點 呀",
+            "MaskedITN": "好耐冇見 你近排點呀",
+            "Display": "好耐冇見。 你近排點呀。"
+          }
+        ]
+      },
+      "at": "2026-11-03T07:48:15.724Z"
+    },
+    {
+      "endpoint": "fast",
+      "sid": "greetings-t2-s07",
+      "pauseMs": 2000,
+      "timing": {
+        "c1Start": 300,
+        "c1End": 2325,
+        "c2Start": 4325,
+        "c2End": 6287.5,
+        "totalMs": 6887.5
+      },
+      "verdict": "COVERED",
+      "heard": 9,
+      "reachesC2": true,
+      "disagree": false,
+      "text": "好耐冇見你近排點呀。",
+      "status": "Success",
+      "http": 200,
+      "rttMs": 238,
+      "endMs": 6080,
+      "phraseCount": 1,
+      "raw": {
+        "durationMilliseconds": 6887,
+        "combinedPhrases": [
+          {
+            "text": "好耐冇見你近排點呀。"
+          }
+        ],
+        "phrases": [
+          {
+            "offsetMilliseconds": 400,
+            "durationMilliseconds": 5680,
+            "text": "好耐冇見你近排點呀。",
+            "words": [
+              {
+                "text": "好",
+                "offsetMilliseconds": 400,
+                "durationMilliseconds": 320
+              },
+              {
+                "text": "耐",
+                "offsetMilliseconds": 720,
+                "durationMilliseconds": 240
+              },
+              {
+                "text": "冇",
+                "offsetMilliseconds": 960,
+                "durationMilliseconds": 160
+              },
+              {
+                "text": "見",
+                "offsetMilliseconds": 1120,
+                "durationMilliseconds": 3280
+              },
+              {
+                "text": "你",
+                "offsetMilliseconds": 4400,
+                "durationMilliseconds": 320
+              },
+              {
+                "text": "近",
+                "offsetMilliseconds": 4720,
+                "durationMilliseconds": 240
+              },
+              {
+                "text": "排",
+                "offsetMilliseconds": 4960,
+                "durationMilliseconds": 160
+              },
+              {
+                "text": "點",
+                "offsetMilliseconds": 5120,
+                "durationMilliseconds": 240
+              },
+              {
+                "text": "呀。",
+                "offsetMilliseconds": 5360,
+                "durationMilliseconds": 720
+              }
+            ],
+            "locale": "zh-HK",
+            "confidence": 0.88599265
+          }
+        ]
+      },
+      "at": "2026-11-03T07:48:15.963Z"
+    },
+    {
+      "endpoint": "rest",
+      "sid": "greetings-t2-s07",
+      "pauseMs": 3000,
+      "timing": {
+        "c1Start": 300,
+        "c1End": 2325,
+        "c2Start": 5325,
+        "c2End": 7287.5,
+        "totalMs": 7887.5
+      },
+      "verdict": "COVERED",
+      "heard": 9,
+      "reachesC2": false,
+      "disagree": true,
+      "text": "好 耐 冇 見 你 近 排 點 呀",
+      "status": "Success",
+      "http": 200,
+      "rttMs": 1541,
+      "endMs": 2430,
+      "raw": {
+        "RecognitionStatus": "Success",
+        "Offset": 5500000,
+        "Duration": 18800000,
+        "DisplayText": "好耐冇見。你近排點呀。",
+        "NBest": [
+          {
+            "Confidence": 0.749179,
+            "Lexical": "好 耐 冇 見 你 近 排 點 呀",
+            "ITN": "好 耐 冇 見 你 近 排 點 呀",
+            "MaskedITN": "好耐冇見 你近排點呀",
+            "Display": "好耐冇見。 你近排點呀。"
+          }
+        ]
+      },
+      "at": "2026-11-03T07:48:17.505Z"
+    },
+    {
+      "endpoint": "fast",
+      "sid": "greetings-t2-s07",
+      "pauseMs": 3000,
+      "timing": {
+        "c1Start": 300,
+        "c1End": 2325,
+        "c2Start": 5325,
+        "c2End": 7287.5,
+        "totalMs": 7887.5
+      },
+      "verdict": "COVERED",
+      "heard": 9,
+      "reachesC2": true,
+      "disagree": false,
+      "text": "好耐冇見你近排點呀。",
+      "status": "Success",
+      "http": 200,
+      "rttMs": 535,
+      "endMs": 7040,
+      "phraseCount": 1,
+      "raw": {
+        "durationMilliseconds": 7887,
+        "combinedPhrases": [
+          {
+            "text": "好耐冇見你近排點呀。"
+          }
+        ],
+        "phrases": [
+          {
+            "offsetMilliseconds": 400,
+            "durationMilliseconds": 6640,
+            "text": "好耐冇見你近排點呀。",
+            "words": [
+              {
+                "text": "好",
+                "offsetMilliseconds": 400,
+                "durationMilliseconds": 320
+              },
+              {
+                "text": "耐",
+                "offsetMilliseconds": 720,
+                "durationMilliseconds": 240
+              },
+              {
+                "text": "冇",
+                "offsetMilliseconds": 960,
+                "durationMilliseconds": 160
+              },
+              {
+                "text": "見",
+                "offsetMilliseconds": 1120,
+                "durationMilliseconds": 4240
+              },
+              {
+                "text": "你",
+                "offsetMilliseconds": 5360,
+                "durationMilliseconds": 320
+              },
+              {
+                "text": "近",
+                "offsetMilliseconds": 5680,
+                "durationMilliseconds": 240
+              },
+              {
+                "text": "排",
+                "offsetMilliseconds": 5920,
+                "durationMilliseconds": 240
+              },
+              {
+                "text": "點",
+                "offsetMilliseconds": 6160,
+                "durationMilliseconds": 160
+              },
+              {
+                "text": "呀。",
+                "offsetMilliseconds": 6320,
+                "durationMilliseconds": 720
+              }
+            ],
+            "locale": "zh-HK",
+            "confidence": 0.9007849
+          }
+        ]
+      },
+      "at": "2026-11-03T07:48:18.041Z"
+    },
+    {
+      "endpoint": "rest",
+      "sid": "greetings-t2-s07",
+      "pauseMs": 5000,
+      "timing": {
+        "c1Start": 300,
+        "c1End": 2325,
+        "c2Start": 7325,
+        "c2End": 9287.5,
+        "totalMs": 9887.5
+      },
+      "verdict": "COVERED",
+      "heard": 9,
+      "reachesC2": false,
+      "disagree": true,
+      "text": "好 耐 冇 見 你 近 排 點 呀",
+      "status": "Success",
+      "http": 200,
+      "rttMs": 1828,
+      "endMs": 2430,
+      "raw": {
+        "RecognitionStatus": "Success",
+        "Offset": 5500000,
+        "Duration": 18800000,
+        "DisplayText": "好耐冇見。你近排點呀。",
+        "NBest": [
+          {
+            "Confidence": 0.749179,
+            "Lexical": "好 耐 冇 見 你 近 排 點 呀",
+            "ITN": "好 耐 冇 見 你 近 排 點 呀",
+            "MaskedITN": "好耐冇見 你近排點呀",
+            "Display": "好耐冇見。 你近排點呀。"
+          }
+        ]
+      },
+      "at": "2026-11-03T07:48:19.870Z"
+    },
+    {
+      "endpoint": "fast",
+      "sid": "greetings-t2-s07",
+      "pauseMs": 5000,
+      "timing": {
+        "c1Start": 300,
+        "c1End": 2325,
+        "c2Start": 7325,
+        "c2End": 9287.5,
+        "totalMs": 9887.5
+      },
+      "verdict": "COVERED",
+      "heard": 9,
+      "reachesC2": true,
+      "disagree": false,
+      "text": "好耐冇見你近排點呀。",
+      "status": "Success",
+      "http": 200,
+      "rttMs": 620,
+      "endMs": 8940,
+      "phraseCount": 1,
+      "raw": {
+        "durationMilliseconds": 9887,
+        "combinedPhrases": [
+          {
+            "text": "好耐冇見你近排點呀。"
+          }
+        ],
+        "phrases": [
+          {
+            "offsetMilliseconds": 400,
+            "durationMilliseconds": 8540,
+            "text": "好耐冇見你近排點呀。",
+            "words": [
+              {
+                "text": "好",
+                "offsetMilliseconds": 400,
+                "durationMilliseconds": 320
+              },
+              {
+                "text": "耐",
+                "offsetMilliseconds": 720,
+                "durationMilliseconds": 240
+              },
+              {
+                "text": "冇",
+                "offsetMilliseconds": 960,
+                "durationMilliseconds": 160
+              },
+              {
+                "text": "見",
+                "offsetMilliseconds": 1120,
+                "durationMilliseconds": 1370
+              },
+              {
+                "text": "你",
+                "offsetMilliseconds": 7340,
+                "durationMilliseconds": 400
+              },
+              {
+                "text": "近",
+                "offsetMilliseconds": 7740,
+                "durationMilliseconds": 160
+              },
+              {
+                "text": "排",
+                "offsetMilliseconds": 7900,
+                "durationMilliseconds": 240
+              },
+              {
+                "text": "點",
+                "offsetMilliseconds": 8140,
+                "durationMilliseconds": 160
+              },
+              {
+                "text": "呀。",
+                "offsetMilliseconds": 8300,
+                "durationMilliseconds": 640
+              }
+            ],
+            "locale": "zh-HK",
+            "confidence": 0.889131
+          }
+        ]
+      },
+      "at": "2026-11-03T07:48:20.490Z"
+    },
+    {
+      "endpoint": "rest",
+      "sid": "greetings-t2-s07",
+      "pauseMs": 8000,
+      "timing": {
+        "c1Start": 300,
+        "c1End": 2325,
+        "c2Start": 10325,
+        "c2End": 12287.5,
+        "totalMs": 12887.5
+      },
+      "verdict": "COVERED",
+      "heard": 9,
+      "reachesC2": false,
+      "disagree": true,
+      "text": "好 耐 冇 見 你 近 排 點 呀",
+      "status": "Success",
+      "http": 200,
+      "rttMs": 2465,
+      "endMs": 2430,
+      "raw": {
+        "RecognitionStatus": "Success",
+        "Offset": 5500000,
+        "Duration": 18800000,
+        "DisplayText": "好耐冇見。你近排點呀。",
+        "NBest": [
+          {
+            "Confidence": 0.749179,
+            "Lexical": "好 耐 冇 見 你 近 排 點 呀",
+            "ITN": "好 耐 冇 見 你 近 排 點 呀",
+            "MaskedITN": "好耐冇見 你近排點呀",
+            "Display": "好耐冇見。 你近排點呀。"
+          }
+        ]
+      },
+      "at": "2026-11-03T07:48:22.957Z"
+    },
+    {
+      "endpoint": "fast",
+      "sid": "greetings-t2-s07",
+      "pauseMs": 8000,
+      "timing": {
+        "c1Start": 300,
+        "c1End": 2325,
+        "c2Start": 10325,
+        "c2End": 12287.5,
+        "totalMs": 12887.5
+      },
+      "verdict": "COVERED",
+      "heard": 9,
+      "reachesC2": true,
+      "disagree": false,
+      "text": "好耐冇見你近排點呀。",
+      "status": "Success",
+      "http": 200,
+      "rttMs": 709,
+      "endMs": 11940,
+      "phraseCount": 1,
+      "raw": {
+        "durationMilliseconds": 12887,
+        "combinedPhrases": [
+          {
+            "text": "好耐冇見你近排點呀。"
+          }
+        ],
+        "phrases": [
+          {
+            "offsetMilliseconds": 400,
+            "durationMilliseconds": 11540,
+            "text": "好耐冇見你近排點呀。",
+            "words": [
+              {
+                "text": "好",
+                "offsetMilliseconds": 400,
+                "durationMilliseconds": 320
+              },
+              {
+                "text": "耐",
+                "offsetMilliseconds": 720,
+                "durationMilliseconds": 240
+              },
+              {
+                "text": "冇",
+                "offsetMilliseconds": 960,
+                "durationMilliseconds": 160
+              },
+              {
+                "text": "見",
+                "offsetMilliseconds": 1120,
+                "durationMilliseconds": 1370
+              },
+              {
+                "text": "你",
+                "offsetMilliseconds": 10340,
+                "durationMilliseconds": 400
+              },
+              {
+                "text": "近",
+                "offsetMilliseconds": 10740,
+                "durationMilliseconds": 160
+              },
+              {
+                "text": "排",
+                "offsetMilliseconds": 10900,
+                "durationMilliseconds": 240
+              },
+              {
+                "text": "點",
+                "offsetMilliseconds": 11140,
+                "durationMilliseconds": 160
+              },
+              {
+                "text": "呀。",
+                "offsetMilliseconds": 11300,
+                "durationMilliseconds": 640
+              }
+            ],
+            "locale": "zh-HK",
+            "confidence": 0.889131
+          }
+        ]
+      },
+      "at": "2026-11-03T07:48:23.666Z"
+    },
+    {
+      "endpoint": "rest",
+      "sid": "weather-t1-s04",
+      "pauseMs": 0,
+      "timing": {
+        "c1Start": 300,
+        "c1End": 2225,
+        "c2Start": 2225,
+        "c2End": 4000,
+        "totalMs": 4600
+      },
+      "verdict": "COVERED",
+      "heard": 7,
+      "reachesC2": false,
+      "disagree": true,
+      "text": "今 日 好 凍 著 多 件",
+      "status": "Success",
+      "http": 200,
+      "rttMs": 996,
+      "endMs": 2270,
+      "raw": {
+        "RecognitionStatus": "Success",
+        "Offset": 5500000,
+        "Duration": 17200000,
+        "DisplayText": "今日好凍。著多件。",
+        "NBest": [
+          {
+            "Confidence": 0.8434457,
+            "Lexical": "今 日 好 凍 著 多 件",
+            "ITN": "今 日 好 凍 著 多 件",
+            "MaskedITN": "今日好凍 著多件",
+            "Display": "今日好凍。 著多件。"
+          }
+        ]
+      },
+      "at": "2026-11-03T07:48:26.071Z"
+    },
+    {
+      "endpoint": "fast",
+      "sid": "weather-t1-s04",
+      "pauseMs": 0,
+      "timing": {
+        "c1Start": 300,
+        "c1End": 2225,
+        "c2Start": 2225,
+        "c2End": 4000,
+        "totalMs": 4600
+      },
+      "verdict": "COVERED",
+      "heard": 7,
+      "reachesC2": true,
+      "disagree": false,
+      "text": "今日好凍著多件。",
+      "status": "Success",
+      "http": 200,
+      "rttMs": 563,
+      "endMs": 3360,
+      "phraseCount": 1,
+      "raw": {
+        "durationMilliseconds": 4600,
+        "combinedPhrases": [
+          {
+            "text": "今日好凍著多件。"
+          }
+        ],
+        "phrases": [
+          {
+            "offsetMilliseconds": 320,
+            "durationMilliseconds": 3040,
+            "text": "今日好凍著多件。",
+            "words": [
+              {
+                "text": "今",
+                "offsetMilliseconds": 320,
+                "durationMilliseconds": 400
+              },
+              {
+                "text": "日",
+                "offsetMilliseconds": 720,
+                "durationMilliseconds": 160
+              },
+              {
+                "text": "好",
+                "offsetMilliseconds": 880,
+                "durationMilliseconds": 240
+              },
+              {
+                "text": "凍",
+                "offsetMilliseconds": 1120,
+                "durationMilliseconds": 1280
+              },
+              {
+                "text": "著",
+                "offsetMilliseconds": 2400,
+                "durationMilliseconds": 240
+              },
+              {
+                "text": "多",
+                "offsetMilliseconds": 2640,
+                "durationMilliseconds": 240
+              },
+              {
+                "text": "件。",
+                "offsetMilliseconds": 2880,
+                "durationMilliseconds": 480
+              }
+            ],
+            "locale": "zh-HK",
+            "confidence": 0.8764025
+          }
+        ]
+      },
+      "at": "2026-11-03T07:48:26.635Z"
+    },
+    {
+      "endpoint": "rest",
+      "sid": "weather-t1-s04",
+      "pauseMs": 1000,
+      "timing": {
+        "c1Start": 300,
+        "c1End": 2225,
+        "c2Start": 3225,
+        "c2End": 5000,
+        "totalMs": 5600
+      },
+      "verdict": "COVERED",
+      "heard": 7,
+      "reachesC2": false,
+      "disagree": true,
+      "text": "今 日 好 凍 著 多 件",
+      "status": "Success",
+      "http": 200,
+      "rttMs": 1124,
+      "endMs": 2230,
+      "raw": {
+        "RecognitionStatus": "Success",
+        "Offset": 5500000,
+        "Duration": 16800000,
+        "DisplayText": "今日好凍。著多件。",
+        "NBest": [
+          {
+            "Confidence": 0.8434457,
+            "Lexical": "今 日 好 凍 著 多 件",
+            "ITN": "今 日 好 凍 著 多 件",
+            "MaskedITN": "今日好凍 著多件",
+            "Display": "今日好凍。 著多件。"
+          }
+        ]
+      },
+      "at": "2026-11-03T07:48:27.759Z"
+    },
+    {
+      "endpoint": "fast",
+      "sid": "weather-t1-s04",
+      "pauseMs": 1000,
+      "timing": {
+        "c1Start": 300,
+        "c1End": 2225,
+        "c2Start": 3225,
+        "c2End": 5000,
+        "totalMs": 5600
+      },
+      "verdict": "COVERED",
+      "heard": 7,
+      "reachesC2": true,
+      "disagree": false,
+      "text": "今日好凍著多件。",
+      "status": "Success",
+      "http": 200,
+      "rttMs": 500,
+      "endMs": 4320,
+      "phraseCount": 1,
+      "raw": {
+        "durationMilliseconds": 5600,
+        "combinedPhrases": [
+          {
+            "text": "今日好凍著多件。"
+          }
+        ],
+        "phrases": [
+          {
+            "offsetMilliseconds": 320,
+            "durationMilliseconds": 4000,
+            "text": "今日好凍著多件。",
+            "words": [
+              {
+                "text": "今",
+                "offsetMilliseconds": 320,
+                "durationMilliseconds": 400
+              },
+              {
+                "text": "日",
+                "offsetMilliseconds": 720,
+                "durationMilliseconds": 160
+              },
+              {
+                "text": "好",
+                "offsetMilliseconds": 880,
+                "durationMilliseconds": 240
+              },
+              {
+                "text": "凍",
+                "offsetMilliseconds": 1120,
+                "durationMilliseconds": 2320
+              },
+              {
+                "text": "著",
+                "offsetMilliseconds": 3440,
+                "durationMilliseconds": 240
+              },
+              {
+                "text": "多",
+                "offsetMilliseconds": 3680,
+                "durationMilliseconds": 160
+              },
+              {
+                "text": "件。",
+                "offsetMilliseconds": 3840,
+                "durationMilliseconds": 480
+              }
+            ],
+            "locale": "zh-HK",
+            "confidence": 0.87039435
+          }
+        ]
+      },
+      "at": "2026-11-03T07:48:28.259Z"
+    },
+    {
+      "endpoint": "rest",
+      "sid": "weather-t1-s04",
+      "pauseMs": 2000,
+      "timing": {
+        "c1Start": 300,
+        "c1End": 2225,
+        "c2Start": 4225,
+        "c2End": 6000,
+        "totalMs": 6600
+      },
+      "verdict": "COVERED",
+      "heard": 7,
+      "reachesC2": false,
+      "disagree": true,
+      "text": "今 日 好 凍 著 多 件",
+      "status": "Success",
+      "http": 200,
+      "rttMs": 1345,
+      "endMs": 2230,
+      "raw": {
+        "RecognitionStatus": "Success",
+        "Offset": 5500000,
+        "Duration": 16800000,
+        "DisplayText": "今日好凍。著多件。",
+        "NBest": [
+          {
+            "Confidence": 0.8434457,
+            "Lexical": "今 日 好 凍 著 多 件",
+            "ITN": "今 日 好 凍 著 多 件",
+            "MaskedITN": "今日好凍 著多件",
+            "Display": "今日好凍。 著多件。"
+          }
+        ]
+      },
+      "at": "2026-11-03T07:48:29.606Z"
+    },
+    {
+      "endpoint": "fast",
+      "sid": "weather-t1-s04",
+      "pauseMs": 2000,
+      "timing": {
+        "c1Start": 300,
+        "c1End": 2225,
+        "c2Start": 4225,
+        "c2End": 6000,
+        "totalMs": 6600
+      },
+      "verdict": "COVERED",
+      "heard": 7,
+      "reachesC2": true,
+      "disagree": false,
+      "text": "今日好凍著多件。",
+      "status": "Success",
+      "http": 200,
+      "rttMs": 244,
+      "endMs": 5360,
+      "phraseCount": 1,
+      "raw": {
+        "durationMilliseconds": 6600,
+        "combinedPhrases": [
+          {
+            "text": "今日好凍著多件。"
+          }
+        ],
+        "phrases": [
+          {
+            "offsetMilliseconds": 320,
+            "durationMilliseconds": 5040,
+            "text": "今日好凍著多件。",
+            "words": [
+              {
+                "text": "今",
+                "offsetMilliseconds": 320,
+                "durationMilliseconds": 400
+              },
+              {
+                "text": "日",
+                "offsetMilliseconds": 720,
+                "durationMilliseconds": 160
+              },
+              {
+                "text": "好",
+                "offsetMilliseconds": 880,
+                "durationMilliseconds": 240
+              },
+              {
+                "text": "凍",
+                "offsetMilliseconds": 1120,
+                "durationMilliseconds": 3280
+              },
+              {
+                "text": "著",
+                "offsetMilliseconds": 4400,
+                "durationMilliseconds": 320
+              },
+              {
+                "text": "多",
+                "offsetMilliseconds": 4720,
+                "durationMilliseconds": 160
+              },
+              {
+                "text": "件。",
+                "offsetMilliseconds": 4880,
+                "durationMilliseconds": 480
+              }
+            ],
+            "locale": "zh-HK",
+            "confidence": 0.89027935
+          }
+        ]
+      },
+      "at": "2026-11-03T07:48:29.850Z"
+    },
+    {
+      "endpoint": "rest",
+      "sid": "weather-t1-s04",
+      "pauseMs": 3000,
+      "timing": {
+        "c1Start": 300,
+        "c1End": 2225,
+        "c2Start": 5225,
+        "c2End": 7000,
+        "totalMs": 7600
+      },
+      "verdict": "COVERED",
+      "heard": 7,
+      "reachesC2": false,
+      "disagree": true,
+      "text": "今 日 好 凍 著 多 件",
+      "status": "Success",
+      "http": 200,
+      "rttMs": 1503,
+      "endMs": 2270,
+      "raw": {
+        "RecognitionStatus": "Success",
+        "Offset": 5500000,
+        "Duration": 17200000,
+        "DisplayText": "今日好凍。著多件。",
+        "NBest": [
+          {
+            "Confidence": 0.8434457,
+            "Lexical": "今 日 好 凍 著 多 件",
+            "ITN": "今 日 好 凍 著 多 件",
+            "MaskedITN": "今日好凍 著多件",
+            "Display": "今日好凍。 著多件。"
+          }
+        ]
+      },
+      "at": "2026-11-03T07:48:31.354Z"
+    },
+    {
+      "endpoint": "fast",
+      "sid": "weather-t1-s04",
+      "pauseMs": 3000,
+      "timing": {
+        "c1Start": 300,
+        "c1End": 2225,
+        "c2Start": 5225,
+        "c2End": 7000,
+        "totalMs": 7600
+      },
+      "verdict": "COVERED",
+      "heard": 7,
+      "reachesC2": true,
+      "disagree": false,
+      "text": "今日好凍著多件。",
+      "status": "Success",
+      "http": 200,
+      "rttMs": 492,
+      "endMs": 6400,
+      "phraseCount": 1,
+      "raw": {
+        "durationMilliseconds": 7600,
+        "combinedPhrases": [
+          {
+            "text": "今日好凍著多件。"
+          }
+        ],
+        "phrases": [
+          {
+            "offsetMilliseconds": 320,
+            "durationMilliseconds": 6080,
+            "text": "今日好凍著多件。",
+            "words": [
+              {
+                "text": "今",
+                "offsetMilliseconds": 320,
+                "durationMilliseconds": 400
+              },
+              {
+                "text": "日",
+                "offsetMilliseconds": 720,
+                "durationMilliseconds": 160
+              },
+              {
+                "text": "好",
+                "offsetMilliseconds": 880,
+                "durationMilliseconds": 240
+              },
+              {
+                "text": "凍",
+                "offsetMilliseconds": 1120,
+                "durationMilliseconds": 4240
+              },
+              {
+                "text": "著",
+                "offsetMilliseconds": 5360,
+                "durationMilliseconds": 320
+              },
+              {
+                "text": "多",
+                "offsetMilliseconds": 5680,
+                "durationMilliseconds": 160
+              },
+              {
+                "text": "件。",
+                "offsetMilliseconds": 5840,
+                "durationMilliseconds": 560
+              }
+            ],
+            "locale": "zh-HK",
+            "confidence": 0.89604926
+          }
+        ]
+      },
+      "at": "2026-11-03T07:48:31.847Z"
+    },
+    {
+      "endpoint": "rest",
+      "sid": "weather-t1-s04",
+      "pauseMs": 5000,
+      "timing": {
+        "c1Start": 300,
+        "c1End": 2225,
+        "c2Start": 7225,
+        "c2End": 9000,
+        "totalMs": 9600
+      },
+      "verdict": "COVERED",
+      "heard": 7,
+      "reachesC2": false,
+      "disagree": true,
+      "text": "今 日 好 凍 著 多 件",
+      "status": "Success",
+      "http": 200,
+      "rttMs": 1850,
+      "endMs": 2230,
+      "raw": {
+        "RecognitionStatus": "Success",
+        "Offset": 5500000,
+        "Duration": 16800000,
+        "DisplayText": "今日好凍。著多件。",
+        "NBest": [
+          {
+            "Confidence": 0.8434457,
+            "Lexical": "今 日 好 凍 著 多 件",
+            "ITN": "今 日 好 凍 著 多 件",
+            "MaskedITN": "今日好凍 著多件",
+            "Display": "今日好凍。 著多件。"
+          }
+        ]
+      },
+      "at": "2026-11-03T07:48:33.697Z"
+    },
+    {
+      "endpoint": "fast",
+      "sid": "weather-t1-s04",
+      "pauseMs": 5000,
+      "timing": {
+        "c1Start": 300,
+        "c1End": 2225,
+        "c2Start": 7225,
+        "c2End": 9000,
+        "totalMs": 9600
+      },
+      "verdict": "COVERED",
+      "heard": 7,
+      "reachesC2": true,
+      "disagree": false,
+      "text": "今日好凍著多件。",
+      "status": "Success",
+      "http": 200,
+      "rttMs": 530,
+      "endMs": 8340,
+      "phraseCount": 1,
+      "raw": {
+        "durationMilliseconds": 9600,
+        "combinedPhrases": [
+          {
+            "text": "今日好凍著多件。"
+          }
+        ],
+        "phrases": [
+          {
+            "offsetMilliseconds": 320,
+            "durationMilliseconds": 8020,
+            "text": "今日好凍著多件。",
+            "words": [
+              {
+                "text": "今",
+                "offsetMilliseconds": 320,
+                "durationMilliseconds": 400
+              },
+              {
+                "text": "日",
+                "offsetMilliseconds": 720,
+                "durationMilliseconds": 160
+              },
+              {
+                "text": "好",
+                "offsetMilliseconds": 880,
+                "durationMilliseconds": 240
+              },
+              {
+                "text": "凍",
+                "offsetMilliseconds": 1120,
+                "durationMilliseconds": 1320
+              },
+              {
+                "text": "著",
+                "offsetMilliseconds": 7380,
+                "durationMilliseconds": 320
+              },
+              {
+                "text": "多",
+                "offsetMilliseconds": 7700,
+                "durationMilliseconds": 160
+              },
+              {
+                "text": "件。",
+                "offsetMilliseconds": 7860,
+                "durationMilliseconds": 480
+              }
+            ],
+            "locale": "zh-HK",
+            "confidence": 0.8725131
+          }
+        ]
+      },
+      "at": "2026-11-03T07:48:34.229Z"
+    },
+    {
+      "endpoint": "rest",
+      "sid": "weather-t1-s04",
+      "pauseMs": 8000,
+      "timing": {
+        "c1Start": 300,
+        "c1End": 2225,
+        "c2Start": 10225,
+        "c2End": 12000,
+        "totalMs": 12600
+      },
+      "verdict": "COVERED",
+      "heard": 7,
+      "reachesC2": false,
+      "disagree": true,
+      "text": "今 日 好 凍 著 多 件",
+      "status": "Success",
+      "http": 200,
+      "rttMs": 2336,
+      "endMs": 2230,
+      "raw": {
+        "RecognitionStatus": "Success",
+        "Offset": 5500000,
+        "Duration": 16800000,
+        "DisplayText": "今日好凍。著多件。",
+        "NBest": [
+          {
+            "Confidence": 0.8434457,
+            "Lexical": "今 日 好 凍 著 多 件",
+            "ITN": "今 日 好 凍 著 多 件",
+            "MaskedITN": "今日好凍 著多件",
+            "Display": "今日好凍。 著多件。"
+          }
+        ]
+      },
+      "at": "2026-11-03T07:48:36.567Z"
+    },
+    {
+      "endpoint": "fast",
+      "sid": "weather-t1-s04",
+      "pauseMs": 8000,
+      "timing": {
+        "c1Start": 300,
+        "c1End": 2225,
+        "c2Start": 10225,
+        "c2End": 12000,
+        "totalMs": 12600
+      },
+      "verdict": "COVERED",
+      "heard": 7,
+      "reachesC2": true,
+      "disagree": false,
+      "text": "今日好凍著多件。",
+      "status": "Success",
+      "http": 200,
+      "rttMs": 343,
+      "endMs": 11340,
+      "phraseCount": 1,
+      "raw": {
+        "durationMilliseconds": 12600,
+        "combinedPhrases": [
+          {
+            "text": "今日好凍著多件。"
+          }
+        ],
+        "phrases": [
+          {
+            "offsetMilliseconds": 320,
+            "durationMilliseconds": 11020,
+            "text": "今日好凍著多件。",
+            "words": [
+              {
+                "text": "今",
+                "offsetMilliseconds": 320,
+                "durationMilliseconds": 400
+              },
+              {
+                "text": "日",
+                "offsetMilliseconds": 720,
+                "durationMilliseconds": 160
+              },
+              {
+                "text": "好",
+                "offsetMilliseconds": 880,
+                "durationMilliseconds": 240
+              },
+              {
+                "text": "凍",
+                "offsetMilliseconds": 1120,
+                "durationMilliseconds": 1320
+              },
+              {
+                "text": "著",
+                "offsetMilliseconds": 10380,
+                "durationMilliseconds": 320
+              },
+              {
+                "text": "多",
+                "offsetMilliseconds": 10700,
+                "durationMilliseconds": 160
+              },
+              {
+                "text": "件。",
+                "offsetMilliseconds": 10860,
+                "durationMilliseconds": 480
+              }
+            ],
+            "locale": "zh-HK",
+            "confidence": 0.8725131
+          }
+        ]
+      },
+      "at": "2026-11-03T07:48:36.910Z"
+    }
+  ],
+  "verdicts": {
+    "rest": "INCONCLUSIVE",
+    "fast": "PASS"
+  }
+}
