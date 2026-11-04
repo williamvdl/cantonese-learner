@@ -4,7 +4,7 @@
 IN_PROGRESS.md when it's picked up; delete it from here once it's shipped and
 folded into STATUS.md.*
 
-Last updated: 2026-11-03 · sw.js at v159
+Last updated: 2026-11-04 · sw.js at v161
 
 ## Product
 - **Runtime Azure TTS for the Translate screen — gated on the A2 proxy.** Agreed
@@ -224,6 +224,10 @@ are pointers only — detail goes there, not here.*
   stage vs. standalone episode list) undecided.
 
 ## Quality
+- **Decide whether to delete the old paid (S0) Azure Speech resource.** A free
+  (F0) resource replaced it on 2026-11-03 and holds both `SPEECH_KEY` and the
+  key saved on the phone. The S0 one is unused and costs nothing idle; deleting
+  it just removes the chance of a key from it being used by mistake.
 - **Remove the temporary speech-failure detail line before anyone else uses the
   app** (v161). `_speechFailDetail` and `speechFailDetail()` in `app.js`, the
   `.speak-fail-detail` span in `renderSpeakNotice()`, its rule in `styles.css`, and
@@ -271,7 +275,7 @@ are pointers only — detail goes there, not here.*
   to it and larger. Speech recognition currently runs on the browser's Web Speech
   API, which is **untested on iOS** (A8 in `PRODUCTISATION_REVIEW.md`; this line
   said *unavailable* until 2026-11-02, but A8 was corrected on 2026-09-03 — Safari
-  has supported it since iOS 14.5), cuts out at a pause on Android (the listening cut-off, now in IN_PROGRESS.md), and was the reason the false-reject work was hard.
+  has supported it since iOS 14.5), cut out at a pause on Android (fixed at v160 by recording and sending the clip to Azure when a speech key is saved; the browser listener is still the no-key fallback), and was the reason the false-reject work was hard.
   `gemini-3.5-transcribe` offers utterance-based language detection, speaker
   diarization, word-level timestamps and **custom vocabulary biasing** — the last
   being the one Web Speech cannot do at all, and the one that matters here: the
@@ -282,8 +286,8 @@ are pointers only — detail goes there, not here.*
   and see words appear as you speak" behaviour would change shape; and it would
   be our key, not the learner's, so it sits behind the same A2 proxy as runtime
   Azure TTS. Bigger than the translation model swap — scope it separately.
-  **Since 2026-11-03 it is also the named fallback for the listening cut-off**
-  (IN_PROGRESS.md) if Azure fails the phone probe. `node
+  **It is also the named fallback for speech checking** if Azure ever stops
+  being available or free (Azure passed every probe and shipped at v160). `node
   tools/azure-pause-check.js --only=gemini` asks it the pause question; built and
   mock-tested, not yet run, because Azure passed. **One premise above is worth
   re-checking before it is costed:** Translate already calls Gemini with the

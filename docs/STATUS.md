@@ -13,9 +13,19 @@ not a history log. Approved design decisions and whether they were built live in
 > convention (`v121 — <what changed>`) so this file stops being load-bearing on
 > its own.
 
-Last updated: 2026-11-03 · sw.js at v160
+Last updated: 2026-11-04 · sw.js at v161
 
 ## Confirmed live and working
+- **Speaking keeps listening through pauses** (v160–v161, DES-61/62/63,
+  MOCK-40-B). With an Azure speech key saved in Settings, all four speak
+  surfaces (the Learn *Say it back* sheet, Chat's Speak mode, the checkpoint
+  sentence review, Translate's speak-back) record until the learner taps Stop,
+  then send the clip to Azure fast transcription. With no key, the browser's
+  listener is unchanged. Cost guards: leaving discards the recording, a silent
+  clip is never sent, silence either side is trimmed, and recording stops by
+  itself at 30 seconds. A momentary failure is retried once. **Personal use
+  only until the A2 proxy exists** — the key is William's. Confirmed on the
+  Pixel 2026-11-04.
 - **Checkpoint sentence review** (v134, DES-44/45). Third checkpoint activity:
   8 sentences per run from a seeded ring over the stage's pool, in listen,
   produce, or mixed mode. Grades like Speak but never blocks — "Next" is always
@@ -72,7 +82,9 @@ Last updated: 2026-11-03 · sw.js at v160
     **Superseded at v123 — see the Azure entry below.**
   - Generated via `tools/generate-audio.js` (vanilla Node, no npm deps, auth via
     the `SPEECH_KEY` / `SPEECH_REGION` environment variables). Incremental — safe
-    to re-run. Carries a `--provider=google` backend as the A/B reference only;
+    to re-run. **After any `--force` run, bump `AUDIO_CACHE` in `sw.js`** (v161):
+    phones keep every clip they have played, so a file regenerated under an old
+    name is otherwise never fetched again. Carries a `--provider=google` backend as the A/B reference only;
     that path still authenticates through `gcloud auth print-access-token`.
   - **`docs/PROBE_METHOD.md`** (2026-08-22) carries how to run an investigation
     at a cost proportionate to the answer — read the shipped handler a probe
@@ -100,10 +112,22 @@ Last updated: 2026-11-03 · sw.js at v160
     characters spaced apart), and `tools/tone-prototype.html` (all three
     candidate feedback designs over one recording — answered: none of them is
     usable against a synthetic reference). See DES-37.
+    Three more from the 2026-11-03 listening investigation, closed and kept on
+    the same terms: `tools/azure-pause-check.js` (does Azure stop at a pause —
+    answered: no, both endpoints, up to 8 s; its `--only=gemini` arm is built and
+    unrun, kept for the Gemini fallback in BACKLOG), `tools/azure-corpus-check.js`
+    (does the matcher accept Azure's spellings — answered: yes, 1.0% and 1.6%
+    false rejects against a 10% bar), and `tools/listen-probe.html` (a native
+    speaker on the Pixel — answered: 10 of 10 on fast transcription). Raw results
+    in `tools/runs/`; one native export there is a standing check's input.
   - Playback goes through `speakItem()` / `speakConvoLine()`. Web Speech API is
     kept, deliberately, only for the Translate tab (no stable ID to pre-generate).
   - No fallback on missing audio by design — a toast shows instead of a silent
-    synthetic-voice substitute.
+    synthetic-voice substitute. Since v161 (DES-63) the toast says why: offline,
+    unreachable, or — only on a real 404 — not generated yet.
+  - **Works offline once played** (v161). `sw.js` keeps every clip in its own
+    cache, `cantonese-audio-v1`, which deploys don't clear. A clip never played
+    online still can't play offline; saving all 24MB ahead of time is in BACKLOG.
 - **Stable IDs** fully in place — 585/585 words, 307/307 sentences, 150/150
   drills. Validator passes clean. *(Corrected at v127: this line read "600/600
   words" from the ID-minting work. 600 is the count of `wid` references inside
@@ -258,9 +282,25 @@ orphan hues `#B7861E`, `#e4d4ad`, `#8a6716`,
 | — | v157 | **One Adjectives sentence replaced: 今日人好多 (gam1 jat6 jan4 hou2 do1) becomes 佢哋好高 (keoi5 dei6 hou2 gou1), "They're very tall."** Reported by William's wife, a fluent speaker, who has never heard the old phrasing. People say 今日好多人 (gam1 jat6 hou2 do1 jan4), and the corpus agreed with her six to one: 好多人 (hou2 do1 jan4) appears six times across Restaurant, Shopping and two checkpoint conversations, and 人好多 (jan4 hou2 do1) only here. The structure was grammatical but a poor model for a beginner to copy. The replacement keeps the sentence's teaching point, an adjective as the whole predicate with 好 (hou2) and no 係 (hai6), and keeps its id `adjectives-t1-s04`, which is used only to name the audio file and to avoid repeats, so no learner state moves. **Four characters, not three:** 佢好高 (keoi5 hou2 gou1) was the first suggestion, but `SENT_REVIEW_MIN_CHARS` (DES-44) drops anything under four from the checkpoint sentence review, which would have cost the Saying More pool a sentence. `tools/asr-testset.json` still holds the old sentence and was deliberately left alone: it is the frozen input of the closed tone probe, nothing live reads it, and it already predates v148. Checks: all twelve standing checks and `content-report.js` produce output identical to v156, except `jyutping-check.js` counting 3,292 corpus characters instead of 3,293; `char-jyutping.json` rebuilds byte for byte the same. **The audio must be regenerated before this deploys** (see IN_PROGRESS). **Also in v157: the Modal Verbs chat (*Learning to swim*) rewritten, lines 2, 4, 5 and 6.** Reported by William: the learner said "I want to learn to swim, but I don't know how", a 但係 (daan6 hai6, but) with nothing to contrast, then answered the friend's offer to teach with surprise, 你會游咩 (nei5 wui5 jau4 me1, you can swim?). That line also used 會 (wui5) for a learned skill, which Cantonese marks with 識 (sik1); the lesson's own note says so. The new chat accepts the offer and fixes a time — 你聽日可唔可以教我 (nei5 ting1 jat6 ho2 m4 ho2 ji5 gaau3 ngo5, could you teach me tomorrow?) — and lines 5 and 6 were rewritten too so the chat still carries 應該 (jing1 goi1, should) and now uses 會 (wui5) correctly, as "will". Without that, 會 (wui5) would have appeared nowhere in the lesson, since none of its five sentences uses it. **One of the old wrong answers was a better reply than the right one:** 幾時教呀？聽日得唔得？ (gei2 si4 gaau3 aa3? ting1 jat6 dak1 m4 dak1?) was replaced, since under the new line 4 it is also correct. Two distractors are new, both written to the CONTENT.md §3 rules; `gap-opts-check.js` output is unchanged. Every breakdown was asserted to rebuild its line in both characters and jyutping. New untaught word: 瞓 (fan3, sleep), glossed. Approved by William. |
 | — | v158 | **The checkpoint's Words activity now plays its listen prompts by itself, as a topic's Quiz and Word Review always have.** Reported by William: in the audio-only direction the checkpoint waited for a tap on every word. `renderQuizCore()` draws three quizzes — the topic Quiz, Word Review and the checkpoint's Words activity (`state.checkpointQuiz`) — but builds markup only, so each caller wires its own behaviour. `autoPlayListenPrompts()` held one copy of the auto-play block per quiz and had copies for the first two only; the third consumer has never auto-played since the checkpoint was built. **Consolidated rather than given a third copy:** one rule over a table of the three sessions, kept inside the function so it can be lifted whole, with a comment that a new caller of `renderQuizCore()` needs a row. The checkpoint row is gated on `state.checkpointAct === 'words'`, matching its own choice handler, so a leftover quiz cannot play under another activity. Verified by lifting the function verbatim against stubbed audio and timers, ten cases: v158 passes all ten, and v157 fails exactly the four checkpoint auto-play cases while passing the topic Quiz and Word Review ones, so those two behave as before. All twelve standing checks and `content-report.js` give output identical to v157. **Pre-existing, unchanged and unreachable by hand:** leaving a question inside the 900ms delay lets both timers fire on the current word, so it plays twice; it never plays the old word. |
 | DES-60 | v159 | **Two fixes on the quiz results screens, one reported and one found while checking the checkpoint as asked.** *Reported by William, from a screenshot:* the topic Quiz's "Words to review" list showed only the character of the word picked — "You chose: 羊 (joeng4)" for 養 (joeng5), with no jyutping or meaning, so the tone confusion behind the miss was invisible. The line was deliberately direction-aware and showed the English alone in the other two directions. It now shows Chinese, jyutping and English in all three (DES-60). *Found:* the checkpoint Words summary's *Worth another look* rows have never played. `renderCheckpointWords()` mapped missed words to `{ c, j, e }` and dropped `id`, which the row's play button interpolates, so every button carried `data-cp-say="undefined"` and asked for `audio/words/undefined.mp3` — the toast "Audio not generated for this yet" instead of the word. `id` is now carried. Neither screen is in DESIGN_SYSTEM.md or the styleguide, so neither needed updating. Verified by lifting `renderQuiz()`, `renderCheckpointWords()`, `renderCheckpointDone()` and `colorJyutping()` verbatim: v159 passes all eight cases and v158 fails six, reproducing both defects. Rendered with the real stylesheet at phone width to check wrapping. All twelve standing checks and `content-report.js` give output identical to v158. |
-| DES-61, DES-62, MOCK-40-B | v160 | **Speaking no longer cuts out at a pause: with a speech key saved, every speak surface records until the learner taps Stop, and Azure checks the clip.** The Learn *Say it back* sheet, Chat's Speak mode, the checkpoint sentence review and Translate's speak-back all switch together (DES-61), because they share `startSpeechRecognition()` — which keeps its name and contract and now hands off to a new Azure recorder when a key is saved; the browser path below it is byte-for-byte unchanged and is the fallback with no key. **Measured before it was built** (IN_PROGRESS.md): Azure's fast transcription returned both halves of every sentence through pauses up to 8 s; across the whole corpus in two voices the app's own matcher rejected it 1.0% of the time against a 10% bar; a native speaker on the Pixel scored 10 of 10; the wait after Stop was a median 0.83 s. **What the learner sees** (mockup 40): a running timer and a five-bar input level under the mic while recording (MOCK-40-B — the level moves only when sound arrives, the honest "it can hear you" that live text used to give); a new *checking* state, a neutral mic with three dots, for the under-a-second wait, drawn as the recording layout held invisible so the card's height does not change; and two new neutral panels, *I didn't catch anything* and *Couldn't check that one*, never graded and never in the error red. **Three cost guards**, agreed with William: leaving the screen, the back button, locking the phone or switching apps discards a recording and sends nothing; a clip with no speech in it is never sent (`analyseSpeech()`, calibrated on the eleven native recordings); and silence either side of the speech is trimmed before sending. Plus a **30-second safety stop**, after which the clip is checked as normal with one muted line saying why it ended. The key is entered in Settings as a second row (DES-62), checked before it is saved, and stored on the phone only in a new `speechKey` storage area. **Personal use only until the A2 proxy exists.** Verified: all four surfaces end to end in a headless browser with a real recording as the microphone and Azure scripted, including the lock-screen and tab-away discards, the silent mic (no request made), a refused key, Remove, and the safety stop; the recording and checking cards measured identical in height. **Thirteen standing checks**: `tools/speech-silence-harness.js` joins, pinning the silence guard against the real recordings in both directions, mutation-tested; `sentence-review-harness.js` now renders 690 states including the three new statuses under both engines, and its new section 8 was mutation-tested; `nav-harness.js` stubs the new discard. **Device QA pending.** |
+| DES-61, DES-62, MOCK-40-B | v160 | **Speaking no longer cuts out at a pause: with a speech key saved, every speak surface records until the learner taps Stop, and Azure checks the clip.** The Learn *Say it back* sheet, Chat's Speak mode, the checkpoint sentence review and Translate's speak-back all switch together (DES-61), because they share `startSpeechRecognition()` — which keeps its name and contract and now hands off to a new Azure recorder when a key is saved; the browser path below it is byte-for-byte unchanged and is the fallback with no key. **Measured before it was built** (the three listening probes, results in `tools/runs/`): Azure's fast transcription returned both halves of every sentence through pauses up to 8 s; across the whole corpus in two voices the app's own matcher rejected it 1.0% of the time against a 10% bar; a native speaker on the Pixel scored 10 of 10; the wait after Stop was a median 0.83 s. **What the learner sees** (mockup 40): a running timer and a five-bar input level under the mic while recording (MOCK-40-B — the level moves only when sound arrives, the honest "it can hear you" that live text used to give); a new *checking* state, a neutral mic with three dots, for the under-a-second wait, drawn as the recording layout held invisible so the card's height does not change; and two new neutral panels, *I didn't catch anything* and *Couldn't check that one*, never graded and never in the error red. **Three cost guards**, agreed with William: leaving the screen, the back button, locking the phone or switching apps discards a recording and sends nothing; a clip with no speech in it is never sent (`analyseSpeech()`, calibrated on the eleven native recordings); and silence either side of the speech is trimmed before sending. Plus a **30-second safety stop**, after which the clip is checked as normal with one muted line saying why it ended. The key is entered in Settings as a second row (DES-62), checked before it is saved, and stored on the phone only in a new `speechKey` storage area. **Personal use only until the A2 proxy exists.** Verified: all four surfaces end to end in a headless browser with a real recording as the microphone and Azure scripted, including the lock-screen and tab-away discards, the silent mic (no request made), a refused key, Remove, and the safety stop; the recording and checking cards measured identical in height. **Thirteen standing checks**: `tools/speech-silence-harness.js` joins, pinning the silence guard against the real recordings in both directions, mutation-tested; `sentence-review-harness.js` now renders 690 states including the three new statuses under both engines, and its new section 8 was mutation-tested; `nav-harness.js` stubs the new discard. Short-audio REST also passed every bar and is the named fallback if fast transcription stops being reachable or free. **Device QA 2026-11-04: confirmed on the Pixel.** |
+| DES-63 | v161 | **Two failure messages from v160 QA that now say what went wrong.** *Speech checking:* one attempt on the Pixel came back *Couldn't check that one* with no way to tell why. A failure that may be momentary (no response, a timeout, 429, 5xx) is now retried once with the same recording after one second; a refused key or other 4xx is shown at once. Azure's `Retry-After` was in the proposal and is deliberately not used: Azure doesn't expose it cross-origin, so the browser can't read it — found when the test showed the wait never changed. A **temporary** grey line under the panel says what the failure was, to be removed before anyone else uses the app (BACKLOG § Quality). *Pre-generated audio:* the *Audio not generated for this yet* toast fired for every playback failure, and two causes were not a missing file. **No clip had ever been available offline**: `<audio>` fetches by Range, GitHub Pages answers 206, and the service worker cached only 200s — and cleared its cache on every deploy anyway. And **a quick second tap** aborted the first clip's `play()`, which reported as an error. Audio now has its own cache, stored whole on first play and sliced locally for Range requests; a superseded clip is silent; the toast says offline, unreachable, or (on a real 404) not generated. The no-fallback rule stands (DES-63). Verified in headless Chromium against a local server answering Range requests as Pages does, including an app restart with the server down and a version bump with the cache surviving it; `sentence-review-harness.js` asserts the detail line, mutation-tested. Twelve standing checks exit 0; `dup-css.js` unchanged. **Device QA 2026-11-04: confirmed on the Pixel.** |
 
 ### Notes worth carrying forward
+
+- **A filter that reads as "only cache successes" can exclude a whole class of
+  success (v161).** `resp.status === 200` in `sw.js` was meant as "don't cache
+  errors". But media is fetched by Range and answered 206, so it actually meant
+  "never cache audio" — for every version since audio existed, with no symptom
+  while online. STATUS even recorded that audio was cached "automatically, no
+  dedicated code needed". **The test that would have caught it is one app
+  restart offline.** When a rule filters on a status code, list what else
+  succeeds with a different code.
+
+- **A header you can't read is not a header you honour (v161).** The retry was
+  proposed to wait for Azure's `Retry-After`. Cross-origin, the browser only
+  exposes headers the server lists in `Access-Control-Expose-Headers`, and Azure
+  doesn't list it, so the code would have read `null` every time and looked as
+  though it worked. Caught because the test measured the actual wait.
 
 - **A destructured parameter breaks every brace-matching lifter in `tools/` (v160).**
   The harnesses and probes lift a function by finding the first `{` after its
@@ -322,8 +362,8 @@ orphan hues `#B7861E`, `#e4d4ad`, `#8a6716`,
   6000ms attempts ended themselves at 4.6s and 4.9s. Nobody noticed in August
   because every probe stopped sessions on a timer, so the natural end was never
   the thing being watched. **A setting in the code records what was asked for,
-  not what the platform does.** The work this opens is in progress: see the
-  listening cut-off in IN_PROGRESS.md.
+  not what the platform does.** The work this opened shipped at v160: with a
+  speech key, the app now records until Stop and sends the clip to Azure.
 
 - **A missing field interpolates as the string "undefined", which defeats a
   falsy guard (v159).** `speakItem()` returns early on `!id`, but the checkpoint
@@ -1344,8 +1384,11 @@ UX and visual design. It may be worth a line in the project instructions.)*
   auth until then. `tools/generate-audio.js` keeps the Google backend behind
   `--provider=google` as the A/B reference, not as a fallback — for this corpus
   it produces known-defective audio.*
-- Service worker caches audio automatically via the existing generic runtime
-  fetch handler — no dedicated audio-caching code was needed.
+- **Audio has its own cache** (`AUDIO_CACHE` in `sw.js`, v161), kept across
+  deploys, cache-first, stored whole on first play and sliced locally to answer
+  Range requests. *Corrected at v161: this line said the generic handler cached
+  audio automatically. It never did — `<audio>` gets 206 responses, which that
+  handler skipped — so no clip had ever been available offline.*
 - `renderTopicsScreen()` renders the Topics screen; `renderDashboard()` is Home.
   Renamed in v105, and `state.homeView` — the same trap, one layer down — was
   renamed to `state.topicsView` at v119. Both names dated from when Topics was the
