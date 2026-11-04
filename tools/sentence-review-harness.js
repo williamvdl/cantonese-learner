@@ -120,6 +120,10 @@ const pieces = [
   // v160 shared speak parts: the engine test from app.js, the rendering helpers
   // from render.js — lifted, not stubbed, because they are what is under test.
   'let _azure = null;',
+  // v161 temporary failure detail: the variable and its reader, lifted so the
+  // notice is rendered by the real code. Remove both lines with the diagnostic.
+  "let _speechFailDetail = '';", grab(all, 'speechFailDetail'),
+  'globalThis.__setFailDetail = v => { _speechFailDetail = v; };',
   grab(all, 'getSpeechCreds'), grab(all, 'canRecordSpeech'), grab(all, 'speechEngine'),
   grab(all, 'speakBusy'), grab(all, 'speechElapsedLabel'),
   grab(renderSrc, 'speakMicClass'), grab(renderSrc, 'speakMicInner'), grab(renderSrc, 'speakMicAttrs'),
@@ -353,6 +357,14 @@ console.log('\n— 8. the Azure speak states render as mockup 40 draws them —'
   h = render('failed', 'k', { fail: 'key' });
   if (!h.includes('check it in Settings')) fail('failed/key: does not point to Settings');
   else ok('failed/key: points to Settings');
+  env.__setFailDetail('first try HTTP 503 after 0.4s; retry <HTTP 503>');
+  h = render('failed', 'k', { fail: 'network' });
+  if (!h.includes('class="speak-fail-detail">first try HTTP 503 after 0.4s; retry &lt;HTTP 503></span>')) fail('failed/network: the v161 detail line is missing or unescaped');
+  else ok('failed/network: shows what the failure was, escaped');
+  env.__setFailDetail('');
+  h = render('failed', 'k', { fail: 'network' });
+  if (h.includes('speak-fail-detail')) fail('failed/network: renders an empty detail line');
+  else ok('failed/network: no detail line when there is no detail');
   for (const status of ['nothing', 'failed']) {
     render(status, 'k');
     if (sr.results[sr.idx] === 'mismatch' || sr.results[sr.idx] === 'matched') fail(`${status}: was graded`);

@@ -41,6 +41,11 @@
  * newly added content. Edited existing text won't auto-detect as stale — delete
  * the specific file, or use --force, to regenerate it.
  *
+ * AFTER ANY --force RUN (or deleting a file to regenerate it): bump AUDIO_CACHE
+ * in sw.js. Since v161 the app keeps every clip it has played in a cache that
+ * deploys don't clear, so a regenerated file under an old name is never
+ * re-fetched until that name changes. New files need no bump.
+ *
  * ── VOICES ──────────────────────────────────────────────────────────────────
  * Words/sentences use one narrator voice (--voice). ALL conversation lines —
  * both topic Chat tabs and checkpoint conversations — use TWO voices, picked

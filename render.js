@@ -183,7 +183,10 @@ function renderSpeakNotice(status, failReason) {
     const line = failReason === 'key' ? 'Your speech key wasn’t accepted — check it in Settings.'
       : failReason === 'mic' ? 'The microphone isn’t available — allow it for this site, then try again.'
       : 'The speech checker didn’t answer — check your connection. Your attempt wasn’t marked either way.';
-    return `<div class="speak-result-close"><b>Couldn’t check that one.</b><br>${line}</div>`;
+    // TEMPORARY DIAGNOSTIC (v161) — see _speechFailDetail in app.js.
+    const detail = speechFailDetail();
+    return `<div class="speak-result-close"><b>Couldn’t check that one.</b><br>${line}`
+      + (detail ? `<span class="speak-fail-detail">${detail.replace(/&/g, "&amp;").replace(/</g, "&lt;")}</span>` : '') + `</div>`;
   }
   return '';
 }

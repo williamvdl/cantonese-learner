@@ -4,7 +4,7 @@
 questions behind it. Meant to be short-lived — when a piece ships, fold its
 outcome into STATUS.md and clear this file back down for the next thing.*
 
-Last updated: 2026-11-03 · sw.js at v160
+Last updated: 2026-11-04 · sw.js at v161
 
 ## In progress — the listening cut-off: Azure record-then-transcribe
 
@@ -206,6 +206,83 @@ browser reachability are already proven.
 **Deployed and awaiting device QA confirmation: v155 to v160**, below. Each
 keeps its QA list until William confirms it on the Pixel; then it folds into
 STATUS.md and leaves this file.
+
+## v161 — two failure messages that now say what went wrong — built, not yet deployed
+
+Two device reports from v160 QA, fixed in one deploy. Code: `app.js`, `render.js`,
+`styles.css`, `sw.js`; `tools/sentence-review-harness.js` asserts the new line.
+No data change.
+
+**1. "Couldn't check that one" (speech checking).** On the first attempt on the
+Pixel, one clip came back as a network failure with no way to tell why.
+- **One automatic retry.** A failure that might be momentary — no response, a
+  timeout, Azure busy (429) or a server error (5xx) — is retried once with the
+  same recording after one second, still on *Checking what you said…*. A refused
+  key or any other 4xx is shown at once: sending it again cannot help. Cost: a
+  retry re-sends audio already recorded, so only a failed attempt costs double.
+- **Retry-After is not used**, though it was in the proposal: Azure doesn't
+  expose that header to the browser cross-origin, so the page can't read it.
+  Found when the test showed the wait never changed. A fixed one-second wait is
+  what would have happened anyway.
+- **Temporary diagnostic:** when it still fails, a small grey line under the
+  panel says what happened — e.g. *first try no response (TypeError) after 0.3s;
+  retry HTTP 503 after 0.4s*. **Remove before anyone else uses the app**
+  (BACKLOG § Quality). If you see it on the phone, a screenshot is all that's needed.
+
+**2. "Audio not generated for this yet" (all pre-generated audio), DES-63.**
+The toast fired for every playback failure, and two of the causes weren't a
+missing file at all:
+- **No clip had ever been saved for offline use.** The browser asks for audio
+  in pieces (a Range request), GitHub Pages answers with a partial response
+  (206), and the service worker only stored complete (200) ones. Even if it had,
+  every deploy wiped the cache. Reproduced in a headless browser: a word played
+  online, app restarted with the server down → failed.
+- **A quick second tap** cut off the first clip, and the browser reports that
+  as an error — so the toast appeared while the second clip played normally.
+- **Fixed:** audio now has its own cache, `cantonese-audio-v1`, which deploys
+  don't touch. A clip is stored whole the first time it plays and served from
+  the phone from then on, online or not. A cut-off clip is silent. When playback
+  really fails, the toast says why: *You're offline — this audio isn't saved yet*,
+  *Couldn't reach the audio — check your connection*, or — only when the server
+  actually answers 404 — *Audio not generated for this yet*.
+- **Not done: falling back to the phone's own voice.** That reverses the
+  no-fallback rule in `app.js`, and the phone's Cantonese voice may need a
+  connection too unless its language pack is downloaded, so it wouldn't reliably
+  help offline. Saving every clip ahead of time (24MB) is the option that would;
+  it's in BACKLOG.
+- **One limit:** words you have never played still can't play offline. After this
+  deploy the cache starts empty — the old cache never held any audio.
+
+**Verified** in headless Chromium against a local server that answers Range
+requests the way GitHub Pages does: retry on 503, a dropped connection and 429;
+no retry on 401 and 400; detail cleared on Try again. Audio: played before →
+plays with the server down and offline; never played → the correct message for
+server down and for offline; missing file → the 404 message; rapid re-tap → no
+toast; the audio cache survives a version bump. Twelve standing checks exit 0;
+`dup-css.js` unchanged (Check A 4, Check B structural 179).
+
+**For STATUS § Notes worth carrying forward, on ship:** *a filter that looks
+like "only cache successes" can exclude a whole class of success.* `status === 200`
+read as "don't cache errors", but media is fetched by range and answered 206, so
+the rule meant "never cache audio" — for every version since audio existed, with
+no symptom online. The test that would have caught it is one restart offline.
+Also: `tools/generate-audio.js --force` now needs an `AUDIO_CACHE` bump (its
+header says so).
+
+**Deploy:** commit and push; reload on the Pixel until it shows v161.
+
+**QA, screens that changed:**
+- **Any word or sentence play button, online:** plays as before. Tap one play
+  button twice quickly — no toast.
+- **Offline (airplane mode):** a word you played since updating plays; one you
+  haven't shows *You're offline — this audio isn't saved yet*.
+- **A speak surface in airplane mode:** *Couldn't check that one* now takes about
+  a second longer (the retry) and shows the grey detail line.
+
+**Screens sharing the changed code, to confirm only:**
+- Chat's *Play all*, the Quiz and Word Review listen prompts, checkpoint audio:
+  they play and chain as before.
+- A normal speak attempt online: the result arrives as before, no grey line.
 
 ## v160 — speaking keeps listening through pauses — deployed, awaiting device QA confirmation
 

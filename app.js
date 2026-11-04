@@ -266,6 +266,12 @@ async function speak(text, onEnd, voiceOverride, pitchOverride, langOverride) {
 // generator hasn't been re-run yet), the play button shows a toast instead of
 // silently substituting a lower-quality voice, so the gap stays visible.
 //
+// The toast says WHY it failed (DES-63, v161). Until v161 every failure said
+// "Audio not generated for this yet", including being offline and a quick
+// second tap cutting off the first clip — which made the missing-file message
+// untrustworthy. Offline playback itself is the service worker's job: sw.js
+// keeps every clip once played, in a cache that survives deploys.
+//
 // NAMING CONTRACT with tools/generate-audio.js — if either side's naming
 // scheme changes, the other must be updated to match:
 //   audio/words/{wordId}.mp3
@@ -293,6 +299,20 @@ function stopAudioFile() {
 
 const AUDIO_RATES = { slow: 0.75, normal: 1.0, fast: 1.3 };
 
+// Why a clip didn't play, in the learner's terms. Asks the network directly
+// (HEAD, which sw.js deliberately doesn't intercept) so a missing file is only
+// ever reported when the server actually said 404.
+async function audioFailureMessage(url) {
+  if (navigator.onLine === false) return 'You’re offline — this audio isn’t saved yet';
+  try {
+    const res = await fetch(url, { method: 'HEAD', cache: 'no-store' });
+    if (res.status === 404) return 'Audio not generated for this yet';
+    return res.ok ? 'Couldn’t play this audio — try again' : 'Couldn’t load the audio — try again';
+  } catch (e) {
+    return 'Couldn’t reach the audio — check your connection';
+  }
+}
+
 function playAudioFile(url, onEnd) {
   stopAudioFile();
   const audio = new Audio(url);
@@ -302,9 +322,13 @@ function playAudioFile(url, onEnd) {
   const fail = () => {
     if (settled) return;
     settled = true;
-    if (_currentAudio === audio) _currentAudio = null;
-    showToast('Audio not generated for this yet', 'audio-missing');
+    // Stopped or replaced before it got going — a second tap, or leaving the
+    // screen. play() rejects with AbortError then; that is not a failure, and
+    // the clip that replaced it owns the toast and the onEnd from here.
+    if (_currentAudio !== audio) return;
+    _currentAudio = null;
     if (onEnd) onEnd();
+    audioFailureMessage(url).then(msg => showToast(msg, 'audio-missing'));
   };
   audio.addEventListener('ended', () => {
     if (settled) return;
@@ -2553,7 +2577,12 @@ async function decodeToSpeechPcm(blob) {
   return (await off.startRendering()).getChannelData(0);
 }
 
-// One request to fast transcription. Resolves to { text } or { fail }.
+// One request to fast transcription. Resolves to { text } or { fail, detail,
+// transient }. `detail` is a short description of what actually
+// went wrong (status or error, and how long it took) — see _speechFailDetail.
+// `transient` marks the failures worth one automatic retry: no response at
+// all, a timeout, a 429 throttle, or a 5xx. A refused key (401/403) and any
+// other 4xx are not transient — sending the same request again cannot help.
 async function transcribeAzure(wavBlob, creds) {
   const url = 'https://' + creds.region + '.api.cognitive.microsoft.com'
             + '/speechtotext/transcriptions:transcribe?api-version=' + AZURE_FAST_API_VERSION;
@@ -2562,19 +2591,52 @@ async function transcribeAzure(wavBlob, creds) {
   form.append('definition', JSON.stringify({ locales: ['zh-HK'] }));
   const ctl = new AbortController();
   const timer = setTimeout(() => ctl.abort(), SPEECH_TIMEOUT_MS);
+  const t0 = Date.now();
+  const took = () => ' after ' + ((Date.now() - t0) / 1000).toFixed(1) + 's';
   try {
     const res = await fetch(url, { method: 'POST', headers: { 'Ocp-Apim-Subscription-Key': creds.key, 'Accept': 'application/json' }, body: form, signal: ctl.signal });
-    if (res.status === 401 || res.status === 403) return { fail: 'key' };
-    if (!res.ok) return { fail: 'network' };
+    if (res.status === 401 || res.status === 403) return { fail: 'key', detail: 'HTTP ' + res.status + took() };
+    if (!res.ok) return { fail: 'network', detail: 'HTTP ' + res.status + took(),
+                          transient: res.status === 429 || res.status >= 500 };
     const json = await res.json().catch(() => null);
     // Judge the payload, never the status code.
     const text = json && Array.isArray(json.combinedPhrases) ? json.combinedPhrases.map(p => p.text || '').join('') : '';
     return { text };
   } catch (e) {
-    return { fail: 'network' };
+    const timedOut = ctl.signal.aborted;
+    return { fail: 'network', transient: true,
+             detail: (timedOut ? 'no answer (timed out)' : 'no response (' + (e && e.name || 'error') + ')') + took() };
   } finally {
     clearTimeout(timer);
   }
+}
+
+// TEMPORARY DIAGNOSTIC (v161) — remove before anyone else uses the app.
+// The last "Couldn't check that one" failure, in words: shown as a small muted
+// line under the notice so a real-device failure says what it was. It lives
+// here rather than in the four surfaces' state because only one recording can
+// be in flight at a time, and so removing it later is one variable and one
+// line in renderSpeakNotice(). Cleared at the start of every recording.
+let _speechFailDetail = '';
+function speechFailDetail() { return _speechFailDetail; }
+
+// One automatic retry of the SAME clip for a transient failure (v161), after a
+// fixed short pause. Not Retry-After: Azure's header isn't exposed to the
+// browser cross-origin, so the page cannot read it — a fixed wait is what
+// actually happens either way, and saying so here beats code that looks like
+// it honours a header it never sees. On F0 the likely 429 is the one-request
+// concurrency limit, which clears in about a second.
+// The retry re-sends audio already recorded, so at worst it doubles the
+// seconds billed for that one attempt — and only when the first try failed.
+const SPEECH_RETRY_WAIT_MS = 1000;
+async function transcribeAzureWithRetry(wavBlob, creds, alive) {
+  const first = await transcribeAzure(wavBlob, creds);
+  if (!first.fail || !first.transient) return first;
+  await new Promise(r => setTimeout(r, SPEECH_RETRY_WAIT_MS));
+  if (alive && !alive()) return first;
+  const second = await transcribeAzure(wavBlob, creds);
+  if (second.fail) second.detail = 'first try ' + first.detail + '; retry ' + second.detail;
+  return second;
 }
 
 // Check a key on Save (DES-62). Tries the token endpoint first, which sends no
@@ -2640,6 +2702,7 @@ async function startAzureRecording(getTarget, getStatus, applyPatch, onMatch) {
   const alive = () => _azure === session && _speechToken === token;
   // Created inside the tap, before any await, so mobile browsers let it run.
   const ctx = speechAudioContext();
+  _speechFailDetail = '';
   applyPatch({ status: 'listening', heard: '', capped: false, failReason: '' });
 
   try {
@@ -2697,9 +2760,9 @@ async function finishAzureSession(session, mimeType, getTarget, onMatch) {
 
   const creds = getSpeechCreds();
   if (!creds) return done({ status: 'failed', failReason: 'key' });
-  const r = await transcribeAzure(pcmToWav(pcm.subarray(span.start, span.end)), creds);
+  const r = await transcribeAzureWithRetry(pcmToWav(pcm.subarray(span.start, span.end)), creds, alive);
   if (!alive()) return;
-  if (r.fail) return done({ status: 'failed', failReason: r.fail });
+  if (r.fail) { _speechFailDetail = r.detail || ''; return done({ status: 'failed', failReason: r.fail }); }
   const text = (r.text || '').trim();
   if (!text) return done({ status: 'nothing', capped: session.capped });
   const g = resolveHeard(text, [], getTarget());

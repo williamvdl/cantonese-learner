@@ -135,6 +135,15 @@ are pointers only — detail goes there, not here.*
 
 ## Features
 
+- **Save every clip for offline, ahead of time** (raised v161). Since v161 a
+  clip plays offline once it has been played online; one never played still
+  can't. All 1,376 clips are 24MB. A Settings action — *Save audio for offline* —
+  could fetch them into `cantonese-audio-v1` in the background, once, with
+  progress; deploys don't clear that cache. Kept opt-in rather than automatic
+  because 24MB over mobile data is the learner's call. Needs a mockup (Settings
+  row, progress, done state) and a DES row. The alternative considered and not
+  built is falling back to the phone's own voice (see DES-63).
+
 - **Tone feedback by pitch measurement — investigated and closed, 2026-08-17.**
   Kept as a warning, not as work. **Read alongside the ASR closure above**: pitch
   was the first candidate path to tone feedback and recognition was the second,
@@ -215,6 +224,13 @@ are pointers only — detail goes there, not here.*
   stage vs. standalone episode list) undecided.
 
 ## Quality
+- **Remove the temporary speech-failure detail line before anyone else uses the
+  app** (v161). `_speechFailDetail` and `speechFailDetail()` in `app.js`, the
+  `.speak-fail-detail` span in `renderSpeakNotice()`, its rule in `styles.css`, and
+  the two lift lines plus two assertions in `tools/sentence-review-harness.js` —
+  all marked *TEMPORARY DIAGNOSTIC*. It exists to explain the one unexplained
+  *Couldn't check that one* from v160 QA; once a few real failures have been read,
+  it has done its job. The one automatic retry stays.
 - **Revisit `gemini-3.5-flash-lite` for Translate — a live candidate, not a dead
   end.** The 2026-09-10 trial kept `gemini-2.5-flash-lite`, but B finished joint
   top on preference (7 of 12 with ties credited, one short of the bar) at

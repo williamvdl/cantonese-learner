@@ -863,6 +863,8 @@
      accent (below), which is enough to draw the eye without the whole panel
      reading as either a pass or a fail. */
   .speak-result-close { background: var(--parchment-warm); border: 1px solid var(--parchment-border); color: var(--ink-soft); padding: 12px 16px; border-radius: var(--r-sm); margin-bottom: 14px; font-size: var(--fs-small); }
+  /* TEMPORARY DIAGNOSTIC (v161): what the failure actually was. Remove with _speechFailDetail. */
+  .speak-fail-detail { display: block; margin-top: 6px; font-size: var(--fs-micro); color: var(--muted); font-family: ui-monospace, monospace; }
 
   /* ── Checkpoint sentence review (DES-44/45, MOCK-28) ──────────────────────
      Five additions. `.sr-listen` is the only one that is a control rather than
