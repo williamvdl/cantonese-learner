@@ -229,10 +229,13 @@ function renderSentSpeakSheet() {
   // what was said. It also matters that every glyph here is one the learner can
   // read back: charsToJyutping() gives digits no syllable at all, so an unfolded
   // "3月10號" printed six syllables under eight spoken ones.
+  // DES-65: characters said exactly as taught take the lesson's own syllable,
+  // so a perfect attempt can no longer read 哥哥 (go4 go1) as go1 go1. Same
+  // call on all four "You said" surfaces.
   const heardShown  = sp.heard ? foldAsrNumerals(sp.heard) : '';
-  const heardJyutping = heardShown ? charsToJyutping(heardShown) : '';
+  const heardJp = heardShown ? heardJyutping(heardShown, sentence.c, sentence.j) : '';
   const heardLine = heardShown
-    ? `<div class="speak-heard">You said: <strong>${heardShown}</strong>${heardJyutping ? `<div class="speak-heard-jp">${heardJyutping}</div>` : ''}</div>`
+    ? `<div class="speak-heard">You said: <strong>${heardShown}</strong>${heardJp ? `<div class="speak-heard-jp">${heardJp}</div>` : ''}</div>`
     : '';
 
   const result = status === 'matched'
@@ -372,7 +375,7 @@ function renderTranslate() {
   if (result && sp.open) {
     const targetJp   = charJyutpingLine(result.zh);
     const heardShown = sp.heard ? foldAsrNumerals(sp.heard) : '';
-    const heardJp    = heardShown ? charsToJyutping(heardShown) : '';
+    const heardJp    = heardShown ? heardJyutping(heardShown, result.zh, targetJp) : '';
     const heardLine  = heardShown
       ? `<div class="speak-heard">You said: <strong>${heardShown}</strong>${heardJp ? `<div class="speak-heard-jp">${heardJp}</div>` : ''}</div>`
       : '';
@@ -1467,7 +1470,7 @@ function renderCheckpointSentences() {
     // DES-48 — see renderSentSpeakSheet() for why the fold applies to display
     // and not only to matching.
     const heardShown = sr.heard ? foldAsrNumerals(sr.heard) : '';
-    const heardJp = heardShown ? charsToJyutping(heardShown) : '';
+    const heardJp = heardShown ? heardJyutping(heardShown, item.c, item.j) : '';
     const heardLine = heardShown
       ? `<div class="speak-heard">You said: <strong>${heardShown}</strong>${heardJp ? `<div class="speak-heard-jp">${heardJp}</div>` : ''}</div>`
       : '';
@@ -2274,7 +2277,7 @@ function renderConversation() {
     // DES-48 — see renderSentSpeakSheet() for why the fold applies to display
     // and not only to matching.
     const heardShown = cv.speakHeard ? foldAsrNumerals(cv.speakHeard) : '';
-    const heardJp = heardShown ? charsToJyutping(heardShown) : '';
+    const heardJp = heardShown ? heardJyutping(heardShown, line.c, line.j) : '';
     const heard = heardShown
       ? `<div class="speak-heard">You said: <strong>${heardShown}</strong>${heardJp ? `<div class="speak-heard-jp">${heardJp}</div>` : ''}</div>`
       : '';

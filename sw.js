@@ -6,7 +6,7 @@
 // up a new service worker when this string changes. If you forget to bump it,
 // users will keep serving the old index.html from cache.
 
-const CACHE_VERSION = 'cantonese-teahouse-v161';
+const CACHE_VERSION = 'cantonese-teahouse-v163';
 
 // Pre-generated audio lives in its OWN cache, which activate deliberately keeps
 // (v161). Until then audio shared CACHE_VERSION, so every deploy wiped it — and

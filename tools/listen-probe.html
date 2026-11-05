@@ -336,6 +336,11 @@ function liftApp(appSrc, store) {
     grabConst(appSrc, /const ASR_DIGITS = \{[\s\S]*?\};/, 'ASR_DIGITS'),
     grabConst(appSrc, /const ASR_PLACES = \[[\s\S]*?\];/, 'ASR_PLACES'),
     grabFn(appSrc, 'foldAsrNumerals'),
+    // v163: normalizeChinese() reads the one shared punctuation list.
+    grabConst(appSrc, /const SPEAK_PUNCT = [^\n]*/, 'SPEAK_PUNCT'),
+    grabConst(appSrc, /const SPEAK_PUNCT_ALL [^\n]*/, 'SPEAK_PUNCT_ALL'),
+    grabConst(appSrc, /const SPEAK_PUNCT_ONE [^\n]*/, 'SPEAK_PUNCT_ONE'),
+    grabConst(appSrc, /const SPEAK_PUNCT_TAIL [^\n]*/, 'SPEAK_PUNCT_TAIL'),
     grabFn(appSrc, 'normalizeChinese'),
     // DES-57 same-sound equality, in the order asr-replay-harness.js lifts it:
     // editDistance() takes speakEqFor()'s test, so these come first.

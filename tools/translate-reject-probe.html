@@ -238,6 +238,12 @@ async function boot() {
     // (DES-48). Lifting it without its dependency threw at grade time.
     grabFn(appSrc, 'foldAsrNumerals'),
     grabConst(appSrc, /const SPEAK_FINAL_PARTICLES\s*=[\s\S]*?\]\);/, 'SPEAK_FINAL_PARTICLES'),
+    // v163: normalizeChinese() reads the one shared punctuation list.
+    grabConst(appSrc, /const SPEAK_PUNCT = [^\n]*/, 'SPEAK_PUNCT'),
+    grabConst(appSrc, /const SPEAK_PUNCT_ALL [^\n]*/, 'SPEAK_PUNCT_ALL'),
+    grabConst(appSrc, /const SPEAK_PUNCT_ONE [^\n]*/, 'SPEAK_PUNCT_ONE'),
+    grabConst(appSrc, /const SPEAK_PUNCT_TAIL [^\n]*/, 'SPEAK_PUNCT_TAIL'),
+    grabFn(appSrc, 'speakTargetParts'),
     grabFn(appSrc, 'normalizeChinese'),
     grabFn(appSrc, 'editDistance'),
     grabFn(appSrc, 'deduplicateRepeats'),

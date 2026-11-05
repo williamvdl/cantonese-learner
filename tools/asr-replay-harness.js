@@ -49,6 +49,9 @@ vm.runInContext([
   grabConst(/const ASR_DIGITS = \{[\s\S]*?\};/),
   grabConst(/const ASR_PLACES = \[[\s\S]*?\];/),
   grab('foldAsrNumerals'),
+  // v163: normalizeChinese() reads the one shared punctuation list.
+  grabConst(/const SPEAK_PUNCT = [^\n]*/), grabConst(/const SPEAK_PUNCT_ALL [^\n]*/),
+  grabConst(/const SPEAK_PUNCT_ONE [^\n]*/), grabConst(/const SPEAK_PUNCT_TAIL [^\n]*/),
   grab('normalizeChinese'),
   // DES-57 same-sound equality. editDistance() below calls speakCharsEqual(),
   // so these must be in scope before it — the whole point of the change is that

@@ -6,7 +6,7 @@
   },
   "rounds": {
     "1": {
-      "note": "Tech vocabulary mixes English loanwords (<em>WiFi</em>, <em>app</em>) with native compounds. <strong>din6</strong> (電, electric) prefixes most modern tech: <em>din6 nou5</em> (電腦, computer = electric brain), <em>din6 waa2</em> (電話, phone = electric speech). <strong>soeng5 mong5</strong> (上網) literally 'ascend the net' = go online. <strong>cung1 din6</strong> (充電) literally 'fill electricity' = charge a battery. The adjective <em>waai6</em> (壞, broken) covers anything not working.",
+      "note": "Tech vocabulary mixes English loanwords (<em>WiFi</em>, <em>app</em>) with native compounds. <strong>電</strong> (din6, electric) prefixes most modern tech: 電腦 (din6 nou5, computer = electric brain), 電話 (din6 waa2, phone = electric speech). <strong>上網</strong> (soeng5 mong5) literally 'ascend the net' = go online. <strong>充電</strong> (cung1 din6) literally 'fill electricity' = charge a battery. The adjective 壞 (waai6, broken) covers anything not working.",
       "words": [
         {
           "id": "tech-001",

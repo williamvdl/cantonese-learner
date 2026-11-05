@@ -165,7 +165,11 @@ function liftMatcher() {
   vm.runInContext([
     grabConst(/const ASR_DIGITS = \{[\s\S]*?\};/, 'ASR_DIGITS'),
     grabConst(/const ASR_PLACES = \[[\s\S]*?\];/, 'ASR_PLACES'),
-    grab('foldAsrNumerals'), grab('normalizeChinese'),
+    grab('foldAsrNumerals'),
+    // v163: normalizeChinese() reads the one shared punctuation list.
+    grabConst(/const SPEAK_PUNCT = [^\n]*/, 'SPEAK_PUNCT'), grabConst(/const SPEAK_PUNCT_ALL [^\n]*/, 'SPEAK_PUNCT_ALL'),
+    grabConst(/const SPEAK_PUNCT_ONE [^\n]*/, 'SPEAK_PUNCT_ONE'), grabConst(/const SPEAK_PUNCT_TAIL [^\n]*/, 'SPEAK_PUNCT_TAIL'),
+    grab('normalizeChinese'),
     grab('charJyutpingSyllables'), grab('readingsFor'), grab('sameSoundAt'),
     grabConst(/const IDENTITY_EQ = [\s\S]*?;/, 'IDENTITY_EQ'),
     grab('speakEqFor'), grab('editDistance'),

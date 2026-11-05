@@ -4,7 +4,21 @@
 questions behind it. Meant to be short-lived — when a piece ships, fold its
 outcome into STATUS.md and clear this file back down for the next thing.*
 
-Last updated: 2026-11-04 · sw.js at v161
+Last updated: 2026-11-05 · sw.js at v163
+
+## v163 — a correctly said sentence reads back as its lesson — delivered, not yet deployed
+
+The "You said" jyutping no longer contradicts the lesson on a correct attempt: 哥哥 (go4 go1) reads go4 go1, not go1 go1 (DES-65). Characters said exactly as taught take the lesson's syllable; anything said differently is worked out as before. Also: one shared punctuation list, which now includes ；. Code only: `app.js`, `render.js`, `sw.js`, `tools/jyutping-check.js`, and five harnesses and probes that lift the changed functions. Detail is in the STATUS row. **Verified by the real functions against all 776 lines and a rendered line, not yet on the Pixel.** v163 sits on top of v162, which is also uncommitted: both can go in one commit and one deploy, and `sw.js` already reads v163.
+
+**QA, screens that changed:** the Learn *Say it back* sheet on Family's 我有一個哥哥 (ngo5 jau5 jat1 go3 go4 go1) said correctly — *You said* reads go4 go1, nothing dotted; the same sheet on Greetings' 麻煩你幫我介紹下；失禮喇 said correctly — the grid now draws; a sentence said with one wrong word — that word keeps its own reading.
+**Screens sharing the changed code, to confirm only:** Chat's Speak mode and the checkpoint sentence review (same *You said* line, should read as the lesson); Translate's speak-back, which should look exactly as before.
+
+## v162 — topic intro notes put the character first — delivered, not yet deployed
+
+Every reading-first term in the *About this lesson* notes — 80 of them across 15 topics — now reads 煮 (zyu2) rather than zyu2 (煮), with any gloss inside the same bracket. Bold key terms keep their bold, now on the character; the italic on the old leading jyutping is gone (DES-64). `jyutping-check.js` now asserts the order. Content and a check only: 15 topic files, `tools/jyutping-check.js`, and the `sw.js` bump (topic files are pre-cached, so without it the old notes would stay). No audio. Detail is in the STATUS row.
+
+**QA, screens that changed:** the Learn screen's *About this lesson* panel in round 1 of Cooking (the three bold verbs, and "The wok, 鑊 (wok6), is…"), Money (four bold terms), Animals (glosses inside brackets) and round 2 of Numbers — the character leads every pair, bold sits on the character, nothing is slanted.
+**Screens sharing the changed code, to confirm only:** the same panel on any topic not in the list (Adjectives, Classifiers), which should look exactly as before.
 
 ## v159 — quiz results show the whole word you chose — deployed, awaiting device QA confirmation
 

@@ -4,7 +4,7 @@
 IN_PROGRESS.md when it's picked up; delete it from here once it's shipped and
 folded into STATUS.md.*
 
-Last updated: 2026-11-04 · sw.js at v161
+Last updated: 2026-11-05 · sw.js at v163
 
 ## Product
 - **Runtime Azure TTS for the Translate screen — gated on the A2 proxy.** Agreed
@@ -51,16 +51,10 @@ Last updated: 2026-11-04 · sw.js at v161
 
 ## Content
 
-- **Topic intro notes write jyutping before the character, 36+ times.** Found
-  2026-09-23 on *Cooking & Kitchen*: "**zyu2** (煮) is general cooking" puts the
-  reading first and the character in brackets, the reverse of the rule that every
-  character is followed by its jyutping. A pattern search finds at least 36 such
-  spots across 15 topic files (work, animals, school, hotels, emergencies,
-  numbers, friends, restaurant, attractions, tech, money, cooking, hobbies, home,
-  sports); an italic form, *wok6*, 鑊, is not counted. `jyutping-check.js` passes
-  them because the jyutping is present, just in the wrong order. Reorder to
-  煮 (zyu2), then add the order to the check, verified to fail on a planted
-  reversal before it is trusted.
+- **16 Cantonese phrases in 10 topic intro notes are written in jyutping only, with no characters.** Found during the v162 reorder: Money asks *jau5 mou5 saan3 zi2?* where it should read 有冇散紙？ (jau5 mou5 saan3 zi2?), and Attractions, Friends, Hotels, Particles, Questions, Restaurant, School, Tense and Work do the same. A learner who reads characters gets nothing to read. Needs the characters written in, ideally checked by ear, since a phrase never voiced has never been heard.
+  The order check (`jyutping-check.js` §8) does not see these, and the forward half of the rule — a character with no bracketed reading after it — is still unchecked anywhere; Comparisons' 高啲 gou1 di1 = taller is one known case. A forward check is the natural next assertion once this is fixed, and would fail today.
+- **14 topic intro notes carry more than one `<strong>`**, against CONTENT.md's "`<strong>` reserved for the single key term" (Tense has 8; Money 4; most have 3). Untouched at v162, which kept each note's emphasis count. Pick one term per note, or relax the rule to match the notes — William's call.
+- **Body's chat line 要唔要食藥？係咪要去醫院？ has jyutping for different words.** It reads *hai6 m4 hai6* (係唔係) where the characters say 係咪 (hai6 mai6): 11 characters, 12 syllables. Either form is natural Cantonese; one of the two lines needs changing to match the other, and the audio may follow whichever was voiced. Found by `jyutping-check.js` §9 (v163), which skips the line because it cannot be lined up.
 - **Optional wording tweak: 你識唔識炒飯？ (nei5 sik1 m4 sik1 caau2 faan6?).** Its
   English, *Can you make fried rice?*, is correct. *Do you know how to make fried
   rice?* would reinforce its own note, which contrasts 識 (sik1), a learned skill,
@@ -224,6 +218,9 @@ are pointers only — detail goes there, not here.*
   stage vs. standalone episode list) undecided.
 
 ## Quality
+- **Translate's speak-back still reads 哥哥 as go1 go1.** v163 fixed the "You said" line by borrowing the lesson's syllables, but on Translate the target's jyutping is itself worked out per character (`charJyutpingLine()`, needed for the grid), so it has the same fault and there is no lesson to borrow from. The model's own `jp` is shown above it correctly. A fix would ask the dictionary for the whole phrase there; the corpus-first rule exists for recogniser output, not model output.
+- **12 lines with a Latin word (William, WiFi, OK) and 2 with 999 keep the old per-character "You said" reading**, because they cannot be lined up one syllable per character. **Two of them visibly read back wrong when said perfectly:** 我叫William，你呢？ and 我叫David。你呢？ show 呢 as ni1 (this), where the lesson teaches ne1, the question particle. Closing it means the line-up skipping Latin tokens; `speakTargetParts()` is shared with the breakdown grid, so the grid would start drawing on these lines too, which needs a look before it changes.
+- **`tools/translate-reject-probe.html` cannot grade.** It lifts `renderSpeakBreakdown()` and `fuzzyMatch()` but not `speakEqFor()`, which both have called since DES-57 (v150). v163 added the punctuation constants it now also needs; the older gap is unfixed. Only matters if the probe is reopened.
 - **Decide whether to delete the old paid (S0) Azure Speech resource.** A free
   (F0) resource replaced it on 2026-11-03 and holds both `SPEECH_KEY` and the
   key saved on the phone. The S0 one is unused and costs nothing idle; deleting

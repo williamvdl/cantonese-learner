@@ -18,6 +18,8 @@
 //      character. charsToJyutping() indexes its output positionally, so a
 //      library update that changed this would silently shift every reading in
 //      the "You said" line onto the wrong character.
+//   4. ORDER — in authored text the character comes first and its jyutping
+//      follows in brackets, never the reverse (section 8, v162).
 //
 // Run after any content change or any update to vendor/to-jyutping.js.
 // Usage: node tools/jyutping-check.js
@@ -238,6 +240,181 @@ console.log('\n— every "You said" surface folds recogniser numerals —');
   if (!/function normalizeChinese[\s\S]{0,240}foldAsrNumerals\(/.test(appSrc))
     fail('normalizeChinese() no longer folds via foldAsrNumerals() — matching and display can now disagree about a number');
   else ok('matching and display fold through the same function, so they cannot drift');
+}
+
+// ── 8. Order: the character comes first, its jyutping follows ──────────────
+// The house rule is 煮 (zyu2) — every character immediately followed by its
+// jyutping in brackets. The checks above confirm a reading is PRESENT; none of
+// them looked at ORDER, so 80 reversals across 15 topic intro notes passed
+// unnoticed until v162: "<strong>zyu2</strong> (煮)", "<em>caau2 coi3</em>
+// (炒菜, stir-fried vegetables)", and one comma form, "(<em>wok6</em>, 鑊)".
+// The backlog counted 36, because a search for the bold form missed 43 italic
+// ones and the comma — the signature to match is "jyutping, then a bracket or
+// comma, then a character", whatever markup wraps the jyutping.
+//
+// One exclusion. A bracketed reading may itself be followed by characters —
+// 食飯 (sik6 faan6, 食 eat + 飯 rice) — which has the reversed shape inside the
+// bracket. Jyutping that opens a bracket straight after a character is that
+// character's reading and is skipped.
+//
+// Scans every string in every data/ file, not just intro notes, so a reversal
+// in a sentence note or a chat line fails too. The self-test runs first: if the
+// pattern is ever loosened until it matches nothing, the check fails on its own
+// fixtures instead of passing on an empty scan.
+console.log('\n— order: character first, jyutping in brackets after it —');
+{
+  const HAN = '\\u3400-\\u4dbf\\u4e00-\\u9fff';
+  const SYL = '[a-z]+[1-6]';
+  const REVERSED = new RegExp(
+    `(?:<(?:strong|em|b|i)>)?\\b${SYL}(?:[ -]${SYL})*(?:</(?:strong|em|b|i)>)?` +
+    `\\s*(?:\\(|[,，]\\s*)[${HAN}]`, 'g');
+  const OWN_READING = new RegExp(`[${HAN}](?:</(?:strong|em|b|i)>)?\\s*\\($`);
+  const findReversals = str => [...str.matchAll(REVERSED)]
+    .filter(m => !OWN_READING.test(str.slice(0, m.index)))
+    .map(m => m[0]);
+
+  const mustFlag = [
+    '<strong>zyu2</strong> (煮) is general cooking',
+    '<em>caau2 coi3</em> (炒菜, stir-fried vegetables)',
+    'The wok (<em>wok6</em>, 鑊) is',
+    'plain zyu2 (煮) with no markup',
+  ];
+  const mustPass = [
+    '<strong>煮</strong> (zyu2) is general cooking',
+    '炒菜 (caau2 coi3, stir-fried vegetables)',
+    'The wok, 鑊 (wok6), is',
+    '食飯 (sik6 faan6, 食 eat + 飯 rice)',
+    '煮 (zyu2), 炒 (caau2) and 蒸 (zing1)',
+  ];
+  let selfOk = true;
+  for (const s of mustFlag) if (!findReversals(s).length) { selfOk = false; fail(`self-test: did not flag the reversed form "${s}"`); }
+  for (const s of mustPass) if (findReversals(s).length) { selfOk = false; fail(`self-test: flagged the correct form "${s}"`); }
+  if (selfOk) ok(`self-test: all ${mustFlag.length} reversed forms flagged, all ${mustPass.length} correct forms passed`);
+
+  const files = [];
+  (function walk(dir) {
+    for (const f of fs.readdirSync(dir)) {
+      const p = path.join(dir, f);
+      if (fs.statSync(p).isDirectory()) walk(p);
+      else if (f.endsWith('.json')) files.push(p);
+    }
+  })(path.join(ROOT, 'data'));
+
+  let strings = 0;
+  const reversals = [];
+  const visit = (v, at) => {
+    if (typeof v === 'string') {
+      if (!/[㐀-䶿一-鿿]/.test(v)) return;
+      strings++;
+      for (const r of findReversals(v)) reversals.push(`${at}: ${r}`);
+    } else if (Array.isArray(v)) v.forEach((x, i) => visit(x, `${at}.${i}`));
+    else if (v && typeof v === 'object') for (const k of Object.keys(v)) visit(v[k], `${at}.${k}`);
+  };
+  for (const f of files) visit(JSON.parse(fs.readFileSync(f, 'utf8')), path.relative(ROOT, f));
+
+  if (reversals.length) {
+    reversals.forEach(r => fail(`jyutping before its character — ${r}`));
+    console.log('       (write the character first: 煮 (zyu2), not zyu2 (煮))');
+  } else ok(`no jyutping-before-character in ${strings} strings across ${files.length} data files`);
+}
+
+// ── 9. A perfect attempt reads back exactly as the lesson does ─────────────
+// DES-65, v163. The recogniser returns characters, never sounds, so the "You
+// said" jyutping is derived from the characters. Derived one at a time, it got
+// any word-dependent reading wrong — 哥哥 (go4 go1) as go1 go1 — and before
+// v163 a perfectly said sentence contradicted its own lesson in 28 of 304
+// sentences. heardJyutping() now gives every character said exactly as taught
+// the lesson's own syllable.
+//
+// Runs the REAL functions, lifted from app.js by name, against every sentence
+// and chat line whose jyutping splits one syllable per character. Then four
+// pinned cases, so the fix cannot "pass" by copying the lesson onto characters
+// the learner did not say: a wrong character, a homophone the matcher forgave,
+// a swapped particle, and a target with a Latin name, which must fall back.
+console.log('\n— a perfect attempt reads back exactly as the lesson does —');
+{
+  const vm = require('vm');
+  const appSrc = fs.readFileSync(path.join(ROOT, 'app.js'), 'utf8');
+  const grab = name => {
+    const i = appSrc.indexOf('function ' + name + '(');
+    if (i < 0) throw new Error('app.js no longer defines ' + name + '() — this check needs updating');
+    let d = 0;
+    for (let k = appSrc.indexOf('{', i); k < appSrc.length; k++) {
+      if (appSrc[k] === '{') d++;
+      else if (appSrc[k] === '}') { d--; if (!d) return appSrc.slice(i, k + 1); }
+    }
+  };
+  const grabConst = re => { const m = appSrc.match(re); if (!m) throw new Error('app.js const not found: ' + re); return m[0]; };
+  const env = { console, Map, Set, Array, String, Object, parseInt };
+  env.window = env;
+  vm.createContext(env);
+  vm.runInContext(fs.readFileSync(path.join(ROOT, 'vendor/to-jyutping.js'), 'utf8'), env);
+  env.store = { charJyutping: corpus };
+  vm.runInContext([
+    grabConst(/const ASR_DIGITS = [\s\S]*?;/), grabConst(/const ASR_PLACES = [\s\S]*?;/),
+    grabConst(/const IDENTITY_EQ = [^\n]*/),
+    grabConst(/const SPEAK_PUNCT = [^\n]*/), grabConst(/const SPEAK_PUNCT_ALL [^\n]*/),
+    grabConst(/const SPEAK_PUNCT_ONE [^\n]*/), grabConst(/const SPEAK_PUNCT_TAIL [^\n]*/),
+    ...['speakTargetParts', 'charJyutpingSyllables', 'readingsFor', 'sameSoundAt', 'speakEqFor', 'foldAsrNumerals',
+        'normalizeChinese', 'alignChars', 'heardReadingsFromTarget'].map(grab),
+    'globalThis.readHeard = (h, c, j) => charJyutpingSyllables(h, heardReadingsFromTarget(h, c, j)).map(s => s.reading);',
+    'globalThis.readPlain = h => charJyutpingSyllables(h).map(s => s.reading);',
+  ].join('\n\n'), env);
+
+  // The lesson's syllables, split independently of the app's speakTargetParts():
+  // whitespace tokens, anything after the tone digit dropped. Using the app's own
+  // parse here would grade the code with itself.
+  // Case is kept: the lessons capitalise names (悉尼 Sat1 nei4), and the line
+  // should read back as the lesson does, capital included.
+  const syl = j => j.split(/\s+/).map(s => s.replace(/[^A-Za-z0-9]+$/, '')).filter(Boolean);
+  const items = [];
+  const addLines = (lines, where) => (lines || []).forEach((l, i) => l && l.c && l.j && items.push({ c: l.c, j: l.j, at: `${where}.${i}` }));
+  for (const f of fs.readdirSync(path.join(ROOT, 'data/topics'))) {
+    const t = JSON.parse(fs.readFileSync(path.join(ROOT, 'data/topics', f), 'utf8'));
+    for (const [rk, r] of Object.entries(t.rounds || {})) {
+      addLines(r.sentences, `${f} r${rk} sentence`);
+      if (r.convo) addLines(r.convo.lines, `${f} r${rk} chat`);
+    }
+  }
+  const pc = JSON.parse(fs.readFileSync(path.join(ROOT, 'data/path_convos.json'), 'utf8')).convos || {};
+  for (const [k, cv] of Object.entries(pc)) addLines(cv.lines, `path_convos ${k}`);
+
+  let compared = 0, skipped = 0, plainWrong = 0, wrong = 0;
+  for (const it of items) {
+    const want = syl(it.j);
+    const plain = env.readPlain(it.c);
+    if (plain.length !== want.length) { skipped++; continue; }   // a Latin name or uneven split: nothing to compare
+    compared++;
+    if (plain.some((r, i) => (r || '').toLowerCase() !== want[i].toLowerCase())) plainWrong++;   // readings, not capitals
+    const got = env.readHeard(it.c, it.c, it.j);
+    const diffs = got.map((r, i) => r !== want[i] ? `${[...it.c.replace(/[^㐀-䶿一-鿿]/g, '')][i]} ${r}≠${want[i]}` : null).filter(Boolean);
+    if (diffs.length) { wrong++; fail(`${it.at} said perfectly reads back ${diffs.join(', ')} — ${it.c}`); }
+  }
+  if (!compared) fail('no corpus lines were compared — has the data shape changed?');
+  else if (!wrong) ok(`all ${compared} sentences and chat lines, said perfectly, read back as their lessons (the old per-character reading got ${plainWrong} wrong, ignoring capitals; ${skipped} skipped, not one syllable per character)`);
+
+  // Pinned cases. The target is 我有一個哥哥 (ngo5 jau5 jat1 go3 go4 go1).
+  const T = ['我有一個哥哥。', 'ngo5 jau5 jat1 go3 go4 go1.'];
+  const pin = (label, got, want) => {
+    if (JSON.stringify(got) === JSON.stringify(want)) ok(label);
+    else fail(`${label} — got ${got.join(' ')}, expected ${want.join(' ')}`);
+  };
+  pin('the reported case: 哥哥 reads go4 go1, not go1 go1', env.readHeard('我有一個哥哥。', ...T), syl(T[1]));
+  // A wrong character keeps its own reading, and the matched 哥哥 around it still
+  // takes the lesson's. If the identical-character test were dropped, 兩 would
+  // read jat1. (So would 歌 and 啦 below: all three pins guard that one rule.)
+  pin('a wrong character keeps its own reading: 兩 is loeng5, not the lesson\'s jat1',
+      env.readHeard('我有兩個哥哥', ...T), ['ngo5', 'jau5', env.readPlain('兩')[0], 'go3', 'go4', 'go1']);
+  // A homophone the matcher forgives (歌 and 哥 are both go1 on their own) is a
+  // different character, so the lesson's go4 does not belong to it. If the
+  // identical-character test were dropped, 歌 would read go4.
+  pin('a forgiven homophone keeps its own reading: 歌 is go1, not the lesson\'s go4',
+      env.readHeard('我有一個歌哥', ...T), ['ngo5', 'jau5', 'jat1', 'go3', env.readPlain('歌')[0], 'go1']);
+  // A swapped final particle is forgiven, but it is not the particle taught.
+  pin('a swapped particle keeps its own reading: 啦 is not read as the lesson\'s 呀 (aa3)',
+      env.readHeard('你好啦', '你好呀', 'nei5 hou2 aa3'), ['nei5', 'hou2', env.readPlain('啦')[0]]);
+  pin('a target with a Latin name falls back to the plain reading',
+      env.readHeard('我叫William。', '我叫William。', 'ngo5 giu3 William.'), env.readPlain('我叫William。'));
 }
 
 console.log('');

@@ -423,7 +423,12 @@ function colorJyutping(text) {
 // entirely, matching the alignment renderSpeakBreakdown() expects. A character
 // with no reading anywhere still occupies a slot, marked unknown, so the count
 // stays right rather than silently collapsing the grid.
-function charJyutpingSyllables(text) {
+//
+// `fixed` (optional) is a Map from character position in [...text] to a reading
+// that overrides both sources. heardJyutping() passes the lesson's own syllable
+// for every character the learner said exactly as taught (DES-65). A fixed
+// reading is never marked ambiguous: it is the one the lesson teaches there.
+function charJyutpingSyllables(text, fixed) {
   const corpus = store.charJyutping || {};
   const lib = (typeof window !== 'undefined' && window.ToJyutping) || null;
 
@@ -445,6 +450,7 @@ function charJyutpingSyllables(text) {
     // jyutping on every surface, and the breakdown grid refused to align on any
     // sentence containing one.
     if (!/[\u3400-\u4dbf\u4e00-\u9fff]/.test(ch)) return;
+    if (fixed && fixed.has(i)) { out.push({ ch, reading: fixed.get(i), amb: false }); return; }
     const taught = corpus[ch];
     const fromLib = libPairs && libPairs[i] && libPairs[i][1];
     const reading = taught ? taught.j : fromLib;
@@ -465,11 +471,11 @@ function charJyutpingLine(text) {
   return charJyutpingSyllables(text).map(s => s.reading || '\u00b7').join(' ');
 }
 
-function charsToJyutping(text) {
+function charsToJyutping(text, fixed) {
   // Renders from charJyutpingSyllables() rather than repeating the lookup, so
   // the coloured line the learner reads and the plain line the breakdown grades
   // against can never disagree about what a character says.
-  return charJyutpingSyllables(text).map(({ ch, reading, amb }) => {
+  return charJyutpingSyllables(text, fixed).map(({ ch, reading, amb }) => {
     if (!reading) {
       return `<span class="jp-unknown" title="No reading available for ${ch}">?</span>`;
     }
@@ -485,6 +491,61 @@ function charsToJyutping(text) {
     }
     return `<span style="color:${color};font-weight:700">${reading}</span>`;
   }).join(' ');
+}
+
+// The jyutping under every "You said" line (DES-65, v163).
+//
+// The recogniser returns characters, never sounds, so this line has always been
+// a reading worked out from the characters afterwards, one at a time. That fails
+// wherever a character's reading depends on its word: 哥哥 (go4 go1) came out as
+// go1 go1, because 哥 alone is most often go1. On a perfectly said sentence the
+// line contradicted the lesson printed above it — 28 of 304 corpus sentences did
+// this before v163 (醫生 ji1 sang1 shown as saang1, 時間 si4 gaan3 as gaan1).
+//
+// So the heard text is lined up against the target first, with the SAME
+// alignChars() and speakEqFor() the breakdown grid uses, and every heard
+// character IDENTICAL to the target character it matched takes the lesson's
+// syllable. Anything else — a different character, a homophone the matcher
+// forgave, a swapped particle, an extra word — keeps the derived reading,
+// because for those the lesson's syllable is not what the character says.
+//
+// Falls back to the plain derivation, unchanged, whenever the two cannot be
+// lined up one syllable per character (a target with a Latin name in it, or
+// jyutping that does not split evenly) — the same condition under which
+// renderSpeakBreakdown() declines to draw its grid.
+function heardJyutping(heard, targetC, targetJ) {
+  return charsToJyutping(heard, heardReadingsFromTarget(heard, targetC, targetJ));
+}
+
+function heardReadingsFromTarget(heard, targetC, targetJ) {
+  const fixed = new Map();
+  if (!heard || !targetC || !targetJ) return fixed;
+  // Read the target exactly as renderSpeakBreakdown() does, so this line and
+  // the grid below it cannot disagree about it.
+  const { chars: tChars, syls: tSyl, aligned } = speakTargetParts(targetC, targetJ);
+  if (!aligned) return fixed;
+
+  // Where each character of the compared string sits in `heard` itself.
+  // normalizeChinese() strips punctuation and folds digits; the caller has
+  // already folded digits (DES-48), so stripping should be all that is left. If
+  // it is not, positions cannot be trusted and nothing is fixed.
+  const hChars = [...heard];
+  const pos = [];
+  hChars.forEach((c, p) => { if (!SPEAK_PUNCT_ONE.test(c)) pos.push(p); });
+  const heardClean = normalizeChinese(heard);
+  const targetClean = tChars.join('');
+  if (heardClean !== pos.map(p => hChars[p]).join('') || heardClean.length !== pos.length
+      || targetClean.length !== tChars.length) return fixed;
+
+  // The one rule: the heard character lined up with this target slot is the
+  // SAME character. A 'wrong' mark can never pass it, and a homophone 'match'
+  // — a different character the matcher forgave — must not, so no separate
+  // status test is needed or kept.
+  const marks = alignChars(heardClean, targetClean, speakEqFor(heardClean, targetClean));
+  marks.forEach((m, j) => {
+    if (m && m.heardIdx !== undefined && heardClean[m.heardIdx] === tChars[j]) fixed.set(pos[m.heardIdx], tSyl[j]);
+  });
+  return fixed;
 }
 
 // ── State ─────────────────────────────────────────────────────────────────────
@@ -1981,10 +2042,35 @@ function foldAsrNumerals(text) {
   });
 }
 
+// The punctuation every speak comparison ignores — ONE list (v163). Until then
+// it was written out separately in normalizeChinese(), renderSpeakBreakdown()
+// and the "You said" reading, and every copy missed the full-width semicolon ；,
+// which one corpus line uses (Greetings, 介紹下；失禮喇). On that line the grid
+// never drew, the "You said" line could not line up, and the ； cost the learner
+// one of their allowed edits, because no recogniser ever writes it.
+const SPEAK_PUNCT = '\\s，。！？、；,!?.;\\-';
+const SPEAK_PUNCT_ALL  = new RegExp(`[${SPEAK_PUNCT}]`, 'g');
+const SPEAK_PUNCT_ONE  = new RegExp(`^[${SPEAK_PUNCT}]$`);
+const SPEAK_PUNCT_TAIL = new RegExp(`[${SPEAK_PUNCT}]+$`);
+
+// A target split the way every speak comparison reads it: its characters with
+// punctuation removed, and its jyutping one syllable per whitespace-separated
+// token, trailing punctuation removed. `aligned` is false when the two counts
+// differ (a Latin name in the line, say), and callers then decline rather than
+// guess. Shared by renderSpeakBreakdown() and heardReadingsFromTarget(), so the
+// grid and the "You said" line can never read the same target differently.
+function speakTargetParts(targetC, targetJ) {
+  const chars = [...(targetC || '')].filter(c => !SPEAK_PUNCT_ONE.test(c));
+  const syls = (targetJ || '').split(/\s+/)
+    .map(x => x.replace(SPEAK_PUNCT_TAIL, ''))
+    .filter(Boolean);
+  return { chars, syls, aligned: chars.length > 0 && chars.length === syls.length };
+}
+
 function normalizeChinese(text) {
   // Strip whitespace and Chinese punctuation, and fold Arabic digits to their
   // Chinese numerals, for comparison
-  return foldAsrNumerals((text || '').replace(/[\s，。！？、,!?.\-]/g, ''));
+  return foldAsrNumerals((text || '').replace(SPEAK_PUNCT_ALL, ''));
 }
 
 // Edit-distance (Levenshtein) between two strings. Order-sensitive.
@@ -2253,6 +2339,9 @@ function fuzzyMatch(heard, target) {
 //   { status: 'match' }                            — target[j] was said correctly
 //   { status: 'wrong', heardChar: '<char>' }       — target[j] was said as a different char
 //   { status: 'missing' }                          — target[j] was skipped/not heard
+// 'match' and 'wrong' also carry `heardIdx`, the position in `heard` that
+// target[j] lined up with — heardJyutping() needs to know which heard character
+// each lesson syllable belongs to (DES-65, v163). Nothing else reads it.
 //
 // Standard Needleman-Wunsch / Levenshtein DP, then backtrack the optimal path.
 // Both inputs should be normalized (punctuation/whitespace stripped) before calling.
@@ -2285,7 +2374,8 @@ function alignChars(heard, target, eq) {
     const same = eq(i - 1, j - 1, heard[i - 1], target[j - 1]);
     const diag = dp[i - 1][j - 1] + (same ? 0 : 1);
     if (dp[i][j] === diag) {
-      marks[j - 1] = same ? { status: 'match' } : { status: 'wrong', heardChar: heard[i - 1] };
+      marks[j - 1] = same ? { status: 'match', heardIdx: i - 1 }
+                          : { status: 'wrong', heardChar: heard[i - 1], heardIdx: i - 1 };
       i--; j--;
     } else if (dp[i][j] === dp[i][j - 1] + 1) {
       marks[j - 1] = { status: 'missing' };
@@ -2320,13 +2410,8 @@ function renderSpeakBreakdown(heard, targetC, targetJ, variant) {
   const badColor  = variant === 'close' ? 'var(--brand-text-dark)' : 'var(--feedback-bad)';
   const markColor = variant === 'close' ? 'var(--brand)'           : 'var(--feedback-bad)';
 
-  const punct = /[\s，。！？、,!?.\-]/;
-  const charArr = Array.from(targetC).filter(c => !punct.test(c));
-  // Split by whitespace, then strip any trailing punctuation that came with the syllable
-  const jpArr   = (targetJ || '').split(/\s+/)
-    .map(s => s.replace(/[，。！？、,!?.\-]+$/, ''))
-    .filter(Boolean);
-  if (!charArr.length || charArr.length !== jpArr.length) return { html: '', hasDiff: false };   // alignment-impossible — caller handles fallback
+  const { chars: charArr, syls: jpArr, aligned } = speakTargetParts(targetC, targetJ);
+  if (!aligned) return { html: '', hasDiff: false };   // alignment-impossible — caller handles fallback
 
   const heardClean = normalizeChinese(heard);
   const targetClean = charArr.join('');

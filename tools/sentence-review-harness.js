@@ -86,6 +86,11 @@ const pieces = [
   grabConst(/const ASR_DIGITS = \{[\s\S]*?\};/),
   grabConst(/const ASR_PLACES = \[[\s\S]*?\];/),
   grab(all, 'foldAsrNumerals'),
+  // v163: the shared punctuation list and target split, and the "You said"
+  // reading the review now renders through (DES-65).
+  grabConst(/const SPEAK_PUNCT = [^\n]*/), grabConst(/const SPEAK_PUNCT_ALL [^\n]*/),
+  grabConst(/const SPEAK_PUNCT_ONE [^\n]*/), grabConst(/const SPEAK_PUNCT_TAIL [^\n]*/),
+  grab(all, 'speakTargetParts'), grab(all, 'heardJyutping'), grab(all, 'heardReadingsFromTarget'),
   grab(all, 'normalizeChinese'),
   // DES-57 same-sound equality, and the particle machinery fuzzyMatch() has
   // called since v144. The particle functions were never lifted here, so this
