@@ -4,7 +4,14 @@
 questions behind it. Meant to be short-lived — when a piece ships, fold its
 outcome into STATUS.md and clear this file back down for the next thing.*
 
-Last updated: 2026-11-06 · sw.js at v164
+Last updated: 2026-11-06 · sw.js at v165
+
+## v165 — topic intro notes carry characters for every reading — delivered, not yet deployed
+
+28 terms across 13 topic intro notes were written as jyutping alone, or as characters alone: Money's *jau5 mou5 saan3 zi2?* now reads 有冇散紙？ (jau5 mou5 saan3 zi2?), Questions' bold particles read **嗎** (maa3), **點解** (dim2 gaai2), **呢** (ne1), and Home's bare 家 now has (gaa1). Characters written in by Claude and checked against the course's own character table and the dictionary; every pair agrees with what the course teaches elsewhere. `jyutping-check.js` §10 now enforces the rule for intro notes. Data and a check only: 12 topic files, the check, and the `sw.js` bump. No audio — notes are not voiced. Detail is in the STATUS row.
+
+**QA, screens that changed:** the *About this lesson* panel on Questions, Tense and Comparisons — every Chinese term has characters, then jyutping in brackets; bold sits on the characters. A glance at Money, Particles and Friends.
+**Screens sharing the changed code, to confirm only:** none; data only.
 
 ## v164 — Body's doctor chat line reads 係咪 (hai6 mai6) — delivered, not yet deployed
 
@@ -13,8 +20,8 @@ The learner line 要唔要食藥？係咪要去醫院？ (jiu3 m4 jiu3 sik6 joek
 **QA, screens that changed:** Body's Chat, *At the doctor*, line 6 — the jyutping under the line, under its first answer option in Fill the Gap, and in its word breakdown all read hai6 mai6.
 **Screens sharing the changed code, to confirm only:** none; data only.
 
-**Next candidate work:** saving every audio clip for offline ahead of time and, once a few real failures have been read, removing v161's temporary speech-failure line (both new at v161); writing in the characters for
-the 16 jyutping-only phrases in topic intro notes (BACKLOG § Content), styling the styleguide's speak demos, an aggregating runner
+**Next candidate work:** saving every audio clip for offline ahead of time and, once a few real failures have been read, removing v161's temporary speech-failure line (both new at v161); holding sentence notes to the
+character-and-reading rule (BACKLOG § Content), styling the styleguide's speak demos, an aggregating runner
 for the standing checks, the 169 Check B structural candidates from
 `dup-css.js` (needs William's judgement), the 4 remaining Check A rule-splits,
 the open particle-rule question, and the `char-jyutping.json` coverage

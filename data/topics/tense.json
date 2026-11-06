@@ -6,7 +6,7 @@
   },
   "rounds": {
     "1": {
-      "note": "Cantonese verbs don't change form for past, present, or future — instead, small particles and time words do the work. <strong>zo2</strong>, <strong>gan2</strong>, <strong>gwo3</strong>, and <strong>zyu6</strong> attach <strong>after</strong> the verb (e.g. <em>sik6 zo2</em> = ate, <em>sik6 gan2</em> = eating). Modals like <strong>wui5</strong> (will) and <strong>jiu3</strong> (need to) come <strong>before</strong> the verb. Time words like <em>ji5 ging1</em> (already) and <em>mei6</em> (not yet) sit at the start or before the verb to anchor when something happens.",
+      "note": "Cantonese verbs don't change form for past, present, or future — instead, small particles and time words do the work. <strong>咗</strong> (zo2), <strong>緊</strong> (gan2), <strong>過</strong> (gwo3) and <strong>住</strong> (zyu6) attach <strong>after</strong> the verb: 食咗 (sik6 zo2) = ate, 食緊 (sik6 gan2) = eating. Modals like <strong>會</strong> (wui5, will) and <strong>要</strong> (jiu3, need to) come <strong>before</strong> the verb. Time words like 已經 (ji5 ging1, already) and 未 (mei6, not yet) sit at the start or before the verb to anchor when something happens.",
       "words": [
         {
           "id": "tense-001",

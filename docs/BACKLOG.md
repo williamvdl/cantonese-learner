@@ -4,7 +4,7 @@
 IN_PROGRESS.md when it's picked up; delete it from here once it's shipped and
 folded into STATUS.md.*
 
-Last updated: 2026-11-06 · sw.js at v164
+Last updated: 2026-11-06 · sw.js at v165
 
 ## Product
 - **Runtime Azure TTS for the Translate screen — gated on the A2 proxy.** Agreed
@@ -51,8 +51,8 @@ Last updated: 2026-11-06 · sw.js at v164
 
 ## Content
 
-- **16 Cantonese phrases in 10 topic intro notes are written in jyutping only, with no characters.** Found during the v162 reorder: Money asks *jau5 mou5 saan3 zi2?* where it should read 有冇散紙？ (jau5 mou5 saan3 zi2?), and Attractions, Friends, Hotels, Particles, Questions, Restaurant, School, Tense and Work do the same. A learner who reads characters gets nothing to read. Needs the characters written in, ideally checked by ear, since a phrase never voiced has never been heard.
-  The order check (`jyutping-check.js` §8) does not see these, and the forward half of the rule — a character with no bracketed reading after it — is still unchecked anywhere; Comparisons' 高啲 gou1 di1 = taller is one known case. A forward check is the natural next assertion once this is fixed, and would fail today.
+- **Sentence notes are not yet held to the character-and-reading rule.** v165 made `jyutping-check.js` §10 enforce it for topic intro notes only. Run over sentence notes, the same method reports about 300 hits — a mix of real gaps, such as Adjectives' "(Same 條 tiu4 …)" with no bracket, and forms the method reads too strictly, such as a full-width ？ between the characters and their bracket. Measure precisely before fixing, then widen §10.
+- **Attractions' intro note: what do the signs actually say?** It tells learners to watch for 唔可以拍照 (m4 ho2 ji5 paak3 ziu3, 'photos not allowed') signs. That is the spoken phrase; signs are written in standard Chinese, typically 請勿拍照 (cing2 mat6 paak3 ziu3, 'please do not take photos'). v165 kept the original wording and only wrote in its characters. A one-line rewording if a native reader agrees.
 - **14 topic intro notes carry more than one `<strong>`**, against CONTENT.md's "`<strong>` reserved for the single key term" (Tense has 8; Money 4; most have 3). Untouched at v162, which kept each note's emphasis count. Pick one term per note, or relax the rule to match the notes — William's call.
 - **Optional wording tweak: 你識唔識炒飯？ (nei5 sik1 m4 sik1 caau2 faan6?).** Its
   English, *Can you make fried rice?*, is correct. *Do you know how to make fried
