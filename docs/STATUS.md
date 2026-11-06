@@ -16,6 +16,7 @@ not a history log. Approved design decisions and whether they were built live in
 Last updated: 2026-11-06 · sw.js at v166
 
 ## Confirmed live and working
+- **Every note writes every Chinese term as characters, then jyutping in brackets** (v165–v166) — all 34 topic intro notes and 246 sentence notes, held at zero by `jyutping-check.js` §10 using the one rule in `tools/note-pairs.js`; the full rule is CONTENT.md §3. Body's doctor chat line spells 係咪 as hai6 mai6 (v164). Confirmed on the Pixel 2026-11-06.
 - **Five smaller deploys, v155 to v159** — confirmed on the Pixel 2026-11-06: larger Learn / Chat / Quiz tabs and small-caps labels (v155); Saying More third on the Beginner path (v156); the corrected Adjectives sentence and Modal Verbs chat, with new audio (v157); the checkpoint Words quiz auto-playing listen prompts like the topic quiz (v158); "You chose" showing the picked word's Chinese, jyutping and English (DES-60, v159). Each has its row in the deploy table.
 - **"You said" reads back as the lesson when the learner gets it right** (v163, DES-65). On all four speak surfaces, a heard character that is the same as the lesson's takes the lesson's syllable, so 哥哥 (go4 go1) no longer reads go1 go1; anything said differently keeps its own reading. Lines with a Latin name or 999 keep the old reading (BACKLOG). Confirmed on the Pixel 2026-11-06.
 - **Topic intro notes put the character first** (v162, DES-64): 煮 (zyu2), never zyu2 (煮), with any gloss in the same bracket, enforced by `jyutping-check.js` §8. Confirmed on the Pixel 2026-11-06.
