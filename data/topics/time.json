@@ -272,7 +272,7 @@
           "c": "今年係我第一年學廣東話。",
           "j": "gam1 nin4 hai6 ngo5 dai6 jat1 nin4 hok6 gwong2 dung1 waa2.",
           "e": "This year is my first year learning Cantonese.",
-          "note": "年 (nin4) \"year\" follows the same logic: 今年 (gam1 nin4) \"this year\", 去年 (heoi3 nin4) \"last year\" (not in the word list but useful), 明年 (ming4 nin4) \"next year\". Numbers + 年 give the calendar year.",
+          "note": "年 (nin4) \"year\" follows the same logic: 今年 (gam1 nin4) \"this year\", 去年 (heoi3 nin4) \"last year\" (not in the word list but useful), 明年 (ming4 nin4) \"next year\". Numbers + 年 (nin4) give the calendar year.",
           "bd": [
             {
               "c": "今年",
@@ -306,7 +306,7 @@
           "c": "上個月好忙，下個月應該好啲。",
           "j": "soeng6 go3 jyut6 hou2 mong4, haa6 go3 jyut6 jing1 goi1 hou2 di1.",
           "e": "Last month was hectic — next month should be better.",
-          "note": "上個月 (soeng6 go3 jyut6) \"last month\" and <b>下個月</b> (haa6 go3 jyut6) \"next month\" follow the same 上/下 (soeng6/haa6) \"above/below\" logic as 上個星期/下個星期 (last/next week). A consistent Cantonese pattern.",
+          "note": "上個月 (soeng6 go3 jyut6) \"last month\" and <b>下個月</b> (haa6 go3 jyut6) \"next month\" follow the same 上/下 (soeng6/haa6) \"above/below\" logic as 上個星期/下個星期 (soeng6 go3 sing1 kei4/haa6 go3 sing1 kei4) \"last/next week\". A consistent Cantonese pattern.",
           "bd": [
             {
               "c": "上個月",

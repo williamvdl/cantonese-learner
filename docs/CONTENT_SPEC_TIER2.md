@@ -5,7 +5,7 @@ harder experience. Read this before authoring or retrofitting a tier-2 lesson.
 `CONTENT.md` records what exists and what is planned; this file records how to
 build one.*
 
-Last updated: 2026-08-10 · sw.js at v127
+Last updated: 2026-11-06 · sw.js at v165
 
 > **Provenance.** This is spec v2, previously held outside the repo as
 > `intermediate-tier2-content-spec-v1.md` — a filename that said v1 while the
@@ -132,8 +132,12 @@ sentence — not the connective.
    Not forced one-per-sentence.
 4. **Skip true repetition** — omit a note when an earlier note in the same round
    made the identical point.
-5. **House style:** plain language; every Chinese character immediately followed
-   by jyutping in brackets; `<strong>` reserved for the single key concept term.
+5. **House style:** plain language; `<strong>` reserved for the single key
+   concept term; and every Chinese term written as its characters, then its
+   jyutping in brackets. **That rule is stated in full in CONTENT.md §3,
+   *Writing Chinese in English text*** — the accepted compact forms, the five ways
+   it has gone wrong, and how to check a pair without reading characters. It is
+   not restated here, so the two cannot drift.
 
 ---
 
@@ -269,7 +273,9 @@ its sizing vocabulary — 試吓 (si3 haa5), 尺碼 (cek3 maa5), 緊 (gan2), 鬆
 4. Update `data/topics_index.json` — tier list **and** word count. This is
    derived data maintained by hand and it has drifted before; check 7 in
    `content-report.js` exists because of it.
-5. `node tools/validate.js` and `node tools/content-report.js --check`.
+5. `node tools/validate.js`, `node tools/content-report.js --check` and
+   `node tools/jyutping-check.js`. The last holds CONTENT.md §3's character-and-
+   reading rule for every intro note and sentence note.
 6. Generate audio with `tools/generate-audio.js` — **Azure AI Speech, `zh-HK`
    Neural** (the default since v123; `SPEECH_KEY` + `SPEECH_REGION`) — and commit
    the files. **Content without audio is a silent lesson.** Do not fall back to

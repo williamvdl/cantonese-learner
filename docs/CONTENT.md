@@ -5,8 +5,8 @@ and what is planned. Content only — the app that renders it lives in STATUS.md
 the visual rules in DESIGN_SYSTEM.md, the UX decisions in DESIGN_DECISIONS.md,
 the tier-2 authoring rules in CONTENT_SPEC_TIER2.md.*
 
-Last updated: 2026-10-07 · sw.js at v156 · inventory derived from
-`node tools/content-report.js`
+Last updated: 2026-11-06 · sw.js at v166 · inventory derived from
+`node tools/content-report.js` (§2 not re-run since v156; §3, §4, §6, §7 updated at v165–v166)
 
 ---
 
@@ -334,10 +334,6 @@ a labelled reference: it cannot produce a bare syllabic nasal, so 唔 (m4) and
 not just a pipeline one** — it affected 207 of 1,376 files and would silently
 mispronounce any new sentence containing either character.
 
-**Every Chinese character is immediately followed by jyutping in brackets** —
-in sentences, breakdowns, notes, conversations and chat. No exceptions. Notes may
-carry `<strong>` and `<em>`, with `<strong>` reserved for the single key term.
-
 **Fill-the-Gap distractors — the rule, and why the existing ones fail it.**
 A user turn carries `opts` and `optsJ`: three strings each, positionally
 parallel, and `opts[0]` is the line verbatim. That much is already invariant
@@ -397,6 +393,74 @@ both "Making weekend plans"; `body` tier 1 and tier 2 are both "At the doctor";
 `colors` and `clothing` are both "Shopping for clothes". Harmless while titles
 are never listed side by side — worth knowing before a screen does.
 
+### Writing Chinese in English text
+
+**This is the canonical statement of the rule.** CONTENT_SPEC_TIER2.md §5 points
+here rather than restating it, and the project instructions summarise it in one
+line. It was a one-line rule until v165, and it was broken more than 250 times
+— 80 terms reading-first, 28 intro-note terms and 70 sentence-note terms missing
+half their pair, and 24 dormant pattern lines in jyutping alone — because the
+line said what to do and nothing said what going wrong looks like, or how to find
+out.
+
+**The rule: every Chinese term is written as its characters, then its jyutping
+in brackets.** 有冇散紙？ (jau5 mou5 saan3 zi2?). Never the reading alone, never
+the characters alone. It applies to every string a learner can see — sentences,
+breakdowns, sentence notes, topic intro notes, conversations, Fill-the-Gap
+options, and `patterns.json` if it is ever revived. It applies to the docs too.
+
+**How the pair is written:**
+- **Where the gloss goes depends on the kind of note, and each kind is
+  consistent.** Topic intro notes put it inside the bracket, after the reading —
+  好 (hou2, very). Sentence notes put it after the bracket, in quotes — 心
+  (sam1) "heart". Measured at v166: intro notes 57 to 0 inside, sentence notes
+  393 to 5 after. Match the note you are writing in. Never the gloss first —
+  "very" (好).
+- **Emphasis sits on the characters.** <strong>煮</strong> (zyu2), not 煮
+  (<strong>zyu2</strong>). Jyutping is not italicised (DES-64).
+- **`<strong>` is reserved for the single key term** of a note. Fourteen intro
+  notes break this today; see BACKLOG.
+- **Chinese punctuation inside the characters is full-width** — 返工呀？ (faan1
+  gung1 aa3?), not 返工呀? — and stays with the characters, before the bracket.
+
+**Four compact forms are accepted**, because each gives every character its
+reading in one place:
+- a pattern with a gap — 同…一樣 (tung4…jat1 joeng6);
+- alternatives sharing one bracket, one reading each, in the same order —
+  呢/嗰 (ni1/go2), 對唔住，改日啦 (deoi3 m4 zyu6, goi2 jat6 laa1);
+- digits with their reading — 999 (gau2 gau2 gau2);
+- an optional syllable marked on both sides — 定(係) (ding6 (hai6)).
+
+**The five ways it has gone wrong — each found in the corpus, each a real
+example:**
+
+| Failure | Wrong | Right |
+|---|---|---|
+| Reading first | <strong>zyu2</strong> (煮) | <strong>煮</strong> (zyu2) |
+| Reading alone | you'll be asked *jau5 mou5 saan3 zi2?* | 有冇散紙？ (jau5 mou5 saan3 zi2?) |
+| Characters alone | 開心 happy | 開心 (hoi1 sam1) happy |
+| Reading not in brackets | Same 條 tiu4 as for fish | Same 條 (tiu4) as for fish |
+| A find-and-replace that hit the text explaining the change | 畀 (bei2) "give" (also written 畀) | 畀 (bei2) "give" (also written 俾 (bei2)) |
+
+The last one is v148's: standardising 俾 (bei2) to 畀 (bei2) everywhere also
+replaced the 俾 (bei2) in the two notes that existed to say the spellings differ.
+**A spelling change by find-and-replace must exclude any text that names the
+variant** — grep for the old form in notes first and read each hit.
+
+**Characters you cannot read, you can still check.** An author who does not read
+characters — or a reviewer who checks by ear — can confirm a pair mechanically:
+every character's reading in `data/char-jyutping.json`, the corpus's own taught
+readings, should agree with the bracket. That is how v165's 28 intro-note terms
+were verified. Where the general dictionary disagrees, it is usually giving the
+literary reading — 訂 (ding3) for the taught 訂 (deng6); the corpus table wins.
+
+**How it is checked.** `node tools/jyutping-check.js` after any data change:
+§8 fails on a reading written before its characters, anywhere in `data/`; §10
+fails on an unpaired term in any topic intro note or sentence note, and accepts
+the four compact forms above. The rule itself lives in `tools/note-pairs.js`, so
+a new accepted form is added there once. `patterns.json` is dormant and outside
+§10; measure it with `node tools/note-pairs-measure.js` before any revival.
+
 ---
 
 ## 4. Content defects
@@ -406,6 +470,26 @@ v127.** What follows is the record of what was found and closed, kept because th
 *shapes* recur — plus the two findings that remain open by design.
 
 ### Closed
+
+**Sentence notes broke the character-and-reading rule 70 times. Fixed at v166.**
+Measured at v165 by `tools/note-pairs-measure.js` over all 246 sentence notes:
+50 readings out of brackets (Same 條 tiu4), 19 characters with no reading — most
+of them the notes' Mandarin comparisons, (Mandarin 找) — and 1 reading with no
+characters. 46 were bracketed mechanically from the measurement's own findings;
+the other 24 were written by hand, every reading checked against
+`char-jyutping.json` and the dictionary. A Mandarin comparison is now phrased
+"— Mandarin uses 找 (zaau2)" rather than nesting brackets. Three accepted compact
+forms the rule misread — shared brackets, digits, an optional syllable — were
+taught to `tools/note-pairs.js` under the measurement's decision rule, and two
+stray forms, 返工呀? and 同 … 一樣, were normalised in the content instead.
+Sentence notes joined `jyutping-check.js` §10 at zero.
+
+**v148's find-and-replace had broken two notes. Fixed at v166.** Restaurant
+`restaurant-t1-s01` said 畀 (bei2) is "also written 畀", and Comparisons
+`comparisons-t1-s01` said 比 (bei2) sounds like "畀/畀". Restaurant, whose point
+is the spelling, now says "also written 俾 (bei2)". Comparisons, whose point is
+that 比 (bei2) and 畀 (bei2) sound alike, now names 畀 (bei2) alone — the variant
+spelling added nothing there. §3 records the rule this taught.
 
 **`connectives` and `pronouns` were missing from `sw.js`'s `TOPIC_KEYS` precache
 list** — 40 keys listed against 42 topic files. Both were added during the
@@ -459,6 +543,17 @@ the issue. **Fix:** re-set the same ten-line exchange around things taught by
 stage 3, keeping its grammar, then regenerate its audio with
 `node tools/generate-audio.js --convo=beginner-s5` — conversation-voice files
 only, so the DES-51 voice casting applies.
+
+**Attractions' intro note tells learners to watch for 唔可以拍照 (m4 ho2 ji5
+paak3 ziu3, 'photos not allowed') signs.** That is the spoken phrase; signs are
+written in standard Chinese, typically 請勿拍照 (cing2 mat6 paak3 ziu3, 'please do
+not take photos'). v165 wrote the characters in and kept the wording. A one-line
+rewording if a native reader agrees.
+
+**`patterns.json` would bring 81 more if revived.** 24 of its 66 `structure`
+lines are jyutping alone — nei5 hou2 / zou2 san4 / zoi3 gin3 — and the file is
+dormant (§4 *Not a defect*), so no learner sees them. Measured into a separate
+bucket by the same tool. Fix before any revival, not now.
 
 ### Open by design
 
@@ -640,6 +735,23 @@ start feeling samey** — the fixed 站 (zaam6) is the deliberate default.
 
 ## 6. Checks
 
+**`tools/jyutping-check.js`** — a standing check, and the one that holds the
+rule in §3 *Writing Chinese in English text*. Its content sections: §8 fails on a
+reading written before its characters, in any string in `data/`; §9 fails if a
+sentence or chat line, said perfectly, would read back differently from its
+lesson; §10 fails on an unpaired term in a topic intro note or sentence note.
+Each carries a
+self-test of planted right and wrong forms, so a loosened pattern fails on its
+own fixtures instead of passing an empty scan. Run it after any data change,
+with `validate.js`.
+
+**`tools/note-pairs-measure.js`** — a **diagnostic**, closed at v166. It
+measured the same rule (`tools/note-pairs.js`, shared with §10) over sentence
+notes, classified every hit, and found the 70 gaps v166 fixed; sentence notes
+then joined §10 at zero. It stays in `tools/` because `patterns.json` would need
+the same measurement before any revival — it still reports that file's 81 gaps
+in a separate DORMANT bucket. Exits 0; `--list` for every finding in context.
+
 **`tools/gap-opts-check.js`** — reports every topic user turn against the four
 Fill-the-Gap rules in §3. Structural faults (three options, `opts[0]` verbatim,
 `optsJ` parallel, no duplicates) fail the run; rules 3 and 4 report only, until
@@ -680,6 +792,14 @@ only a person can say whether a seventh sentence would earn its place.
 ---
 
 ## 7. Notes worth carrying forward
+
+**A rule stated in one line and checked nowhere was broken more than 250 times.**
+"Every Chinese character is immediately followed by jyutping in brackets" sat in
+§3 and in the tier-2 spec throughout, and the corpus broke it in five distinct
+ways (§3). Every author read the rule; none of the five shapes was named, and
+no check ran on notes until v162. **A content rule is not in force until a check
+holds it** — and the check is not trustworthy until it has failed on a planted
+example of each shape it claims to catch.
 
 **Derived data maintained by hand will drift, and the drift is invisible.**
 `topics_index.json` summarises the topic files so the app can boot without 42

@@ -417,7 +417,7 @@ console.log('\n— a perfect attempt reads back exactly as the lesson does —')
       env.readHeard('我叫William。', '我叫William。', 'ngo5 giu3 William.'), env.readPlain('我叫William。'));
 }
 
-// ── 10. Intro notes: every character has its reading, every reading its character ──
+// ── 10. Notes: every character has its reading, every reading its character ──
 // v165. Section 8 checks ORDER; it cannot see a reading written with no
 // character at all — Money's "you'll be asked jau5 mou5 saan3 zi2?" — or a
 // character written with no reading — Home's "the formal 家". Until v165, 28
@@ -429,52 +429,61 @@ console.log('\n— a perfect attempt reads back exactly as the lesson does —')
 // it, and may span a gap as in 同…一樣 (tung4…jat1 joeng6). Whatever is left
 // must contain neither a character nor a jyutping syllable.
 //
-// Intro notes (rounds.N.note) only. Sentence notes are not yet held to this:
-// they have their own gaps, logged in BACKLOG, and widening the scope here would
-// fail the check on day one rather than guard what v165 fixed.
-console.log('\n— intro notes: every character has its reading, every reading its character —');
+// Scope: topic intro notes (rounds.N.note) since v165, and sentence notes
+// (rounds.N.sentences.N.note) since v166 — joined at zero, with no allowlist,
+// after tools/note-pairs-measure.js measured 70 gaps there and v166 fixed them.
+// patterns.json is dormant and stays outside: 81 measured gaps, to be fixed
+// before it is ever revived (CONTENT.md §4).
+console.log('\n— notes: every character has its reading, every reading its character —');
 {
-  const H = '\\u3400-\\u4dbf\\u4e00-\\u9fff';
-  const PAIR = new RegExp(`[${H}][${H}…]*[？！]?\\s*\\([^)]*\\)`, 'g');
-  const unpaired = note => {
-    const rest = note.replace(/<[^>]+>/g, '').replace(PAIR, '');
-    return [
-      ...(rest.match(new RegExp(`[${H}]+`, 'g')) || []).map(s => `character with no reading: ${s}`),
-      ...(rest.match(/\b[a-z]+[1-6](?:\s+[a-z]+[1-6])*\b/g) || []).map(s => `reading with no character: ${s}`),
-    ];
-  };
+  // The rule itself lives in tools/note-pairs.js, shared with the measurement
+  // tool, so a widening is made once and both see it.
+  const { unpaired } = require('./note-pairs');
 
   const mustFlag = [
     "you'll be asked <em>jau5 mou5 saan3 zi2?</em> when paying",
     'add <strong>maa3</strong> to the end',
     'than the formal 家. To talk',
     'Add 啲 (di1) for a bit more (高啲 gou1 di1 = taller)',
+    'built on 心 (sam1) "heart" — 開心 happy',
+    'pairs with 呢/嗰 (ni1) "this/that"',
   ];
   const mustPass = [
     "you'll be asked 有冇散紙？ (jau5 mou5 saan3 zi2?) when paying",
     'add <strong>嗎</strong> (maa3) to the end',
     '好 (hou2, very) and 食飯 (sik6 faan6, 食 eat + 飯 rice)',
     'And 同…一樣 (tung4…jat1 joeng6) means the same as',
+    '開心 (hoi1 sam1) "happy" — the sentence-note gloss style',
+    'pairs with 呢/嗰 (ni1/go2) "this/that"',
+    '對唔住，改日啦 (deoi3 m4 zyu6, goi2 jat6 laa1) postpones',
+    'the number is 999 (gau2 gau2 gau2)',
+    'use 定(係) (ding6 (hai6)) instead',
   ];
   let selfOk = true;
   for (const s of mustFlag) if (!unpaired(s).length) { selfOk = false; fail(`self-test: missed the unpaired term in "${s}"`); }
   for (const s of mustPass) if (unpaired(s).length) { selfOk = false; fail(`self-test: flagged the correct form "${s}" — ${unpaired(s).join('; ')}`); }
   if (selfOk) ok(`self-test: all ${mustFlag.length} unpaired forms flagged, all ${mustPass.length} correct forms passed`);
 
-  let notes = 0;
+  let intro = 0, sentence = 0;
   const gaps = [];
   for (const f of fs.readdirSync(path.join(ROOT, 'data/topics')).sort()) {
     const t = JSON.parse(fs.readFileSync(path.join(ROOT, 'data/topics', f), 'utf8'));
     for (const [rk, r] of Object.entries(t.rounds || {})) {
-      if (!r.note) continue;
-      notes++;
-      for (const g of unpaired(r.note)) gaps.push(`${f} round ${rk} intro note — ${g}`);
+      if (r.note) {
+        intro++;
+        for (const g of unpaired(r.note)) gaps.push(`${f} round ${rk} intro note — ${g}`);
+      }
+      (r.sentences || []).forEach((st, i) => {
+        if (!st.note) return;
+        sentence++;
+        for (const g of unpaired(st.note)) gaps.push(`${f} round ${rk} sentence ${st.sid || i} note — ${g}`);
+      });
     }
   }
   if (gaps.length) {
     gaps.forEach(g => fail(g));
     console.log('       (write the character and its reading together: 有冇散紙？ (jau5 mou5 saan3 zi2?))');
-  } else ok(`every character and every reading is paired in all ${notes} topic intro notes`);
+  } else ok(`every character and every reading is paired in all ${intro} topic intro notes and ${sentence} sentence notes`);
 }
 
 console.log('');

@@ -4,16 +4,23 @@
 questions behind it. Meant to be short-lived — when a piece ships, fold its
 outcome into STATUS.md and clear this file back down for the next thing.*
 
-Last updated: 2026-11-06 · sw.js at v165
+Last updated: 2026-11-06 · sw.js at v166
 
-## v165 — topic intro notes carry characters for every reading — delivered, not yet deployed
+## v166 — every sentence note pairs characters with jyutping — delivered, not yet deployed
+
+The 70 character-and-reading gaps measured in sentence notes are fixed, along with the two notes v148's 俾 (bei2) to 畀 (bei2) replace had broken, and sentence notes now sit under `jyutping-check.js` §10 at zero. Also landing now, because the deployed v165 was the earlier zip: CONTENT.md §3's full rule, the tier-2 spec pointing to it, `tools/note-pairs.js` and `tools/note-pairs-measure.js`. The diagnostic is **closed** — it answered its question — and stays in `tools/` for `patterns.json` before any revival. Data, tools and docs: 30 topic files, the `sw.js` bump. No audio — notes are not voiced. Detail is in the STATUS row.
+
+**QA, screens that changed:** sentence notes on the Learn screen — Feelings sentence 1 (開心 (hoi1 sam1) happy), Restaurant sentence 1 (also written 俾 (bei2)), Weather sentence 2 and Hotels sentence 3 (the Mandarin comparisons), Phrases sentence 4 (呢 (ne1) and 呢 (ni1)), and the checkpoint sentence review, which shows the same notes.
+**Screens sharing the changed code, to confirm only:** none; data only.
+
+## v165 — topic intro notes carry characters for every reading — deployed, awaiting device QA confirmation
 
 28 terms across 13 topic intro notes were written as jyutping alone, or as characters alone: Money's *jau5 mou5 saan3 zi2?* now reads 有冇散紙？ (jau5 mou5 saan3 zi2?), Questions' bold particles read **嗎** (maa3), **點解** (dim2 gaai2), **呢** (ne1), and Home's bare 家 now has (gaa1). Characters written in by Claude and checked against the course's own character table and the dictionary; every pair agrees with what the course teaches elsewhere. `jyutping-check.js` §10 now enforces the rule for intro notes. Data and a check only: 12 topic files, the check, and the `sw.js` bump. No audio — notes are not voiced. Detail is in the STATUS row.
 
 **QA, screens that changed:** the *About this lesson* panel on Questions, Tense and Comparisons — every Chinese term has characters, then jyutping in brackets; bold sits on the characters. A glance at Money, Particles and Friends.
 **Screens sharing the changed code, to confirm only:** none; data only.
 
-## v164 — Body's doctor chat line reads 係咪 (hai6 mai6) — delivered, not yet deployed
+## v164 — Body's doctor chat line reads 係咪 (hai6 mai6) — deployed, awaiting device QA confirmation
 
 The learner line 要唔要食藥？係咪要去醫院？ (jiu3 m4 jiu3 sik6 joek6? hai6 mai6 jiu3 heoi3 ji1 jyun2?) in Body's *At the doctor* chat had jyutping for 係唔係 (hai6 m4 hai6). Fixed in its line, its first answer option and its word breakdown. Data only: `body.json` and the `sw.js` bump. No audio — the recording was made from the characters and already says 係咪.
 

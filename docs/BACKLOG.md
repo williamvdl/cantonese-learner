@@ -4,7 +4,7 @@
 IN_PROGRESS.md when it's picked up; delete it from here once it's shipped and
 folded into STATUS.md.*
 
-Last updated: 2026-11-06 · sw.js at v165
+Last updated: 2026-11-06 · sw.js at v166
 
 ## Product
 - **Runtime Azure TTS for the Translate screen — gated on the A2 proxy.** Agreed
@@ -51,8 +51,7 @@ Last updated: 2026-11-06 · sw.js at v165
 
 ## Content
 
-- **Sentence notes are not yet held to the character-and-reading rule.** v165 made `jyutping-check.js` §10 enforce it for topic intro notes only. Run over sentence notes, the same method reports about 300 hits — a mix of real gaps, such as Adjectives' "(Same 條 tiu4 …)" with no bracket, and forms the method reads too strictly, such as a full-width ？ between the characters and their bracket. Measure precisely before fixing, then widen §10.
-- **Attractions' intro note: what do the signs actually say?** It tells learners to watch for 唔可以拍照 (m4 ho2 ji5 paak3 ziu3, 'photos not allowed') signs. That is the spoken phrase; signs are written in standard Chinese, typically 請勿拍照 (cing2 mat6 paak3 ziu3, 'please do not take photos'). v165 kept the original wording and only wrote in its characters. A one-line rewording if a native reader agrees.
+- **Attractions' intro note: spoken phrase or sign wording?** 唔可以拍照 (m4 ho2 ji5 paak3 ziu3) vs 請勿拍照 (cing2 mat6 paak3 ziu3). Detail in CONTENT.md §4 *Open*.
 - **14 topic intro notes carry more than one `<strong>`**, against CONTENT.md's "`<strong>` reserved for the single key term" (Tense has 8; Money 4; most have 3). Untouched at v162, which kept each note's emphasis count. Pick one term per note, or relax the rule to match the notes — William's call.
 - **Optional wording tweak: 你識唔識炒飯？ (nei5 sik1 m4 sik1 caau2 faan6?).** Its
   English, *Can you make fried rice?*, is correct. *Do you know how to make fried
