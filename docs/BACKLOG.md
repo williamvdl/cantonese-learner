@@ -4,7 +4,7 @@
 IN_PROGRESS.md when it's picked up; delete it from here once it's shipped and
 folded into STATUS.md.*
 
-Last updated: 2026-11-05 · sw.js at v163
+Last updated: 2026-11-06 · sw.js at v164
 
 ## Product
 - **Runtime Azure TTS for the Translate screen — gated on the A2 proxy.** Agreed
@@ -54,13 +54,13 @@ Last updated: 2026-11-05 · sw.js at v163
 - **16 Cantonese phrases in 10 topic intro notes are written in jyutping only, with no characters.** Found during the v162 reorder: Money asks *jau5 mou5 saan3 zi2?* where it should read 有冇散紙？ (jau5 mou5 saan3 zi2?), and Attractions, Friends, Hotels, Particles, Questions, Restaurant, School, Tense and Work do the same. A learner who reads characters gets nothing to read. Needs the characters written in, ideally checked by ear, since a phrase never voiced has never been heard.
   The order check (`jyutping-check.js` §8) does not see these, and the forward half of the rule — a character with no bracketed reading after it — is still unchecked anywhere; Comparisons' 高啲 gou1 di1 = taller is one known case. A forward check is the natural next assertion once this is fixed, and would fail today.
 - **14 topic intro notes carry more than one `<strong>`**, against CONTENT.md's "`<strong>` reserved for the single key term" (Tense has 8; Money 4; most have 3). Untouched at v162, which kept each note's emphasis count. Pick one term per note, or relax the rule to match the notes — William's call.
-- **Body's chat line 要唔要食藥？係咪要去醫院？ has jyutping for different words.** It reads *hai6 m4 hai6* (係唔係) where the characters say 係咪 (hai6 mai6): 11 characters, 12 syllables. Either form is natural Cantonese; one of the two lines needs changing to match the other, and the audio may follow whichever was voiced. Found by `jyutping-check.js` §9 (v163), which skips the line because it cannot be lined up.
 - **Optional wording tweak: 你識唔識炒飯？ (nei5 sik1 m4 sik1 caau2 faan6?).** Its
   English, *Can you make fried rice?*, is correct. *Do you know how to make fried
   rice?* would reinforce its own note, which contrasts 識 (sik1), a learned skill,
   with 可以 (ho2 ji5), permission. William's call; not yet decided.
 - **Re-set the Saying More checkpoint conversation.** *Choosing a coat* rests on
   clothing nouns taught five stages later. Detail and fix in CONTENT.md §4 *Open*.
+- **Watch: the first food lesson is now 14th on the Beginner path, not 11th** (v156), after eight function-word topics in a row. The counts that justified the move cannot see that cost; if beginners stall before Food & Drink, this is the first place to look.
 
 *The corpus register, the full Intermediate chapter plan, and the tier-2
 authoring spec live in `docs/CONTENT.md` and `docs/CONTENT_SPEC_TIER2.md`. These
