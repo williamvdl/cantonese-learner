@@ -5,8 +5,8 @@ and what is planned. Content only — the app that renders it lives in STATUS.md
 the visual rules in DESIGN_SYSTEM.md, the UX decisions in DESIGN_DECISIONS.md,
 the tier-2 authoring rules in CONTENT_SPEC_TIER2.md.*
 
-Last updated: 2026-11-06 · sw.js at v166 · inventory derived from
-`node tools/content-report.js` (§2 not re-run since v156; §3, §4, §6, §7 updated at v165–v166)
+Last updated: 2026-11-11 · sw.js at v166 · inventory derived from
+`node tools/content-report.js` (§2 not re-run since v156, except *Tier-2 spec compliance* and *Lesson rules*, run 2026-11-11; §3, §4, §6, §7 updated at v165–v166; lesson rules added to §2–§6 on 2026-11-11)
 
 ---
 
@@ -221,18 +221,49 @@ output; the summary:
 
 | Verdict | Rounds |
 |---|---|
-| **spec v2** — clean on all six countable targets | body, comparisons, feelings, food, friends, modals, restaurant, shopping (8) |
-| **review** — one miss, likely the connective floor under-reporting | greetings (1) |
-| **PRE-SPEC** — two or more misses | numbers (1) |
+| **spec v2** — clean on all six countable targets | body, comparisons, food, friends, modals, restaurant, shopping (7) |
+| **review** — one miss | feelings (1) |
+| **PRE-SPEC** — two or more misses | greetings, numbers (2) |
 
-`greetings` misses only on connective density at 43% against a 50% target, and
-that test is a substring match against a fixed list — it cannot see a two-clause
-sentence built without one of those words. It wants a read, not a rewrite.
+*Re-run 2026-11-11, after the sentence target changed from 7–8 to **8 or more**
+(§3, Lesson rules). That change alone moved two rounds: `feelings` and
+`greetings` have 7 sentences each and were clean on the old band.*
 
-`numbers` (sou3 zi6) tier 2 misses on four of six: 5 sentences against 7–8,
+`feelings` misses only on that one sentence.
+
+`greetings` misses on the sentence, and on connective density at 43% against a
+50% target — a substring match against a fixed list, which cannot see a
+two-clause sentence built without one of those words. Two misses reads
+*PRE-SPEC*, but the label overstates it: it needs one sentence and a read, not a
+rewrite.
+
+`numbers` (sou3 zi6) tier 2 misses on four of six: 5 sentences against 8 or more,
 averaging 5.8 characters against 8–16, no connectives, a 6-line conversation
 against 8–10, and no notes at all. It is the last un-retrofitted survivor of the
 six pre-spec tier-2 rounds.
+
+### Lesson rules
+
+Measured 2026-11-11 against the four rules in §3, *Lesson rules*. Full per-lesson
+table in the script output; `--worklist` lists what each lesson lacks.
+
+| Measure | Count |
+|---|---|
+| Lessons meeting every rule | **8 of 52** |
+| Lessons pending retrofit | 44 — all 41 failing tier-1 lessons, and `feelings`, `greetings` and `numbers` tier 2 |
+| Sentences short of the minimum | 135, across 44 lessons |
+| Words not yet used where the rule needs them | 217 of 585 |
+| Sentences containing none of their topic's words | 6 |
+| Lessons marked *long* | 1 — `connectives`, 20 sentences, deliberate (§3) |
+
+**Meeting every rule:** `connectives`, and tier 2 of `body`, `comparisons`,
+`food`, `friends`, `modals`, `restaurant` and `shopping`.
+
+**Tier 1 was authored to a different shape** — 5 sentences and a 6-line
+conversation — so this is not 44 defects. It is one decision, taken 2026-11-11,
+to raise the shape, and the retrofit that follows from it (§5.9). `food` tier 1
+shows the gap is the sentence count rather than care: it already uses all 11 of
+its words in sentences and is short only on the minimum.
 
 ### Note coverage
 
@@ -305,6 +336,11 @@ longer: `connectives` (20 — a deliberate exception, see below), `time` (9),
 `pronouns` (8). A 6–7 line conversation embedded at `rounds.1.convo`. A tier note
 at `rounds.1.note` giving the grammar framing — present on 27 of 42, and the 15
 without are a soft gap rather than a defect.
+
+**The 5-sentence shape is now below the minimum.** The lesson rules below ask
+for 8 or more, and tier 1 is being retrofitted to them (§5.9). A written tier-1
+spec does not exist yet and is the next piece of authoring guidance to write —
+see *Lesson rules* for what it has to protect.
 
 **`connectives` breaks the shape on purpose.** A connective is meaningless
 alone, so it is sentence-led rather than vocab-led: 16 words, 20 sentences,
@@ -393,6 +429,63 @@ both "Making weekend plans"; `body` tier 1 and tier 2 are both "At the doctor";
 `colors` and `clothing` are both "Shopping for clothes". Harmless while titles
 are never listed side by side — worth knowing before a screen does.
 
+### Lesson rules
+
+**This is the canonical statement.** Decided by William on 2026-11-11.
+`tools/content-report.js` enforces it, and CONTENT_SPEC_TIER2.md points here
+rather than restating the values. The measurements behind each value are in
+`PROPOSAL-content-playbook.md` §4.
+
+Four rules, the same at tier 1 and tier 2:
+
+| Rule | Lessons of up to 12 words | Lessons of 13 or more |
+|---|---|---|
+| **Sentences** | At least 8 | At least 10 |
+| **Word use** | Every word appears in a sentence | Every word appears in a sentence or the conversation |
+| **On topic** | Every sentence contains at least one of the lesson's words | The same |
+| **Conversation** | Uses at least 50% of the lesson's words | Uses at least 40%, and runs to at least 8 lines |
+
+- **The sentence count is a minimum, not a target.** If covering the vocabulary
+  naturally takes a ninth or an eleventh sentence, write it — a richer lesson
+  beats two words forced into one sentence. Above 12 sentences (14 for 13+
+  words) the report marks the lesson *long*: a prompt to confirm the length is
+  deliberate, never a fail. If a lesson needs far more than that, its word list
+  is probably too big or too mixed, and the fix is to split the topic.
+- **For a tier-2 round, the topic's tier-1 words count as on topic.** Putting
+  known words into longer sentences is what tier 2 is for.
+- **Why the 13+ band differs.** A flat 50% of an 18-word lesson is nine words in
+  a six-line conversation, which is the stuffing that makes dialogue unnatural.
+  The two bands hold the *density* about level — roughly one lesson word a line.
+
+**What the rules do not say, and a tier-1 spec must.** The four rules are the
+same at both tiers, so by themselves they do not keep tier 1 simple — and more
+sentences plus fuller conversations could quietly make it harder. William's
+steer (2026-11-11): tier 1 is simple sentences and simple chats; tier 2 belongs
+to the Intermediate path and gets progressively longer and harder. As built, the
+tiers are already far apart, which is the baseline a tier-1 spec should hold:
+
+| Measured 2026-11-11, `connectives` excluded | Tier 1 | Tier 2 |
+|---|---|---|
+| Sentence length, median (characters) | 5 | 12 |
+| Sentence length, nine in ten are at most | 7 | 15 |
+| Sentences carrying a listed connective | 0% | 58% |
+| Chat line length, median (characters) | 7 | 11 |
+| Chat line length, nine in ten are at most | 9 | 17 |
+
+**"Appears" is a substring match, and has two known limits.** A one-character
+word can match inside a longer, unrelated word, so a pass on a one-character
+word is a ceiling rather than a proof. And a verb-object word said with
+something between its halves — 排幾耐隊 (paai4 gei2 noi6 deoi2) for 排隊
+(paai4 deoi2) — is not a substring: the script lists these as *possibly split*
+and counts them as not yet used until a reader confirms the use and records it
+in `SPLIT_ACCEPTED`. Two are recorded, in Attractions and Hobbies.
+
+**Existing lessons are held by a ratchet.** The 44 that do not meet the rules
+are named in `RETROFIT_PENDING` in the script. Any lesson *not* on that list
+must pass — so every new lesson is held from the day it lands — and a listed
+lesson that starts passing fails the check until its entry is deleted. The list
+only gets shorter.
+
 ### Writing Chinese in English text
 
 **This is the canonical statement of the rule.** CONTENT_SPEC_TIER2.md §5 points
@@ -466,7 +559,7 @@ a new accepted form is added there once. `patterns.json` is dormant and outside
 ## 4. Content defects
 
 Measured by `node tools/content-report.js --check`. **All eight checks pass as of
-v127.** What follows is the record of what was found and closed, kept because the
+v127**, and all nine since the lesson rules joined on 2026-11-11 (§6). What follows is the record of what was found and closed, kept because the
 *shapes* recur — plus the two findings that remain open by design.
 
 ### Closed
@@ -571,6 +664,11 @@ not an accident. This answers the question BACKLOG.md carried open from
 
 Both sit in an `EXPECTED` allowlist in the script, printed as *expected* rather
 than hidden, each with a comment naming what removes it.
+
+**44 of 52 lessons do not meet the lesson rules.** Not a defect in the content
+as authored — the rules postdate it. Counts are in §2, the rules in §3, the
+plan in §5.9. They sit in `RETROFIT_PENDING`, reported on every `--check` run as
+*retrofit pending* rather than hidden.
 
 ### Not a defect, but worth knowing
 
@@ -731,6 +829,29 @@ People. Authored content, but the decision is a design one and lives in
 BACKLOG.md against DESIGN_SYSTEM §Watermark. **Adopt only if checkpoint heroes
 start feeling samey** — the fixed 站 (zaam6) is the deliberate default.
 
+### 5.9 Retrofitting to the lesson rules
+
+Approved 2026-11-11. 44 lessons, 135 sentences short of the minimum, 217 words
+not yet used where the rules need them — plus audio for every new line.
+`node tools/content-report.js --worklist` is the list, worst first: Family
+(13 words unused), Body Parts (12), Animals & Pets and Home (11 each).
+
+**Not started, and two things come first.** A **tier-1 spec**, so the new
+sentences are written to a stated standard of simplicity rather than to the
+rules alone (§3, *Lesson rules*). And the **native-ear review sheet** in
+`docs/review/`, whose result says which phrasings the retrofit should avoid.
+
+**How it is meant to run** (`PROPOSAL-content-playbook.md` §9, work item PB-7):
+in batches of about five lessons, each given a full native review with every
+correction logged before and after. The repo's history holds only five such
+corrections, too few to test an AI reviewer against, so the retrofit's log is
+what builds that set. Each batch deletes its lessons from `RETROFIT_PENDING`.
+
+The big lessons need more than sentences: the seven tier-1 lessons of 13 or
+more words — Animals, Body, Family, Home, Time, Modal Verbs and Pronouns — also
+need their conversation taken from 6 lines to 8, which means new conversation audio
+in both voices (DES-51).
+
 ---
 
 ## 6. Checks
@@ -757,7 +878,7 @@ Fill-the-Gap rules in §3. Structural faults (three options, `opts[0]` verbatim,
 `optsJ` parallel, no duplicates) fail the run; rules 3 and 4 report only, until
 the retrofit in BACKLOG.md lands. `--summary` for counts, `--topic=<key>` for one.
 
-`node tools/content-report.js --check` asserts eight properties and exits 1 on
+`node tools/content-report.js --check` asserts nine properties and exits 1 on
 failure. It is **standing check 9**, joining the eight in IN_PROGRESS.md, and is
 the first of them that reads content rather than CSS, JS or navigation. Run it
 with `tools/validate.js` after any data change; the two do not overlap.
@@ -777,6 +898,13 @@ is coherent.
 6. **Every topic is mapped to a category and every mapping points at a topic.**
 7. **`topics_index.json`'s tier lists and word counts match the topic files.**
 8. **Every topic file is in `sw.js`'s `TOPIC_KEYS`.**
+9. **Every lesson meets the lesson rules of §3, or is named in
+   `RETROFIT_PENDING`.** Added 2026-11-11. A ratchet: an unlisted lesson that
+   breaks a rule fails, and so does a listed lesson that now passes, until its
+   entry is deleted. A `SPLIT_ACCEPTED` entry whose line has since changed
+   fails too. The word matcher carries a self-test of planted right and wrong
+   forms and exits 2 if it breaks. `--worklist` prints what each pending lesson
+   lacks; add `--md` for a pasteable document.
 
 Checks 1 and 5 currently report against I-2's reserved slot. Rather than let them
 report a known-benign finding on every run — which trains you to skim the output,
@@ -786,8 +914,9 @@ hidden, each with a comment naming what removes it. **Delete the entries when I-
 is built and the checks start failing again.**
 
 The script also prints two things it does **not** enforce: tier-2 spec compliance
-and Fill-the-Gap coverage. Both are content debt rather than data defects, and
-only a person can say whether a seventh sentence would earn its place.
+and Fill-the-Gap coverage. Both are content debt rather than data defects. And
+it marks a lesson *long* past 12 sentences (14 for 13+ words) without failing
+it — only a person can say whether a thirteenth sentence earns its place.
 
 ---
 

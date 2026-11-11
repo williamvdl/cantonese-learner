@@ -4,9 +4,41 @@
 questions behind it. Meant to be short-lived — when a piece ships, fold its
 outcome into STATUS.md and clear this file back down for the next thing.*
 
-Last updated: 2026-11-06 · sw.js at v166
+Last updated: 2026-11-11 · sw.js at v166
 
-**Next candidate work:** saving every audio clip for offline ahead of time and, once a few real failures have been read, removing v161's temporary speech-failure line (both new at v161); styling the styleguide's speak demos, an aggregating runner
+## Now — the content playbook and the lesson rules
+
+**The aim (William, 2026-11-06 and 2026-11-11):** new topics that are natural
+and relevant, QA'd by rules, needing minimal native review — content as the
+app's point of difference. The plan is `PROPOSAL-content-playbook.md`.
+
+**Built, tools only — no deploy, no `sw.js` bump:** the four lesson rules in
+`tools/content-report.js`, held by `--check` as a ratchet, with `--worklist` for
+what each lesson lacks. 8 of 52 lessons meet them; 44 are pending. The rules
+are stated in CONTENT.md §3, *Lesson rules*.
+
+**Decided:** the sentence minimum applies to tier 1 and the retrofit is
+approved; tier 2 is "8 or more"; the word-use and conversation values; the app
+is for all learners.
+
+**Waiting on:**
+- **The review sheet** (`docs/review/2026-11-11-native-ear-sheet.md`) — 28
+  lines for a native ear, about ten minutes. Its key holds the reading rules.
+- **The tier-1 spec.** William wants more thinking first: tier 1 is simple
+  sentences and chats, tier 2 gets progressively longer and harder. The
+  retrofit does not start until this exists.
+
+**Open questions:**
+- What "simple" is, as a rule a script can hold — a length cap, a ban on
+  connectives and two-clause sentences, one lesson word per sentence, or some
+  mix. The as-built numbers are in CONTENT.md §3.
+- Whether the 13+ word tier-1 lessons stay "simple" with an 8-line
+  conversation carrying 40% of their words.
+- The history count found only five recorded native corrections, so there is
+  nothing yet to test an AI reviewer against. The retrofit's correction log is
+  meant to build it (CONTENT.md §5.9).
+
+**Next candidate work (everything else):** saving every audio clip for offline ahead of time and, once a few real failures have been read, removing v161's temporary speech-failure line (both new at v161); styling the styleguide's speak demos, an aggregating runner
 for the standing checks, the 169 Check B structural candidates from
 `dup-css.js` (needs William's judgement), the 4 remaining Check A rule-splits,
 the open particle-rule question, and the `char-jyutping.json` coverage

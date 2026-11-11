@@ -13,6 +13,9 @@
  *   node tools/content-report.js --md       markdown tables, ready to paste
  *   node tools/content-report.js --check    exit 1 if a structural invariant fails
  *
+ *   node tools/content-report.js --worklist  what each lesson needs to meet the
+ *                                            lesson rules (add --md to paste)
+ *
  * The --check mode is the standing-check half. It asserts the invariants the
  * content model rests on, in the spirit of tier-harness.js: a fact the docs
  * depend on gets a check, not a comment.
@@ -213,14 +216,212 @@ try {
   }
 } catch (e) { problems.push(`sw.js could not be read: ${e.message}`); }
 
+// ── Lesson rules ─────────────────────────────────────────────────────────────
+// The countable authoring rules every lesson is held to, tier 1 and tier 2
+// alike. Decided by William 2026-11-11. The canonical statement is
+// docs/CONTENT.md §3, *Lesson rules*; the reasoning and the measurements behind
+// each value are in docs/PROPOSAL-content-playbook.md §4.
+//
+//   SENTENCES   at least 8 for a lesson of up to 12 words, at least 10 for 13+.
+//               A minimum, not a target: more is fine where the vocabulary
+//               needs it. Above 12 (or 14 for 13+) the lesson is marked "long"
+//               — a prompt to confirm the length is deliberate, never a fail.
+//   WORD USE    up to 12 words: every word appears in a sentence.
+//               13+ words: every word appears in a sentence or the conversation.
+//   ON TOPIC    every sentence contains at least one of the lesson's words.
+//               For a tier-2 round the topic's tier-1 words count too: putting
+//               known words into longer sentences is what tier 2 is for
+//               (CONTENT_SPEC_TIER2 §0), so such a sentence is on topic.
+//   CONVO       up to 12 words: the conversation uses at least 50% of them.
+//               13+ words: at least 40%, in a conversation of at least 8 lines.
+//
+// "Appears" is a substring test on the word's written form, one line at a
+// time. Two things follow, and both are stated rather than hidden:
+//   · A one-character word can match inside a longer, unrelated word, so a
+//     pass on a one-character word is a ceiling, not a proof.
+//   · A two-character verb-object word said with something between its halves
+//     — 食咗飯 (sik6 zo2 faan6) for 食飯 (sik6 faan6) — is not a substring.
+//     Those are classed SPLIT: listed for a reader, and counted as not yet
+//     used, because resemblance is not use until someone has looked. Once
+//     someone has, the use is declared in SPLIT_ACCEPTED below.
+const WORD_PUNCT = '\\s。！？，、!?.,';
+const trimPunct = s => s.replace(new RegExp(`^[${WORD_PUNCT}…]+|[${WORD_PUNCT}…]+$`, 'gu'), '');
+const isHan = ch => /[㐀-鿿豈-﫿]/u.test(ch);
+const escRe = s => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+
+// 'used' | 'split' | 'unused' — for one word against one line of Chinese.
+function wordUse(word, line) {
+  const w = trimPunct(word || '');
+  if (!w) return 'unused';
+  if (w.includes('…')) {
+    // A gapped pattern — 因為…所以 (jan1 wai6…so2 ji5): every part, in order.
+    let from = 0;
+    for (const part of w.split('…').map(trimPunct).filter(Boolean)) {
+      const at = line.indexOf(part, from);
+      if (at < 0) return 'unused';
+      from = at + part.length;
+    }
+    return 'used';
+  }
+  if (line.includes(w)) return 'used';
+  const ch = [...w];
+  if (ch.length === 2 && ch.every(isHan)) {
+    const split = new RegExp(`${escRe(ch[0])}[^${WORD_PUNCT}…]{1,2}${escRe(ch[1])}`, 'u');
+    if (split.test(line)) return 'split';
+  }
+  return 'unused';
+}
+// Split uses a reader has confirmed are the word itself. Keyed on the lesson,
+// the word and the exact line, so editing the line voids the acceptance and
+// the use is read again. An entry whose line no longer exists fails --check.
+const SPLIT_ACCEPTED = [
+  // 排隊 (paai4 deoi2) "queue", split by 幾耐 (gei2 noi6) "how long". 2026-11-11.
+  'attractions:1|排隊|要排幾耐隊？',
+  // 睇戲 (tai2 hei3) "watch a film", split by 咩 (me1) "what". 2026-11-11.
+  'hobbies:1|睇戲|你鍾意睇咩戲？'
+];
+const splitSeen = new Set();
+const RANK = { used: 2, split: 1, unused: 0 };
+// wordUse, with a confirmed split promoted to 'used'.
+function useIn(id, word, line) {
+  const u = wordUse(word, line);
+  if (u !== 'split') return u;
+  const k = `${id}|${trimPunct(word)}|${line}`;
+  if (!SPLIT_ACCEPTED.includes(k)) return 'split';
+  splitSeen.add(k);
+  return 'used';
+}
+const bestUse = (id, word, lines) => lines.reduce((best, l) => {
+  const u = useIn(id, word, l);
+  return RANK[u] > RANK[best] ? u : best;
+}, 'unused');
+
+// Self-test: planted right and wrong forms, so a loosened matcher fails on its
+// own fixtures instead of passing an empty scan (the pattern jyutping-check.js
+// uses for the same reason).
+[
+  ['飯',        '我想食飯。',            'used'],
+  ['幾錢？',    '呢個幾錢呀？',          'used'],    // trailing punctuation on the word
+  ['我叫…',     '我叫阿明。',            'used'],    // open-ended pattern
+  ['因為…所以', '因為落雨，所以唔去。',  'used'],    // gapped, in order
+  ['因為…所以', '所以唔去，因為落雨。',  'unused'],  // gapped, wrong order
+  ['食飯',      '我食咗飯喇。',          'split'],   // verb-object, split
+  ['食飯',      '我食，飯好味。',        'unused'],  // punctuation between is not a split
+  ['地鐵',      '我搭巴士去。',          'unused'],
+  ['',          '我搭巴士去。',          'unused']
+].forEach(([w, l, want]) => {
+  const got = wordUse(w, l);
+  if (got !== want) {
+    console.error(`content-report self-test FAILED: wordUse('${w}', '${l}') = ${got}, expected ${want}`);
+    process.exit(2);
+  }
+});
+
+const lessonRules = tiers.map(t => {
+  const r = topics[t.key].rounds[String(t.tier)];
+  const words = r.words || [];
+  const sents = (r.sentences || []).map(s => s.c);
+  const lines = ((r.convo || {}).lines || []).map(l => l.c);
+  const big = words.length >= 13;
+  const minSents = big ? 10 : 8;
+  const id = `${t.key}:${t.tier}`;
+  // On-topic words: this round's, plus the topic's lower tiers.
+  const topicWords = Object.keys(topics[t.key].rounds).filter(rk => +rk <= t.tier)
+    .flatMap(rk => topics[t.key].rounds[rk].words || []);
+
+  const inSents = words.map(w => bestUse(id, w.c, sents));
+  const inConvo = words.map(w => bestUse(id, w.c, lines));
+  // Up to 12 words a word must be in a sentence; 13+ the conversation counts too.
+  const use = words.map((w, i) => big && RANK[inConvo[i]] > RANK[inSents[i]] ? inConvo[i] : inSents[i]);
+  const unused = words.filter((w, i) => use[i] === 'unused');
+  const split = words.filter((w, i) => use[i] === 'split');
+  const offTopic = (r.sentences || []).filter(s => !topicWords.some(w => useIn(id, w.c, s.c) === 'used'));
+  const convoUsed = inConvo.filter(u => u === 'used').length;
+  const convoNeed = Math.ceil(words.length * (big ? 0.4 : 0.5));
+
+  const fails = [];
+  if (sents.length < minSents) fails.push('sentences');
+  if (unused.length || split.length) fails.push('word use');
+  if (offTopic.length) fails.push('on topic');
+  if (convoUsed < convoNeed) fails.push('convo share');
+  if (big && lines.length < 8) fails.push('convo length');
+
+  return {
+    id, key: t.key, label: t.label, tier: t.tier, big,
+    words: words.length, sentences: sents.length, minSents,
+    short: Math.max(0, minSents - sents.length),
+    long: sents.length > (big ? 14 : 12),
+    unused, split, offTopic, convoUsed, convoNeed, convoLines: lines.length, fails
+  };
+});
+
+// Lessons that do not meet the lesson rules yet — the tier-1 retrofit's
+// worklist, plus the tier-2 rounds it catches. Measured at v166, 2026-11-11.
+//
+// This is a ratchet, not an excuse list. --check FAILS for:
+//   · any lesson NOT listed here that breaks a rule — so a new lesson, or one
+//     already fixed, is held to the rules from the day it lands;
+//   · any lesson listed here that now PASSES — delete its entry in the same
+//     commit as the fix, and from then on it is held like any other.
+// Listed lessons are reported under "retrofit pending" rather than hidden.
+// The list only ever gets shorter. When it is empty, delete it.
+const RETROFIT_PENDING = [
+  'adjectives:1', 'animals:1', 'attractions:1', 'body:1', 'classifiers:1',
+  'clothing:1', 'colors:1', 'comparisons:1', 'cooking:1', 'directions:1',
+  'drinks:1', 'emergencies:1', 'family:1', 'feelings:1', 'feelings:2',
+  'food:1', 'friends:1', 'fruitveg:1', 'greetings:1', 'greetings:2',
+  'hobbies:1', 'home:1', 'hotels:1', 'location:1', 'meatseafood:1',
+  'modals:1', 'money:1', 'numbers:1', 'numbers:2', 'particles:1',
+  'phrases:1', 'pronouns:1', 'questions:1', 'restaurant:1', 'school:1',
+  'shopping:1', 'sports:1', 'tech:1', 'tense:1', 'time:1',
+  'transport:1', 'weather:1', 'work:1', 'yesno:1'
+];
+lessonRules.forEach(l => {
+  const pending = RETROFIT_PENDING.includes(l.id);
+  if (l.fails.length && !pending) problems.push(`lesson rules: ${l.id} fails ${l.fails.join(', ')}`);
+  if (!l.fails.length && pending) problems.push(`lesson rules: ${l.id} now passes — remove it from RETROFIT_PENDING`);
+});
+RETROFIT_PENDING.forEach(id => {
+  if (!lessonRules.some(l => l.id === id)) problems.push(`lesson rules: RETROFIT_PENDING names a lesson that does not exist: ${id}`);
+});
+SPLIT_ACCEPTED.forEach(k => {
+  if (!splitSeen.has(k)) problems.push(`lesson rules: SPLIT_ACCEPTED entry matches no line any more — remove or re-read it: ${k}`);
+});
+const pendingRules = lessonRules.filter(l => l.fails.length && RETROFIT_PENDING.includes(l.id));
+
 // ── Output ───────────────────────────────────────────────────────────────────
 const pct = (n, d) => d ? Math.round((n / d) * 100) + '%' : '—';
 
 const expected = problems.filter(p => EXPECTED.includes(p));
 const real = problems.filter(p => !EXPECTED.includes(p));
 
+// --worklist: what each lesson still needs to meet the lesson rules, the
+// lessons with the most unused words first. Add --md for a pasteable document.
+if (process.argv.includes('--worklist')) {
+  const todo = lessonRules.filter(l => l.fails.length)
+    .sort((a, b) => (b.unused.length + b.split.length) - (a.unused.length + a.split.length) || b.short - a.short);
+  const cj = w => `${trimPunct(w.c)} (${w.j})`;
+  const H = (s) => console.log(MD ? `\n### ${s}\n` : `\n── ${s}`);
+  console.log(`${todo.length} of ${lessonRules.length} lessons do not meet the lesson rules. ` +
+    `Sentences short: ${todo.reduce((n, l) => n + l.short, 0)}. ` +
+    `Words not yet used: ${todo.reduce((n, l) => n + l.unused.length + l.split.length, 0)}.`);
+  todo.forEach(l => {
+    H(`${l.label}${l.tier > 1 ? ' — tier ' + l.tier : ''} (${l.id}) · ${l.words} words`);
+    const out = [];
+    out.push(`Sentences: ${l.sentences} of ${l.minSents} minimum` + (l.short ? ` — **${l.short} short**` : ''));
+    if (l.unused.length) out.push(`Words not used in ${l.big ? 'a sentence or the conversation' : 'a sentence'} (${l.unused.length}): ${l.unused.map(cj).join(', ')}`);
+    if (l.split.length) out.push(`Possibly used split — read and decide (${l.split.length}): ${l.split.map(cj).join(', ')}`);
+    if (l.offTopic.length) out.push(`Sentences with none of the lesson's words (${l.offTopic.length}): ${l.offTopic.map(s => `${s.c} (${s.j})`).join(' ')}`);
+    out.push(`Conversation: ${l.convoUsed} of the ${l.convoNeed} words needed` + (l.convoUsed < l.convoNeed ? ` — **${l.convoNeed - l.convoUsed} short**` : '') +
+      `, ${l.convoLines} lines` + (l.big && l.convoLines < 8 ? ' — **needs 8**' : ''));
+    out.forEach(s => console.log((MD ? '- ' : '   ') + (MD ? s : s.replace(/\*\*/g, ''))));
+  });
+  process.exit(0);
+}
+
 if (CHECK) {
   expected.forEach(p => console.log('  · expected: ' + p));
+  if (pendingRules.length) console.log(`  · retrofit pending: ${pendingRules.length} of ${lessonRules.length} lessons do not meet the lesson rules yet (--worklist lists them)`);
   if (real.length) {
     console.log(`content-report --check: ${real.length} issue(s)`);
     real.forEach(p => console.log('  ✗ ' + p));
@@ -269,7 +470,7 @@ tiers.forEach(t => console.log(row([
 // a round that misses a target is content debt, not a data defect, and only a
 // human can say whether a 7th sentence would earn its place.
 console.log(MD ? '\n### Tier-2 spec compliance\n' : '\n=== TIER-2 SPEC COMPLIANCE ===');
-console.log(row(['Topic', 'Words 8–12', 'Sents 7–8', 'Connective ≥50%', 'Avg len 8–16', 'Convo 8–10', 'Notes', 'Verdict']));
+console.log(row(['Topic', 'Words 8–12', 'Sents ≥8', 'Connective ≥50%', 'Avg len 8–16', 'Convo 8–10', 'Notes', 'Verdict']));
 console.log(sep(8));
 const t2 = tiers.filter(t => t.tier === 2);
 t2.forEach(t => {
@@ -279,7 +480,9 @@ t2.forEach(t => {
   const avg = ss.length ? ss.reduce((n, s) => n + s.c.length, 0) / ss.length : 0;
   const ok = [
     t.words >= 8 && t.words <= 12,
-    t.sentences >= 7 && t.sentences <= 8,
+    // The lesson-rules minimum (8 or more since 2026-11-11, was 7–8) — read
+    // from lessonRules so the two tables cannot disagree about it.
+    lessonRules.find(l => l.id === `${t.key}:2`).short === 0,
     ss.length ? conn / ss.length >= 0.5 : false,
     avg >= 8 && avg <= 16,
     t.convoLines >= 8 && t.convoLines <= 10,
@@ -299,6 +502,29 @@ t2.forEach(t => {
     ok.every(Boolean) ? 'spec v2' : (ok.filter(b => !b).length === 1 ? 'review' : 'PRE-SPEC')
   ]));
 });
+
+// Lesson rules — one row per lesson. ✗ marks a rule the lesson does not meet;
+// --worklist says exactly what is missing.
+console.log(MD ? '\n### Lesson rules\n' : '\n=== LESSON RULES ===');
+console.log(row(['Topic', 'Tier', 'Words', 'Sentences (min)', 'Words unused', 'Off-topic sents', 'Convo words (need)', 'Convo lines', 'Verdict']));
+console.log(sep(9));
+{
+  const mark = b => b ? '✓' : '✗';
+  lessonRules.forEach(l => console.log(row([
+    l.key, String(l.tier), String(l.words),
+    `${l.sentences} (${l.minSents}) ${mark(!l.short)}`,
+    `${l.unused.length + l.split.length} ${mark(!(l.unused.length + l.split.length))}`,
+    `${l.offTopic.length} ${mark(!l.offTopic.length)}`,
+    `${l.convoUsed} (${l.convoNeed}) ${mark(l.convoUsed >= l.convoNeed)}`,
+    l.big ? `${l.convoLines} (8) ${mark(l.convoLines >= 8)}` : String(l.convoLines),
+    (l.fails.length ? 'retrofit' : 'meets rules') + (l.long ? ' · long' : '')
+  ])));
+  const meets = lessonRules.filter(l => !l.fails.length).length;
+  console.log((MD ? '\n' : '') + `${meets} of ${lessonRules.length} lessons meet every rule. ` +
+    `Sentences short: ${lessonRules.reduce((n, l) => n + l.short, 0)}. ` +
+    `Words not yet used: ${lessonRules.reduce((n, l) => n + l.unused.length + l.split.length, 0)} ` +
+    `(of which possibly split: ${lessonRules.reduce((n, l) => n + l.split.length, 0)}).`);
+}
 
 // Fill-the-Gap coverage. A user turn without `opts` cannot be a gap line, and
 // render.js hides the whole activity for a conversation with none. Not a

@@ -4,7 +4,7 @@
 IN_PROGRESS.md when it's picked up; delete it from here once it's shipped and
 folded into STATUS.md.*
 
-Last updated: 2026-11-06 · sw.js at v166
+Last updated: 2026-11-11 · sw.js at v166
 
 ## Product
 - **Runtime Azure TTS for the Translate screen — gated on the A2 proxy.** Agreed
@@ -50,6 +50,12 @@ Last updated: 2026-11-06 · sw.js at v166
   app's. Copy the current rules from `styles.css`. Invisible in the app.
 
 ## Content
+
+- **Write the tier-1 spec.** Tier 1 has only a description (CONTENT.md §3). It needs a written standard before the retrofit starts, and the standard has to keep tier 1 *simple*: the lesson rules are the same at both tiers and would let tier 1 drift harder. Baseline to hold, measured 2026-11-11: sentences of median 5 characters, no connectives, chat lines of median 7. William wants more thinking on this before it is drafted. CONTENT.md §3, *Lesson rules*.
+- **Retrofit 44 lessons to the lesson rules** — 135 sentences, 217 words to bring into use, new audio. Approved 2026-11-11; waits on the tier-1 spec and the review sheet. Plan in CONTENT.md §5.9; list from `node tools/content-report.js --worklist`.
+- **`feelings` and `greetings` tier 2 are one sentence short each**, since the tier-2 minimum became 8. Small, and independent of the tier-1 work: one sentence and its audio apiece.
+- **The content playbook — the rest of it.** `docs/PROPOSAL-content-playbook.md` is the plan for authoring new topics with minimal native review. Built so far: the four lesson rules. Still proposed, not built: the register scan for written-Chinese forms, the curriculum vocabulary index, the scene card, the independent AI reviewer and its calibration. Three decisions in its §7 are still open — the severity bar, the reviewer's pass bar, which second model.
+- **Read the native-ear review sheet when it comes back.** `docs/review/2026-11-11-native-ear-sheet.md`, with its key beside it; the key says how the marks are to be read and was written before any exist. Every line marked *Off* is logged before and after.
 
 - **Attractions' intro note: spoken phrase or sign wording?** 唔可以拍照 (m4 ho2 ji5 paak3 ziu3) vs 請勿拍照 (cing2 mat6 paak3 ziu3). Detail in CONTENT.md §4 *Open*.
 - **14 topic intro notes carry more than one `<strong>`**, against CONTENT.md's "`<strong>` reserved for the single key term" (Tense has 8; Money 4; most have 3). Untouched at v162, which kept each note's emphasis count. Pick one term per note, or relax the rule to match the notes — William's call.

@@ -5,7 +5,7 @@ harder experience. Read this before authoring or retrofitting a tier-2 lesson.
 `CONTENT.md` records what exists and what is planned; this file records how to
 build one.*
 
-Last updated: 2026-11-06 · sw.js at v165
+Last updated: 2026-11-11 · sw.js at v166
 
 > **Provenance.** This is spec v2, previously held outside the repo as
 > `intermediate-tier2-content-spec-v1.md` — a filename that said v1 while the
@@ -28,13 +28,19 @@ bricks; tier 2 teaches building. Every rule below serves that shift.
 
 ## 1. The tier-1 ↔ tier-2 contract
 
-Tier 2 deliberately **inverts** tier 1's balance: fewer new words, more and
-longer sentences, a richer conversation.
+Tier 2 deliberately **inverts** tier 1's balance: fewer new words, longer
+sentences, a richer conversation.
+
+> **Changed 2026-11-11.** The sentence count is now **8 or more** at both
+> tiers — a minimum, not a band — under the lesson rules in CONTENT.md §3. So
+> the number of sentences no longer separates the tiers. What separates them is
+> what the sentences *are*: tier 1 keeps them short and simple, tier 2 makes
+> them longer and progressively harder. That contrast is the rows below it.
 
 | Dimension | Tier 1 | Tier 2 |
 |---|---|---|
 | New words | 10–18 | **8–10** (stretch to 12 only if the domain genuinely warrants it) |
-| Sentences | 5 | **7–8** |
+| Sentences | 8 or more (10 or more for 13+ words) — 5 as built, retrofit pending | **8 or more** |
 | Sentence length | ~4–8 characters | **~8–16 characters** |
 | Sentences with a connective or 2-clause structure | rare | **at least half** |
 | Known-vocab reuse per sentence | n/a | **≥1 already-known word** |
@@ -85,7 +91,10 @@ author one.** The topic is complete at tier 1. This gate is the reason
 
 ## 4. Sentence and conversation rules
 
-**Sentences — 7–8 per round.**
+**Sentences — 8 or more per round.** A minimum: add a ninth or tenth where the
+vocabulary needs it rather than forcing two awkward words into one sentence.
+Past 12 the report marks the round *long* — a prompt to confirm the length is
+deliberate, not a fail.
 
 1. Target **8–16 characters** — visibly longer than tier 1's short frames.
 2. **At least half carry a connective or a genuine two-clause structure.**
@@ -96,8 +105,11 @@ author one.** The topic is complete at tier 1. This gate is the reason
 4. **A `bd` breakdown on every sentence**, covering all tokens. Group a
    multi-syllable word as **one** item — 善良 (sin6 loeng4) is one breakdown
    item, not 善 (sin6) + 良 (loeng4).
-5. Each new word appears in at least one sentence, ideally recurring in the
-   conversation.
+5. **Each new word appears in at least one sentence, and at least half of them
+   in the conversation.** Both are lesson rules, checked by
+   `content-report.js` (CONTENT.md §3, *Lesson rules*).
+6. **Every sentence contains at least one of the topic's words** — this round's
+   or tier 1's. Also a lesson rule.
 
 **Conversation — 8–10 lines.** This is the centrepiece of a tier-2 round;
 dialogue is where connectives and register live most naturally.
@@ -192,6 +204,9 @@ consistently for the round and call it out in a note.
 `node tools/content-report.js` prints a **Tier-2 spec compliance** table
 measuring the countable half of this spec: word count, sentence count,
 connective density, average sentence length, conversation length, notes present.
+The sentence-count column reads the lesson-rules minimum, so the two tables
+cannot disagree. The same run prints a **Lesson rules** table covering word
+use, on-topic sentences and the conversation's share of the words.
 A round scoring clean on all six is marked *spec v2*; one miss is *review*; two
 or more is *PRE-SPEC*.
 
@@ -227,7 +242,9 @@ integrity.
 - **Sentence count 7–8 and conversation length 8–10** → the original spec left
   these to "confirm by feel once food is built". **Nine rounds have now been
   built to them and none has been flagged**, so treat them as confirmed unless
-  device testing says otherwise.
+  device testing says otherwise. **The sentence count became "8 or more" on
+  2026-11-11** (William's decision, with the lesson rules). Two rounds built to
+  the old band sit one sentence short: `feelings` and `greetings`, 7 each.
 - **A harder, negotiation-heavy topic** → the second sense-check was to be
   `shopping`. It was built (bargaining, payment, returns) and scores clean on all
   six countable targets, so the spec holds on that shape.
@@ -244,8 +261,12 @@ Intermediate v1 scope**, not a separate cleanup.
 `feelings` and `body` with I-5, and all five score clean.
 
 **`numbers` tier 2 is the one survivor** — 5 sentences averaging 5.8 characters,
-no connectives, no notes, a 6-line conversation. It is the only round in the app
-scoring *PRE-SPEC*, and it retrofits when I-2 Sentence Grammar is built, which is
+no connectives, no notes, a 6-line conversation. It was the only round in the app
+scoring *PRE-SPEC* until the sentence minimum rose on 2026-11-11; `greetings`
+now reads *PRE-SPEC* too, on two misses — one sentence short, and the
+connective floor of §8. That label means "two or more misses", not that
+`greetings` predates the spec; it needs one sentence, not a retrofit. `numbers`
+is still the real one, and it retrofits when I-2 Sentence Grammar is built, which is
 the chapter it belongs to.
 
 Two other reconciliations came out of the same audit and are done: `food` tier 2
@@ -274,7 +295,10 @@ its sizing vocabulary — 試吓 (si3 haa5), 尺碼 (cek3 maa5), 緊 (gan2), 鬆
    derived data maintained by hand and it has drifted before; check 7 in
    `content-report.js` exists because of it.
 5. `node tools/validate.js`, `node tools/content-report.js --check` and
-   `node tools/jyutping-check.js`. The last holds CONTENT.md §3's character-and-
+   `node tools/jyutping-check.js`. `--check` now holds the lesson rules too: a
+   new round must meet them, and a round brought up to them must be deleted
+   from `RETROFIT_PENDING` in the script in the same commit.
+   `content-report.js --worklist` says what a round still lacks. The last holds CONTENT.md §3's character-and-
    reading rule for every intro note and sentence note.
 6. Generate audio with `tools/generate-audio.js` — **Azure AI Speech, `zh-HK`
    Neural** (the default since v123; `SPEECH_KEY` + `SPEECH_REGION`) — and commit
