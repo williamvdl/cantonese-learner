@@ -389,6 +389,59 @@ SPLIT_ACCEPTED.forEach(k => {
 });
 const pendingRules = lessonRules.filter(l => l.fails.length && RETROFIT_PENDING.includes(l.id));
 
+// ── Tier-1 shape ─────────────────────────────────────────────────────────────
+// How simple tier 1 is, measured against the guide in docs/CONTENT_SPEC_TIER1.md
+// §4 and §5. A GUIDE WITH EXCEPTIONS (William, 2026-11-11), so this is
+// reported and never enforced: nothing here can fail --check.
+//
+//   SENTENCES   aim for up to 8 Chinese characters. 9–12 is an allowed
+//               exception when the sentence carries two of the lesson's words;
+//               9–12 without that is listed as "long, no second word". Over 12
+//               is flagged for a rewrite or a split.
+//   CHAT LINES  aim for up to 9; over 12 is flagged.
+//   CONNECTIVES none in a sentence; in a chat, at most two lines — a chat with
+//               more is listed.
+//
+// Length is counted in Chinese characters only — punctuation and Latin letters
+// are not length a learner has to say in Cantonese. The tier-2 table's
+// "Avg len" predates this and counts every character including punctuation, so
+// the two figures are not comparable; neither is wrong for its own target.
+const hanLen = s => [...s].filter(isHan).length;
+const SHAPE = { sentAim: 8, sentMax: 12, lineAim: 9, lineMax: 12 };
+// Lessons that break the tier-1 shape on purpose (CONTENT.md §3).
+const SHAPE_EXEMPT = ['connectives'];
+const shape = {
+  lessons: 0, sents: 0, lines: 0,
+  sentInAim: 0, sentTwoWords: [], sentNoCause: [], sentOver: [], sentConn: [],
+  lineInAim: 0, lineOverAim: 0, lineOver: [], lineConn: 0, convoConnOver: []
+};
+tiers.filter(t => t.tier === 1 && !SHAPE_EXEMPT.includes(t.key)).forEach(t => {
+  const r = topics[t.key].rounds['1'];
+  const id = `${t.key}:1`;
+  const words = r.words || [];
+  shape.lessons++;
+  (r.sentences || []).forEach(sn => {
+    const n = hanLen(sn.c);
+    const hit = { key: t.key, n, c: sn.c, j: sn.j };
+    shape.sents++;
+    if (CONNECTIVES.some(c => sn.c.includes(c))) shape.sentConn.push(hit);
+    if (n <= SHAPE.sentAim) { shape.sentInAim++; return; }
+    if (n > SHAPE.sentMax) { shape.sentOver.push(hit); return; }
+    const lessonWords = words.filter(w => useIn(id, w.c, sn.c) === 'used').length;
+    (lessonWords >= 2 ? shape.sentTwoWords : shape.sentNoCause).push(hit);
+  });
+  let conn = 0;
+  ((r.convo || {}).lines || []).forEach(l => {
+    const n = hanLen(l.c);
+    shape.lines++;
+    if (CONNECTIVES.some(c => l.c.includes(c))) { shape.lineConn++; conn++; }
+    if (n <= SHAPE.lineAim) shape.lineInAim++;
+    else if (n > SHAPE.lineMax) shape.lineOver.push({ key: t.key, n, c: l.c, j: l.j });
+    else shape.lineOverAim++;
+  });
+  if (conn > 2) shape.convoConnOver.push({ key: t.key, conn });
+});
+
 // ── Output ───────────────────────────────────────────────────────────────────
 const pct = (n, d) => d ? Math.round((n / d) * 100) + '%' : '—';
 
@@ -524,6 +577,40 @@ console.log(sep(9));
     `Sentences short: ${lessonRules.reduce((n, l) => n + l.short, 0)}. ` +
     `Words not yet used: ${lessonRules.reduce((n, l) => n + l.unused.length + l.split.length, 0)} ` +
     `(of which possibly split: ${lessonRules.reduce((n, l) => n + l.split.length, 0)}).`);
+}
+
+// Tier-1 shape — the simplicity guide. Reported only; see the block that
+// computes `shape` for what each row means.
+console.log(MD ? '\n### Tier-1 shape\n' : '\n=== TIER-1 SHAPE ===');
+console.log(row(['Measure', 'Count']));
+console.log(sep(2));
+[
+  ['Tier-1 lessons measured (connectives exempt)', shape.lessons],
+  [`Sentences of up to ${SHAPE.sentAim} characters`, `${shape.sentInAim} of ${shape.sents} (${pct(shape.sentInAim, shape.sents)})`],
+  [`Sentences of ${SHAPE.sentAim + 1}–${SHAPE.sentMax}, carrying two lesson words (allowed)`, shape.sentTwoWords.length],
+  [`Sentences of ${SHAPE.sentAim + 1}–${SHAPE.sentMax}, no second lesson word (listed)`, shape.sentNoCause.length],
+  [`Sentences over ${SHAPE.sentMax} (flagged)`, shape.sentOver.length],
+  ['Sentences carrying a listed connective', shape.sentConn.length],
+  [`Chat lines of up to ${SHAPE.lineAim} characters`, `${shape.lineInAim} of ${shape.lines} (${pct(shape.lineInAim, shape.lines)})`],
+  [`Chat lines of ${SHAPE.lineAim + 1}–${SHAPE.lineMax}`, shape.lineOverAim],
+  [`Chat lines over ${SHAPE.lineMax} (flagged)`, shape.lineOver.length],
+  ['Chat lines carrying a listed connective', shape.lineConn],
+  ['Chats with a connective in more than two lines (listed)', shape.convoConnOver.length]
+].forEach(r => console.log(row(r.map(String))));
+{
+  const list = (title, hits) => {
+    if (!hits.length) return;
+    console.log((MD ? '\n' : '') + title);
+    hits.forEach(h => console.log(`${MD ? '- ' : '   '}${h.key} · ${h.n} · ${h.c} (${h.j})`));
+  };
+  list('Sentences over the flag line:', shape.sentOver);
+  list('Sentences over the aim with no second lesson word:', shape.sentNoCause);
+  list('Sentences carrying a connective:', shape.sentConn);
+  list('Chat lines over the flag line:', shape.lineOver);
+  if (shape.convoConnOver.length) {
+    console.log((MD ? '\n' : '') + 'Chats with a connective in more than two lines:');
+    shape.convoConnOver.forEach(h => console.log(`${MD ? '- ' : '   '}${h.key} · ${h.conn} lines`));
+  }
 }
 
 // Fill-the-Gap coverage. A user turn without `opts` cannot be a gap line, and

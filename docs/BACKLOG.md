@@ -4,7 +4,7 @@
 IN_PROGRESS.md when it's picked up; delete it from here once it's shipped and
 folded into STATUS.md.*
 
-Last updated: 2026-11-11 · sw.js at v166
+Last updated: 2026-11-12 · sw.js at v167
 
 ## Product
 - **Runtime Azure TTS for the Translate screen — gated on the A2 proxy.** Agreed
@@ -51,11 +51,15 @@ Last updated: 2026-11-11 · sw.js at v166
 
 ## Content
 
-- **Write the tier-1 spec.** Tier 1 has only a description (CONTENT.md §3). It needs a written standard before the retrofit starts, and the standard has to keep tier 1 *simple*: the lesson rules are the same at both tiers and would let tier 1 drift harder. Baseline to hold, measured 2026-11-11: sentences of median 5 characters, no connectives, chat lines of median 7. William wants more thinking on this before it is drafted. CONTENT.md §3, *Lesson rules*.
-- **Retrofit 44 lessons to the lesson rules** — 135 sentences, 217 words to bring into use, new audio. Approved 2026-11-11; waits on the tier-1 spec and the review sheet. Plan in CONTENT.md §5.9; list from `node tools/content-report.js --worklist`.
+- **Review `docs/CONTENT_PLAYBOOK.md`** — the twelve-step procedure for authoring and checking a lesson, drafted 2026-11-12, including the independent AI review (three passes, each by a fresh session with a limited packet). Four open questions in its §6: the reviewer's pass bar, where unreviewed audio lives (a branch, or live-first while pre-launch), a second model for pass A, and batch size. **The retrofit waits on this.**
+- **Build the review log and its scoring script** — `docs/review/review-log.jsonl`, one row per reviewed line, and a script reporting each AI pass's catch rate and false-flag rate against the native marks (CONTENT_PLAYBOOK.md §4). The log starts with batch 1; the script is a probe, so `PROBE_METHOD.md` applies.
+
+- **Build the scene-setting field.** CONTENT_SPEC_TIER1.md §5.10, approved 2026-11-12: each chat declares its setting (home and family, everyday life, travel, work), and `content-report.js` reports the mix. Needs a field in the topic data; until then the setting lives on the scene card.
+- **A rewritten sentence keeps its ID, so saved progress follows it onto a different sentence.** Precedent from v69 and v81, and the retrofit will do it many times. Decide whether that is acceptable or whether progress should reset for a rewritten sentence — an app change if so. CONTENT_SPEC_TIER1.md §10.
+- **Retrofit 44 lessons to the lesson rules and the tier-1 spec** — at least 135 sentences and 217 words to bring into use, plus whatever existing lines do not meet the spec, and new audio. Approved 2026-11-11; quality-first approach decided 2026-11-12. The tier-1 spec is approved and the review sheet is back; **it waits on William's review of the playbook**, which it will be the first run of. First batch: Family, Body Parts, Animals & Pets. Plan in CONTENT.md §5.9; list from `node tools/content-report.js --worklist`.
 - **`feelings` and `greetings` tier 2 are one sentence short each**, since the tier-2 minimum became 8. Small, and independent of the tier-1 work: one sentence and its audio apiece.
-- **The content playbook — the rest of it.** `docs/PROPOSAL-content-playbook.md` is the plan for authoring new topics with minimal native review. Built so far: the four lesson rules. Still proposed, not built: the register scan for written-Chinese forms, the curriculum vocabulary index, the scene card, the independent AI reviewer and its calibration. Three decisions in its §7 are still open — the severity bar, the reviewer's pass bar, which second model.
-- **Read the native-ear review sheet when it comes back.** `docs/review/2026-11-11-native-ear-sheet.md`, with its key beside it; the key says how the marks are to be read and was written before any exist. Every line marked *Off* is logged before and after.
+- **The content playbook — the rest of it.** `docs/PROPOSAL-content-playbook.md` is the plan for authoring new topics with minimal native review. Built so far: the four lesson rules, the tier-1 shape report, both specs, and the procedure as a draft (`CONTENT_PLAYBOOK.md`). Not built: the register scan for written-style words (its list holds one confirmed entry, 好的 (hou2 dik1)), the curriculum vocabulary index, and the calibration of the AI reviewer. `CONTENT_PLAYBOOK.md` §5 is the current list of what exists.
+
 
 - **Attractions' intro note: spoken phrase or sign wording?** 唔可以拍照 (m4 ho2 ji5 paak3 ziu3) vs 請勿拍照 (cing2 mat6 paak3 ziu3). Detail in CONTENT.md §4 *Open*.
 - **14 topic intro notes carry more than one `<strong>`**, against CONTENT.md's "`<strong>` reserved for the single key term" (Tense has 8; Money 4; most have 3). Untouched at v162, which kept each note's emphasis count. Pick one term per note, or relax the rule to match the notes — William's call.

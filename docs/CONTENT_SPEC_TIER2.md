@@ -5,7 +5,7 @@ harder experience. Read this before authoring or retrofitting a tier-2 lesson.
 `CONTENT.md` records what exists and what is planned; this file records how to
 build one.*
 
-Last updated: 2026-11-11 · sw.js at v166
+Last updated: 2026-11-12 · sw.js at v167
 
 > **Provenance.** This is spec v2, previously held outside the repo as
 > `intermediate-tier2-content-spec-v1.md` — a filename that said v1 while the
@@ -36,6 +36,7 @@ sentences, a richer conversation.
 > the number of sentences no longer separates the tiers. What separates them is
 > what the sentences *are*: tier 1 keeps them short and simple, tier 2 makes
 > them longer and progressively harder. That contrast is the rows below it.
+> Tier 1's own rules are in CONTENT_SPEC_TIER1.md, approved 2026-11-12.
 
 | Dimension | Tier 1 | Tier 2 |
 |---|---|---|
@@ -295,11 +296,11 @@ its sizing vocabulary — 試吓 (si3 haa5), 尺碼 (cek3 maa5), 緊 (gan2), 鬆
    derived data maintained by hand and it has drifted before; check 7 in
    `content-report.js` exists because of it.
 5. `node tools/validate.js`, `node tools/content-report.js --check` and
-   `node tools/jyutping-check.js`. `--check` now holds the lesson rules too: a
-   new round must meet them, and a round brought up to them must be deleted
-   from `RETROFIT_PENDING` in the script in the same commit.
-   `content-report.js --worklist` says what a round still lacks. The last holds CONTENT.md §3's character-and-
-   reading rule for every intro note and sentence note.
+   `node tools/jyutping-check.js`. The last holds CONTENT.md §3's character-and-
+   reading rule for every intro note and sentence note. `--check` holds the
+   lesson rules too: a new round must meet them, and a round brought up to them
+   must be deleted from `RETROFIT_PENDING` in the script in the same commit.
+   `content-report.js --worklist` says what a round still lacks.
 6. Generate audio with `tools/generate-audio.js` — **Azure AI Speech, `zh-HK`
    Neural** (the default since v123; `SPEECH_KEY` + `SPEECH_REGION`) — and commit
    the files. **Content without audio is a silent lesson.** Do not fall back to

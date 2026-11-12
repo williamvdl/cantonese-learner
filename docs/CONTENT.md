@@ -3,9 +3,10 @@
 *The register of the teaching corpus: what has been authored, how it is shaped,
 and what is planned. Content only — the app that renders it lives in STATUS.md,
 the visual rules in DESIGN_SYSTEM.md, the UX decisions in DESIGN_DECISIONS.md,
-the tier-2 authoring rules in CONTENT_SPEC_TIER2.md.*
+the authoring rules in CONTENT_SPEC_TIER1.md and CONTENT_SPEC_TIER2.md, and the
+procedure in CONTENT_PLAYBOOK.md (a draft).*
 
-Last updated: 2026-11-11 · sw.js at v166 · inventory derived from
+Last updated: 2026-11-12 · sw.js at v167 · inventory derived from
 `node tools/content-report.js` (§2 not re-run since v156, except *Tier-2 spec compliance* and *Lesson rules*, run 2026-11-11; §3, §4, §6, §7 updated at v165–v166; lesson rules added to §2–§6 on 2026-11-11)
 
 ---
@@ -265,6 +266,26 @@ to raise the shape, and the retrofit that follows from it (§5.9). `food` tier 1
 shows the gap is the sentence count rather than care: it already uses all 11 of
 its words in sentences and is short only on the minimum.
 
+### Tier-1 shape
+
+How simple tier 1 is, against the guide in CONTENT_SPEC_TIER1.md §4–§5.
+**Reported, never enforced** — the guide has exceptions by design. Length is in
+Chinese characters; `connectives` is exempt. Run 2026-11-11.
+
+| Measure | Count |
+|---|---|
+| Tier-1 lessons measured | 41 |
+| Sentences of up to 8 characters | 204 of 212 (96%) |
+| Sentences of 9–12, carrying two lesson words (allowed) | 5 |
+| Sentences of 9–12, no second lesson word (listed) | 2 — Clothing, Days & Time |
+| Sentences over 12 (flagged) | 1 — Days & Time, 19 characters |
+| Sentences carrying a listed connective | 0 |
+| Chat lines of up to 9 characters | 228 of 247 (92%) |
+| Chat lines of 10–12 | 18 |
+| Chat lines over 12 (flagged) | 1 — Modal Verbs, 15 characters |
+| Chat lines carrying a listed connective | 21 |
+| Chats with a connective in more than two lines (listed) | 1 — Adjectives, 3 lines |
+
 ### Note coverage
 
 246 of 307 sentences (80%), well past the original 15–25% target. Worst first:
@@ -324,9 +345,11 @@ not nineteen.** Authoring the checkpoint ten would produce dead data.
 
 ## 3. Authoring conventions
 
-Tier 2 has a written spec — **CONTENT_SPEC_TIER2.md**. Tier 1 does not; what
-follows is descriptive, derived from what 42 tier-1 lessons look like, recorded
-so a new one matches the ones beside it.
+Both tiers have a written spec — **CONTENT_SPEC_TIER1.md**, approved 2026-11-12,
+and **CONTENT_SPEC_TIER2.md**. Author to those. What follows describes tier 1
+*as built*, derived from what 42 tier-1 lessons look like before the retrofit;
+where it and the tier-1 spec differ, the spec is the rule and this is the
+starting point.
 
 **A tier-1 lesson:** 10–18 words (median 10; the 17–18 outliers are `time`,
 `family`, `body`, `animals` and `home`, where a smaller set would be arbitrary —
@@ -338,9 +361,8 @@ at `rounds.1.note` giving the grammar framing — present on 27 of 42, and the 1
 without are a soft gap rather than a defect.
 
 **The 5-sentence shape is now below the minimum.** The lesson rules below ask
-for 8 or more, and tier 1 is being retrofitted to them (§5.9). A written tier-1
-spec does not exist yet and is the next piece of authoring guidance to write —
-see *Lesson rules* for what it has to protect.
+for 8 or more, and tier 1 is being retrofitted to them (§5.9). CONTENT_SPEC_TIER1.md
+is what the retrofitted lessons are written to.
 
 **`connectives` breaks the shape on purpose.** A connective is meaningless
 alone, so it is sentence-led rather than vocab-led: 16 words, 20 sentences,
@@ -457,12 +479,12 @@ Four rules, the same at tier 1 and tier 2:
   a six-line conversation, which is the stuffing that makes dialogue unnatural.
   The two bands hold the *density* about level — roughly one lesson word a line.
 
-**What the rules do not say, and a tier-1 spec must.** The four rules are the
+**What the rules do not say, and the tier-1 spec does.** The four rules are the
 same at both tiers, so by themselves they do not keep tier 1 simple — and more
 sentences plus fuller conversations could quietly make it harder. William's
 steer (2026-11-11): tier 1 is simple sentences and simple chats; tier 2 belongs
 to the Intermediate path and gets progressively longer and harder. As built, the
-tiers are already far apart, which is the baseline a tier-1 spec should hold:
+tiers are already far apart, which is the baseline CONTENT_SPEC_TIER1.md holds:
 
 | Measured 2026-11-11, `connectives` excluded | Tier 1 | Tier 2 |
 |---|---|---|
@@ -836,16 +858,34 @@ not yet used where the rules need them — plus audio for every new line.
 `node tools/content-report.js --worklist` is the list, worst first: Family
 (13 words unused), Body Parts (12), Animals & Pets and Home (11 each).
 
-**Not started, and two things come first.** A **tier-1 spec**, so the new
-sentences are written to a stated standard of simplicity rather than to the
-rules alone (§3, *Lesson rules*). And the **native-ear review sheet** in
-`docs/review/`, whose result says which phrasings the retrofit should avoid.
+**Not started. One thing is still ahead of it: William's review of
+`CONTENT_PLAYBOOK.md`**, the step-by-step procedure the retrofit will follow,
+drafted 2026-11-12. An earlier version of this section said nothing blocked the
+retrofit; that was wrong. The rules and the spec were ready, but the procedure
+had not been written down and its independent AI review step had never been
+defined, let alone run. The first batch is that procedure's pilot.
 
-**How it is meant to run** (`PROPOSAL-content-playbook.md` §9, work item PB-7):
-in batches of about five lessons, each given a full native review with every
-correction logged before and after. The repo's history holds only five such
-corrections, too few to test an AI reviewer against, so the retrofit's log is
-what builds that set. Each batch deletes its lessons from `RETROFIT_PENDING`.
+The two things it waited on before are done:
+the **tier-1 spec** was approved on 2026-11-12, and the **native-ear review
+sheet** came back the same day (`docs/review/…-RESULTS.md`) — 好的 (hou2 dik1)
+as a reply is out, 好呀 (hou2 aa3) is in, and the 14 random lines were all
+marked fine.
+
+**Quality first, not least disturbance** (William, 2026-11-12). The aim is that
+every tier-1 lesson meets the spec as if authored new. A sentence that meets it
+stays; one that does not is rewritten; a chat is rebuilt where that makes it
+better, and its audio regenerated whole. So the 135 sentences and 217 words
+above are the floor of the work, not the size of it — how many existing lines
+get rewritten is not known until each lesson is read against the spec. The
+method is CONTENT_SPEC_TIER1.md §10.
+
+**How it runs:** by `CONTENT_PLAYBOOK.md`, in batches of three lessons to
+start and five once the procedure has run once — each authored into a review
+document, put through the three AI review passes, and given a full native
+review, with every flag and every correction logged. The
+known-bad set an AI reviewer would be tested against holds eight lines so far —
+five from the repo's history, three from the review sheet — and the retrofit's
+log is what grows it. Each batch deletes its lessons from `RETROFIT_PENDING`.
 
 The big lessons need more than sentences: the seven tier-1 lessons of 13 or
 more words — Animals, Body, Family, Home, Time, Modal Verbs and Pronouns — also
@@ -916,7 +956,9 @@ is built and the checks start failing again.**
 The script also prints two things it does **not** enforce: tier-2 spec compliance
 and Fill-the-Gap coverage. Both are content debt rather than data defects. And
 it marks a lesson *long* past 12 sentences (14 for 13+ words) without failing
-it — only a person can say whether a thirteenth sentence earns its place.
+it — only a person can say whether a thirteenth sentence earns its place. The
+**Tier-1 shape** table is the same kind of thing: it lists long sentences and
+chat lines by name and can never fail the check.
 
 ---
 

@@ -4,7 +4,7 @@
 questions behind it. Meant to be short-lived — when a piece ships, fold its
 outcome into STATUS.md and clear this file back down for the next thing.*
 
-Last updated: 2026-11-11 · sw.js at v166
+Last updated: 2026-11-12 · sw.js at v167
 
 ## Now — the content playbook and the lesson rules
 
@@ -19,21 +19,37 @@ are stated in CONTENT.md §3, *Lesson rules*.
 
 **Decided:** the sentence minimum applies to tier 1 and the retrofit is
 approved; tier 2 is "8 or more"; the word-use and conversation values; the app
-is for all learners.
+is for all learners. **And on 2026-11-12:** the tier-1 spec
+(`CONTENT_SPEC_TIER1.md`) is approved, with three changes recorded in its §9;
+and the retrofit is quality-first — content that does not meet the spec is
+rewritten, not worked around.
 
-**Waiting on:**
-- **The review sheet** (`docs/review/2026-11-11-native-ear-sheet.md`) — 28
-  lines for a native ear, about ten minutes. Its key holds the reading rules.
-- **The tier-1 spec.** William wants more thinking first: tier 1 is simple
-  sentences and chats, tier 2 gets progressively longer and harder. The
-  retrofit does not start until this exists.
+**The review sheet is back** (2026-11-12,
+`docs/review/2026-11-11-native-ear-sheet-RESULTS.md`). All 14 random lines were
+marked fine. Of the 14 the register scan flagged, 3 were confirmed: 好的
+(hou2 dik1) as a reply is out, twice; 想要 (soeng2 jiu3) and questions ending
+in 嗎 (maa3) are fine and come off the list. The scan's markers had been an
+AI's guess at what sounds written, and four in five of its flags were wrong —
+the measurement that an AI reviewer must be calibrated before it is trusted.
+
+**v167 — the three lines the sheet marked off are fixed** in the data
+(Days & Time chat lines 4 and 6, Numbers chat line 6). **Their audio is not
+regenerated yet** — that is William's step, three commands in STATUS's v167
+row — and the characters for the first were written from the reviewer's
+jyutping and want her glance.
+
+**Next, in order:**
+- **William reviews `CONTENT_PLAYBOOK.md`** — the procedure, drafted
+  2026-11-12, and the four open questions in its §6. The independent AI review
+  in it has been defined but never run.
+- **Retrofit batch 1, as the playbook's pilot** — Family, Body Parts, Animals &
+  Pets, the three lessons with the most unused words. Not before the playbook
+  is agreed.
 
 **Open questions:**
-- What "simple" is, as a rule a script can hold — a length cap, a ban on
-  connectives and two-clause sentences, one lesson word per sentence, or some
-  mix. The as-built numbers are in CONTENT.md §3.
-- Whether the 13+ word tier-1 lessons stay "simple" with an 8-line
-  conversation carrying 40% of their words.
+- A rewritten sentence keeps its ID, so a learner's saved progress follows it
+  onto a different sentence. Accepted before; the retrofit will do it at scale.
+
 - The history count found only five recorded native corrections, so there is
   nothing yet to test an AI reviewer against. The retrofit's correction log is
   meant to build it (CONTENT.md §5.9).

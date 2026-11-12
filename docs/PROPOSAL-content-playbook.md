@@ -308,7 +308,18 @@ This is an investigation, so `PROBE_METHOD.md` applies in full. In outline:
 
 ---
 
-## 8. A first calibration — sheet issued 2026-11-11
+## 8. A first calibration — sheet issued 2026-11-11, marked 2026-11-12
+
+> **Result.** All 28 lines marked. The 14 random lines: all fine. The 14
+> flagged lines: 3 off. 好的 (hou2 dik1) was off both times and stays on the
+> register list; 想要 (soeng2 jiu3) and questions ending in 嗎 (maa3) were
+> fine and come off it. So H7's list was mostly wrong as first drawn — it was
+> an AI's expectation of what sounds written, and about one flag in five held
+> up. That is the clearest evidence yet for §6.4: the reviewer has to be
+> measured before it is trusted. Full write-up and the three corrections:
+> `docs/review/2026-11-11-native-ear-sheet-RESULTS.md`. The rest of this
+> section is as written before the marks came in.
+
 
 `docs/review/2026-11-11-native-ear-sheet.md` is the sheet, and
 `…-sheet-KEY.md` says which lines are which and how the marks will be read. It
@@ -348,7 +359,8 @@ Named work items, no order implied beyond what is stated.
 - **PB-4 — The curriculum vocabulary index**, which unlocks H6 and the tier-2
   spec's uncheckable "known word" target.
 - **PB-5 — Reviewer calibration** (§6.4), as a probe under `PROBE_METHOD.md`.
-- **PB-6 — Write the playbook itself** — one document covering tier 1 as a
+- **PB-6 — Write the playbook itself** *(drafted 2026-11-12 as
+  `CONTENT_PLAYBOOK.md`, with tier 1's spec as `CONTENT_SPEC_TIER1.md`)* — one document covering tier 1 as a
   proper spec, the authoring method, and the workflow end to end.
 - **PB-7 — The tier-1 retrofit, as the trial.** 135 sentences, authored by the
   playbook in batches of about five lessons. Most will be an approved frame with

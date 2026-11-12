@@ -482,20 +482,25 @@
           },
           {
             "u": true,
-            "c": "朝早十點見，好嗎？",
-            "j": "ziu1 zou2 sap6 dim2 gin3, hou2 maa3?",
-            "e": "Meet at 10am, is that ok?",
+            "c": "得唔得朝早十點見？",
+            "j": "dak1 m4 dak1 ziu1 zou2 sap6 dim2 gin3?",
+            "e": "Is it OK to meet at 10am?",
             "opts": [
-              "朝早十點見，好嗎？",
+              "得唔得朝早十點見？",
               "夜晚三點。",
               "琴日見。"
             ],
             "optsJ": [
-              "ziu1 zou2 sap6 dim2 gin3, hou2 maa3?",
+              "dak1 m4 dak1 ziu1 zou2 sap6 dim2 gin3?",
               "je6 maan5 saam1 dim2.",
               "kam4 jat6 gin3."
             ],
             "bd": [
+              {
+                "c": "得唔得",
+                "j": "dak1 m4 dak1",
+                "e": "is it OK?"
+              },
               {
                 "c": "朝早",
                 "j": "ziu1 zou2",
@@ -510,11 +515,6 @@
                 "c": "見",
                 "j": "gin3",
                 "e": "meet"
-              },
-              {
-                "c": "好嗎",
-                "j": "hou2 maa3",
-                "e": "is that ok?"
               }
             ]
           },
@@ -543,24 +543,24 @@
           },
           {
             "u": true,
-            "c": "好的！聽日朝早見！",
-            "j": "hou2 dik1! ting1 jat6 ziu1 zou2 gin3!",
+            "c": "好呀！聽日朝早見！",
+            "j": "hou2 aa3! ting1 jat6 ziu1 zou2 gin3!",
             "e": "Sure! See you tomorrow morning!",
             "opts": [
-              "好的！聽日朝早見！",
+              "好呀！聽日朝早見！",
               "唔好，我唔得閒。",
               "琴日見。"
             ],
             "optsJ": [
-              "hou2 dik1! ting1 jat6 ziu1 zou2 gin3!",
+              "hou2 aa3! ting1 jat6 ziu1 zou2 gin3!",
               "m4 hou2, ngo5 m4 dak1 haan4.",
               "kam4 jat6 gin3."
             ],
             "bd": [
               {
-                "c": "好的",
-                "j": "hou2 dik1",
-                "e": "alright"
+                "c": "好呀",
+                "j": "hou2 aa3",
+                "e": "sure"
               },
               {
                 "c": "聽日",

@@ -391,24 +391,24 @@
           },
           {
             "u": true,
-            "c": "好的，多謝！",
-            "j": "hou2 dik1, do1 ze6!",
+            "c": "好呀，多謝！",
+            "j": "hou2 aa3, do1 ze6!",
             "e": "Great, thank you!",
             "opts": [
-              "好的，多謝！",
+              "好呀，多謝！",
               "我唔明。",
               "再買多一個。"
             ],
             "optsJ": [
-              "hou2 dik1, do1 ze6!",
+              "hou2 aa3, do1 ze6!",
               "ngo5 m4 ming4.",
               "zoi3 maai5 do1 jat1 go3."
             ],
             "bd": [
               {
-                "c": "好的",
-                "j": "hou2 dik1",
-                "e": "alright / great"
+                "c": "好呀",
+                "j": "hou2 aa3",
+                "e": "great"
               },
               {
                 "c": "多謝",
