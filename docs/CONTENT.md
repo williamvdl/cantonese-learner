@@ -6,7 +6,7 @@ the visual rules in DESIGN_SYSTEM.md, the UX decisions in DESIGN_DECISIONS.md,
 the authoring rules in CONTENT_SPEC_TIER1.md and CONTENT_SPEC_TIER2.md, and the
 procedure in CONTENT_PLAYBOOK.md (a draft).*
 
-Last updated: 2026-11-12 · sw.js at v167 · inventory derived from
+Last updated: 2026-11-13 · sw.js at v169 · inventory derived from
 `node tools/content-report.js` (§2 not re-run since v156, except *Tier-2 spec compliance* and *Lesson rules*, run 2026-11-11; §3, §4, §6, §7 updated at v165–v166; lesson rules added to §2–§6 on 2026-11-11)
 
 ---
@@ -245,20 +245,23 @@ six pre-spec tier-2 rounds.
 
 ### Lesson rules
 
-Measured 2026-11-11 against the four rules in §3, *Lesson rules*. Full per-lesson
+Measured 2026-11-13 at v169, after retrofit batch 1, against the four rules in
+§3, *Lesson rules*. (On 2026-11-11, before any retrofit: 8 of 52, 135 sentences
+short, 217 words unused.) Full per-lesson
 table in the script output; `--worklist` lists what each lesson lacks.
 
 | Measure | Count |
 |---|---|
-| Lessons meeting every rule | **8 of 52** |
-| Lessons pending retrofit | 44 — all 41 failing tier-1 lessons, and `feelings`, `greetings` and `numbers` tier 2 |
-| Sentences short of the minimum | 135, across 44 lessons |
-| Words not yet used where the rule needs them | 217 of 585 |
+| Lessons meeting every rule | **11 of 52** |
+| Lessons pending retrofit | 41 — 38 tier-1 lessons, and `feelings`, `greetings` and `numbers` tier 2 |
+| Sentences short of the minimum | 120, across 41 lessons |
+| Words not yet used where the rule needs them | 181 of 585 |
 | Sentences containing none of their topic's words | 6 |
 | Lessons marked *long* | 1 — `connectives`, 20 sentences, deliberate (§3) |
 
-**Meeting every rule:** `connectives`, and tier 2 of `body`, `comparisons`,
-`food`, `friends`, `modals`, `restaurant` and `shopping`.
+**Meeting every rule:** `connectives`; tier 1 of `animals`, `body` and `family`
+(retrofit batch 1, v169); and tier 2 of `body`, `comparisons`, `food`,
+`friends`, `modals`, `restaurant` and `shopping`.
 
 **Tier 1 was authored to a different shape** — 5 sentences and a 6-line
 conversation — so this is not 44 defects. It is one decision, taken 2026-11-11,
@@ -270,20 +273,20 @@ its words in sentences and is short only on the minimum.
 
 How simple tier 1 is, against the guide in CONTENT_SPEC_TIER1.md §4–§5.
 **Reported, never enforced** — the guide has exceptions by design. Length is in
-Chinese characters; `connectives` is exempt. Run 2026-11-11.
+Chinese characters; `connectives` is exempt. Run 2026-11-13 at v169.
 
 | Measure | Count |
 |---|---|
 | Tier-1 lessons measured | 41 |
-| Sentences of up to 8 characters | 204 of 212 (96%) |
-| Sentences of 9–12, carrying two lesson words (allowed) | 5 |
+| Sentences of up to 8 characters | 221 of 230 (96%) |
+| Sentences of 9–12, carrying two lesson words (allowed) | 6 |
 | Sentences of 9–12, no second lesson word (listed) | 2 — Clothing, Days & Time |
 | Sentences over 12 (flagged) | 1 — Days & Time, 19 characters |
 | Sentences carrying a listed connective | 0 |
-| Chat lines of up to 9 characters | 228 of 247 (92%) |
-| Chat lines of 10–12 | 18 |
+| Chat lines of up to 9 characters | 232 of 253 (92%) |
+| Chat lines of 10–12 | 20 |
 | Chat lines over 12 (flagged) | 1 — Modal Verbs, 15 characters |
-| Chat lines carrying a listed connective | 21 |
+| Chat lines carrying a listed connective | 22 |
 | Chats with a connective in more than two lines (listed) | 1 — Adjectives, 3 lines |
 
 ### Note coverage
@@ -853,14 +856,23 @@ start feeling samey** — the fixed 站 (zaam6) is the deliberate default.
 
 ### 5.9 Retrofitting to the lesson rules
 
-Approved 2026-11-11. 44 lessons, 135 sentences short of the minimum, 217 words
-not yet used where the rules need them — plus audio for every new line.
-`node tools/content-report.js --worklist` is the list, worst first: Family
-(13 words unused), Body Parts (12), Animals & Pets and Home (11 each).
+Approved 2026-11-11. It began with 44 lessons, 135 sentences short of the
+minimum and 217 words not yet used where the rules need them.
 
-**Not started. One thing is still ahead of it: William's review of
-`CONTENT_PLAYBOOK.md`**, the step-by-step procedure the retrofit will follow,
-drafted 2026-11-12. An earlier version of this section said nothing blocked the
+**Batch 1 shipped at v169 (2026-11-13): Family, Body Parts, Animals & Pets.**
+18 new sentences, one rewritten, and all three chats rebuilt on a scene card —
+`docs/review/2026-11-12-batch-1-review.md` has every line and every flag. It
+went **live first**: the native review of its 43 new lines has not happened
+yet and follows from the live app (CONTENT_PLAYBOOK.md §6).
+
+**Left: 41 lessons, 120 sentences, 181 words** — plus audio for every new line.
+`node tools/content-report.js --worklist` is the list, worst first: Home (11
+words unused), then Common Adjectives, Clothing, Fruit & Vegetables and
+Location.
+
+**William's review of `CONTENT_PLAYBOOK.md` is still open**, the step-by-step
+procedure the retrofit follows, drafted 2026-11-12; batch 1 ran as its pilot
+while he reads it. An earlier version of this section said nothing blocked the
 retrofit; that was wrong. The rules and the spec were ready, but the procedure
 had not been written down and its independent AI review step had never been
 defined, let alone run. The first batch is that procedure's pilot.

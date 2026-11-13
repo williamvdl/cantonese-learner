@@ -250,78 +250,232 @@
               "e": "vegetables"
             }
           ]
+        },
+        {
+          "sid": "animals-t1-s06",
+          "c": "隻雀仔喺樹上面。",
+          "j": "zek3 zoek3 zai2 hai2 syu6 soeng6 min6.",
+          "e": "The bird is up in the tree.",
+          "bd": [
+            {
+              "c": "隻雀仔",
+              "j": "zek3 zoek3 zai2",
+              "e": "the bird"
+            },
+            {
+              "c": "喺",
+              "j": "hai2",
+              "e": "is at"
+            },
+            {
+              "c": "樹",
+              "j": "syu6",
+              "e": "tree"
+            },
+            {
+              "c": "上面",
+              "j": "soeng6 min6",
+              "e": "on top"
+            }
+          ]
+        },
+        {
+          "sid": "animals-t1-s07",
+          "c": "農場有牛同羊。",
+          "j": "nung4 coeng4 jau5 ngau4 tung4 joeng4.",
+          "e": "The farm has cows and sheep.",
+          "bd": [
+            {
+              "c": "農場",
+              "j": "nung4 coeng4",
+              "e": "farm"
+            },
+            {
+              "c": "有",
+              "j": "jau5",
+              "e": "has"
+            },
+            {
+              "c": "牛",
+              "j": "ngau4",
+              "e": "cows"
+            },
+            {
+              "c": "同",
+              "j": "tung4",
+              "e": "and"
+            },
+            {
+              "c": "羊",
+              "j": "joeng4",
+              "e": "sheep"
+            }
+          ]
+        },
+        {
+          "sid": "animals-t1-s08",
+          "c": "豬好鍾意食嘢。",
+          "j": "zyu1 hou2 zung1 ji3 sik6 je5.",
+          "e": "Pigs love to eat.",
+          "bd": [
+            {
+              "c": "豬",
+              "j": "zyu1",
+              "e": "pigs"
+            },
+            {
+              "c": "好鍾意",
+              "j": "hou2 zung1 ji3",
+              "e": "really like"
+            },
+            {
+              "c": "食嘢",
+              "j": "sik6 je5",
+              "e": "eating"
+            }
+          ]
+        },
+        {
+          "sid": "animals-t1-s09",
+          "c": "我想養一隻狗。",
+          "j": "ngo5 soeng2 joeng5 jat1 zek3 gau2.",
+          "e": "I want to get a dog.",
+          "bd": [
+            {
+              "c": "我",
+              "j": "ngo5",
+              "e": "I"
+            },
+            {
+              "c": "想",
+              "j": "soeng2",
+              "e": "want to"
+            },
+            {
+              "c": "養",
+              "j": "joeng5",
+              "e": "keep, raise"
+            },
+            {
+              "c": "一隻",
+              "j": "jat1 zek3",
+              "e": "one (animal)"
+            },
+            {
+              "c": "狗",
+              "j": "gau2",
+              "e": "dog"
+            }
+          ]
+        },
+        {
+          "sid": "animals-t1-s10",
+          "c": "大象好大，老鼠好細。",
+          "j": "daai6 zoeng6 hou2 daai6, lou5 syu2 hou2 sai3.",
+          "e": "Elephants are big, mice are small.",
+          "bd": [
+            {
+              "c": "大象",
+              "j": "daai6 zoeng6",
+              "e": "elephant"
+            },
+            {
+              "c": "好大",
+              "j": "hou2 daai6",
+              "e": "very big"
+            },
+            {
+              "c": "老鼠",
+              "j": "lou5 syu2",
+              "e": "mouse"
+            },
+            {
+              "c": "好細",
+              "j": "hou2 sai3",
+              "e": "very small"
+            }
+          ]
         }
       ],
       "convo": {
-        "title": "Talking about pets",
+        "title": "A day at the zoo",
         "speakers": [
           "Friend",
           "You"
         ],
         "lines": [
           {
-            "u": false,
-            "c": "你屋企有冇養寵物呀？",
-            "j": "nei5 uk1 kei2 jau5 mou5 joeng5 cung2 mat6 aa3?",
-            "e": "Do you have pets at home?",
+            "c": "你想睇咩動物呀？",
+            "j": "nei5 soeng2 tai2 me1 dung6 mat6 aa3?",
+            "e": "What animals do you want to see?",
             "bd": [
               {
                 "c": "你",
                 "j": "nei5",
-                "e": "your"
+                "e": "you"
               },
               {
-                "c": "屋企",
-                "j": "uk1 kei2",
-                "e": "home"
+                "c": "想",
+                "j": "soeng2",
+                "e": "want to"
               },
               {
-                "c": "有冇",
-                "j": "jau5 mou5",
-                "e": "have or not"
+                "c": "睇",
+                "j": "tai2",
+                "e": "see"
               },
               {
-                "c": "養",
-                "j": "joeng5",
-                "e": "keep"
+                "c": "咩",
+                "j": "me1",
+                "e": "what"
               },
               {
-                "c": "寵物",
-                "j": "cung2 mat6",
-                "e": "pets"
+                "c": "動物",
+                "j": "dung6 mat6",
+                "e": "animals"
+              },
+              {
+                "c": "呀",
+                "j": "aa3",
+                "e": "(question particle)"
               }
             ]
           },
           {
             "u": true,
-            "c": "有呀，一隻貓同一隻狗。",
-            "j": "jau5 aa3, jat1 zek3 maau1 tung4 jat1 zek3 gau2.",
-            "e": "Yes, a cat and a dog.",
+            "c": "我想睇熊貓同大象。",
+            "j": "ngo5 soeng2 tai2 hung4 maau1 tung4 daai6 zoeng6.",
+            "e": "I want to see the pandas and the elephants.",
             "opts": [
-              "有呀，一隻貓同一隻狗。",
-              "冇。",
-              "我唔知。"
+              "我想睇熊貓同大象。",
+              "我今晚想早啲瞓覺。",
+              "我唔鍾意食魚。"
             ],
             "optsJ": [
-              "jau5 aa3, jat1 zek3 maau1 tung4 jat1 zek3 gau2.",
-              "mou5.",
-              "ngo5 m4 zi1."
+              "ngo5 soeng2 tai2 hung4 maau1 tung4 daai6 zoeng6.",
+              "ngo5 gam1 maan5 soeng2 zou2 di1 fan3 gaau3.",
+              "ngo5 m4 zung1 ji3 sik6 jyu2."
             ],
             "bd": [
               {
-                "c": "有呀",
-                "j": "jau5 aa3",
-                "e": "yes"
+                "c": "我",
+                "j": "ngo5",
+                "e": "I"
               },
               {
-                "c": "一隻",
-                "j": "jat1 zek3",
-                "e": "one (animal)"
+                "c": "想",
+                "j": "soeng2",
+                "e": "want to"
               },
               {
-                "c": "貓",
-                "j": "maau1",
-                "e": "cat"
+                "c": "睇",
+                "j": "tai2",
+                "e": "see"
+              },
+              {
+                "c": "熊貓",
+                "j": "hung4 maau1",
+                "e": "pandas"
               },
               {
                 "c": "同",
@@ -329,17 +483,69 @@
                 "e": "and"
               },
               {
-                "c": "狗",
-                "j": "gau2",
-                "e": "dog"
+                "c": "大象",
+                "j": "daai6 zoeng6",
+                "e": "elephants"
               }
             ]
           },
           {
-            "u": false,
-            "c": "嘩，叫咩名？",
-            "j": "waa3, giu3 me1 meng2?",
-            "e": "Wow, what are their names?",
+            "c": "好呀！不過先睇獅子同老虎。",
+            "j": "hou2 aa3! bat1 gwo3 sin1 tai2 si1 zi2 tung4 lou5 fu2.",
+            "e": "OK! But let's see the lions and tigers first.",
+            "bd": [
+              {
+                "c": "好呀",
+                "j": "hou2 aa3",
+                "e": "OK"
+              },
+              {
+                "c": "不過",
+                "j": "bat1 gwo3",
+                "e": "but"
+              },
+              {
+                "c": "先",
+                "j": "sin1",
+                "e": "first"
+              },
+              {
+                "c": "睇",
+                "j": "tai2",
+                "e": "see"
+              },
+              {
+                "c": "獅子",
+                "j": "si1 zi2",
+                "e": "lions"
+              },
+              {
+                "c": "同",
+                "j": "tung4",
+                "e": "and"
+              },
+              {
+                "c": "老虎",
+                "j": "lou5 fu2",
+                "e": "tigers"
+              }
+            ]
+          },
+          {
+            "u": true,
+            "c": "嘩，隻老虎好大呀！",
+            "j": "waa3, zek3 lou5 fu2 hou2 daai6 aa3!",
+            "e": "Wow, that tiger is huge!",
+            "opts": [
+              "嘩，隻老虎好大呀！",
+              "嘩，呢碗麵好好食！",
+              "唔該，幾多錢呀？"
+            ],
+            "optsJ": [
+              "waa3, zek3 lou5 fu2 hou2 daai6 aa3!",
+              "waa3, ni1 wun2 min6 hou2 hou2 sik6!",
+              "m4 goi1, gei2 do1 cin2 aa3?"
+            ],
             "bd": [
               {
                 "c": "嘩",
@@ -347,113 +553,194 @@
                 "e": "wow"
               },
               {
-                "c": "叫",
-                "j": "giu3",
-                "e": "are called"
+                "c": "隻老虎",
+                "j": "zek3 lou5 fu2",
+                "e": "the tiger"
               },
               {
-                "c": "咩名",
-                "j": "me1 meng2",
-                "e": "what name"
+                "c": "好大",
+                "j": "hou2 daai6",
+                "e": "very big"
+              },
+              {
+                "c": "呀",
+                "j": "aa3",
+                "e": "(exclamation)"
+              }
+            ]
+          },
+          {
+            "c": "前面有蛇同老鼠，你驚唔驚呀？",
+            "j": "cin4 min6 jau5 se4 tung4 lou5 syu2, nei5 geng1 m4 geng1 aa3?",
+            "e": "There are snakes and mice ahead — are you scared?",
+            "bd": [
+              {
+                "c": "前面",
+                "j": "cin4 min6",
+                "e": "ahead"
+              },
+              {
+                "c": "有",
+                "j": "jau5",
+                "e": "there are"
+              },
+              {
+                "c": "蛇",
+                "j": "se4",
+                "e": "snakes"
+              },
+              {
+                "c": "同",
+                "j": "tung4",
+                "e": "and"
+              },
+              {
+                "c": "老鼠",
+                "j": "lou5 syu2",
+                "e": "mice"
+              },
+              {
+                "c": "你",
+                "j": "nei5",
+                "e": "you"
+              },
+              {
+                "c": "驚唔驚",
+                "j": "geng1 m4 geng1",
+                "e": "scared or not"
+              },
+              {
+                "c": "呀",
+                "j": "aa3",
+                "e": "(question particle)"
               }
             ]
           },
           {
             "u": true,
-            "c": "貓叫Mochi，狗叫Buddy。",
-            "j": "maau1 giu3 Mochi, gau2 giu3 Buddy.",
-            "e": "The cat is Mochi, the dog is Buddy.",
+            "c": "驚呀！我唔想睇蛇。",
+            "j": "geng1 aa3! ngo5 m4 soeng2 tai2 se4.",
+            "e": "I am! I don't want to see the snakes.",
             "opts": [
-              "貓叫Mochi，狗叫Buddy。",
-              "我唔知。",
-              "佢哋冇名。"
+              "驚呀！我唔想睇蛇。",
+              "唔係，我哥哥係老師。",
+              "係呀！我住喺呢度。"
             ],
             "optsJ": [
-              "maau1 giu3 Mochi, gau2 giu3 Buddy.",
-              "ngo5 m4 zi1.",
-              "keoi5 dei6 mou5 meng2."
+              "geng1 aa3! ngo5 m4 soeng2 tai2 se4.",
+              "m4 hai6, ngo5 go4 go1 hai6 lou5 si1.",
+              "hai6 aa3! ngo5 zyu6 hai2 ni1 dou6."
             ],
             "bd": [
               {
-                "c": "貓",
-                "j": "maau1",
-                "e": "cat"
+                "c": "驚呀",
+                "j": "geng1 aa3",
+                "e": "scared!"
               },
               {
-                "c": "叫",
-                "j": "giu3",
-                "e": "is called"
+                "c": "我",
+                "j": "ngo5",
+                "e": "I"
               },
               {
-                "c": "狗",
-                "j": "gau2",
-                "e": "dog"
+                "c": "唔想",
+                "j": "m4 soeng2",
+                "e": "don't want to"
+              },
+              {
+                "c": "睇",
+                "j": "tai2",
+                "e": "see"
+              },
+              {
+                "c": "蛇",
+                "j": "se4",
+                "e": "snakes"
               }
             ]
           },
           {
-            "u": false,
-            "c": "邊隻乖啲？",
-            "j": "bin1 zek3 gwaai1 di1?",
-            "e": "Which one is better behaved?",
+            "c": "咁我哋去睇馬騮啦。",
+            "j": "gam2 ngo5 dei6 heoi3 tai2 maa5 lau1 laa1.",
+            "e": "Then let's go and see the monkeys.",
             "bd": [
               {
-                "c": "邊隻",
-                "j": "bin1 zek3",
-                "e": "which one"
+                "c": "咁",
+                "j": "gam2",
+                "e": "then"
               },
               {
-                "c": "乖",
-                "j": "gwaai1",
-                "e": "well-behaved"
+                "c": "我哋",
+                "j": "ngo5 dei6",
+                "e": "we"
               },
               {
-                "c": "啲",
-                "j": "di1",
-                "e": "more"
+                "c": "去",
+                "j": "heoi3",
+                "e": "go"
+              },
+              {
+                "c": "睇",
+                "j": "tai2",
+                "e": "see"
+              },
+              {
+                "c": "馬騮",
+                "j": "maa5 lau1",
+                "e": "monkeys"
+              },
+              {
+                "c": "啦",
+                "j": "laa1",
+                "e": "(suggestion)"
               }
             ]
           },
           {
             "u": true,
-            "c": "貓乖啲，狗就好頑皮。",
-            "j": "maau1 gwaai1 di1, gau2 zau6 hou2 waan4 pei4.",
-            "e": "The cat is better behaved, the dog is naughty.",
+            "c": "好呀！馬騮同熊貓都好可愛。",
+            "j": "hou2 aa3! maa5 lau1 tung4 hung4 maau1 dou1 hou2 ho2 oi3.",
+            "e": "OK! Monkeys and pandas are both so cute.",
             "opts": [
-              "貓乖啲，狗就好頑皮。",
-              "都好乖。",
-              "都好頑皮。"
+              "好呀！馬騮同熊貓都好可愛。",
+              "好呀！我哋聽日朝早十點見。",
+              "唔好意思，我唔明。"
             ],
             "optsJ": [
-              "maau1 gwaai1 di1, gau2 zau6 hou2 waan4 pei4.",
-              "dou1 hou2 gwaai1.",
-              "dou1 hou2 waan4 pei4."
+              "hou2 aa3! maa5 lau1 tung4 hung4 maau1 dou1 hou2 ho2 oi3.",
+              "hou2 aa3! ngo5 dei6 ting1 jat6 ziu1 zou2 sap6 dim2 gin3.",
+              "m4 hou2 ji3 si3, ngo5 m4 ming4."
             ],
             "bd": [
               {
-                "c": "貓",
-                "j": "maau1",
-                "e": "cat"
+                "c": "好呀",
+                "j": "hou2 aa3",
+                "e": "OK"
               },
               {
-                "c": "乖啲",
-                "j": "gwaai1 di1",
-                "e": "better behaved"
+                "c": "馬騮",
+                "j": "maa5 lau1",
+                "e": "monkeys"
               },
               {
-                "c": "狗",
-                "j": "gau2",
-                "e": "dog"
+                "c": "同",
+                "j": "tung4",
+                "e": "and"
               },
               {
-                "c": "就",
-                "j": "zau6",
-                "e": "is (contrast)"
+                "c": "熊貓",
+                "j": "hung4 maau1",
+                "e": "pandas"
               },
               {
-                "c": "好頑皮",
-                "j": "hou2 waan4 pei4",
-                "e": "very naughty"
+                "c": "都",
+                "j": "dou1",
+                "e": "both"
+              },
+              {
+                "c": "好可愛",
+                "j": "hou2 ho2 oi3",
+                "e": "so cute"
               }
             ]
           }
@@ -462,5 +749,5 @@
     }
   },
   "_idSeq": 18,
-  "_sidSeq": 5
+  "_sidSeq": 10
 }

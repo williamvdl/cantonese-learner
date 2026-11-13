@@ -5,9 +5,11 @@
 reviewed by three independent AI passes, and the flags acted on once.
 Written 2026-11-12 against v167.*
 
-> **Status: FOR WILLIAM'S APPROVAL. Nothing here is in the app.** The draft
-> sits in a working copy only. Still to come: your approval, audio (step 9),
-> the native review (step 10), corrections (step 11) and release (step 12).
+> **Status: RELEASED at v169, 2026-11-13 — live first.** William approved the
+> three scenes and chose to deploy before the native review, as the app's only
+> user. **Still to come: the native review (step 10) of the 43 new lines, the
+> ten pairs and the three flagged kept sentences, and any corrections
+> (step 11).** The lines as released include the 2026-11-13 update below.
 
 **How this differs from the playbook as written, and why.** Step 5 says you
 approve the draft before the AI review runs. For the pilot the two were run

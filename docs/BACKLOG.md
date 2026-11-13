@@ -4,7 +4,7 @@
 IN_PROGRESS.md when it's picked up; delete it from here once it's shipped and
 folded into STATUS.md.*
 
-Last updated: 2026-11-13 · sw.js at v168
+Last updated: 2026-11-13 · sw.js at v169
 
 ## Product
 - **Runtime Azure TTS for the Translate screen — gated on the A2 proxy.** Agreed
@@ -55,7 +55,8 @@ Last updated: 2026-11-13 · sw.js at v168
 - **Shopping teaches 找換 (zaau2 wun6), and its spoken replacement is already a Money word.** The native speaker chose 唱錢 (coeng3 cin2); Money already has it. Swapping would teach it twice. Decide when Shopping is retrofitted: a different Shopping word, or drop one.
 - **One audit question was not answered:** 爽約 (song2 joek3) against 放飛機 (fong3 fei1 gei1), "cancel on someone", in Friends.
 - **Add a word-list check to the playbook's step 1.** Proposed, not written in: before a lesson's sentences are touched, its word list goes through the two-pass check, and candidates go to the native ear. `docs/review/2026-11-13-word-list-audit.md` §8 has the evidence for how far to trust it.
-- **Retrofit batch 1 needs rebasing onto v168 and a decision on audio.** The draft (Family, Body Parts, Animals & Pets) is approved as to its three scenes (2026-11-13). Its word and reading changes shipped separately in v168, so what remains is the new sentences and chats. Waiting on: where unreviewed audio lives.
+- **Native review of retrofit batch 1 — it is live and unreviewed.** Family, Body Parts and Animals & Pets shipped at v169 before a native speaker heard them, by William's choice as the only user. Owed: a tappable sheet built from the live audio with the 43 new and rewritten lines, the ten "which sounds right?" pairs and the three kept sentences the AI passes flagged (`docs/review/2026-11-12-batch-1-review.md`), then her marks into `review-log.jsonl` and a corrections release. **Until this is done, the AI review's catch rate cannot be scored.**
+- **Before launch, unreviewed content must stop going live first.** Decided 2026-11-13 for now only; CONTENT_PLAYBOOK.md §6 has the branch route.
 
 
 

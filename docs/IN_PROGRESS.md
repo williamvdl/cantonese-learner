@@ -4,7 +4,7 @@
 questions behind it. Meant to be short-lived — when a piece ships, fold its
 outcome into STATUS.md and clear this file back down for the next thing.*
 
-Last updated: 2026-11-13 · sw.js at v168
+Last updated: 2026-11-13 · sw.js at v169
 
 ## Now — the content playbook and the lesson rules
 
@@ -59,7 +59,10 @@ jyutping and want her glance.
   notes. **The three scenes were approved the same day.** The
   word and reading changes shipped on their own in v168, so the batch is now
   only the new sentences and the three rebuilt chats, to be rebased onto v168.
-  Open: where unreviewed audio lives.
+  **Released at v169, live first:** William is the only user and short of time,
+  so the batch went to `main` with its audio and the native review follows.
+  **Owed next: the review sheet for its 43 new lines, built from the live
+  audio.**
 - **Word-list audit, all 585 words** — run 2026-11-13 at William's request.
   `docs/review/2026-11-13-word-list-audit.md`: 19 new word candidates and 8
   reading candidates, each backed by two independent signals, plus 5 on weaker

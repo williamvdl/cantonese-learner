@@ -6,7 +6,7 @@ existing one. The **specs** say what good content is (`CONTENT_SPEC_TIER1.md`,
 says what to do, in what order, and who does it.** The reasoning behind the
 design is in `PROPOSAL-content-playbook.md`.*
 
-Last updated: 2026-11-12 · sw.js at v167
+Last updated: 2026-11-13 · sw.js at v169
 
 > **Status: DRAFT FOR WILLIAM'S REVIEW — and not yet run once.** Steps 1–5 and
 > 9–12 use things that exist today. **Steps 6–8, the independent AI review, are
@@ -266,7 +266,12 @@ stay as a cheap first filter. That is a real possible outcome.
 ## 6. Open questions for William
 
 1. **The pass bar in §4** — 90% caught, 15% false flags, 30 lines.
-2. **Where unreviewed audio lives.** Step 9 needs audio before the native
+2. **Where unreviewed audio lives. — Decided 2026-11-13: live first, for
+   now.** William is the app's only user and short of time, so a batch is
+   committed to `main` with its audio, and the native review follows from the
+   live content, with corrections in a later release. **This has to change
+   before anyone else uses the app** — a branch is the route then. The options
+   as first set out: Step 9 needs audio before the native
    review, and the generator reads the data files, so the draft has to be in
    them. Committing that to `main` puts unreviewed lines live. Two ways:
    - **A branch** — commit the batch's data and audio to a branch such as

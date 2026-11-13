@@ -366,9 +366,9 @@ const lessonRules = tiers.map(t => {
 // Listed lessons are reported under "retrofit pending" rather than hidden.
 // The list only ever gets shorter. When it is empty, delete it.
 const RETROFIT_PENDING = [
-  'adjectives:1', 'animals:1', 'attractions:1', 'body:1', 'classifiers:1',
+  'adjectives:1', 'attractions:1', 'classifiers:1',
   'clothing:1', 'colors:1', 'comparisons:1', 'cooking:1', 'directions:1',
-  'drinks:1', 'emergencies:1', 'family:1', 'feelings:1', 'feelings:2',
+  'drinks:1', 'emergencies:1', 'feelings:1', 'feelings:2',
   'food:1', 'friends:1', 'fruitveg:1', 'greetings:1', 'greetings:2',
   'hobbies:1', 'home:1', 'hotels:1', 'location:1', 'meatseafood:1',
   'modals:1', 'money:1', 'numbers:1', 'numbers:2', 'particles:1',
