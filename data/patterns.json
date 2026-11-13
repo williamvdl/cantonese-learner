@@ -40,7 +40,7 @@
             {
               "wid": "hobbies-003",
               "c": "聽歌",
-              "j": "ting1 go1",
+              "j": "teng1 go1",
               "e": "listen to music"
             },
             {
@@ -126,7 +126,7 @@
         {
           "did": "drill-003",
           "frameC": "頭痛，去藥房買啲▢。",
-          "frameJ": "tau4 tung3, heoi3 joek6 fong2 maai5 di1 ▢.",
+          "frameJ": "tau4 tung3, heoi3 joek6 fong4 maai5 di1 ▢.",
           "english": "Headache — go to the pharmacy for some medicine.",
           "frameE": "Headache — go to the pharmacy for some …",
           "answer": {
@@ -237,7 +237,7 @@
             {
               "wid": "restaurant-001",
               "c": "餐牌",
-              "j": "caan1 paai4",
+              "j": "caan1 paai2",
               "e": "menu"
             },
             {
@@ -367,7 +367,7 @@
       "examples": [
         {
           "c": "唔該畀餐牌",
-          "j": "m4 goi1 bei2 caan1 paai4",
+          "j": "m4 goi1 bei2 caan1 paai2",
           "e": "Menu, please"
         },
         {
@@ -391,7 +391,7 @@
           "answer": {
             "wid": "restaurant-001",
             "c": "餐牌",
-            "j": "caan1 paai4",
+            "j": "caan1 paai2",
             "e": "menu"
           },
           "distractors": [
@@ -513,8 +513,8 @@
             },
             {
               "wid": "animals-003",
-              "c": "鳥",
-              "j": "niu5",
+              "c": "雀仔",
+              "j": "zoek3 zai2",
               "e": "birds"
             },
             {
@@ -616,7 +616,7 @@
             {
               "wid": "hobbies-003",
               "c": "聽歌",
-              "j": "ting1 go1",
+              "j": "teng1 go1",
               "e": "listen to music"
             },
             {
@@ -931,8 +931,8 @@
             },
             {
               "wid": "feelings-007",
-              "c": "激動",
-              "j": "gik1 dung6",
+              "c": "興奮",
+              "j": "hing1 fan5",
               "e": "excited"
             }
           ],
@@ -1183,8 +1183,8 @@
             },
             {
               "wid": "animals-003",
-              "c": "鳥",
-              "j": "niu5",
+              "c": "雀仔",
+              "j": "zoek3 zai2",
               "e": "bird"
             }
           ],
@@ -1306,7 +1306,7 @@
             {
               "wid": "family-008",
               "c": "嫲嫲",
-              "j": "maa4 maa2",
+              "j": "maa4 maa4",
               "e": "grandmother (paternal)"
             }
           ],
@@ -1528,21 +1528,21 @@
           "frameE": "I have two …",
           "answer": {
             "wid": "family-012",
-            "c": "女兒",
-            "j": "neoi5 ji4",
+            "c": "女",
+            "j": "neoi2",
             "e": "daughters"
           },
           "distractors": [
             {
               "wid": "family-011",
-              "c": "兒子",
-              "j": "ji4 zi2",
+              "c": "仔",
+              "j": "zai2",
               "e": "sons"
             },
             {
               "wid": "family-005",
               "c": "弟弟",
-              "j": "dai6 dai2",
+              "j": "dai4 dai2",
               "e": "younger brothers"
             },
             {
@@ -1643,8 +1643,8 @@
           "distractors": [
             {
               "wid": "animals-003",
-              "c": "鳥",
-              "j": "niu5",
+              "c": "雀仔",
+              "j": "zoek3 zai2",
               "e": "bird"
             },
             {
@@ -2122,7 +2122,7 @@
             {
               "wid": "body-020",
               "c": "藥房",
-              "j": "joek6 fong2",
+              "j": "joek6 fong4",
               "e": "pharmacy"
             },
             {
@@ -3422,7 +3422,7 @@
             {
               "wid": "particles-006",
               "c": "囉",
-              "j": "lo3",
+              "j": "lo1",
               "e": "(obviously / exasperation)"
             }
           ],
@@ -4595,8 +4595,8 @@
           "distractors": [
             {
               "wid": "friends-005",
-              "c": "派對",
-              "j": "paai3 deoi3",
+              "c": "party",
+              "j": "paa1 ti4",
               "e": "party"
             },
             {
@@ -4643,8 +4643,8 @@
             },
             {
               "wid": "friends-005",
-              "c": "派對",
-              "j": "paai3 deoi3",
+              "c": "party",
+              "j": "paa1 ti4",
               "e": "party"
             }
           ],
@@ -4656,8 +4656,8 @@
     },
     {
       "label": "Family relationships",
-      "structure": "go4 go1 / dai6 dai2 / ze4 ze1 / mui4 mui2 · je4 je2 / ngoi6 po4",
-      "note": "Cantonese splits siblings by age — 哥哥 (go4 go1, older brother), 弟弟 (dai6 dai2, younger brother), 姐姐 (ze4 ze1, older sister), 妹妹 (mui4 mui2, younger sister) — and grandparents by side: 爺爺 (je4 je2) / 嫲嫲 (maa4 maa2) are your father's parents; 外公 (ngoi6 gung1) / 外婆 (ngoi6 po4) your mother's.",
+      "structure": "go4 go1 / dai4 dai2 / ze4 ze1 / mui4 mui2 · je4 je2 / po4 po2",
+      "note": "Cantonese splits siblings by age — 哥哥 (go4 go1, older brother), 弟弟 (dai4 dai2, younger brother), 姐姐 (ze4 ze1, older sister), 妹妹 (mui4 mui2, younger sister) — and grandparents by side: 爺爺 (je4 je2) / 嫲嫲 (maa4 maa4) are your father's parents; 公公 (gung4 gung1) / 婆婆 (po4 po2) your mother's.",
       "group": "Family",
       "tier": 2,
       "examples": [
@@ -4672,8 +4672,8 @@
           "e": "my (paternal) grandpa"
         },
         {
-          "c": "我外婆",
-          "j": "ngo5 ngoi6 po4",
+          "c": "我婆婆",
+          "j": "ngo5 po4 po2",
           "e": "my (maternal) grandma"
         }
       ],
@@ -4694,7 +4694,7 @@
             {
               "wid": "family-005",
               "c": "弟弟",
-              "j": "dai6 dai2",
+              "j": "dai4 dai2",
               "e": "younger brother"
             },
             {
@@ -4729,20 +4729,20 @@
           "distractors": [
             {
               "wid": "family-009",
-              "c": "外公",
-              "j": "ngoi6 gung1",
+              "c": "公公",
+              "j": "gung4 gung1",
               "e": "grandfather (maternal)"
             },
             {
               "wid": "family-008",
               "c": "嫲嫲",
-              "j": "maa4 maa2",
+              "j": "maa4 maa4",
               "e": "grandmother (paternal)"
             },
             {
               "wid": "family-010",
-              "c": "外婆",
-              "j": "ngoi6 po4",
+              "c": "婆婆",
+              "j": "po4 po2",
               "e": "grandmother (maternal)"
             }
           ],
@@ -4937,8 +4937,8 @@
             },
             {
               "wid": "colors-010",
-              "c": "棕色",
-              "j": "zung1 sik1",
+              "c": "啡色",
+              "j": "fe1 sik1",
               "e": "brown"
             }
           ],
@@ -6541,7 +6541,7 @@
         {
           "did": "drill-144",
           "frameC": "我冇散紙,用▢得唔得？",
-          "frameJ": "ngo5 mou5 saan3 zi2, jung6 ▢ dak1 m4 dak1?",
+          "frameJ": "ngo5 mou5 saan2 zi2, jung6 ▢ dak1 m4 dak1?",
           "english": "I have no coins — can I use a credit card?",
           "frameE": "I have no coins — can I use a …?",
           "answer": {
@@ -6560,7 +6560,7 @@
             {
               "wid": "money-007",
               "c": "散紙",
-              "j": "saan3 zi2",
+              "j": "saan2 zi2",
               "e": "coins / small change"
             },
             {
@@ -6590,7 +6590,7 @@
             {
               "wid": "money-007",
               "c": "散紙",
-              "j": "saan3 zi2",
+              "j": "saan2 zi2",
               "e": "coins"
             },
             {
@@ -6687,7 +6687,7 @@
     {
       "label": "Restaurant ordering",
       "structure": "lok6 daan1 / maai4 daan1",
-      "note": "At a restaurant: 落單 (lok6 daan1, place an order) at the start, 埋單 (maai4 daan1, ask for the bill) at the end. 餐牌 (caan1 paai4) is the menu, 侍應 (si6 jing3) the waiter.",
+      "note": "At a restaurant: 落單 (lok6 daan1, place an order) at the start, 埋單 (maai4 daan1, ask for the bill) at the end. 餐牌 (caan1 paai2) is the menu, 侍應 (si6 jing3) the waiter.",
       "group": "Food & drink",
       "tier": 2,
       "examples": [
@@ -6703,7 +6703,7 @@
         },
         {
           "c": "睇餐牌",
-          "j": "tai2 caan1 paai4",
+          "j": "tai2 caan1 paai2",
           "e": "look at the menu"
         }
       ],
@@ -6711,7 +6711,7 @@
         {
           "did": "drill-148",
           "frameC": "睇好餐牌喇,可以▢。",
-          "frameJ": "tai2 hou2 caan1 paai4 laa3, ho2 ji5 ▢.",
+          "frameJ": "tai2 hou2 caan1 paai2 laa3, ho2 ji5 ▢.",
           "english": "We've looked at the menu — ready to order.",
           "frameE": "We've looked at the menu — ready to …",
           "answer": {
@@ -6730,7 +6730,7 @@
             {
               "wid": "restaurant-001",
               "c": "餐牌",
-              "j": "caan1 paai4",
+              "j": "caan1 paai2",
               "e": "menu"
             },
             {
@@ -6766,7 +6766,7 @@
             {
               "wid": "restaurant-001",
               "c": "餐牌",
-              "j": "caan1 paai4",
+              "j": "caan1 paai2",
               "e": "menu"
             },
             {

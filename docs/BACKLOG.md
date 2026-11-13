@@ -4,7 +4,7 @@
 IN_PROGRESS.md when it's picked up; delete it from here once it's shipped and
 folded into STATUS.md.*
 
-Last updated: 2026-11-12 · sw.js at v167
+Last updated: 2026-11-13 · sw.js at v168
 
 ## Product
 - **Runtime Azure TTS for the Translate screen — gated on the A2 proxy.** Agreed
@@ -50,6 +50,14 @@ Last updated: 2026-11-12 · sw.js at v167
   app's. Copy the current rules from `styles.css`. Invisible in the app.
 
 ## Content
+
+- **Test BB and party in speaking practice.** v168 put two words in English letters — BB (bi4 bi1) in Family and party (paa1 ti4) in Friends — because that is what people say. The checks accept them; whether the word audio sounds right and whether Speak can score them is untested. If it cannot, decide how English words are handled before more arrive ("deadline" was *both fine* on the audit).
+- **Shopping teaches 找換 (zaau2 wun6), and its spoken replacement is already a Money word.** The native speaker chose 唱錢 (coeng3 cin2); Money already has it. Swapping would teach it twice. Decide when Shopping is retrofitted: a different Shopping word, or drop one.
+- **One audit question was not answered:** 爽約 (song2 joek3) against 放飛機 (fong3 fei1 gei1), "cancel on someone", in Friends.
+- **Add a word-list check to the playbook's step 1.** Proposed, not written in: before a lesson's sentences are touched, its word list goes through the two-pass check, and candidates go to the native ear. `docs/review/2026-11-13-word-list-audit.md` §8 has the evidence for how far to trust it.
+- **Retrofit batch 1 needs rebasing onto v168 and a decision on audio.** The draft (Family, Body Parts, Animals & Pets) is approved as to its three scenes (2026-11-13). Its word and reading changes shipped separately in v168, so what remains is the new sentences and chats. Waiting on: where unreviewed audio lives.
+
+
 
 - **Review `docs/CONTENT_PLAYBOOK.md`** — the twelve-step procedure for authoring and checking a lesson, drafted 2026-11-12, including the independent AI review (three passes, each by a fresh session with a limited packet). Four open questions in its §6: the reviewer's pass bar, where unreviewed audio lives (a branch, or live-first while pre-launch), a second model for pass A, and batch size. **The retrofit waits on this.**
 - **Build the review log and its scoring script** — `docs/review/review-log.jsonl`, one row per reviewed line, and a script reporting each AI pass's catch rate and false-flag rate against the native marks (CONTENT_PLAYBOOK.md §4). The log starts with batch 1; the script is a probe, so `PROBE_METHOD.md` applies.

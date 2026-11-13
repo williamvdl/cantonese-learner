@@ -35,7 +35,7 @@
         {
           "id": "family-005",
           "c": "弟弟",
-          "j": "dai6 dai2",
+          "j": "dai4 dai2",
           "e": "Younger brother"
         },
         {
@@ -53,31 +53,31 @@
         {
           "id": "family-008",
           "c": "嫲嫲",
-          "j": "maa4 maa2",
+          "j": "maa4 maa4",
           "e": "Paternal grandmother"
         },
         {
           "id": "family-009",
-          "c": "外公",
-          "j": "ngoi6 gung1",
+          "c": "公公",
+          "j": "gung4 gung1",
           "e": "Maternal grandfather"
         },
         {
           "id": "family-010",
-          "c": "外婆",
-          "j": "ngoi6 po4",
+          "c": "婆婆",
+          "j": "po4 po2",
           "e": "Maternal grandmother"
         },
         {
           "id": "family-011",
-          "c": "兒子",
-          "j": "ji4 zi2",
+          "c": "仔",
+          "j": "zai2",
           "e": "Son"
         },
         {
           "id": "family-012",
-          "c": "女兒",
-          "j": "neoi5 ji4",
+          "c": "女",
+          "j": "neoi2",
           "e": "Daughter"
         },
         {
@@ -112,8 +112,8 @@
         },
         {
           "id": "family-018",
-          "c": "嬰兒",
-          "j": "jing1 ji4",
+          "c": "BB",
+          "j": "bi4 bi1",
           "e": "Baby"
         }
       ],
@@ -175,7 +175,7 @@
           "c": "我有一個哥哥。",
           "j": "ngo5 jau5 jat1 go3 go4 go1.",
           "e": "I have one older brother.",
-          "note": "Cantonese names siblings by age, not just gender — 哥哥 (go4 go1) \"older brother\", 弟弟 (dai6 dai2) \"younger brother\", 姐姐 (ze4 ze1) \"older sister\", 妹妹 (mui4 mui2) \"younger sister\". There's no single word for just \"brother\"; you must pick older or younger.",
+          "note": "Cantonese names siblings by age, not just gender — 哥哥 (go4 go1) \"older brother\", 弟弟 (dai4 dai2) \"younger brother\", 姐姐 (ze4 ze1) \"older sister\", 妹妹 (mui4 mui2) \"younger sister\". There's no single word for just \"brother\"; you must pick older or younger.",
           "bd": [
             {
               "c": "我",
@@ -228,7 +228,7 @@
           "c": "爺爺住喺香港。",
           "j": "je4 je2 zyu6 hai2 hoeng1 gong2.",
           "e": "Grandfather lives in Hong Kong.",
-          "note": "Grandparents split by side of the family: 爺爺 (je4 je2) and 嫲嫲 (maa4 maa2) are your father's parents; 公公 (gung1 gung1) / 婆婆 (po4 po4) — or 外公 (ngoi6 gung1) / 外婆 (ngoi6 po4) — are your mother's. 住喺 (zyu6 hai2) is \"live at\".",
+          "note": "Grandparents split by side of the family: 爺爺 (je4 je2) and 嫲嫲 (maa4 maa4) are your father's parents; 公公 (gung4 gung1) and 婆婆 (po4 po2) are your mother's. 住喺 (zyu6 hai2) is \"live at\".",
           "bd": [
             {
               "c": "爺爺",

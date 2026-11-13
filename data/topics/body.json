@@ -526,7 +526,7 @@
         {
           "id": "body-020",
           "c": "藥房",
-          "j": "joek6 fong2",
+          "j": "joek6 fong4",
           "e": "Pharmacy"
         }
       ],
@@ -682,13 +682,13 @@
         {
           "sid": "body-t2-s11",
           "c": "藥房就喺醫院隔離，好方便。",
-          "j": "joek6 fong2 zau6 hai2 ji1 jyun2 gaak3 lei4, hou2 fong1 bin6.",
+          "j": "joek6 fong4 zau6 hai2 ji1 jyun2 gaak3 lei4, hou2 fong1 bin6.",
           "e": "The pharmacy is right next to the hospital — very convenient.",
-          "note": "藥房 (joek6 fong2) \"pharmacy\" — in Hong Kong, many minor ailments are handled at the 藥房 (joek6 fong2) without seeing a doctor. The pharmacist, <b>藥劑師</b> (joek6 zai1 si1), can advise on common symptoms and sell most over-the-counter medicines.",
+          "note": "藥房 (joek6 fong4) \"pharmacy\" — in Hong Kong, many minor ailments are handled at the 藥房 (joek6 fong4) without seeing a doctor. The pharmacist, <b>藥劑師</b> (joek6 zai1 si1), can advise on common symptoms and sell most over-the-counter medicines.",
           "bd": [
             {
               "c": "藥房",
-              "j": "joek6 fong2",
+              "j": "joek6 fong4",
               "e": "pharmacy"
             },
             {
@@ -955,7 +955,7 @@
             ],
             "optsJ": [
               "jiu3 m4 jiu3 sik6 joek6? hai6 mai6 jiu3 heoi3 ji1 jyun2?",
-              "joek6 fong2 hai2 bin1?",
+              "joek6 fong4 hai2 bin1?",
               "hou2, ngo5 ming4."
             ],
             "bd": [
@@ -1022,7 +1022,7 @@
           {
             "u": true,
             "c": "好，唔該。藥房係唔係喺附近？",
-            "j": "hou2, m4 goi1. joek6 fong2 hai6 m4 hai6 hai2 fu6 gan6?",
+            "j": "hou2, m4 goi1. joek6 fong4 hai6 m4 hai6 hai2 fu6 gan6?",
             "e": "OK, thanks. Is the pharmacy nearby?",
             "opts": [
               "好，唔該。藥房係唔係喺附近？",
@@ -1030,7 +1030,7 @@
               "我唔想食藥。"
             ],
             "optsJ": [
-              "hou2, m4 goi1. joek6 fong2 hai6 m4 hai6 hai2 fu6 gan6?",
+              "hou2, m4 goi1. joek6 fong4 hai6 m4 hai6 hai2 fu6 gan6?",
               "hou2, ngo5 wui5 zyu3 ji3.",
               "ngo5 m4 soeng2 sik6 joek6."
             ],
@@ -1047,7 +1047,7 @@
               },
               {
                 "c": "藥房",
-                "j": "joek6 fong2",
+                "j": "joek6 fong4",
                 "e": "pharmacy"
               },
               {
@@ -1065,7 +1065,7 @@
           {
             "u": false,
             "c": "係，藥房就喺醫院隔離，好方便㗎。",
-            "j": "hai6, joek6 fong2 zau6 hai2 ji1 jyun2 gaak3 lei4, hou2 fong1 bin6 gaa3.",
+            "j": "hai6, joek6 fong4 zau6 hai2 ji1 jyun2 gaak3 lei4, hou2 fong1 bin6 gaa3.",
             "e": "Yes, the pharmacy is right next to the hospital — very convenient.",
             "bd": [
               {
@@ -1075,7 +1075,7 @@
               },
               {
                 "c": "藥房",
-                "j": "joek6 fong2",
+                "j": "joek6 fong4",
                 "e": "pharmacy"
               },
               {

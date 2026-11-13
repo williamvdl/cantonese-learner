@@ -41,7 +41,7 @@
         {
           "id": "particles-006",
           "c": "囉",
-          "j": "lo3",
+          "j": "lo1",
           "e": "(obviously / exasperation)"
         },
         {
@@ -224,7 +224,7 @@
           {
             "u": true,
             "c": "係囉，我都係。",
-            "j": "hai6 lo3, ngo5 dou1 hai6.",
+            "j": "hai6 lo1, ngo5 dou1 hai6.",
             "e": "Yeah, me too.",
             "opts": [
               "係囉，我都係。",
@@ -232,7 +232,7 @@
               "我唔知。"
             ],
             "optsJ": [
-              "hai6 lo3, ngo5 dou1 hai6.",
+              "hai6 lo1, ngo5 dou1 hai6.",
               "m4 hai6, ngo5 hou2 zing1 san4.",
               "ngo5 m4 zi1."
             ],
@@ -244,7 +244,7 @@
               },
               {
                 "c": "囉",
-                "j": "lo3",
+                "j": "lo1",
                 "e": "(obviously)"
               },
               {

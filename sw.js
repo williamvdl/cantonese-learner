@@ -6,7 +6,7 @@
 // up a new service worker when this string changes. If you forget to bump it,
 // users will keep serving the old index.html from cache.
 
-const CACHE_VERSION = 'cantonese-teahouse-v167';
+const CACHE_VERSION = 'cantonese-teahouse-v168';
 
 // Pre-generated audio lives in its OWN cache, which activate deliberately keeps
 // (v161). Until then audio shared CACHE_VERSION, so every deploy wiped it — and
@@ -18,7 +18,7 @@ const CACHE_VERSION = 'cantonese-teahouse-v167';
 // file names (tools/generate-audio.js re-run over old content) — that is the
 // one way a learner would otherwise keep hearing the old recording. Adding new
 // clips needs no bump: they are fetched the first time they're played.
-const AUDIO_CACHE = 'cantonese-audio-v2';
+const AUDIO_CACHE = 'cantonese-audio-v3';
 
 // App shell — fetched at install time.
 // NOTE: when adding a new .js or .css file to the app, add it here too,

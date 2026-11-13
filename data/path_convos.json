@@ -1127,7 +1127,7 @@
         {
           "u": false,
           "c": "你好！呢個係餐牌，想落單未呀？",
-          "j": "nei5 hou2! ni1 go3 hai6 caan1 paai4, soeng2 lok6 daan1 mei6 aa3?",
+          "j": "nei5 hou2! ni1 go3 hai6 caan1 paai2, soeng2 lok6 daan1 mei6 aa3?",
           "e": "Hello! Here's the menu — ready to order?",
           "bd": [
             {
@@ -1147,7 +1147,7 @@
             },
             {
               "c": "餐牌",
-              "j": "caan1 paai4",
+              "j": "caan1 paai2",
               "e": "menu"
             },
             {

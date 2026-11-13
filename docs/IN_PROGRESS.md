@@ -4,7 +4,7 @@
 questions behind it. Meant to be short-lived — when a piece ships, fold its
 outcome into STATUS.md and clear this file back down for the next thing.*
 
-Last updated: 2026-11-12 · sw.js at v167
+Last updated: 2026-11-13 · sw.js at v168
 
 ## Now — the content playbook and the lesson rules
 
@@ -43,8 +43,34 @@ jyutping and want her glance.
   2026-11-12, and the four open questions in its §6. The independent AI review
   in it has been defined but never run.
 - **Retrofit batch 1, as the playbook's pilot** — Family, Body Parts, Animals &
-  Pets, the three lessons with the most unused words. Not before the playbook
-  is agreed.
+  Pets. **Run in parallel with the playbook review, at William's request
+  (2026-11-12), and now at the end of step 8:** drafted, checked, through the
+  three AI passes, flags acted on once. `docs/review/2026-11-12-batch-1-review.md`
+  is the review document, awaiting William's approval;
+  `docs/review/review-log.jsonl` holds every line and its flags, with the
+  native columns empty. **The draft is not in the repo's data.** Blocked on
+  three things in that document's §5: the scenes, seven word and reading
+  questions for the native ear, and where unreviewed audio lives. Its largest
+  finding: the word lists hold written-style words — 兒子 (ji4 zi2),
+  女兒 (neoi5 ji4), 嬰兒 (jing1 ji4), 鳥 (niu5) — which no step of the playbook
+  checks. **2026-11-13: a native speaker confirmed all seven of the review's
+  word and reading questions**, with the rule "always the spoken word". They
+  are folded into the working draft, including 11 drill entries and three
+  notes. **The three scenes were approved the same day.** The
+  word and reading changes shipped on their own in v168, so the batch is now
+  only the new sentences and the three rebuilt chats, to be rebased onto v168.
+  Open: where unreviewed audio lives.
+- **Word-list audit, all 585 words** — run 2026-11-13 at William's request.
+  `docs/review/2026-11-13-word-list-audit.md`: 19 new word candidates and 8
+  reading candidates, each backed by two independent signals, plus 5 on weaker
+  evidence. **Answered the same evening, 31 of 32, and applied at
+  v168:** six of the eight readings confirmed; five of the nineteen words to be
+  replaced, eleven "both fine", one where the app's word was the better one.
+  The plan had been to change words lesson by lesson with the retrofit, on the
+  assumption that each would ripple into sentences. Measured, none did — every
+  confirmed word was one of the lesson's *unused* words — so they went out at
+  once. **William still has to regenerate ten word clips before deploying**
+  (STATUS, v168 row).
 
 **Open questions:**
 - A rewritten sentence keeps its ID, so a learner's saved progress follows it

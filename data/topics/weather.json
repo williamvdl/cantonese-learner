@@ -381,7 +381,7 @@
           {
             "u": true,
             "c": "係囉！希望天氣快啲好番。",
-            "j": "hai6 lo3! hei1 mong6 tin1 hei3 faai3 di1 hou2 faan1.",
+            "j": "hai6 lo1! hei1 mong6 tin1 hei3 faai3 di1 hou2 faan1.",
             "e": "Right! I hope the weather improves soon.",
             "opts": [
               "係囉！希望天氣快啲好番。",
@@ -389,14 +389,14 @@
               "唔緊要。"
             ],
             "optsJ": [
-              "hai6 lo3! hei1 mong6 tin1 hei3 faai3 di1 hou2 faan1.",
+              "hai6 lo1! hei1 mong6 tin1 hei3 faai3 di1 hou2 faan1.",
               "ngo5 zung1 ji3 toi4 fung1.",
               "m4 gan2 jiu3."
             ],
             "bd": [
               {
                 "c": "係囉",
-                "j": "hai6 lo3",
+                "j": "hai6 lo1",
                 "e": "right / exactly"
               },
               {
