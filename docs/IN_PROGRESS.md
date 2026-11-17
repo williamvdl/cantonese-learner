@@ -4,84 +4,47 @@
 questions behind it. Meant to be short-lived — when a piece ships, fold its
 outcome into STATUS.md and clear this file back down for the next thing.*
 
-Last updated: 2026-11-13 · sw.js at v169
+Last updated: 2026-11-17 · sw.js at v170
 
-## Now — the content playbook and the lesson rules
+## Now — the tier-1 retrofit, batch 3 next
 
 **The aim (William, 2026-11-06 and 2026-11-11):** new topics that are natural
-and relevant, QA'd by rules, needing minimal native review — content as the
-app's point of difference. The plan is `PROPOSAL-content-playbook.md`.
+and relevant, QA'd by rules, needing minimal human review — content as the
+app's point of difference.
 
-**Built, tools only — no deploy, no `sw.js` bump:** the four lesson rules in
-`tools/content-report.js`, held by `--check` as a ratchet, with `--worklist` for
-what each lesson lacks. 8 of 52 lessons meet them; 44 are pending. The rules
-are stated in CONTENT.md §3, *Lesson rules*.
+**The process is `CONTENT_PLAYBOOK.md`**, confirmed 2026-11-14: every tier,
+each held to its own spec, no native-speaker review step, William approving
+each batch. Since 2026-11-17 it has a fourth review pass, **A2 — the same
+packet run through a second company's AI by William, by hand** — on trial.
 
-**Decided:** the sentence minimum applies to tier 1 and the retrofit is
-approved; tier 2 is "8 or more"; the word-use and conversation values; the app
-is for all learners. **And on 2026-11-12:** the tier-1 spec
-(`CONTENT_SPEC_TIER1.md`) is approved, with three changes recorded in its §9;
-and the retrofit is quality-first — content that does not meet the spec is
-rewritten, not worked around.
+**Batch 2 is released at v170** (approved 2026-11-17): Home & Rooms, Common
+Adjectives, Clothing, Fruit & Vegetables, Location & Position, plus two Body
+Parts lines held over from batch 1. Record:
+`docs/review/2026-11-14-batch-2-review.md`. **If v170 is not yet live, the
+audio step is still William's to run** — the nine commands are in the STATUS
+row's release notes and were given with the package.
 
-**The review sheet is back** (2026-11-12,
-`docs/review/2026-11-11-native-ear-sheet-RESULTS.md`). All 14 random lines were
-marked fine. Of the 14 the register scan flagged, 3 were confirmed: 好的
-(hou2 dik1) as a reply is out, twice; 想要 (soeng2 jiu3) and questions ending
-in 嗎 (maa3) are fine and come off the list. The scan's markers had been an
-AI's guess at what sounds written, and four in five of its flags were wrong —
-the measurement that an AI reviewer must be calibrated before it is trusted.
+**16 of 52 lessons meet the lesson rules; 36 remain.**
 
-**v167 — the three lines the sheet marked off are fixed** in the data
-(Days & Time chat lines 4 and 6, Numbers chat line 6). **Their audio is not
-regenerated yet** — that is William's step, three commands in STATUS's v167
-row — and the characters for the first were written from the reviewer's
-jyutping and want her glance.
+**Waiting on William:**
+- **嘅 (ge3) or a classifier** for "my" and "your" in two existing lines
+  (BACKLOG, Content). Undecided, so both stay.
+- **QA of v170** in the app — the five lessons and Body Parts.
 
-**Next, in order:**
-- **William reviews `CONTENT_PLAYBOOK.md`** — the procedure, drafted
-  2026-11-12, and the four open questions in its §6. The independent AI review
-  in it has been defined but never run.
-- **Retrofit batch 1, as the playbook's pilot** — Family, Body Parts, Animals &
-  Pets. **Run in parallel with the playbook review, at William's request
-  (2026-11-12), and now at the end of step 8:** drafted, checked, through the
-  three AI passes, flags acted on once. `docs/review/2026-11-12-batch-1-review.md`
-  is the review document, awaiting William's approval;
-  `docs/review/review-log.jsonl` holds every line and its flags, with the
-  native columns empty. **The draft is not in the repo's data.** Blocked on
-  three things in that document's §5: the scenes, seven word and reading
-  questions for the native ear, and where unreviewed audio lives. Its largest
-  finding: the word lists hold written-style words — 兒子 (ji4 zi2),
-  女兒 (neoi5 ji4), 嬰兒 (jing1 ji4), 鳥 (niu5) — which no step of the playbook
-  checks. **2026-11-13: a native speaker confirmed all seven of the review's
-  word and reading questions**, with the rule "always the spoken word". They
-  are folded into the working draft, including 11 drill entries and three
-  notes. **The three scenes were approved the same day.** The
-  word and reading changes shipped on their own in v168, so the batch is now
-  only the new sentences and the three rebuilt chats, to be rebased onto v168.
-  **Released at v169, live first:** William is the only user and short of time,
-  so the batch went to `main` with its audio and the native review follows.
-  **Owed next: the review sheet for its 43 new lines, built from the live
-  audio.**
-- **Word-list audit, all 585 words** — run 2026-11-13 at William's request.
-  `docs/review/2026-11-13-word-list-audit.md`: 19 new word candidates and 8
-  reading candidates, each backed by two independent signals, plus 5 on weaker
-  evidence. **Answered the same evening, 31 of 32, and applied at
-  v168:** six of the eight readings confirmed; five of the nineteen words to be
-  replaced, eleven "both fine", one where the app's word was the better one.
-  The plan had been to change words lesson by lesson with the retrofit, on the
-  assumption that each would ripple into sentences. Measured, none did — every
-  confirmed word was one of the lesson's *unused* words — so they went out at
-  once. **William still has to regenerate ten word clips before deploying**
-  (STATUS, v168 row).
+**Next: batch 3.** The worklist's worst five are Classifiers &
+Demonstratives, Drinks, Numbers, Restaurant & Ordering and Tourist
+Attractions. Three things to do differently, from batch 2:
+- Write each line's purpose so it does not hand over the wording.
+- Rebuild `char-jyutping.json` and run `jyutping-check.js` when the draft is
+  first injected, not at release.
+- Give William the pass A2 packet at the same time the three Claude passes
+  run, so his two minutes do not hold up the review document.
 
 **Open questions:**
 - A rewritten sentence keeps its ID, so a learner's saved progress follows it
-  onto a different sentence. Accepted before; the retrofit will do it at scale.
-
-- The history count found only five recorded native corrections, so there is
-  nothing yet to test an AI reviewer against. The retrofit's correction log is
-  meant to build it (CONTENT.md §5.9).
+  onto a different sentence. Accepted before; the retrofit does it at scale.
+- Whether pass A2 is right more often than Claude, as opposed to merely
+  different (BACKLOG, Content).
 
 **Next candidate work (everything else):** saving every audio clip for offline ahead of time and, once a few real failures have been read, removing v161's temporary speech-failure line (both new at v161); styling the styleguide's speak demos, an aggregating runner
 for the standing checks, the 169 Check B structural candidates from

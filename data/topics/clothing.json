@@ -232,201 +232,483 @@
               "e": "socks"
             }
           ]
+        },
+        {
+          "sid": "clothing-t1-s06",
+          "c": "呢條褲太長喇。",
+          "j": "ni1 tiu4 fu3 taai3 coeng4 laa3.",
+          "e": "These trousers are too long.",
+          "note": "Trousers take <strong>條</strong> (tiu4), the classifier for long things — 一條褲 (jat1 tiu4 fu3). One pair of trousers is one 條 (tiu4), not a 對 (deoi3) \"pair\".",
+          "bd": [
+            {
+              "c": "呢條",
+              "j": "ni1 tiu4",
+              "e": "this (classifier: long things)"
+            },
+            {
+              "c": "褲",
+              "j": "fu3",
+              "e": "trousers"
+            },
+            {
+              "c": "太",
+              "j": "taai3",
+              "e": "too"
+            },
+            {
+              "c": "長",
+              "j": "coeng4",
+              "e": "long"
+            },
+            {
+              "c": "喇",
+              "j": "laa3",
+              "e": "(it's so)"
+            }
+          ]
+        },
+        {
+          "sid": "clothing-t1-s07",
+          "c": "出街記得戴帽。",
+          "j": "ceot1 gaai1 gei3 dak1 daai3 mou2.",
+          "e": "Remember to wear a hat when you go out.",
+          "note": "Cantonese has two verbs for \"wear\". <strong>著</strong> (zoek3) is for clothes you put your body into — 著衫 (zoek3 saam1), 著鞋 (zoek3 haai4). <strong>戴</strong> (daai3) is for things you put on — 戴帽 (daai3 mou2) a hat, 戴手錶 (daai3 sau2 biu1) a watch.",
+          "bd": [
+            {
+              "c": "出街",
+              "j": "ceot1 gaai1",
+              "e": "go out"
+            },
+            {
+              "c": "記得",
+              "j": "gei3 dak1",
+              "e": "remember to"
+            },
+            {
+              "c": "戴",
+              "j": "daai3",
+              "e": "wear (accessories)"
+            },
+            {
+              "c": "帽",
+              "j": "mou2",
+              "e": "hat"
+            }
+          ]
+        },
+        {
+          "sid": "clothing-t1-s08",
+          "c": "返工要著恤衫。",
+          "j": "faan1 gung1 jiu3 zoek3 seot1 saam1.",
+          "e": "You have to wear a shirt to work.",
+          "note": "恤衫 (seot1 saam1) is a shirt with a collar — 恤 (seot1) comes from the English word \"shirt\". 衫 (saam1) on its own is any top.",
+          "bd": [
+            {
+              "c": "返工",
+              "j": "faan1 gung1",
+              "e": "go to work"
+            },
+            {
+              "c": "要",
+              "j": "jiu3",
+              "e": "must"
+            },
+            {
+              "c": "著",
+              "j": "zoek3",
+              "e": "wear"
+            },
+            {
+              "c": "恤衫",
+              "j": "seot1 saam1",
+              "e": "shirt"
+            }
+          ]
+        },
+        {
+          "sid": "clothing-t1-s09",
+          "c": "佢著西裝好靚仔。",
+          "j": "keoi5 zoek3 sai1 zong1 hou2 leng3 zai2.",
+          "e": "He looks handsome in a suit.",
+          "note": "靚 (leng3) \"good-looking\" becomes <strong>靚仔</strong> (leng3 zai2) for a man and 靚女 (leng3 neoi2) for a woman.",
+          "bd": [
+            {
+              "c": "佢",
+              "j": "keoi5",
+              "e": "he"
+            },
+            {
+              "c": "著",
+              "j": "zoek3",
+              "e": "wearing"
+            },
+            {
+              "c": "西裝",
+              "j": "sai1 zong1",
+              "e": "suit"
+            },
+            {
+              "c": "好",
+              "j": "hou2",
+              "e": "very"
+            },
+            {
+              "c": "靚仔",
+              "j": "leng3 zai2",
+              "e": "handsome"
+            }
+          ]
+        },
+        {
+          "sid": "clothing-t1-s10",
+          "c": "夏天我著短褲。",
+          "j": "haa6 tin1 ngo5 zoek3 dyun2 fu3.",
+          "e": "In summer I wear shorts.",
+          "bd": [
+            {
+              "c": "夏天",
+              "j": "haa6 tin1",
+              "e": "summer"
+            },
+            {
+              "c": "我",
+              "j": "ngo5",
+              "e": "I"
+            },
+            {
+              "c": "著",
+              "j": "zoek3",
+              "e": "wear"
+            },
+            {
+              "c": "短褲",
+              "j": "dyun2 fu3",
+              "e": "shorts"
+            }
+          ]
+        },
+        {
+          "sid": "clothing-t1-s11",
+          "c": "呢條頸巾係邊個㗎？",
+          "j": "ni1 tiu4 geng2 gan1 hai6 bin1 go3 gaa3?",
+          "e": "Whose scarf is this?",
+          "bd": [
+            {
+              "c": "呢條",
+              "j": "ni1 tiu4",
+              "e": "this (classifier: long things)"
+            },
+            {
+              "c": "頸巾",
+              "j": "geng2 gan1",
+              "e": "scarf"
+            },
+            {
+              "c": "係",
+              "j": "hai6",
+              "e": "is"
+            },
+            {
+              "c": "邊個",
+              "j": "bin1 go3",
+              "e": "who"
+            },
+            {
+              "c": "㗎",
+              "j": "gaa3",
+              "e": "(question: belonging)"
+            }
+          ]
+        },
+        {
+          "sid": "clothing-t1-s12",
+          "c": "呢隻手錶好貴。",
+          "j": "ni1 zek3 sau2 biu1 hou2 gwai3.",
+          "e": "This watch is very expensive.",
+          "bd": [
+            {
+              "c": "呢隻",
+              "j": "ni1 zek3",
+              "e": "this (classifier)"
+            },
+            {
+              "c": "手錶",
+              "j": "sau2 biu1",
+              "e": "watch"
+            },
+            {
+              "c": "好",
+              "j": "hou2",
+              "e": "very"
+            },
+            {
+              "c": "貴",
+              "j": "gwai3",
+              "e": "expensive"
+            }
+          ]
         }
       ],
       "convo": {
-        "title": "Shopping for clothes",
+        "title": "Dressing for a wedding dinner",
         "speakers": [
-          "Shopkeeper",
+          "Friend",
           "You"
         ],
         "lines": [
           {
-            "u": false,
-            "c": "想搵啲咩呀？",
-            "j": "soeng2 wan2 di1 me1 aa3?",
-            "e": "What are you looking for?",
+            "c": "你今晚著咩衫呀？",
+            "j": "nei5 gam1 maan5 zoek3 me1 saam1 aa3?",
+            "e": "What are you wearing tonight?",
             "bd": [
               {
-                "c": "想搵",
-                "j": "soeng2 wan2",
-                "e": "looking for"
+                "c": "你",
+                "j": "nei5",
+                "e": "you"
               },
               {
-                "c": "啲咩",
-                "j": "di1 me1",
-                "e": "what"
+                "c": "今晚",
+                "j": "gam1 maan5",
+                "e": "tonight"
+              },
+              {
+                "c": "著",
+                "j": "zoek3",
+                "e": "wear"
+              },
+              {
+                "c": "咩衫",
+                "j": "me1 saam1",
+                "e": "what clothes"
               },
               {
                 "c": "呀",
                 "j": "aa3",
-                "e": "(particle)"
+                "e": "(question particle)"
               }
             ]
           },
           {
             "u": true,
-            "c": "我想買件外套。",
-            "j": "ngo5 soeng2 maai5 gin6 ngoi6 tou3.",
-            "e": "I want to buy a coat.",
+            "c": "我著西裝同白色恤衫。",
+            "j": "ngo5 zoek3 sai1 zong1 tung4 baak6 sik1 seot1 saam1.",
+            "e": "A suit and a white shirt.",
+            "opts": [
+              "我著西裝同白色恤衫。",
+              "喺嗰邊，行入去就見到。",
+              "唔係，我唔鍾意食魚。"
+            ],
+            "optsJ": [
+              "ngo5 zoek3 sai1 zong1 tung4 baak6 sik1 seot1 saam1.",
+              "hai2 go2 bin1, haang4 jap6 heoi3 zau6 gin3 dou2.",
+              "m4 hai6, ngo5 m4 zung1 ji3 sik6 jyu2."
+            ],
             "bd": [
               {
-                "c": "我想買",
-                "j": "ngo5 soeng2 maai5",
-                "e": "I want to buy"
+                "c": "我",
+                "j": "ngo5",
+                "e": "I"
               },
               {
-                "c": "件",
-                "j": "gin6",
+                "c": "著",
+                "j": "zoek3",
+                "e": "wear"
+              },
+              {
+                "c": "西裝",
+                "j": "sai1 zong1",
+                "e": "suit"
+              },
+              {
+                "c": "同",
+                "j": "tung4",
+                "e": "and"
+              },
+              {
+                "c": "白色",
+                "j": "baak6 sik1",
+                "e": "white"
+              },
+              {
+                "c": "恤衫",
+                "j": "seot1 saam1",
+                "e": "shirt"
+              }
+            ]
+          },
+          {
+            "c": "好靚喎！著邊對鞋呀？",
+            "j": "hou2 leng3 wo3! zoek3 bin1 deoi3 haai4 aa3?",
+            "e": "Nice! Which shoes?",
+            "bd": [
+              {
+                "c": "好靚",
+                "j": "hou2 leng3",
+                "e": "very nice"
+              },
+              {
+                "c": "喎",
+                "j": "wo3",
+                "e": "(approving)"
+              },
+              {
+                "c": "著",
+                "j": "zoek3",
+                "e": "wear"
+              },
+              {
+                "c": "邊對",
+                "j": "bin1 deoi3",
+                "e": "which pair"
+              },
+              {
+                "c": "鞋",
+                "j": "haai4",
+                "e": "shoes"
+              },
+              {
+                "c": "呀",
+                "j": "aa3",
+                "e": "(question particle)"
+              }
+            ]
+          },
+          {
+            "u": true,
+            "c": "黑色嗰對。我隻手錶呢？",
+            "j": "hak1 sik1 go2 deoi3. ngo5 zek3 sau2 biu1 ne1?",
+            "e": "The black ones. Where's my watch?",
+            "opts": [
+              "黑色嗰對。我隻手錶呢？",
+              "我今日唔得閒，對唔住。",
+              "有冇大啲嘅碼？"
+            ],
+            "optsJ": [
+              "hak1 sik1 go2 deoi3. ngo5 zek3 sau2 biu1 ne1?",
+              "ngo5 gam1 jat6 m4 dak1 haan4, deoi3 m4 zyu6.",
+              "jau5 mou5 daai6 di1 ge3 maa5?"
+            ],
+            "bd": [
+              {
+                "c": "黑色",
+                "j": "hak1 sik1",
+                "e": "black"
+              },
+              {
+                "c": "嗰對",
+                "j": "go2 deoi3",
+                "e": "that pair"
+              },
+              {
+                "c": "我",
+                "j": "ngo5",
+                "e": "my"
+              },
+              {
+                "c": "隻",
+                "j": "zek3",
                 "e": "(classifier)"
+              },
+              {
+                "c": "手錶",
+                "j": "sau2 biu1",
+                "e": "watch"
+              },
+              {
+                "c": "呢",
+                "j": "ne1",
+                "e": "(where is…?)"
+              }
+            ]
+          },
+          {
+            "c": "喺枱上面。今晚好凍㗎。",
+            "j": "hai2 toi2 soeng6 min6. gam1 maan5 hou2 dung3 gaa3.",
+            "e": "On the table. It's cold tonight, you know.",
+            "bd": [
+              {
+                "c": "喺",
+                "j": "hai2",
+                "e": "at"
+              },
+              {
+                "c": "枱",
+                "j": "toi2",
+                "e": "table"
+              },
+              {
+                "c": "上面",
+                "j": "soeng6 min6",
+                "e": "on top"
+              },
+              {
+                "c": "今晚",
+                "j": "gam1 maan5",
+                "e": "tonight"
+              },
+              {
+                "c": "好凍",
+                "j": "hou2 dung3",
+                "e": "very cold"
+              },
+              {
+                "c": "㗎",
+                "j": "gaa3",
+                "e": "(you should know)"
+              }
+            ]
+          },
+          {
+            "u": true,
+            "c": "咁我帶埋外套同頸巾。",
+            "j": "gam2 ngo5 daai3 maai4 ngoi6 tou3 tung4 geng2 gan1.",
+            "e": "Then I'll bring a coat and a scarf too.",
+            "opts": [
+              "咁我帶埋外套同頸巾。",
+              "係呀，我哋聽日朝早十點見。",
+              "咁你自己搵下啦。"
+            ],
+            "optsJ": [
+              "gam2 ngo5 daai3 maai4 ngoi6 tou3 tung4 geng2 gan1.",
+              "hai6 aa3, ngo5 dei6 ting1 jat6 ziu1 zou2 sap6 dim2 gin3.",
+              "gam2 nei5 zi6 gei2 wan2 haa5 laa1."
+            ],
+            "bd": [
+              {
+                "c": "咁",
+                "j": "gam2",
+                "e": "then"
+              },
+              {
+                "c": "我",
+                "j": "ngo5",
+                "e": "I"
+              },
+              {
+                "c": "帶埋",
+                "j": "daai3 maai4",
+                "e": "bring along as well"
               },
               {
                 "c": "外套",
                 "j": "ngoi6 tou3",
                 "e": "coat"
+              },
+              {
+                "c": "同",
+                "j": "tung4",
+                "e": "and"
+              },
+              {
+                "c": "頸巾",
+                "j": "geng2 gan1",
+                "e": "scarf"
               }
-            ],
-            "opts": [
-              "我想買件外套。",
-              "呢件衫幾多錢呀？",
-              "我想買對鞋。"
-            ],
-            "optsJ": [
-              "ngo5 soeng2 maai5 gin6 ngoi6 tou3.",
-              "ni1 gin6 saam1 gei2 do1 cin2 aa3?",
-              "ngo5 soeng2 maai5 deoi3 haai4."
-            ]
-          },
-          {
-            "u": false,
-            "c": "呢件好啱你，試下啦。",
-            "j": "ni1 gin6 hou2 ngaam1 nei5, si3 haa5 laa1.",
-            "e": "This one suits you — try it on.",
-            "bd": [
-              {
-                "c": "呢件",
-                "j": "ni1 gin6",
-                "e": "this one"
-              },
-              {
-                "c": "好啱你",
-                "j": "hou2 ngaam1 nei5",
-                "e": "suits you"
-              },
-              {
-                "c": "試下",
-                "j": "si3 haa5",
-                "e": "try"
-              },
-              {
-                "c": "啦",
-                "j": "laa1",
-                "e": "(particle)"
-              }
-            ]
-          },
-          {
-            "u": true,
-            "c": "有冇大啲嘅碼？",
-            "j": "jau5 mou5 daai6 di1 ge3 maa5?",
-            "e": "Do you have a bigger size?",
-            "bd": [
-              {
-                "c": "有冇",
-                "j": "jau5 mou5",
-                "e": "do you have"
-              },
-              {
-                "c": "大啲",
-                "j": "daai6 di1",
-                "e": "bigger"
-              },
-              {
-                "c": "嘅",
-                "j": "ge3",
-                "e": "(particle)"
-              },
-              {
-                "c": "碼",
-                "j": "maa5",
-                "e": "size"
-              }
-            ],
-            "opts": [
-              "有冇大啲嘅碼？",
-              "呢件有冇第二個色？",
-              "唔該，我要埋條褲。"
-            ],
-            "optsJ": [
-              "jau5 mou5 daai6 di1 ge3 maa5?",
-              "ni1 gin6 jau5 mou5 dai6 ji6 go3 sik1?",
-              "m4 goi1, ngo5 jiu3 maai4 tiu4 fu3."
-            ]
-          },
-          {
-            "u": false,
-            "c": "有，呢件啱唔啱呀？",
-            "j": "jau5, ni1 gin6 ngaam1 m4 ngaam1 aa3?",
-            "e": "Yes — does this one fit?",
-            "bd": [
-              {
-                "c": "有",
-                "j": "jau5",
-                "e": "yes"
-              },
-              {
-                "c": "呢件",
-                "j": "ni1 gin6",
-                "e": "this one"
-              },
-              {
-                "c": "啱唔啱",
-                "j": "ngaam1 m4 ngaam1",
-                "e": "fit or not"
-              },
-              {
-                "c": "呀",
-                "j": "aa3",
-                "e": "(particle)"
-              }
-            ]
-          },
-          {
-            "u": true,
-            "c": "啱嗮！我要呢件。",
-            "j": "ngaam1 saai3! ngo5 jiu3 ni1 gin6.",
-            "e": "Perfect! I'll take this one.",
-            "bd": [
-              {
-                "c": "啱嗮",
-                "j": "ngaam1 saai3",
-                "e": "fits perfectly"
-              },
-              {
-                "c": "我要",
-                "j": "ngo5 jiu3",
-                "e": "I want"
-              },
-              {
-                "c": "呢件",
-                "j": "ni1 gin6",
-                "e": "this one"
-              }
-            ],
-            "opts": [
-              "啱嗮！我要呢件。",
-              "我下次再嚟啦，唔該。",
-              "唔啱呀，太細喇。"
-            ],
-            "optsJ": [
-              "ngaam1 saai3! ngo5 jiu3 ni1 gin6.",
-              "ngo5 haa6 ci3 zoi3 lai4 laa1, m4 goi1.",
-              "m4 ngaam1 aa3, taai3 sai3 laa3."
             ]
           }
         ]
       }
     }
   },
-  "_sidSeq": 5
+  "_sidSeq": 12
 }

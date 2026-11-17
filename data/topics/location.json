@@ -225,35 +225,223 @@
               "e": "wait for you"
             }
           ]
+        },
+        {
+          "sid": "location-t1-s06",
+          "c": "部電話喺床上面。",
+          "j": "bou6 din6 waa2 hai2 cong4 soeng6 min6.",
+          "e": "The phone is on the bed.",
+          "bd": [
+            {
+              "c": "部",
+              "j": "bou6",
+              "e": "(classifier: devices)"
+            },
+            {
+              "c": "電話",
+              "j": "din6 waa2",
+              "e": "phone"
+            },
+            {
+              "c": "喺",
+              "j": "hai2",
+              "e": "is at"
+            },
+            {
+              "c": "床",
+              "j": "cong4",
+              "e": "bed"
+            },
+            {
+              "c": "上面",
+              "j": "soeng6 min6",
+              "e": "on top"
+            }
+          ]
+        },
+        {
+          "sid": "location-t1-s07",
+          "c": "出面落緊雨。",
+          "j": "ceot1 min6 lok6 gan2 jyu5.",
+          "e": "It's raining outside.",
+          "note": "A position word can start the sentence as the place — 出面落緊雨 (ceot1 min6 lok6 gan2 jyu5) is literally \"outside is raining\".",
+          "bd": [
+            {
+              "c": "出面",
+              "j": "ceot1 min6",
+              "e": "outside"
+            },
+            {
+              "c": "落緊雨",
+              "j": "lok6 gan2 jyu5",
+              "e": "is raining"
+            }
+          ]
+        },
+        {
+          "sid": "location-t1-s08",
+          "c": "我坐喺你旁邊。",
+          "j": "ngo5 co5 hai2 nei5 pong4 bin1.",
+          "e": "I'm sitting beside you.",
+          "note": "旁邊 (pong4 bin1) and 隔籬 (gaak3 lei4) both mean \"beside / next to\", and either can be used here.",
+          "bd": [
+            {
+              "c": "我",
+              "j": "ngo5",
+              "e": "I"
+            },
+            {
+              "c": "坐",
+              "j": "co5",
+              "e": "sit"
+            },
+            {
+              "c": "喺",
+              "j": "hai2",
+              "e": "at"
+            },
+            {
+              "c": "你",
+              "j": "nei5",
+              "e": "your"
+            },
+            {
+              "c": "旁邊",
+              "j": "pong4 bin1",
+              "e": "side"
+            }
+          ]
+        },
+        {
+          "sid": "location-t1-s09",
+          "c": "我企喺中間。",
+          "j": "ngo5 kei5 hai2 zung1 gaan1.",
+          "e": "I'm standing in the middle.",
+          "bd": [
+            {
+              "c": "我",
+              "j": "ngo5",
+              "e": "I"
+            },
+            {
+              "c": "企",
+              "j": "kei5",
+              "e": "stand"
+            },
+            {
+              "c": "喺",
+              "j": "hai2",
+              "e": "at"
+            },
+            {
+              "c": "中間",
+              "j": "zung1 gaan1",
+              "e": "the middle"
+            }
+          ]
+        },
+        {
+          "sid": "location-t1-s10",
+          "c": "廁所喺嗰度。",
+          "j": "ci3 so2 hai2 go2 dou6.",
+          "e": "The toilet is over there.",
+          "note": "呢度 (ni1 dou6) \"here\" and <strong>嗰度</strong> (go2 dou6) \"there\" are a pair — 呢 (ni1) is \"this\", 嗰 (go2) is \"that\".",
+          "bd": [
+            {
+              "c": "廁所",
+              "j": "ci3 so2",
+              "e": "toilet"
+            },
+            {
+              "c": "喺",
+              "j": "hai2",
+              "e": "is at"
+            },
+            {
+              "c": "嗰度",
+              "j": "go2 dou6",
+              "e": "over there"
+            }
+          ]
+        },
+        {
+          "sid": "location-t1-s11",
+          "c": "餐廳喺前面。",
+          "j": "caan1 teng1 hai2 cin4 min6.",
+          "e": "The restaurant is up ahead.",
+          "bd": [
+            {
+              "c": "餐廳",
+              "j": "caan1 teng1",
+              "e": "restaurant"
+            },
+            {
+              "c": "喺",
+              "j": "hai2",
+              "e": "is at"
+            },
+            {
+              "c": "前面",
+              "j": "cin4 min6",
+              "e": "in front"
+            }
+          ]
+        },
+        {
+          "sid": "location-t1-s12",
+          "c": "小心，後面有車！",
+          "j": "siu2 sam1, hau6 min6 jau5 ce1!",
+          "e": "Careful, there's a car behind you!",
+          "bd": [
+            {
+              "c": "小心",
+              "j": "siu2 sam1",
+              "e": "careful"
+            },
+            {
+              "c": "後面",
+              "j": "hau6 min6",
+              "e": "behind"
+            },
+            {
+              "c": "有",
+              "j": "jau5",
+              "e": "there is"
+            },
+            {
+              "c": "車",
+              "j": "ce1",
+              "e": "car"
+            }
+          ]
         }
       ],
       "convo": {
-        "title": "Where is it?",
+        "title": "Where are you?",
         "speakers": [
           "Friend",
           "You"
         ],
         "lines": [
           {
-            "u": false,
-            "c": "我本書喺邊度呀？",
-            "j": "ngo5 bun2 syu1 hai2 bin1 dou6 aa3?",
-            "e": "Where's my book?",
+            "c": "喂，你喺邊度呀？",
+            "j": "wai2, nei5 hai2 bin1 dou6 aa3?",
+            "e": "Hello, where are you?",
             "bd": [
               {
-                "c": "我",
-                "j": "ngo5",
-                "e": "my"
+                "c": "喂",
+                "j": "wai2",
+                "e": "hello (on the phone)"
               },
               {
-                "c": "本書",
-                "j": "bun2 syu1",
-                "e": "book"
+                "c": "你",
+                "j": "nei5",
+                "e": "you"
               },
               {
                 "c": "喺",
                 "j": "hai2",
-                "e": "is at"
+                "e": "are at"
               },
               {
                 "c": "邊度",
@@ -263,163 +451,221 @@
               {
                 "c": "呀",
                 "j": "aa3",
-                "e": "(particle)"
+                "e": "(question particle)"
               }
             ]
           },
           {
             "u": true,
-            "c": "喺張枱上面。",
-            "j": "hai2 zoeng1 toi2 soeng6 min6.",
-            "e": "On the table.",
+            "c": "我喺地鐵站出面。",
+            "j": "ngo5 hai2 dei6 tit3 zaam6 ceot1 min6.",
+            "e": "I'm outside the MTR station.",
+            "opts": [
+              "我喺地鐵站出面。",
+              "今日天氣好熱呀。",
+              "唔該，我要呢個。"
+            ],
+            "optsJ": [
+              "ngo5 hai2 dei6 tit3 zaam6 ceot1 min6.",
+              "gam1 jat6 tin1 hei3 hou2 jit6 aa3.",
+              "m4 goi1, ngo5 jiu3 ni1 go3."
+            ],
             "bd": [
+              {
+                "c": "我",
+                "j": "ngo5",
+                "e": "I"
+              },
+              {
+                "c": "喺",
+                "j": "hai2",
+                "e": "am at"
+              },
+              {
+                "c": "地鐵站",
+                "j": "dei6 tit3 zaam6",
+                "e": "MTR station"
+              },
+              {
+                "c": "出面",
+                "j": "ceot1 min6",
+                "e": "outside"
+              }
+            ]
+          },
+          {
+            "c": "我都喺出面，見唔到你喎。",
+            "j": "ngo5 dou1 hai2 ceot1 min6, gin3 m4 dou2 nei5 wo3.",
+            "e": "I'm outside too — I can't see you.",
+            "bd": [
+              {
+                "c": "我",
+                "j": "ngo5",
+                "e": "I"
+              },
+              {
+                "c": "都",
+                "j": "dou1",
+                "e": "also"
+              },
+              {
+                "c": "喺",
+                "j": "hai2",
+                "e": "am at"
+              },
+              {
+                "c": "出面",
+                "j": "ceot1 min6",
+                "e": "outside"
+              },
+              {
+                "c": "見唔到",
+                "j": "gin3 m4 dou2",
+                "e": "can't see"
+              },
+              {
+                "c": "你",
+                "j": "nei5",
+                "e": "you"
+              },
+              {
+                "c": "喎",
+                "j": "wo3",
+                "e": "(puzzled)"
+              }
+            ]
+          },
+          {
+            "u": true,
+            "c": "我企喺巴士站前面。",
+            "j": "ngo5 kei5 hai2 baa1 si2 zaam6 cin4 min6.",
+            "e": "I'm standing in front of the bus stop.",
+            "opts": [
+              "我企喺巴士站前面。",
+              "好貴喎，平啲得唔得？",
+              "我聽日再嚟買啦。"
+            ],
+            "optsJ": [
+              "ngo5 kei5 hai2 baa1 si2 zaam6 cin4 min6.",
+              "hou2 gwai3 wo3, peng4 di1 dak1 m4 dak1?",
+              "ngo5 ting1 jat6 zoi3 lai4 maai5 laa1."
+            ],
+            "bd": [
+              {
+                "c": "我",
+                "j": "ngo5",
+                "e": "I"
+              },
+              {
+                "c": "企",
+                "j": "kei5",
+                "e": "stand"
+              },
               {
                 "c": "喺",
                 "j": "hai2",
                 "e": "at"
               },
               {
-                "c": "張枱",
-                "j": "zoeng1 toi2",
-                "e": "the table"
+                "c": "巴士站",
+                "j": "baa1 si2 zaam6",
+                "e": "bus stop"
               },
               {
-                "c": "上面",
-                "j": "soeng6 min6",
-                "e": "on top"
+                "c": "前面",
+                "j": "cin4 min6",
+                "e": "in front"
               }
-            ],
-            "opts": [
-              "喺張枱上面。",
-              "我唔記得放咗邊。",
-              "喺我個袋入面。"
-            ],
-            "optsJ": [
-              "hai2 zoeng1 toi2 soeng6 min6.",
-              "ngo5 m4 gei3 dak1 fong3 zo2 bin1.",
-              "hai2 ngo5 go3 doi2 jap6 min6."
             ]
           },
           {
-            "u": false,
-            "c": "冇喎，唔喺度。",
-            "j": "mou5 wo3, m4 hai2 dou6.",
-            "e": "No, it's not there.",
+            "c": "我就喺巴士站隔籬喎！",
+            "j": "ngo5 zau6 hai2 baa1 si2 zaam6 gaak3 lei4 wo3!",
+            "e": "I'm right next to the bus stop!",
             "bd": [
               {
-                "c": "冇",
-                "j": "mou5",
-                "e": "no / not there"
+                "c": "我",
+                "j": "ngo5",
+                "e": "I"
+              },
+              {
+                "c": "就",
+                "j": "zau6",
+                "e": "right, just"
+              },
+              {
+                "c": "喺",
+                "j": "hai2",
+                "e": "am at"
+              },
+              {
+                "c": "巴士站",
+                "j": "baa1 si2 zaam6",
+                "e": "bus stop"
+              },
+              {
+                "c": "隔籬",
+                "j": "gaak3 lei4",
+                "e": "next to"
               },
               {
                 "c": "喎",
                 "j": "wo3",
-                "e": "(particle)"
-              },
-              {
-                "c": "唔喺度",
-                "j": "m4 hai2 dou6",
-                "e": "not here"
+                "e": "(surprised)"
               }
             ]
           },
           {
             "u": true,
-            "c": "咁睇下櫈下面。",
-            "j": "gam2 tai2 haa5 dang3 haa6 min6.",
-            "e": "Then look under the chair.",
+            "c": "睇下後面，我喺呢度呀！",
+            "j": "tai2 haa5 hau6 min6, ngo5 hai2 ni1 dou6 aa3!",
+            "e": "Look behind you — I'm right here!",
+            "opts": [
+              "睇下後面，我喺呢度呀！",
+              "我今日唔得閒，對唔住。",
+              "我聽日再睇過啦。"
+            ],
+            "optsJ": [
+              "tai2 haa5 hau6 min6, ngo5 hai2 ni1 dou6 aa3!",
+              "ngo5 gam1 jat6 m4 dak1 haan4, deoi3 m4 zyu6.",
+              "ngo5 ting1 jat6 zoi3 tai2 gwo3 laa1."
+            ],
             "bd": [
-              {
-                "c": "咁",
-                "j": "gam2",
-                "e": "then"
-              },
               {
                 "c": "睇下",
                 "j": "tai2 haa5",
                 "e": "have a look"
               },
               {
-                "c": "櫈",
-                "j": "dang3",
-                "e": "chair"
+                "c": "後面",
+                "j": "hau6 min6",
+                "e": "behind"
               },
               {
-                "c": "下面",
-                "j": "haa6 min6",
-                "e": "underneath"
-              }
-            ],
-            "opts": [
-              "咁睇下櫈下面。",
-              "咁你自己搵下啦。",
-              "可能喺廚房度。"
-            ],
-            "optsJ": [
-              "gam2 tai2 haa5 dang3 haa6 min6.",
-              "gam2 nei5 zi6 gei2 wan2 haa5 laa1.",
-              "ho2 nang4 hai2 cyu4 fong2 dou6."
-            ]
-          },
-          {
-            "u": false,
-            "c": "搵到喇！喺個袋入面。",
-            "j": "wan2 dou2 laa3! hai2 go3 doi2 jap6 min6.",
-            "e": "Found it! It's inside the bag.",
-            "bd": [
-              {
-                "c": "搵到",
-                "j": "wan2 dou2",
-                "e": "found it"
-              },
-              {
-                "c": "喇",
-                "j": "laa3",
-                "e": "(particle)"
+                "c": "我",
+                "j": "ngo5",
+                "e": "I"
               },
               {
                 "c": "喺",
                 "j": "hai2",
-                "e": "in"
+                "e": "am at"
               },
               {
-                "c": "個袋",
-                "j": "go3 doi2",
-                "e": "the bag"
+                "c": "呢度",
+                "j": "ni1 dou6",
+                "e": "here"
               },
               {
-                "c": "入面",
-                "j": "jap6 min6",
-                "e": "inside"
+                "c": "呀",
+                "j": "aa3",
+                "e": "(exclamation)"
               }
-            ]
-          },
-          {
-            "u": true,
-            "c": "好彩！",
-            "j": "hou2 coi2!",
-            "e": "Lucky!",
-            "bd": [
-              {
-                "c": "好彩",
-                "j": "hou2 coi2",
-                "e": "lucky"
-              }
-            ],
-            "opts": [
-              "好彩！",
-              "喺邊個袋呀？",
-              "我幫你搵過啦。"
-            ],
-            "optsJ": [
-              "hou2 coi2!",
-              "hai2 bin1 go3 doi2 aa3?",
-              "ngo5 bong1 nei5 wan2 gwo3 laa1."
             ]
           }
         ]
       }
     }
   },
-  "_sidSeq": 5
+  "_sidSeq": 12
 }

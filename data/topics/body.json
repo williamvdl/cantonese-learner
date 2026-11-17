@@ -215,10 +215,10 @@
         },
         {
           "sid": "body-t1-s05",
-          "c": "佢腳受傷。",
-          "j": "keoi5 goek3 sau6 soeng1.",
-          "e": "His leg is injured.",
-          "note": "受傷 (sau6 soeng1) means \"to get injured / be hurt\" — 佢腳受傷 (keoi5 goek3 sau6 soeng1) \"his leg is injured\". Note 腳 (goek3) covers both \"leg\" and \"foot\" in Cantonese.",
+          "c": "佢隻腳受咗傷。",
+          "j": "keoi5 zek3 goek3 sau6 zo2 soeng1.",
+          "e": "His leg got injured.",
+          "note": "受傷 (sau6 soeng1) means \"to get injured\". 咗 (zo2) goes <em>between</em> its two halves to mark it as done — 受咗傷 (sau6 zo2 soeng1) \"got injured\". 腳 (goek3) covers both \"leg\" and \"foot\", and takes the classifier 隻 (zek3).",
           "bd": [
             {
               "c": "佢",
@@ -226,14 +226,19 @@
               "e": "he / she"
             },
             {
+              "c": "隻",
+              "j": "zek3",
+              "e": "(classifier: one of a pair)"
+            },
+            {
               "c": "腳",
               "j": "goek3",
               "e": "leg / foot"
             },
             {
-              "c": "受傷",
-              "j": "sau6 soeng1",
-              "e": "injured"
+              "c": "受咗傷",
+              "j": "sau6 zo2 soeng1",
+              "e": "got injured"
             }
           ]
         },
@@ -499,8 +504,8 @@
             ]
           },
           {
-            "c": "點解呀？你琴日做咩？",
-            "j": "dim2 gaai2 aa3? nei5 kam4 jat6 zou6 me1?",
+            "c": "點解呀？你琴日做咗啲咩呀？",
+            "j": "dim2 gaai2 aa3? nei5 kam4 jat6 zou6 zo2 di1 me1 aa3?",
             "e": "Why? What did you do yesterday?",
             "bd": [
               {
@@ -524,9 +529,19 @@
                 "e": "yesterday"
               },
               {
-                "c": "做咩",
-                "j": "zou6 me1",
-                "e": "do what"
+                "c": "做咗",
+                "j": "zou6 zo2",
+                "e": "did"
+              },
+              {
+                "c": "啲咩",
+                "j": "di1 me1",
+                "e": "what (things)"
+              },
+              {
+                "c": "呀",
+                "j": "aa3",
+                "e": "(question particle)"
               }
             ]
           },

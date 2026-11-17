@@ -1,6 +1,14 @@
 # Proposal — a content playbook that needs minimal native review
 
-**Status: PARTLY BUILT — 2026-11-11.** The four lesson rules (H1–H3 in §4) are
+> **Superseded 2026-11-14 — kept as the record of the reasoning.** The
+> procedure that came out of this proposal is `CONTENT_PLAYBOOK.md`, and where
+> the two differ, that one wins. Two things here did not survive: the plan to
+> **measure the AI reviewer against native-speaker marks** before trusting it,
+> and the **shrinking native audit sample** — William decided on 2026-11-14 to
+> run without a native-speaker review step. The curriculum vocabulary index
+> (H6) was dropped too. What replaced them is in the playbook's §4, §5 and §7.
+
+**Status when last edited: PARTLY BUILT — 2026-11-11.** The four lesson rules (H1–H3 in §4) are
 decided and built into `tools/content-report.js`; their canonical statement is
 now CONTENT.md §3, *Lesson rules*, and where this file and that one differ,
 that one wins. Everything else here is still a proposal. Three of the six

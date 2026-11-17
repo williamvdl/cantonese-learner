@@ -234,20 +234,288 @@
               "e": "please"
             }
           ]
+        },
+        {
+          "sid": "home-t1-s06",
+          "c": "我張床好舒服。",
+          "j": "ngo5 zoeng1 cong4 hou2 syu1 fuk6.",
+          "e": "My bed is very comfortable.",
+          "note": "<strong>張</strong> (zoeng1) is the classifier for flat-topped furniture — 一張床 (jat1 zoeng1 cong4) \"a bed\", 一張枱 (jat1 zoeng1 toi2) \"a table\", 一張椅 (jat1 zoeng1 ji2) \"a chair\".",
+          "bd": [
+            {
+              "c": "我",
+              "j": "ngo5",
+              "e": "my"
+            },
+            {
+              "c": "張",
+              "j": "zoeng1",
+              "e": "(classifier: flat things, furniture)"
+            },
+            {
+              "c": "床",
+              "j": "cong4",
+              "e": "bed"
+            },
+            {
+              "c": "好",
+              "j": "hou2",
+              "e": "very"
+            },
+            {
+              "c": "舒服",
+              "j": "syu1 fuk6",
+              "e": "comfortable"
+            }
+          ]
+        },
+        {
+          "sid": "home-t1-s07",
+          "c": "鎖匙喺枱上面。",
+          "j": "so2 si4 hai2 toi2 soeng6 min6.",
+          "e": "The keys are on the table.",
+          "bd": [
+            {
+              "c": "鎖匙",
+              "j": "so2 si4",
+              "e": "keys"
+            },
+            {
+              "c": "喺",
+              "j": "hai2",
+              "e": "are at"
+            },
+            {
+              "c": "枱",
+              "j": "toi2",
+              "e": "table"
+            },
+            {
+              "c": "上面",
+              "j": "soeng6 min6",
+              "e": "on top"
+            }
+          ]
+        },
+        {
+          "sid": "home-t1-s08",
+          "c": "唔該閂門。",
+          "j": "m4 goi1 saan1 mun4.",
+          "e": "Please close the door.",
+          "note": "<strong>閂</strong> (saan1) is \"to close / shut\" — the opposite of 開 (hoi1). 開門 (hoi1 mun4) \"open the door\", 閂門 (saan1 mun4) \"close the door\".",
+          "bd": [
+            {
+              "c": "唔該",
+              "j": "m4 goi1",
+              "e": "please"
+            },
+            {
+              "c": "閂",
+              "j": "saan1",
+              "e": "to close"
+            },
+            {
+              "c": "門",
+              "j": "mun4",
+              "e": "door"
+            }
+          ]
+        },
+        {
+          "sid": "home-t1-s09",
+          "c": "雪櫃入面冇嘢食。",
+          "j": "syut3 gwai6 jap6 min6 mou5 je5 sik6.",
+          "e": "There's nothing to eat in the fridge.",
+          "note": "嘢食 (je5 sik6) is literally \"things to eat\" — the everyday word for food. Its partner is 嘢飲 (je5 jam2) \"things to drink\".",
+          "bd": [
+            {
+              "c": "雪櫃",
+              "j": "syut3 gwai6",
+              "e": "fridge"
+            },
+            {
+              "c": "入面",
+              "j": "jap6 min6",
+              "e": "inside"
+            },
+            {
+              "c": "冇",
+              "j": "mou5",
+              "e": "there is no"
+            },
+            {
+              "c": "嘢食",
+              "j": "je5 sik6",
+              "e": "food, things to eat"
+            }
+          ]
+        },
+        {
+          "sid": "home-t1-s10",
+          "c": "熄燈瞓覺喇。",
+          "j": "sik1 dang1 fan3 gaau3 laa3.",
+          "e": "Lights off, time for bed.",
+          "note": "Lights are switched on with 開 (hoi1) and off with <strong>熄</strong> (sik1) — 開燈 (hoi1 dang1) \"light on\", 熄燈 (sik1 dang1) \"light off\".",
+          "bd": [
+            {
+              "c": "熄燈",
+              "j": "sik1 dang1",
+              "e": "turn off the light"
+            },
+            {
+              "c": "瞓覺",
+              "j": "fan3 gaau3",
+              "e": "to sleep"
+            },
+            {
+              "c": "喇",
+              "j": "laa3",
+              "e": "(it's time now)"
+            }
+          ]
+        },
+        {
+          "sid": "home-t1-s11",
+          "c": "牆上面有個鐘。",
+          "j": "coeng4 soeng6 min6 jau5 go3 zung1.",
+          "e": "There's a clock on the wall.",
+          "bd": [
+            {
+              "c": "牆",
+              "j": "coeng4",
+              "e": "wall"
+            },
+            {
+              "c": "上面",
+              "j": "soeng6 min6",
+              "e": "on"
+            },
+            {
+              "c": "有",
+              "j": "jau5",
+              "e": "there is"
+            },
+            {
+              "c": "個",
+              "j": "go3",
+              "e": "(classifier)"
+            },
+            {
+              "c": "鐘",
+              "j": "zung1",
+              "e": "clock"
+            }
+          ]
+        },
+        {
+          "sid": "home-t1-s12",
+          "c": "行樓梯上二樓啦。",
+          "j": "haang4 lau4 tai1 soeng5 ji6 lau2 laa1.",
+          "e": "Take the stairs up to the second floor.",
+          "note": "One character, two readings, in the same sentence: <strong>樓梯</strong> (lau4 tai1) \"stairs\", but 二樓 (ji6 lau2) \"the second floor\" — and so 三樓 (saam1 lau2) \"the third floor\".",
+          "bd": [
+            {
+              "c": "行",
+              "j": "haang4",
+              "e": "walk"
+            },
+            {
+              "c": "樓梯",
+              "j": "lau4 tai1",
+              "e": "stairs"
+            },
+            {
+              "c": "上",
+              "j": "soeng5",
+              "e": "go up to"
+            },
+            {
+              "c": "二樓",
+              "j": "ji6 lau2",
+              "e": "the second floor"
+            },
+            {
+              "c": "啦",
+              "j": "laa1",
+              "e": "(suggestion)"
+            }
+          ]
+        },
+        {
+          "sid": "home-t1-s13",
+          "c": "客廳有張大梳化。",
+          "j": "haak3 teng1 jau5 zoeng1 daai6 so1 faa2.",
+          "e": "There's a big sofa in the living room.",
+          "note": "梳化 (so1 faa2) is the English word \"sofa\", borrowed by sound — like 巴士 (baa1 si2) \"bus\" and 的士 (dik1 si2) \"taxi\".",
+          "bd": [
+            {
+              "c": "客廳",
+              "j": "haak3 teng1",
+              "e": "living room"
+            },
+            {
+              "c": "有",
+              "j": "jau5",
+              "e": "has"
+            },
+            {
+              "c": "張",
+              "j": "zoeng1",
+              "e": "(classifier)"
+            },
+            {
+              "c": "大",
+              "j": "daai6",
+              "e": "big"
+            },
+            {
+              "c": "梳化",
+              "j": "so1 faa2",
+              "e": "sofa"
+            }
+          ]
+        },
+        {
+          "sid": "home-t1-s14",
+          "c": "地板好濕，小心！",
+          "j": "dei6 baan2 hou2 sap1, siu2 sam1!",
+          "e": "The floor is wet — careful!",
+          "note": "地板 (dei6 baan2) is the floor as a surface — the boards or tiles. To sit <em>on the floor</em>, people say 坐地下 (co5 dei6 haa2), with 地下 (dei6 haa2) \"the ground\".",
+          "bd": [
+            {
+              "c": "地板",
+              "j": "dei6 baan2",
+              "e": "floor"
+            },
+            {
+              "c": "好",
+              "j": "hou2",
+              "e": "very"
+            },
+            {
+              "c": "濕",
+              "j": "sap1",
+              "e": "wet"
+            },
+            {
+              "c": "小心",
+              "j": "siu2 sam1",
+              "e": "be careful"
+            }
+          ]
         }
       ],
       "convo": {
-        "title": "Showing someone your new place",
+        "title": "The sofa hasn't arrived",
         "speakers": [
           "Friend",
           "You"
         ],
         "lines": [
           {
-            "u": false,
-            "c": "嘩，你個屋企好大呀！",
-            "j": "waa3, nei5 go3 uk1 kei2 hou2 daai6 aa3!",
-            "e": "Wow, your place is huge!",
+            "c": "嘩，你屋企好靚呀！",
+            "j": "waa3, nei5 uk1 kei2 hou2 leng3 aa3!",
+            "e": "Wow, your place is lovely!",
             "bd": [
               {
                 "c": "嘩",
@@ -260,47 +528,52 @@
                 "e": "your"
               },
               {
-                "c": "個",
-                "j": "go3",
-                "e": "(measure word)"
-              },
-              {
                 "c": "屋企",
                 "j": "uk1 kei2",
                 "e": "home"
               },
               {
-                "c": "好大",
-                "j": "hou2 daai6",
-                "e": "very big"
+                "c": "好",
+                "j": "hou2",
+                "e": "very"
+              },
+              {
+                "c": "靚",
+                "j": "leng3",
+                "e": "nice, pretty"
+              },
+              {
+                "c": "呀",
+                "j": "aa3",
+                "e": "(exclamation)"
               }
             ]
           },
           {
             "u": true,
-            "c": "多謝，呢個係客廳。",
-            "j": "do1 ze6, ni1 go3 hai6 haak3 teng1.",
-            "e": "Thanks, this is the living room.",
+            "c": "多謝！呢度係客廳。",
+            "j": "do1 ze6! ni1 dou6 hai6 haak3 teng1.",
+            "e": "Thanks! This is the living room.",
             "opts": [
-              "多謝，呢個係客廳。",
-              "唔好意思。",
-              "邊度都好。"
+              "多謝！呢度係客廳。",
+              "多謝，我食飽喇。",
+              "我下次再嚟啦，唔該。"
             ],
             "optsJ": [
-              "do1 ze6, ni1 go3 hai6 haak3 teng1.",
-              "m4 hou2 ji3 si3.",
-              "bin1 dou6 dou1 hou2."
+              "do1 ze6! ni1 dou6 hai6 haak3 teng1.",
+              "do1 ze6, ngo5 sik6 baau2 laa3.",
+              "ngo5 haa6 ci3 zoi3 lai4 laa1, m4 goi1."
             ],
             "bd": [
               {
                 "c": "多謝",
                 "j": "do1 ze6",
-                "e": "thanks"
+                "e": "thank you"
               },
               {
-                "c": "呢個",
-                "j": "ni1 go3",
-                "e": "this"
+                "c": "呢度",
+                "j": "ni1 dou6",
+                "e": "here"
               },
               {
                 "c": "係",
@@ -315,15 +588,14 @@
             ]
           },
           {
-            "u": false,
-            "c": "廚房喺邊度？",
-            "j": "cyu4 fong2 hai2 bin1 dou6?",
-            "e": "Where's the kitchen?",
+            "c": "梳化喺邊度呀？",
+            "j": "so1 faa2 hai2 bin1 dou6 aa3?",
+            "e": "Where's the sofa?",
             "bd": [
               {
-                "c": "廚房",
-                "j": "cyu4 fong2",
-                "e": "kitchen"
+                "c": "梳化",
+                "j": "so1 faa2",
+                "e": "sofa"
               },
               {
                 "c": "喺",
@@ -334,105 +606,209 @@
                 "c": "邊度",
                 "j": "bin1 dou6",
                 "e": "where"
-              }
-            ]
-          },
-          {
-            "u": true,
-            "c": "喺嗰邊，行入去就見到。",
-            "j": "hai2 go2 bin1, haang4 jap6 heoi3 zau6 gin3 dou2.",
-            "e": "Over there, walk in and you'll see.",
-            "opts": [
-              "喺嗰邊，行入去就見到。",
-              "我唔知。",
-              "冇廚房。"
-            ],
-            "optsJ": [
-              "hai2 go2 bin1, haang4 jap6 heoi3 zau6 gin3 dou2.",
-              "ngo5 m4 zi1.",
-              "mou5 cyu4 fong2."
-            ],
-            "bd": [
-              {
-                "c": "喺",
-                "j": "hai2",
-                "e": "is at"
-              },
-              {
-                "c": "嗰邊",
-                "j": "go2 bin1",
-                "e": "over there"
-              },
-              {
-                "c": "行入去",
-                "j": "haang4 jap6 heoi3",
-                "e": "walk in"
-              },
-              {
-                "c": "就見到",
-                "j": "zau6 gin3 dou2",
-                "e": "and you'll see"
-              }
-            ]
-          },
-          {
-            "u": false,
-            "c": "你個房幾大呀？",
-            "j": "nei5 go3 fong2 gei2 daai6 aa3?",
-            "e": "How big is your bedroom?",
-            "bd": [
-              {
-                "c": "你",
-                "j": "nei5",
-                "e": "your"
-              },
-              {
-                "c": "房",
-                "j": "fong2",
-                "e": "room"
-              },
-              {
-                "c": "幾大",
-                "j": "gei2 daai6",
-                "e": "how big"
               },
               {
                 "c": "呀",
                 "j": "aa3",
-                "e": "(soft particle)"
+                "e": "(question particle)"
               }
             ]
           },
           {
             "u": true,
-            "c": "細細個，但係夠瞓。",
-            "j": "sai3 sai3 go3, daan6 hai6 gau3 fan3.",
-            "e": "A bit small, but enough to sleep.",
+            "c": "未到呀，得一張椅。",
+            "j": "mei6 dou3 aa3, dak1 jat1 zoeng1 ji2.",
+            "e": "It hasn't arrived — there's only one chair.",
             "opts": [
-              "細細個，但係夠瞓。",
-              "好大！",
-              "我冇床。"
+              "未到呀，得一張椅。",
+              "今日天氣好熱呀。",
+              "唔係，呢度好近。"
             ],
             "optsJ": [
-              "sai3 sai3 go3, daan6 hai6 gau3 fan3.",
-              "hou2 daai6!",
-              "ngo5 mou5 cong4."
+              "mei6 dou3 aa3, dak1 jat1 zoeng1 ji2.",
+              "gam1 jat6 tin1 hei3 hou2 jit6 aa3.",
+              "m4 hai6, ni1 dou6 hou2 kan5."
             ],
             "bd": [
               {
-                "c": "細細個",
-                "j": "sai3 sai3 go3",
-                "e": "smallish"
+                "c": "未到",
+                "j": "mei6 dou3",
+                "e": "not arrived yet"
               },
               {
-                "c": "但係",
-                "j": "daan6 hai6",
-                "e": "but"
+                "c": "呀",
+                "j": "aa3",
+                "e": "(softener)"
               },
               {
-                "c": "夠瞓",
-                "j": "gau3 fan3",
-                "e": "enough to sleep"
+                "c": "得",
+                "j": "dak1",
+                "e": "only have"
+              },
+              {
+                "c": "一張",
+                "j": "jat1 zoeng1",
+                "e": "one (classifier)"
+              },
+              {
+                "c": "椅",
+                "j": "ji2",
+                "e": "chair"
+              }
+            ]
+          },
+          {
+            "c": "咁有咩到咗呀？",
+            "j": "gam2 jau5 me1 dou3 zo2 aa3?",
+            "e": "So what has arrived?",
+            "bd": [
+              {
+                "c": "咁",
+                "j": "gam2",
+                "e": "so"
+              },
+              {
+                "c": "有",
+                "j": "jau5",
+                "e": "there is"
+              },
+              {
+                "c": "咩",
+                "j": "me1",
+                "e": "what"
+              },
+              {
+                "c": "到咗",
+                "j": "dou3 zo2",
+                "e": "has arrived"
+              },
+              {
+                "c": "呀",
+                "j": "aa3",
+                "e": "(question particle)"
+              }
+            ]
+          },
+          {
+            "u": true,
+            "c": "電視同雪櫃都到咗。",
+            "j": "din6 si6 tung4 syut3 gwai6 dou1 dou3 zo2.",
+            "e": "The TV and the fridge have both arrived.",
+            "opts": [
+              "電視同雪櫃都到咗。",
+              "我今日唔得閒，對唔住。",
+              "唔係，我唔鍾意食魚。"
+            ],
+            "optsJ": [
+              "din6 si6 tung4 syut3 gwai6 dou1 dou3 zo2.",
+              "ngo5 gam1 jat6 m4 dak1 haan4, deoi3 m4 zyu6.",
+              "m4 hai6, ngo5 m4 zung1 ji3 sik6 jyu2."
+            ],
+            "bd": [
+              {
+                "c": "電視",
+                "j": "din6 si6",
+                "e": "TV"
+              },
+              {
+                "c": "同",
+                "j": "tung4",
+                "e": "and"
+              },
+              {
+                "c": "雪櫃",
+                "j": "syut3 gwai6",
+                "e": "fridge"
+              },
+              {
+                "c": "都",
+                "j": "dou1",
+                "e": "both"
+              },
+              {
+                "c": "到咗",
+                "j": "dou3 zo2",
+                "e": "have arrived"
+              }
+            ]
+          },
+          {
+            "c": "咁我哋坐地下睇電視啦。",
+            "j": "gam2 ngo5 dei6 co5 dei6 haa2 tai2 din6 si6 laa1.",
+            "e": "Then let's sit on the floor and watch TV.",
+            "bd": [
+              {
+                "c": "咁",
+                "j": "gam2",
+                "e": "then"
+              },
+              {
+                "c": "我哋",
+                "j": "ngo5 dei6",
+                "e": "we"
+              },
+              {
+                "c": "坐",
+                "j": "co5",
+                "e": "sit"
+              },
+              {
+                "c": "地下",
+                "j": "dei6 haa2",
+                "e": "the floor, the ground"
+              },
+              {
+                "c": "睇",
+                "j": "tai2",
+                "e": "watch"
+              },
+              {
+                "c": "電視",
+                "j": "din6 si6",
+                "e": "TV"
+              },
+              {
+                "c": "啦",
+                "j": "laa1",
+                "e": "(suggestion)"
+              }
+            ]
+          },
+          {
+            "u": true,
+            "c": "好呀！廚房有汽水。",
+            "j": "hou2 aa3! cyu4 fong2 jau5 hei3 seoi2.",
+            "e": "Great! There's soda in the kitchen.",
+            "opts": [
+              "好呀！廚房有汽水。",
+              "我聽日再嚟買啦。",
+              "唔該，我要呢個。"
+            ],
+            "optsJ": [
+              "hou2 aa3! cyu4 fong2 jau5 hei3 seoi2.",
+              "ngo5 ting1 jat6 zoi3 lai4 maai5 laa1.",
+              "m4 goi1, ngo5 jiu3 ni1 go3."
+            ],
+            "bd": [
+              {
+                "c": "好呀",
+                "j": "hou2 aa3",
+                "e": "great"
+              },
+              {
+                "c": "廚房",
+                "j": "cyu4 fong2",
+                "e": "kitchen"
+              },
+              {
+                "c": "有",
+                "j": "jau5",
+                "e": "has"
+              },
+              {
+                "c": "汽水",
+                "j": "hei3 seoi2",
+                "e": "soft drinks"
               }
             ]
           }
@@ -441,5 +817,5 @@
     }
   },
   "_idSeq": 17,
-  "_sidSeq": 5
+  "_sidSeq": 14
 }

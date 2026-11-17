@@ -143,10 +143,10 @@
         },
         {
           "sid": "fruitveg-t1-s03",
-          "c": "你鍾意食邊種菜？",
-          "j": "nei5 zung1 ji3 sik6 bin1 zung2 coi3?",
-          "e": "Which vegetables do you like?",
-          "note": "邊種 (bin1 zung2) is \"which kind / type\" — 種 (zung2) is the classifier for varieties of things. 菜 (coi3) is \"vegetable\", and also \"a dish\" of food more broadly.",
+          "c": "你鍾意食邊種生果？",
+          "j": "nei5 zung1 ji3 sik6 bin1 zung2 saang1 gwo2?",
+          "e": "Which fruit do you like?",
+          "note": "<strong>邊種</strong> (bin1 zung2) is \"which kind / type\" — 種 (zung2) is the classifier for varieties of things. Swap the last word to ask about anything: 邊種菜 (bin1 zung2 coi3) \"which kind of vegetable\".",
           "bd": [
             {
               "c": "你",
@@ -154,19 +154,24 @@
               "e": "you"
             },
             {
-              "c": "鍾意食",
-              "j": "zung1 ji3 sik6",
-              "e": "like to eat"
+              "c": "鍾意",
+              "j": "zung1 ji3",
+              "e": "like"
+            },
+            {
+              "c": "食",
+              "j": "sik6",
+              "e": "to eat"
             },
             {
               "c": "邊種",
               "j": "bin1 zung2",
-              "e": "which kind"
+              "e": "which kind of"
             },
             {
-              "c": "菜",
-              "j": "coi3",
-              "e": "vegetable"
+              "c": "生果",
+              "j": "saang1 gwo2",
+              "e": "fruit"
             }
           ]
         },
@@ -211,10 +216,10 @@
         },
         {
           "sid": "fruitveg-t1-s05",
-          "c": "西瓜喺夏天最好食。",
-          "j": "sai1 gwaa1 hai2 haa6 tin1 zeoi3 hou2 sik6.",
+          "c": "西瓜夏天最好食。",
+          "j": "sai1 gwaa1 haa6 tin1 zeoi3 hou2 sik6.",
           "e": "Watermelon is best in summer.",
-          "note": "最 (zeoi3) means \"most\" — 最好食 (zeoi3 hou2 sik6) \"the best-tasting / nicest to eat\". 喺 (hai2) here marks \"in\" a time (喺夏天 (hai2 haa6 tin1) \"in summer\"), the same word used for places.",
+          "note": "<strong>最</strong> (zeoi3) means \"most\" — 最好食 (zeoi3 hou2 sik6) \"the best-tasting / nicest to eat\". A time word like 夏天 (haa6 tin1) \"summer\" needs no word for \"in\" — it simply goes before the verb.",
           "bd": [
             {
               "c": "西瓜",
@@ -222,14 +227,9 @@
               "e": "watermelon"
             },
             {
-              "c": "喺",
-              "j": "hai2",
-              "e": "in"
-            },
-            {
               "c": "夏天",
               "j": "haa6 tin1",
-              "e": "summer"
+              "e": "in summer"
             },
             {
               "c": "最好食",
@@ -237,124 +237,234 @@
               "e": "best to eat"
             }
           ]
+        },
+        {
+          "sid": "fruitveg-t1-s06",
+          "c": "食多啲蔬菜啦。",
+          "j": "sik6 do1 di1 so1 coi3 laa1.",
+          "e": "Eat more vegetables.",
+          "note": "<strong>多啲</strong> (do1 di1) after a verb means \"more\" — 食多啲 (sik6 do1 di1) \"eat more\", 飲多啲水 (jam2 do1 di1 seoi2) \"drink more water\".",
+          "bd": [
+            {
+              "c": "食",
+              "j": "sik6",
+              "e": "eat"
+            },
+            {
+              "c": "多啲",
+              "j": "do1 di1",
+              "e": "a bit more"
+            },
+            {
+              "c": "蔬菜",
+              "j": "so1 coi3",
+              "e": "vegetables"
+            },
+            {
+              "c": "啦",
+              "j": "laa1",
+              "e": "(urging)"
+            }
+          ]
+        },
+        {
+          "sid": "fruitveg-t1-s07",
+          "c": "馬騮鍾意食香蕉。",
+          "j": "maa5 lau1 zung1 ji3 sik6 hoeng1 ziu1.",
+          "e": "Monkeys like eating bananas.",
+          "bd": [
+            {
+              "c": "馬騮",
+              "j": "maa5 lau1",
+              "e": "monkey"
+            },
+            {
+              "c": "鍾意",
+              "j": "zung1 ji3",
+              "e": "like"
+            },
+            {
+              "c": "食",
+              "j": "sik6",
+              "e": "to eat"
+            },
+            {
+              "c": "香蕉",
+              "j": "hoeng1 ziu1",
+              "e": "banana"
+            }
+          ]
+        },
+        {
+          "sid": "fruitveg-t1-s08",
+          "c": "呢個橙好多汁。",
+          "j": "ni1 go3 caang2 hou2 do1 zap1.",
+          "e": "This orange is very juicy.",
+          "note": "汁 (zap1) is \"juice\" — 好多汁 (hou2 do1 zap1) is literally \"lots of juice\". It is the same word as in 果汁 (gwo2 zap1) \"fruit juice\" and 橙汁 (caang2 zap1) \"orange juice\".",
+          "bd": [
+            {
+              "c": "呢個",
+              "j": "ni1 go3",
+              "e": "this"
+            },
+            {
+              "c": "橙",
+              "j": "caang2",
+              "e": "orange"
+            },
+            {
+              "c": "好多",
+              "j": "hou2 do1",
+              "e": "lots of"
+            },
+            {
+              "c": "汁",
+              "j": "zap1",
+              "e": "juice"
+            }
+          ]
+        },
+        {
+          "sid": "fruitveg-t1-s09",
+          "c": "啲提子好新鮮。",
+          "j": "di1 tai4 zi2 hou2 san1 sin1.",
+          "e": "The grapes are very fresh.",
+          "bd": [
+            {
+              "c": "啲",
+              "j": "di1",
+              "e": "the (plural)"
+            },
+            {
+              "c": "提子",
+              "j": "tai4 zi2",
+              "e": "grapes"
+            },
+            {
+              "c": "好",
+              "j": "hou2",
+              "e": "very"
+            },
+            {
+              "c": "新鮮",
+              "j": "san1 sin1",
+              "e": "fresh"
+            }
+          ]
+        },
+        {
+          "sid": "fruitveg-t1-s10",
+          "c": "士多啤梨好貴呀！",
+          "j": "si6 do1 be1 lei2 hou2 gwai3 aa3!",
+          "e": "Strawberries are so expensive!",
+          "note": "士多啤梨 (si6 do1 be1 lei2) is the English word \"strawberry\", borrowed by sound — say it quickly and you can hear it.",
+          "bd": [
+            {
+              "c": "士多啤梨",
+              "j": "si6 do1 be1 lei2",
+              "e": "strawberry"
+            },
+            {
+              "c": "好",
+              "j": "hou2",
+              "e": "very"
+            },
+            {
+              "c": "貴",
+              "j": "gwai3",
+              "e": "expensive"
+            },
+            {
+              "c": "呀",
+              "j": "aa3",
+              "e": "(exclamation)"
+            }
+          ]
+        },
+        {
+          "sid": "fruitveg-t1-s11",
+          "c": "今晚炒菜心啦。",
+          "j": "gam1 maan5 caau2 coi3 sam1 laa1.",
+          "e": "Let's stir-fry choy sum tonight.",
+          "bd": [
+            {
+              "c": "今晚",
+              "j": "gam1 maan5",
+              "e": "tonight"
+            },
+            {
+              "c": "炒",
+              "j": "caau2",
+              "e": "stir-fry"
+            },
+            {
+              "c": "菜心",
+              "j": "coi3 sam1",
+              "e": "choy sum"
+            },
+            {
+              "c": "啦",
+              "j": "laa1",
+              "e": "(suggestion)"
+            }
+          ]
+        },
+        {
+          "sid": "fruitveg-t1-s12",
+          "c": "我唔食紅蘿蔔。",
+          "j": "ngo5 m4 sik6 hung4 lo4 baak6.",
+          "e": "I don't eat carrots.",
+          "note": "紅蘿蔔 (hung4 lo4 baak6) is literally \"red radish\" — 蘿蔔 (lo4 baak6) on its own is the white radish used in turnip cake.",
+          "bd": [
+            {
+              "c": "我",
+              "j": "ngo5",
+              "e": "I"
+            },
+            {
+              "c": "唔",
+              "j": "m4",
+              "e": "not"
+            },
+            {
+              "c": "食",
+              "j": "sik6",
+              "e": "eat"
+            },
+            {
+              "c": "紅蘿蔔",
+              "j": "hung4 lo4 baak6",
+              "e": "carrot"
+            }
+          ]
         }
       ],
       "convo": {
-        "title": "At the fruit stall",
+        "title": "Fruit after dinner",
         "speakers": [
-          "Vendor",
+          "Friend",
           "You"
         ],
         "lines": [
           {
-            "u": false,
-            "c": "啲蘋果好甜，要唔要？",
-            "j": "di1 ping4 gwo2 hou2 tim4, jiu3 m4 jiu3?",
-            "e": "The apples are sweet — want some?",
+            "c": "食飽未？食啲生果啦。",
+            "j": "sik6 baau2 mei6? sik6 di1 saang1 gwo2 laa1.",
+            "e": "Had enough? Have some fruit.",
             "bd": [
               {
-                "c": "啲",
-                "j": "di1",
-                "e": "the"
+                "c": "食飽",
+                "j": "sik6 baau2",
+                "e": "eaten your fill"
               },
               {
-                "c": "蘋果",
-                "j": "ping4 gwo2",
-                "e": "apples"
+                "c": "未",
+                "j": "mei6",
+                "e": "yet?"
               },
               {
-                "c": "好甜",
-                "j": "hou2 tim4",
-                "e": "very sweet"
-              },
-              {
-                "c": "要唔要",
-                "j": "jiu3 m4 jiu3",
-                "e": "want or not"
-              }
-            ]
-          },
-          {
-            "u": true,
-            "c": "要，我想買幾個蘋果同香蕉。",
-            "j": "jiu3, ngo5 soeng2 maai5 gei2 go3 ping4 gwo2 tung4 hoeng1 ziu1.",
-            "e": "Yes, I'd like a few apples and bananas.",
-            "bd": [
-              {
-                "c": "要",
-                "j": "jiu3",
-                "e": "yes"
-              },
-              {
-                "c": "我想買",
-                "j": "ngo5 soeng2 maai5",
-                "e": "I want to buy"
-              },
-              {
-                "c": "幾個",
-                "j": "gei2 go3",
-                "e": "a few"
-              },
-              {
-                "c": "蘋果",
-                "j": "ping4 gwo2",
-                "e": "apples"
-              },
-              {
-                "c": "同",
-                "j": "tung4",
-                "e": "and"
-              },
-              {
-                "c": "香蕉",
-                "j": "hoeng1 ziu1",
-                "e": "bananas"
-              }
-            ],
-            "opts": [
-              "要，我想買幾個蘋果同香蕉。",
-              "啲蘋果幾多錢一個呀？",
-              "唔要蘋果，我想買啲菜心同番茄。"
-            ],
-            "optsJ": [
-              "jiu3, ngo5 soeng2 maai5 gei2 go3 ping4 gwo2 tung4 hoeng1 ziu1.",
-              "di1 ping4 gwo2 gei2 do1 cin2 jat1 go3 aa3?",
-              "m4 jiu3 ping4 gwo2, ngo5 soeng2 maai5 di1 coi3 sam1 tung4 faan1 ke2."
-            ]
-          },
-          {
-            "u": false,
-            "c": "有冇要啲菜？",
-            "j": "jau5 mou5 jiu3 di1 coi3?",
-            "e": "Need any vegetables?",
-            "bd": [
-              {
-                "c": "有冇",
-                "j": "jau5 mou5",
-                "e": "do you want"
-              },
-              {
-                "c": "要",
-                "j": "jiu3",
-                "e": "want"
-              },
-              {
-                "c": "啲菜",
-                "j": "di1 coi3",
-                "e": "some vegetables"
-              }
-            ]
-          },
-          {
-            "u": true,
-            "c": "要啲菜心同番茄。",
-            "j": "jiu3 di1 coi3 sam1 tung4 faan1 ke2.",
-            "e": "Some choy sum and tomatoes.",
-            "bd": [
-              {
-                "c": "要",
-                "j": "jiu3",
-                "e": "want"
+                "c": "食",
+                "j": "sik6",
+                "e": "eat"
               },
               {
                 "c": "啲",
@@ -362,9 +472,79 @@
                 "e": "some"
               },
               {
-                "c": "菜心",
-                "j": "coi3 sam1",
-                "e": "choy sum"
+                "c": "生果",
+                "j": "saang1 gwo2",
+                "e": "fruit"
+              },
+              {
+                "c": "啦",
+                "j": "laa1",
+                "e": "(urging)"
+              }
+            ]
+          },
+          {
+            "u": true,
+            "c": "好呀！有咩生果呀？",
+            "j": "hou2 aa3! jau5 me1 saang1 gwo2 aa3?",
+            "e": "Lovely! What fruit is there?",
+            "opts": [
+              "好呀！有咩生果呀？",
+              "今日天氣好熱呀。",
+              "唔係，呢度好近。"
+            ],
+            "optsJ": [
+              "hou2 aa3! jau5 me1 saang1 gwo2 aa3?",
+              "gam1 jat6 tin1 hei3 hou2 jit6 aa3.",
+              "m4 hai6, ni1 dou6 hou2 kan5."
+            ],
+            "bd": [
+              {
+                "c": "好呀",
+                "j": "hou2 aa3",
+                "e": "yes please"
+              },
+              {
+                "c": "有",
+                "j": "jau5",
+                "e": "there is"
+              },
+              {
+                "c": "咩",
+                "j": "me1",
+                "e": "what"
+              },
+              {
+                "c": "生果",
+                "j": "saang1 gwo2",
+                "e": "fruit"
+              },
+              {
+                "c": "呀",
+                "j": "aa3",
+                "e": "(question particle)"
+              }
+            ]
+          },
+          {
+            "c": "有西瓜，蘋果同提子。",
+            "j": "jau5 sai1 gwaa1, ping4 gwo2 tung4 tai4 zi2.",
+            "e": "There's watermelon, apples and grapes.",
+            "bd": [
+              {
+                "c": "有",
+                "j": "jau5",
+                "e": "there is"
+              },
+              {
+                "c": "西瓜",
+                "j": "sai1 gwaa1",
+                "e": "watermelon"
+              },
+              {
+                "c": "蘋果",
+                "j": "ping4 gwo2",
+                "e": "apple"
               },
               {
                 "c": "同",
@@ -372,76 +552,208 @@
                 "e": "and"
               },
               {
-                "c": "番茄",
-                "j": "faan1 ke2",
-                "e": "tomatoes"
-              }
-            ],
-            "opts": [
-              "要啲菜心同番茄。",
-              "唔使菜，要多啲蘋果。",
-              "有冇魚同雞賣呀？"
-            ],
-            "optsJ": [
-              "jiu3 di1 coi3 sam1 tung4 faan1 ke2.",
-              "m4 sai2 coi3, jiu3 do1 di1 ping4 gwo2.",
-              "jau5 mou5 jyu2 tung4 gai1 maai6 aa3?"
-            ]
-          },
-          {
-            "u": false,
-            "c": "好，啲嘢好新鮮㗎！",
-            "j": "hou2, di1 je5 hou2 san1 sin1 gaa3!",
-            "e": "Sure, everything's fresh!",
-            "bd": [
-              {
-                "c": "好",
-                "j": "hou2",
-                "e": "sure"
-              },
-              {
-                "c": "啲嘢",
-                "j": "di1 je5",
-                "e": "the things"
-              },
-              {
-                "c": "好新鮮",
-                "j": "hou2 san1 sin1",
-                "e": "very fresh"
-              },
-              {
-                "c": "㗎",
-                "j": "gaa3",
-                "e": "(particle)"
+                "c": "提子",
+                "j": "tai4 zi2",
+                "e": "grapes"
               }
             ]
           },
           {
             "u": true,
-            "c": "唔該晒！",
-            "j": "m4 goi1 saai3!",
-            "e": "Thank you so much!",
-            "bd": [
-              {
-                "c": "唔該晒",
-                "j": "m4 goi1 saai3",
-                "e": "thanks a lot"
-              }
-            ],
+            "c": "有冇士多啤梨呀？",
+            "j": "jau5 mou5 si6 do1 be1 lei2 aa3?",
+            "e": "Are there any strawberries?",
             "opts": [
-              "唔該晒！",
-              "好貴喎，平啲得唔得？",
-              "我聽日再嚟買啦。"
+              "有冇士多啤梨呀？",
+              "租金貴唔貴呀？",
+              "我唔記得放咗邊。"
             ],
             "optsJ": [
-              "m4 goi1 saai3!",
-              "hou2 gwai3 wo3, peng4 di1 dak1 m4 dak1?",
-              "ngo5 ting1 jat6 zoi3 lai4 maai5 laa1."
+              "jau5 mou5 si6 do1 be1 lei2 aa3?",
+              "zou1 gam1 gwai3 m4 gwai3 aa3?",
+              "ngo5 m4 gei3 dak1 fong3 zo2 bin1."
+            ],
+            "bd": [
+              {
+                "c": "有冇",
+                "j": "jau5 mou5",
+                "e": "is there any"
+              },
+              {
+                "c": "士多啤梨",
+                "j": "si6 do1 be1 lei2",
+                "e": "strawberry"
+              },
+              {
+                "c": "呀",
+                "j": "aa3",
+                "e": "(question particle)"
+              }
+            ]
+          },
+          {
+            "c": "冇喇，我個女食晒喇。",
+            "j": "mou5 laa3, ngo5 go3 neoi2 sik6 saai3 laa3.",
+            "e": "None left — my daughter ate them all.",
+            "bd": [
+              {
+                "c": "冇喇",
+                "j": "mou5 laa3",
+                "e": "none left"
+              },
+              {
+                "c": "我個女",
+                "j": "ngo5 go3 neoi2",
+                "e": "my daughter"
+              },
+              {
+                "c": "食晒",
+                "j": "sik6 saai3",
+                "e": "ate all of them"
+              },
+              {
+                "c": "喇",
+                "j": "laa3",
+                "e": "(already)"
+              }
+            ]
+          },
+          {
+            "u": true,
+            "c": "咁我食提子啦。",
+            "j": "gam2 ngo5 sik6 tai4 zi2 laa1.",
+            "e": "Then I'll have grapes.",
+            "opts": [
+              "咁我食提子啦。",
+              "我幫你搵過啦。",
+              "我哋住喺香港。"
+            ],
+            "optsJ": [
+              "gam2 ngo5 sik6 tai4 zi2 laa1.",
+              "ngo5 bong1 nei5 wan2 gwo3 laa1.",
+              "ngo5 dei6 zyu6 hai2 hoeng1 gong2."
+            ],
+            "bd": [
+              {
+                "c": "咁",
+                "j": "gam2",
+                "e": "then"
+              },
+              {
+                "c": "我",
+                "j": "ngo5",
+                "e": "I"
+              },
+              {
+                "c": "食",
+                "j": "sik6",
+                "e": "eat, have"
+              },
+              {
+                "c": "提子",
+                "j": "tai4 zi2",
+                "e": "grapes"
+              },
+              {
+                "c": "啦",
+                "j": "laa1",
+                "e": "(settling on it)"
+              }
+            ]
+          },
+          {
+            "c": "好甜㗎。攞啲橙返屋企啦。",
+            "j": "hou2 tim4 gaa3. lo2 di1 caang2 faan1 uk1 kei2 laa1.",
+            "e": "They're really sweet. Take some oranges home.",
+            "bd": [
+              {
+                "c": "好甜",
+                "j": "hou2 tim4",
+                "e": "very sweet"
+              },
+              {
+                "c": "㗎",
+                "j": "gaa3",
+                "e": "(assuring)"
+              },
+              {
+                "c": "攞",
+                "j": "lo2",
+                "e": "take"
+              },
+              {
+                "c": "啲",
+                "j": "di1",
+                "e": "some"
+              },
+              {
+                "c": "橙",
+                "j": "caang2",
+                "e": "oranges"
+              },
+              {
+                "c": "返屋企",
+                "j": "faan1 uk1 kei2",
+                "e": "back home"
+              },
+              {
+                "c": "啦",
+                "j": "laa1",
+                "e": "(urging)"
+              }
+            ]
+          },
+          {
+            "u": true,
+            "c": "多謝！我最鍾意食橙。",
+            "j": "do1 ze6! ngo5 zeoi3 zung1 ji3 sik6 caang2.",
+            "e": "Thanks! Oranges are my favourite.",
+            "opts": [
+              "多謝！我最鍾意食橙。",
+              "唔係，我今日要返工。",
+              "唔啱呀，太細喇。"
+            ],
+            "optsJ": [
+              "do1 ze6! ngo5 zeoi3 zung1 ji3 sik6 caang2.",
+              "m4 hai6, ngo5 gam1 jat6 jiu3 faan1 gung1.",
+              "m4 ngaam1 aa3, taai3 sai3 laa3."
+            ],
+            "bd": [
+              {
+                "c": "多謝",
+                "j": "do1 ze6",
+                "e": "thank you"
+              },
+              {
+                "c": "我",
+                "j": "ngo5",
+                "e": "I"
+              },
+              {
+                "c": "最",
+                "j": "zeoi3",
+                "e": "most"
+              },
+              {
+                "c": "鍾意",
+                "j": "zung1 ji3",
+                "e": "like"
+              },
+              {
+                "c": "食",
+                "j": "sik6",
+                "e": "to eat"
+              },
+              {
+                "c": "橙",
+                "j": "caang2",
+                "e": "oranges"
+              }
             ]
           }
         ]
       }
     }
   },
-  "_sidSeq": 5
+  "_sidSeq": 12
 }

@@ -4,9 +4,9 @@
 and what is planned. Content only — the app that renders it lives in STATUS.md,
 the visual rules in DESIGN_SYSTEM.md, the UX decisions in DESIGN_DECISIONS.md,
 the authoring rules in CONTENT_SPEC_TIER1.md and CONTENT_SPEC_TIER2.md, and the
-procedure in CONTENT_PLAYBOOK.md (a draft).*
+procedure in CONTENT_PLAYBOOK.md, which serves every tier.*
 
-Last updated: 2026-11-13 · sw.js at v169 · inventory derived from
+Last updated: 2026-11-17 · sw.js at v170 · inventory derived from
 `node tools/content-report.js` (§2 not re-run since v156, except *Tier-2 spec compliance* and *Lesson rules*, run 2026-11-11; §3, §4, §6, §7 updated at v165–v166; lesson rules added to §2–§6 on 2026-11-11)
 
 ---
@@ -85,7 +85,7 @@ data/
   topics/<key>.json     the corpus — words, sentences, per-tier conversation
   patterns.json         66 patterns, 150 drills — DORMANT, see §4
 audio/
-  words/ 585    sentences/ 307    convos/ 484
+  words/ 585    sentences/ 362    convos/ 494
 ```
 
 `topics_index.json` is a **hand-maintained summary** of the topic files, loaded
@@ -124,11 +124,11 @@ does in four places (§4).
 | Topics | 42 |
 | Topic-tiers (a topic at one tier = one lesson) | 52 |
 | Words | 585 |
-| Sentences | 307 |
-| Sentences with a teaching note | 246 (80%) |
-| Sentences with a word breakdown | 307 (100%) |
+| Sentences | 362 |
+| Sentences with a teaching note | 273 (75%) |
+| Sentences with a word breakdown | 362 (100%) |
 | Topic conversations | 52 |
-| Topic conversation lines | 339 |
+| Topic conversation lines | 349 |
 | Checkpoint conversations | 15 |
 | Checkpoint conversation lines | 145 |
 
@@ -245,22 +245,23 @@ six pre-spec tier-2 rounds.
 
 ### Lesson rules
 
-Measured 2026-11-13 at v169, after retrofit batch 1, against the four rules in
+Measured 2026-11-17 at v170, after retrofit batch 2, against the four rules in
 §3, *Lesson rules*. (On 2026-11-11, before any retrofit: 8 of 52, 135 sentences
 short, 217 words unused.) Full per-lesson
 table in the script output; `--worklist` lists what each lesson lacks.
 
 | Measure | Count |
 |---|---|
-| Lessons meeting every rule | **11 of 52** |
-| Lessons pending retrofit | 41 — 38 tier-1 lessons, and `feelings`, `greetings` and `numbers` tier 2 |
-| Sentences short of the minimum | 120, across 41 lessons |
-| Words not yet used where the rule needs them | 181 of 585 |
+| Lessons meeting every rule | **16 of 52** |
+| Lessons pending retrofit | 36 — 33 tier-1 lessons, and `feelings`, `greetings` and `numbers` tier 2 |
+| Sentences short of the minimum | 103, across 36 lessons |
+| Words not yet used where the rule needs them | 142 of 585 |
 | Sentences containing none of their topic's words | 6 |
 | Lessons marked *long* | 1 — `connectives`, 20 sentences, deliberate (§3) |
 
 **Meeting every rule:** `connectives`; tier 1 of `animals`, `body` and `family`
-(retrofit batch 1, v169); and tier 2 of `body`, `comparisons`, `food`,
+(retrofit batch 1, v169) and of `adjectives`, `clothing`, `fruitveg`, `home`
+and `location` (batch 2, v170); and tier 2 of `body`, `comparisons`, `food`,
 `friends`, `modals`, `restaurant` and `shopping`.
 
 **Tier 1 was authored to a different shape** — 5 sentences and a 6-line
@@ -273,37 +274,42 @@ its words in sentences and is short only on the minimum.
 
 How simple tier 1 is, against the guide in CONTENT_SPEC_TIER1.md §4–§5.
 **Reported, never enforced** — the guide has exceptions by design. Length is in
-Chinese characters; `connectives` is exempt. Run 2026-11-13 at v169.
+Chinese characters; `connectives` is exempt. Run 2026-11-17 at v170.
 
 | Measure | Count |
 |---|---|
 | Tier-1 lessons measured | 41 |
-| Sentences of up to 8 characters | 221 of 230 (96%) |
+| Sentences of up to 8 characters | 258 of 267 (97%) |
 | Sentences of 9–12, carrying two lesson words (allowed) | 6 |
 | Sentences of 9–12, no second lesson word (listed) | 2 — Clothing, Days & Time |
 | Sentences over 12 (flagged) | 1 — Days & Time, 19 characters |
 | Sentences carrying a listed connective | 0 |
-| Chat lines of up to 9 characters | 232 of 253 (92%) |
-| Chat lines of 10–12 | 20 |
+| Chat lines of up to 9 characters | 233 of 257 (91%) |
+| Chat lines of 10–12 | 23 |
 | Chat lines over 12 (flagged) | 1 — Modal Verbs, 15 characters |
-| Chat lines carrying a listed connective | 22 |
-| Chats with a connective in more than two lines (listed) | 1 — Adjectives, 3 lines |
+| Chat lines carrying a listed connective | 19 |
+| Chats with a connective in more than two lines (listed) | 0 — Adjectives' chat was rebuilt at v170 |
 
 ### Note coverage
 
-246 of 307 sentences (80%), well past the original 15–25% target. Worst first:
+273 of 362 sentences (75%), well past the original 15–25% target. The share
+fell with the retrofit because a new sentence gets a note only when it has
+something to teach. Worst first, at v170:
 
 | Topic | Tier | Notes | Coverage |
 |---|---|---|---|
 | numbers | 2 | 0/5 | 0% |
+| animals | 1 | 3/10 | 30% |
 | connectives | 1 | 9/20 | 45% |
-| animals, attractions, colors, home, location, work | 1 | 3/5 each | 60% |
+| body, location | 1 | 6/12 each | 50% |
+| attractions, colors, work | 1 | 3/5 each | 60% |
 | body, food, friends, restaurant, shopping | 2 | 5/8 each | 63% |
 | pronouns | 1 | 5/8 | 63% |
+| adjectives | 1 | 8/12 | 67% |
 | feelings | 2 | 5/7 | 71% |
-| body, family, friends, hotels, modals, money, restaurant, school, shopping, tech, transport | 1 | 4/5 each | 80% |
-| greetings | 2 | 6/7 | 86% |
-| time | 1 | 8/9 | 89% |
+| home | 1 | 10/14 | 71% |
+| family | 1 | 8/11 | 73% |
+| clothing, fruitveg | 1 | 9/12 each | 75% |
 
 > **Two of these are not gaps.** Under spec §5.2, a tier-2 sentence whose only
 > teaching point is a connective **gets no note by design** — that is why six
@@ -862,26 +868,32 @@ minimum and 217 words not yet used where the rules need them.
 **Batch 1 shipped at v169 (2026-11-13): Family, Body Parts, Animals & Pets.**
 18 new sentences, one rewritten, and all three chats rebuilt on a scene card —
 `docs/review/2026-11-12-batch-1-review.md` has every line and every flag. It
-went **live first**: the native review of its 43 new lines has not happened
-yet and follows from the live app (CONTENT_PLAYBOOK.md §6).
+was the playbook's pilot; what it found is in CONTENT_PLAYBOOK.md §6.
 
-**Left: 41 lessons, 120 sentences, 181 words** — plus audio for every new line.
-`node tools/content-report.js --worklist` is the list, worst first: Home (11
-words unused), then Common Adjectives, Clothing, Fruit & Vegetables and
-Location.
+**Batch 2 shipped at v170 (2026-11-17): Home & Rooms, Common Adjectives,
+Clothing, Fruit & Vegetables, Location & Position.** 37 new sentences, 2
+changed, five chats rebuilt — `docs/review/2026-11-14-batch-2-review.md`. It
+was the first batch to use a second AI model on one review pass, and two Body
+Parts lines held over from batch 1 changed with it.
 
-**William's review of `CONTENT_PLAYBOOK.md` is still open**, the step-by-step
-procedure the retrofit follows, drafted 2026-11-12; batch 1 ran as its pilot
-while he reads it. An earlier version of this section said nothing blocked the
-retrofit; that was wrong. The rules and the spec were ready, but the procedure
-had not been written down and its independent AI review step had never been
-defined, let alone run. The first batch is that procedure's pilot.
+**Left: 36 lessons, 103 sentences, 142 words** — plus audio for every new line.
+`node tools/content-report.js --worklist` is the list, worst first:
+Classifiers & Demonstratives, Drinks, Numbers, Restaurant & Ordering and
+Tourist Attractions.
 
-The two things it waited on before are done:
-the **tier-1 spec** was approved on 2026-11-12, and the **native-ear review
-sheet** came back the same day (`docs/review/…-RESULTS.md`) — 好的 (hou2 dik1)
-as a reply is out, 好呀 (hou2 aa3) is in, and the 14 random lines were all
-marked fine.
+**The procedure is `CONTENT_PLAYBOOK.md`**, revised on William's review and
+confirmed by him on 2026-11-14. **It has no native-speaker review step**
+(William, 2026-11-14): the independent AI review and his own approval carry
+each batch, and anything a native speaker has ever ruled on is held in the
+playbook's house list. An earlier version of this section said nothing blocked
+the retrofit before the procedure had been written or run; that was wrong, and
+batch 1 was the run that settled it.
+
+The native-speaker checks that did happen, in November 2026, are the evidence
+the playbook's rules rest on: the review sheet of 2026-11-12
+(`docs/review/…-RESULTS.md`) — 好的 (hou2 dik1) as a reply is out, 好呀
+(hou2 aa3) is in, and the 14 random lines were all marked fine — and the
+word-list audit of 2026-11-13.
 
 **Quality first, not least disturbance** (William, 2026-11-12). The aim is that
 every tier-1 lesson meets the spec as if authored new. A sentence that meets it
@@ -891,13 +903,11 @@ above are the floor of the work, not the size of it — how many existing lines
 get rewritten is not known until each lesson is read against the spec. The
 method is CONTENT_SPEC_TIER1.md §10.
 
-**How it runs:** by `CONTENT_PLAYBOOK.md`, in batches of three lessons to
-start and five once the procedure has run once — each authored into a review
-document, put through the three AI review passes, and given a full native
-review, with every flag and every correction logged. The
-known-bad set an AI reviewer would be tested against holds eight lines so far —
-five from the repo's history, three from the review sheet — and the retrofit's
-log is what grows it. Each batch deletes its lessons from `RETROFIT_PENDING`.
+**How it runs:** by `CONTENT_PLAYBOOK.md`, in batches of three to five
+lessons — each drafted, put through the AI review passes (three by Claude, one
+by a second model that William runs by hand), settled by the
+playbook's flag rule, written up in a review document and approved by William,
+with every flag and every change logged. Each batch deletes its lessons from `RETROFIT_PENDING`.
 
 The big lessons need more than sentences: the seven tier-1 lessons of 13 or
 more words — Animals, Body, Family, Home, Time, Modal Verbs and Pronouns — also

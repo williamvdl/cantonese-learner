@@ -212,216 +212,457 @@
               "e": "(particle)"
             }
           ]
+        },
+        {
+          "sid": "adjectives-t1-s06",
+          "c": "呢對鞋太細喇。",
+          "j": "ni1 deoi3 haai4 taai3 sai3 laa3.",
+          "e": "These shoes are too small.",
+          "bd": [
+            {
+              "c": "呢對",
+              "j": "ni1 deoi3",
+              "e": "this pair of"
+            },
+            {
+              "c": "鞋",
+              "j": "haai4",
+              "e": "shoes"
+            },
+            {
+              "c": "太",
+              "j": "taai3",
+              "e": "too"
+            },
+            {
+              "c": "細",
+              "j": "sai3",
+              "e": "small"
+            },
+            {
+              "c": "喇",
+              "j": "laa3",
+              "e": "(it's so)"
+            }
+          ]
+        },
+        {
+          "sid": "adjectives-t1-s07",
+          "c": "今日好多人。",
+          "j": "gam1 jat6 hou2 do1 jan4.",
+          "e": "There are lots of people today.",
+          "note": "多 (do1) and 少 (siu2) go <em>before</em> the thing they count, after 好 (hou2) — 好多人 (hou2 do1 jan4) \"lots of people\", 好少人 (hou2 siu2 jan4) \"very few people\".",
+          "bd": [
+            {
+              "c": "今日",
+              "j": "gam1 jat6",
+              "e": "today"
+            },
+            {
+              "c": "好多",
+              "j": "hou2 do1",
+              "e": "very many"
+            },
+            {
+              "c": "人",
+              "j": "jan4",
+              "e": "people"
+            }
+          ]
+        },
+        {
+          "sid": "adjectives-t1-s08",
+          "c": "夜晚好少車。",
+          "j": "je6 maan5 hou2 siu2 ce1.",
+          "e": "There are few cars at night.",
+          "bd": [
+            {
+              "c": "夜晚",
+              "j": "je6 maan5",
+              "e": "at night"
+            },
+            {
+              "c": "好少",
+              "j": "hou2 siu2",
+              "e": "very few"
+            },
+            {
+              "c": "車",
+              "j": "ce1",
+              "e": "cars"
+            }
+          ]
+        },
+        {
+          "sid": "adjectives-t1-s09",
+          "c": "行慢啲啦。",
+          "j": "haang4 maan6 di1 laa1.",
+          "e": "Walk a bit slower.",
+          "note": "<strong>啲</strong> (di1) after an adjective means \"a bit more\" — 慢啲 (maan6 di1) \"a bit slower\", 快啲 (faai3 di1) \"a bit faster\", 大啲 (daai6 di1) \"a bit bigger\".",
+          "bd": [
+            {
+              "c": "行",
+              "j": "haang4",
+              "e": "walk"
+            },
+            {
+              "c": "慢啲",
+              "j": "maan6 di1",
+              "e": "a bit slower"
+            },
+            {
+              "c": "啦",
+              "j": "laa1",
+              "e": "(suggestion)"
+            }
+          ]
+        },
+        {
+          "sid": "adjectives-t1-s10",
+          "c": "我想買部新電話。",
+          "j": "ngo5 soeng2 maai5 bou6 san1 din6 waa2.",
+          "e": "I want to buy a new phone.",
+          "bd": [
+            {
+              "c": "我",
+              "j": "ngo5",
+              "e": "I"
+            },
+            {
+              "c": "想",
+              "j": "soeng2",
+              "e": "want to"
+            },
+            {
+              "c": "買",
+              "j": "maai5",
+              "e": "buy"
+            },
+            {
+              "c": "部",
+              "j": "bou6",
+              "e": "(classifier: devices)"
+            },
+            {
+              "c": "新",
+              "j": "san1",
+              "e": "new"
+            },
+            {
+              "c": "電話",
+              "j": "din6 waa2",
+              "e": "phone"
+            }
+          ]
+        },
+        {
+          "sid": "adjectives-t1-s11",
+          "c": "佢啲頭髮好短。",
+          "j": "keoi5 di1 tau4 faat3 hou2 dyun2.",
+          "e": "Her hair is very short.",
+          "bd": [
+            {
+              "c": "佢",
+              "j": "keoi5",
+              "e": "her"
+            },
+            {
+              "c": "啲",
+              "j": "di1",
+              "e": "(plural / mass classifier)"
+            },
+            {
+              "c": "頭髮",
+              "j": "tau4 faat3",
+              "e": "hair"
+            },
+            {
+              "c": "好",
+              "j": "hou2",
+              "e": "very"
+            },
+            {
+              "c": "短",
+              "j": "dyun2",
+              "e": "short"
+            }
+          ]
+        },
+        {
+          "sid": "adjectives-t1-s12",
+          "c": "哥哥好高，我好矮。",
+          "j": "go4 go1 hou2 gou1, ngo5 hou2 ai2.",
+          "e": "My brother is tall; I'm short.",
+          "note": "Two kinds of \"short\": <strong>矮</strong> (ai2) is short in height — a person, a table; 短 (dyun2) is short in length — hair, a skirt, a queue.",
+          "bd": [
+            {
+              "c": "哥哥",
+              "j": "go4 go1",
+              "e": "older brother"
+            },
+            {
+              "c": "好",
+              "j": "hou2",
+              "e": "very"
+            },
+            {
+              "c": "高",
+              "j": "gou1",
+              "e": "tall"
+            },
+            {
+              "c": "我",
+              "j": "ngo5",
+              "e": "I"
+            },
+            {
+              "c": "好",
+              "j": "hou2",
+              "e": "very"
+            },
+            {
+              "c": "矮",
+              "j": "ai2",
+              "e": "short (height)"
+            }
+          ]
         }
       ],
       "convo": {
-        "title": "Looking at a flat",
+        "title": "Which queue?",
         "speakers": [
-          "Friend",
+          "Colleague",
           "You"
         ],
         "lines": [
           {
-            "u": false,
-            "c": "你覺得呢間屋點呀？",
-            "j": "nei5 gok3 dak1 ni1 gaan1 uk1 dim2 aa3?",
-            "e": "What do you think of this place?",
+            "c": "嘩，呢間好多人呀！",
+            "j": "waa3, ni1 gaan1 hou2 do1 jan4 aa3!",
+            "e": "Wow, this place is packed!",
             "bd": [
               {
-                "c": "你覺得",
-                "j": "nei5 gok3 dak1",
-                "e": "do you think"
+                "c": "嘩",
+                "j": "waa3",
+                "e": "wow"
               },
               {
-                "c": "呢間屋",
-                "j": "ni1 gaan1 uk1",
-                "e": "this house"
+                "c": "呢間",
+                "j": "ni1 gaan1",
+                "e": "this place"
               },
               {
-                "c": "點",
-                "j": "dim2",
-                "e": "how / what about"
+                "c": "好多",
+                "j": "hou2 do1",
+                "e": "very many"
+              },
+              {
+                "c": "人",
+                "j": "jan4",
+                "e": "people"
               },
               {
                 "c": "呀",
                 "j": "aa3",
-                "e": "(particle)"
+                "e": "(exclamation)"
               }
             ]
           },
           {
             "u": true,
-            "c": "好大，不過有啲舊。",
-            "j": "hou2 daai6, bat1 gwo3 jau5 di1 gau6.",
-            "e": "Very big, but a bit old.",
+            "c": "係呀，條隊好長。",
+            "j": "hai6 aa3, tiu4 deoi2 hou2 coeng4.",
+            "e": "Yeah, the queue is really long.",
+            "opts": [
+              "係呀，條隊好長。",
+              "我哋住喺香港。",
+              "唔啱呀，太細喇。"
+            ],
+            "optsJ": [
+              "hai6 aa3, tiu4 deoi2 hou2 coeng4.",
+              "ngo5 dei6 zyu6 hai2 hoeng1 gong2.",
+              "m4 ngaam1 aa3, taai3 sai3 laa3."
+            ],
             "bd": [
               {
-                "c": "好大",
-                "j": "hou2 daai6",
-                "e": "very big"
+                "c": "係呀",
+                "j": "hai6 aa3",
+                "e": "yes"
               },
+              {
+                "c": "條",
+                "j": "tiu4",
+                "e": "(classifier: long things)"
+              },
+              {
+                "c": "隊",
+                "j": "deoi2",
+                "e": "queue"
+              },
+              {
+                "c": "好",
+                "j": "hou2",
+                "e": "very"
+              },
+              {
+                "c": "長",
+                "j": "coeng4",
+                "e": "long"
+              }
+            ]
+          },
+          {
+            "c": "嗰間少人啲，條隊短啲。",
+            "j": "go2 gaan1 siu2 jan4 di1, tiu4 deoi2 dyun2 di1.",
+            "e": "That one has fewer people, and a shorter queue.",
+            "bd": [
+              {
+                "c": "嗰間",
+                "j": "go2 gaan1",
+                "e": "that place"
+              },
+              {
+                "c": "少人啲",
+                "j": "siu2 jan4 di1",
+                "e": "fewer people"
+              },
+              {
+                "c": "條隊",
+                "j": "tiu4 deoi2",
+                "e": "the queue"
+              },
+              {
+                "c": "短啲",
+                "j": "dyun2 di1",
+                "e": "a bit shorter"
+              }
+            ]
+          },
+          {
+            "u": true,
+            "c": "不過嗰間好慢喎。",
+            "j": "bat1 gwo3 go2 gaan1 hou2 maan6 wo3.",
+            "e": "But that place is really slow.",
+            "opts": [
+              "不過嗰間好慢喎。",
+              "租金貴唔貴呀？",
+              "我聽日再睇過啦。"
+            ],
+            "optsJ": [
+              "bat1 gwo3 go2 gaan1 hou2 maan6 wo3.",
+              "zou1 gam1 gwai3 m4 gwai3 aa3?",
+              "ngo5 ting1 jat6 zoi3 tai2 gwo3 laa1."
+            ],
+            "bd": [
               {
                 "c": "不過",
                 "j": "bat1 gwo3",
                 "e": "but"
               },
               {
-                "c": "有啲",
-                "j": "jau5 di1",
-                "e": "a bit"
-              },
-              {
-                "c": "舊",
-                "j": "gau6",
-                "e": "old"
-              }
-            ],
-            "opts": [
-              "好大，不過有啲舊。",
-              "租金太貴喇，我唔租。",
-              "今日天氣好熱呀。"
-            ],
-            "optsJ": [
-              "hou2 daai6, bat1 gwo3 jau5 di1 gau6.",
-              "zou1 gam1 taai3 gwai3 laa3, ngo5 m4 zou1.",
-              "gam1 jat6 tin1 hei3 hou2 jit6 aa3."
-            ]
-          },
-          {
-            "u": false,
-            "c": "嗰間就新啲，但係細啲。",
-            "j": "go2 gaan1 zau6 san1 di1, daan6 hai6 sai3 di1.",
-            "e": "That one's newer, but smaller.",
-            "bd": [
-              {
                 "c": "嗰間",
                 "j": "go2 gaan1",
-                "e": "that one"
+                "e": "that place"
               },
               {
-                "c": "就",
-                "j": "zau6",
-                "e": "then / is"
+                "c": "好",
+                "j": "hou2",
+                "e": "very"
               },
               {
-                "c": "新啲",
-                "j": "san1 di1",
-                "e": "newer"
+                "c": "慢",
+                "j": "maan6",
+                "e": "slow"
               },
               {
-                "c": "但係",
-                "j": "daan6 hai6",
-                "e": "but"
-              },
-              {
-                "c": "細啲",
-                "j": "sai3 di1",
-                "e": "smaller"
+                "c": "喎",
+                "j": "wo3",
+                "e": "(reminding)"
               }
             ]
           },
           {
-            "u": true,
-            "c": "租金貴唔貴呀？",
-            "j": "zou1 gam1 gwai3 m4 gwai3 aa3?",
-            "e": "Is the rent expensive?",
-            "bd": [
-              {
-                "c": "租金",
-                "j": "zou1 gam1",
-                "e": "rent"
-              },
-              {
-                "c": "貴唔貴",
-                "j": "gwai3 m4 gwai3",
-                "e": "expensive or not"
-              },
-              {
-                "c": "呀",
-                "j": "aa3",
-                "e": "(particle)"
-              }
-            ],
-            "opts": [
-              "租金貴唔貴呀？",
-              "嗰間喺邊度呀？",
-              "你想租邊間呀？"
-            ],
-            "optsJ": [
-              "zou1 gam1 gwai3 m4 gwai3 aa3?",
-              "go2 gaan1 hai2 bin1 dou6 aa3?",
-              "nei5 soeng2 zou1 bin1 gaan1 aa3?"
-            ]
-          },
-          {
-            "u": false,
-            "c": "唔算貴，仲幾平。",
-            "j": "m4 syun3 gwai3, zung6 gei2 peng4.",
-            "e": "Not really — quite cheap, actually.",
-            "bd": [
-              {
-                "c": "唔算",
-                "j": "m4 syun3",
-                "e": "not really"
-              },
-              {
-                "c": "貴",
-                "j": "gwai3",
-                "e": "expensive"
-              },
-              {
-                "c": "仲",
-                "j": "zung6",
-                "e": "even"
-              },
-              {
-                "c": "幾平",
-                "j": "gei2 peng4",
-                "e": "quite cheap"
-              }
-            ]
-          },
-          {
-            "u": true,
-            "c": "咁我鍾意新嗰間。",
-            "j": "gam2 ngo5 zung1 ji3 san1 go2 gaan1.",
-            "e": "Then I like the new one.",
+            "c": "咁呢間快唔快呀？",
+            "j": "gam2 ni1 gaan1 faai3 m4 faai3 aa3?",
+            "e": "So is this one fast?",
             "bd": [
               {
                 "c": "咁",
                 "j": "gam2",
-                "e": "then"
+                "e": "so"
               },
               {
-                "c": "我鍾意",
-                "j": "ngo5 zung1 ji3",
-                "e": "I like"
+                "c": "呢間",
+                "j": "ni1 gaan1",
+                "e": "this place"
               },
               {
-                "c": "新",
-                "j": "san1",
-                "e": "new"
+                "c": "快唔快",
+                "j": "faai3 m4 faai3",
+                "e": "fast or not"
               },
               {
-                "c": "嗰間",
-                "j": "go2 gaan1",
-                "e": "that one"
+                "c": "呀",
+                "j": "aa3",
+                "e": "(question particle)"
               }
-            ],
+            ]
+          },
+          {
+            "u": true,
+            "c": "好快㗎！我哋排呢間啦。",
+            "j": "hou2 faai3 gaa3! ngo5 dei6 paai4 ni1 gaan1 laa1.",
+            "e": "Very fast! Let's queue here.",
             "opts": [
-              "咁我鍾意新嗰間。",
-              "咁我唔租呢間喇。",
-              "我聽日再睇過啦。"
+              "好快㗎！我哋排呢間啦。",
+              "我今日唔得閒，對唔住。",
+              "好貴喎，平啲得唔得？"
             ],
             "optsJ": [
-              "gam2 ngo5 zung1 ji3 san1 go2 gaan1.",
-              "gam2 ngo5 m4 zou1 ni1 gaan1 laa3.",
-              "ngo5 ting1 jat6 zoi3 tai2 gwo3 laa1."
+              "hou2 faai3 gaa3! ngo5 dei6 paai4 ni1 gaan1 laa1.",
+              "ngo5 gam1 jat6 m4 dak1 haan4, deoi3 m4 zyu6.",
+              "hou2 gwai3 wo3, peng4 di1 dak1 m4 dak1?"
+            ],
+            "bd": [
+              {
+                "c": "好",
+                "j": "hou2",
+                "e": "very"
+              },
+              {
+                "c": "快",
+                "j": "faai3",
+                "e": "fast"
+              },
+              {
+                "c": "㗎",
+                "j": "gaa3",
+                "e": "(assuring)"
+              },
+              {
+                "c": "我哋",
+                "j": "ngo5 dei6",
+                "e": "we"
+              },
+              {
+                "c": "排",
+                "j": "paai4",
+                "e": "queue"
+              },
+              {
+                "c": "呢間",
+                "j": "ni1 gaan1",
+                "e": "this place"
+              },
+              {
+                "c": "啦",
+                "j": "laa1",
+                "e": "(suggestion)"
+              }
             ]
           }
         ]
       }
     }
   },
-  "_sidSeq": 5
+  "_sidSeq": 12
 }

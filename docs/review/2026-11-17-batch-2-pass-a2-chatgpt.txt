@@ -1,0 +1,95 @@
+H-S1 | 我而家返屋企。 | ngo5 ji4 gaa1 faan1 uk1 kei2 | 我準備返屋企。 | ngo5 zeon2 bei6 faan1 uk1 kei2
+H-S2 | 廁所喺邊度？ | ci3 so2 hai2 bin1 dou6 | 洗手間喺邊度？ | sai2 sau2 gaan1 hai2 bin1 dou6
+H-S3 | 我喺廚房煮緊嘢食。 | ngo5 hai2 cyu4 fong2 zyu2 gan2 je5 sik6 |
+H-S4 | 我間房好細。 | ngo5 gaan1 fong2 hou2 sai3 |
+H-S5 | 唔該，幫我開吓個窗。 | m4 goi1, bong1 ngo5 hoi1 haa5 go3 coeng1 | 唔該，開吓個窗。 | m4 goi1, hoi1 haa5 go3 coeng1
+H-S6 | 我張床好舒服。 | ngo5 zoeng1 cong4 hou2 syu1 fuk6 |
+H-S7 | 鎖匙喺枱面。 | so2 si4 hai2 toi2 min6 | 鎖匙喺張枱上面。 | so2 si4 hai2 zoeng1 toi2 soeng6 min6
+H-S8 | 唔該，幫我閂埋道門。 | m4 goi1, bong1 ngo5 saan1 maai4 dou6 mun4 | 唔該，閂埋道門。 | m4 goi1, saan1 maai4 dou6 mun4
+H-S9 | 雪櫃入面冇嘢食。 | syut3 gwai6 jap6 min6 mou5 je5 sik6 |
+H-S10 | 係時候熄燈瞓覺喇。 | hai6 si4 hau6 sik1 dang1 fan3 gaau3 laa3 |
+H-S11 | 牆上面有個鐘。 | coeng4 soeng6 min6 jau5 go3 zung1 |
+H-S12 | 我哋行樓梯上去啦。 | ngo5 dei6 haang4 lau4 tai1 soeng5 heoi3 laa1 |
+H-S13 | 客廳有張大梳化。 | haak3 teng1 jau5 zoeng1 daai6 so1 faa2 |
+H-C1 | 嘩，你間屋企好靚呀！ | waa1, nei5 gaan1 uk1 kei2 hou2 leng3 aa3 |
+H-C2 | 多謝！呢度係客廳。 | do1 ze6! ni1 dou6 hai6 haak3 teng1 |
+H-C3 | 咦，梳化喺邊度呀？ | ji2, so1 faa2 hai2 bin1 dou6 aa3 |
+H-C4 | 梳化仲未送到，得一張椅。 | so1 faa2 zung6 mei6 sung3 dou3, dak1 jat1 zoeng1 ji2 |
+H-C5 | 咁你間房起碼有張床吖嘛？ | gam3 nei5 gaan1 fong2 hei2 maa5 jau5 zoeng1 cong4 aa1 maa3 |
+H-C6 | 有呀！電視同雪櫃都送到喇。 | jau5 aa3! din6 si6 tung4 syut3 gwai6 dou1 sung3 dou3 laa3 |
+H-C7 | 不如我哋坐喺地下睇電視啦。 | bat1 jyu4 ngo5 dei6 co5 hai2 dei6 haa6 tai2 din6 si6 laa1 |
+H-C8 | 好呀！雪櫃有凍飲。 | hou2 aa3! syut3 gwai6 jau5 dung3 jam2 |
+J-S1 | 呢間屋好大。 | ni1 gaan1 uk1 hou2 daai6 |
+J-S2 | 我部電話而家太舊喇。 | ngo5 bou6 din6 waa2 ji4 gaa1 taai3 gau6 laa3 |
+J-S3 | 佢行得好快。 | keoi5 haang4 dak1 hou2 faai3 |
+J-S4 | 佢哋好高。 | keoi5 dei6 hou2 gou1 |
+J-S5 | 呢條裙太長喇。 | ni1 tiu4 kwan4 taai3 coeng4 laa3 |
+J-S6 | 呢對鞋太細喇。 | ni1 deoi3 haai4 taai3 sai3 laa3 |
+J-S7 | 今日好多人。 | gam1 jat6 hou2 do1 jan4 | 今日好逼。 | gam1 jat6 hou2 bik1
+J-S8 | 夜晚啲車好少。 | je6 maan5 di1 ce1 hou2 siu2 |
+J-S9 | 行慢啲呀！ | haang4 maan6 di1 aa3 |
+J-S10 | 我想買部新電話。 | ngo5 soeng2 maai5 bou6 san1 din6 waa2 |
+J-S11 | 佢頭髮好短。 | keoi5 tau4 faat3 hou2 dyun2 |
+J-S12 | 我阿哥好高，我唔高。 | ngo5 aa3 go1 hou2 gou1, ngo5 m4 gou1 |
+J-C1 | 嘩，呢度好多人呀！ | waa1, ni1 dou6 hou2 do1 jan4 aa3 |
+J-C2 | 係呀，條隊好長呀！ | hai6 aa3, tiu4 deoi6 hou2 coeng4 aa3 |
+J-C3 | 嗰間人少啲，條隊都短啲。 | go2 gaan1 jan4 siu2 di1, tiu4 deoi6 dou1 dyun2 di1 |
+J-C4 | 但係嗰間出餐好慢。 | daan6 hai6 go2 gaan1 ceot1 caan1 hou2 maan6 |
+J-C5 | 咁呢間出餐快唔快呀？ | gam3 ni1 gaan1 ceot1 caan1 faai3 m4 faai3 aa3 |
+J-C6 | 好快㗎！我哋排呢條隊啦。 | hou2 faai3 gaa3! ngo5 dei6 paai4 ni1 tiu4 deoi6 laa1 |
+C-S1 | 我想買件新衫。 | ngo5 soeng2 maai5 gin6 san1 saam1 |
+C-S2 | 呢對鞋幾錢？ | ni1 deoi3 haai4 gei2 cin2 |
+C-S3 | 今日好凍，記得着外套呀。 | gam1 jat6 hou2 dung3, gei3 dak1 zoek3 ngoi6 tou3 aa3 |
+C-S4 | 你條裙好靚呀！ | nei5 tiu4 kwan4 hou2 leng3 aa3 |
+C-S5 | 我搵唔到啲襪。 | ngo5 wan2 m4 dou2 di1 mat6 |
+C-S6 | 呢條褲太長喇。 | ni1 tiu4 fu3 taai3 coeng4 laa3 |
+C-S7 | 出街記得戴帽呀。 | ceot1 gaai1 gei3 dak1 daai3 mou2 aa3 |
+C-S8 | 返工要着恤衫。 | faan1 gung1 jiu3 zoek3 seot1 saam1 |
+C-S9 | 男人着西裝好好睇。 | naam4 jan4 zoek3 sai1 zong1 hou2 hou2 tai2 |
+C-S10 | 夏天我會着短褲。 | haa6 tin1 ngo5 wui5 zoek3 dyun2 fu3 |
+C-S11 | 呢條頸巾係邊個㗎？ | ni1 tiu4 geng2 gan1 hai6 bin1 go3 gaa3 |
+C-S12 | 呢隻手錶好貴。 | ni1 zek3 sau2 biu1 hou2 gwai3 |
+C-C1 | 你今晚去食飯着咩衫呀？ | nei5 gam1 maan5 heoi3 sik6 faan6 zoek3 me1 saam1 aa3 |
+C-C2 | 我着西裝，襯白色恤衫。 | ngo5 zoek3 sai1 zong1, can3 baak6 sik1 seot1 saam1 |
+C-C3 | 好睇喎！咁你着邊對鞋呀？ | hou2 tai2 wo3! gam3 nei5 zoek3 bin1 deoi3 haai4 aa3 |
+C-C4 | 我着黑色嗰對。咦，我隻手錶去咗邊呀？ | ngo5 zoek3 hak1 sik1 go2 deoi3. ji2, ngo5 zek3 sau2 biu1 heoi3 zo2 bin1 aa3 |
+C-C5 | 喺枱面呀！今晚好凍，記得着外套。 | hai2 toi2 min6 aa3! gam1 maan5 hou2 dung3, gei3 dak1 zoek3 ngoi6 tou3 |
+C-C6 | 咁我帶埋件外套同條頸巾啦。 | gam3 ngo5 daai3 maai4 gin6 ngoi6 tou3 tung4 tiu4 geng2 gan1 laa1 |
+V-S1 | 我每日食一個蘋果。 | ngo5 mui5 jat6 sik6 jat1 go3 ping4 gwo2 |
+V-S2 | 呢啲生果好甜。 | ni1 di1 saang1 gwo2 hou2 tim4 |
+V-S3 | 你鍾意食咩生果？ | nei5 zung1 ji3 sik6 me1 saang1 gwo2 |
+V-S4 | 我想買啲薯仔同番茄。 | ngo5 soeng2 maai5 di1 syu4 zai2 tung4 faan1 ke2 |
+V-S5 | 西瓜夏天最好食。 | sai1 gwaa1 haa6 tin1 zeoi3 hou2 sik6 |
+V-S6 | 食多啲蔬菜啦。 | sik6 do1 di1 so1 coi3 laa1 |
+V-S7 | 馬騮鍾意食香蕉。 | maa5 lau1 zung1 ji3 sik6 hoeng1 ziu1 |
+V-S8 | 呢個橙好多汁。 | ni1 go3 caang2 hou2 do1 zap1 |
+V-S9 | 啲提子好新鮮。 | di1 tai4 zi2 hou2 san1 sin1 |
+V-S10 | 嘩，士多啤梨好貴呀！ | waa1, si6 do1 be1 lei2 hou2 gwai3 aa3 |
+V-S11 | 今晚不如炒菜心啦。 | gam1 maan5 bat1 jyu4 caau2 coi3 sam1 laa1 |
+V-S12 | 我唔食紅蘿蔔。 | ngo5 m4 sik6 hung4 lo4 baak6 |
+V-C1 | 你食飽未呀？食啲生果吖？ | nei5 sik6 baau2 mei6 aa3? sik6 di1 saang1 gwo2 aa1?
+V-C2 | 好呀！有啲咩生果呀？ | hou2 aa3! jau5 di1 me1 saang1 gwo2 aa3?
+V-C3 | 有西瓜、蘋果同提子。 | jau5 sai1 gwaa1, ping4 gwo2 tung4 tai4 zi2 |
+V-C4 | 有冇士多啤梨呀？ | jau5 mou5 si6 do1 be1 lei2 aa3?
+V-C5 | 冇喇，我個女食晒喇。 | mou5 laa3, ngo5 go3 neoi5 sik6 saai3 laa3 |
+V-C6 | 咁我食提子啦。 | gam3 ngo5 sik6 tai4 zi2 laa1 |
+V-C7 | 啲提子好甜㗎！你攞啲橙返屋企食啦。 | di1 tai4 zi2 hou2 tim4 gaa3! nei5 lo2 di1 caang2 faan1 uk1 kei2 sik6 laa1 |
+V-C8 | 多謝！橙係我最鍾意食嘅生果。 | do1 ze6! caang2 hai6 ngo5 zeoi3 zung1 ji3 sik6 ge3 saang1 gwo2 |
+L-S1 | 我喺屋企。 | ngo5 hai2 uk1 kei2 |
+L-S2 | 隻貓喺枱底。 | zek3 maau1 hai2 toi2 dai2 |
+L-S3 | 你個銀包喺個袋入面。 | nei5 go3 ngan4 baau1 hai2 go3 doi2 jap6 min6 |
+L-S4 | 銀行喺郵局隔籬。 | ngan4 hong4 hai2 jau4 guk6 gaak3 lei4 |
+L-S5 | 我哋喺呢度等你。 | ngo5 dei6 hai2 ni1 dou6 dang2 nei5 |
+L-S6 | 個電話喺張床上面。 | go3 din6 waa2 hai2 zoeng1 cong4 soeng6 min6 |
+L-S7 | 出面而家落緊雨。 | ceot1 min6 ji4 gaa1 lok6 gan2 jyu5 |
+L-S8 | 我坐喺你隔籬。 | ngo5 co5 hai2 nei5 gaak3 lei4 |
+L-S9 | 我企中間。 | ngo5 kei5 zung1 gaan1 |
+L-S10 | 廁所喺嗰度。 | ci3 so2 hai2 go2 dou6 |
+L-S11 | 餐廳就喺前面。 | caan1 teng1 zau6 hai2 cin4 min6 |
+L-S12 | 小心！後面有架車呀！ | siu2 sam1! hau6 min6 jau5 gaa3 ce1 aa3 |
+L-C1 | 喂，你而家喺邊度呀？ | wai2, nei5 ji4 gaa1 hai2 bin1 dou6 aa3?
+L-C2 | 我喺港鐵站出面。 | ngo5 hai2 gong2 tit3 zaam6 ceot1 min6 |
+L-C3 | 我都喺出面呀，但係睇唔到你。 | ngo5 dou1 hai2 ceot1 min6 aa3, daan6 hai6 tai2 m4 dou2 nei5 |
+L-C4 | 我企喺巴士站前面。 | ngo5 kei5 hai2 baa1 si2 zaam6 cin4 min6 |
+L-C5 | 咁啱？我就喺巴士站隔籬喎！ | gam3 ngaam1? ngo5 zau6 hai2 baa1 si2 zaam6 gaak3 lei4 wo3!
+L-C6 | 你望吓後面！我喺呢度呀！ | nei5 mong6 haa5 hau6 min6! ngo5 hai2 ni1 dou6 aa3!

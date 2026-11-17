@@ -313,9 +313,12 @@ is finished when the lesson would pass if it were being authored new today.
 7. **New sentences need new IDs** — `tools/mint-sentence-ids.js`, never by hand.
 8. **Delete the lesson from `RETROFIT_PENDING`** in `content-report.js` in the
    same commit, once it passes.
-9. **A full native review of each batch**, with every correction logged before
-   and after (CONTENT.md §5.9). A rewrite is new content and is reviewed as
-   such; it does not inherit the old line's standing.
+9. **The independent AI review of each batch, then William's approval**
+   (CONTENT_PLAYBOOK.md steps 6–9), with every flag and every change logged
+   before and after. A rewrite is new content and is reviewed as such; it does
+   not inherit the old line's standing. *There is no native-speaker review
+   step* (William, 2026-11-14) — CONTENT_PLAYBOOK.md §7 says what that covers
+   and what it does not.
 
 **One thing not settled:** a learner's saved progress is keyed to a sentence's
 ID. When a sentence is rewritten in place, that progress now points at a
@@ -326,8 +329,8 @@ for rewritten sentences, that is an app change, not a content one.
 
 ## 11. Workflow
 
-**`CONTENT_PLAYBOOK.md` is the procedure** — the twelve steps from scoping a
-lesson to releasing it, including the independent AI review and the native
-review. This spec says what a tier-1 lesson must be; the playbook says how one
+**`CONTENT_PLAYBOOK.md` is the procedure** — the eleven steps from scoping a
+lesson to hearing it in the app, including the word-list check, the
+independent AI review and William's approval. It serves every tier. This spec says what a tier-1 lesson must be; the playbook says how one
 gets made and checked. The mechanics of getting content into the data — IDs,
 the topics index, audio, wiring — are CONTENT_SPEC_TIER2.md §11.
