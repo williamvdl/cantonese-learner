@@ -4,7 +4,7 @@
 IN_PROGRESS.md when it's picked up; delete it from here once it's shipped and
 folded into STATUS.md.*
 
-Last updated: 2026-11-17 · sw.js at v170
+Last updated: 2026-11-17 · sw.js at v171
 
 ## Product
 - **Runtime Azure TTS for the Translate screen — gated on the A2 proxy.** Agreed
@@ -89,7 +89,7 @@ are pointers only — detail goes there, not here.*
   (4 lessons) and I-6 Out, Work & Safety (3). Chapter shape, v2 reservations and
   per-topic direction are settled in CONTENT.md §5. *(The old open question here
   — whether `intermediate-s2` was skipped or reserved — is answered: reserved.)*
-- **Note-authoring pass.** 246/307 sentences (80%) carry a teaching note. The
+- **Note-authoring pass.** 273/362 sentences (75%) carry a teaching note at v170 (it was 246/307 before the retrofit added sentences). The
   genuine gaps and the cases that are deliberately note-free are separated in
   CONTENT.md §2 — do not work from a raw percentage, several rounds are complete
   at 5/8 by design.

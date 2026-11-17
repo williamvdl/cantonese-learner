@@ -17,33 +17,40 @@ each held to its own spec, no native-speaker review step, William approving
 each batch. Since 2026-11-17 it has a fourth review pass, **A2 — the same
 packet run through a second company's AI by William, by hand** — on trial.
 
-**Batch 2 is released at v170** (approved 2026-11-17): Home & Rooms, Common
-Adjectives, Clothing, Fruit & Vegetables, Location & Position, plus two Body
-Parts lines held over from batch 1. Record:
-`docs/review/2026-11-14-batch-2-review.md`. The live repo was checked against
-the package afterwards and matched, except for one clip.
-
-**v171 fixes that clip** — Body Parts sentence 5 still played its old audio.
-One command, `node tools/generate-audio.js --force=body-t1-s05`, then commit
-with the v171 `sw.js`.
+**Batch 2 is live** — released at v170 (approved 2026-11-17): Home & Rooms,
+Common Adjectives, Clothing, Fruit & Vegetables, Location & Position, plus two
+Body Parts lines held over from batch 1. Record:
+`docs/review/2026-11-14-batch-2-review.md`. **v171** regenerated one clip that
+v170's audio run missed. The live repo has been checked against both packages:
+data, docs and all 75 clips match.
 
 **16 of 52 lessons meet the lesson rules; 36 remain.**
 
-**Waiting on William:**
+**Waiting on William — none of it blocks batch 3:**
 - **嘅 (ge3) or a classifier** for "my" and "your" in two existing lines
   (BACKLOG, Content). Undecided, so both stay.
-- **QA of v170** in the app — the five lessons and Body Parts.
+- **Whether `generate-audio.js` should take a list in `--force`** before batch
+  3, so a release is one command, not nine (BACKLOG, Content).
+- **QA of v170 and v171** in the app — the five lessons, and Body Parts
+  sentence 5 and chat line 3.
 
-**Next: batch 3.** The worklist's worst five are Classifiers &
-Demonstratives, Drinks, Numbers, Restaurant & Ordering and Tourist
-Attractions. Three things to do differently, from batch 2:
-- Write each line's purpose so it does not hand over the wording.
-- Rebuild `char-jyutping.json` and run `jyutping-check.js` when the draft is
-  first injected, not at release.
-- Give William the pass A2 packet at the same time the three Claude passes
-  run, so his two minutes do not hold up the review document.
-- After the audio is pushed, compare the clips the release expected with the
-  files the commit changed. v170 had nine commands and one was missed.
+**Next: batch 3, by `CONTENT_PLAYBOOK.md`.** The worklist's worst five are
+Classifiers & Demonstratives, Drinks, Numbers, Restaurant & Ordering and
+Tourist Attractions. **The scripts are in `tools/content-batch/`** — read its
+README first; they did not exist in the repo for batches 1 and 2. What batch 2
+taught, all now written into the playbook:
+- Write each line's purpose so it does not hand over the wording (step 4).
+- Rebuild `char-jyutping.json` when the draft is first injected (step 5).
+- Give William the pass A2 packet when the Claude passes start (step 6).
+- Check the audio against the data once it is pushed (step 10).
+- Two passes agreeing is two signals only if they make the same point and the
+  shared packet did not lead them there (§4).
+
+**Two of batch 3's lessons are not ordinary vocabulary lessons.** Classifiers
+& Demonstratives and Numbers teach function words, and Numbers also has a
+tier-2 round on the pending list. Read each against the spec before assuming
+batch 2's pattern of "seven new sentences and a rebuilt chat" fits — and say so
+in the scoping if it does not.
 
 **Open questions:**
 - A rewritten sentence keeps its ID, so a learner's saved progress follows it

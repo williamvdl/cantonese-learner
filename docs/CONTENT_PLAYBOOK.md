@@ -2,7 +2,8 @@
 
 *The step-by-step procedure for authoring new content or retrofitting existing
 content, **at any tier**. The **specs** say what good content is at each tier;
-**this file says what to do, in what order, and who does it.***
+**this file says what to do, in what order, and who does it.** The scripts
+the author uses along the way are in `tools/content-batch/`.*
 
 | Tier | Path | Its spec |
 |---|---|---|
@@ -13,7 +14,7 @@ content, **at any tier**. The **specs** say what good content is at each tier;
 The four lesson rules, the same at every tier, are in `CONTENT.md` §3. The
 reasoning behind this design is in `PROPOSAL-content-playbook.md`.
 
-Last updated: 2026-11-17 · sw.js at v170
+Last updated: 2026-11-17 · sw.js at v171
 
 > **Status: CONFIRMED by William, 2026-11-14.** This is the process for all
 > content from here on; he expects it to change in small ways as it is used,
@@ -81,15 +82,19 @@ not come yet", not "says it has not been *delivered*"). §6 has why.
 working copy of the data so the scripts can read it: `validate.js`,
 `jyutping-check.js`, `gap-opts-check.js` and `content-report.js --check`, then
 read the **Lesson rules** table and the tier's shape table for the lesson.
-Check every line against the house list. Fix everything before going on — a
-reviewer's attention is not spent on what a script can find.
+Check every line against the house list. **Rebuild `data/char-jyutping.json`
+here too** (`build-char-jyutping.js`) before `jyutping-check.js` — new content
+can change a character's default reading, and at v170 that surfaced only at
+release. Fix everything before going on — a reviewer's attention is not spent
+on what a script can find.
 
 ### Independent AI review
 
 **6. Run the review passes.** *(Reviewer — three fresh sessions, and William
 for the second-model pass.)* Each sees a different, deliberately limited
 packet. **Every line of the lesson goes in, kept ones included and unmarked.**
-§3 has the detail.
+§3 has the detail. The author hands William the A2 packet when the Claude
+passes start, so the two run side by side.
 
 | Pass | The reviewer sees | The reviewer is asked | It catches |
 |---|---|---|---|
@@ -123,7 +128,10 @@ The author delivers the changed files with the batch's lessons deleted from
 William unzips over the repo, runs the commands, then commits and pushes — in
 that order, so data and audio go live together. New lines generate on a plain
 run; rewritten sentences and any changed chat need `--force` and an
-`AUDIO_CACHE` bump (tier-1 spec §10.6).
+`AUDIO_CACHE` bump (tier-1 spec §10.6). **Once it is pushed, the author checks
+the audio against the data** with `tools/content-batch/audio_release_check.py`:
+a missed `--force` run fails silently, leaving new text over an old clip, and
+v170 had one.
 
 **11. Listen to it in the app.** *(William)* Go through the batch's lessons
 once. Anything that sounds or reads wrong comes back as a correction — and if
@@ -461,6 +469,8 @@ sheet, and anything it finds goes on the house list.
 | Piece | State |
 |---|---|
 | Lesson rules, and the check that holds them | **Built**, in use — `content-report.js` |
+| The author's batch scripts | **Built**, in the repo since v171 — `tools/content-batch/`, with a README |
+| The check that a release's audio matches its data | **Built** — `tools/content-batch/audio_release_check.py` |
 | Tier-1 shape report | **Built**, in use |
 | Tier-1 and tier-2 specs | **Written and approved** |
 | This procedure | **Run twice; confirmed 2026-11-14** |
